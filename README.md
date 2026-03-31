@@ -19,9 +19,9 @@ ___/ / /_/ / / /_/ / / / / /_/ /   / /___/ / /_/ / /_/ / /_/ /  __/
 [![No Private Key](https://img.shields.io/badge/private%20key-not%20required-brightgreen)](README.md)
 [![Claude Desktop](https://img.shields.io/badge/Claude%20Desktop-ready-purple)](README.md#claude-desktop)
 [![Fly.io](https://img.shields.io/badge/Fly.io-deployable-blue)](mcp-server/fly.toml)
-[![Tools](https://img.shields.io/badge/MCP%20tools-23-ff6b35)](mcp-server/src/server.ts)
+[![Tools](https://img.shields.io/badge/MCP%20tools-31-ff6b35)](mcp-server/src/server.ts)
 
-[**Quick Start**](#quick-start) · [**MCP Tools**](#mcp-tools-23) · [**Onchain Listener**](#onchain-event-listener) · [**OODA Loop**](#ooda-trading-loop) · [**Deploy**](#deploy-to-flyio)
+[**Quick Start**](#quick-start) · [**MCP Tools**](#mcp-tools-31) · [**Risk Engine**](#128-bit-risk-engine) · [**Telegram/Tailclaude UI**](#telegram-gateway--tailclaude-ui) · [**Deploy**](#deploy-to-flyio)
 
 </div>
 
@@ -45,6 +45,10 @@ Claude: [calls helius_listener_setup] → returns working TypeScript code to dep
 You: "Research BONK for a potential trade"
 Claude: [calls solana_token_info, solana_top_traders, helius_das_asset, memory_recall]
        → structured report: price, security score, smart money, OODA signal
+
+You: "Start a Pump.fun scanner"
+Claude: [calls get_pump_market_data, scan_pump_token]
+       → autonomously runs PUMP_SCANNER_AGENT, routing signals to Telegram gateway
 ```
 
 ---
@@ -130,7 +134,24 @@ Add to your MCP config:
 
 ---
 
-## MCP Tools (23)
+## 128-bit Risk Engine
+
+We have integrated our **128-bit Perpetual DEX Risk Engine (v12.0.2)** design directly into the Solana-Claude logic layer.
+- **Goal:** preserve conservation, bounded insolvency handling, oracle-manipulation resistance, and liveness while supporting lazy ADL.
+- **Features:** Native 128-bit Base-10 scaling, protected principal for flat accounts, live premium-based funding, and pure unencumbered-flat deposit sweep.
+- Read the full spec in `docs/risk-engine-spec.md`.
+
+---
+
+## Telegram Gateway & TailClaude UI
+
+The `solana-claude` agentic engine now comes bundled with a **Tailscale Funnel & Telegram Gateway** out of the box (`/tailclaude`). 
+- **Cypherpunk Web Dashboard:** Run `tailclaude` to serve a rich, CRT-styled command center that bridges directly with the internal Engine Memory, Session Tracking, and Activity traces. A live instance of this Web UI is hosted at **[stalwart-queijadas-a9cb83.netlify.app](https://stalwart-queijadas-a9cb83.netlify.app)**.
+- **Telegram Bot Integration:** Control your `solana-claude` swarm securely over Telegram with the built-in bot bridging proxy. Dispatch OODA loops, run the Pump Scanner, or monitor your Snipe agents entirely from your mobile device.
+
+---
+
+## MCP Tools (31)
 
 ### Solana Market Data
 | Tool | What it does | API key needed |
@@ -243,12 +264,14 @@ npx tsx examples/ooda-loop.ts
 Adapted from Claude Code's `builtInAgents.ts`:
 
 ```
-Explore   — read-only research, 10 turns, readOnly permission, cheap
-Scanner   — market scan, 25 turns, watches trending + smart money
-OODA      — full trading cycle, 40 turns, ask permission, sync (can show prompts)
-Dream     — memory consolidation, 20 turns, promotes INFERRED → LEARNED
-Analyst   — structured research reports, 30 turns, high effort
-Monitor   — onchain listener setup, 15 turns, configures webhooks
+Explore       — read-only research, 10 turns, readOnly permission, cheap
+Scanner       — market scan, 25 turns, watches trending + smart money
+PumpScanner   — autonomous trending Pump.fun curve watcher (new via solana_dev_skill)
+SniperBot     — automated trade execution loop decider (new via solana_dev_skill)
+OODA          — full trading cycle, 40 turns, ask permission, sync (can show prompts)
+Dream         — memory consolidation, 20 turns, promotes INFERRED → LEARNED
+Analyst       — structured research reports, 30 turns, high effort
+Monitor       — onchain listener setup, 15 turns, configures webhooks
 ```
 
 ---
@@ -349,6 +372,8 @@ solana-claude/
 │   ├── tasks/            Task lifecycle manager
 │   ├── skills/           Skill registry
 │   └── shared/           Message types, model catalog, tool policy
+├── tailclaude/           Cypherpunk Telegram Gateway + Next.js UI
+├── docs/                 Specs including risk-engine-spec.md
 ├── examples/
 │   ├── listen-wallet.ts  Real-time wallet monitor (account + tx + slot subs)
 │   └── ooda-loop.ts      Full OODA cycle demo
