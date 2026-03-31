@@ -134,11 +134,13 @@ Add to your MCP config:
 
 ### Option D — Solana OS Skill (Global)
 
-If you are running the `skills` CLI framework across Solana OS, you can install the complete agent globally from the public npm repository:
+If you are running the `skills` CLI framework across Solana OS, you can install the complete agent globally from our GitHub namespace:
 
 ```bash
-npx skills add solana-claude
+npx skills add x402agent/solana-claude
 ```
+
+*(You can optionally use `-y` or `--yes` to install passively without prompts)*
 
 ---
 
