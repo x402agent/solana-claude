@@ -43,7 +43,7 @@ It ships as a **Model Context Protocol (MCP) server** that gives any Claude/Curs
 
 ```bash
 # 1. Clone and setup
-git clone https://github.com/YOUR_USERNAME/solana-claude
+git clone https://github.com/x402agent/solana-claude
 cd solana-claude
 bash scripts/setup.sh
 

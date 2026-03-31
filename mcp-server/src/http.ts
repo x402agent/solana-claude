@@ -43,7 +43,7 @@ async function main(): Promise<void> {
     server: "solana-claude",
     version: "1.0.0",
     auth: API_KEY ? "enabled" : "open",
-    docs: "https://github.com/YOUR_USERNAME/solana-claude",
+    docs: "https://github.com/x402agent/solana-claude",
   }));
 
   // ── Streamable HTTP ──────────────────────────────────────────────────────
