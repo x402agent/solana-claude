@@ -347,7 +347,7 @@ export async function cmdCashback(ctx: CommandContext): Promise<void> {
     `• Buy (bonding curve): automatic\n` +
     `• Sell: add UserVolumeAccumulator PDA\n` +
     `• PumpSwap buy: add WSOL ATA of accumulator\n\n` +
-    `*Claim: \\`claim_cashback\\` instruction*\n` +
+    `*Claim: \\\`claim_cashback\\\` instruction*\n` +
     `• Bonding curve → lamports to user wallet\n` +
     `• PumpSwap → WSOL to user's WSOL ATA`
   );

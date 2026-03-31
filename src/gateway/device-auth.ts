@@ -1,7 +1,7 @@
 import {
   buildDeviceAuthPayloadV3,
   type GatewayRole,
-} from "../shared/device-auth";
+} from "../shared/device-auth.js";
 
 export interface DeviceAuthPayload {
   deviceId: string;
