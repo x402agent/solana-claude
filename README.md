@@ -132,6 +132,14 @@ Add to your MCP config:
 }
 ```
 
+### Option D — Solana OS Skill (Global)
+
+If you are running the `skills` CLI framework across Solana OS, you can install the complete agent globally from the public npm repository:
+
+```bash
+npx skills add solana-claude
+```
+
 ---
 
 ## 128-bit Risk Engine
@@ -140,6 +148,14 @@ We have integrated our **128-bit Perpetual DEX Risk Engine (v12.0.2)** design di
 - **Goal:** preserve conservation, bounded insolvency handling, oracle-manipulation resistance, and liveness while supporting lazy ADL.
 - **Features:** Native 128-bit Base-10 scaling, protected principal for flat accounts, live premium-based funding, and pure unencumbered-flat deposit sweep.
 - Read the full spec in `docs/risk-engine-spec.md`.
+
+---
+
+## Formal Verification (Lean 4 & QEDGen)
+
+We verify the mathematical invariants of `solana-claude` and its internal engines using **Lean 4** and the `qedgen` proof engineering agent.
+- Integrated natively into the project workflow via `npx skills add qedgen/solana-skills`.
+- **128-bit DEX Risk Engine:** We maintain rigorous structural formalizations (`formal_verification/SPEC.md`) to mathematically enforce `prop_protected_principal` and `prop_conservation` across arbitrary K-space liquidity evaluations.
 
 ---
 

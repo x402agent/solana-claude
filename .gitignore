@@ -9,3 +9,5 @@ mcp-server/node_modules/
 
 # Local Netlify folder
 .netlify
+tailclaude/
+tailclaude-ui/
