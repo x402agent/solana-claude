@@ -11,7 +11,7 @@
  *   - Jupiter price API (no key)
  *   - Public Solana mainnet RPC (fallback)
  *
- * Tools: 29 (15 original + 8 Helius + 6 services: x402, autoDream, session, prompts)
+ * Tools: 37 (15 original + 8 Helius + 6 services: x402, autoDream, session, prompts + 8 Pump.fun)
  * Resources: 4 (README, soul, skills, tools)
  * Prompts: 5
  */
@@ -362,6 +362,48 @@ export function createServer(): Server {
         name: "prompt_suggestions",
         description: "Get context-aware suggested next prompts for Solana research, onchain monitoring, agent fleet, memory, and x402 payments. Adapted from Claude Code PromptSuggestion service.",
         inputSchema: { type: "object" as const, properties: {} },
+      },
+
+      // ── Pump.fun bonding curve + AMM tools ────────────────────────────────
+      {
+        name: "pump_token_scan",
+        description: "Comprehensive Pump.fun token scan: bonding curve state, graduation progress, signal score, and flags (LP locked, creator sold, whale risk, cashback, mayhem mode). Best for evaluating pre-graduate tokens.",
+        inputSchema: { type: "object" as const, properties: { mint: { type: "string", description: "Token mint address" } }, required: ["mint"] },
+      },
+      {
+        name: "pump_buy_quote",
+        description: "Simulate a buy on Pump.fun bonding curve — get fee breakdown and net amount for a given SOL input.",
+        inputSchema: { type: "object" as const, properties: { mint: { type: "string" }, sol_amount: { type: "number", description: "SOL to spend" }, creator_fee_bps: { type: "number", description: "Creator fee in basis points (0 if no fee)" } }, required: ["mint", "sol_amount"] },
+      },
+      {
+        name: "pump_sell_quote",
+        description: "Simulate a sell on Pump.fun bonding curve — get SOL output estimate and fee breakdown for a given token amount.",
+        inputSchema: { type: "object" as const, properties: { mint: { type: "string" }, token_amount: { type: "number", description: "Tokens to sell (whole tokens)" }, creator_fee_bps: { type: "number" } }, required: ["mint", "token_amount"] },
+      },
+      {
+        name: "pump_graduation",
+        description: "Get graduation progress for a Pump.fun token: % bonded, SOL accumulated, milestone thresholds, and whether it graduated to PumpSwap AMM.",
+        inputSchema: { type: "object" as const, properties: { mint: { type: "string" } }, required: ["mint"] },
+      },
+      {
+        name: "pump_market_cap",
+        description: "Calculate Pump.fun token market cap in SOL and USD. Returns current price per token and bonding curve spot price.",
+        inputSchema: { type: "object" as const, properties: { mint: { type: "string" } }, required: ["mint"] },
+      },
+      {
+        name: "pump_top_tokens",
+        description: "Get top Pump.fun tokens by volume, market cap, or graduation rate. Quick market overview.",
+        inputSchema: { type: "object" as const, properties: { sort_by: { type: "string", enum: ["volume", "market_cap", "new", "graduating"], description: "Sort order" }, limit: { type: "number", description: "Number of results (default 10)" } } },
+      },
+      {
+        name: "pump_new_tokens",
+        description: "Get the most recently launched Pump.fun tokens. Useful for OODA observe phase and sniping new launches.",
+        inputSchema: { type: "object" as const, properties: { limit: { type: "number", description: "Number of tokens (default 20, max 50)" } } },
+      },
+      {
+        name: "pump_cashback_info",
+        description: "Explain Pump.fun cashback mechanics — UserVolumeAccumulator PDAs, unclaimed cashback balance, and how to claim for a specific token.",
+        inputSchema: { type: "object" as const, properties: { mint: { type: "string", description: "Token mint (optional — if omitted returns general cashback docs)" } } },
       },
     ],
   }));
@@ -896,6 +938,231 @@ emitter.on("event", (e) => console.log(e.type, e.signature, e.description));`,
             return text(suggestions);
           }
 
+          // ── Pump.fun bonding curve + AMM tools ─────────────────────────────
+
+          case "pump_token_scan": {
+            const mint = String(a.mint);
+            const [trackerRes, priceRes] = await Promise.allSettled([
+              solanaTracker(`/tokens/${mint}`) as Promise<Record<string, unknown>>,
+              coingeckoPrice("solana") as Promise<Record<string, unknown>>,
+            ]);
+            const tracker = trackerRes.status === "fulfilled" ? trackerRes.value as Record<string, unknown> : null;
+            const solPriceUSD: number = priceRes.status === "fulfilled"
+              ? ((priceRes.value as Record<string, Record<string, number>>)?.solana?.usd ?? 0)
+              : 0;
+            if (!tracker) return text(`No Pump.fun data found for mint: ${mint}`);
+
+            const isGraduated = Boolean(tracker.poolAddress || tracker.migratedToAMM);
+            const progressPct = Number(tracker.bondingCurveProgress ?? 0);
+            const progressBps = Math.round(progressPct * 100);
+            const mcapSOL = Number(tracker.marketCap ?? 0);
+            const vol24h = Number(tracker.volume24h ?? 0);
+            const top10 = Number(tracker.top10HolderPercent ?? 0);
+            const holderCount = Number(tracker.holderCount ?? 0);
+
+            let score = 50;
+            const reasons: string[] = [];
+            const risks: string[] = [];
+            if (isGraduated) { score += 10; reasons.push("LP locked (graduated)"); }
+            if (tracker.creatorSold) { score -= 20; risks.push("Creator sold ⚠️"); }
+            if (top10 > 50) { score -= 15; risks.push(`Whale risk: top10=${top10.toFixed(0)}%`); }
+            if (progressBps >= 6000 && progressBps <= 9000) { score += 15; reasons.push(`Pre-grad sweet spot ${progressPct.toFixed(1)}%`); }
+            if (vol24h > 1_000_000) { score += 10; reasons.push(`Vol $${(vol24h/1e6).toFixed(2)}M`); }
+            if (holderCount > 1000) { score += 5; reasons.push(`${holderCount.toLocaleString()} holders`); }
+            if (tracker.isCashbackCoin) { score += 3; reasons.push("Cashback enabled"); }
+            score = Math.min(100, Math.max(0, score));
+            const strength = score >= 75 ? "STRONG" : score >= 55 ? "MODERATE" : score >= 35 ? "WEAK" : "AVOID";
+
+            const filled = Math.min(10, Math.round(progressBps / 1000));
+            const bar = "█".repeat(filled) + "░".repeat(10 - filled);
+
+            const output = [
+              `## ${tracker.symbol ?? "??"} — ${tracker.name ?? "Unknown"}`,
+              `Mint: \`${mint}\``,
+              `Status: ${isGraduated ? "🎓 Graduated → PumpSwap AMM" : "📈 Bonding curve"}`,
+              ``,
+              `### Bonding Curve`,
+              `Progress: ${bar} ${progressPct.toFixed(1)}%`,
+              `Market Cap: $${(mcapSOL * solPriceUSD).toLocaleString(undefined, { maximumFractionDigits: 0 })} (${mcapSOL.toFixed(2)} SOL)`,
+              `Volume 24h: $${vol24h.toLocaleString(undefined, { maximumFractionDigits: 0 })}`,
+              `Holders: ${holderCount.toLocaleString()} | Top 10: ${top10.toFixed(1)}%`,
+              ``,
+              `### Signal: **${strength}** (${score}/100)`,
+              reasons.length ? `✅ ${reasons.join(" | ")}` : "",
+              risks.length ? `⚠️ ${risks.join(" | ")}` : "",
+              ``,
+              `### Flags`,
+              `Cashback: ${tracker.isCashbackCoin ? "✅" : "❌"} | Mayhem: ${tracker.isMayhemMode ? "⚡" : "❌"} | Creator sold: ${tracker.creatorSold ? "🚨" : "✅"}`,
+            ].filter(Boolean).join("\n");
+            return text(output);
+          }
+
+          case "pump_buy_quote": {
+            const mint = String(a.mint);
+            const solAmount = Number(a.sol_amount ?? 0);
+            const creatorFeeBps = Number(a.creator_fee_bps ?? 0);
+            if (solAmount <= 0) return text("sol_amount must be > 0");
+            let tracker: Record<string, unknown> | null = null;
+            try { tracker = await solanaTracker(`/tokens/${mint}`) as Record<string, unknown>; } catch { /* ok */ }
+            const solIn = BigInt(Math.round(solAmount * 1e9));
+            const FEE_BPS = 100n, BPS_D = 10_000n;
+            const creatorBps = BigInt(creatorFeeBps);
+            const totalFeeBps = FEE_BPS + creatorBps;
+            const inputNet = ((solIn - 1n) * BPS_D) / (totalFeeBps + BPS_D);
+            const protocolFee = (inputNet * FEE_BPS + BPS_D - 1n) / BPS_D;
+            const creatorFee = creatorBps > 0n ? (inputNet * creatorBps + BPS_D - 1n) / BPS_D : 0n;
+            return text([
+              `## 🛒 Buy Quote — ${tracker?.symbol ?? mint.slice(0, 8)}`,
+              ``,
+              `**Input:** ${solAmount} SOL`,
+              `**Net into curve:** ${(Number(inputNet) / 1e9).toFixed(6)} SOL`,
+              `**Protocol fee (1%):** ${(Number(protocolFee) / 1e9).toFixed(6)} SOL`,
+              `**Creator fee (${creatorFeeBps}bps):** ${(Number(creatorFee) / 1e9).toFixed(6)} SOL`,
+              `**Total fees:** ${(Number(protocolFee + creatorFee) / 1e9).toFixed(6)} SOL`,
+              ``,
+              `_For exact token output: use @pump-fun/pump-sdk with live on-chain reserves._`,
+            ].join("\n"));
+          }
+
+          case "pump_sell_quote": {
+            const mint = String(a.mint);
+            const tokenAmount = Number(a.token_amount ?? 0);
+            const creatorFeeBps = Number(a.creator_fee_bps ?? 0);
+            if (tokenAmount <= 0) return text("token_amount must be > 0");
+            let tracker: Record<string, unknown> | null = null;
+            try { tracker = await solanaTracker(`/tokens/${mint}`) as Record<string, unknown>; } catch { /* ok */ }
+            const price = Number(tracker?.price ?? 0);
+            const estGross = price > 0 ? `$${(price * tokenAmount).toFixed(4)}` : "N/A";
+            return text([
+              `## 💰 Sell Quote — ${tracker?.symbol ?? mint.slice(0, 8)}`,
+              `Amount: ${tokenAmount.toLocaleString()} tokens`,
+              ``,
+              `**Protocol fee:** 1.00% of gross SOL out`,
+              `**Creator fee:** ${(creatorFeeBps / 100).toFixed(2)}%`,
+              `**Total fee rate:** ${(1 + creatorFeeBps / 100).toFixed(2)}%`,
+              ``,
+              `Current price: ${price > 0 ? `$${price.toFixed(8)}` : "N/A"}`,
+              `Estimated gross: ${estGross}`,
+              ``,
+              `_For exact amount: use @pump-fun/pump-sdk with live reserves._`,
+            ].join("\n"));
+          }
+
+          case "pump_graduation": {
+            const mint = String(a.mint);
+            let tracker: Record<string, unknown> | null = null;
+            try { tracker = await solanaTracker(`/tokens/${mint}`) as Record<string, unknown>; } catch { /* ok */ }
+            if (!tracker) return text(`No data for ${mint}`);
+            const isGraduated = Boolean(tracker.poolAddress || tracker.migratedToAMM);
+            const progressPct = Number(tracker.bondingCurveProgress ?? 0);
+            const filled = Math.min(10, Math.round(progressPct / 10));
+            const bar = "█".repeat(filled) + "░".repeat(10 - filled);
+            return text([
+              `## 🎓 Graduation Progress — ${tracker.symbol ?? mint.slice(0, 8)}`,
+              ``,
+              `Status: ${isGraduated ? "✅ **Graduated** — trading on PumpSwap AMM" : "⏳ On bonding curve"}`,
+              `Progress: ${bar} **${progressPct.toFixed(2)}%**`,
+              isGraduated ? `Pool: \`${tracker.poolAddress ?? "N/A"}\`` : `Remaining: ~${(85 - Number(tracker.realSolReserves ?? 0) / 1e9).toFixed(2)} SOL to graduation`,
+              ``,
+              `**Milestone guide:**`,
+              `  < 20%  — Early entry, high risk/reward`,
+              `  60–90% — Pre-grad sweet spot 🎯`,
+              `  > 90%  — Near graduation, vol spike expected`,
+              `  100%   — Graduated → liquidity migrated to PumpSwap`,
+            ].join("\n"));
+          }
+
+          case "pump_market_cap": {
+            const mint = String(a.mint);
+            const [trackerRes, solPriceRes] = await Promise.allSettled([
+              solanaTracker(`/tokens/${mint}`) as Promise<Record<string, unknown>>,
+              coingeckoPrice("solana") as Promise<Record<string, unknown>>,
+            ]);
+            const tracker = trackerRes.status === "fulfilled" ? trackerRes.value as Record<string, unknown> : null;
+            const solPrice = solPriceRes.status === "fulfilled"
+              ? ((solPriceRes.value as Record<string, Record<string, number>>)?.solana?.usd ?? 0)
+              : 0;
+            if (!tracker) return text(`No data for ${mint}`);
+            const mcapSOL = Number(tracker.marketCap ?? 0);
+            const price = Number(tracker.price ?? 0);
+            const poolAddress = String(tracker.poolAddress ?? "");
+            return text([
+              `## 📊 Market Cap — ${tracker.symbol ?? mint.slice(0, 8)}`,
+              ``,
+              `**Market Cap:** $${(mcapSOL * solPrice).toLocaleString(undefined, { maximumFractionDigits: 0 })} USD | ${mcapSOL.toFixed(2)} SOL`,
+              `**Token Price:** $${price.toFixed(8)} USD`,
+              `**SOL Price:** $${solPrice.toFixed(2)}`,
+              poolAddress ? `**Pool (AMM):** \`${poolAddress}\`` : `**Venue:** Bonding curve (pre-graduation)`,
+              ``,
+              `_Formula: marketCap = virtualSolReserves × totalSupply / virtualTokenReserves_`,
+            ].join("\n"));
+          }
+
+          case "pump_top_tokens": {
+            const limit = Math.min(Number(a.limit ?? 10), 50);
+            const sortBy = String(a.sort_by ?? "volume");
+            let data: unknown;
+            try {
+              data = await solanaTracker(`/tokens/pump?sort=${sortBy}&limit=${limit}`);
+            } catch {
+              data = await solanaTracker(`/tokens/trending?limit=${limit}`);
+            }
+            return text(data);
+          }
+
+          case "pump_new_tokens": {
+            const limit = Math.min(Number(a.limit ?? 20), 50);
+            let data: unknown;
+            try {
+              const res = await fetch(`https://pump.fun/api/coins/new?limit=${limit}`, {
+                headers: { Accept: "application/json", "User-Agent": "solana-claude/1.0" },
+              });
+              data = res.ok ? await res.json() : await solanaTracker(`/tokens/latest?limit=${limit}`);
+            } catch {
+              data = await solanaTracker(`/tokens/latest?limit=${limit}`);
+            }
+            return text(data);
+          }
+
+          case "pump_cashback_info": {
+            const mint = String(a.mint ?? "");
+            const docs = [
+              `## 💰 Pump.fun Cashback Mechanics`,
+              ``,
+              `Cashback redirects the creator fee back to traders. Enabled on tokens created with **isCashbackEnabled: true**.`,
+              ``,
+              `### Instruction Changes`,
+              `- **Bonding curve buy**: No change — cashback automatic`,
+              `- **Bonding curve sell**: Add UserVolumeAccumulator PDA at remaining_accounts[0] (writable)`,
+              `- **PumpSwap buy**: Add WSOL ATA of UserVolumeAccumulator (AMM program) at remaining_accounts[0]`,
+              `- **PumpSwap sell**: Add WSOL ATA at [0], UserVolumeAccumulator at [1]`,
+              ``,
+              `### PDA Seeds`,
+              `\`\`\`typescript`,
+              `// Use PUMP_PROGRAM_ADDRESS for bonding curve, PUMP_AMM_PROGRAM_ADDRESS for AMM`,
+              `const [pda] = await getProgramDerivedAddress({`,
+              `  programAddress: PUMP_PROGRAM_ADDRESS,`,
+              `  seeds: [utf8Encoder.encode("user_volume_accumulator"), addressEncoder.encode(wallet)]`,
+              `});`,
+              `\`\`\``,
+              ``,
+              `### Reading Unclaimed`,
+              `- **Bonding curve**: lamports of UserVolumeAccumulator − rent_exempt_min`,
+              `- **PumpSwap**: WSOL token balance of WSOL ATA of UserVolumeAccumulator (AMM program)`,
+              ``,
+              `### Claiming`,
+              `- Bonding curve: \`claim_cashback\` instruction → native lamports to user`,
+              `- PumpSwap: \`claim_cashback\` → WSOL from ATA to user's WSOL ATA`,
+            ].join("\n");
+            if (mint) {
+              let tracker: Record<string, unknown> | null = null;
+              try { tracker = await solanaTracker(`/tokens/${mint}`) as Record<string, unknown>; } catch { /* ok */ }
+              const enabled = tracker?.isCashbackCoin ? "✅ YES" : "❌ NO (standard creator fee)";
+              return text(`### Cashback for ${tracker?.symbol ?? mint.slice(0, 8)}\nEnabled: ${enabled}\n\n---\n\n${docs}`);
+            }
+            return text(docs);
+          }
+
           default:
             throw new Error(`Unknown tool: ${name}`);
         }
@@ -914,6 +1181,8 @@ emitter.on("event", (e) => console.log(e.type, e.signature, e.description));`,
       { name: "ooda_loop", description: "Run an OODA cycle: Observe → Orient → Decide → Act" },
       { name: "market_scan", description: "Scan trending tokens and surface high-signal opportunities" },
       { name: "wallet_analysis", description: "Analyze a wallet's performance and holdings", arguments: [{ name: "wallet", description: "Solana wallet address", required: true }] },
+      { name: "pump_scan", description: "Scan Pump.fun for high-signal new token launches and bonding curve plays" },
+      { name: "pump_ooda", description: "Full OODA loop focused on Pump.fun bonding curve opportunities", arguments: [{ name: "mint", description: "Token mint to evaluate (optional)", required: false }] },
     ],
   }));
 
@@ -944,6 +1213,17 @@ emitter.on("event", (e) => console.log(e.type, e.signature, e.description));`,
         case "wallet_analysis": {
           const wallet = args?.wallet ?? "(no wallet provided)";
           return msg(`Analyze this Solana wallet: ${wallet}\n\n1. solana_wallet_pnl — overall PnL, wins/losses\n2. solana_wallet_tokens — current holdings\n3. For major holdings, run solana_price to get current values\n4. memory_recall query="${wallet.slice(0,8)}" — any prior analysis in memory\n\nSummarize:\n- Total PnL (realized + unrealized)\n- Win rate\n- Largest positions\n- Best and worst trades\n- Pattern: what does this wallet trade? (memecoins, DeFi, NFTs?)\n- memory_write any notable patterns you discover`);
+        }
+
+        case "pump_scan":
+          return msg(`You are a Pump.fun degen analyst. Run an OBSERVE scan for alpha.\n\n1. pump_new_tokens limit=20 — what just launched?\n2. pump_top_tokens sort_by=graduating limit=10 — what's near 100%?\n3. pump_top_tokens sort_by=volume limit=10 — what's moving?\n4. sol_price — market context\n\nFor each token that looks interesting:\n- pump_token_scan mint=<mint> — full signal score and flags\n- pump_graduation mint=<mint> — how close to graduation?\n\n## Output Format\n\nFor each token of interest:\n- **Signal:** [STRONG/MODERATE/WEAK]\n- **Mint:** \`...\`\n- **Thesis:** (one sentence)\n- **Risk:** (one sentence)\n\n**Top pick:** [symbol] — [reason]\n\nEnd with: memory_write your top INFERRED signal`);
+
+        case "pump_ooda": {
+          const mint = args?.mint;
+          if (mint) {
+            return msg(`OODA loop on Pump.fun token: \`${mint}\`\n\n**OBSERVE**\n- pump_token_scan mint=${mint}\n- pump_graduation mint=${mint}\n- pump_market_cap mint=${mint}\n- sol_price\n\n**ORIENT**\n- pump_buy_quote mint=${mint} sol_amount=0.1\n- pump_sell_quote mint=${mint} token_amount=100000\n- pump_cashback_info mint=${mint}\n- memory_recall query=${mint.slice(0, 8)}\n\n**DECIDE**\n- Signal: STRONG / MODERATE / WEAK / AVOID\n- Is this a graduation play? Pre-grad entry? Exit setup?\n- Risk factors: whale concentration? Creator still holding?\n\n**ACT**\n- memory_write your INFERRED signal with score and reasoning\n- If STRONG: propose entry size (% of portfolio) + stop loss\n- If AVOID: document why for future reference`);
+          }
+          return msg(`Full Pump.fun OODA loop — no specific token.\n\n**OBSERVE**\n- pump_new_tokens limit=30\n- pump_top_tokens sort_by=graduating\n- sol_price\n\n**ORIENT**\nFor top 3 promising new tokens:\n- pump_token_scan\n- pump_graduation\n\n**DECIDE**\nRank by signal score. Identify:\n1. Best pre-grad play (60-90% bonded, strong signal)\n2. Best new launch (fresh, low mcap, creator holding)\n3. Avoid list (rugs, whales, low volume)\n\n**ACT**\n- memory_write top signals with scoring rationale\n- Report top 3 findings with entry thesis`);
         }
 
         default:

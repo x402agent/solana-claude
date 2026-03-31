@@ -70,6 +70,19 @@ export type OnchainSubscription = {
   active: boolean;
 };
 
+/** Top pump signal from scanner (stored in AppState for quick access) */
+export type PumpSignal = {
+  mint: string;
+  symbol: string;
+  score: number;
+  strength: "strong" | "moderate" | "weak" | "avoid";
+  progressBps: number;
+  isGraduated: boolean;
+  reasons: string[];
+  risks: string[];
+  detectedAt: number;
+};
+
 /** Full runtime state for the solana-claude agent */
 export type AppState = {
   // Permission engine
@@ -95,10 +108,20 @@ export type AppState = {
   totalApiCalls: number;
 
   // UI / display hints
-  expandedView: "tasks" | "memory" | "tools" | null;
+  expandedView: "tasks" | "memory" | "tools" | "pump" | null;
 
   // Active skill context
   activeSkill: string | null;
+
+  // ── Pump.fun scanner state ──────────────────────────────────────────────
+  /** Whether the PumpScanner background task is running */
+  pumpScannerActive: boolean;
+  /** Top Pump.fun signals from the scanner (STRONG/MODERATE only) */
+  pumpTopSignals: PumpSignal[];
+  /** Mints on the graduation watchlist */
+  pumpWatchlist: string[];
+  /** Total tokens observed by scanner this session */
+  pumpTokensObserved: number;
 };
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -127,6 +150,15 @@ const initialState: AppState = {
     "skill_list",
     "skill_read",
     "agent_list",
+    // Pump.fun read-only tools
+    "pump_token_scan",
+    "pump_buy_quote",
+    "pump_sell_quote",
+    "pump_graduation",
+    "pump_market_cap",
+    "pump_top_tokens",
+    "pump_new_tokens",
+    "pump_cashback_info",
   ],
   alwaysDenyTools: [
     // These require explicit human approval — no auto-approve ever
@@ -144,6 +176,11 @@ const initialState: AppState = {
   totalApiCalls: 0,
   expandedView: null,
   activeSkill: null,
+  // Pump.fun scanner
+  pumpScannerActive: false,
+  pumpTopSignals: [],
+  pumpWatchlist: [],
+  pumpTokensObserved: 0,
 };
 
 // ─────────────────────────────────────────────────────────────────────────────
