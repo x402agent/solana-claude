@@ -264,7 +264,7 @@ export class GatewayEventRouter extends EventEmitter {
       // Treat as a raw chat message
       this.emit(GATEWAY_EVENT_CHAT_MESSAGE, {
         event: GATEWAY_EVENT_CHAT_MESSAGE,
-        content: typeof payload === "string" ? payload : (payload?.content ?? JSON.stringify(payload)),
+        content: typeof payload === "string" ? payload : (String((payload as any)?.content ?? JSON.stringify(payload))),
         sessionId: session?.id ?? clientId,
         role: "user",
       } satisfies GatewayEventPayload, session);
