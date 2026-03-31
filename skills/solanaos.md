@@ -85,9 +85,9 @@ HELIUS_WSS_URL=wss://mainnet.helius-rpc.com/?api-key=your-helius-key
 ### Build & Run
 
 ```bash
-make build
-./build/solanaos onboard
-./build/solanaos daemon
+go build -o solanaos .
+./solanaos onboard
+./solanaos daemon
 ```
 
 ### Verify
@@ -178,7 +178,7 @@ await listener.subscribeLogs(
 | Telegram 409 | `pkill -f "solanaos"` → restart |
 | Wallet not found | `solanaos onboard` |
 | Helius WS disconnects | Listener auto-reconnects with exponential backoff |
-| Build fails | `go mod tidy && make build` |
+| Build fails | `go mod tidy && go build -o solanaos .` |
 
 ---
 
