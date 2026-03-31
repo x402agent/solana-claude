@@ -6,3 +6,6 @@ mcp-server/node_modules/
 *.local
 .DS_Store
 *.log
+
+# Local Netlify folder
+.netlify
