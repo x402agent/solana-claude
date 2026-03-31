@@ -1,0 +1,41 @@
+{
+  "name": "solana-claude",
+  "version": "1.0.0",
+  "description": "Open-source Solana AI agent framework — Claude Code + SolanaOS architecture, no private key required",
+  "type": "module",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsc -p tsconfig.json --watch",
+    "mcp:build": "cd mcp-server && npm install && npm run build",
+    "mcp:start": "cd mcp-server && npm start",
+    "mcp:http": "cd mcp-server && npm run start:http",
+    "setup": "bash scripts/setup.sh"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3",
+    "@types/node": "^22.14.0"
+  },
+  "dependencies": {
+    "zod": "^3.24.2"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "keywords": [
+    "solana",
+    "ai",
+    "agent",
+    "mcp",
+    "claude",
+    "trading",
+    "agentic",
+    "openrouter",
+    "blockchain"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/YOUR_USERNAME/solana-claude"
+  }
+}
