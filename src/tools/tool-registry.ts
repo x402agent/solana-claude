@@ -135,8 +135,8 @@ export async function executeTool(
   try {
     const result = await tool.call(input, {
       signal: opts.signal,
-      getAppState,
-      setAppState,
+      getAppState: getAppState as () => unknown,
+      setAppState: setAppState as (updater: (prev: unknown) => unknown) => void,
     });
 
     // Record in AppState

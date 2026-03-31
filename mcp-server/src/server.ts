@@ -11,7 +11,7 @@
  *   - Jupiter price API (no key)
  *   - Public Solana mainnet RPC (fallback)
  *
- * Tools: 23 (15 original + 8 Helius onchain tools)
+ * Tools: 29 (15 original + 8 Helius + 6 services: x402, autoDream, session, prompts)
  * Resources: 4 (README, soul, skills, tools)
  * Prompts: 5
  */
@@ -326,6 +326,42 @@ export function createServer(): Server {
           subscriptionType: { type: "string", enum: ["account", "transaction", "logs", "slot", "signature", "program", "webhook"], description: "Type of listener to generate code for" },
           address: { type: "string", description: "Address to watch (for account/program subscriptions)" },
         }, required: ["subscriptionType"] },
+      },
+
+      // ── x402 Payment Protocol (Solana USDC) ─────────────────────────────
+      {
+        name: "x402_status",
+        description: "Check x402 micropayment protocol status. Shows wallet config, spend limits, current network (Solana USDC primary). Adapted from Claude Code x402 service.",
+        inputSchema: { type: "object" as const, properties: {} },
+      },
+      {
+        name: "x402_payment_history",
+        description: "Show persistent x402 payment history from ~/.config/solana-claude/x402-payments.jsonl. Lists payments with amounts, networks, timestamps.",
+        inputSchema: { type: "object" as const, properties: {} },
+      },
+
+      // ── autoDream — memory consolidation ────────────────────────────────
+      {
+        name: "dream_status",
+        description: "Show autoDream memory consolidation status: OODA cycle gates, time gates, config. Explains how INFERRED signals get promoted to LEARNED.",
+        inputSchema: { type: "object" as const, properties: {} },
+      },
+      {
+        name: "dream_run",
+        description: "Generate a manual Dream memory consolidation prompt. Instructs Claude to group INFERRED signals and promote to LEARNED. Adapted from Claude Code's autoDream service.",
+        inputSchema: { type: "object" as const, properties: {} },
+      },
+
+      // ── Session memory & prompt suggestions ──────────────────────────────
+      {
+        name: "session_summary",
+        description: "Show persistent session history from ~/.config/solana-claude/sessions/. Lists sessions with tool call counts, timestamps, and summaries.",
+        inputSchema: { type: "object" as const, properties: {} },
+      },
+      {
+        name: "prompt_suggestions",
+        description: "Get context-aware suggested next prompts for Solana research, onchain monitoring, agent fleet, memory, and x402 payments. Adapted from Claude Code PromptSuggestion service.",
+        inputSchema: { type: "object" as const, properties: {} },
       },
     ],
   }));
@@ -694,6 +730,170 @@ emitter.on("event", (e) => console.log(e.type, e.signature, e.description));`,
             return text(
               `## Helius ${sub} Listener\n\nDocs: https://docs.helius.dev/data-streaming-event-listening/overview\n\n\`\`\`typescript\n${code}\n\`\`\`\n\nHeliusListener auto-reconnects with exponential backoff and pings every 30s to keep the connection alive.`
             );
+          }
+
+          // ── x402 Payment Tools ──────────────────────────────────────────
+          case "x402_status": {
+            const enabled = !!process.env.X402_SVM_PRIVATE_KEY;
+            const network = process.env.X402_NETWORK ?? "solana";
+            const maxReq = parseFloat(process.env.X402_MAX_PER_REQUEST_USD ?? "0.10");
+            const maxSess = parseFloat(process.env.X402_MAX_SESSION_USD ?? "5.00");
+            return text(
+              [`x402 Payment Protocol — Solana USDC Edition`,
+               ``,
+               `Status:    ${enabled ? "✅ enabled" : "⚠️  disabled (set X402_SVM_PRIVATE_KEY)"}`,
+               `Network:   ${network}`,
+               `Max/req:   $${maxReq.toFixed(2)} USDC`,
+               `Max/sess:  $${maxSess.toFixed(2)} USDC`,
+               ``,
+               `How it works:`,
+               `  1. Agent requests a paid API endpoint`,
+               `  2. Server returns HTTP 402 + PAYMENT-REQUIRED header`,
+               `  3. x402 client signs Solana USDC transfer (@x402/svm)`,
+               `  4. Agent retries with X-Payment header`,
+               `  5. Server verifies via facilitator → returns data`,
+               ``,
+               `Enable: set X402_SVM_PRIVATE_KEY=<base58-keypair>`,
+               `Demo:   npx tsx examples/x402-solana.ts --server`,
+               `Docs:   https://github.com/coinbase/x402`,
+              ].join("\n")
+            );
+          }
+
+          case "x402_payment_history": {
+            // Load from persistent JSONL log
+            const logPath = require("path").join(
+              require("os").homedir(), ".config", "solana-claude", "x402-payments.jsonl"
+            );
+            let history: Array<Record<string, unknown>> = [];
+            try {
+              const raw = await fs.readFile(logPath, "utf-8");
+              history = raw.trim().split("\n").filter(Boolean)
+                .slice(-20).map(l => JSON.parse(l));
+            } catch { /* no payments yet */ }
+            if (history.length === 0) {
+              return text("No x402 payments recorded yet. Enable with X402_SVM_PRIVATE_KEY.");
+            }
+            const total = history.reduce((s, p) => s + ((p.amountUSD as number) ?? 0), 0);
+            const lines = [
+              `x402 Payment History (last ${history.length})`,
+              `Total: $${total.toFixed(6)} USDC`,
+              ``,
+              ...history.map(p =>
+                `[${new Date(p.timestamp as number).toLocaleString()}] $${(p.amountUSD as number).toFixed(6)} ${p.token} on ${p.network} — ${p.description ?? p.resource}`
+              ),
+            ];
+            return text(lines.join("\n"));
+          }
+
+          // ── autoDream Tools ──────────────────────────────────────────────
+          case "dream_status": {
+            const minCycles = parseInt(process.env.DREAM_MIN_CYCLES ?? "5", 10);
+            const minHours = parseFloat(process.env.DREAM_MIN_HOURS ?? "6");
+            return text(
+              [`autoDream Memory Consolidation`,
+               ``,
+               `Config:`,
+               `  Min OODA cycles before dream: ${minCycles}`,
+               `  Min hours between dreams:     ${minHours}h`,
+               `  Enabled:                      ${process.env.DREAM_ENABLED !== "false" ? "yes" : "no"}`,
+               ``,
+               `What autoDream does:`,
+               `  1. Waits until ${minCycles} OODA cycles have run`,
+               `  2. Groups related INFERRED signals by keyword clusters`,
+               `  3. Promotes clusters with 2+ corroborating signals → LEARNED`,
+               `  4. Writes consolidated LEARNED fact to memory`,
+               ``,
+               `Override: DREAM_MIN_CYCLES=3 DREAM_MIN_HOURS=1 (faster consolidation)`,
+               `Disable:  DREAM_ENABLED=false`,
+              ].join("\n")
+            );
+          }
+
+          case "dream_run": {
+            // Direct dream invocation — builds consolidation prompt
+            const prompt = [
+              `# Manual Memory Consolidation`,
+              ``,
+              `Please consolidate the agent memory by:`,
+              `1. Calling memory_recall with tier="INFERRED" to get all signals`,
+              `2. Grouping related signals`,
+              `3. For clusters of 2+ signals, calling memory_write with tier="LEARNED"`,
+              `4. Write a summary conclusion to memory_write tier="LEARNED"`,
+              ``,
+              `Focus on Solana-relevant patterns: price action, wallet archetypes,`,
+              `smart money moves, market regime signals.`,
+            ].join("\n");
+            return text(prompt);
+          }
+
+          // ── Session & Prompt Tools ───────────────────────────────────────
+          case "session_summary": {
+            const sessDir = require("path").join(
+              require("os").homedir(), ".config", "solana-claude", "sessions"
+            );
+            let sessions: Array<Record<string, unknown>> = [];
+            try {
+              const files = await fs.readdir(sessDir);
+              sessions = (await Promise.all(
+                files.filter(f => f.endsWith(".json")).slice(-10).map(async f => {
+                  try {
+                    const raw = await fs.readFile(require("path").join(sessDir, f), "utf-8");
+                    return JSON.parse(raw);
+                  } catch { return null; }
+                })
+              )).filter(Boolean);
+            } catch { /* no sessions */ }
+            if (sessions.length === 0) {
+              return text("No sessions recorded yet. Sessions are saved after tool calls.");
+            }
+            const lines = [
+              `Session History (${sessions.length} sessions)`,
+              ``,
+              ...sessions.sort((a, b) => (b.lastActiveAt as number) - (a.lastActiveAt as number))
+                .map(s => [
+                  `Session: ${s.sessionId}`,
+                  `  Started:    ${new Date(s.startedAt as number).toLocaleString()}`,
+                  `  Last active: ${new Date(s.lastActiveAt as number).toLocaleString()}`,
+                  `  Tool calls:  ${s.toolCallCount}`,
+                  `  Compacted:   ${s.isCompacted ? "yes" : "no"}`,
+                  s.summary ? `  Summary: ${(s.summary as string).slice(0, 100)}...` : "",
+                ].filter(Boolean).join("\n")),
+            ];
+            return text(lines.join("\n"));
+          }
+
+          case "prompt_suggestions": {
+            const suggestions = [
+              `## Suggested Next Prompts`,
+              ``,
+              `### 🔍 Research`,
+              `- "What are the top 5 trending tokens with >40% 24h change?"`,
+              `- "Research BONK security score, smart money activity, and signal strength"`,
+              `- "Check wallet [address] PnL and current holdings"`,
+              ``,
+              `### 📡 Onchain Monitor`,
+              `- "Set up a real-time listener for wallet [address]"`,
+              `- "Generate code to watch Raydium AMM for large swaps"`,
+              `- "Create a Helius webhook for [mint] token transfers"`,
+              ``,
+              `### 🤖 Agent Fleet`,
+              `- "Spawn the Scanner agent to monitor trending tokens"`,
+              `- "Run a full OODA trading cycle"`,
+              `- "Spawn the Analyst agent to research [token]"`,
+              `- "Run Dream memory consolidation"`,
+              ``,
+              `### 💾 Memory`,
+              `- "What do I know about [token] from memory?"`,
+              `- "Show all LEARNED patterns in memory"`,
+              `- "Write this finding to memory: [fact]"`,
+              ``,
+              `### 💳 x402 Payments`,
+              `- "How do I enable x402 Solana micropayments?"`,
+              `- "Show my x402 payment history"`,
+              `- "What APIs support x402 payment protocol?"`,
+            ].join("\n");
+            return text(suggestions);
           }
 
           default:
