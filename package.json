@@ -1,11 +1,11 @@
 {
-  "name": "solana-claude",
+  "name": "solana-clawd",
   "version": "1.0.0",
-  "description": "The Claude Code agentic engine, rebuilt for Solana — 31 MCP tools for trading, research, and onchain monitoring",
+  "description": "The Clawd Code agentic engine, rebuilt for Solana — 31 MCP tools for trading, research, and onchain monitoring",
   "type": "module",
   "main": "dist/index.js",
   "bin": {
-    "solana-claude": "src/entrypoints/cli.tsx"
+    "solana-clawd": "src/entrypoints/cli.tsx"
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",
@@ -98,7 +98,7 @@
     "ai",
     "agent",
     "mcp",
-    "claude",
+    "clawd",
     "trading",
     "agentic",
     "openrouter",
@@ -107,6 +107,6 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/x402agent/solana-claude"
+    "url": "https://github.com/x402agent/solana-clawd"
   }
 }
