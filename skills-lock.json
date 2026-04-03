@@ -5,6 +5,11 @@
       "source": "qedgen/solana-skills",
       "sourceType": "github",
       "computedHash": "b9b5749d0365d085e295090ec254d3b7343bdb09335d3817b5f5e7855ff5d52c"
+    },
+    "solana-dev": {
+      "source": "solana-foundation/solana-dev-skill",
+      "sourceType": "github",
+      "computedHash": "2a0b3c2a739988f3a6d583b68951de142864ac19debd56994aa1dc074c2b3831"
     }
   }
 }
