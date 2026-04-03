@@ -1,7 +1,7 @@
 {
   "name": "solana-claude",
   "version": "1.0.0",
-  "description": "Open-source Solana AI agent framework — Claude Code + SolanaOS architecture, no private key required",
+  "description": "The Claude Code agentic engine, rebuilt for Solana — 31 MCP tools for trading, research, and onchain monitoring",
   "type": "module",
   "main": "dist/index.js",
   "bin": {

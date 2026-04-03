@@ -31,7 +31,7 @@ ___/ / /_/ / / /_/ / / / / /_/ /   / /___/ / /_/ / /_/ / /_/ /  __/
 
 `solana-claude` is an open-source agent framework that ports the core agentic DNA from [Anthropic's Claude Code](https://github.com/x402agent/solana-claude) into the Solana ecosystem.
 
-It runs as a **Model Context Protocol (MCP) server** — meaning any Claude-powered client (Claude Desktop, Cursor, VS Code, Windsurf) can instantly access **23 live Solana tools** without writing a single line of code.
+It runs as a **Model Context Protocol (MCP) server** — meaning any Claude-powered client (Claude Desktop, Cursor, VS Code, Windsurf) can instantly access **31 live Solana tools** without writing a single line of code.
 
 **No private key. No wallet. No paid API. Just clone, run, and ask.**
 
@@ -105,7 +105,7 @@ Add to `~/Library/Application Support/Claude/claude_desktop_config.json`:
 }
 ```
 
-Restart Claude Desktop. Done. You now have 23 live Solana tools.
+Restart Claude Desktop. Done. You now have 31 live Solana tools.
 
 ### Option B — Cursor / VS Code
 
@@ -366,7 +366,7 @@ Then connect anyone via:
 solana-claude/
 ├── mcp-server/           MCP server (Claude Desktop, Cursor, Fly.io)
 │   ├── src/
-│   │   ├── server.ts     23 tools, 4 resources, 5 prompts
+│   │   ├── server.ts     31 tools, 4 resources, 5 prompts
 │   │   ├── http.ts       HTTP + SSE + Streamable transport
 │   │   └── index.ts      STDIO transport (Claude Desktop)
 │   ├── Dockerfile
