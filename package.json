@@ -18,6 +18,7 @@
     "typescript": "^5.8.3"
   },
   "dependencies": {
+    "@cloudflare/sandbox": "^0.8.4",
     "zod": "^3.24.2"
   },
   "engines": {

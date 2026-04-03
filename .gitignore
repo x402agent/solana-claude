@@ -6,9 +6,11 @@ mcp-server/node_modules/
 *.local
 .DS_Store
 *.log
-
+.env
+.env.local
 # Local Netlify folder
 .netlify
 tailclaude/
 tailclaude-ui/
 tailclaude-main/
+claude-code-main 2

@@ -1,0 +1,86 @@
+{
+  "name": "@agentwallet/core",
+  "version": "0.1.0",
+  "description": "Agentic wallet vault — encrypted Solana + EVM keypair management with E2B sandbox and Cloudflare Workers deployment",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "agentwallet": "dist/cli.js"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./server": {
+      "types": "./dist/server.d.ts",
+      "import": "./dist/server.js"
+    },
+    "./deploy": {
+      "types": "./dist/deploy/index.d.ts",
+      "import": "./dist/deploy/index.js"
+    },
+    "./deploy/e2b": {
+      "types": "./dist/deploy/e2b.d.ts",
+      "import": "./dist/deploy/e2b.js"
+    },
+    "./deploy/cloudflare": {
+      "types": "./dist/deploy/cloudflare.d.ts",
+      "import": "./dist/deploy/cloudflare.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsc -p tsconfig.json --watch",
+    "start": "node dist/cli.js serve",
+    "test": "node --test dist/**/*.test.js",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "@solana/web3.js": "^1.95.0",
+    "ethers": "^6.13.0",
+    "express": "^4.21.0",
+    "tweetnacl": "^1.0.3",
+    "bs58": "^6.0.0",
+    "commander": "^12.1.0",
+    "dotenv": "^16.4.0"
+  },
+  "optionalDependencies": {
+    "e2b": "^1.0.0",
+    "wrangler": "^3.80.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.14.0",
+    "typescript": "^5.8.0"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "keywords": [
+    "solana",
+    "evm",
+    "wallet",
+    "vault",
+    "agent",
+    "agentic",
+    "e2b",
+    "cloudflare",
+    "sandbox",
+    "encrypted",
+    "keypair"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/x402agent/solana-claude",
+    "directory": "packages/agentwallet"
+  },
+  "files": [
+    "dist",
+    "templates",
+    "README.md"
+  ]
+}
