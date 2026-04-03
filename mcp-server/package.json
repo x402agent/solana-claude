@@ -1,7 +1,7 @@
 {
-  "name": "solana-claude-mcp",
+  "name": "solana-clawd-mcp",
   "version": "1.0.0",
-  "description": "solana-claude MCP server — 15 Solana tools for any Claude/Cursor/VS Code session",
+  "description": "solana-clawd MCP server — 15 Solana tools for any Clawd/Cursor/VS Code session",
   "type": "module",
   "main": "dist/index.js",
   "scripts": {
