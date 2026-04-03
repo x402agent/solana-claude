@@ -8,16 +8,16 @@ ___/ / /_/ / / /_/ / / / / /_/ /   / /___/ / /_/ / /_/ / /_/ /  __/
 /____/\____/_/\__,_/_/ /_/\__,_/    \____/_/\__,_/\__,_/\__,_/\___/
 ```
 
-# solana-claude
+# solana-clawd
 
-**The Claude Code agentic engine, rebuilt for Solana.**
+**The Clawd Code agentic engine, rebuilt for Solana.**
 
 [![MIT License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript)](https://typescriptlang.org)
 [![MCP](https://img.shields.io/badge/MCP-native-blueviolet)](https://modelcontextprotocol.io)
 [![Helius](https://img.shields.io/badge/Helius-RPC%20%2B%20WebSocket-orange)](https://helius.dev)
 [![No Private Key](https://img.shields.io/badge/private%20key-not%20required-brightgreen)](README.md)
-[![Claude Desktop](https://img.shields.io/badge/Claude%20Desktop-ready-purple)](README.md#claude-desktop)
+[![Clawd Desktop](https://img.shields.io/badge/Clawd%20Desktop-ready-purple)](README.md#clawd-desktop)
 [![Fly.io](https://img.shields.io/badge/Fly.io-deployable-blue)](mcp-server/fly.toml)
 [![Tools](https://img.shields.io/badge/MCP%20tools-31-ff6b35)](mcp-server/src/server.ts)
 
@@ -29,25 +29,25 @@ ___/ / /_/ / / /_/ / / / / /_/ /   / /___/ / /_/ / /_/ / /_/ /  __/
 
 ## What Is This?
 
-`solana-claude` is an open-source agent framework that ports the core agentic DNA from [Anthropic's Claude Code](https://github.com/x402agent/solana-claude) into the Solana ecosystem.
+`solana-clawd` is an open-source agent framework that ports the core agentic DNA from [Anthropic's Clawd Code](https://github.com/x402agent/solana-clawd) into the Solana ecosystem.
 
-It runs as a **Model Context Protocol (MCP) server** — meaning any Claude-powered client (Claude Desktop, Cursor, VS Code, Windsurf) can instantly access **31 live Solana tools** without writing a single line of code.
+It runs as a **Model Context Protocol (MCP) server** — meaning any Clawd-powered client (Clawd Desktop, Cursor, VS Code, Windsurf) can instantly access **31 live Solana tools** without writing a single line of code.
 
 **No private key. No wallet. No paid API. Just clone, run, and ask.**
 
 ```
 You: "What are the top 5 trending tokens right now?"
-Claude: [calls solana_trending] → returns live data with security scores and volume
+Clawd: [calls solana_trending] → returns live data with security scores and volume
 
 You: "Watch wallet 8vFz... for changes"
-Claude: [calls helius_listener_setup] → returns working TypeScript code to deploy
+Clawd: [calls helius_listener_setup] → returns working TypeScript code to deploy
 
 You: "Research BONK for a potential trade"
-Claude: [calls solana_token_info, solana_top_traders, helius_das_asset, memory_recall]
+Clawd: [calls solana_token_info, solana_top_traders, helius_das_asset, memory_recall]
        → structured report: price, security score, smart money, OODA signal
 
 You: "Start a Pump.fun scanner"
-Claude: [calls get_pump_market_data, scan_pump_token]
+Clawd: [calls get_pump_market_data, scan_pump_token]
        → autonomously runs PUMP_SCANNER_AGENT, routing signals to Telegram gateway
 ```
 
@@ -55,7 +55,7 @@ Claude: [calls get_pump_market_data, scan_pump_token]
 
 ## Architecture
 
-Claude Code's leaked source (March 2026) had this core pipeline:
+Clawd Code's leaked source (March 2026) had this core pipeline:
 
 ```
 User Input → Query Engine → LLM API → Tool Execution Loop → Output
@@ -67,7 +67,7 @@ User Input → Query Engine → LLM API → Tool Execution Loop → Output
 
 We adapted every layer for Solana:
 
-| Claude Code Layer | solana-claude Equivalent |
+| Clawd Code Layer | solana-clawd Equivalent |
 |---|---|
 | `src/state/store.ts` | `src/state/store.ts` — reactive AppState store |
 | `src/state/AppStateStore.ts` | `src/state/app-state.ts` — OODA phases, memory, subscriptions |
@@ -82,19 +82,19 @@ We adapted every layer for Solana:
 
 ## Quick Start
 
-### Option A — Claude Desktop (zero config)
+### Option A — Clawd Desktop (zero config)
 
 ```bash
-git clone https://github.com/x402agent/solana-claude
-cd solana-claude && bash scripts/setup.sh
+git clone https://github.com/x402agent/solana-clawd
+cd solana-clawd && bash scripts/setup.sh
 ```
 
-Add to `~/Library/Application Support/Claude/claude_desktop_config.json`:
+Add to `~/Library/Application Support/Clawd/clawd_desktop_config.json`:
 
 ```json
 {
   "mcpServers": {
-    "solana-claude": {
+    "solana-clawd": {
       "command": "node",
       "args": ["/absolute/path/to/solana-claude/mcp-server/dist/index.js"],
       "env": {
@@ -105,7 +105,7 @@ Add to `~/Library/Application Support/Claude/claude_desktop_config.json`:
 }
 ```
 
-Restart Claude Desktop. Done. You now have 31 live Solana tools.
+Restart Clawd Desktop. Done. You now have 31 live Solana tools.
 
 ### Option B — Cursor / VS Code
 
@@ -113,10 +113,10 @@ Add to your MCP config:
 
 ```json
 {
-  "solana-claude": {
+  "solana-clawd": {
     "command": "node",
     "args": ["mcp-server/dist/index.js"],
-    "cwd": "/path/to/solana-claude"
+    "cwd": "/path/to/solana-clawd"
   }
 }
 ```
@@ -125,9 +125,9 @@ Add to your MCP config:
 
 ```json
 {
-  "solana-claude": {
+  "solana-clawd": {
     "type": "http",
-    "url": "https://solana-claude.fly.dev/mcp"
+    "url": "https://solana-clawd.fly.dev/mcp"
   }
 }
 ```
@@ -137,7 +137,7 @@ Add to your MCP config:
 If you are running the `skills` CLI framework across Solana OS, you can install the complete agent globally from our GitHub namespace:
 
 ```bash
-npx skills add x402agent/solana-claude
+npx skills add x402agent/solana-clawd
 ```
 
 *(You can optionally use `-y` or `--yes` to install passively without prompts)*
@@ -155,7 +155,7 @@ We have integrated our **128-bit Perpetual DEX Risk Engine (v12.0.2)** design di
 
 ## Formal Verification (Lean 4 & QEDGen)
 
-We verify the mathematical invariants of `solana-claude` and its internal engines using **Lean 4** and the `qedgen` proof engineering agent.
+We verify the mathematical invariants of `solana-clawd` and its internal engines using **Lean 4** and the `qedgen` proof engineering agent.
 - Integrated natively into the project workflow via `npx skills add qedgen/solana-skills`.
 - **128-bit DEX Risk Engine:** We maintain rigorous structural formalizations (`formal_verification/SPEC.md`) to mathematically enforce `prop_protected_principal` and `prop_conservation` across arbitrary K-space liquidity evaluations.
 
@@ -163,9 +163,9 @@ We verify the mathematical invariants of `solana-claude` and its internal engine
 
 ## Telegram Gateway & TailClaude UI
 
-The `solana-claude` agentic engine now comes bundled with a **Tailscale Funnel & Telegram Gateway** out of the box (`/tailclaude`). 
-- **Cypherpunk Web Dashboard:** Run `tailclaude` to serve a rich, CRT-styled command center that bridges directly with the internal Engine Memory, Session Tracking, and Activity traces. A live instance of this Web UI is hosted at **[stalwart-queijadas-a9cb83.netlify.app](https://stalwart-queijadas-a9cb83.netlify.app)**.
-- **Telegram Bot Integration:** Control your `solana-claude` swarm securely over Telegram with the built-in bot bridging proxy. Dispatch OODA loops, run the Pump Scanner, or monitor your Snipe agents entirely from your mobile device.
+The `solana-clawd` agentic engine now comes bundled with a **Tailscale Funnel & Telegram Gateway** out of the box (`/tailclawd`). 
+- **Cypherpunk Web Dashboard:** Run `tailclawd` to serve a rich, CRT-styled command center that bridges directly with the internal Engine Memory, Session Tracking, and Activity traces. A live instance of this Web UI is hosted at **[stalwart-queijadas-a9cb83.netlify.app](https://stalwart-queijadas-a9cb83.netlify.app)**.
+- **Telegram Bot Integration:** Control your `solana-clawd` swarm securely over Telegram with the built-in bot bridging proxy. Dispatch OODA loops, run the Pump Scanner, or monitor your Snipe agents entirely from your mobile device.
 
 ---
 
@@ -279,7 +279,7 @@ npx tsx examples/ooda-loop.ts
 
 ### Built-in Agent Fleet
 
-Adapted from Claude Code's `builtInAgents.ts`:
+Adapted from Clawd Code's `builtInAgents.ts`:
 
 ```
 Explore       — read-only research, 10 turns, readOnly permission, cheap
@@ -296,7 +296,7 @@ Monitor       — onchain listener setup, 15 turns, configures webhooks
 
 ## Memory System
 
-Three tiers inspired by SolanaOS epistemology + Claude Code's memory extraction:
+Three tiers inspired by SolanaOS epistemology + Clawd Code's memory extraction:
 
 ```typescript
 import { writeMemory, recallMemory, getMemoryContext } from "./src/state/app-state.js";
@@ -324,7 +324,7 @@ const ctx = getMemoryContext(getAppState());
 
 ## Permission Engine
 
-All trade operations are **deny-first**. Adapted from Claude Code's permission system.
+All trade operations are **deny-first**. Adapted from Clawd Code's permission system.
 
 ```typescript
 // src/state/app-state.ts
@@ -363,12 +363,12 @@ Then connect anyone via:
 ## Repository Structure
 
 ```
-solana-claude/
-├── mcp-server/           MCP server (Claude Desktop, Cursor, Fly.io)
+solana-clawd/
+├── mcp-server/           MCP server (Clawd Desktop, Cursor, Fly.io)
 │   ├── src/
 │   │   ├── server.ts     31 tools, 4 resources, 5 prompts
 │   │   ├── http.ts       HTTP + SSE + Streamable transport
-│   │   └── index.ts      STDIO transport (Claude Desktop)
+│   │   └── index.ts      STDIO transport (Clawd Desktop)
 │   ├── Dockerfile
 │   └── fly.toml
 ├── src/
@@ -376,7 +376,7 @@ solana-claude/
 │   │   ├── helius-client.ts     HTTP client (RPC, DAS, enhanced txs, priority fees)
 │   │   ├── onchain-listener.ts  WebSocket (account/tx/logs/slot/signature/enhanced)
 │   │   └── index.ts
-│   ├── state/            AppState (adapted from Claude Code)
+│   ├── state/            AppState (adapted from Clawd Code)
 │   │   ├── store.ts      Reactive store (pure TS, no React)
 │   │   └── app-state.ts  OODA phases, memory tiers, permissions, agent fleet
 │   ├── agents/           Agent definitions
@@ -390,7 +390,7 @@ solana-claude/
 │   ├── tasks/            Task lifecycle manager
 │   ├── skills/           Skill registry
 │   └── shared/           Message types, model catalog, tool policy
-├── tailclaude/           Cypherpunk Telegram Gateway + Next.js UI
+├── tailclawd/           Cypherpunk Telegram Gateway + Next.js UI
 ├── docs/                 Specs including risk-engine-spec.md
 ├── examples/
 │   ├── listen-wallet.ts  Real-time wallet monitor (account + tx + slot subs)
@@ -417,7 +417,7 @@ HELIUS_WSS_URL=            # WebSocket endpoint
 # Optional — public APIs work without these
 SOLANA_TRACKER_API_KEY=    # trend data, enhanced token info
 
-# Optional — MCP mode uses Claude's built-in model
+# Optional — MCP mode uses Clawd's built-in model
 OPENROUTER_API_KEY=        # or XAI_API_KEY or ANTHROPIC_API_KEY
 
 # Optional — secure public deployment
@@ -439,15 +439,15 @@ PRs welcome. Key areas:
 
 ## Credits
 
-- **[Anthropic Claude Code](https://github.com/nirholas/claude-code)** — agentic architecture (leaked March 2026)
+- **[Anthropic Clawd Code](https://github.com/nirholas/clawd-code)** — agentic architecture (leaked March 2026)
 - **[SolanaOS](https://github.com/x402agent/SolanaOS)** — OODA strategy, Honcho memory, Solana tooling
 - **[Helius](https://helius.dev)** — best-in-class Solana RPC, DAS, streaming
-- **[Model Context Protocol](https://modelcontextprotocol.io)** — the glue that makes it work in Claude Desktop
+- **[Model Context Protocol](https://modelcontextprotocol.io)** — the glue that makes it work in Clawd Desktop
 
 ---
 
 <div align="center">
 
-MIT · [github.com/x402agent/solana-claude](https://github.com/x402agent/solana-claude) · [seeker.solanaos.net](https://seeker.solanaos.net)
+MIT · [github.com/x402agent/solana-clawd](https://github.com/x402agent/solana-clawd) · [seeker.solanaos.net](https://seeker.solanaos.net)
 
 </div>
