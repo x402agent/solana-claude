@@ -60,15 +60,15 @@ export async function importSolanaKeypairFromBytes(secretBytes: Uint8Array): Pro
  * Returns the private key bytes, hex address, and compressed public key.
  */
 export async function generateEVMKeypair(): Promise<KeypairResult> {
-  const { Wallet } = await import("ethers");
+  const { HDNodeWallet } = await import("ethers");
 
-  const wallet = Wallet.createRandom();
+  const wallet = HDNodeWallet.createRandom();
   const privateKeyHex = wallet.privateKey.startsWith("0x")
     ? wallet.privateKey.slice(2)
     : wallet.privateKey;
 
   return {
-    publicKey: wallet.publicKey,
+    publicKey: wallet.signingKey.publicKey,
     privateKey: Buffer.from(privateKeyHex, "hex"),
     address: wallet.address,
   };
@@ -87,7 +87,7 @@ export async function importEVMKeypair(privateKeyHex: string): Promise<KeypairRe
     : wallet.privateKey;
 
   return {
-    publicKey: wallet.publicKey,
+    publicKey: wallet.signingKey.publicKey,
     privateKey: Buffer.from(cleanHex, "hex"),
     address: wallet.address,
   };

@@ -1,5 +1,5 @@
 {
-  "name": "@agentwallet/core",
+  "name": "agentwallet-vault",
   "version": "0.1.0",
   "description": "Agentic wallet vault — encrypted Solana + EVM keypair management with E2B sandbox and Cloudflare Workers deployment",
   "type": "module",

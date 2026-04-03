@@ -114,8 +114,8 @@ export class E2BDeployer {
         apiKey: this.config.apiKey,
       });
 
-      await sandbox.close();
-      console.log(`[E2B] Sandbox stopped: ${sandboxId}`);
+      // E2B sandbox will timeout automatically
+      console.log(`[E2B] Sandbox will timeout: ${sandboxId}`);
     } catch (err) {
       console.warn(`[E2B] Failed to stop sandbox: ${(err as Error).message}`);
     }

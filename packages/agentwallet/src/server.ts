@@ -21,6 +21,24 @@ export function defaultServerConfig(): ServerConfig {
 }
 
 /**
+ * Helper to get a single string from a request parameter.
+ */
+function getStringParam(req: Request, param: string): string | undefined {
+  const val = req.params[param];
+  return Array.isArray(val) ? val[0] : val;
+}
+
+/**
+ * Helper to get a single string from request body.
+ */
+function getStringBody(body: Record<string, unknown>, key: string): string | undefined {
+  const val = body[key];
+  if (val === undefined) return undefined;
+  if (Array.isArray(val)) return val[0];
+  return typeof val === "string" ? val : undefined;
+}
+
+/**
  * Create an Express router for the vault API.
  */
 export function createVaultRouter(vault: Vault): express.Router {
@@ -42,7 +60,11 @@ export function createVaultRouter(vault: Vault): express.Router {
 
   // Get a specific wallet
   router.get("/wallets/:id", (req: Request, res: Response) => {
-    const wallet = vault.getWallet(req.params.id);
+    const id = getStringParam(req, "id");
+    if (!id) {
+      return res.status(400).json({ error: "Missing wallet ID" });
+    }
+    const wallet = vault.getWallet(id);
     if (!wallet) {
       return res.status(404).json({ error: "Wallet not found" });
     }
@@ -52,7 +74,11 @@ export function createVaultRouter(vault: Vault): express.Router {
   // Create a new wallet (generate keypair)
   router.post("/wallets", async (req: Request, res: Response) => {
     try {
-      const { id, label, chainType, chainId = 0 } = req.body;
+      const body = req.body as Record<string, unknown>;
+      const id = getStringBody(body, "id");
+      const label = getStringBody(body, "label");
+      const chainType = getStringBody(body, "chainType") as ChainType | undefined;
+      const chainId = typeof body.chainId === "number" ? body.chainId : 0;
 
       if (!label || !chainType) {
         return res.status(400).json({ error: "Missing required fields: label, chainType" });
@@ -71,7 +97,7 @@ export function createVaultRouter(vault: Vault): express.Router {
         return res.status(400).json({ error: `Unsupported chainType: ${chainType}` });
       }
 
-      const entry = await vault.addWallet(id, label, chainType as ChainType, chainId, address, keypair.privateKey);
+      const entry = await vault.addWallet(id, label, chainType, chainId, address, keypair.privateKey);
 
       res.status(201).json({
         wallet: {
@@ -92,7 +118,12 @@ export function createVaultRouter(vault: Vault): express.Router {
   // Import an existing wallet
   router.post("/wallets/import", async (req: Request, res: Response) => {
     try {
-      const { id, label, chainType, chainId = 0, privateKey } = req.body;
+      const body = req.body as Record<string, unknown>;
+      const id = getStringBody(body, "id");
+      const label = getStringBody(body, "label");
+      const chainType = getStringBody(body, "chainType") as ChainType | undefined;
+      const chainId = typeof body.chainId === "number" ? body.chainId : 0;
+      const privateKey = getStringBody(body, "privateKey");
 
       if (!label || !chainType || !privateKey) {
         return res.status(400).json({ error: "Missing required fields: label, chainType, privateKey" });
@@ -103,12 +134,10 @@ export function createVaultRouter(vault: Vault): express.Router {
 
       if (chainType === "solana") {
         // privateKey can be base58 or hex
-        if (typeof privateKey === "string") {
-          keypair = await (privateKey.startsWith("[")
-            ? importSolanaKeypairFromBytes(new Uint8Array(JSON.parse(privateKey)))
-            : importSolanaKeypair(privateKey));
+        if (privateKey.startsWith("[")) {
+          keypair = await importSolanaKeypairFromBytes(new Uint8Array(JSON.parse(privateKey)));
         } else {
-          keypair = await importSolanaKeypairFromBytes(new Uint8Array(privateKey));
+          keypair = await importSolanaKeypair(privateKey);
         }
         address = keypair.address;
       } else if (chainType === "evm") {
@@ -118,7 +147,7 @@ export function createVaultRouter(vault: Vault): express.Router {
         return res.status(400).json({ error: `Unsupported chainType: ${chainType}` });
       }
 
-      const entry = await vault.addWallet(id, label, chainType as ChainType, chainId, address, keypair.privateKey);
+      const entry = await vault.addWallet(id, label, chainType, chainId, address, keypair.privateKey);
 
       res.status(201).json({
         wallet: {
@@ -139,10 +168,14 @@ export function createVaultRouter(vault: Vault): express.Router {
   // Get private key (requires auth)
   router.get("/wallets/:id/private-key", (req: Request, res: Response) => {
     try {
-      const privateKey = vault.getPrivateKey(req.params.id);
+      const id = getStringParam(req, "id");
+      if (!id) {
+        return res.status(400).json({ error: "Missing wallet ID" });
+      }
+      const privateKey = vault.getPrivateKey(id);
       res.json({
         privateKey: Buffer.from(privateKey).toString("hex"),
-        id: req.params.id,
+        id,
       });
     } catch (err) {
       if ((err as Error).message.includes("not found")) {
@@ -155,8 +188,12 @@ export function createVaultRouter(vault: Vault): express.Router {
   // Pause wallet
   router.post("/wallets/:id/pause", async (req: Request, res: Response) => {
     try {
-      await vault.pauseWallet(req.params.id);
-      res.json({ status: "paused", id: req.params.id });
+      const id = getStringParam(req, "id");
+      if (!id) {
+        return res.status(400).json({ error: "Missing wallet ID" });
+      }
+      await vault.pauseWallet(id);
+      res.json({ status: "paused", id });
     } catch (err) {
       res.status(404).json({ error: (err as Error).message });
     }
@@ -165,8 +202,12 @@ export function createVaultRouter(vault: Vault): express.Router {
   // Unpause wallet
   router.post("/wallets/:id/unpause", async (req: Request, res: Response) => {
     try {
-      await vault.unpauseWallet(req.params.id);
-      res.json({ status: "unpaused", id: req.params.id });
+      const id = getStringParam(req, "id");
+      if (!id) {
+        return res.status(400).json({ error: "Missing wallet ID" });
+      }
+      await vault.unpauseWallet(id);
+      res.json({ status: "unpaused", id });
     } catch (err) {
       res.status(404).json({ error: (err as Error).message });
     }
@@ -175,8 +216,12 @@ export function createVaultRouter(vault: Vault): express.Router {
   // Delete wallet
   router.delete("/wallets/:id", async (req: Request, res: Response) => {
     try {
-      await vault.deleteWallet(req.params.id);
-      res.json({ status: "deleted", id: req.params.id });
+      const id = getStringParam(req, "id");
+      if (!id) {
+        return res.status(400).json({ error: "Missing wallet ID" });
+      }
+      await vault.deleteWallet(id);
+      res.json({ status: "deleted", id });
     } catch (err) {
       res.status(404).json({ error: (err as Error).message });
     }
@@ -197,7 +242,8 @@ export function createVaultRouter(vault: Vault): express.Router {
   // Import vault
   router.post("/vault/import", async (req: Request, res: Response) => {
     try {
-      const { data } = req.body;
+      const body = req.body as Record<string, unknown>;
+      const data = getStringBody(body, "data");
       if (!data) {
         return res.status(400).json({ error: "Missing vault data" });
       }
