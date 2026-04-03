@@ -1,189 +1,141 @@
 /**
- * src/services/x402/types.ts
+ * x402 Protocol Types
  *
- * x402 Protocol Types — Solana-first edition.
- *
- * Adapted from Claude Code's src/services/x402/types.ts.
- * Extended to support Solana USDC (SPL Token) as the primary payment rail
- * alongside EVM (Base) as secondary.
- *
- * x402 spec: https://github.com/coinbase/x402
- * Solana SVM scheme: @x402/svm (registerExactSvmScheme)
+ * Implements the x402 HTTP 402 Payment Required protocol for machine-to-machine
+ * crypto payments (USDC on Base). See: https://github.com/coinbase/x402
  */
 
-/** Payment scheme — currently only 'exact' (pay exact amount, no partial) */
-export type PaymentScheme = "exact";
+/** Supported payment schemes */
+export type PaymentScheme = 'exact'
 
-/** Supported networks — Solana first, EVM secondary */
+/** Supported blockchain networks */
 export type PaymentNetwork =
-  | "solana"           // Solana Mainnet (primary — no gas, fast, cheap)
-  | "solana-devnet"    // Solana Devnet (testing)
-  | "base"             // Base Mainnet (EVM fallback)
-  | "base-sepolia"     // Base Sepolia (EVM testnet)
-  | "ethereum"         // Ethereum Mainnet
-  | "ethereum-sepolia";
+  | 'base'
+  | 'base-sepolia'
+  | 'ethereum'
+  | 'ethereum-sepolia'
 
-/** x402 payment requirement — returned in HTTP 402 response header */
+/** Payment requirement returned in 402 response headers */
 export interface PaymentRequirement {
-  /** Payment scheme */
-  scheme: PaymentScheme;
-  /** Target network */
-  network: PaymentNetwork;
-  /** Amount in token smallest unit (USDC = 6 decimals, so 1000 = $0.001) */
-  maxAmountRequired: string;
-  /** The URL being paid for */
-  resource: string;
+  /** Payment scheme (currently only 'exact') */
+  scheme: PaymentScheme
+  /** Target blockchain network */
+  network: PaymentNetwork
+  /** Maximum amount required in smallest unit (e.g. USDC has 6 decimals) */
+  maxAmountRequired: string
+  /** The resource URL being paid for */
+  resource: string
   /** Human-readable description of what's being purchased */
-  description: string;
+  description: string
   /** MIME type of the resource */
-  mimeType?: string;
-  /** Recipient address (Base58 for Solana, EIP-55 hex for EVM) */
-  payTo: string;
-  /** Max seconds the server will wait for settlement */
-  maxTimeoutSeconds: number;
-  /** Token mint address (SPL mint for Solana, ERC-20 for EVM) */
-  asset: string;
+  mimeType?: string
+  /** Recipient wallet address (EIP-55 checksummed) */
+  payTo: string
+  /** Max seconds the server will wait for payment settlement */
+  maxTimeoutSeconds: number
+  /** Token contract address */
+  asset: string
   /** Additional token metadata */
   extra?: {
-    name?: string;
-    version?: string;
-    decimals?: number;
-  };
+    name?: string
+    version?: string
+  }
 }
 
-/** Signed payment payload — sent in X-Payment request header */
+/** Signed payment payload sent in request header */
 export interface PaymentPayload {
-  x402Version: 1;
-  scheme: PaymentScheme;
-  network: PaymentNetwork;
-  /** Network-specific payload (SVM or EVM) */
-  payload: SvmPaymentPayload | EvmPaymentPayload;
+  /** x402 protocol version */
+  x402Version: 1
+  /** Payment scheme */
+  scheme: PaymentScheme
+  /** Target blockchain network */
+  network: PaymentNetwork
+  /** Payment authorization details */
+  payload: {
+    /** Signature of the EIP-712 typed data */
+    signature: string
+    /** Authorization details for EIP-3009 transferWithAuthorization */
+    authorization: {
+      /** Payer wallet address */
+      from: string
+      /** Recipient wallet address */
+      to: string
+      /** Payment amount in smallest unit */
+      value: string
+      /** Validity start timestamp (usually 0) */
+      validAfter: string
+      /** Validity end timestamp */
+      validBefore: string
+      /** Unique nonce to prevent replay */
+      nonce: string
+    }
+  }
 }
 
-/** Solana SVM payment payload (SPL Token transfer via @solana/kit) */
-export interface SvmPaymentPayload {
-  type: "svm";
-  /** Base64-encoded signed Solana transaction */
-  transaction: string;
-  /** Payer public key (Base58) */
-  from: string;
-  /** Recipient public key (Base58) */
-  to: string;
-  /** Amount in lamports (for SOL) or token smallest unit (for USDC) */
-  value: string;
-  /** Unique nonce to prevent replay (Base58-encoded 32 bytes) */
-  nonce: string;
-  /** Validity window */
-  validAfter: string;
-  validBefore: string;
+/** x402 wallet configuration stored in global config */
+export interface X402WalletConfig {
+  /** Whether x402 payments are enabled */
+  enabled: boolean
+  /** Blockchain network to use */
+  network: PaymentNetwork
+  /** Wallet address (derived from private key, stored for display) */
+  address?: string
+  /** Maximum payment per request in USD (safety limit) */
+  maxPaymentPerRequestUSD: number
+  /** Maximum total spend per session in USD */
+  maxSessionSpendUSD: number
+  /** Facilitator URL for payment verification */
+  facilitatorUrl?: string
 }
 
-/** EVM payment payload (EIP-3009 transferWithAuthorization) */
-export interface EvmPaymentPayload {
-  type: "evm";
-  signature: string;
-  authorization: {
-    from: string;
-    to: string;
-    value: string;
-    validAfter: string;
-    validBefore: string;
-    nonce: string;
-  };
-}
-
-/** x402 wallet configuration (stored in ~/.config/solana-claude/config.json) */
-export interface X402Config {
-  enabled: boolean;
-  /** Primary network — Solana for this runtime */
-  primaryNetwork: PaymentNetwork;
-  /** Solana wallet (keypair) configuration */
-  solana?: {
-    /** Payer public key (Base58) — derived from private key, safe to store */
-    publicKey: string;
-    /** USDC mint address on the configured network */
-    usdcMint: string;
-  };
-  /** EVM wallet configuration (optional fallback) */
-  evm?: {
-    address: string;
-  };
-  /** Max USD per single request */
-  maxPaymentPerRequestUSD: number;
-  /** Max USD per session */
-  maxSessionSpendUSD: number;
-  /** Override facilitator URL */
-  facilitatorUrl?: string;
-}
-
-/** Payment record for tracking and display */
+/** x402 payment record for cost tracking */
 export interface X402PaymentRecord {
-  id: string;
-  timestamp: number;
-  resource: string;
-  description: string;
-  network: PaymentNetwork;
-  /** Amount in token smallest unit */
-  amount: string;
+  /** Timestamp of payment */
+  timestamp: number
+  /** URL that required payment */
+  resource: string
+  /** Amount paid in token smallest unit */
+  amount: string
   /** USD equivalent at time of payment */
-  amountUSD: number;
-  token: string;
-  payTo: string;
-  /** Transaction signature (Base58 for Solana, hex for EVM) */
-  txSignature: string;
-  status: "pending" | "settled" | "failed";
+  amountUSD: number
+  /** Token used (e.g. 'USDC') */
+  token: string
+  /** Network used */
+  network: PaymentNetwork
+  /** Recipient address */
+  payTo: string
+  /** Transaction signature/hash */
+  signature: string
 }
 
-/** x402 HTTP headers */
+/** Header names used in the x402 protocol */
 export const X402_HEADERS = {
-  PAYMENT_REQUIRED: "x-payment-required",
-  PAYMENT: "x-payment",
-  PAYMENT_RESPONSE: "x-payment-response",
-} as const;
+  /** Server → Client: Payment requirement details (JSON) */
+  PAYMENT_REQUIRED: 'x-payment-required',
+  /** Client → Server: Signed payment payload (base64 JSON) */
+  PAYMENT: 'x-payment',
+} as const
 
-/** USDC token addresses by network */
-export const USDC_ADDRESSES: Record<PaymentNetwork, string> = {
-  "solana":          "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v", // Solana Mainnet USDC
-  "solana-devnet":   "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU", // Devnet USDC
-  "base":            "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
-  "base-sepolia":    "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
-  "ethereum":        "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
-  "ethereum-sepolia":"0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238",
-} as const;
-
-/** Default facilitator URLs */
+/** Default facilitator URLs by network */
 export const DEFAULT_FACILITATOR_URLS: Record<PaymentNetwork, string> = {
-  "solana":          "https://x402.org/facilitator",
-  "solana-devnet":   "https://x402.org/facilitator",
-  "base":            "https://x402.org/facilitator",
-  "base-sepolia":    "https://x402.org/facilitator",
-  "ethereum":        "https://x402.org/facilitator",
-  "ethereum-sepolia":"https://x402.org/facilitator",
-} as const;
+  'base': 'https://x402.org/facilitator',
+  'base-sepolia': 'https://x402.org/facilitator',
+  'ethereum': 'https://x402.org/facilitator',
+  'ethereum-sepolia': 'https://x402.org/facilitator',
+} as const
 
-export const X402_DEFAULTS: X402Config = {
+/** USDC contract addresses by network */
+export const USDC_ADDRESSES: Record<PaymentNetwork, string> = {
+  'base': '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913',
+  'base-sepolia': '0x036CbD53842c5426634e7929541eC2318f3dCF7e',
+  'ethereum': '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
+  'ethereum-sepolia': '0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238',
+} as const
+
+/** Default configuration values */
+export const X402_DEFAULTS: X402WalletConfig = {
   enabled: false,
-  primaryNetwork: "solana",
+  network: 'base',
   maxPaymentPerRequestUSD: 0.10,
   maxSessionSpendUSD: 5.00,
-} as const;
-
-/** Is this a Solana network? */
-export function isSolanaNetwork(network: PaymentNetwork): boolean {
-  return network === "solana" || network === "solana-devnet";
-}
-
-/** Is this an EVM network? */
-export function isEvmNetwork(network: PaymentNetwork): boolean {
-  return !isSolanaNetwork(network);
-}
-
-/** USDC decimals for a given network */
-export function getUsdcDecimals(network: PaymentNetwork): number {
-  return 6; // USDC is always 6 decimals on both Solana and EVM
-}
-
-/** Convert token amount (smallest unit) to USD */
-export function tokenAmountToUSD(amount: string, network: PaymentNetwork): number {
-  return parseInt(amount, 10) / 10 ** getUsdcDecimals(network);
-}
+} as const

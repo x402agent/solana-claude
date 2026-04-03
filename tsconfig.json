@@ -1,17 +1,31 @@
 {
   "compilerOptions": {
-    "target": "ES2022",
+    "target": "ES2023",
+    "lib": ["ES2023", "DOM", "DOM.Iterable"],
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
-    "outDir": "./dist",
-    "rootDir": "./src",
-    "strict": true,
+    "jsx": "react-jsx",
+    "jsxImportSource": "react",
+    "strict": false,
+    "noEmit": false,
     "esModuleInterop": true,
     "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
     "declaration": true,
+    "declarationMap": true,
     "sourceMap": true,
-    "resolveJsonModule": true
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "baseUrl": ".",
+    "paths": {
+      "src/*": ["./src/*"]
+    },
+    "allowImportingTsExtensions": false,
+    "noImplicitAny": false,
+    "strictNullChecks": false,
+    "types": ["node"]
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist", "mcp-server"]
+  "exclude": ["node_modules", "dist", "packages", "claude-code-main 2", "web"]
 }

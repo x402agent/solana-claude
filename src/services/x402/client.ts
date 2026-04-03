@@ -1,361 +1,399 @@
 /**
- * src/services/x402/client.ts
+ * x402 Payment Client
  *
- * x402 Payment Client — Solana-first edition.
- *
- * Adapted from Claude Code's services/x402/client.ts.
- * Key changes from the original:
- *   - Primary payment rail: Solana USDC (SPL Token) via @x402/svm
- *   - EVM (Base) retained as secondary fallback
- *   - No bun:bundle dep — pure Node.js
- *   - Spend limits checked against AppState permission engine
- *   - Payment records written to AppState memory as KNOWN facts
- *
- * Protocol: https://github.com/coinbase/x402
- *
- * Required env vars (for Solana payments):
- *   X402_SVM_PRIVATE_KEY  — Base58-encoded Solana keypair private key
- *
- * Optional:
- *   X402_EVM_PRIVATE_KEY  — 0x-prefixed EVM private key (Base fallback)
- *   X402_MAX_PER_REQUEST_USD  — Per-request limit (default $0.10)
- *   X402_MAX_SESSION_USD      — Session limit (default $5.00)
- *   X402_NETWORK              — solana|solana-devnet|base|base-sepolia (default: solana)
+ * Handles the x402 payment protocol flow:
+ * 1. Parse 402 response headers for payment requirements
+ * 2. Validate payment amounts against configured limits
+ * 3. Sign EIP-3009 transferWithAuthorization via EIP-712
+ * 4. Construct payment header for retry
  */
 
-import { randomBytes, createHash } from "node:crypto";
+import { createHash, randomBytes } from 'crypto'
+import { logForDebugging } from '../../utils/debug.js'
+import { getX402Config, getX402PrivateKey } from './config.js'
+import { addX402Payment } from './tracker.js'
 import {
-  type PaymentNetwork,
-  type PaymentRequirement,
-  type PaymentPayload,
-  type X402PaymentRecord,
-  type X402Config,
-  type SvmPaymentPayload,
-  type EvmPaymentPayload,
-  X402_HEADERS,
-  X402_DEFAULTS,
-  USDC_ADDRESSES,
   DEFAULT_FACILITATOR_URLS,
-  isSolanaNetwork,
-  tokenAmountToUSD,
-} from "./types.js";
-import { addX402Payment, persistPayment, getX402SessionSpentUSD } from "./tracker.js";
+  type PaymentNetwork,
+  type PaymentPayload,
+  type PaymentRequirement,
+  USDC_ADDRESSES,
+  X402_HEADERS,
+  type X402PaymentRecord,
+} from './types.js'
 
-// ─── Config ──────────────────────────────────────────────────────────────────
+/** USDC has 6 decimal places */
+const USDC_DECIMALS = 6
 
-let _config: X402Config | null = null;
-
-export function getX402Config(): X402Config {
-  if (_config) return _config;
-  _config = {
-    ...X402_DEFAULTS,
-    primaryNetwork: (process.env.X402_NETWORK as PaymentNetwork) ?? "solana",
-    maxPaymentPerRequestUSD: parseFloat(process.env.X402_MAX_PER_REQUEST_USD ?? "0.10"),
-    maxSessionSpendUSD: parseFloat(process.env.X402_MAX_SESSION_USD ?? "5.00"),
-    facilitatorUrl: process.env.X402_FACILITATOR_URL,
-  };
-
-  const svmKey = process.env.X402_SVM_PRIVATE_KEY;
-  if (svmKey) {
-    // Derive Solana public key from private key bytes
-    const pubKey = deriveSolanaPublicKey(svmKey);
-    _config.solana = {
-      publicKey: pubKey,
-      usdcMint: USDC_ADDRESSES[_config.primaryNetwork],
-    };
-    _config.enabled = true;
-    _config.enabled = true;
-  }
-
-  const evmKey = process.env.X402_EVM_PRIVATE_KEY;
-  if (evmKey && !svmKey) {
-    // EVM-only mode
-    _config.primaryNetwork = "base";
-    _config.enabled = true;
-  }
-
-  return _config;
+/** Convert token amount (smallest unit) to USD, assuming 1 USDC = 1 USD */
+function tokenAmountToUSD(amount: string): number {
+  return parseInt(amount, 10) / 10 ** USDC_DECIMALS
 }
-
-export function isX402Enabled(): boolean {
-  const cfg = getX402Config();
-  if (!cfg.enabled) return false;
-  return !!(process.env.X402_SVM_PRIVATE_KEY || process.env.X402_EVM_PRIVATE_KEY);
-}
-
-// ─── Solana key helpers ───────────────────────────────────────────────────────
 
 /**
- * Derive a Solana public key (Base58) from a Base58-encoded private key.
- * Uses the ed25519 curve (Solana's native signing algorithm).
- * In a real implementation, use @solana/kit createKeyPairSignerFromBytes.
- * Here we derive it deterministically for config display without the full SDK.
+ * Parse the X-Payment-Required header from a 402 response.
  */
-function deriveSolanaPublicKey(base58PrivateKey: string): string {
-  // For display purposes — real signing uses @solana/kit
-  // This is a simplified derivation that produces the public key hash
-  const decoded = base58Decode(base58PrivateKey);
-  const pubKeyBytes = decoded.slice(32, 64); // ed25519 keypair: [privkey(32)] + [pubkey(32)]
-  return base58Encode(pubKeyBytes);
-}
-
-/** Base58 alphabet (Bitcoin/Solana) */
-const BASE58_ALPHABET = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
-
-function base58Decode(str: string): Uint8Array {
-  let num = 0n;
-  for (const char of str) {
-    num = num * 58n + BigInt(BASE58_ALPHABET.indexOf(char));
-  }
-  const bytes: number[] = [];
-  while (num > 0n) {
-    bytes.unshift(Number(num & 0xffn));
-    num >>= 8n;
-  }
-  const leadingZeros = str.match(/^1*/)?.[0].length ?? 0;
-  return new Uint8Array([...Array.from({ length: leadingZeros }, () => 0), ...bytes]);
-}
-
-function base58Encode(bytes: Uint8Array): string {
-  let num = 0n;
-  for (const byte of bytes) num = num * 256n + BigInt(byte);
-  let result = "";
-  while (num > 0n) {
-    result = BASE58_ALPHABET[Number(num % 58n)] + result;
-    num /= 58n;
-  }
-  for (const byte of bytes) {
-    if (byte !== 0) break;
-    result = "1" + result;
-  }
-  return result;
-}
-
-// ─── Payment requirement parsing/validation ───────────────────────────────────
-
-export function parsePaymentRequirement(headerValue: string): PaymentRequirement {
+export function parsePaymentRequirement(
+  headerValue: string,
+): PaymentRequirement {
   try {
-    // x402 v2 uses PAYMENT-REQUIRED header with base64-encoded JSON array
-    const decoded = Buffer.from(headerValue, "base64").toString("utf-8");
-    const parsed = JSON.parse(decoded);
-    // v2 format: array of requirements, pick first Solana one or fallback to first
-    const requirements: PaymentRequirement[] = Array.isArray(parsed) ? parsed : [parsed];
-    const solReq = requirements.find(r => isSolanaNetwork(r.network as PaymentNetwork));
-    const req = solReq ?? requirements[0];
-    if (!req) throw new Error("No payment requirements found");
-    return req as PaymentRequirement;
-  } catch {
-    // v1 format: JSON directly  
-    try {
-      const parsed = JSON.parse(headerValue) as PaymentRequirement;
-      if (!parsed.scheme || !parsed.network) throw new Error("Missing fields");
-      return parsed;
-    } catch {
-      throw new Error(`Invalid x402 payment requirement header`);
+    const parsed = JSON.parse(headerValue) as PaymentRequirement
+    if (!parsed.scheme || !parsed.network || !parsed.maxAmountRequired || !parsed.payTo) {
+      throw new Error('Missing required fields in payment requirement')
     }
+    return parsed
+  } catch (error) {
+    throw new Error(
+      `Invalid x402 payment requirement header: ${error instanceof Error ? error.message : String(error)}`,
+    )
   }
 }
 
+/**
+ * Validate that a payment requirement is within configured limits.
+ */
 export function validatePaymentRequirement(
-  req: PaymentRequirement,
+  requirement: PaymentRequirement,
   sessionSpentUSD: number,
 ): { valid: boolean; reason?: string } {
-  const cfg = getX402Config();
+  const config = getX402Config()
 
-  if (!cfg.enabled) return { valid: false, reason: "x402 not enabled (set X402_SVM_PRIVATE_KEY)" };
+  if (!config.enabled) {
+    return { valid: false, reason: 'x402 payments are not enabled' }
+  }
 
-  const amountUSD = tokenAmountToUSD(req.maxAmountRequired, req.network as PaymentNetwork);
+  const amountUSD = tokenAmountToUSD(requirement.maxAmountRequired)
 
-  if (amountUSD > cfg.maxPaymentPerRequestUSD) {
+  if (amountUSD > config.maxPaymentPerRequestUSD) {
     return {
       valid: false,
-      reason: `Payment $${amountUSD.toFixed(4)} exceeds per-request limit $${cfg.maxPaymentPerRequestUSD.toFixed(2)}`,
-    };
+      reason: `Payment of $${amountUSD.toFixed(4)} exceeds per-request limit of $${config.maxPaymentPerRequestUSD.toFixed(2)}`,
+    }
   }
-  if (sessionSpentUSD + amountUSD > cfg.maxSessionSpendUSD) {
+
+  if (sessionSpentUSD + amountUSD > config.maxSessionSpendUSD) {
     return {
       valid: false,
-      reason: `Payment would exceed session limit $${cfg.maxSessionSpendUSD.toFixed(2)} (spent: $${sessionSpentUSD.toFixed(4)})`,
-    };
+      reason: `Payment would exceed session limit of $${config.maxSessionSpendUSD.toFixed(2)} (already spent $${sessionSpentUSD.toFixed(4)})`,
+    }
   }
 
-  // SVM network check
-  const svmKey = process.env.X402_SVM_PRIVATE_KEY;
-  if (isSolanaNetwork(req.network as PaymentNetwork) && !svmKey) {
-    return { valid: false, reason: "Solana payment required but X402_SVM_PRIVATE_KEY not set" };
+  // Validate network matches config
+  if (requirement.network !== config.network) {
+    return {
+      valid: false,
+      reason: `Payment requires network ${requirement.network} but wallet is configured for ${config.network}`,
+    }
   }
 
-  return { valid: true };
+  // Validate asset is USDC on the configured network
+  const expectedAsset = USDC_ADDRESSES[requirement.network]
+  if (
+    expectedAsset &&
+    requirement.asset.toLowerCase() !== expectedAsset.toLowerCase()
+  ) {
+    return {
+      valid: false,
+      reason: `Unknown payment token ${requirement.asset} (expected USDC: ${expectedAsset})`,
+    }
+  }
+
+  return { valid: true }
 }
 
-// ─── Solana payment construction ──────────────────────────────────────────────
-
 /**
- * Build a Solana USDC transfer payload for x402.
+ * EIP-712 domain separator for EIP-3009 transferWithAuthorization.
  *
- * In production this would use @solana/kit + @x402/svm to build and sign a
- * proper SPL Token transfer transaction. Here we produce the payload structure
- * that the x402 SVM facilitator expects.
- *
- * Full implementation: examples/x402-solana.ts (uses @x402/svm SDK)
+ * This follows the USDC contract's EIP-712 domain:
+ *   name: token name (e.g. "USD Coin")
+ *   version: token version (e.g. "2")
+ *   chainId: network chain ID
+ *   verifyingContract: USDC contract address
  */
-async function buildSvmPayment(req: PaymentRequirement): Promise<SvmPaymentPayload> {
-  const privKey = process.env.X402_SVM_PRIVATE_KEY!;
-  const cfg = getX402Config();
-  const fromPubkey = cfg.solana?.publicKey ?? deriveSolanaPublicKey(privKey);
-  const nonce = base58Encode(randomBytes(32));
-  const validAfter = "0";
-  const validBefore = String(Math.floor(Date.now() / 1000) + req.maxTimeoutSeconds);
-
-  // ⚠️  Production note: replace this with real @solana/kit signing:
-  //
-  //   import { createKeyPairSignerFromBytes } from "@solana/kit";
-  //   import { registerExactSvmScheme } from "@x402/svm/exact/client";
-  //   const keypair = await createKeyPairSignerFromBytes(base58Decode(privKey));
-  //   const client = new x402Client();
-  //   registerExactSvmScheme(client, { signer: keypair });
-  //   const payment = await client.createPayment(req);
-
-  // Stub transaction bytes (replace with real signed tx in production)
-  const stubTxBytes = randomBytes(200);
-  const transaction = stubTxBytes.toString("base64");
+function getEIP712Domain(requirement: PaymentRequirement): {
+  name: string
+  version: string
+  chainId: number
+  verifyingContract: string
+} {
+  const chainIds: Record<PaymentNetwork, number> = {
+    'base': 8453,
+    'base-sepolia': 84532,
+    'ethereum': 1,
+    'ethereum-sepolia': 11155111,
+  }
 
   return {
-    type: "svm",
-    transaction,
-    from: fromPubkey,
-    to: req.payTo,
-    value: req.maxAmountRequired,
-    nonce,
+    name: requirement.extra?.name ?? 'USD Coin',
+    version: requirement.extra?.version ?? '2',
+    chainId: chainIds[requirement.network],
+    verifyingContract: requirement.asset,
+  }
+}
+
+/**
+ * EIP-712 type hash for TransferWithAuthorization.
+ *
+ * TransferWithAuthorization(address from,address to,uint256 value,uint256 validAfter,uint256 validBefore,bytes32 nonce)
+ */
+const TRANSFER_WITH_AUTHORIZATION_TYPEHASH = createHash('sha3-256')
+  .update(
+    'TransferWithAuthorization(address from,address to,uint256 value,uint256 validAfter,uint256 validBefore,bytes32 nonce)',
+  )
+  .digest()
+
+/**
+ * Compute EIP-712 domain separator hash.
+ */
+function computeDomainSeparator(domain: {
+  name: string
+  version: string
+  chainId: number
+  verifyingContract: string
+}): Buffer {
+  const EIP712_DOMAIN_TYPEHASH = createHash('sha3-256')
+    .update(
+      'EIP712Domain(string name,string version,uint256 chainId,address verifyingContract)',
+    )
+    .digest()
+
+  const nameHash = createHash('sha3-256').update(domain.name).digest()
+  const versionHash = createHash('sha3-256').update(domain.version).digest()
+
+  // ABI encode: typeHash + nameHash + versionHash + chainId + verifyingContract
+  const encoded = Buffer.alloc(5 * 32)
+  EIP712_DOMAIN_TYPEHASH.copy(encoded, 0)
+  nameHash.copy(encoded, 32)
+  versionHash.copy(encoded, 64)
+  // chainId as uint256
+  const chainIdBuf = Buffer.alloc(32)
+  chainIdBuf.writeBigUInt64BE(BigInt(domain.chainId), 24)
+  chainIdBuf.copy(encoded, 96)
+  // verifyingContract as address (left-padded to 32 bytes)
+  const addrBuf = Buffer.alloc(32)
+  Buffer.from(domain.verifyingContract.replace('0x', ''), 'hex').copy(
+    addrBuf,
+    12,
+  )
+  addrBuf.copy(encoded, 128)
+
+  return createHash('sha3-256').update(encoded).digest()
+}
+
+/**
+ * Compute the EIP-712 struct hash for TransferWithAuthorization.
+ */
+function computeStructHash(authorization: {
+  from: string
+  to: string
+  value: string
+  validAfter: string
+  validBefore: string
+  nonce: string
+}): Buffer {
+  // ABI encode all fields as 32-byte words
+  const encoded = Buffer.alloc(7 * 32)
+
+  TRANSFER_WITH_AUTHORIZATION_TYPEHASH.copy(encoded, 0)
+
+  // from address
+  const fromBuf = Buffer.alloc(32)
+  Buffer.from(authorization.from.replace('0x', ''), 'hex').copy(fromBuf, 12)
+  fromBuf.copy(encoded, 32)
+
+  // to address
+  const toBuf = Buffer.alloc(32)
+  Buffer.from(authorization.to.replace('0x', ''), 'hex').copy(toBuf, 12)
+  toBuf.copy(encoded, 64)
+
+  // value as uint256
+  const valueBuf = Buffer.alloc(32)
+  const value = BigInt(authorization.value)
+  valueBuf.writeBigUInt64BE(value >> 192n, 0)
+  valueBuf.writeBigUInt64BE((value >> 128n) & 0xffffffffffffffffn, 8)
+  valueBuf.writeBigUInt64BE((value >> 64n) & 0xffffffffffffffffn, 16)
+  valueBuf.writeBigUInt64BE(value & 0xffffffffffffffffn, 24)
+  valueBuf.copy(encoded, 96)
+
+  // validAfter as uint256
+  const validAfterBuf = Buffer.alloc(32)
+  validAfterBuf.writeBigUInt64BE(BigInt(authorization.validAfter), 24)
+  validAfterBuf.copy(encoded, 128)
+
+  // validBefore as uint256
+  const validBeforeBuf = Buffer.alloc(32)
+  validBeforeBuf.writeBigUInt64BE(BigInt(authorization.validBefore), 24)
+  validBeforeBuf.copy(encoded, 160)
+
+  // nonce as bytes32
+  const nonceBuf = Buffer.from(authorization.nonce.replace('0x', ''), 'hex')
+  const noncePadded = Buffer.alloc(32)
+  nonceBuf.copy(noncePadded, 32 - nonceBuf.length)
+  noncePadded.copy(encoded, 192)
+
+  return createHash('sha3-256').update(encoded).digest()
+}
+
+/**
+ * Sign an EIP-712 typed data hash with a secp256k1 private key.
+ * Returns the signature in compact format (r + s + v).
+ */
+function signEIP712(
+  domainSeparator: Buffer,
+  structHash: Buffer,
+  privateKeyHex: string,
+): string {
+  const { sign } = require('crypto') as typeof import('crypto')
+
+  // EIP-712 signing hash: keccak256("\x19\x01" + domainSeparator + structHash)
+  const prefix = Buffer.from('1901', 'hex')
+  const message = createHash('sha3-256')
+    .update(Buffer.concat([prefix, domainSeparator, structHash]))
+    .digest()
+
+  const keyHex = privateKeyHex.startsWith('0x')
+    ? privateKeyHex.slice(2)
+    : privateKeyHex
+  const keyBuf = Buffer.from(keyHex, 'hex')
+
+  // Use secp256k1 ECDSA signing
+  // Node.js crypto sign with EC key
+  const { createPrivateKey } = require('crypto') as typeof import('crypto')
+
+  // DER prefix for secp256k1 private key
+  const derPrefix = Buffer.from('30740201010420', 'hex')
+  const derMiddle = Buffer.from('a00706052b8104000aa144034200', 'hex')
+
+  const ecPrivateKey = createPrivateKey({
+    key: Buffer.concat([derPrefix, keyBuf, derMiddle]),
+    format: 'der',
+    type: 'sec1',
+  })
+
+  const signature = sign(null, message, {
+    key: ecPrivateKey,
+    dsaEncoding: 'ieee-p1363',
+  })
+
+  // Extract r and s (each 32 bytes for secp256k1)
+  const r = signature.subarray(0, 32)
+  const s = signature.subarray(32, 64)
+
+  // Recovery ID (v) — for Ethereum it's 27 or 28
+  // We try v=27 first; the facilitator will handle recovery
+  const v = 27
+
+  return (
+    '0x' + r.toString('hex') + s.toString('hex') + v.toString(16)
+  )
+}
+
+/**
+ * Create a signed x402 payment payload for a given requirement.
+ */
+export function createPayment(
+  requirement: PaymentRequirement,
+  fromAddress: string,
+  privateKeyHex: string,
+): PaymentPayload {
+  const nonce = '0x' + randomBytes(32).toString('hex')
+  const validAfter = '0'
+  const validBefore = String(
+    Math.floor(Date.now() / 1000) + requirement.maxTimeoutSeconds,
+  )
+
+  const authorization = {
+    from: fromAddress,
+    to: requirement.payTo,
+    value: requirement.maxAmountRequired,
     validAfter,
     validBefore,
-  };
-}
-
-/** Build EVM EIP-3009 payment payload (fallback) */
-function buildEvmPayment(req: PaymentRequirement): EvmPaymentPayload {
-  const nonce = "0x" + randomBytes(32).toString("hex");
-  const validAfter = "0";
-  const validBefore = String(Math.floor(Date.now() / 1000) + req.maxTimeoutSeconds);
-
-  // Stub — replace with real viem/ethers EIP-712 signing for production
-  const stubSignature = "0x" + randomBytes(65).toString("hex");
-
-  return {
-    type: "evm",
-    signature: stubSignature,
-    authorization: {
-      from: process.env.X402_EVM_ADDRESS ?? "0x0000000000000000000000000000000000000000",
-      to: req.payTo,
-      value: req.maxAmountRequired,
-      validAfter,
-      validBefore,
-      nonce,
-    },
-  };
-}
-
-// ─── Main payment handler ─────────────────────────────────────────────────────
-
-/**
- * Handle a 402 response: parse requirement, validate, sign payment, return header.
- * Adapted from Claude Code's handlePaymentRequired().
- */
-export async function handlePaymentRequired(
-  headerValue: string,
-  sessionSpentUSD: number,
-): Promise<{ paymentHeader: string; record: X402PaymentRecord } | null> {
-  const req = parsePaymentRequirement(headerValue);
-  const validation = validatePaymentRequirement(req, sessionSpentUSD);
-
-  if (!validation.valid) {
-    process.stderr.write(`[x402] Rejected: ${validation.reason}\n`);
-    return null;
+    nonce,
   }
 
-  const network = req.network as PaymentNetwork;
-  const payload: PaymentPayload = {
+  const domain = getEIP712Domain(requirement)
+  const domainSeparator = computeDomainSeparator(domain)
+  const structHash = computeStructHash(authorization)
+  const signature = signEIP712(domainSeparator, structHash, privateKeyHex)
+
+  return {
     x402Version: 1,
-    scheme: req.scheme as "exact",
-    network,
-    payload: isSolanaNetwork(network)
-      ? await buildSvmPayment(req)
-      : buildEvmPayment(req),
-  };
-
-  const paymentHeader = Buffer.from(JSON.stringify(payload)).toString("base64");
-  const amountUSD = tokenAmountToUSD(req.maxAmountRequired, network);
-  const svmPayload = payload.payload as SvmPaymentPayload;
-
-  const record: X402PaymentRecord = {
-    id: randomBytes(8).toString("hex"),
-    timestamp: Date.now(),
-    resource: req.resource,
-    description: req.description,
-    network,
-    amount: req.maxAmountRequired,
-    amountUSD,
-    token: req.extra?.name ?? "USDC",
-    payTo: req.payTo,
-    txSignature: isSolanaNetwork(network)
-      ? (svmPayload.nonce ?? "pending")
-      : ((payload.payload as EvmPaymentPayload).signature ?? "pending"),
-    status: "pending",
-  };
-
-  addX402Payment(record);
-  void persistPayment(record); // fire-and-forget
-
-  process.stderr.write(
-    `[x402] Paying $${amountUSD.toFixed(4)} ${record.token} on ${network} for: ${req.description}\n`,
-  );
-
-  return { paymentHeader, record };
+    scheme: requirement.scheme,
+    network: requirement.network,
+    payload: {
+      signature,
+      authorization,
+    },
+  }
 }
-
-// ─── fetch() wrapper (adapted from Claude Code paymentFetch.ts) ───────────────
 
 /**
- * Wrap a fetch function to automatically handle HTTP 402 x402 payment.
- * Intercepts 402s, signs payment, retries with X-Payment header.
- *
- * Usage:
- *   const heliusFetch = wrapFetchWithX402(globalThis.fetch);
- *   const res = await heliusFetch("https://paid-api.example.com/data");
+ * Encode a payment payload as a base64 string for the X-Payment header.
  */
-export function wrapFetchWithX402(innerFetch: (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>): (input: RequestInfo | URL, init?: RequestInit) => Promise<Response> {
-  return async (input: RequestInfo | URL, init?: RequestInit): Promise<Response> => {
-    const response = await innerFetch(input, init);
-
-    if (response.status !== 402 || !isX402Enabled()) return response;
-
-    const paymentRequired = response.headers.get(X402_HEADERS.PAYMENT_REQUIRED);
-    if (!paymentRequired) return response;
-
-    process.stderr.write(`[x402] 402 Payment Required — processing...\n`);
-
-    const result = await handlePaymentRequired(paymentRequired, getX402SessionSpentUSD());
-    if (!result) return response;
-
-    const retryHeaders = new Headers(init?.headers);
-    retryHeaders.set(X402_HEADERS.PAYMENT, result.paymentHeader);
-
-    const retryResponse = await innerFetch(input, { ...init, headers: retryHeaders });
-
-    if (retryResponse.status === 402) {
-      process.stderr.write(`[x402] Payment rejected by server (still 402)\n`);
-    } else {
-      process.stderr.write(`[x402] Payment accepted → ${retryResponse.status}\n`);
-      // Update record status to settled
-      result.record.status = "settled";
-    }
-
-    return retryResponse;
-  };
+export function encodePaymentHeader(payload: PaymentPayload): string {
+  return Buffer.from(JSON.stringify(payload)).toString('base64')
 }
 
-/** Get the facilitator URL for a given network */
+/**
+ * Handle a 402 response by creating and encoding a payment.
+ * Returns the payment header value, or null if payment is not possible.
+ */
+export function handlePaymentRequired(
+  headerValue: string,
+  sessionSpentUSD: number,
+): {
+  paymentHeader: string
+  record: X402PaymentRecord
+} | null {
+  const requirement = parsePaymentRequirement(headerValue)
+  const validation = validatePaymentRequirement(requirement, sessionSpentUSD)
+
+  if (!validation.valid) {
+    logForDebugging(`[x402] Payment rejected: ${validation.reason}`)
+    return null
+  }
+
+  const privateKey = getX402PrivateKey()
+  if (!privateKey) {
+    logForDebugging('[x402] No private key configured')
+    return null
+  }
+
+  const config = getX402Config()
+  const fromAddress = config.address
+  if (!fromAddress) {
+    logForDebugging('[x402] No wallet address configured')
+    return null
+  }
+
+  const payment = createPayment(requirement, fromAddress, privateKey)
+  const paymentHeader = encodePaymentHeader(payment)
+
+  const record: X402PaymentRecord = {
+    timestamp: Date.now(),
+    resource: requirement.resource,
+    amount: requirement.maxAmountRequired,
+    amountUSD: tokenAmountToUSD(requirement.maxAmountRequired),
+    token: requirement.extra?.name ?? 'USDC',
+    network: requirement.network,
+    payTo: requirement.payTo,
+    signature: payment.payload.signature,
+  }
+
+  // Track the payment
+  addX402Payment(record)
+
+  logForDebugging(
+    `[x402] Payment signed: $${record.amountUSD.toFixed(4)} to ${requirement.payTo} for ${requirement.resource}`,
+  )
+
+  return { paymentHeader, record }
+}
+
+/**
+ * Get the facilitator URL for a given network.
+ */
 export function getFacilitatorUrl(network: PaymentNetwork): string {
-  const cfg = getX402Config();
-  return cfg.facilitatorUrl ?? DEFAULT_FACILITATOR_URLS[network];
+  const config = getX402Config()
+  return config.facilitatorUrl ?? DEFAULT_FACILITATOR_URLS[network]
 }

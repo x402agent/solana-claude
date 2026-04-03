@@ -1,129 +1,81 @@
 /**
- * src/services/x402/tracker.ts
+ * x402 Payment Tracker
  *
- * x402 Payment Tracker — adapted from Claude Code's services/x402/tracker.ts.
- * Tracks payments per session for cost display, safety limits, and MCP tool output.
- * Solana-first: records Base58 tx signatures instead of EVM hashes.
+ * Tracks x402 payments within a session for cost display and safety limits.
+ * Integrates with the main cost tracking system.
  */
 
-import * as fs from "node:fs/promises";
-import * as path from "node:path";
-import * as os from "node:os";
-import type { X402PaymentRecord, PaymentNetwork } from "./types.js";
-import { tokenAmountToUSD } from "./types.js";
+import chalk from 'chalk'
+import { logForDebugging } from '../../utils/debug.js'
+import { formatNumber } from '../../utils/format.js'
+import type { X402PaymentRecord } from './types.js'
 
-// ─── In-memory session tracking (adapted from Claude Code tracker.ts) ──────
+/** In-memory payment records for the current session */
+let sessionPayments: X402PaymentRecord[] = []
+let sessionTotalUSD = 0
 
-let sessionPayments: X402PaymentRecord[] = [];
-let sessionTotalUSD = 0;
-
+/** Add a payment record to the session tracker */
 export function addX402Payment(record: X402PaymentRecord): void {
-  sessionPayments.push(record);
-  sessionTotalUSD += record.amountUSD;
-  process.stderr.write(
-    `[x402] Payment: $${record.amountUSD.toFixed(4)} ${record.token} on ${record.network} → ${record.payTo.slice(0, 8)}... (session total: $${sessionTotalUSD.toFixed(4)})\n`,
-  );
+  sessionPayments.push(record)
+  sessionTotalUSD += record.amountUSD
+  logForDebugging(
+    `[x402] Session total: $${sessionTotalUSD.toFixed(4)} (${sessionPayments.length} payments)`,
+  )
 }
 
+/** Get total USD spent via x402 in the current session */
 export function getX402SessionSpentUSD(): number {
-  return sessionTotalUSD;
+  return sessionTotalUSD
 }
 
+/** Get all payment records for the current session */
 export function getX402SessionPayments(): readonly X402PaymentRecord[] {
-  return sessionPayments;
+  return sessionPayments
 }
 
+/** Get the count of payments in this session */
 export function getX402PaymentCount(): number {
-  return sessionPayments.length;
+  return sessionPayments.length
 }
 
+/** Reset session payment tracking (used on session switch) */
 export function resetX402SessionPayments(): void {
-  sessionPayments = [];
-  sessionTotalUSD = 0;
+  sessionPayments = []
+  sessionTotalUSD = 0
 }
 
-// ─── Persistent payment log ─────────────────────────────────────────────────
-
-const PAYMENT_LOG_PATH = path.join(
-  os.homedir(),
-  ".config",
-  "solana-claude",
-  "x402-payments.jsonl",
-);
-
-/** Append payment to persistent JSONL log (fire-and-forget) */
-export async function persistPayment(record: X402PaymentRecord): Promise<void> {
-  try {
-    await fs.mkdir(path.dirname(PAYMENT_LOG_PATH), { recursive: true });
-    const line = JSON.stringify(record) + "\n";
-    await fs.appendFile(PAYMENT_LOG_PATH, line, "utf-8");
-  } catch {
-    // Non-blocking — log but don't fail
-    process.stderr.write(`[x402] Failed to persist payment log\n`);
-  }
-}
-
-/** Read historical payments from persistent log */
-export async function loadPaymentHistory(limit = 50): Promise<X402PaymentRecord[]> {
-  try {
-    const content = await fs.readFile(PAYMENT_LOG_PATH, "utf-8");
-    const lines = content.trim().split("\n").filter(Boolean);
-    return lines.slice(-limit).map(l => JSON.parse(l) as X402PaymentRecord);
-  } catch {
-    return [];
-  }
-}
-
-// ─── Cost display (adapted from Claude Code tracker.ts formatX402Cost) ──────
-
+/** Format x402 payment summary for display */
 export function formatX402Cost(): string {
-  if (sessionPayments.length === 0) return "";
-
-  const lines: string[] = [
-    `x402 payments: $${sessionTotalUSD.toFixed(4)} (${sessionPayments.length} payment${sessionPayments.length === 1 ? "" : "s"})`,
-  ];
-
-  // Group by network
-  const byNetwork: Record<string, { count: number; totalUSD: number }> = {};
-  for (const p of sessionPayments) {
-    byNetwork[p.network] = byNetwork[p.network] ?? { count: 0, totalUSD: 0 };
-    byNetwork[p.network].count++;
-    byNetwork[p.network].totalUSD += p.amountUSD;
+  if (sessionPayments.length === 0) {
+    return ''
   }
 
-  for (const [network, stats] of Object.entries(byNetwork)) {
-    lines.push(
-      `  ${network}: ${stats.count} request${stats.count === 1 ? "" : "s"} ($${stats.totalUSD.toFixed(4)})`,
-    );
-  }
+  const lines: string[] = []
+  lines.push(
+    `x402 payments:         $${sessionTotalUSD.toFixed(4)} (${sessionPayments.length} ${sessionPayments.length === 1 ? 'payment' : 'payments'})`,
+  )
 
   // Group by resource domain
-  const byDomain: Record<string, { count: number; totalUSD: number }> = {};
-  for (const p of sessionPayments) {
+  const byDomain: Record<string, { count: number; totalUSD: number }> = {}
+  for (const payment of sessionPayments) {
     try {
-      const domain = new URL(p.resource).hostname;
-      byDomain[domain] = byDomain[domain] ?? { count: 0, totalUSD: 0 };
-      byDomain[domain].count++;
-      byDomain[domain].totalUSD += p.amountUSD;
-    } catch { /* skip malformed URLs */ }
+      const domain = new URL(payment.resource).hostname
+      if (!byDomain[domain]) {
+        byDomain[domain] = { count: 0, totalUSD: 0 }
+      }
+      byDomain[domain].count += 1
+      byDomain[domain].totalUSD += payment.amountUSD
+    } catch {
+      // Skip malformed URLs
+    }
   }
 
   for (const [domain, stats] of Object.entries(byDomain)) {
     lines.push(
-      `  ${domain}: ${stats.count} req ($${stats.totalUSD.toFixed(4)})`,
-    );
+      `${domain}:`.padStart(21) +
+        `  ${formatNumber(stats.count)} ${stats.count === 1 ? 'request' : 'requests'} ($${stats.totalUSD.toFixed(4)})`,
+    )
   }
 
-  return lines.join("\n");
-}
-
-/** Summary for MCP tool output */
-export function getX402Summary(): {
-  session: { payments: number; totalUSD: number };
-  records: readonly X402PaymentRecord[];
-} {
-  return {
-    session: { payments: sessionPayments.length, totalUSD: sessionTotalUSD },
-    records: sessionPayments,
-  };
+  return chalk.dim(lines.join('\n'))
 }
