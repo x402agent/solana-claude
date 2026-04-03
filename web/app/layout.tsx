@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
-import localFont from "next/font/local";
+import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/layout/ThemeProvider";
 import { ToastProvider } from "@/components/notifications/ToastProvider";
@@ -11,27 +10,15 @@ const inter = Inter({
   display: "swap",
 });
 
-const jetbrainsMono = localFont({
-  src: [
-    {
-      path: "../public/fonts/JetBrainsMono-Regular.woff2",
-      weight: "400",
-      style: "normal",
-    },
-    {
-      path: "../public/fonts/JetBrainsMono-Medium.woff2",
-      weight: "500",
-      style: "normal",
-    },
-  ],
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
   variable: "--font-jetbrains-mono",
   display: "swap",
-  fallback: ["ui-monospace", "SFMono-Regular", "Menlo", "Monaco", "monospace"],
 });
 
 export const metadata: Metadata = {
-  title: "Claude Code",
-  description: "Claude Code — AI-powered development assistant",
+  title: "Blockchain Buddies",
+  description: "Solana-native trading companions with unique wallets, personalities, and trading styles",
   icons: {
     icon: "/favicon.ico",
   },
