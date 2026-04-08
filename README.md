@@ -612,9 +612,61 @@ GET  /api/das/assets/:owner              -- Helius DAS assets
 WS   /ws                                 -- Solana Tracker Datastream relay
 ```
 
-### TailClawd UI
+### TailClawd Dashboard (Private)
 
-Cypherpunk Web Dashboard in `/tailclawd`: CRT-styled command center bridging Engine Memory, Session Tracking, and Activity traces. Live at **[stalwart-queijadas-a9cb83.netlify.app](https://stalwart-queijadas-a9cb83.netlify.app)**
+Solana-branded agentic dashboard (`tailclawd/`) — Solana Purple (#9945FF) + Green (#14F195) themed UI with live session tracking, activity feeds, metrics, and traces. Includes **Buddies** tab (hatch and animate blockchain companions in-browser) and **Spinners** tab (all 9 $CLAWD unicode animations running live).
+
+> `tailclawd/` is private and not included in the public repository. Run locally with `cd tailclawd && npm start`.
+
+### Web App
+
+The `web/` directory contains the Next.js frontend — chat UI, buddies page, voice mode, and REST API.
+
+```bash
+cd web && npm install && npm run build    # production build
+cd web && npm run dev                     # dev server on :3000
+```
+
+**Routes:**
+
+| Route | Description |
+|---|---|
+| `/` | Chat interface |
+| `/buddies` | Blockchain Buddy gallery + hatch |
+| `/voice` | Voice mode (STT/TTS) |
+| `/api/chat` | Streaming chat API |
+| `/api/voice/tts` | Text-to-speech |
+| `/api/share` | Conversation sharing |
+
+**Deploy to Netlify:**
+
+```bash
+# In web/
+netlify deploy --prod --dir=.next
+```
+
+Or connect the GitHub repo and set:
+- **Build command:** `cd web && npm install && npm run build`
+- **Publish directory:** `web/.next`
+- **Custom domain:** `solanaclawd.com`
+
+### Solana Vault (AES-256-GCM)
+
+Encrypted secret storage at `~/.clawd/vault/` for keypairs, API keys, and RPC endpoints.
+
+```typescript
+import { SolanaVault, storeKeypair, retrieveKeypair } from 'solana-clawd/vault'
+
+const vault = await SolanaVault.create('my-passphrase')
+const id = await vault.store('api_key', 'sk-live-...', 'Helius prod key')
+const key = await vault.retrieve(id)  // decrypted
+vault.lock()                           // zero-fills key from memory
+```
+
+- Master key derived via **scrypt** from user passphrase
+- Auto-locks after 15 minutes of inactivity
+- Passphrase rotation without re-encrypting from scratch
+- Sentinel-based passphrase validation on open
 
 ---
 
