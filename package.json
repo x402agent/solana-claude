@@ -1,6 +1,6 @@
 {
   "name": "solana-clawd",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "$CLAWD — Solana agentic engine with 31 MCP tools, blockchain buddies, and unicode animations. One command to trade, research, and monitor onchain.",
   "type": "module",
   "main": "dist/index.js",
@@ -43,6 +43,10 @@
     "@cloudflare/sandbox": "^0.8.4",
     "@commander-js/extra-typings": "^13.1.0",
     "@growthbook/growthbook": "^1.4.0",
+    "@metaplex-foundation/mpl-agent-registry": "^0.2.5",
+    "@metaplex-foundation/mpl-core": "^1.9.1",
+    "@metaplex-foundation/umi": "^1.5.1",
+    "@metaplex-foundation/umi-bundle-defaults": "^1.5.1",
     "@modelcontextprotocol/sdk": "^1.12.1",
     "@opentelemetry/api": "^1.9.0",
     "@opentelemetry/api-logs": "^0.57.0",

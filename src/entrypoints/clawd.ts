@@ -12,7 +12,7 @@
  *   npx solana-clawd --version    # version
  */
 
-const VERSION = '1.1.0'
+const VERSION = '1.2.0'
 
 const c = {
   reset: '\x1b[0m',
@@ -103,7 +103,6 @@ async function showSpecies(): Promise<void> {
 async function runBirth(species?: string): Promise<void> {
   const { BLOCKCHAIN_SPECIES } = await import('../buddy/index.js')
   const { birthCeremony } = await import('../animations/birth-ceremony.js')
-  const { BlockchainSpecies } = await import('../buddy/blockchain-types.js') as any
 
   const validSpecies = species && (BLOCKCHAIN_SPECIES as readonly string[]).includes(species)
     ? species
