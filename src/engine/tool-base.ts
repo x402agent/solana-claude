@@ -1,7 +1,7 @@
 /**
  * SolanaOS Tool Base
  *
- * Adapted from Anthropic Claude Code's src/Tool.ts architecture.
+ * Adapted from Anthropic Clawd Code's src/Tool.ts architecture.
  * Tools are self-contained execution units with Zod schema validation,
  * a permission model, and a render hook for multi-surface output
  * (Telegram, web, Android, macOS menu bar).
@@ -23,7 +23,7 @@ export type PermissionLevel = "safe" | "write" | "execute" | "trade";
 
 export type PermissionAction = "allow" | "deny" | "ask";
 
-/** Wildcard pattern permission rule — adapated from Claude Code's toolPermission handlers */
+/** Wildcard pattern permission rule — adapated from Clawd Code's toolPermission handlers */
 export interface PermissionRule {
   /** Glob-style pattern: "trading.buy(*)", "memory.write(*)", "bash(git *)" */
   pattern: string;

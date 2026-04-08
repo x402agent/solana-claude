@@ -3,7 +3,7 @@
  *
  * AppState shape for the solana-claude agent runtime.
  *
- * Architectural DNA from Claude Code's AppStateStore.ts + selectors.ts,
+ * Architectural DNA from Clawd Code's AppStateStore.ts + selectors.ts,
  * adapted for Solana: tasks, memory tiers, permission mode, onchain
  * subscriptions, OODA phase, and agent fleet.
  */
@@ -11,7 +11,7 @@
 import { createStore } from "./store.js";
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Core types (adapted from Claude Code)
+// Core types (adapted from Clawd Code)
 // ─────────────────────────────────────────────────────────────────────────────
 
 export type PermissionMode =

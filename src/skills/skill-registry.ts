@@ -1,7 +1,7 @@
 /**
  * SolanaOS Skill Loader & Registry
  *
- * Adapted from Claude Code's src/skills/ (loadSkillsDir.ts, bundledSkills.ts, mcpSkillBuilders.ts)
+ * Adapted from Clawd Code's src/skills/ (loadSkillsDir.ts, bundledSkills.ts, mcpSkillBuilders.ts)
  *
  * Loads SKILL.md files from:
  *  1. `skills/` directory (bundled skills shipped with repo)
@@ -11,7 +11,7 @@
  * Each SKILL.md file has YAML frontmatter + markdown body. The loader parses
  * the frontmatter for metadata and exposes the body as the skill's system prompt.
  *
- * The registry uses the same search/tag/capability patterns as Claude Code's
+ * The registry uses the same search/tag/capability patterns as Clawd Code's
  * internal skill system but wired to the public NanoHub skill marketplace.
  */
 
@@ -57,7 +57,7 @@ export interface Skill {
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Frontmatter parser (minimal YAML subset)
-// Adapted from Claude Code's skill loading pattern
+// Adapted from Clawd Code's skill loading pattern
 // ─────────────────────────────────────────────────────────────────────────────
 
 function parseFrontmatter(content: string): { meta: Partial<SkillMeta>; body: string } {
@@ -167,7 +167,7 @@ export async function loadSkillsDir(
 
 // ─────────────────────────────────────────────────────────────────────────────
 // NanoHub Remote Skill builder
-// Adapted from Claude Code's mcpSkillBuilders.ts (MCP → Skill conversion)
+// Adapted from Clawd Code's mcpSkillBuilders.ts (MCP → Skill conversion)
 // ─────────────────────────────────────────────────────────────────────────────
 
 export interface NanoHubSkillEntry {

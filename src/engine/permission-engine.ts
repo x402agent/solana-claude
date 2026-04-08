@@ -1,7 +1,7 @@
 /**
  * SolanaOS Permission Engine
  *
- * Adapted from Claude Code's src/hooks/toolPermission/ system.
+ * Adapted from Clawd Code's src/hooks/toolPermission/ system.
  *
  * Resolves permission actions (allow/deny/ask) for tool invocations using
  * a priority-ordered list of wildcard pattern rules. Rules are checked

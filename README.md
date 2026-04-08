@@ -75,7 +75,7 @@ We adapted every layer for Solana:
 |---|---|
 | `src/state/store.ts` | `src/state/store.ts` — reactive AppState store |
 | `src/state/AppStateStore.ts` | `src/state/app-state.ts` — OODA phases, memory, subscriptions |
-| `src/tools/AgentTool/builtInAgents.ts` | `src/agents/built-in-agents.ts` — Explore, Scanner, OODA, Dream, Analyst, Monitor |
+| `src/tools/AgentTool/builtInAgents.ts` | `src/agents/built-in-agents.ts` — Explore, Scanner, OODA, Dream, Analyst, Monitor, MetaplexAgent |
 | `src/tools/AgentTool/agentMemory.ts` | `src/memory/extract-memories.ts` — KNOWN/LEARNED/INFERRED tiers |
 | `src/tools/TaskCreateTool/` | `src/tasks/task-manager.ts` — async task lifecycle |
 | `src/coordinator/` | `src/coordinator/coordinator.ts` — multi-agent routing |
