@@ -35,7 +35,7 @@ Powered by **$CLAWD** on Solana & Pump.fun
 [![Skills](https://img.shields.io/badge/Skills-95%20catalog-yellow)](skills/)
 [![Live](https://img.shields.io/badge/live-solanaclawd.com-00ff88)](https://solanaclawd.com)
 
-[**One-Shot Install**](#one-shot-install) · [**Blockchain Buddies**](#blockchain-buddies) · [**Animations**](#clawd-animations) · [**MCP Tools**](#mcp-tools-31) · [**Voice Mode**](#voice-mode) · [**Telegram Bot**](#telegram-trading-bot) · [**Metaplex Agents**](#metaplex-agent-minting-mpl-agent-registry) · [**Worker Swarm**](#solana-worker-swarm-iii-sdk) · [**Skills**](#skills-catalog-88-skills) · [**Deploy**](#deploy-to-flyio)
+[**One-Shot Install**](#one-shot-install) · [**Blockchain Buddies**](#blockchain-buddies) · [**Animations**](#clawd-animations) · [**MCP Tools**](#mcp-tools-31) · [**Voice Mode**](#voice-mode) · [**Telegram Bot**](#telegram-trading-bot) · [**Metaplex Agents**](#metaplex-agent-minting-mpl-agent-registry) · [**Worker Swarm**](#solana-worker-swarm-iii-sdk) · [**Skills**](#skills-catalog-95-skills) · [**Deploy**](#deploy-to-flyio)
 
 </div>
 
@@ -869,9 +869,11 @@ Compute-worker fetches Jupiter v6 quote + builds the swap tx, payment-worker sub
 
 ---
 
-## Skills Catalog (88 Skills)
+## Skills Catalog (95 Skills)
 
-`solana-clawd` ships with **89 on-demand knowledge skills** the agent can load when needed. Skills follow the [agentskills.io](https://agentskills.io) open standard with YAML frontmatter and progressive disclosure to minimize token usage.
+`solana-clawd` ships with **95 on-demand knowledge skills** the agent can load when needed. Skills follow the [agentskills.io](https://agentskills.io) open standard with YAML frontmatter and progressive disclosure to minimize token usage.
+
+> **Start here:** `skill_read("solana-clawd")` — the master skill covering the entire codebase: one-shot install, all 31 MCP tools, Telegram bot, voice mode, OODA loops, Metaplex minting, vault, deploy, and repo structure.
 
 ### How Skills Work
 
@@ -884,11 +886,12 @@ Level 2: skill_view("pump-sdk-core", "references/api.md") -> Specific file   (va
 The agent only loads full skill content when it actually needs it. Every skill is also a slash command:
 
 ```
-/weather              # Get weather forecasts
-/coding-agent         # Delegate to Codex/Claude Code
-/pumpfun-trading      # Buy/sell on Pump.fun bonding curves
-/swarm-orchestrator   # Multi-bot trading swarms
+/solana-clawd          # Master skill — full codebase playbook
 /solanaos             # Full SolanaOS operator guide
+/pumpfun-trading      # Buy/sell on Pump.fun bonding curves
+/coding-agent         # Delegate to Codex/Claude Code
+/swarm-orchestrator   # Multi-bot trading swarms
+/weather              # Get weather forecasts
 ```
 
 ### Skill Categories
