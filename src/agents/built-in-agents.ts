@@ -3,7 +3,7 @@
  *
  * Built-in agent definitions for solana-clawd.
  *
- * Adapted from Claude Code's AgentTool/builtInAgents.ts and loadAgentsDir.ts.
+ * Adapted from Clawd Code's AgentTool/builtInAgents.ts and loadAgentsDir.ts.
  * Each agent has: a name, system prompt, supported tools, memory scope,
  * permission mode, and max turns. Agents run in the coordinator loop.
  *
@@ -16,7 +16,7 @@
  */
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Agent definition type (adapted from Claude Code's AgentDefinition)
+// Agent definition type (adapted from Clawd Code's AgentDefinition)
 // ─────────────────────────────────────────────────────────────────────────────
 
 export type PermissionMode = "ask" | "auto" | "readOnly";
@@ -90,7 +90,7 @@ const METAPLEX_TOOLS = [
 
 /**
  * Explore — lightweight read-only research agent.
- * Adapted from Claude Code's EXPLORE_AGENT.
+ * Adapted from Clawd Code's EXPLORE_AGENT.
  * Optimized to be cheap: no memory writes, no agent spawning, max 10 turns.
  */
 export const EXPLORE_AGENT: AgentDefinition = {
@@ -133,7 +133,7 @@ Return a structured JSON summary:
 
 /**
  * Scanner — trend monitoring agent.
- * Adapted from Claude Code's GENERAL_PURPOSE_AGENT pattern.
+ * Adapted from Clawd Code's GENERAL_PURPOSE_AGENT pattern.
  * Runs on schedule or on-demand to surface high-signal opportunities.
  */
 export const SCANNER_AGENT: AgentDefinition = {
@@ -225,7 +225,7 @@ If in auto mode: describe the trade (token, size, stop, target) and await approv
 
 /**
  * Dream — memory consolidation agent.
- * Adapted from Claude Code's auto-compaction/memory-extraction pattern.
+ * Adapted from Clawd Code's auto-compaction/memory-extraction pattern.
  * Promotes high-confidence INFERRED signals to LEARNED.
  */
 export const DREAM_AGENT: AgentDefinition = {
@@ -258,7 +258,7 @@ This is a background maintenance task. Run after every 5 OODA cycles.`,
 
 /**
  * Analyst — deep structured analysis with report output.
- * Adapted from Claude Code's Plan/Verification agent patterns.
+ * Adapted from Clawd Code's Plan/Verification agent patterns.
  */
 export const ANALYST_AGENT: AgentDefinition = {
   agentType: "Analyst",

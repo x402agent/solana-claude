@@ -159,9 +159,10 @@ export async function readAgentData(
 
   // Derive the agent's built-in wallet (Asset Signer PDA)
   const assetSignerPda = findAssetSignerPda(umi, { asset: assetPubkey })
+  const walletPubkey = publicKey(assetSignerPda)
   let walletBalance: bigint | undefined
   try {
-    const balance = await umi.rpc.getBalance(assetSignerPda)
+    const balance = await umi.rpc.getBalance(walletPubkey)
     walletBalance = balance.basisPoints
   } catch {
     // Wallet may not exist yet
@@ -177,7 +178,7 @@ export async function readAgentData(
           execute: !!agentIdentity.lifecycleChecks?.execute,
         }
       : undefined,
-    walletAddress: assetSignerPda.toString(),
+    walletAddress: walletPubkey.toString(),
     walletBalance,
   }
 }
@@ -223,10 +224,11 @@ export async function getAgentWalletBalance(
 ): Promise<{ address: string; lamports: bigint }> {
   const assetPubkey = publicKey(assetAddress)
   const pda = findAssetSignerPda(umi, { asset: assetPubkey })
-  const balance = await umi.rpc.getBalance(pda)
+  const walletPubkey = publicKey(pda)
+  const balance = await umi.rpc.getBalance(walletPubkey)
 
   return {
-    address: pda.toString(),
+    address: walletPubkey.toString(),
     lamports: balance.basisPoints,
   }
 }
@@ -308,16 +310,16 @@ export async function checkDelegation(
 ): Promise<boolean> {
   umi.use(mplAgentTools())
 
-  const executiveProfile = findExecutiveProfileV1Pda(umi, {
+  const executiveProfilePda = findExecutiveProfileV1Pda(umi, {
     authority: publicKey(executiveAuthorityAddress),
   })
 
   const delegateRecord = findExecutionDelegateRecordV1Pda(umi, {
-    executiveProfile,
+    executiveProfile: publicKey(executiveProfilePda),
     agentAsset: publicKey(agentAssetAddress),
   })
 
-  const account = await umi.rpc.getAccount(delegateRecord)
+  const account = await umi.rpc.getAccount(publicKey(delegateRecord))
   return account.exists
 }
 
