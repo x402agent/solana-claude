@@ -4,14 +4,16 @@ A lobster claw pointer that follows you during your daily tasks on macOS. It can
 
 Built on Anthropic Claude, AssemblyAI, ElevenLabs, and Solana.
 
+> **[View Interactive Architecture Diagram](architecture-viz.html)** -- open in your browser for an animated visualization of the full system.
+
 ## How It Works
 
-1. **Push-to-talk** (Ctrl+Option) captures your voice
-2. **AssemblyAI** transcribes speech in real-time via websocket
-3. **ScreenCaptureKit** takes a screenshot of your current screen
+1. **Push-to-talk** (Ctrl+Option) captures your voice via `AVAudioEngine`
+2. **AssemblyAI** transcribes speech in real-time via websocket (`u3-rt-pro` model)
+3. **ScreenCaptureKit** takes a screenshot of your current screen (multi-monitor)
 4. Transcript + screenshot are sent to **Claude** (Sonnet/Opus) via streaming SSE
 5. Claude responds with text and can embed `[CLAW:x,y:label:screenN]` tags
-6. **ElevenLabs** converts the response to lobster speech
+6. **ElevenLabs** converts the response to lobster speech (`eleven_flash_v2_5`)
 7. A lobster claw overlay flies to and points at UI elements Claude references
 8. **Solana RPC** calls are proxied through the Clawd Gateway for on-chain lookups
 
@@ -86,20 +88,41 @@ beepboop/
     ClickyAnalytics.swift              # PostHog analytics
     WindowPositionManager.swift        # Window placement, permission flows
     AppBundleConfiguration.swift       # Runtime config from Info.plist
+    Info.plist                         # App config (LSUIElement, Sparkle, usage descriptions)
+    leanring-buddy.entitlements        # App sandbox & entitlements
+    AGENTS.md                          # Symlink to ../CLAUDE.md
     Assets.xcassets/                   # App icons, screenshots, images
+    enter.mp3                          # Sound effect
+    eshop.mp3                          # Sound effect
+    ff.mp3                             # Sound effect
+    steve.jpg                          # Image asset
   leanring-buddy.xcodeproj/          # Xcode project
+    project.pbxproj                    # Xcode build config
+    project.xcworkspace/               # Workspace settings
+    xcuserdata/                        # User-specific Xcode settings
   leanring-buddyTests/               # Unit tests
+    leanring_buddyTests.swift          # Test file
   leanring-buddyUITests/             # UI tests
+    leanring_buddyUITests.swift        # UI test file
+    leanring_buddyUITestsLaunchTests.swift # Launch test file
   worker/                            # Clawd Gateway (Cloudflare Worker)
-    src/index.ts                       # Routes: /chat, /tts, /transcribe-token, /solana/*
+    src/
+      index.ts                         # Routes: /chat, /tts, /transcribe-token, /solana/*
     wrangler.toml                      # Worker config (name: beepboop-clawd-gateway)
     package.json                       # Worker dependencies
+    package-lock.json                  # Locked dependency versions
+    .dev.vars                          # Local dev secrets (git-ignored)
+    .wrangler/                         # Wrangler cache (git-ignored)
+    node_modules/                      # Dependencies (git-ignored)
   scripts/
     release.sh                         # Full release pipeline
+    README.md                          # Scripts documentation
   AGENTS.md                          # Agent instructions (CLAUDE.md symlinks here)
   CLAUDE.md                          # Full architecture doc for AI agents
+  architecture-viz.html              # Interactive architecture visualization
   appcast.xml                        # Sparkle auto-update feed
   dmg-background.png                 # DMG installer background image
+  clicky-demo.gif                    # Demo GIF
   LICENSE                            # MIT License
 ```
 
@@ -197,6 +220,39 @@ The app appears in your menu bar. Click the lobster icon, grant permissions, and
 | Accessibility | Global keyboard shortcut (Ctrl+Option) |
 | Screen Recording | Taking screenshots on hotkey press |
 | Screen Content | ScreenCaptureKit access |
+
+## Testing the Clawd Gateway
+
+Once the worker is running locally (`npx wrangler dev`), test the endpoints:
+
+```bash
+# Health check
+curl http://localhost:8787/health
+
+# Solana balance lookup (mainnet)
+curl -X POST http://localhost:8787/solana/balance \
+  -H "Content-Type: application/json" \
+  -d '{"address":"vines1vzrYbzLMRdu58ou5XTby4qAqVRLmqo36NKPTg"}'
+
+# Solana token accounts
+curl -X POST http://localhost:8787/solana/tokens \
+  -H "Content-Type: application/json" \
+  -d '{"address":"vines1vzrYbzLMRdu58ou5XTby4qAqVRLmqo36NKPTg"}'
+
+# Claude chat (non-streaming)
+curl -X POST http://localhost:8787/chat \
+  -H "Content-Type: application/json" \
+  -d '{"model":"claude-sonnet-4-6-20250514","max_tokens":100,"messages":[{"role":"user","content":"Say hello from the clawd in 10 words or less"}]}'
+
+# ElevenLabs TTS
+curl -X POST http://localhost:8787/tts \
+  -H "Content-Type: application/json" \
+  -d '{"text":"I am a lobster","model_id":"eleven_flash_v2_5"}' \
+  --output test-lobster.mp3
+
+# AssemblyAI transcription token
+curl -X POST http://localhost:8787/transcribe-token
+```
 
 ## Release Pipeline
 

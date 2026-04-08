@@ -1,7 +1,7 @@
 # Dependencies
 node_modules/
 **/node_modules/
-
+elevenlabs-mcp-main
 # Build output and caches
 dist/
 **/dist/
@@ -16,7 +16,7 @@ coverage/
 .netlify/
 **/.netlify/
 *.tsbuildinfo
-
+llm-wiki-tang
 # Environment and local secrets
 .env
 .env.*

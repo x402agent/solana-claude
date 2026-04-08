@@ -146,6 +146,12 @@ ___/ / /_/ / / /_/ / / / / /_/ /   / /___/ / /_/ /| |/ |/ / /_/ /
             >
               Hatch A Buddy
             </Link>
+            <Link
+              href="/voice"
+              className="rounded-lg border border-purple-400 bg-purple-500/20 px-6 py-3 font-mono text-sm font-semibold text-purple-200 transition hover:bg-purple-500/30 hover:border-purple-300 hover:text-white"
+            >
+              Talk to Clawd
+            </Link>
             <a
               href="https://github.com/x402agent/solana-clawd"
               target="_blank"

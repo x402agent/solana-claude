@@ -366,127 +366,255 @@ Mathematical invariants are verified using **Lean 4** and the `qedgen` proof eng
 
 ---
 
-## Telegram Gateway & TailClawd UI
+## Telegram Trading Bot
 
-Bundled out of the box in `/tailclawd`:
+The full-featured Telegram trading terminal lives in `src/telegram/`. 60+ commands covering market data, trading signals, AI generation, social posting, encrypted vault, and an autonomous agent born with complete Solana data capability.
 
-- **Cypherpunk Web Dashboard:** CRT-styled command center bridging Engine Memory, Session Tracking, and Activity traces. Live at **[stalwart-queijadas-a9cb83.netlify.app](https://stalwart-queijadas-a9cb83.netlify.app)**
-- **Telegram Bot Integration:** Control your swarm over Telegram -- dispatch OODA loops, run the Pump Scanner, or monitor Snipe agents from your phone
-
-### CLAWD Gateway (`/gateway`)
-
-A standalone Telegram bot + HTTP API that gives you full Solana access from any Telegram chat. Built on Helius RPC, Helius DAS, and Birdeye real-time WebSocket feeds.
-
-#### Quick Start
+### Deploy from Scratch
 
 ```bash
-cd gateway
-npm install && npm run build
-npm start
+# 1. Clone the repo
+git clone https://github.com/x402agent/solana-clawd
+cd solana-clawd
+
+# 2. Install dependencies
+npm install
+
+# 3. Create your .env (copy and fill in)
+cp .env.example .env
+
+# 4. Get your API keys (minimum: Telegram + Helius)
+#    - Telegram: message @BotFather on Telegram, /newbot, copy the token
+#    - Helius: sign up at helius.dev (free 1M credits/month)
+#    - Solana Tracker: sign up at data.solanatracker.io (free tier available)
+
+# 5. Edit .env with your keys
+nano .env
+
+# 6. Start the Telegram bot
+npx tsx src/telegram/index.ts
+
+# 7. (Optional) Start the data API server
+cd solana-tracker/server && npm install && npm run dev
 ```
 
-The gateway starts three services simultaneously:
-- **Telegram Bot** -- long-polling, zero webhook setup needed
-- **HTTP API** on `:8080` -- RESTful endpoints for every Solana query
-- **Birdeye WebSocket** -- real-time price, transaction, and listing feeds
+### Environment Variables
 
-#### Telegram Bot Commands
+```bash
+# ── Required ──────────────────────────────────────────
+TELEGRAM_BOT_TOKEN=           # From @BotFather
+HELIUS_RPC_URL=               # Helius mainnet RPC (free at helius.dev)
+HELIUS_API_KEY=               # Helius API key (DAS, wallet API)
 
+# ── Solana Data ───────────────────────────────────────
+SOLANA_TRACKER_API_KEY=       # data.solanatracker.io (trending, trades, charts, PnL)
+BIRDEYE_API_KEY=              # Birdeye token data (price, search, overview)
+
+# ── Access Control ────────────────────────────────────
+TELEGRAM_ALLOWED_CHATS=       # Comma-separated chat IDs (empty = open access)
+TELEGRAM_ADMIN_IDS=           # Admin user IDs (can run /snipe, /vault)
+
+# ── Wallet (optional, signal-only mode works without) ─
+SOLANA_PRIVATE_KEY=           # Base58 keypair (only for live trade execution)
+SOLANA_PUBLIC_KEY=            # Default wallet for /balance, /tokens, /txs
+
+# ── AI / Social (optional) ───────────────────────────
+XAI_API_KEY=                  # xAI Grok API (chat, vision, image/video gen, search)
+CONSUMER_KEY=                 # Twitter/X OAuth 1.0a (for /tweet, /reply, etc.)
+SECRET_KEY=                   # Twitter/X OAuth 1.0a
+ACCESS_TOKEN=                 # Twitter/X OAuth 1.0a
+ACCESS_TOKEN_SECRET=          # Twitter/X OAuth 1.0a
+BEARER_TOKEN=                 # Twitter/X Bearer (read-only search)
+
+# ── Pump.fun Sniper (optional) ───────────────────────
+PUMP_MIN_SCORE=60             # Minimum signal score to trade
+BOT_BUY_AMOUNT=0.05          # SOL per buy
+BOT_TAKE_PROFIT=50           # TP %
+BOT_STOP_LOSS=15             # SL %
+BOT_TIMEOUT_SECS=120         # Position timeout
+
+# ── Vault ─────────────────────────────────────────────
+VAULT_PASSPHRASE=             # Encryption passphrase (falls back to SOLANA_PRIVATE_KEY)
+
+# ── Webhook Mode (optional, default is long-polling) ──
+TELEGRAM_WEBHOOK_URL=         # Tailscale Funnel URL
+TELEGRAM_WEBHOOK_PORT=3000    # Port for webhook server
+```
+
+### Bot Commands (60+)
+
+#### Market Data
 | Command | Description |
 |---------|-------------|
-| `/start` | Show all available commands |
-| `/wallet` | Full wallet summary (SOL + tokens) |
-| `/balance [address]` | SOL balance for any address |
-| `/tokens [address]` | SPL token holdings |
-| `/txs [address]` | Recent transaction history |
-| `/price <mint>` | Live token price via Birdeye |
-| `/search <query>` | Search tokens by name/symbol |
-| `/slot` | Current Solana slot + block height |
-| `/assets [address]` | Helius DAS asset query (NFTs, compressed NFTs) |
-| `/watch <mint>` | Subscribe to real-time OHLCV price alerts |
-| `/whales <min_usd>` | Large trade alerts (default $10k+) |
-| `/newpairs` | New DEX pair listing alerts |
-| `/newlistings` | New token listing alerts |
-| `/alerts on/off` | Toggle Birdeye alerts for this chat |
-| `/status` | Gateway health, RPC, wallet, Birdeye connection |
+| `/sol` | SOL price (CoinGecko) |
+| `/price <mint\|symbol>` | Token price via Solana Tracker |
+| `/trending` | Top 10 trending tokens |
+| `/token <mint>` | Token info + security flags |
+| `/wallet <address>` | Wallet PnL analysis |
+| `/market` | Full market overview with signals |
+| `/latest` | Latest launched tokens |
+| `/graduated` | Recently graduated tokens |
 
-#### HTTP API Endpoints
+#### Deep Analysis (Agent-Powered)
+| Command | Description |
+|---------|-------------|
+| `/research <mint\|symbol>` | Token research with signal scoring |
+| `/deepresearch <mint>` | Full report: holders, pools, top traders, chart, narrative |
+| `/ooda` | OODA trading loop (observe/orient/decide/act) |
+| `/chart <mint> [tf]` | OHLCV chart summary (1m/5m/15m/1h/4h/1d) |
+| `/trades <mint>` | Recent token trades |
+| `/toptraders <mint>` | Top traders for a token |
+| `/holders <mint>` | Holder count + history |
+| `/pools <mint>` | Liquidity pools |
+| `/walletfull <address>` | Full wallet profile (identity + balance + PnL) |
+
+#### Watchlist
+| Command | Description |
+|---------|-------------|
+| `/watch` | Show watchlist |
+| `/watch <mint>` | Add/remove token from watchlist |
+| `/watch check` | Scan watchlist for significant moves |
+
+#### Helius RPC
+| Command | Description |
+|---------|-------------|
+| `/balance [address]` | SOL balance |
+| `/tokens [address]` | Token accounts |
+| `/txs [address]` | Recent transactions |
+| `/slot` | Current slot + block height |
+| `/assets [address]` | Helius DAS assets |
+
+#### Birdeye
+| Command | Description |
+|---------|-------------|
+| `/bprice <mint>` | Birdeye token price |
+| `/bsearch <query>` | Birdeye token search |
+| `/btoken <mint>` | Birdeye full overview |
+
+#### Pump.fun Trading
+| Command | Description |
+|---------|-------------|
+| `/scan` | Toggle background pump scanner |
+| `/signal` | Show active pump signals |
+| `/snipe [config]` | Start sniper bot (requires private key) |
+| `/stop` | Stop sniper/scanner |
+| `/grad <mint>` | Graduation progress |
+| `/mcap <mint>` | Market cap |
+| `/cashback <mint>` | Cashback info |
+
+#### xAI / Grok AI
+| Command | Description |
+|---------|-------------|
+| `/grok <question>` | Chat with Grok |
+| `/xsearch <query>` | Search X/Twitter live |
+| `/wsearch <query>` | Web search live |
+| `/imagine <prompt>` | Generate images |
+| `/video <prompt>` | Generate video (up to 5 min) |
+| `/vision <url> [q]` | Analyze image |
+| `/file <url> <question>` | Chat with PDF/CSV |
+
+#### Twitter/X
+| Command | Description |
+|---------|-------------|
+| `/tweet <text>` | Post a tweet |
+| `/reply <id> <text>` | Reply to a tweet |
+| `/deltweet <id>` | Delete tweet |
+| `/like <id>` | Like tweet |
+| `/rt <id>` | Retweet |
+| `/tsearch <query>` | Search recent tweets |
+| `/mytweets` | Show account's recent tweets |
+| `/autotweet on [min] [topics]` | Start auto-tweet daemon |
+| `/smarttweet <topic>` | Generate tweet with Grok + X context |
+
+#### Vault & System
+| Command | Description |
+|---------|-------------|
+| `/vault` | List encrypted secrets |
+| `/vault store <label> <secret>` | Encrypt & store |
+| `/vault get <id>` | Decrypt (masked) |
+| `/vault lock` | Wipe key from memory |
+| `/status` | Bot status |
+| `/agentstate` | Agent internal state |
+| `/skills` | List available skills |
+| `/help` | Full command reference |
+
+### Architecture
 
 ```
-GET  /health                      -- Gateway status + wallet + Birdeye connection
-GET  /api/balance/:address?       -- SOL balance (default: configured wallet)
-GET  /api/tokens/:address?        -- SPL token accounts
-GET  /api/transactions/:address?  -- Recent signatures (accepts ?limit=N)
-GET  /api/slot                    -- Current slot number
-GET  /api/assets/:address?        -- Helius DAS getAssetsByOwner
-GET  /api/price/:address          -- Birdeye token price
-GET  /api/token/:address          -- Birdeye token overview (full metadata)
-GET  /api/search?q=               -- Search tokens by keyword
+┌─────────────────────────────────────────────────────────────────┐
+│                     solana-clawd Telegram Bot                    │
+│                                                                 │
+│  ┌──────────────┐  ┌──────────────────┐  ┌──────────────────┐  │
+│  │ Telegram API  │  │  SolanaAgent     │  │  PumpSniper      │  │
+│  │ (long-poll    │  │  (autonomous     │  │  (PumpPortal     │  │
+│  │  or webhook)  │  │   OODA + memory) │  │   WebSocket)     │  │
+│  └──────┬────────┘  └────────┬─────────┘  └────────┬─────────┘  │
+│         │                    │                      │            │
+│         └────────┬───────────┘                      │            │
+│                  │                                  │            │
+│  ┌──────────────▼──────────────────────────────────▼──────────┐ │
+│  │              SolanaTrackerAPI (unified client)              │ │
+│  │                                                            │ │
+│  │  Solana Tracker  │  Helius RPC/DAS  │  Birdeye  │ CoinGecko│ │
+│  │  data.solana     │  Wallet API      │  REST     │ Price    │ │
+│  │  tracker.io      │  DAS Assets      │  Search   │          │ │
+│  │  • tokens        │  • getBalance    │  • price  │          │ │
+│  │  • trades        │  • getAssets     │  • search │          │ │
+│  │  • chart/OHLCV   │  • identity      │  • overview          │ │
+│  │  • PnL           │  • history       │           │          │ │
+│  │  • top traders   │  • transfers     │           │          │ │
+│  │  • holders       │  • funded-by     │           │          │ │
+│  │  • pools         │                  │           │          │ │
+│  │  • trending      │                  │           │          │ │
+│  └────────────────────────────────────────────────────────────┘ │
+│                                                                 │
+│  ┌────────────┐  ┌────────────┐  ┌────────────┐                │
+│  │ xAI/Grok   │  │ Twitter/X  │  │ SolanaVault│                │
+│  │ Vision,Gen │  │ OAuth 1.0a │  │ AES-256-GCM│                │
+│  └────────────┘  └────────────┘  └────────────┘                │
+└─────────────────────────────────────────────────────────────────┘
 ```
 
-#### Birdeye Real-Time WebSocket
+### Solana Tracker Data API Server
 
-The gateway maintains a persistent Birdeye WebSocket connection with automatic reconnection and ping/pong heartbeat. Supported subscription types:
-
-| Subscription | Birdeye Event | What It Streams |
-|---|---|---|
-| `SUBSCRIBE_PRICE` | OHLCV candles | Open/High/Low/Close/Volume per interval (1s to 1M) |
-| `SUBSCRIBE_TXS` | Swap/liquidity txs | Real-time token or pair transactions |
-| `SUBSCRIBE_TOKEN_NEW_LISTING` | New tokens | Newly listed tokens with liquidity data |
-| `SUBSCRIBE_NEW_PAIR` | New DEX pairs | New trading pairs across all DEXes |
-| `SUBSCRIBE_LARGE_TRADE_TXS` | Whale trades | Trades above USD threshold |
-| `SUBSCRIBE_WALLET_TXS` | Wallet activity | All transactions for a tracked wallet |
-
-Alerts from these feeds are forwarded to any Telegram chat that has run `/alerts on`.
-
-#### Architecture
-
-```
-┌──────────────────────────────────────────────────────┐
-│                  CLAWD Gateway                        │
-│                                                      │
-│  ┌─────────────┐  ┌──────────────┐  ┌─────────────┐ │
-│  │  Telegram    │  │  Express     │  │  Birdeye    │ │
-│  │  Bot (poll)  │  │  HTTP :8080  │  │  WebSocket  │ │
-│  └──────┬───────┘  └──────┬───────┘  └──────┬──────┘ │
-│         │                 │                 │        │
-│         └────────┬────────┘                 │        │
-│                  │                          │        │
-│         ┌───────▼────────┐     ┌───────────▼──────┐ │
-│         │  Solana Service │     │  Birdeye Service │ │
-│         │  (Helius RPC)   │     │  (REST + WS)    │ │
-│         │  • Balance      │     │  • Price         │ │
-│         │  • Tokens       │     │  • Search        │ │
-│         │  • Transactions │     │  • New Listings  │ │
-│         │  • DAS Assets   │     │  • Large Trades  │ │
-│         └────────┬────────┘     └─────────────────┘ │
-│                  │                                   │
-│         ┌───────▼────────┐                          │
-│         │  Helius RPC     │                          │
-│         │  (Gatekeeper)   │                          │
-│         │  + Atlas WSS    │                          │
-│         └────────────────┘                          │
-└──────────────────────────────────────────────────────┘
-```
-
-#### Environment Variables
+The Express server in `solana-tracker/server/` provides a REST + WebSocket API layer:
 
 ```bash
-# Required
-TELEGRAM_BOT_TOKEN=        # From @BotFather
-HELIUS_RPC_URL=            # Helius mainnet RPC
-HELIUS_API_KEY=            # For DAS and enhanced APIs
-
-# Optional — enhanced features
-GATEKEEPER_RPC_URL=        # Helius beta RPC (faster)
-HELIUS_ATLAS_WSS_URL=      # Atlas WebSocket endpoint
-HELIUS_PARSE_URL=          # Helius transaction parser
-BIRDEYE_API_KEY=           # Real-time WebSocket + REST
-TELEGRAM_ALLOW_FROM=       # Comma-separated Telegram user IDs (access control)
-GATEWAY_PORT=8080          # HTTP API port
-SOLANA_PRIVATE_KEY=        # Base58 private key (for wallet commands)
-SOLANA_PUBLIC_KEY=         # Public key (read-only mode if no private key)
+cd solana-tracker/server
+npm install
+npm run dev    # starts on port 3001
 ```
+
+#### Endpoints
+
+```
+GET  /api/health                         -- Service status
+GET  /api/tokens/trending?limit=20       -- Trending tokens
+GET  /api/tokens/latest?limit=20         -- Latest launches
+GET  /api/tokens/graduated?limit=20      -- Recently graduated
+GET  /api/tokens/search?q=BONK           -- Search tokens
+GET  /api/tokens/:mint                   -- Token info
+GET  /api/tokens/:mint/chart?type=5m     -- OHLCV chart data
+GET  /api/tokens/:mint/trades            -- Recent trades
+GET  /api/tokens/:mint/holders           -- Holder data
+GET  /api/tokens/:mint/pools             -- Liquidity pools
+GET  /api/tokens/:mint/top-traders       -- Top traders
+POST /api/tokens/multi-price             -- Batch price lookup
+GET  /api/trading/pnl/:address           -- Wallet PnL
+GET  /api/trading/research/:mint         -- Deep research + signal
+GET  /api/trading/overview               -- Market overview
+GET  /api/trading/profile/:address       -- Full wallet profile
+POST /api/trading/score                  -- Batch token scoring
+GET  /api/wallet/:address/identity       -- Helius wallet identity
+GET  /api/wallet/:address/balances       -- Helius balances
+GET  /api/wallet/:address/history        -- Helius history
+GET  /api/das/assets/:owner              -- Helius DAS assets
+WS   /ws                                 -- Solana Tracker Datastream relay
+```
+
+### TailClawd UI
+
+Cypherpunk Web Dashboard in `/tailclawd`: CRT-styled command center bridging Engine Memory, Session Tracking, and Activity traces. Live at **[stalwart-queijadas-a9cb83.netlify.app](https://stalwart-queijadas-a9cb83.netlify.app)**
 
 ---
 
@@ -906,6 +1034,18 @@ solana-clawd/
 │   │   └── index.ts
 │   ├── tools/            Tool definitions and registry
 │   │   └── tool-registry.ts    ToolDef interface, registry, executor
+│   ├── services/          Unified data + agent layer
+│   │   ├── solanaTrackerAPI.ts  Unified client (Solana Tracker + Helius + Birdeye + CoinGecko)
+│   │   └── solanaAgent.ts       Autonomous agent (OODA, research, watchlist, memory)
+│   ├── telegram/          Full Telegram trading bot (60+ commands)
+│   │   ├── bot.ts               SolanaClaudeBot class (long-poll + webhook)
+│   │   ├── commands.ts          60+ command handlers
+│   │   ├── types.ts             Session, signal, sniper types
+│   │   ├── pump-sniper.ts       PumpPortal WebSocket scanner + sniper
+│   │   ├── xai.ts               xAI/Grok integration (vision, gen, search)
+│   │   ├── twitter.ts           Twitter/X OAuth 1.0a + auto-tweet daemon
+│   │   └── index.ts             Entry point
+│   ├── vault/             AES-256-GCM encrypted secret store
 │   ├── engine/           Permission + query engine
 │   ├── coordinator/      Multi-agent coordinator
 │   ├── memory/           Memory extraction (KNOWN/LEARNED/INFERRED)
@@ -917,6 +1057,19 @@ solana-clawd/
 │   │   └── loadSkillsDir.ts    Filesystem skill loader
 │   ├── entrypoints/      CLI entry (demo, birth, spinners)
 │   └── shared/           Message types, model catalog, tool policy
+├── solana-tracker/       Solana data API server + client
+│   ├── server/
+│   │   ├── index.js             Express + WebSocket server
+│   │   ├── services/
+│   │   │   ├── helius.js        Helius RPC/DAS/Wallet API service
+│   │   │   └── solanaTracker.js Solana Tracker Data API service
+│   │   └── routes/
+│   │       ├── wallet.js        Helius wallet endpoints
+│   │       ├── das.js           Helius DAS endpoints
+│   │       ├── tracking.js      Composite tracking endpoints
+│   │       ├── tokens.js        Solana Tracker token endpoints (trending/chart/trades/pools)
+│   │       └── trading.js       Trading endpoints (PnL/research/overview/scoring)
+│   └── client/            React dashboard (wallet tracker UI)
 ├── skills/              88 SKILL.md knowledge documents (agentskills.io format)
 │   ├── pump-sdk-core/SKILL.md
 │   ├── pumpfun-trading/SKILL.md
