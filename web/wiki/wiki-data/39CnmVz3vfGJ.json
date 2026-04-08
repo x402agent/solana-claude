@@ -1,0 +1,29 @@
+{
+  "slug": "pump-fun-mechanics",
+  "title": "Pump.fun Bonding Curve",
+  "category": "protocol",
+  "summary": "How Pump.fun bonding curves work — launch mechanics, graduation, and cashback.",
+  "tags": [
+    "pumpfun",
+    "bonding-curve",
+    "memecoin",
+    "launch"
+  ],
+  "memoryTier": "LEARNED",
+  "metadata": {
+    "birdeyeLink": "https://birdeye.so",
+    "pumpfunLink": "https://pump.fun"
+  },
+  "sources": [
+    {
+      "label": "pump-sdk-core SKILL.md",
+      "type": "manual"
+    }
+  ],
+  "content": "# Pump.fun Bonding Curve\n\n## How It Works\n1. Creator launches token on pump.fun (no code needed)\n2. Token starts on a **bonding curve** — price increases with buys\n3. At ~$69k market cap, token **graduates** to PumpSwap AMM\n4. Post-graduation: normal DEX trading on Raydium/Jupiter\n\n## Key Metrics\n- **Bonding curve progress:** 0-100% (use `/grad <mint>`)\n- **Sweet spot:** 60-90% progress — pre-graduation momentum\n- **Risk zone:** <20% progress — high chance of abandonment\n\n## Graduation\n- Triggered automatically at market cap threshold\n- Liquidity migrates from bonding curve → PumpSwap AMM pool\n- LP tokens are burned (locked forever)\n\n## Cashback\n- Creator fee redirected back to traders\n- Auto on buys during bonding curve\n- Requires UserVolumeAccumulator PDA for sells\n- Claim via `claim_cashback` instruction\n\n## Mayhem Mode\n- 2B supply variant (vs standard 1B)\n- Higher volatility, faster graduation\n- Use `/snipe mayhem` to filter for these only\n",
+  "id": "39CnmVz3vfGJ",
+  "createdAt": "2026-04-08T16:07:42.280Z",
+  "updatedAt": "2026-04-08T16:07:42.280Z",
+  "version": 1,
+  "archived": false
+}

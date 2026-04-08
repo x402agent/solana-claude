@@ -1,0 +1,28 @@
+{
+  "slug": "memory-system",
+  "title": "Three-Tier Memory System",
+  "category": "agent",
+  "summary": "KNOWN/LEARNED/INFERRED memory tiers — how agents accumulate and validate trading knowledge.",
+  "tags": [
+    "memory",
+    "agent",
+    "ooda",
+    "dream"
+  ],
+  "memoryTier": "LEARNED",
+  "metadata": {
+    "agentType": "Dream"
+  },
+  "sources": [
+    {
+      "label": "SolanaOS epistemology",
+      "type": "manual"
+    }
+  ],
+  "content": "# Three-Tier Memory System\n\n## KNOWN (Ephemeral)\n- **Source:** API calls, price feeds, scanner signals\n- **Lifetime:** Expires after set duration (default 60s for prices)\n- **Example:** \"SOL: $142.30, +3.2% 24h\"\n- **Use:** OODA OBSERVE phase — fresh market context\n\n## LEARNED (Persistent)\n- **Source:** Validated patterns, confirmed by Dream agent\n- **Lifetime:** Permanent until explicitly revoked\n- **Example:** \"BONK typically leads meme rallies by 2-4h\"\n- **Use:** OODA ORIENT phase — pattern matching\n\n## INFERRED (Tentative)\n- **Source:** Scanner signals, single-observation correlations\n- **Lifetime:** Expires in 24h unless promoted\n- **Example:** \"WIF showing accumulation pattern similar to March 2025\"\n- **Use:** Candidate for promotion → LEARNED via Dream consolidation\n\n## Dream Agent\nThe Dream agent runs periodically to:\n1. Review all INFERRED signals\n2. Find recurring themes (token, pattern, wallet)\n3. Promote high-confidence signals to LEARNED\n4. Expire stale or contradicted signals\n5. Write consolidated insights\n\nRun manually: `/dream` in Telegram\n",
+  "id": "hdOqNedjaBY_",
+  "createdAt": "2026-04-08T16:07:42.280Z",
+  "updatedAt": "2026-04-08T16:07:42.280Z",
+  "version": 1,
+  "archived": false
+}

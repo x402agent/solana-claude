@@ -1,0 +1,29 @@
+{
+  "slug": "solana-sol",
+  "title": "SOL (Solana)",
+  "category": "token",
+  "summary": "Solana's native token — L1 gas, staking, and the base pair for all Solana DeFi.",
+  "tags": [
+    "sol",
+    "l1",
+    "base-pair"
+  ],
+  "memoryTier": "LEARNED",
+  "metadata": {
+    "mint": "So11111111111111111111111111111111111111112",
+    "symbol": "SOL",
+    "solscanLink": "https://solscan.io/token/So11111111111111111111111111111111111111112"
+  },
+  "sources": [
+    {
+      "label": "Helius RPC",
+      "type": "api"
+    }
+  ],
+  "content": "# SOL (Solana)\n\n## Token Info\n- **Mint:** `So11111111111111111111111111111111111111112`\n- **Type:** Native L1 token\n- **Use:** Gas fees, staking, base pair for all DEX trading\n\n## Trading Notes\n- SOL is the denominator for most Solana trades\n- Monitor SOL price before any memecoin entry (correlation risk)\n- Priority fees are paid in SOL — high network activity = higher execution cost\n- Staking yield: ~7% APY via liquid staking (Marinade, Jito)\n\n## Key Signals\n- SOL dominance rising = risk-off (memes dump)\n- SOL flat + memecoin volume rising = rotation opportunity\n- SOL + ETH correlation breakdown = Solana-specific catalyst\n",
+  "id": "-Ll79FjPcBrw",
+  "createdAt": "2026-04-08T16:07:42.280Z",
+  "updatedAt": "2026-04-08T16:07:42.280Z",
+  "version": 1,
+  "archived": false
+}

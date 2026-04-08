@@ -1,0 +1,30 @@
+{
+  "slug": "rug-detection",
+  "title": "Rug Pull Detection Patterns",
+  "category": "signal",
+  "summary": "Common rug pull indicators and how to detect them before entry.",
+  "tags": [
+    "rug",
+    "security",
+    "risk",
+    "detection"
+  ],
+  "memoryTier": "LEARNED",
+  "riskLevel": "high",
+  "metadata": {
+    "signalStrength": "STRONG",
+    "signalScore": 90
+  },
+  "sources": [
+    {
+      "label": "OODA trade history",
+      "type": "agent"
+    }
+  ],
+  "content": "# Rug Pull Detection Patterns\n\n## Red Flags (Auto-AVOID)\n1. **Creator sold >50%** — check `creatorSold` field\n2. **Top 10 holders >60%** — extreme whale concentration\n3. **No social links** — zero Twitter/Telegram/website\n4. **Mint authority not revoked** — can inflate supply\n5. **Freeze authority active** — can freeze your tokens\n\n## Yellow Flags (Proceed with caution)\n1. Top 10 holders 30-50%\n2. <100 holders after 1 hour\n3. Bonding curve progress <10% after 30 minutes\n4. No dev buy (creator didn't buy their own token)\n5. Name/symbol cloning a popular token\n\n## Green Signals\n1. LP burned or locked (graduated tokens)\n2. Dev holding <5%\n3. Organic holder growth (not botted)\n4. Cashback enabled (creator aligned with traders)\n5. Community verified on Pump.fun\n\n## Automated Scoring\nThe Scanner agent scores 0-100:\n- >= 75: STRONG (auto-snipe eligible)\n- 55-74: MODERATE (research first)\n- 35-54: WEAK (high risk)\n- < 35: AVOID\n",
+  "id": "l0Oe0D9EaSEm",
+  "createdAt": "2026-04-08T16:07:42.280Z",
+  "updatedAt": "2026-04-08T16:07:42.280Z",
+  "version": 1,
+  "archived": false
+}

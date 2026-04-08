@@ -1,0 +1,29 @@
+{
+  "slug": "jupiter-routing",
+  "title": "Jupiter Aggregator",
+  "category": "protocol",
+  "summary": "Jupiter — Solana's leading DEX aggregator. Best-price routing across all venues.",
+  "tags": [
+    "jupiter",
+    "dex",
+    "swap",
+    "routing"
+  ],
+  "memoryTier": "LEARNED",
+  "metadata": {
+    "mint": "JUPyiwrYJFskUPiHa7hkeR8VUtAeFoSYbKedZNsDvCN",
+    "symbol": "JUP"
+  },
+  "sources": [
+    {
+      "label": "Jupiter API docs",
+      "type": "manual"
+    }
+  ],
+  "content": "# Jupiter Aggregator\n\n## Overview\nJupiter is Solana's #1 DEX aggregator — routes swaps across Raydium, Orca, Meteora, and 20+ venues for best price.\n\n## Key Endpoints\n- **Quote:** `GET /v6/quote?inputMint=X&outputMint=Y&amount=Z`\n- **Swap:** `POST /v6/swap` — returns serialized transaction\n- **Ultra:** `POST /ultra/v1/order` — intent-based, MEV-protected\n\n## Integration Notes\n- Always use `slippageBps` (basis points, not percent)\n- Set `prioritizationFeeLamports` from Helius fee estimate\n- For large swaps: use Ultra API (MEV protection, better fills)\n\n## Referral\n- Referral account earns fee share on swaps\n- CLAWD referral: `2mE1EbETC8e8XyJomMkvQ3jXzoGBZAqRRSRFJv9AHRD9`\n",
+  "id": "QjFFIeKexpJM",
+  "createdAt": "2026-04-08T16:07:42.280Z",
+  "updatedAt": "2026-04-08T16:07:42.280Z",
+  "version": 1,
+  "archived": false
+}

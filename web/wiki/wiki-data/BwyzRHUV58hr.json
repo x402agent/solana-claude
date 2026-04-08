@@ -1,0 +1,25 @@
+{
+  "slug": "ooda-loop",
+  "title": "OODA Trading Loop",
+  "category": "strategy",
+  "summary": "The Observe-Orient-Decide-Act cycle adapted for Solana DeFi trading with multi-venue signal scoring.",
+  "tags": [
+    "ooda",
+    "strategy",
+    "core"
+  ],
+  "memoryTier": "LEARNED",
+  "metadata": {},
+  "sources": [
+    {
+      "label": "SolanaOS strategy.md",
+      "type": "manual"
+    }
+  ],
+  "content": "# OODA Trading Loop\n\n## Overview\nThe OODA loop (Observe, Orient, Decide, Act) is the core decision-making framework for CLAWD agents. Adapted from military strategy for the speed and chaos of Solana DeFi markets.\n\n## Phases\n\n### OBSERVE\nGather real-time market data:\n- `sol_price` — Current SOL/USD\n- `solana_trending` — Top movers by volume/momentum\n- `helius_priority_fee` — Network congestion indicator\n- `memory_recall(KNOWN)` — Fresh cached signals\n\n### ORIENT\nScore each candidate using weighted factors:\n| Factor | Weight | Source |\n|--------|--------|--------|\n| Trend alignment | 25% | 24h price change |\n| Momentum | 20% | Volume acceleration |\n| Liquidity depth | 20% | DEX pool sizes |\n| Smart money participation | 15% | Top trader wallets |\n| Execution risk | -20% | Slippage + priority fee |\n\n### DECIDE\n- Confidence >= 60 → Size band selection\n  - 60-69: 0.5x base size\n  - 70-79: 1.0x\n  - 80-89: 1.25x\n  - 90+: 1.5x (max conviction)\n- Below 60 → SKIP, write INFERRED signal for Dream agent\n\n### ACT\nExecute via Jupiter/Raydium with:\n- Priority fee from helius estimate\n- Slippage protection (adaptive)\n- Permission gate: `ask` mode requires human approval\n\n### LEARN\nPost-trade:\n- Write result to INFERRED memory\n- Dream agent consolidates INFERRED → LEARNED\n- Failed trades write risk patterns to LEARNED\n",
+  "id": "BwyzRHUV58hr",
+  "createdAt": "2026-04-08T16:07:42.278Z",
+  "updatedAt": "2026-04-08T16:07:42.278Z",
+  "version": 1,
+  "archived": false
+}

@@ -86,6 +86,12 @@ export default function RootLayout({
           {children}
           <Toaster richColors />
         </ThemeProvider>
+        {/* @ts-expect-error -- ElevenLabs ConvAI web component */}
+        <elevenlabs-convai agent-id="agent_1601knpw2ax7ejb80fdxx118n7qn" />
+        <Script
+          src="https://unpkg.com/@elevenlabs/convai-widget-embed"
+          strategy="afterInteractive"
+        />
       </body>
     </html>
   );
