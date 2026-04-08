@@ -1,0 +1,52 @@
+# Spins up all quickstart workers. Run the iii engine on the host first:
+#   iii -c iii-config.yaml
+#
+# Workers connect to iii via host.docker.internal. On Linux (Docker <20.10),
+# add: extra_hosts: ["host.docker.internal:host-gateway"]
+# Note: This Docker Compose file is for demonstration only and not intended
+# to represent a full production system.
+
+services:
+  client:
+    build:
+      context: ./workers/client
+      dockerfile: Dockerfile
+    environment:
+      III_BRIDGE_URL: ws://host.docker.internal:49134
+      III_HOST_USER_ID: ${III_HOST_USER_ID:-}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: unless-stopped
+
+  compute-worker:
+    build:
+      context: ./workers/compute-worker
+      dockerfile: Dockerfile
+    environment:
+      III_BRIDGE_URL: ws://host.docker.internal:49134
+      III_HOST_USER_ID: ${III_HOST_USER_ID:-}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: unless-stopped
+
+  data-worker:
+    build:
+      context: ./workers/data-worker
+      dockerfile: Dockerfile
+    environment:
+      III_BRIDGE_URL: ws://host.docker.internal:49134
+      III_HOST_USER_ID: ${III_HOST_USER_ID:-}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: unless-stopped
+
+  payment-worker:
+    build:
+      context: ./workers/payment-worker
+      dockerfile: Dockerfile
+    environment:
+      III_BRIDGE_URL: ws://host.docker.internal:49134
+      III_HOST_USER_ID: ${III_HOST_USER_ID:-}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: unless-stopped
