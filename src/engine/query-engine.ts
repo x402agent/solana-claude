@@ -1,7 +1,7 @@
 /**
  * SolanaOS Query Engine
  *
- * Adapted from Claude Code's src/QueryEngine.ts pipeline patterns.
+ * Adapted from Clawd Code's src/QueryEngine.ts pipeline patterns.
  *
  * Provider-agnostic multi-model streaming LLM engine with:
  *  - Tool call loops (detect → execute → inject result → continue)
@@ -62,7 +62,7 @@ export interface ProviderConfig {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Tool usage tracking (adapted from Claude Code's cost-tracker.ts)
+// Tool usage tracking (adapted from Clawd Code's cost-tracker.ts)
 // ─────────────────────────────────────────────────────────────────────────────
 
 export interface TurnUsage {
@@ -172,7 +172,7 @@ export class QueryEngine {
       ? this.config.toolRegistry.all().filter((t) => opts.allowedTools!.includes(t.name))
       : this.config.toolRegistry.all();
 
-    // Tool call loop (adapted from Claude Code's QueryEngine tool loop)
+    // Tool call loop (adapted from Clawd Code's QueryEngine tool loop)
     while (loopCount < maxLoops) {
       if (opts.signal?.aborted) {
         stopReason = "error";

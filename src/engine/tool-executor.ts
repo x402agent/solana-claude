@@ -1,7 +1,7 @@
 /**
  * SolanaOS Tool Executor
  *
- * Adapted from Claude Code's QueryEngine.ts tool-call loop.
+ * Adapted from Clawd Code's QueryEngine.ts tool-call loop.
  *
  * Handles:
  *  - Permission resolution before execution
@@ -193,7 +193,7 @@ export class ToolExecutor {
       }
     }
 
-    // Concurrency gate (adapted from Claude Code isConcurrencySafe)
+    // Concurrency gate (adapted from Clawd Code isConcurrencySafe)
     await this.acquireSlot(tool);
 
     try {
@@ -221,7 +221,7 @@ export class ToolExecutor {
 
   /**
    * Execute multiple tool calls in parallel (respecting concurrency limits).
-   * Adapted from Claude Code's parallel tool call handling in QueryEngine.
+   * Adapted from Clawd Code's parallel tool call handling in QueryEngine.
    */
   async executeMany(calls: LLMToolCall[], ctx: ToolContext): Promise<ToolCallResult[]> {
     return Promise.all(calls.map((call) => this.execute(call, ctx)));

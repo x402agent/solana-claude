@@ -1,7 +1,7 @@
 /**
  * SolanaOS Memory Extraction
  *
- * Adapted from Claude Code's src/services/extractMemories/ + src/memdir/ hierarchy.
+ * Adapted from Clawd Code's src/services/extractMemories/ + src/memdir/ hierarchy.
  *
  * Auto-extracts KNOWN / LEARNED / INFERRED facts from conversation turns
  * and routes them to the correct memory tier in the SolanaOS dual-memory stack:
@@ -116,7 +116,7 @@ export interface ConversationTurn {
 
 /**
  * Extract memories from a conversation turn.
- * Adapted from Claude Code's extractMemories service.
+ * Adapted from Clawd Code's extractMemories service.
  *
  * Rule-based extraction runs synchronously. For deeper LLM-backed extraction,
  * call extractFromTurnWithLLM() which sends to the Go daemon's /api/v1/memory/extract.
@@ -242,7 +242,7 @@ export class MemoryRouter {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Memory Hierarchy types (Claude Code memdir → Honcho mapping)
+// Memory Hierarchy types (Clawd Code memdir → Honcho mapping)
 // ─────────────────────────────────────────────────────────────────────────────
 
 export interface MemoryScope {
@@ -256,7 +256,7 @@ export interface MemoryScope {
 
 /**
  * Format memory hierarchy for LLM context injection.
- * Adapted from Claude Code's CLAUDE.md injection pattern.
+ * Adapted from Clawd Code's CLAUDE.md injection pattern.
  *
  * In SolanaOS this is injected at the start of each LLM turn
  * alongside the SOUL.md content.

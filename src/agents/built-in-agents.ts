@@ -303,7 +303,7 @@ For a given target (token mint or wallet address):
 
 /**
  * Monitor — real-time onchain event monitor.
- * Adapted from Claude Code's async background agent pattern.
+ * Adapted from Clawd Code's async background agent pattern.
  * Sets up Helius WebSocket subscriptions and watches for events.
  */
 export const MONITOR_AGENT: AgentDefinition = {
