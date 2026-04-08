@@ -1,20 +1,41 @@
 {
   "name": "solana-clawd",
-  "version": "1.0.0",
-  "description": "The Clawd Code agentic engine, rebuilt for Solana — 31 MCP tools for trading, research, and onchain monitoring",
+  "version": "1.1.0",
+  "description": "$CLAWD — Solana agentic engine with 31 MCP tools, blockchain buddies, and unicode animations. One command to trade, research, and monitor onchain.",
   "type": "module",
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./animations": {
+      "import": "./dist/animations/index.js",
+      "types": "./dist/animations/index.d.ts"
+    },
+    "./buddy": {
+      "import": "./dist/buddy/index.js",
+      "types": "./dist/buddy/index.d.ts"
+    }
+  },
   "bin": {
-    "solana-clawd": "src/entrypoints/cli.tsx"
+    "solana-clawd": "dist/entrypoints/clawd.js",
+    "clawd": "dist/entrypoints/clawd.js"
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "build:watch": "tsc -p tsconfig.json --watch",
     "dev": "tsc -p tsconfig.json --watch",
     "typecheck": "tsc --noEmit",
+    "prebuild": "node -e \"console.log('Building solana-clawd v' + require('./package.json').version)\"",
+    "prepublishOnly": "npm run build",
     "mcp:build": "cd mcp-server && npm install && npm run build",
     "mcp:start": "cd mcp-server && npm start",
     "mcp:http": "cd mcp-server && npm run start:http",
+    "demo": "node dist/entrypoints/clawd.js demo",
+    "birth": "node dist/entrypoints/clawd.js birth",
+    "spinners": "node dist/entrypoints/clawd.js spinners",
     "setup": "bash scripts/setup.sh"
   },
   "dependencies": {
@@ -69,6 +90,7 @@
     "tweetnacl": "^1.0.3",
     "type-fest": "^4.30.0",
     "undici": "^7.3.0",
+    "unicode-animations": "^1.0.3",
     "usehooks-ts": "^3.1.0",
     "wrap-ansi": "^9.0.0",
     "ws": "^8.18.0",
@@ -102,12 +124,33 @@
     "clawd",
     "trading",
     "agentic",
-    "openrouter",
-    "blockchain"
+    "blockchain",
+    "unicode-animations",
+    "spinner",
+    "braille",
+    "cli",
+    "memecoin",
+    "defi",
+    "companion",
+    "buddy",
+    "wallet",
+    "jupiter",
+    "raydium",
+    "pumpfun"
   ],
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/x402agent/solana-clawd"
-  }
+  },
+  "homepage": "https://github.com/x402agent/solana-clawd#readme",
+  "bugs": {
+    "url": "https://github.com/x402agent/solana-clawd/issues"
+  },
+  "files": [
+    "dist",
+    "src",
+    "README.md",
+    "LICENSE"
+  ]
 }

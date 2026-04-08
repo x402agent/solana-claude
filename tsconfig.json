@@ -6,26 +6,47 @@
     "moduleResolution": "NodeNext",
     "jsx": "react-jsx",
     "jsxImportSource": "react",
+
+    /* Type checking */
     "strict": false,
+    "noImplicitAny": false,
+    "strictNullChecks": false,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+
+    /* Emit */
     "noEmit": false,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "resolveJsonModule": true,
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
     "outDir": "./dist",
     "rootDir": "./src",
+
+    /* Module resolution */
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "allowImportingTsExtensions": false,
     "baseUrl": ".",
     "paths": {
       "src/*": ["./src/*"]
     },
-    "allowImportingTsExtensions": false,
-    "noImplicitAny": false,
-    "strictNullChecks": false,
-    "types": ["node"]
+
+    /* Environment */
+    "types": ["node"],
+
+    /* Compat — baseUrl is deprecated in TS 7; silence until migration */
+    "ignoreDeprecations": "5.0"
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist", "packages", "claude-code-main 2", "web"]
+  "exclude": [
+    "node_modules",
+    "dist",
+    "packages",
+    "claude-code-main 2",
+    "web",
+    "**/*.test.ts",
+    "**/*.spec.ts"
+  ]
 }
