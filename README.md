@@ -698,99 +698,79 @@ vault.lock()                           // zero-fills key from memory
 
 ---
 
-## CLAWD Wiki — Trading Intelligence Knowledge Base
+## Clawd Vault — Solana Research Knowledge Base
 
-Inspired by [Karpathy's LLM Wiki](https://github.com/karpathy/llm-wiki), adapted for Solana trading agents. A self-evolving knowledge base where OODA loops, scanner signals, and agent memory compile into structured wiki articles.
+`llm-wiki-tang/` is **Clawd Vault**: a Solana-native research vault for financial agents and trading workflows. Upload sources (whitepapers, wallet exports, PDFs, governance docs), connect via MCP, and let the agent compile and maintain token dossiers, protocol pages, wallet profiles, strategy memos, and cross-referenced research.
+
+### Three Layers
+
+| Layer | Description |
+|-------|-------------|
+| **Raw Sources** | Whitepapers, filings, wallet notes, DEX research, governance posts, transcripts. Immutable. |
+| **The Vault** | LLM-generated markdown pages: token dossiers, protocol pages, wallet profiles, strategy memos, timelines, diagrams. |
+| **The Tools** | Search, read, write, delete. Clawd connects through MCP and orchestrates the rest. |
 
 ### Architecture
 
 ```
-┌──────────────────────────────────────────────────────┐
-│                    CLAWD Wiki                         │
-│                                                      │
-│  ┌──────────────┐  ┌──────────────┐  ┌────────────┐ │
-│  │  Next.js UI   │  │  REST API    │  │  Agent API │ │
-│  │  :3777        │  │  /api/       │  │  (MCP)     │ │
-│  └──────┬────────┘  └──────┬───────┘  └──────┬─────┘ │
-│         └────────┬─────────┘                 │       │
-│         ┌───────▼──────────────────────────▼──────┐ │
-│         │           Wiki Store (JSON)              │ │
-│         │  ┌─────────┐ ┌─────────┐ ┌───────────┐  │ │
-│         │  │  KNOWN   │ │ LEARNED │ │ INFERRED  │  │ │
-│         │  │  (fresh) │ │ (valid) │ │ (tentative│  │ │
-│         │  └─────────┘ └─────────┘ └───────────┘  │ │
-│         └──────────────────────────────────────────┘ │
-│                          ▲                           │
-│  ┌───────┐ ┌─────────┐  │  ┌──────────┐             │
-│  │Scanner│→│ OODA    │→─┘  │  Dream   │             │
-│  │signals│ │ loops   │     │  agent   │             │
-│  └───────┘ └─────────┘     └──────────┘             │
-│              Helius RPC + Birdeye + Solana Tracker    │
-└──────────────────────────────────────────────────────┘
+┌─────────────┐     ┌─────────────┐     ┌─────────────┐
+│   Next.js   │────>│   FastAPI   │────>│  Supabase   │
+│ Clawd Vault │     │   Backend   │     │  (Postgres) │
+└─────────────┘     └──────┬──────┘     └─────────────┘
+                           │
+                    ┌──────┴──────┐
+                    │  MCP Server │<──── solana-clawd
+                    └─────────────┘
 ```
 
-### Categories
+| Component | Stack | Responsibilities |
+|-----------|-------|------------------|
+| **Web** (`web/`) | Next.js 16, React 19, Tailwind, Radix UI | Dashboard, PDF/HTML viewer, wiki renderer |
+| **API** (`api/`) | FastAPI, asyncpg, aioboto3 | Auth, uploads, document processing, OCR, persistence |
+| **Converter** (`converter/`) | FastAPI, LibreOffice | Isolated office-to-PDF conversion |
+| **MCP** (`mcp/`) | MCP SDK, Supabase OAuth | Tools for Clawd: `guide`, `search`, `read`, `write`, `delete` |
+| **Database** | Supabase (Postgres + RLS + PGroonga) | Documents, chunks, knowledge bases, users |
+| **Storage** | S3-compatible | Raw uploads, extracted images, research assets |
 
-| Category | Icon | What It Covers |
-|----------|------|---------------|
-| **Tokens** | 💰 | Token profiles — SOL, BONK, JUP, memecoins |
-| **Wallets** | 👛 | Smart money, whale wallets, PnL tracking |
-| **Protocols** | 🔗 | Jupiter, Raydium, Pump.fun, Marinade |
-| **Strategies** | 🎯 | OODA loops, scalping, arbitrage, sniper configs |
-| **Signals** | 📡 | Market patterns, rug detection, alpha signals |
-| **Agents** | 🤖 | Agent configs, Dream consolidation, fleet management |
-| **Trade Log** | 📜 | Executed trades, PnL records, post-mortems |
-| **Research** | 🔬 | Deep-dive analysis, sector reports |
-| **Glossary** | 📖 | DeFi/Solana term definitions |
+### MCP Tools
 
-### Memory Tiers (SolanaOS Epistemology)
+| Tool | Description |
+|------|-------------|
+| `guide` | Explains Solana research workflow and lists available knowledge bases |
+| `search` | Browse files or keyword search with PGroonga full-text ranking |
+| `read` | Read documents — PDFs with page ranges, inline images, glob batch reads |
+| `write` | Create dossier pages, edit with `str_replace`, append. SVG/CSV asset support |
+| `delete` | Archive documents by path or glob pattern |
 
-- **KNOWN** (blue) — Fresh market data from API calls. Auto-expires.
-- **LEARNED** (green) — Validated patterns confirmed by Dream agent. Permanent.
-- **INFERRED** (amber) — Tentative signals from scanners. Promoted or expired by Dream.
+### Core Operations
+
+- **Ingest** — Drop in a source. The agent reads it, writes a summary, updates token/wallet/protocol/strategy pages, and flags contradictions against existing theses.
+- **Query** — Ask complex questions across the compiled vault. Knowledge is already synthesized, linked, and citation-aware.
+- **Lint** — Run health checks. Find stale theses, orphan pages, unsupported claims, missing links, and gaps in the research graph.
 
 ### Quick Start
 
 ```bash
-cd web/wiki
-npm install
-npm run seed     # Pre-populate with Solana trading knowledge
-npm run dev      # http://localhost:3777
+cd llm-wiki-tang
+
+# Database
+psql $DATABASE_URL -f supabase/migrations/001_initial.sql
+
+# API
+cd api && pip install -r requirements.txt && uvicorn main:app --reload --port 8000
+
+# MCP Server
+cd mcp && pip install -r requirements.txt && uvicorn server:app --reload --port 8080
+
+# Web
+cd web && npm install && npm run dev
 ```
 
-### REST API
+### Memory Tiers
 
-```
-GET  /api/articles                  -- All articles
-GET  /api/articles?q=bonk           -- Full-text search
-GET  /api/articles?category=token   -- Filter by category
-GET  /api/articles?tier=LEARNED     -- Filter by memory tier
-GET  /api/articles?tree=true        -- Sidebar navigation tree
-GET  /api/articles?ooda=true        -- OODA context (for agent injection)
-GET  /api/articles?slug=ooda-loop   -- Single article by slug
-POST /api/articles                  -- Create article (JSON body)
-PUT  /api/articles                  -- Update article (requires id)
-DELETE /api/articles?id=xxx         -- Soft-delete
-```
-
-### Agent Integration
-
-Agents write to the wiki during OODA loops:
-- **OBSERVE:** Scanner writes KNOWN articles (token prices, trending data)
-- **ORIENT:** Analyst writes research articles with signal scores
-- **LEARN:** Dream agent promotes INFERRED → LEARNED, expires stale signals
-- **OODA context:** `GET /api/articles?ooda=true` returns structured memory for prompt injection
-
-### Seed Articles (6 foundational)
-
-| Article | Category | Tier |
-|---------|----------|------|
-| OODA Trading Loop | Strategy | LEARNED |
-| SOL (Solana) | Token | LEARNED |
-| Pump.fun Bonding Curve | Protocol | LEARNED |
-| Three-Tier Memory System | Agent | LEARNED |
-| Jupiter Aggregator | Protocol | LEARNED |
-| Rug Pull Detection Patterns | Signal | LEARNED |
+- **KNOWN** (blue) — Fresh market data from API calls. Auto-expires.
+- **LEARNED** (green) — Validated patterns confirmed by Dream agent. Permanent.
+- **INFERRED** (amber) — Tentative signals from scanners. Promoted or expired by Dream.
 
 ---
 
