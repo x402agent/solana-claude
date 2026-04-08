@@ -14,7 +14,7 @@ mcp-server/node_modules/
 
 # OS
 .DS_Store
-
+claude-code-main 2
 # Logs
 *.log
 npm-debug.log*
