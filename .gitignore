@@ -23,8 +23,8 @@ npm-debug.log*
 .netlify
 
 # Legacy / vendored
-tailclaude/
 tailclaude-ui/
 tailclaude-main/
 claude-code-main 2
-web
+web/.next
+web/.wrangler

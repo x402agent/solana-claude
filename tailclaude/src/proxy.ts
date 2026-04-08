@@ -1213,6 +1213,24 @@ export function startProxy(): Promise<void> {
         return;
       }
 
+      // $CLAWD spinner data endpoint — consumed by web app
+      if (method === "GET" && pathname === "/spinners") {
+        const spinnerData = {
+          solanaPulse: { frames: ['⠀⠀⠀⣀⠀⠀⠀','⠀⠀⣠⣿⣄⠀⠀','⠀⣴⣿⣿⣿⣦⠀','⣾⣿⣿⣿⣿⣿⣷','⠻⣿⣿⣿⣿⣿⠟','⠀⠙⣿⣿⣿⠋⠀','⠀⠀⠙⣿⠋⠀⠀','⠀⠀⠀⠁⠀⠀⠀'], interval: 100 },
+          pumpLoader: { frames: ['▱▱▱▱▱▱▱▱','▰▱▱▱▱▱▱▱','▰▰▱▱▱▱▱▱','▰▰▰▱▱▱▱▱','▰▰▰▰▱▱▱▱','▰▰▰▰▰▱▱▱','▰▰▰▰▰▰▱▱','▰▰▰▰▰▰▰▱','▰▰▰▰▰▰▰▰'], interval: 60 },
+          blockFinality: { frames: ['░░░░','▒░░░','▓▒░░','█▓▒░','██▓▒','███▓','████','███▓','██▓▒','█▓▒░','▓▒░░','▒░░░','░░░░'], interval: 80 },
+          degenDice: { frames: ['⚀','⚁','⚂','⚃','⚄','⚅','⚄','⚃','⚁'], interval: 100 },
+          mevScan: { frames: ['⠁⠀⠀⠀⠀⠀⠀⠀','⠂⠁⠀⠀⠀⠀⠀⠀','⠄⠂⠁⠀⠀⠀⠀⠀','⡀⠄⠂⠁⠀⠀⠀⠀','⠀⡀⠄⠂⠁⠀⠀⠀','⠀⠀⡀⠄⠂⠁⠀⠀','⠀⠀⠀⡀⠄⠂⠁⠀','⠀⠀⠀⠀⡀⠄⠂⠁'], interval: 70 },
+          tokenOrbit: { frames: ['◆ ·  · ·','· ◆  · ·','· ·  ◆ ·','· ·  · ◆','· ·  ◆ ·','· ◆  · ·'], interval: 110 },
+          clawdSpin: { frames: ['⣰⣿⣿⡆','⣿⡏⠀⠀','⣿⡇⠀⠀','⣿⡏⠀⠀','⠹⣿⣿⠃','⠀⠈⠉⠀'], interval: 90 },
+          walletHeartbeat: { frames: ['⠤⠤⠤⠤⠤⠤⣤⠴⠚⠁⠀⠀⠀⠀⠹⠤⠤⠤⠤⠤','⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀','⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤'], interval: 120 },
+          rugDetector: { frames: ['🛡️ scanning','🛡️ scanning.','🛡️ scanning..','🛡️ scanning...','🛡️ CLEAR ✓'], interval: 200 },
+        };
+        res.writeHead(200, { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' });
+        res.end(JSON.stringify(spinnerData));
+        return;
+      }
+
       if (method === "GET" && pathname === "/api-status") {
         handleApiStatus(req, res).catch(() => {
           if (!res.headersSent)

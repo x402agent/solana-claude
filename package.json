@@ -1,6 +1,6 @@
 {
   "name": "solana-clawd",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "$CLAWD — Solana agentic engine with 31 MCP tools, blockchain buddies, and unicode animations. One command to trade, research, and monitor onchain.",
   "type": "module",
   "main": "dist/index.js",
@@ -40,7 +40,9 @@
     "demo": "node dist/entrypoints/clawd.js demo",
     "birth": "node dist/entrypoints/clawd.js birth",
     "spinners": "node dist/entrypoints/clawd.js spinners",
-    "setup": "bash scripts/setup.sh"
+    "setup": "bash scripts/setup.sh",
+    "skills:catalog": "node scripts/generate-skills-catalog.js",
+    "skills:serve": "node scripts/generate-skills-catalog.js && npx serve web/skills -l 3333"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.39.0",

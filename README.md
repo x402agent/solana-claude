@@ -375,6 +375,93 @@ Bundled out of the box in `/tailclawd`:
 
 ---
 
+## Skills Catalog (89 Skills)
+
+`solana-clawd` ships with **89 on-demand knowledge skills** the agent can load when needed. Skills follow the [agentskills.io](https://agentskills.io) open standard with YAML frontmatter and progressive disclosure to minimize token usage.
+
+### How Skills Work
+
+```
+Level 0: skill_list()              -> [{name, description, category}, ...]   (~3k tokens)
+Level 1: skill_view("pump-sdk-core") -> Full SKILL.md content                (varies)
+Level 2: skill_view("pump-sdk-core", "references/api.md") -> Specific file   (varies)
+```
+
+The agent only loads full skill content when it actually needs it. Every skill is also a slash command:
+
+```
+/weather              # Get weather forecasts
+/coding-agent         # Delegate to Codex/Claude Code
+/pumpfun-trading      # Buy/sell on Pump.fun bonding curves
+/swarm-orchestrator   # Multi-bot trading swarms
+/solanaos             # Full SolanaOS operator guide
+```
+
+### Skill Categories
+
+| Category | Count | Examples |
+| -------- | ----- | ------- |
+| Pump.fun / Token Launch | 22 | pump-sdk-core, pumpfun-trading, pump-bonding-curve, pump-fee-sharing |
+| Solana / Blockchain | 7 | solanaos, solana-dev, solana-formal-verification, solana-research-brief |
+| AI / Agents | 11 | coding-agent, swarm-orchestrator, skill-creator, e2b, cua |
+| Communication | 6 | discord, slack, imsg, bluebubbles, himalaya, voice-call |
+| Productivity | 8 | apple-notes, apple-reminders, notion, obsidian, 1password, trello |
+| Web / Research | 9 | browse, blogwatcher, weather, pdf-to-markdown, summarize, xurl |
+| Media | 8 | camsnap, canvas, gifgrep, spotify-player, video-frames, songsee |
+| DevOps / Infrastructure | 7 | gateway-node-ops, healthcheck, tmux, openhue, eightctl |
+| Clawd Ecosystem | 2 | clawhub, openclaw-claude-code-skill-main |
+| Other | 9 | gog, goplaces, honcho-integration, mcporter, nano-pdf |
+
+### Browse Skills
+
+Open `web/skills/index.html` or run:
+
+```bash
+npm run skills:catalog   # regenerate catalog.json
+npm run skills:serve     # serve the catalog at localhost:3333
+```
+
+### SKILL.md Format
+
+```yaml
+---
+name: my-skill
+description: Brief description of what this skill does
+version: 1.0.0
+metadata:
+  solanaos:
+    emoji: "\U0001F680"
+    requires:
+      env: [HELIUS_RPC_URL]
+      bins: [node]
+---
+
+# Skill Title
+
+## When to Use
+Trigger conditions for this skill.
+
+## Procedure
+1. Step one
+2. Step two
+
+## Pitfalls
+- Known failure modes and fixes
+```
+
+### Install Skills
+
+```bash
+# Add from the skills hub
+npx skills add x402agent/solana-clawd
+
+# Or copy a skill directory into skills/
+cp -r my-skill/ skills/my-skill/
+npm run skills:catalog   # regenerate the catalog
+```
+
+---
+
 ## Metaplex Agent Minting (MPL Agent Registry)
 
 `solana-clawd` fully integrates the **Metaplex mpl-agent-registry SDK** to mint, register, and manage AI agents as on-chain MPL Core assets on Solana.
@@ -634,9 +721,24 @@ solana-clawd/
 │   ├── memory/           Memory extraction (KNOWN/LEARNED/INFERRED)
 │   ├── gateway/          SSE transport (gateway bridge)
 │   ├── tasks/            Task lifecycle manager
-│   ├── skills/           Skill registry
+│   ├── skills/           Skill registry and loader
+│   │   ├── skill-registry.ts   SkillRegistry class, frontmatter parser, bootstrap
+│   │   ├── bundledSkills.ts    Bundled skill definitions
+│   │   └── loadSkillsDir.ts    Filesystem skill loader
 │   ├── entrypoints/      CLI entry (demo, birth, spinners)
 │   └── shared/           Message types, model catalog, tool policy
+├── skills/              89 SKILL.md knowledge documents (agentskills.io format)
+│   ├── pump-sdk-core/SKILL.md
+│   ├── pumpfun-trading/SKILL.md
+│   ├── solanaos/SKILL.md
+│   ├── coding-agent/SKILL.md
+│   ├── ... (89 total)
+│   └── catalog.json     Generated skill manifest
+├── web/
+│   └── skills/index.html  Static skills catalog browser
+├── scripts/
+│   ├── setup.sh           One-shot setup
+│   └── generate-skills-catalog.js  Catalog generator
 ├── tailclawd/           Cypherpunk Telegram Gateway + Next.js UI
 ├── docs/                 Specs including risk-engine-spec.md
 ├── examples/
