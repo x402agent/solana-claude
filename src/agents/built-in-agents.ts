@@ -1,7 +1,7 @@
 /**
  * src/agents/built-in-agents.ts
  *
- * Built-in agent definitions for solana-claude.
+ * Built-in agent definitions for solana-clawd.
  *
  * Adapted from Claude Code's AgentTool/builtInAgents.ts and loadAgentsDir.ts.
  * Each agent has: a name, system prompt, supported tools, memory scope,
