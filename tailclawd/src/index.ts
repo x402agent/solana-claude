@@ -212,7 +212,7 @@ useCron(
   "Cleanup old usage and trace data every 6 hours",
 );
 
-pushActivity("worker_started", "TailClawd v1.3 worker started", {});
+pushActivity("worker_started", "TailClaude v1.3 worker started", {});
 
 indexSessions()
   .then((count) => {
@@ -237,5 +237,5 @@ indexSessions()
 registerShutdownHandlers();
 
 logger.info(
-  "TailClawd v1.3 worker registered — waiting for iii engine connection",
+  "TailClaude v1.3 worker registered — waiting for iii engine connection",
 );

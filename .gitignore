@@ -11,6 +11,14 @@ solana-tracker
 .env.*
 *.local
 .npmrc
+.mcp.json
+
+# Vault (encrypted keypairs — never commit)
+vault-data/
+.clawd/
+
+# Voice output
+voice-output/
 
 # OS
 .DS_Store

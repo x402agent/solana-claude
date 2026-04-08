@@ -7,7 +7,6 @@ import {
   envDetector,
   hostDetector,
   osDetector,
-  resourceFromAttributes,
 } from '@opentelemetry/resources'
 import {
   BatchLogRecordProcessor,
@@ -61,6 +60,7 @@ import { isBetaTracingEnabled } from './betaSessionTracing.js'
 import { BigQueryMetricsExporter } from './bigqueryExporter.js'
 import { ClaudeCodeDiagLogger } from './logger.js'
 import { initializePerfettoTracing } from './perfettoTracing.js'
+import { resourceFromAttributes } from './resourceCompat.js'
 import {
   endInteractionSpan,
   isEnhancedTelemetryEnabled,
@@ -823,4 +823,3 @@ function getOTLPExporterConfig() {
   config.httpAgentOptions = agentFactory
   return config
 }
-

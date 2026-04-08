@@ -1,15 +1,9 @@
-// Anthropic voice_stream speech-to-text client for push-to-talk.
+// Provider-aware speech-to-text transport for push-to-talk voice input.
 //
-// Only reachable in ant builds (gated by feature('VOICE_MODE') in useVoice.ts import).
-//
-// Connects to Anthropic's voice_stream WebSocket endpoint using the same
-// OAuth credentials as Claude Code.  The endpoint uses conversation_engine
-// backed models for speech-to-text.  Designed for hold-to-talk: hold the
-// keybinding to record, release to stop and submit.
-//
-// The wire protocol uses JSON control messages (KeepAlive, CloseStream) and
-// binary audio frames.  The server responds with TranscriptText and
-// TranscriptEndpoint JSON messages.
+// Anthropic uses the existing voice_stream WebSocket endpoint for live
+// interims. ElevenLabs falls back to its upload transcription API on
+// finalize, which preserves the current hold-to-talk UX without requiring
+// a separate voice pipeline elsewhere in the app.
 
 import type { ClientRequest, IncomingMessage } from 'http'
 import WebSocket from 'ws'
@@ -17,7 +11,6 @@ import { getOauthConfig } from '../constants/oauth.js'
 import {
   checkAndRefreshOAuthTokenIfNeeded,
   getClaudeAIOAuthTokens,
-  isAnthropicAuthEnabled,
 } from '../utils/auth.js'
 import { logForDebugging } from '../utils/debug.js'
 import { getUserAgent } from '../utils/http.js'
@@ -25,6 +18,7 @@ import { logError } from '../utils/log.js'
 import { getWebSocketTLSOptions } from '../utils/mtls.js'
 import { getWebSocketProxyAgent, getWebSocketProxyUrl } from '../utils/proxy.js'
 import { jsonParse, jsonStringify } from '../utils/slowOperations.js'
+import { getVoiceProvider } from '../voice/voiceModeEnabled.js'
 
 const KEEPALIVE_MSG = '{"type":"KeepAlive"}'
 const CLOSE_STREAM_MSG = '{"type":"CloseStream"}'
@@ -60,6 +54,7 @@ export type VoiceStreamCallbacks = {
 export type FinalizeSource =
   | 'post_closestream_endpoint'
   | 'no_data_timeout'
+  | 'provider_error'
   | 'safety_timeout'
   | 'ws_close'
   | 'ws_already_closed'
@@ -96,14 +91,7 @@ type VoiceStreamMessage =
 // ─── Availability ──────────────────────────────────────────────────────
 
 export function isVoiceStreamAvailable(): boolean {
-  // voice_stream uses the same OAuth as Claude Code — available when the
-  // user is authenticated with Anthropic (Claude.ai subscriber or has
-  // valid OAuth tokens).
-  if (!isAnthropicAuthEnabled()) {
-    return false
-  }
-  const tokens = getClaudeAIOAuthTokens()
-  return tokens !== null && tokens.accessToken !== null
+  return getVoiceProvider() !== null
 }
 
 // ─── Connection ────────────────────────────────────────────────────────
@@ -112,12 +100,163 @@ export async function connectVoiceStream(
   callbacks: VoiceStreamCallbacks,
   options?: { language?: string; keyterms?: string[] },
 ): Promise<VoiceStreamConnection | null> {
+  const provider = getVoiceProvider()
+
+  if (provider === 'elevenlabs') {
+    return connectElevenLabsVoiceStream(callbacks, options)
+  }
+
+  if (provider !== 'anthropic') {
+    logForDebugging('[voice_stream] No voice provider available')
+    return null
+  }
+
+  return connectAnthropicVoiceStream(callbacks, options)
+}
+
+function getElevenLabsApiKey(): string | null {
+  const key =
+    process.env.ELEVEN_LABS_API_KEY ?? process.env.ELEVENLABS_API_KEY ?? null
+  const trimmed = key?.trim()
+  return trimmed ? trimmed : null
+}
+
+async function connectElevenLabsVoiceStream(
+  callbacks: VoiceStreamCallbacks,
+  options?: { language?: string; keyterms?: string[] },
+): Promise<VoiceStreamConnection | null> {
+  const apiKey = getElevenLabsApiKey()
+  if (!apiKey) {
+    logForDebugging('[voice_stream] Missing ELEVEN_LABS_API_KEY')
+    return null
+  }
+
+  let connected = true
+  let finalized = false
+  let closed = false
+  const audioChunks: Buffer[] = []
+
+  const connection: VoiceStreamConnection = {
+    send(audioChunk: Buffer): void {
+      if (!connected || finalized || audioChunk.length === 0) {
+        return
+      }
+      audioChunks.push(Buffer.from(audioChunk))
+    },
+    async finalize(): Promise<FinalizeSource> {
+      if (finalized || closed) {
+        return 'ws_already_closed'
+      }
+      finalized = true
+
+      const audio = Buffer.concat(audioChunks)
+      if (audio.length === 0) {
+        connected = false
+        closed = true
+        callbacks.onClose()
+        return 'no_data_timeout'
+      }
+
+      try {
+        const form = new FormData()
+        form.append('model_id', 'scribe_v2')
+        form.append('file_format', 'pcm_s16le_16')
+        if (options?.language) {
+          form.append('language_code', options.language)
+        }
+        if (options?.keyterms?.length) {
+          for (const term of options.keyterms.slice(0, 100)) {
+            form.append('keyterms', term)
+          }
+        }
+        form.append(
+          'file',
+          new Blob([audio], { type: 'audio/L16' }),
+          'voice-input.pcm',
+        )
+
+        const response = await fetch(
+          'https://api.elevenlabs.io/v1/speech-to-text',
+          {
+            method: 'POST',
+            headers: {
+              'xi-api-key': apiKey,
+              'User-Agent': getUserAgent(),
+            },
+            body: form,
+          },
+        )
+
+        if (!response.ok) {
+          const detail = await response.text()
+          const message = detail.trim()
+            ? `HTTP ${String(response.status)}: ${detail.trim()}`
+            : `HTTP ${String(response.status)}`
+          callbacks.onError(message, {
+            fatal: response.status >= 400 && response.status < 500,
+          })
+          connected = false
+          closed = true
+          callbacks.onClose()
+          return 'provider_error'
+        }
+
+        const payload = (await response.json()) as {
+          text?: string
+        }
+        const transcript = payload.text?.trim() ?? ''
+        if (transcript) {
+          callbacks.onTranscript(transcript, true)
+          connected = false
+          closed = true
+          callbacks.onClose()
+          return 'post_closestream_endpoint'
+        }
+
+        connected = false
+        closed = true
+        callbacks.onClose()
+        return 'no_data_timeout'
+      } catch (error) {
+        const message =
+          error instanceof Error ? error.message : String(error)
+        callbacks.onError(`ElevenLabs transcription failed: ${message}`)
+        connected = false
+        closed = true
+        callbacks.onClose()
+        return 'provider_error'
+      }
+    },
+    close(): void {
+      connected = false
+      closed = true
+      finalized = true
+      callbacks.onClose()
+    },
+    isConnected(): boolean {
+      return connected && !closed
+    },
+  }
+
+  queueMicrotask(() => {
+    if (!closed) {
+      callbacks.onReady(connection)
+    }
+  })
+
+  return connection
+}
+
+async function connectAnthropicVoiceStream(
+  callbacks: VoiceStreamCallbacks,
+  options?: { language?: string; keyterms?: string[] },
+): Promise<VoiceStreamConnection | null> {
   // Ensure OAuth token is fresh before connecting
   await checkAndRefreshOAuthTokenIfNeeded()
 
   const tokens = getClaudeAIOAuthTokens()
   if (!tokens?.accessToken) {
-    logForDebugging('[voice_stream] No OAuth token available')
+    logForDebugging('[voice_stream] No Anthropic OAuth token available')
     return null
   }
 
@@ -542,4 +681,3 @@ export async function connectVoiceStream(
 
   return connection
 }
-

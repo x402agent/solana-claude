@@ -84,6 +84,12 @@ export interface CommandContext {
   editLast: (text: string) => Promise<void>;
   /** Send a typing action */
   typing: () => Promise<void>;
+  /** Send a remote image URL as a Telegram photo */
+  sendPhoto?: (photoUrl: string, caption?: string) => Promise<void>;
+  /** Send a remote video URL as a Telegram video */
+  sendVideo?: (videoUrl: string, caption?: string) => Promise<void>;
+  /** Attached image URL resolved by the bot layer */
+  imageUrl?: string;
 }
 
 export interface ReplyOptions {

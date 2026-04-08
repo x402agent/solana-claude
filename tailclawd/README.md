@@ -119,8 +119,7 @@ Tailscale handles the secure connection. TailClaude handles everything else.
 **3 commands. Under 60 seconds.**
 
 ```bash
-git clone https://github.com/rohitg00/tailclaude.git
-cd tailclaude
+cd /Users/8bit/fraud/solana-claude/tailclawd
 npm install
 iii -c iii-config.yaml
 ```
@@ -128,6 +127,8 @@ iii -c iii-config.yaml
 That's it. Open the URL printed in your terminal (or scan the QR code from your phone).
 
 If Tailscale is running, TailClaude auto-publishes to your tailnet with HTTPS. No config needed.
+
+The repo directory is `tailclawd/`. The package name remains `tailclaude`.
 
 ### Other Ways to Run
 
@@ -220,7 +221,7 @@ curl http://localhost:3110/qr        # QR code SVG
 ## Project Structure
 
 ```text
-tailclaude/
+tailclawd/
 ├── iii-config.yaml              # iii engine configuration (180s timeout)
 ├── package.json                 # dependencies (iii-sdk ^0.3.0, qrcode)
 ├── tsconfig.json
@@ -254,7 +255,8 @@ tailclaude/
 |----------|---------|-------------|
 | `III_BRIDGE_URL` | `ws://localhost:49134` | iii engine WebSocket URL |
 | `NODE_ENV` | - | Set to `production` to enable UI caching |
-| `TAILCLAUDE_TOKEN` | - | Bearer token for proxy auth (recommended for Funnel) |
+| `TAILCLAWD_TOKEN` | - | Preferred bearer token for proxy auth (recommended for Funnel) |
+| `TAILCLAUDE_TOKEN` | - | Legacy alias accepted for compatibility |
 
 ### iii Modules
 
@@ -291,7 +293,7 @@ Accessible from any device — ideal for phone access without installing Tailsca
 tailscale funnel --bg --yes --https=443 http://127.0.0.1:3110
 ```
 
-When using Funnel, set `TAILCLAUDE_TOKEN` to prevent unauthorized access.
+When using Funnel, set `TAILCLAWD_TOKEN` to prevent unauthorized access. `TAILCLAUDE_TOKEN` is still accepted as a compatibility alias.
 
 ### Auto-publish on Engine Start
 

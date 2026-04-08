@@ -1,4 +1,5 @@
 import { feature } from 'bun:bundle'
+import { isVoiceFeatureEnabled } from '../../voice/voiceFeatureEnabled.js'
 import { getRemoteControlAtStartup } from '../../utils/config.js'
 import {
   EDITOR_MODES,
@@ -141,7 +142,7 @@ export const SUPPORTED_SETTINGS: Record<string, SettingConfig> = {
         },
       }
     : {}),
-  ...(feature('VOICE_MODE')
+  ...(isVoiceFeatureEnabled()
     ? {
         voiceEnabled: {
           source: 'settings' as const,
@@ -209,4 +210,3 @@ export function getPath(key: string): string[] {
   const config = SUPPORTED_SETTINGS[key]
   return config?.path ?? key.split('.')
 }
-

@@ -1,5 +1,4 @@
 import type { AnyValueMap, Logger, logs } from '@opentelemetry/api-logs'
-import { resourceFromAttributes } from '@opentelemetry/resources'
 import {
   BatchLogRecordProcessor,
   LoggerProvider,
@@ -17,6 +16,7 @@ import { getPlatform, getWslVersion } from '../../utils/platform.js'
 import { jsonStringify } from '../../utils/slowOperations.js'
 import { profileCheckpoint } from '../../utils/startupProfiler.js'
 import { getCoreUserData } from '../../utils/user.js'
+import { resourceFromAttributes } from '../../utils/telemetry/resourceCompat.js'
 import { isAnalyticsDisabled } from './config.js'
 import { FirstPartyEventLoggingExporter } from './firstPartyEventLoggingExporter.js'
 import type { GrowthBookUserAttributes } from './growthbook.js'
@@ -447,4 +447,3 @@ export async function reinitialize1PEventLoggingIfConfigChanged(): Promise<void>
 
   void oldProvider.shutdown().catch(() => {})
 }
-

@@ -1,15 +1,77 @@
 import { open, readFile, stat } from 'fs/promises'
-import {
-  applyEdits,
-  modify,
-  parse as parseJsonc,
-} from 'jsonc-parser/lib/esm/main.js'
 import { stripBOM } from './jsonRead.js'
 import { logError } from './log.js'
 import { memoizeWithLRU } from './memoize.js'
 import { jsonStringify } from './slowOperations.js'
 
 type CachedParse = { ok: true; value: unknown } | { ok: false }
+
+function stripJsonCommentsAndTrailingCommas(input: string): string {
+  let result = ''
+  let inString = false
+  let escaped = false
+
+  for (let i = 0; i < input.length; i++) {
+    const char = input[i]!
+    const next = input[i + 1] ?? ''
+
+    if (inString) {
+      result += char
+      if (escaped) {
+        escaped = false
+      } else if (char === '\\') {
+        escaped = true
+      } else if (char === '"') {
+        inString = false
+      }
+      continue
+    }
+
+    if (char === '"') {
+      inString = true
+      result += char
+      continue
+    }
+
+    if (char === '/' && next === '/') {
+      i += 2
+      while (i < input.length && input[i] !== '\n') i++
+      if (i < input.length) {
+        result += '\n'
+      }
+      continue
+    }
+
+    if (char === '/' && next === '*') {
+      i += 2
+      while (i < input.length - 1) {
+        if (input[i] === '*' && input[i + 1] === '/') {
+          i++
+          break
+        }
+        i++
+      }
+      continue
+    }
+
+    if (char === ',') {
+      let j = i + 1
+      while (j < input.length && /\s/.test(input[j]!)) j++
+      const nextNonWhitespace = input[j]
+      if (nextNonWhitespace === ']' || nextNonWhitespace === '}') {
+        continue
+      }
+    }
+
+    result += char
+  }
+
+  return result
+}
+
+function parseJsonc(json: string): unknown {
+  return JSON.parse(stripJsonCommentsAndTrailingCommas(json))
+}
 
 // Memoized inner parse. Uses a discriminated-union wrapper because:
 // 1. memoizeWithLRU requires NonNullable<unknown>, but JSON.parse can return
@@ -240,29 +302,7 @@ export function addItemToJSONCArray(content: string, newItem: unknown): string {
 
     // If the parsed content is a valid array, modify it
     if (Array.isArray(parsedContent)) {
-      // Get the length of the array
-      const arrayLength = parsedContent.length
-
-      // Determine if we are dealing with an empty array
-      const isEmpty = arrayLength === 0
-
-      // If it's an empty array we want to add at index 0, otherwise append to the end
-      const insertPath = isEmpty ? [0] : [arrayLength]
-
-      // Generate edits - we're using isArrayInsertion to add a new item without overwriting existing ones
-      const edits = modify(cleanContent, insertPath, newItem, {
-        formattingOptions: { insertSpaces: true, tabSize: 4 },
-        isArrayInsertion: true,
-      })
-
-      // If edits could not be generated, fall back to manual JSON string manipulation
-      if (!edits || edits.length === 0) {
-        const copy = [...parsedContent, newItem]
-        return jsonStringify(copy, null, 4)
-      }
-
-      // Apply the edits to preserve comments (use cleanContent without BOM)
-      return applyEdits(cleanContent, edits)
+      return jsonStringify([...parsedContent, newItem], null, 4)
     }
     // If it's not an array at all, create a new array with the item
     else {
@@ -275,4 +315,3 @@ export function addItemToJSONCArray(content: string, newItem: unknown): string {
     return jsonStringify([newItem], null, 4)
   }
 }
-

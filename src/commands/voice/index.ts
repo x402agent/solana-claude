@@ -8,7 +8,6 @@ const voice = {
   type: 'local',
   name: 'voice',
   description: 'Toggle voice mode',
-  availability: ['claude-ai'],
   isEnabled: () => isVoiceGrowthBookEnabled(),
   get isHidden() {
     return !isVoiceModeEnabled()
@@ -18,5 +17,4 @@ const voice = {
 } satisfies Command
 
 export default voice
-
 

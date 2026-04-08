@@ -4,6 +4,37 @@ import {
   getClaudeAIOAuthTokens,
   isAnthropicAuthEnabled,
 } from '../utils/auth.js'
+import { isVoiceFeatureEnabled } from './voiceFeatureEnabled.js'
+
+export type VoiceProvider = 'anthropic' | 'elevenlabs'
+
+function getElevenLabsApiKey(): string | null {
+  const key =
+    process.env.ELEVEN_LABS_API_KEY ?? process.env.ELEVENLABS_API_KEY ?? null
+  const trimmed = key?.trim()
+  return trimmed ? trimmed : null
+}
+
+export function getVoiceProvider(): VoiceProvider | null {
+  // Prefer an explicit ElevenLabs key over Anthropic OAuth so users can
+  // opt into voice mode without Claude.ai auth.
+  if (getElevenLabsApiKey()) {
+    return 'elevenlabs'
+  }
+
+  if (isAnthropicAuthEnabled()) {
+    const tokens = getClaudeAIOAuthTokens()
+    if (tokens?.accessToken) {
+      return 'anthropic'
+    }
+  }
+
+  return null
+}
+
+export function getVoiceUnavailableMessage(): string {
+  return 'Voice mode requires either a Claude.ai login or ELEVEN_LABS_API_KEY.'
+}
 
 /**
  * Kill-switch check for voice mode. Returns true unless the
@@ -15,9 +46,9 @@ import {
  */
 export function isVoiceGrowthBookEnabled(): boolean {
   // Positive ternary pattern — see docs/feature-gating.md.
-  // Negative pattern (if (!feature(...)) return) does not eliminate
-  // inline string literals from external builds.
-  return feature('VOICE_MODE')
+  // The runtime helper keeps Bun dev mode and env-driven voice providers
+  // working even when the compile-time VOICE_MODE flag is absent.
+  return isVoiceFeatureEnabled()
     ? !getFeatureValue_CACHED_MAY_BE_STALE('tengu_amber_quartz_disabled', false)
     : false
 }
@@ -30,17 +61,7 @@ export function isVoiceGrowthBookEnabled(): boolean {
  * cold spawn per refresh is expected. Cheap enough for usage-time checks.
  */
 export function hasVoiceAuth(): boolean {
-  // Voice mode requires Anthropic OAuth — it uses the voice_stream
-  // endpoint on claude.ai which is not available with API keys,
-  // Bedrock, Vertex, or Foundry.
-  if (!isAnthropicAuthEnabled()) {
-    return false
-  }
-  // isAnthropicAuthEnabled only checks the auth *provider*, not whether
-  // a token exists. Without this check, the voice UI renders but
-  // connectVoiceStream fails silently when the user isn't logged in.
-  const tokens = getClaudeAIOAuthTokens()
-  return Boolean(tokens?.accessToken)
+  return getVoiceProvider() !== null
 }
 
 /**
@@ -52,4 +73,3 @@ export function hasVoiceAuth(): boolean {
 export function isVoiceModeEnabled(): boolean {
   return hasVoiceAuth() && isVoiceGrowthBookEnabled()
 }
-

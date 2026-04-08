@@ -38,7 +38,8 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const III_PORT = 3111;
 const PROXY_PORT = 3110;
 const isProduction = process.env.NODE_ENV === "production";
-const API_TOKEN = process.env.TAILCLAWD_TOKEN || process.env.TAILCLAUDE_TOKEN || null;
+const API_TOKEN =
+  process.env.TAILCLAWD_TOKEN || process.env.TAILCLAUDE_TOKEN || null;
 const MAX_BODY_BYTES = 1_000_000;
 
 const logger = new Logger(undefined, "tailclawd-proxy");
@@ -117,7 +118,8 @@ function cleanEnv(): Record<string, string> {
       val &&
       !key.startsWith("CLAUDE") &&
       !key.startsWith("III_") &&
-      key !== "TAILCLAUDE_TOKEN"
+      key !== "TAILCLAUDE_TOKEN" &&
+      key !== "TAILCLAWD_TOKEN"
     ) {
       env[key] = val;
     }
@@ -233,7 +235,12 @@ function handleChat(req: IncomingMessage, res: ServerResponse): void {
       const mode = body.mode || "default";
       const effort = body.effort || "medium";
 
-      withSpan("chat.request", { kind: 1 }, async (span) => {
+      withSpan(
+        "chat.request",
+        { kind: 1 },
+        async (span: {
+          setAttribute(key: string, value: string | number | boolean): void;
+        }) => {
         span.setAttribute("chat.request_id", requestId);
         span.setAttribute("chat.model", model);
         span.setAttribute("chat.session_id", body.sessionId || "new");
@@ -499,8 +506,11 @@ function handleChat(req: IncomingMessage, res: ServerResponse): void {
             }).catch(() => {});
           }
         });
-      }).catch((err) => {
-        logger.error("Chat span error", { error: err?.message });
+        },
+      ).catch((err: unknown) => {
+        logger.error("Chat span error", {
+          error: err instanceof Error ? err.message : String(err),
+        });
         if (!res.headersSent) jsonError(res, 500, "Internal error");
       });
     })
@@ -1081,7 +1091,9 @@ export function startProxy(): Promise<void> {
   });
 
   if (!API_TOKEN) {
-    logger.warn("No TAILCLAUDE_TOKEN set — proxy is open to all tailnet peers");
+    logger.warn(
+      "No TAILCLAWD_TOKEN or TAILCLAUDE_TOKEN set — proxy is open to all tailnet peers",
+    );
   }
 
   return new Promise((resolve, reject) => {

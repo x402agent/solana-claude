@@ -17,7 +17,9 @@ export const useApi = <TBody = unknown>(
 ) => {
   const function_id = `api::${config.http_method.toLowerCase()}::${config.api_path}`;
 
-  iii.registerFunction({ id: function_id, metadata: config.metadata }, (req) =>
+  iii.registerFunction(
+    { id: function_id, metadata: config.metadata },
+    (req: unknown) =>
     handler(req as ApiRequest<TBody>, getContext()),
   );
 
@@ -42,7 +44,7 @@ export const useEvent = <TData = unknown>(
 ) => {
   const function_id = `event::${topic}::handler::${++eventCounter}`;
 
-  iii.registerFunction({ id: function_id, description }, (data) =>
+  iii.registerFunction({ id: function_id, description }, (data: unknown) =>
     handler(data as TData, getContext()),
   );
 

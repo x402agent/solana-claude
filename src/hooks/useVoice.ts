@@ -26,6 +26,7 @@ import { getSystemLocaleLanguage } from '../utils/intl.js'
 import { logError } from '../utils/log.js'
 import { getInitialSettings } from '../utils/settings/settings.js'
 import { sleep } from '../utils/sleep.js'
+import { getVoiceUnavailableMessage } from '../voice/voiceModeEnabled.js'
 
 // ─── Language normalization ─────────────────────────────────────────────
 
@@ -453,6 +454,20 @@ export function useVoice({
           if (isStale()) return
         }
         fullAudioRef.current = []
+
+        if (finalizeSource === 'provider_error') {
+          accumulatedRef.current = ''
+          setVoiceState(prev => {
+            if (prev.voiceInterimTranscript === '') return prev
+            return { ...prev, voiceInterimTranscript: '' }
+          })
+          if (connectionRef.current) {
+            connectionRef.current.close()
+            connectionRef.current = null
+          }
+          updateState('idle')
+          return
+        }
 
         const text = accumulatedRef.current.trim()
         logForDebugging(
@@ -987,9 +1002,7 @@ export function useVoice({
           logForDebugging(
             '[voice] Failed to connect to voice_stream (no OAuth token?)',
           )
-          onErrorRef.current?.(
-            'Voice mode requires a Claude.ai account. Please run /login to sign in.',
-          )
+          onErrorRef.current?.(getVoiceUnavailableMessage())
           // Clear the audio buffer on failure
           audioBuffer.length = 0
           cleanup()
@@ -1142,4 +1155,3 @@ export function useVoice({
     handleKeyEvent,
   }
 }
-

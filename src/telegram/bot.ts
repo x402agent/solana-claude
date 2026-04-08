@@ -37,6 +37,10 @@ import {
   cmdSnipe, cmdStop, cmdAgent,
   cmdBalance, cmdTokens, cmdTxs, cmdSlot, cmdAssets,
   cmdBirdeyePrice, cmdBirdeyeSearch, cmdBirdeyeOverview,
+  cmdVault,
+  cmdGrok, cmdXSearch, cmdWebSearch, cmdImagine, cmdVideo, cmdVision, cmdFile,
+  cmdTweet, cmdReply, cmdDelTweet, cmdLike, cmdRT,
+  cmdTSearch, cmdMyTweets, cmdAutoTweet, cmdSmartTweet,
 } from "./commands.js";
 
 import { PumpSniper, defaultSniperConfig } from "./pump-sniper.js";
@@ -54,6 +58,9 @@ interface TgMessage {
   from?: { id: number; username?: string; first_name?: string };
   chat: { id: number; type: string };
   text?: string;
+  caption?: string;
+  photo?: Array<{ file_id: string; file_unique_id: string; width: number; height: number }>;
+  document?: { file_id: string; file_name?: string; mime_type?: string };
   date: number;
 }
 
@@ -152,6 +159,63 @@ class TelegramAPI {
     await this.request("sendChatAction", { chat_id: chatId, action }).catch(() => {});
   }
 
+  async sendPhoto(chatId: number, photoUrl: string, caption?: string): Promise<void> {
+    const payload = {
+      chat_id: chatId,
+      photo: photoUrl,
+      caption: caption?.slice(0, 1024),
+      parse_mode: "Markdown",
+    };
+
+    try {
+      await this.request("sendPhoto", payload);
+    } catch (error) {
+      if (
+        payload.parse_mode &&
+        error instanceof Error &&
+        error.message.includes("can't parse entities")
+      ) {
+        await this.request("sendPhoto", {
+          ...payload,
+          parse_mode: undefined,
+        });
+        return;
+      }
+      throw error;
+    }
+  }
+
+  async sendVideo(chatId: number, videoUrl: string, caption?: string): Promise<void> {
+    const payload = {
+      chat_id: chatId,
+      video: videoUrl,
+      caption: caption?.slice(0, 1024),
+      parse_mode: "Markdown",
+    };
+
+    try {
+      await this.request("sendVideo", payload);
+    } catch (error) {
+      if (
+        payload.parse_mode &&
+        error instanceof Error &&
+        error.message.includes("can't parse entities")
+      ) {
+        await this.request("sendVideo", {
+          ...payload,
+          parse_mode: undefined,
+        });
+        return;
+      }
+      throw error;
+    }
+  }
+
+  async getFileUrl(fileId: string): Promise<string> {
+    const file = await this.request<{ file_path: string }>("getFile", { file_id: fileId });
+    return `https://api.telegram.org/file/bot${this.baseUrl.split("/bot")[1]}/${file.file_path}`;
+  }
+
   async getUpdates(offset: number, timeout = 25): Promise<TgUpdate[]> {
     return this.request<TgUpdate[]>("getUpdates", {
       offset,
@@ -198,17 +262,17 @@ class TelegramAPI {
         { command: "bprice", description: "Birdeye token price" },
         { command: "bsearch", description: "Birdeye token search" },
         { command: "btoken", description: "Birdeye token overview" },
+        { command: "vault", description: "Encrypted secret vault" },
         { command: "status", description: "Bot status" },
         { command: "skills", description: "Available skills" },
         { command: "tailscale", description: "Tailscale setup guide" },
-        { command: "balance", description: "SOL balance (Helius RPC)" },
-        { command: "tokens", description: "SPL token holdings (Helius)" },
-        { command: "txs", description: "Recent transactions (Helius)" },
-        { command: "slot", description: "Current Solana slot" },
-        { command: "assets", description: "Helius DAS assets" },
-        { command: "bprice", description: "Token price (Birdeye)" },
-        { command: "bsearch", description: "Search tokens (Birdeye)" },
-        { command: "btoken", description: "Token overview (Birdeye)" },
+        { command: "grok", description: "Chat with Grok AI" },
+        { command: "xsearch", description: "Search X/Twitter in real-time" },
+        { command: "wsearch", description: "Search the web in real-time" },
+        { command: "imagine", description: "Generate images with Grok" },
+        { command: "video", description: "Generate video with Grok" },
+        { command: "vision", description: "Analyze an image with Grok" },
+        { command: "file", description: "Chat with a file (PDF, CSV)" },
       ],
     });
   }
@@ -276,7 +340,11 @@ export class SolanaClaudeBot {
 
   // ─── Command Dispatch ──────────────────────────────────────────────────────
 
-  private buildCtx(msg: TgMessage, args: string[]): CommandContext {
+  private buildCtx(
+    msg: TgMessage,
+    args: string[],
+    extras?: { text?: string; imageUrl?: string },
+  ): CommandContext {
     const chatId = msg.chat.id;
     const userId = msg.from?.id ?? 0;
     const username = msg.from?.username;
@@ -303,6 +371,12 @@ export class SolanaClaudeBot {
     const typing = async () => {
       await this.api.sendChatAction(chatId, "typing");
     };
+    const sendPhoto = async (photoUrl: string, caption?: string) => {
+      await this.api.sendPhoto(chatId, photoUrl, caption);
+    };
+    const sendVideo = async (videoUrl: string, caption?: string) => {
+      await this.api.sendVideo(chatId, videoUrl, caption);
+    };
 
     return {
       chatId,
@@ -310,15 +384,53 @@ export class SolanaClaudeBot {
       username,
       session,
       args,
-      text: msg.text ?? "",
+      text: extras?.text ?? msg.text ?? "",
       reply,
       replyHTML,
       editLast,
       typing,
+      sendPhoto,
+      sendVideo,
+      imageUrl: extras?.imageUrl,
     };
   }
 
   private async dispatch(msg: TgMessage): Promise<void> {
+    // Route photo messages through /vision so command behavior stays consistent.
+    if (msg.photo && msg.photo.length > 0) {
+      const caption = (msg.caption ?? "").trim();
+      if (caption.startsWith("/") && !caption.toLowerCase().startsWith("/vision")) {
+        return;
+      }
+
+      const session = this.getSession(msg.chat.id, msg.from?.id ?? 0, msg.from?.username);
+      if (!this.isAuthorized(session)) {
+        await this.api.sendMessage(
+          msg.chat.id,
+          "⛔ This bot is restricted. Contact the owner for access."
+        );
+        return;
+      }
+
+      const largestPhoto = msg.photo[msg.photo.length - 1];
+      const question = caption.replace(/^\/vision\s*/i, "").trim();
+      const text = question ? `/vision ${question}` : "/vision";
+      const args = question ? question.split(/\s+/) : [];
+
+      try {
+        const imageUrl = await this.api.getFileUrl(largestPhoto.file_id);
+        const ctx = this.buildCtx(msg, args, { text, imageUrl });
+        this.state.messageCount++;
+        await cmdVision(ctx);
+      } catch (err) {
+        await this.api.sendMessage(
+          msg.chat.id,
+          `❌ Vision error: ${err instanceof Error ? err.message : String(err)}`
+        );
+      }
+      return;
+    }
+
     if (!msg.text) return;
     const text = msg.text.trim();
     if (!text.startsWith("/")) return;
@@ -400,6 +512,14 @@ export class SolanaClaudeBot {
         case "bprice": return void cmdBirdeyePrice(ctx);
         case "bsearch": return void cmdBirdeyeSearch(ctx);
         case "btoken": return void cmdBirdeyeOverview(ctx);
+        case "vault": return void cmdVault(ctx);
+        case "grok": return void cmdGrok(ctx);
+        case "xsearch": return void cmdXSearch(ctx);
+        case "wsearch": return void cmdWebSearch(ctx);
+        case "imagine": return void cmdImagine(ctx);
+        case "video": return void cmdVideo(ctx);
+        case "vision": return void cmdVision(ctx);
+        case "file": return void cmdFile(ctx);
         case "status": return void cmdStatus(ctx, this.state);
         default:
           await ctx.reply(`❓ Unknown command: \`/${rawCmd}\`\n\nUse /help for the full list.`);

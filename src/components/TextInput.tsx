@@ -9,6 +9,7 @@ import { Box, color, useAnimationFrame, useTerminalFocus, useTheme } from '../in
 import type { BaseTextInputProps } from '../types/textInputTypes.js';
 import { isEnvTruthy } from '../utils/envUtils.js';
 import type { TextHighlight } from '../utils/textHighlighting.js';
+import { isVoiceFeatureEnabled } from '../voice/voiceFeatureEnabled.js';
 import { BaseTextInput } from './BaseTextInput.js';
 import { hueToRgb } from './Spinner/utils.js';
 
@@ -41,16 +42,16 @@ export default function TextInput(props: Props): React.ReactNode {
   const accessibilityEnabled = useMemo(() => isEnvTruthy(process.env.CLAUDE_CODE_ACCESSIBILITY), []);
   const settings = useSettings();
   const reducedMotion = settings.prefersReducedMotion ?? false;
-  const voiceState = feature('VOICE_MODE') ?
+  const voiceState = isVoiceFeatureEnabled() ?
   // biome-ignore lint/correctness/useHookAtTopLevel: feature() is a compile-time constant
   useVoiceState(s => s.voiceState) : 'idle' as const;
   const isVoiceRecording = voiceState === 'recording';
-  const audioLevels = feature('VOICE_MODE') ?
+  const audioLevels = isVoiceFeatureEnabled() ?
   // biome-ignore lint/correctness/useHookAtTopLevel: feature() is a compile-time constant
   useVoiceState(s_0 => s_0.voiceAudioLevels) : [];
   const smoothedRef = useRef<number[]>(new Array(CURSOR_WAVEFORM_WIDTH).fill(0));
   const needsAnimation = isVoiceRecording && !reducedMotion;
-  const [animRef, animTime] = feature('VOICE_MODE') ?
+  const [animRef, animTime] = isVoiceFeatureEnabled() ?
   // biome-ignore lint/correctness/useHookAtTopLevel: feature() is a compile-time constant
   useAnimationFrame(needsAnimation ? 50 : null) : [() => {}, 0];
 

@@ -23,6 +23,7 @@
  */
 
 import type { CommandContext } from "./types.js";
+import { SolanaVault } from "../vault/index.js";
 
 export interface Command {
   name: string;
@@ -142,6 +143,21 @@ export async function cmdHelp(ctx: CommandContext): Promise<void> {
     `/memory recall <query> — search memory\n` +
     `/memory write <fact> — save to memory\n` +
     `/dream — run memory consolidation\n\n` +
+    `*🔐 Vault*\n` +
+    `/vault — list stored secrets\n` +
+    `/vault store <label> <secret> — encrypt + store\n` +
+    `/vault get <id> — show a masked secret\n` +
+    `/vault delete <id> — remove an entry\n` +
+    `/vault lock — wipe the vault key from memory\n\n` +
+    `*🧠 xAI / Grok*\n` +
+    `/grok <question> — chat with Grok AI\n` +
+    `/xsearch <query> — search X/Twitter live\n` +
+    `/wsearch <query> — search the web live\n` +
+    `/imagine <prompt> — generate images\n` +
+    `/video <prompt> — generate video\n` +
+    `/vision <url> [q] — analyze image\n` +
+    `/file <url> <question> — chat with file\n` +
+    `_Send any photo → auto vision analysis_\n\n` +
     `*⚙️ System*\n` +
     `/status — bot + scanner status\n` +
     `/skills — list available skills\n` +
@@ -876,6 +892,516 @@ export async function cmdBirdeyeOverview(ctx: CommandContext): Promise<void> {
       `Holders: ${Number(t.holder ?? 0).toLocaleString()}\n` +
       `Liquidity: $${Number(t.liquidity ?? 0).toLocaleString(undefined, { maximumFractionDigits: 0 })}\n` +
       `Mint: \`${mint}\``
+    );
+  } catch (e) {
+    await ctx.reply(`❌ ${e instanceof Error ? e.message : String(e)}`);
+  }
+}
+
+// ─── Vault Commands ─────────────────────────────────────────────────────────────
+
+/** Lazy singleton — created on first /vault open */
+let _vault: SolanaVault | null = null;
+
+async function openVaultForChat(ctx: CommandContext): Promise<SolanaVault | null> {
+  if (_vault?.isUnlocked()) return _vault;
+
+  const passphrase = process.env.VAULT_PASSPHRASE || process.env.SOLANA_PRIVATE_KEY;
+  if (!passphrase) {
+    await ctx.reply(
+      "Set `VAULT_PASSPHRASE` in .env before using the vault.\n" +
+      "This encrypts all stored secrets with AES-256-GCM."
+    );
+    return null;
+  }
+
+  try {
+    _vault = await SolanaVault.open(passphrase);
+  } catch {
+    // No vault yet — create one
+    _vault = await SolanaVault.create(passphrase);
+    // Auto-import PRIVATE_KEY on first boot
+    const pk = process.env.PRIVATE_KEY;
+    if (pk) {
+      await _vault.store("keypair", pk, "primary-trading");
+    }
+    const sk = process.env.SOLANA_PRIVATE_KEY;
+    if (sk && sk !== pk) {
+      await _vault.store("keypair", sk, "solana-main");
+    }
+  }
+  return _vault;
+}
+
+/**
+ * /vault — Encrypted secret vault (AES-256-GCM + scrypt)
+ *
+ * Subcommands:
+ *   /vault              — List stored entries
+ *   /vault store <label> <secret>  — Encrypt & store a secret (keypair / api_key)
+ *   /vault get <id>     — Decrypt & show a secret (DM only!)
+ *   /vault delete <id>  — Remove an entry
+ *   /vault lock         — Lock the vault (wipes key from memory)
+ */
+export async function cmdVault(ctx: CommandContext): Promise<void> {
+  const sub = ctx.args[0]?.toLowerCase();
+
+  try {
+    const vault = await openVaultForChat(ctx);
+    if (!vault) return;
+
+    // Default: list entries
+    if (!sub || sub === "list" || sub === "status") {
+      await ctx.typing();
+      const entries = await vault.list();
+      if (entries.length === 0) {
+        await ctx.reply(
+          "🔐 *Vault* — Empty\n\n" +
+          "Store a secret:\n" +
+          "`/vault store my-key <base58-private-key>`\n\n" +
+          "_All secrets encrypted with AES-256-GCM at rest._"
+        );
+        return;
+      }
+
+      const lines = entries.map((e, i) => {
+        const icon = e.type === "keypair" ? "🔑" : e.type === "api_key" ? "🗝" : "📦";
+        const age = Math.round((Date.now() - e.createdAt) / 86400000);
+        return `${i + 1}. ${icon} *${e.label ?? "unlabeled"}* (${e.type})\n   ID: \`${e.id}\` — ${age}d ago`;
+      });
+
+      await ctx.reply(`🔐 *Vault* — ${entries.length} entry(s)\n\n${lines.join("\n\n")}\n\n_/vault get <id> | /vault delete <id> | /vault lock_`);
+      return;
+    }
+
+    // Store a new secret
+    if (sub === "store" || sub === "add" || sub === "import") {
+      const label = ctx.args[1];
+      const secret = ctx.args[2];
+      if (!label || !secret) {
+        await ctx.reply("Usage: `/vault store <label> <secret>`\n\nSend in DM only!");
+        return;
+      }
+      await ctx.typing();
+      const isKey = secret.length >= 32 && /^[1-9A-HJ-NP-Za-km-z]+$/.test(secret);
+      const entryType = isKey ? "keypair" : "api_key";
+      const id = await vault.store(entryType, secret, label);
+      await ctx.reply(`✅ Stored as *${label}* (${entryType})\nID: \`${id}\`\n\n_Delete your message with the secret for safety._`);
+      return;
+    }
+
+    // Retrieve a secret
+    if (sub === "get" || sub === "reveal") {
+      const id = ctx.args[1];
+      if (!id) { await ctx.reply("Usage: `/vault get <entry-id>`"); return; }
+      await ctx.typing();
+      const value = await vault.retrieve(id);
+      // Truncate display for safety
+      const masked = `${value.slice(0, 6)}...${value.slice(-4)}`;
+      await ctx.reply(`🔓 Entry \`${id}\`:\n\`${masked}\`\n\n_Value is masked in chat for safety._`);
+      return;
+    }
+
+    // Delete an entry
+    if (sub === "delete" || sub === "remove" || sub === "rm") {
+      const id = ctx.args[1];
+      if (!id) { await ctx.reply("Usage: `/vault delete <entry-id>`"); return; }
+      const removed = await vault.remove(id);
+      await ctx.reply(removed ? `🗑 Entry \`${id}\` removed.` : `Entry \`${id}\` not found.`);
+      return;
+    }
+
+    // Lock the vault
+    if (sub === "lock") {
+      vault.lock();
+      _vault = null;
+      await ctx.reply("🔒 Vault locked. Master key wiped from memory.");
+      return;
+    }
+
+    await ctx.reply(
+      "Unknown vault command.\n\nAvailable: `list`, `store`, `get`, `delete`, `lock`"
+    );
+  } catch (e) {
+    await ctx.reply(`❌ Vault error: ${e instanceof Error ? e.message : String(e)}`);
+  }
+}
+
+// ─── xAI / Grok Commands ─────────────────────────────────────────────────────
+
+import {
+  analyzeImage,
+  generateImage,
+  generateVideo,
+  xSearch,
+  webSearch,
+  chatWithFile,
+  grokChat,
+} from "./xai.js";
+
+/** /grok <prompt> — Chat with Grok */
+export async function cmdGrok(ctx: CommandContext): Promise<void> {
+  const prompt = ctx.args.join(" ");
+  if (!prompt) { await ctx.reply("Usage: `/grok <question>`"); return; }
+  await ctx.typing();
+  try {
+    const reply = await grokChat(prompt, "You are a helpful Solana trading assistant. Be concise.");
+    await ctx.reply(reply.slice(0, 4000));
+  } catch (e) {
+    await ctx.reply(`❌ ${e instanceof Error ? e.message : String(e)}`);
+  }
+}
+
+/** /xsearch <query> — Search X/Twitter in real-time */
+export async function cmdXSearch(ctx: CommandContext): Promise<void> {
+  const query = ctx.args.join(" ");
+  if (!query) { await ctx.reply("Usage: `/xsearch <query>`\nExample: `/xsearch Solana memecoin alpha`"); return; }
+  await ctx.typing();
+  try {
+    const result = await xSearch(query);
+    await ctx.reply(`🔍 *X Search: "${query}"*\n\n${result.text.slice(0, 3800)}`);
+  } catch (e) {
+    await ctx.reply(`❌ ${e instanceof Error ? e.message : String(e)}`);
+  }
+}
+
+/** /wsearch <query> — Search the web in real-time */
+export async function cmdWebSearch(ctx: CommandContext): Promise<void> {
+  const query = ctx.args.join(" ");
+  if (!query) { await ctx.reply("Usage: `/wsearch <query>`"); return; }
+  await ctx.typing();
+  try {
+    const result = await webSearch(query);
+    await ctx.reply(`🌐 *Web Search: "${query}"*\n\n${result.text.slice(0, 3800)}`);
+  } catch (e) {
+    await ctx.reply(`❌ ${e instanceof Error ? e.message : String(e)}`);
+  }
+}
+
+/** /imagine <prompt> — Generate images with Grok Imagine */
+export async function cmdImagine(ctx: CommandContext): Promise<void> {
+  const prompt = ctx.args.join(" ");
+  if (!prompt) { await ctx.reply("Usage: `/imagine <description>`\nExample: `/imagine a solana logo in cyberpunk style`"); return; }
+  await ctx.typing();
+  try {
+    const images = await generateImage(prompt, { resolution: "2k" });
+    if (!images.length) { await ctx.reply("❌ No images generated."); return; }
+    for (const [index, img] of images.entries()) {
+      const caption = index === 0 ? `🎨 *Generated Image*\n\n_Prompt: ${prompt.slice(0, 900)}_` : undefined;
+      if (ctx.sendPhoto) {
+        await ctx.sendPhoto(img.url, caption);
+      } else {
+        await ctx.reply(`🎨 *Generated Image*\n\n${img.url}`);
+      }
+    }
+  } catch (e) {
+    await ctx.reply(`❌ ${e instanceof Error ? e.message : String(e)}`);
+  }
+}
+
+/** /video <prompt> — Generate video with Grok Imagine Video */
+export async function cmdVideo(ctx: CommandContext): Promise<void> {
+  const prompt = ctx.args.join(" ");
+  if (!prompt) { await ctx.reply("Usage: `/video <description>`\nExample: `/video a rocket launching from mars`"); return; }
+  await ctx.reply(`🎬 *Generating video...* This may take up to 5 minutes.\n\n_Prompt: ${prompt}_`);
+  try {
+    const result = await generateVideo(prompt, { duration: 5, resolution: "720p", aspect_ratio: "16:9" });
+    if (ctx.sendVideo) {
+      await ctx.sendVideo(result.url, `🎬 *Video Ready*\n\n_Prompt: ${prompt.slice(0, 900)}_`);
+    } else {
+      await ctx.reply(`🎬 *Video Ready!*\n\n${result.url}`);
+    }
+  } catch (e) {
+    await ctx.reply(`❌ ${e instanceof Error ? e.message : String(e)}`);
+  }
+}
+
+/** /vision <question> — Analyze an image (reply to a photo or provide URL) */
+export async function cmdVision(ctx: CommandContext): Promise<void> {
+  // The image URL will be injected by the bot when handling photo messages
+  // For URL mode: /vision <url> [question]
+  const firstArg = ctx.args[0] ?? "";
+  const isUrl = firstArg.startsWith("http://") || firstArg.startsWith("https://");
+
+  if (!isUrl && !ctx.imageUrl) {
+    await ctx.reply(
+      "Usage:\n" +
+      "• `/vision <image_url> [question]` — analyze image from URL\n" +
+      "• Send a photo with caption `/vision [question]` — analyze attached photo"
+    );
+    return;
+  }
+
+  const imageUrl = isUrl ? firstArg : String(ctx.imageUrl ?? "");
+  const question = isUrl ? ctx.args.slice(1).join(" ") || "Describe this image" : ctx.args.join(" ") || "Describe this image";
+
+  await ctx.typing();
+  try {
+    const analysis = await analyzeImage(imageUrl, question);
+    await ctx.reply(`👁 *Vision Analysis*\n\n${analysis.slice(0, 3800)}`);
+  } catch (e) {
+    await ctx.reply(`❌ ${e instanceof Error ? e.message : String(e)}`);
+  }
+}
+
+/** /file <url> <question> — Chat with a file (PDF, CSV, etc.) */
+export async function cmdFile(ctx: CommandContext): Promise<void> {
+  const fileUrl = ctx.args[0] ?? "";
+  const question = ctx.args.slice(1).join(" ");
+  if (!fileUrl.startsWith("http") || !question) {
+    await ctx.reply("Usage: `/file <file_url> <question>`\nExample: `/file https://example.com/report.pdf What is the total revenue?`");
+    return;
+  }
+  await ctx.typing();
+  try {
+    const result = await chatWithFile(question, fileUrl);
+    await ctx.reply(`📄 *File Analysis*\n\n${result.slice(0, 3800)}`);
+  } catch (e) {
+    await ctx.reply(`❌ ${e instanceof Error ? e.message : String(e)}`);
+  }
+}
+
+// ─── Twitter/X Commands ──────────────────────────────────────────────────────
+
+import {
+  postTweet,
+  deleteTweet,
+  likeTweet,
+  retweet,
+  searchTweets,
+  getUserTweets,
+  startAutoTweet,
+  stopAutoTweet,
+  getAutoTweetStatus,
+} from "./twitter.js";
+
+/** /tweet <text> — Post a tweet */
+export async function cmdTweet(ctx: CommandContext): Promise<void> {
+  const text = ctx.args.join(" ");
+  if (!text) { await ctx.reply("Usage: `/tweet <text>`\nExample: `/tweet Solana is pumping right now 🚀`"); return; }
+  if (text.length > 280) { await ctx.reply(`❌ Tweet too long (${text.length}/280 chars)`); return; }
+  await ctx.typing();
+  try {
+    const result = await postTweet(text);
+    await ctx.reply(
+      `✅ *Tweet Posted!*\n\n` +
+      `"${result.text}"\n\n` +
+      `[View on X](https://x.com/i/web/status/${result.id})`
+    );
+  } catch (e) {
+    await ctx.reply(`❌ ${e instanceof Error ? e.message : String(e)}`);
+  }
+}
+
+/** /reply <tweet_id> <text> — Reply to a tweet */
+export async function cmdReply(ctx: CommandContext): Promise<void> {
+  const tweetId = ctx.args[0];
+  const text = ctx.args.slice(1).join(" ");
+  if (!tweetId || !text) { await ctx.reply("Usage: `/reply <tweet_id> <text>`"); return; }
+  await ctx.typing();
+  try {
+    const result = await postTweet(text, tweetId);
+    await ctx.reply(
+      `✅ *Reply Posted!*\n\n` +
+      `"${result.text}"\n\n` +
+      `[View](https://x.com/i/web/status/${result.id})`
+    );
+  } catch (e) {
+    await ctx.reply(`❌ ${e instanceof Error ? e.message : String(e)}`);
+  }
+}
+
+/** /deltweet <tweet_id> — Delete a tweet */
+export async function cmdDelTweet(ctx: CommandContext): Promise<void> {
+  const tweetId = ctx.args[0];
+  if (!tweetId) { await ctx.reply("Usage: `/deltweet <tweet_id>`"); return; }
+  await ctx.typing();
+  try {
+    await deleteTweet(tweetId);
+    await ctx.reply(`🗑 Tweet \`${tweetId}\` deleted.`);
+  } catch (e) {
+    await ctx.reply(`❌ ${e instanceof Error ? e.message : String(e)}`);
+  }
+}
+
+/** /like <tweet_id> — Like a tweet */
+export async function cmdLike(ctx: CommandContext): Promise<void> {
+  const tweetId = ctx.args[0];
+  if (!tweetId) { await ctx.reply("Usage: `/like <tweet_id>`"); return; }
+  await ctx.typing();
+  try {
+    await likeTweet(tweetId);
+    await ctx.reply(`❤️ Liked tweet \`${tweetId}\``);
+  } catch (e) {
+    await ctx.reply(`❌ ${e instanceof Error ? e.message : String(e)}`);
+  }
+}
+
+/** /rt <tweet_id> — Retweet */
+export async function cmdRT(ctx: CommandContext): Promise<void> {
+  const tweetId = ctx.args[0];
+  if (!tweetId) { await ctx.reply("Usage: `/rt <tweet_id>`"); return; }
+  await ctx.typing();
+  try {
+    await retweet(tweetId);
+    await ctx.reply(`🔁 Retweeted \`${tweetId}\``);
+  } catch (e) {
+    await ctx.reply(`❌ ${e instanceof Error ? e.message : String(e)}`);
+  }
+}
+
+/** /tsearch <query> — Search recent tweets on X */
+export async function cmdTSearch(ctx: CommandContext): Promise<void> {
+  const query = ctx.args.join(" ");
+  if (!query) { await ctx.reply("Usage: `/tsearch <query>`\nExample: `/tsearch Solana memecoin alpha`"); return; }
+  await ctx.typing();
+  try {
+    const tweets = await searchTweets(query, 5);
+    if (!tweets.length) { await ctx.reply(`No tweets found for "${query}".`); return; }
+    const lines = tweets.map((t, i) => {
+      const time = t.created_at ? new Date(t.created_at).toISOString().slice(0, 16) : "";
+      return `${i + 1}. ${t.text.slice(0, 200)}\n   _${time}_ | ID: \`${t.id}\``;
+    });
+    await ctx.reply(`🐦 *X Search: "${query}"*\n\n${lines.join("\n\n")}`);
+  } catch (e) {
+    await ctx.reply(`❌ ${e instanceof Error ? e.message : String(e)}`);
+  }
+}
+
+/** /mytweets — Show recent tweets from our account */
+export async function cmdMyTweets(ctx: CommandContext): Promise<void> {
+  await ctx.typing();
+  try {
+    const tweets = await getUserTweets(undefined, 5);
+    if (!tweets.length) { await ctx.reply("No recent tweets found."); return; }
+    const lines = tweets.map((t, i) => {
+      const time = t.created_at ? new Date(t.created_at).toISOString().slice(0, 16) : "";
+      return `${i + 1}. ${t.text.slice(0, 200)}\n   _${time}_ | ID: \`${t.id}\``;
+    });
+    await ctx.reply(`📜 *Recent Tweets:*\n\n${lines.join("\n\n")}`);
+  } catch (e) {
+    await ctx.reply(`❌ ${e instanceof Error ? e.message : String(e)}`);
+  }
+}
+
+/** /autotweet — Control the auto-tweet daemon */
+export async function cmdAutoTweet(
+  ctx: CommandContext,
+  notifyChatId: number,
+  sendNotification: (chatId: number, text: string) => Promise<void>,
+): Promise<void> {
+  const sub = ctx.args[0]?.toLowerCase();
+
+  if (sub === "on" || sub === "start") {
+    const intervalMin = parseInt(ctx.args[1] ?? "30", 10);
+    const topics = ctx.args.slice(2);
+    startAutoTweet(
+      (tweet) => {
+        sendNotification(notifyChatId,
+          `🤖 *Auto-Tweet Posted:*\n\n"${tweet.text}"\n\n[View](https://x.com/i/web/status/${tweet.id})`
+        ).catch(() => {});
+      },
+      (err) => {
+        sendNotification(notifyChatId, `❌ Auto-tweet error: ${err.message}`).catch(() => {});
+      },
+      {
+        intervalMs: intervalMin * 60 * 1000,
+        ...(topics.length > 0 && { topics }),
+      },
+    );
+    await ctx.reply(
+      `🤖 *Auto-Tweet Daemon Started!*\n\n` +
+      `Interval: every ${intervalMin} minutes\n` +
+      `Topics: ${topics.length > 0 ? topics.join(", ") : "Solana, crypto alpha, DeFi"}\n` +
+      `Max/day: 24\n\n` +
+      `Tweets will be generated by Grok AI with live X context.\n` +
+      `Use \`/autotweet off\` to stop.`
+    );
+    return;
+  }
+
+  if (sub === "off" || sub === "stop") {
+    stopAutoTweet();
+    await ctx.reply("⏹ *Auto-Tweet Daemon Stopped.*");
+    return;
+  }
+
+  if (sub === "status") {
+    const status = getAutoTweetStatus();
+    const recent = status.recentTweets.map(t =>
+      `• "${t.text.slice(0, 80)}…" — ${t.time.slice(11, 16)}`
+    );
+    await ctx.reply(
+      `🤖 *Auto-Tweet Status*\n\n` +
+      `Enabled: ${status.enabled ? "🟢 Yes" : "🔴 No"}\n` +
+      `Interval: ${status.config.intervalMs / 60000}min\n` +
+      `Topics: ${status.config.topics.join(", ")}\n` +
+      `Today: ${status.todayCount}/${status.config.maxPerDay}\n` +
+      `Style: ${status.config.style.slice(0, 60)}\n\n` +
+      (recent.length ? `*Recent:*\n${recent.join("\n")}` : "_No tweets yet_")
+    );
+    return;
+  }
+
+  if (sub === "style") {
+    const style = ctx.args.slice(1).join(" ");
+    if (!style) { await ctx.reply("Usage: `/autotweet style <description>`\nExample: `/autotweet style degen alpha trader, bullish vibes`"); return; }
+    const status = getAutoTweetStatus();
+    status.config.style = style;
+    await ctx.reply(`✅ Auto-tweet style updated to: "${style}"`);
+    return;
+  }
+
+  if (sub === "topics") {
+    const topics = ctx.args.slice(1);
+    if (!topics.length) { await ctx.reply("Usage: `/autotweet topics Solana DeFi memes`"); return; }
+    const status = getAutoTweetStatus();
+    status.config.topics = topics;
+    await ctx.reply(`✅ Auto-tweet topics: ${topics.join(", ")}`);
+    return;
+  }
+
+  // Default: show help
+  await ctx.reply(
+    `🤖 *Auto-Tweet Daemon*\n\n` +
+    `Uses Grok AI + live X search to generate and post tweets automatically.\n\n` +
+    `\`/autotweet on [interval_min] [topics...]\`\n` +
+    `\`/autotweet off\`\n` +
+    `\`/autotweet status\`\n` +
+    `\`/autotweet style <description>\`\n` +
+    `\`/autotweet topics <topic1> <topic2> ...\`\n\n` +
+    `Example: \`/autotweet on 20 Solana memecoins alpha\``
+  );
+}
+
+/** /smarttweet <topic> — Generate a tweet with Grok + X context, preview before posting */
+export async function cmdSmartTweet(ctx: CommandContext): Promise<void> {
+  const topic = ctx.args.join(" ");
+  if (!topic) { await ctx.reply("Usage: `/smarttweet <topic>`\nGenerates a tweet using Grok AI with live X context."); return; }
+  await ctx.typing();
+  try {
+    const { grokChat, xSearch } = await import("./xai.js");
+
+    // Fetch live context
+    let context = "";
+    try {
+      const search = await xSearch(`${topic} latest`);
+      context = search.text.slice(0, 800);
+    } catch { /* optional */ }
+
+    const prompt = [
+      `Generate a single tweet (max 280 chars) about: ${topic}`,
+      `Style: crypto thought leader, punchy, engaging, authentic.`,
+      context ? `Live X context:\n${context}` : "",
+      "Return ONLY the tweet text.",
+    ].filter(Boolean).join("\n");
+
+    const tweetText = (await grokChat(prompt)).replace(/^["']|["']$/g, "").slice(0, 280);
+
+    await ctx.reply(
+      `📝 *Smart Tweet Preview:*\n\n"${tweetText}"\n\n` +
+      `(${tweetText.length}/280 chars)\n\n` +
+      `Post it? Reply: \`/tweet ${tweetText}\``
     );
   } catch (e) {
     await ctx.reply(`❌ ${e instanceof Error ? e.message : String(e)}`);

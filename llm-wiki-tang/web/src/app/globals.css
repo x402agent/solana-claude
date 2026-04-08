@@ -1,0 +1,368 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+
+  /* Core UI tokens */
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+
+  /* Charts already use full color functions, keep as-is */
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  /* Accent blue */
+  --color-accent-blue: hsl(var(--accent-blue));
+
+  /* Sidebar tokens */
+  --color-sidebar: hsl(var(--sidebar));
+  --color-sidebar-foreground: hsl(var(--sidebar-foreground));
+  --color-sidebar-primary: hsl(var(--sidebar-primary));
+  --color-sidebar-primary-foreground: hsl(var(--sidebar-primary-foreground));
+  --color-sidebar-accent: hsl(var(--sidebar-accent));
+  --color-sidebar-accent-foreground: hsl(var(--sidebar-accent-foreground));
+  --color-sidebar-border: hsl(var(--sidebar-border));
+  --color-sidebar-ring: hsl(var(--sidebar-ring));
+
+  /* Radii passthrough */
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+:root {
+  --sidebar-width: 14rem;
+  --radius: 1rem;
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+
+  /* Light theme — warm paper */
+  --background: 30 3% 96%;
+  --foreground: 20 14% 4%;
+  --card: 0 0% 100%;
+  --card-foreground: 20 14% 10%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 20 14% 10%;
+  --primary: 24 10% 10%;
+  --primary-foreground: 60 9% 98%;
+  --secondary: 30 6% 96%;
+  --secondary-foreground: 20 14% 10%;
+  --muted: 30 6% 96%;
+  --muted-foreground: 25 5% 45%;
+  --accent: 30 6% 94%;
+  --accent-foreground: 20 14% 10%;
+  --destructive: 0 84.2% 60.2%;
+  --border: 24 6% 83%;
+  --input: 24 6% 83%;
+  --ring: 25 5% 45%;
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+  --accent-blue: 220 40% 50%;
+  --sidebar: 30 3% 96%;
+  --sidebar-foreground: 20 14% 4%;
+  --sidebar-primary: 24 10% 10%;
+  --sidebar-primary-foreground: 60 9% 98%;
+  --sidebar-accent: 30 6% 94%;
+  --sidebar-accent-foreground: 20 14% 10%;
+  --sidebar-border: 24 6% 90%;
+  --sidebar-ring: 25 5% 45%;
+}
+
+.dark {
+  /* Dark theme — lamp light (warm darks, not pure black) */
+  --background: 20 14% 4%;
+  --foreground: 40 10% 90%;
+  --card: 20 12% 8%;
+  --card-foreground: 40 10% 90%;
+  --popover: 20 12% 8%;
+  --popover-foreground: 40 10% 90%;
+  --primary: 40 10% 90%;
+  --primary-foreground: 20 14% 4%;
+  --secondary: 20 10% 10%;
+  --secondary-foreground: 40 10% 90%;
+  --muted: 20 10% 10%;
+  --muted-foreground: 24 5% 55%;
+  --accent: 20 10% 12%;
+  --accent-foreground: 40 10% 90%;
+  --destructive: 0 62.8% 30.6%;
+  --border: 20 6% 16%;
+  --input: 20 6% 16%;
+  --ring: 24 5% 55%;
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+  --accent-blue: 220 35% 55%;
+  --sidebar: 20 14% 3%;
+  --sidebar-foreground: 40 10% 90%;
+  --sidebar-primary: 40 10% 90%;
+  --sidebar-primary-foreground: 20 14% 4%;
+  --sidebar-accent: 20 10% 12%;
+  --sidebar-accent-foreground: 40 10% 90%;
+  --sidebar-border: 20 6% 16%;
+  --sidebar-ring: 24 5% 55%;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@layer components {
+  /* Surfaces */
+  .surface        { @apply bg-card text-card-foreground border border-border rounded-xl shadow-sm; }
+  .panel          { @apply bg-background text-foreground border border-border rounded-2xl shadow-lg; }
+  .muted-block    { @apply bg-muted text-muted-foreground rounded-md; }
+  .separator      { @apply h-px w-full bg-border; }
+
+  /* Layout helpers */
+  .stack-2        { @apply flex flex-col gap-2; }
+  .stack-3        { @apply flex flex-col gap-3; }
+  .stack-4        { @apply flex flex-col gap-4; }
+
+  /* Inline chips/badges (variants via data-role) */
+  .chip           { @apply text-xs px-2 py-1 rounded-full ring-1 ring-inset; }
+  .chip[data-role="operator"] { @apply bg-muted text-muted-foreground ring-border; }
+  .chip[data-role="analyst"]  { @apply bg-muted text-muted-foreground ring-border; }
+  .chip[data-role="exec"]     { @apply bg-zinc-800 text-zinc-300 ring-zinc-700; }
+
+  /* Minimal prose styling - tighter, more technical */
+  .prose {
+    @apply text-[15px] leading-relaxed;
+  }
+  .prose p {
+    @apply my-3;
+  }
+  .prose h1, .prose h2, .prose h3, .prose h4 {
+    @apply font-medium tracking-tight mt-6 mb-3;
+  }
+  .prose h1 { @apply text-xl; }
+  .prose h2 { @apply text-lg; }
+  .prose h3 { @apply text-base; }
+  .prose h4 { @apply text-sm; }
+  .prose ul {
+    @apply my-3 space-y-1 list-disc pl-5;
+  }
+  .prose ol {
+    @apply my-3 space-y-1 list-decimal pl-5;
+  }
+  .prose li {
+    @apply my-0.5;
+  }
+  .prose code {
+    @apply text-xs bg-muted px-1.5 py-0.5 rounded font-mono;
+  }
+  .ProseMirror pre {
+    @apply text-xs leading-relaxed my-3 bg-muted border border-border rounded-lg;
+  }
+  .ProseMirror pre code {
+    @apply bg-transparent p-0;
+  }
+  .prose strong {
+    @apply font-semibold text-foreground;
+  }
+  .prose a {
+    @apply text-foreground underline underline-offset-2 decoration-foreground/30 hover:decoration-foreground transition-colors;
+  }
+}
+
+@layer utilities {
+  .rounded-app { border-radius: var(--radius); }
+  .rounded-app-md { border-radius: var(--radius-md); }
+  .rounded-app-sm { border-radius: var(--radius-sm); }
+}
+
+/* Smooth panel collapse/expand — disabled while user is dragging the separator */
+.panel-transition:not(:has([data-resize-handle-active])) [data-panel] {
+  transition: flex-grow 150ms ease-out;
+}
+
+/* Tab content transition */
+@keyframes tab-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-tab-in {
+  animation: tab-in 200ms ease-out both;
+}
+
+/* Ensure overlays, sheets, popovers mirror the radius */
+[data-slot="popover-content"],
+[data-slot="sheet-content"],
+[data-slot="dialog-content"],
+[data-slot="card"],
+[data-slot="textarea"],
+[data-slot="input"],
+[data-slot="button"] {
+  border-radius: var(--radius);
+}
+
+/* Hide scrollbars but keep scroll functionality */
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+/* Tiptap editor */
+.ProseMirror p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  float: left;
+  color: hsl(var(--muted-foreground) / 0.4);
+  pointer-events: none;
+  height: 0;
+}
+
+/* Tiptap line spacing */
+.ProseMirror {
+  line-height: 1.7;
+}
+.ProseMirror p {
+  margin-top: 0.6em;
+  margin-bottom: 0.6em;
+}
+.ProseMirror ul,
+.ProseMirror ol {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+.ProseMirror li {
+  margin-top: 0.2em;
+  margin-bottom: 0.2em;
+}
+.ProseMirror li p {
+  margin-top: 0.25em;
+  margin-bottom: 0.25em;
+}
+
+/* Tiptap tables (scoped to ProseMirror so they don't affect other tables) */
+.ProseMirror table {
+  @apply w-full border-collapse my-3;
+}
+.ProseMirror th {
+  @apply bg-muted text-left text-sm font-medium px-2.5 py-1 border border-border;
+}
+.ProseMirror td {
+  @apply text-sm px-2.5 py-1 border border-border;
+}
+.ProseMirror .tableWrapper {
+  overflow-x: auto;
+  margin: 0.75rem 0;
+}
+.ProseMirror table .selectedCell::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: hsl(var(--primary) / 0.08);
+  pointer-events: none;
+  z-index: 1;
+}
+.ProseMirror td,
+.ProseMirror th {
+  position: relative;
+}
+
+/* Tiptap images */
+.ProseMirror img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius-md);
+  margin: 0.75rem 0;
+}
+.ProseMirror img.ProseMirror-selectednode {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 2px;
+}
+
+/* Wiki markdown content — polished documentation typography */
+.wiki-content {
+  @apply text-[15px] leading-[1.8];
+}
+.wiki-content h1 { @apply text-2xl font-bold tracking-tight mt-10 mb-4 first:mt-0 scroll-mt-20; }
+.wiki-content h2 { @apply text-xl font-semibold tracking-tight mt-10 mb-4 pt-4 border-t border-border/50 first:border-0 first:pt-0 scroll-mt-20; }
+.wiki-content h3 { @apply text-lg font-medium tracking-tight mt-8 mb-3 scroll-mt-20; }
+.wiki-content h4 { @apply text-base font-medium mt-6 mb-2 scroll-mt-20; }
+.wiki-content p { @apply my-4 leading-[1.8] text-foreground/90; }
+.wiki-content ul { @apply my-4 space-y-1.5 list-disc pl-5; }
+.wiki-content ol { @apply my-4 space-y-1.5 list-decimal pl-5; }
+.wiki-content li { @apply my-1 leading-[1.8]; }
+.wiki-content hr { @apply my-8 border-border/60; }
+.wiki-content img { @apply max-w-full h-auto rounded-lg my-5 border border-border/30; }
+.wiki-content blockquote {
+  @apply border-l-[3px] border-accent-blue/40 pl-4 my-6 py-1 rounded-r-md;
+  background: hsl(var(--accent-blue) / 0.03);
+  color: hsl(var(--muted-foreground));
+}
+.wiki-content blockquote p {
+  @apply my-2;
+}
+.wiki-content strong { @apply font-semibold text-foreground; }
+.wiki-content a { @apply text-accent-blue underline underline-offset-2 decoration-accent-blue/30 hover:decoration-accent-blue transition-colors; }
+
+/* Wiki tables */
+.wiki-content table { @apply w-full border-collapse text-sm; }
+.wiki-content thead { @apply bg-muted/50; }
+.wiki-content th { @apply text-left text-xs font-semibold uppercase tracking-wide text-muted-foreground px-3 py-2 border-b border-border; }
+.wiki-content td { @apply text-sm px-3 py-2 border-b border-border/50; }
+.wiki-content tr:last-child td { @apply border-b-0; }
+
+/* Wiki footnotes section */
+.wiki-content .footnotes { @apply mt-12 pt-6 border-t border-border; }
+.wiki-content .footnotes ol { @apply space-y-2; }
+.wiki-content .footnotes li { @apply text-sm text-muted-foreground; }
+
+/* Blockquote styles (legacy) */
+.markdown-blockquote {
+  border-left: 3px solid hsl(var(--accent-blue) / 0.4) !important;
+  padding-left: 16px !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  margin-top: 24px !important;
+  margin-bottom: 24px !important;
+  color: hsl(var(--muted-foreground)) !important;
+  background: hsl(var(--accent-blue) / 0.03) !important;
+  border-radius: 0 6px 6px 0 !important;
+  padding-top: 4px !important;
+  padding-bottom: 4px !important;
+}
