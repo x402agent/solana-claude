@@ -1,10 +1,11 @@
 //
 //  DesignSystem.swift
-//  leanring-buddy
+//  leanring-buddy (Beep Boop Clawd)
 //
-//  Centralized design system using a blue accent palette on dark surfaces,
+//  Centralized design system using a lobster red/orange accent palette on dark surfaces,
 //  with a unified button style system. All colors, button styles, and
 //  interaction states are defined here as the single source of truth.
+//  Theme: Lobster claw — deep ocean darks with warm red/orange accents.
 //
 
 import SwiftUI
