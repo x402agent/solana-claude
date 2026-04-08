@@ -136,6 +136,30 @@ export const BLOCKCHAIN_BODIES: Record<BlockchainSpecies, string[][]> = {
   ],
   
   // DeFi archetypes
+  octopus: [
+    [
+      '            ',
+      '   .----.   ',
+      '  ( {E}  {E} )  ',
+      '  (______)  ',
+      '  /\\/\\/\\/\\  ',
+    ],
+    [
+      '            ',
+      '   .----.   ',
+      '  ( {E}  {E} )  ',
+      '  (______)  ',
+      '  \\/\\/\\/\\/  ',
+    ],
+    [
+      '   🐙🐙     ',
+      '   .----.   ',
+      '  ( {E}  {E} )  ',
+      '  (MULTI)   ',
+      '  /\\/\\/\\/\\  ',
+    ],
+  ],
+
   whale: [
     [
       '            ',
