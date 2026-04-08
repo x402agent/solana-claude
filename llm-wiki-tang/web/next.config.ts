@@ -2,8 +2,10 @@ import type { NextConfig } from "next";
 import path from "path";
 import { withSentryConfig } from "@sentry/nextjs";
 
+const isNetlify = process.env.NETLIFY === "true";
+
 const nextConfig: NextConfig = {
-  output: "standalone",
+  ...(!isNetlify && { output: "standalone" }),
   outputFileTracingRoot: path.join(__dirname),
 };
 
