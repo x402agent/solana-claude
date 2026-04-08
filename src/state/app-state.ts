@@ -93,7 +93,7 @@ export type AppState = {
   // Memory vault
   memories: MemoryEntry[];
 
-  // Agent fleet (adapted from Claude Code's tasks Record<agentId, TaskState>)
+  // Agent fleet (adapted from Clawd Code's tasks Record<agentId, TaskState>)
   tasks: Record<string, AgentTask>;
 
   // OODA loop
@@ -162,7 +162,7 @@ const initialState: AppState = {
   ],
   alwaysDenyTools: [
     // These require explicit human approval — no auto-approve ever
-    // (adapted from Claude Code's deny-first pattern for destructive tools)
+    // (adapted from Clawd Code's deny-first pattern for destructive tools)
     "trade_execute",
     "wallet_send",
     "wallet_sign",
@@ -200,7 +200,7 @@ export const setAppState = (updater: (prev: AppState) => AppState) =>
   appStateStore.setState(updater);
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Selectors (adapted from Claude Code's selectors.ts)
+// Selectors (adapted from Clawd Code's selectors.ts)
 // ─────────────────────────────────────────────────────────────────────────────
 
 /** Get all running tasks */
@@ -251,7 +251,7 @@ export function getMemoryContext(state: AppState): string {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// State helpers (adapted from Claude Code's action patterns)
+// State helpers (adapted from Clawd Code's action patterns)
 // ─────────────────────────────────────────────────────────────────────────────
 
 let _taskCounter = 0;

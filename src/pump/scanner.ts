@@ -6,7 +6,7 @@
  * Continuously monitors PumpPortal for new token launches and evaluates
  * them against configurable filters to surface high-signal opportunities.
  *
- * Adapted from Claude Code's DreamTask & LocalAgentTask patterns:
+ * Adapted from Clawd Code's DreamTask & LocalAgentTask patterns:
  *   - Runs as a background TaskManager task (type: "scanner")
  *   - Emits scored signals to AppState memories
  *   - Respects AbortController for graceful shutdown

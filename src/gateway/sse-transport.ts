@@ -1,15 +1,15 @@
 /**
  * SolanaOS Gateway SSE Transport
  *
- * Adapted from Claude Code's src/bridge/ SSETransport + bidirectional message patterns.
+ * Adapted from Clawd Code's src/bridge/ SSETransport + bidirectional message patterns.
  *
  * Provides a bidirectional SSE-based transport layer for the SolanaOS gateway ↔ client
  * communication. Replaces the custom polling/WebSocket mix with a clean SSE stream
- * for reads and POST for writes — the same v2 "env-less" pattern from Claude Code.
+ * for reads and POST for writes — the same v2 "env-less" pattern from Clawd Code.
  *
  * Used by: Chrome Extension, Android app, macOS menu bar, web Control UI
  *
- * Key patterns from Claude Code:
+ * Key patterns from Clawd Code:
  *  - BoundedUUIDSet for message dedup (prevents replay / echo)
  *  - Inbound message classification (user | control_request | control_response)
  *  - Outbound message batching
@@ -20,7 +20,7 @@
 import { EventEmitter } from "events";
 
 // ─────────────────────────────────────────────────────────────────────────────
-// BoundedUUIDSet (adapted from Claude Code's bridge dedup)
+// BoundedUUIDSet (adapted from Clawd Code's bridge dedup)
 // ─────────────────────────────────────────────────────────────────────────────
 
 export class BoundedUUIDSet {
@@ -52,7 +52,7 @@ export class BoundedUUIDSet {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Transport Message Types (aligned with Claude Code's bridge protocol)
+// Transport Message Types (aligned with Clawd Code's bridge protocol)
 // ─────────────────────────────────────────────────────────────────────────────
 
 export type InboundMessageType =
@@ -83,7 +83,7 @@ export interface OutboundMessage {
   timestamp: number;
 }
 
-// Control request types (from Claude Code's bridge protocol)
+// Control request types (from Clawd Code's bridge protocol)
 export type ControlRequestType =
   | "interrupt"
   | "set_model"
@@ -150,7 +150,7 @@ export class GatewaySSETransport extends EventEmitter {
   handleInbound(raw: unknown, clientId: string): void {
     if (!isInboundMessage(raw)) return;
 
-    // Dedup (adapted from Claude Code's BoundedUUIDSet replay guard)
+    // Dedup (adapted from Clawd Code's BoundedUUIDSet replay guard)
     if (this.seenIds.has(raw.id)) return;
     this.seenIds.add(raw.id);
 
@@ -158,7 +158,7 @@ export class GatewaySSETransport extends EventEmitter {
     this.emit("message:inbound", raw, clientId);
   }
 
-  // ── Outbound message batching (adapted from Claude Code bridge write batching) ──
+  // ── Outbound message batching (adapted from Clawd Code bridge write batching) ──
 
   private outboundQueue: OutboundMessage[] = [];
   private flushTimer: ReturnType<typeof setTimeout> | null = null;
@@ -340,7 +340,7 @@ export class SSEClient extends EventEmitter {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Token refresh scheduler (adapted from Claude Code's createTokenRefreshScheduler)
+// Token refresh scheduler (adapted from Clawd Code's createTokenRefreshScheduler)
 // ─────────────────────────────────────────────────────────────────────────────
 
 export interface DeviceToken {
