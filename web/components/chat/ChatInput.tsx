@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { Send, Square, Paperclip } from "lucide-react";
 import { useChatStore } from "@/lib/store";
 import { streamChat } from "@/lib/api";
@@ -19,6 +19,23 @@ export function ChatInput({ conversationId }: ChatInputProps) {
 
   const { conversations, settings, addMessage, updateMessage } = useChatStore();
   const conversation = conversations.find((c) => c.id === conversationId);
+
+  const adjustHeight = useCallback(() => {
+    const el = textareaRef.current;
+    if (!el) return;
+    el.style.height = "auto";
+    el.style.height = `${Math.min(el.scrollHeight, 200)}px`;
+  }, []);
+
+  useEffect(() => {
+    adjustHeight();
+  }, [input, adjustHeight]);
+
+  useEffect(() => {
+    return () => {
+      abortRef.current?.abort();
+    };
+  }, [conversationId]);
 
   const handleSubmit = useCallback(async () => {
     const text = input.trim();
@@ -44,8 +61,12 @@ export function ChatInput({ conversationId }: ChatInputProps) {
     const controller = new AbortController();
     abortRef.current = controller;
 
+    const latestConversation = useChatStore
+      .getState()
+      .conversations.find((c) => c.id === conversationId);
+
     const messages = [
-      ...(conversation?.messages ?? []).map((m) => ({
+      ...(latestConversation?.messages ?? []).map((m) => ({
         role: m.role,
         content: m.content,
       })),
@@ -55,7 +76,13 @@ export function ChatInput({ conversationId }: ChatInputProps) {
     let fullText = "";
 
     try {
-      for await (const chunk of streamChat(messages, settings.model, controller.signal)) {
+      for await (const chunk of streamChat(messages, {
+        model: settings.model,
+        signal: controller.signal,
+        apiUrl: settings.apiUrl,
+        apiKey: settings.apiKey,
+        streamingEnabled: settings.streamingEnabled,
+      })) {
         if (chunk.type === "text" && chunk.content) {
           fullText += chunk.content;
           updateMessage(conversationId, assistantId, {
@@ -87,10 +114,24 @@ export function ChatInput({ conversationId }: ChatInputProps) {
       setIsStreaming(false);
       abortRef.current = null;
     }
-  }, [input, isStreaming, conversationId, conversation, settings.model, addMessage, updateMessage]);
+  }, [
+    input,
+    isStreaming,
+    conversationId,
+    settings.model,
+    settings.apiUrl,
+    settings.apiKey,
+    settings.streamingEnabled,
+    addMessage,
+    updateMessage,
+  ]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === "Enter" && !e.shiftKey) {
+    const shouldSubmit =
+      (settings.sendOnEnter && e.key === "Enter" && !e.shiftKey) ||
+      (!settings.sendOnEnter && e.key === "Enter" && (e.metaKey || e.ctrlKey));
+
+    if (shouldSubmit) {
       e.preventDefault();
       handleSubmit();
     }
@@ -98,13 +139,6 @@ export function ChatInput({ conversationId }: ChatInputProps) {
 
   const handleStop = () => {
     abortRef.current?.abort();
-  };
-
-  const adjustHeight = () => {
-    const el = textareaRef.current;
-    if (!el) return;
-    el.style.height = "auto";
-    el.style.height = `${Math.min(el.scrollHeight, 200)}px`;
   };
 
   return (
@@ -132,7 +166,6 @@ export function ChatInput({ conversationId }: ChatInputProps) {
             value={input}
             onChange={(e) => {
               setInput(e.target.value.slice(0, MAX_MESSAGE_LENGTH));
-              adjustHeight();
             }}
             onKeyDown={handleKeyDown}
             placeholder="Message solana-clawd..."

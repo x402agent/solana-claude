@@ -3,6 +3,37 @@ import type { Message } from "./types";
 const getApiUrl = () =>
   process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3001";
 
+function trimTrailingSlash(url: string): string {
+  return url.replace(/\/+$/, "");
+}
+
+function extractAssistantText(payload: unknown): string {
+  if (!payload || typeof payload !== "object") {
+    return "";
+  }
+
+  const record = payload as Record<string, unknown>;
+  if (typeof record.content === "string") {
+    return record.content;
+  }
+  if (typeof record.text === "string") {
+    return record.text;
+  }
+  if (Array.isArray(record.content)) {
+    return record.content
+      .flatMap((block) => {
+        if (!block || typeof block !== "object") {
+          return [];
+        }
+        const typedBlock = block as Record<string, unknown>;
+        return typeof typedBlock.text === "string" ? [typedBlock.text] : [];
+      })
+      .join("");
+  }
+
+  return "";
+}
+
 export interface StreamChunk {
   type: "text" | "tool_use" | "tool_result" | "done" | "error";
   content?: string;
@@ -16,15 +47,34 @@ export interface StreamChunk {
   error?: string;
 }
 
+export interface StreamChatOptions {
+  model: string;
+  signal?: AbortSignal;
+  apiUrl?: string;
+  apiKey?: string;
+  streamingEnabled?: boolean;
+}
+
 export async function* streamChat(
   messages: Pick<Message, "role" | "content">[],
-  model: string,
-  signal?: AbortSignal
+  options: StreamChatOptions
 ): AsyncGenerator<StreamChunk> {
+  const {
+    model,
+    signal,
+    apiUrl = getApiUrl(),
+    apiKey,
+    streamingEnabled = true,
+  } = options;
+
   const response = await fetch("/api/chat", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ messages, model, stream: true }),
+    headers: {
+      "Content-Type": "application/json",
+      "X-Target-Api-Url": trimTrailingSlash(apiUrl),
+      ...(apiKey ? { Authorization: `Bearer ${apiKey}` } : {}),
+    },
+    body: JSON.stringify({ messages, model, stream: streamingEnabled }),
     signal,
   });
 
@@ -32,6 +82,21 @@ export async function* streamChat(
     const err = await response.text();
     yield { type: "error", error: err };
     return;
+  }
+
+  if (!streamingEnabled) {
+    try {
+      const payload = (await response.json()) as unknown;
+      const content = extractAssistantText(payload);
+      if (content) {
+        yield { type: "text", content };
+      }
+      yield { type: "done" };
+      return;
+    } catch {
+      yield { type: "error", error: "Invalid non-streaming response" };
+      return;
+    }
   }
 
   const reader = response.body?.getReader();

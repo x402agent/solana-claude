@@ -3,14 +3,23 @@ import { NextRequest, NextResponse } from "next/server";
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3001";
+    const configuredApiUrl =
+      req.headers.get("x-target-api-url") ??
+      process.env.NEXT_PUBLIC_API_URL ??
+      "http://localhost:3001";
+    const apiUrl = configuredApiUrl.replace(/\/+$/, "");
+    const forwardedAuthorization =
+      req.headers.get("authorization") ??
+      (process.env.ANTHROPIC_API_KEY
+        ? `Bearer ${process.env.ANTHROPIC_API_KEY}`
+        : null);
 
     const response = await fetch(`${apiUrl}/api/chat`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        ...(process.env.ANTHROPIC_API_KEY
-          ? { Authorization: `Bearer ${process.env.ANTHROPIC_API_KEY}` }
+        ...(forwardedAuthorization
+          ? { Authorization: forwardedAuthorization }
           : {}),
       },
       body: JSON.stringify(body),
