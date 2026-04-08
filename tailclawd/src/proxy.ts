@@ -38,10 +38,10 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const III_PORT = 3111;
 const PROXY_PORT = 3110;
 const isProduction = process.env.NODE_ENV === "production";
-const API_TOKEN = process.env.TAILCLAUDE_TOKEN || null;
+const API_TOKEN = process.env.TAILCLAWD_TOKEN || process.env.TAILCLAUDE_TOKEN || null;
 const MAX_BODY_BYTES = 1_000_000;
 
-const logger = new Logger(undefined, "tailclaude-proxy");
+const logger = new Logger(undefined, "tailclawd-proxy");
 
 let cachedHtml: string | null = null;
 

@@ -19,7 +19,7 @@ import {
 } from "./traces.js";
 import { backfillSessionCosts } from "./session-costs.js";
 
-const logger = new Logger(undefined, "tailclaude");
+const logger = new Logger(undefined, "tailclawd");
 
 registerChatStream();
 

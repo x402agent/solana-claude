@@ -1,6 +1,6 @@
 {
   "name": "solana-clawd",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "description": "$CLAWD — Solana agentic engine with 31 MCP tools, blockchain buddies, and unicode animations. One command to trade, research, and monitor onchain.",
   "type": "module",
   "main": "dist/index.js",
