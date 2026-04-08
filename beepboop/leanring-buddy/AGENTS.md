@@ -1,15 +1,15 @@
-# AGENTS.md - leanring-buddy (Main App Target)
+# AGENTS.md - leanring-buddy (Beep Boop Clawd — Main App Target)
 
 ## Source Files
 
 ### FloatingSessionButton.swift
-- `FloatingSessionButtonManager` — `@MainActor` class managing the `NSPanel` lifecycle
+- `FloatingSessionButtonManager` — `@MainActor` class managing the lobster claw `NSPanel` lifecycle
   - `showFloatingButton()` — Creates/shows the panel in top-right of primary screen
   - `hideFloatingButton()` — Hides panel (keeps it alive for quick re-show)
   - `destroyFloatingButton()` — Removes panel permanently (session ended)
   - `onFloatingButtonClicked` — Callback closure, set by ContentView to bring main window to front
   - `floatingButtonPanel` — Exposed `NSPanel` reference for screenshot exclusion
-- `FloatingButtonView` — Private SwiftUI view with gradient circle, scale+glow hover animation, pointer cursor
+- `FloatingButtonView` — Private SwiftUI view with lobster gradient circle, scale+glow hover animation, pointer cursor
 
 ### ContentView.swift
 - Receives `FloatingSessionButtonManager` via `@EnvironmentObject`

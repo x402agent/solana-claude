@@ -237,5 +237,5 @@ indexSessions()
 registerShutdownHandlers();
 
 logger.info(
-  "TailClaude v1.3 worker registered — waiting for iii engine connection",
+  "TailClawd v1.6 worker registered — waiting for iii engine connection",
 );
