@@ -1,0 +1,546 @@
+[
+  {
+    "slug": "coding-agent",
+    "name": "coding-agent",
+    "description": "Delegate coding tasks to Codex, Claude Code, or Pi agents via background process. Use when: (1) building/creating new features or apps, (2) reviewing PRs (spawn in temp dir), (3) refactoring large codebases, (4) iterative coding that needs file exploration. NOT for: simple one-liner fixes (just edit), reading code (use read tool), thread-bound ACP harness requests in chat (for example spawn/run Codex or Claude Code in a Discord thread; use sessions_spawn with runtime:\"acp\"), or any work in ~/clawd workspace (never spawn agents here). Claude Code: use --print --permission-mode bypassPermissions (no PTY). Codex/Pi/OpenCode: pty:true required.",
+    "category": "AI / Agents"
+  },
+  {
+    "slug": "cua",
+    "name": "cua",
+    "description": "Computer Use Agent — autonomous browser control via Steel, Browser Use, and Browserbase cloud providers. Supports headful CDP sessions, CAPTCHA solving, proxy rotation, live view, session recording/replay, Playwright/Puppeteer integration, and LLM-driven visual browsing. Use when asked about computer use, browser automation, web scraping, Steel sessions, cloud browsers, headful browsing, CAPTCHA solving, or autonomous web navigation.",
+    "version": "1.0.0",
+    "emoji": "🤖",
+    "category": "AI / Agents"
+  },
+  {
+    "slug": "e2b",
+    "name": "e2b",
+    "description": "E2B Desktop Sandbox with autonomous computer use — cloud Linux environments for browser automation, visual UI grounding, screenshot analysis, and shell execution. Supports Browser Use cloud sessions, Playwright integration, and LLM-driven desktop control. Use when asked about sandboxes, computer use, browser automation, E2B, desktop control, visual testing, or cloud Linux environments.",
+    "version": "1.0.0",
+    "emoji": "🖥️",
+    "category": "AI / Agents"
+  },
+  {
+    "slug": "gemini",
+    "name": "gemini",
+    "description": "Gemini CLI for one-shot Q&A, summaries, and generation.",
+    "category": "AI / Agents"
+  },
+  {
+    "slug": "model-usage",
+    "name": "model-usage",
+    "description": "Use CodexBar CLI local cost usage to summarize per-model usage for Codex or Claude, including the current (most recent) model or a full model breakdown. Trigger when asked for model-level usage/cost data from codexbar, or when you need a scriptable per-model summary from codexbar cost JSON.",
+    "category": "AI / Agents"
+  },
+  {
+    "slug": "openai-image-gen",
+    "name": "openai-image-gen",
+    "description": "Batch-generate images via OpenAI Images API. Random prompt sampler + `index.html` gallery.",
+    "category": "AI / Agents"
+  },
+  {
+    "slug": "openai-whisper",
+    "name": "openai-whisper",
+    "description": "Local speech-to-text with the Whisper CLI (no API key).",
+    "category": "AI / Agents"
+  },
+  {
+    "slug": "openai-whisper-api",
+    "name": "openai-whisper-api",
+    "description": "Transcribe audio via OpenAI Audio Transcriptions API (Whisper).",
+    "category": "AI / Agents"
+  },
+  {
+    "slug": "sag",
+    "name": "sag",
+    "description": "ElevenLabs text-to-speech with mac-style say UX.",
+    "category": "AI / Agents"
+  },
+  {
+    "slug": "skill-creator",
+    "name": "skill-creator",
+    "description": "Create, edit, improve, or audit AgentSkills. Use when creating a new skill from scratch or when asked to improve, review, audit, tidy up, or clean up an existing skill or SKILL.md file. Also use when editing or restructuring a skill directory (moving files to references/ or scripts/, removing stale content, validating against the AgentSkills spec). Triggers on phrases like \"create a skill\", \"author a skill\", \"tidy up a skill\", \"improve this skill\", \"review the skill\", \"clean up the skill\", \"audit the skill\".",
+    "category": "AI / Agents"
+  },
+  {
+    "slug": "swarm-orchestrator",
+    "name": "Swarm Orchestrator",
+    "description": "Orchestrate multi-bot trading swarms on Pump.fun with persona-driven agents",
+    "category": "AI / Agents"
+  },
+  {
+    "slug": "clawhub",
+    "name": "clawhub",
+    "description": "Use the ClawHub CLI to search, install, update, and publish agent skills from clawhub.com. Use when you need to fetch new skills on the fly, sync installed skills to latest or a specific version, or publish new/updated skill folders with the npm-installed clawhub CLI.",
+    "category": "Clawd Ecosystem"
+  },
+  {
+    "slug": "openclaw-claude-code-skill-main",
+    "name": "claude-code-skill",
+    "description": "Control Claude Code via MCP protocol. Trigger with \"plan\" to write a precise execution plan then feed it to Claude Code. Also supports direct commands, persistent sessions, agent teams, and advanced tool control.",
+    "category": "Clawd Ecosystem"
+  },
+  {
+    "slug": "bluebubbles",
+    "name": "bluebubbles",
+    "description": "Use when you need to send or manage iMessages via BlueBubbles (recommended iMessage integration). Calls go through the generic message tool with channel=\"bluebubbles\".",
+    "category": "Communication"
+  },
+  {
+    "slug": "discord",
+    "name": "discord",
+    "description": "Discord ops via the message tool (channel=discord).",
+    "category": "Communication"
+  },
+  {
+    "slug": "himalaya",
+    "name": "himalaya",
+    "description": "CLI to manage emails via IMAP/SMTP. Use `himalaya` to list, read, write, reply, forward, search, and organize emails from the terminal. Supports multiple accounts and message composition with MML (MIME Meta Language).",
+    "category": "Communication"
+  },
+  {
+    "slug": "imsg",
+    "name": "imsg",
+    "description": "iMessage/SMS CLI for listing chats, history, and sending messages via Messages.app.",
+    "category": "Communication"
+  },
+  {
+    "slug": "slack",
+    "name": "slack",
+    "description": "Use when you need to control Slack from SolanaOS via the slack tool, including reacting to messages or pinning/unpinning items in Slack channels or DMs.",
+    "category": "Communication"
+  },
+  {
+    "slug": "voice-call",
+    "name": "voice-call",
+    "description": "Start voice calls via the SolanaOS voice-call plugin.",
+    "category": "Communication"
+  },
+  {
+    "slug": "blucli",
+    "name": "blucli",
+    "description": "BluOS CLI (blu) for discovery, playback, grouping, and volume.",
+    "category": "DevOps / Infrastructure"
+  },
+  {
+    "slug": "eightctl",
+    "name": "eightctl",
+    "description": "Control Eight Sleep pods (status, temperature, alarms, schedules).",
+    "category": "DevOps / Infrastructure"
+  },
+  {
+    "slug": "gateway-node-ops",
+    "name": "SolanaOS Gateway + Node Workflow",
+    "description": "How to spawn a SolanaOS Gateway and connect headless nodes",
+    "category": "DevOps / Infrastructure"
+  },
+  {
+    "slug": "healthcheck",
+    "name": "healthcheck",
+    "description": "Host security hardening and risk-tolerance configuration for SolanaOS deployments. Use when a user asks for security audits, firewall/SSH/update hardening, risk posture, exposure review, SolanaOS cron scheduling for periodic checks, or version status checks on a machine running SolanaOS (laptop, workstation, Pi, VPS).",
+    "category": "DevOps / Infrastructure"
+  },
+  {
+    "slug": "nano-banana-pro",
+    "name": "nano-banana-pro",
+    "description": "Generate or edit images via Gemini 3 Pro Image (Nano Banana Pro).",
+    "category": "DevOps / Infrastructure"
+  },
+  {
+    "slug": "openhue",
+    "name": "openhue",
+    "description": "Control Philips Hue lights and scenes via the OpenHue CLI.",
+    "category": "DevOps / Infrastructure"
+  },
+  {
+    "slug": "tmux",
+    "name": "tmux",
+    "description": "Remote-control tmux sessions for interactive CLIs by sending keystrokes and scraping pane output.",
+    "category": "DevOps / Infrastructure"
+  },
+  {
+    "slug": "camsnap",
+    "name": "camsnap",
+    "description": "Capture frames or clips from RTSP/ONVIF cameras.",
+    "category": "Media"
+  },
+  {
+    "slug": "canvas",
+    "name": "Canvas Skill",
+    "description": "Display HTML content on connected SolanaOS nodes (Mac app, iOS, Android).",
+    "category": "Media"
+  },
+  {
+    "slug": "gifgrep",
+    "name": "gifgrep",
+    "description": "Search GIF providers with CLI/TUI, download results, and extract stills/sheets.",
+    "category": "Media"
+  },
+  {
+    "slug": "peekaboo",
+    "name": "peekaboo",
+    "description": "Capture and automate macOS UI with the Peekaboo CLI.",
+    "category": "Media"
+  },
+  {
+    "slug": "sherpa-onnx-tts",
+    "name": "sherpa-onnx-tts",
+    "description": "Local text-to-speech via sherpa-onnx (offline, no cloud)",
+    "category": "Media"
+  },
+  {
+    "slug": "songsee",
+    "name": "songsee",
+    "description": "Generate spectrograms and feature-panel visualizations from audio with the songsee CLI.",
+    "category": "Media"
+  },
+  {
+    "slug": "sonoscli",
+    "name": "sonoscli",
+    "description": "Control Sonos speakers (discover/status/play/volume/group).",
+    "category": "Media"
+  },
+  {
+    "slug": "spotify-player",
+    "name": "spotify-player",
+    "description": "Terminal Spotify playback/search via spogo (preferred) or spotify_player.",
+    "category": "Media"
+  },
+  {
+    "slug": "video-frames",
+    "name": "video-frames",
+    "description": "Extract frames or short clips from videos using ffmpeg.",
+    "category": "Media"
+  },
+  {
+    "slug": "gh-issues",
+    "name": "gh-issues",
+    "description": "Fetch GitHub issues, spawn sub-agents to implement fixes and open PRs, then monitor and address PR review comments. Usage: /gh-issues [owner/repo] [--label bug] [--limit 5] [--milestone v1.0] [--assignee @me] [--fork user/repo] [--watch] [--interval 5] [--reviews-only] [--cron] [--dry-run] [--model glm-5] [--notify-channel -1002381931352]",
+    "category": "Other"
+  },
+  {
+    "slug": "github",
+    "name": "github",
+    "description": "GitHub operations via `gh` CLI: issues, PRs, CI runs, code review, API queries. Use when: (1) checking PR status or CI, (2) creating/commenting on issues, (3) listing/filtering PRs or issues, (4) viewing run logs. NOT for: complex web UI interactions requiring manual browser flows (use browser tooling when available), bulk operations across many repos (script with gh api), or when gh auth is not configured.",
+    "category": "Other"
+  },
+  {
+    "slug": "1password",
+    "name": "1password",
+    "description": "Set up and use 1Password CLI (op). Use when installing the CLI, enabling desktop app integration, signing in (single or multi-account), or reading/injecting/running secrets via op.",
+    "category": "Productivity"
+  },
+  {
+    "slug": "apple-notes",
+    "name": "apple-notes",
+    "description": "Manage Apple Notes via the `memo` CLI on macOS (create, view, edit, delete, search, move, and export notes). Use when a user asks SolanaOS to add a note, list notes, search notes, or manage note folders.",
+    "category": "Productivity"
+  },
+  {
+    "slug": "apple-reminders",
+    "name": "apple-reminders",
+    "description": "Manage Apple Reminders via remindctl CLI (list, add, edit, complete, delete). Supports lists, date filters, and JSON/plain output.",
+    "category": "Productivity"
+  },
+  {
+    "slug": "bear-notes",
+    "name": "bear-notes",
+    "description": "Create, search, and manage Bear notes via grizzly CLI.",
+    "category": "Productivity"
+  },
+  {
+    "slug": "notion",
+    "name": "notion",
+    "description": "Notion API for creating and managing pages, databases, and blocks.",
+    "category": "Productivity"
+  },
+  {
+    "slug": "obsidian",
+    "name": "obsidian",
+    "description": "Work with Obsidian vaults (plain Markdown notes) and automate via obsidian-cli.",
+    "category": "Productivity"
+  },
+  {
+    "slug": "ordercli",
+    "name": "ordercli",
+    "description": "Foodora-only CLI for checking past orders and active order status (Deliveroo WIP).",
+    "category": "Productivity"
+  },
+  {
+    "slug": "session-logs",
+    "name": "session-logs",
+    "description": "Search and analyze your own session logs (older/parent conversations) using jq.",
+    "category": "Productivity"
+  },
+  {
+    "slug": "things-mac",
+    "name": "things-mac",
+    "description": "Manage Things 3 via the `things` CLI on macOS (add/update projects+todos via URL scheme; read/search/list from the local Things database). Use when a user asks SolanaOS to add a task to Things, list inbox/today/upcoming, search tasks, or inspect projects/areas/tags.",
+    "category": "Productivity"
+  },
+  {
+    "slug": "trello",
+    "name": "trello",
+    "description": "Manage Trello boards, lists, and cards via the Trello REST API.",
+    "category": "Productivity"
+  },
+  {
+    "slug": "pump-admin-ops",
+    "name": "pump-admin-ops",
+    "description": "Admin and authority operations for the Pump protocol — set coin creator, update token incentives, set IDL authority, claim cashback, Mayhem mode, and BothPrograms cross-program admin instructions.",
+    "category": "Pump.fun / Token Launch"
+  },
+  {
+    "slug": "pump-ai-agents",
+    "name": "pump-ai-agents",
+    "description": "AI agent integration layer for the Pump SDK — agent instruction files, .well-known discovery, LLM context documents, 15+ skill files, MCP server prompts, and terminal management rules for GitHub Copilot and Gemini.",
+    "category": "Pump.fun / Token Launch"
+  },
+  {
+    "slug": "pump-bonding-curve",
+    "name": "pump-bonding-curve",
+    "description": "Constant-product AMM bonding curve math for Pump token pricing — buy/sell quoting, fee-aware calculations, market cap computation, tiered fees, ceiling division, virtual vs real reserves, and edge-case handling.",
+    "category": "Pump.fun / Token Launch"
+  },
+  {
+    "slug": "pump-build-release",
+    "name": "pump-build-release",
+    "description": "Build and release pipeline for the Pump SDK — tsup TypeScript builds, Cargo release profiles, semantic release with commitizen, npm publishing, linting, Makefile targets, Vercel deployment, and MCP server distribution.",
+    "category": "Pump.fun / Token Launch"
+  },
+  {
+    "slug": "pump-claims-readonly",
+    "name": "pump-claims-readonly",
+    "description": "Read-only query methods for PumpFun claims — unclaimed token rewards, creator vault balances, volume accumulators, distributable fees, and current-day token previews across Pump and PumpAMM programs.",
+    "category": "Pump.fun / Token Launch"
+  },
+  {
+    "slug": "pump-fee-sharing",
+    "name": "pump-fee-sharing",
+    "description": "Configure and distribute creator fees to multiple shareholders using the PumpFees program with BPS-based share allocation, admin management, and cross-program fee consolidation for graduated tokens.",
+    "category": "Pump.fun / Token Launch"
+  },
+  {
+    "slug": "pump-fee-system",
+    "name": "pump-fee-system",
+    "description": "Complete Pump protocol fee system — tiered protocol fees based on market cap, creator fee collection across two programs, basis point arithmetic, and ceiling division for dust-safe calculations.",
+    "category": "Pump.fun / Token Launch"
+  },
+  {
+    "slug": "pump-mcp-server",
+    "name": "pump-mcp-server",
+    "description": "Model Context Protocol server exposing 53 tools, 3 resource types, and 3 prompts for AI agent consumption — quoting, building transactions, fee management, analytics, AMM operations, social fees, wallet operations over stdio transport.",
+    "category": "Pump.fun / Token Launch"
+  },
+  {
+    "slug": "pump-rust-vanity",
+    "name": "pump-rust-vanity",
+    "description": "Production-grade multi-threaded Rust vanity address generator for Solana — 100K+ keys/sec using Rayon parallel iterators with solana-sdk, Base58 pattern matching, prefix/suffix support, security-hardened file output, and Criterion benchmarks.",
+    "category": "Pump.fun / Token Launch"
+  },
+  {
+    "slug": "pump-sdk-core",
+    "name": "pump-sdk-core",
+    "description": "Build and extend the core Pump SDK — an offline-first TypeScript SDK that constructs Solana TransactionInstructions for token creation, buying, selling, migration, and creator fee collection across three on-chain programs (Pump, PumpAMM, PumpFees).",
+    "category": "Pump.fun / Token Launch"
+  },
+  {
+    "slug": "pump-security",
+    "name": "pump-security",
+    "description": "Defense-in-depth security across Rust, TypeScript, and Bash for the Pump SDK — cryptographic key handling, memory zeroization, secure file I/O, input validation, privilege management, dependency auditing, and a 60+ item security checklist.",
+    "category": "Pump.fun / Token Launch"
+  },
+  {
+    "slug": "pump-shell-scripts",
+    "name": "pump-shell-scripts",
+    "description": "Production-quality Bash scripts for Solana vanity generation, keypair verification, batch operations, dependency auditing, and test orchestration — with security-hardened patterns including file permissions, input validation, and cleanup traps.",
+    "category": "Pump.fun / Token Launch"
+  },
+  {
+    "slug": "pump-solana-architecture",
+    "name": "pump-solana-architecture",
+    "description": "Design and derive Program Derived Addresses (PDAs) and account layouts across the Pump ecosystem's four Solana programs — global singletons, per-token accounts, per-user accumulators, and cross-program coordination patterns.",
+    "category": "Pump.fun / Token Launch"
+  },
+  {
+    "slug": "pump-solana-dev",
+    "name": "pump-solana-dev",
+    "description": "Solana development patterns used in the Pump SDK — Anchor IDL-based program interaction, SPL Token and Token-2022 management, transaction construction with instruction composition, RPC batching, and cross-program coordination.",
+    "category": "Pump.fun / Token Launch"
+  },
+  {
+    "slug": "pump-solana-wallet",
+    "name": "pump-solana-wallet",
+    "description": "Secure Solana wallet generation using official Solana Labs libraries — Ed25519 keypairs, memory zeroization, vanity address generation, offline-only operation, and multi-language implementations (Rust, TypeScript, Bash).",
+    "category": "Pump.fun / Token Launch"
+  },
+  {
+    "slug": "pump-testing",
+    "name": "pump-testing",
+    "description": "Multi-language test infrastructure for the Pump SDK — Rust unit/integration/security/performance tests, TypeScript Jest tests, Python fuzz tests, shell test orchestration, Criterion benchmarks, and CI quality gates.",
+    "category": "Pump.fun / Token Launch"
+  },
+  {
+    "slug": "pump-token-incentives",
+    "name": "pump-token-incentives",
+    "description": "Volume-based PUMP token reward system with day-indexed epochs, pro-rata distribution, accumulator tracking, and cross-program claiming on Solana.",
+    "category": "Pump.fun / Token Launch"
+  },
+  {
+    "slug": "pump-token-lifecycle",
+    "name": "pump-token-lifecycle",
+    "description": "Full token lifecycle from creation through bonding curve trading, graduation detection, AMM migration, fee collection, and volume tracking on Solana using PumpSdk and OnlinePumpSdk.",
+    "category": "Pump.fun / Token Launch"
+  },
+  {
+    "slug": "pump-ts-vanity",
+    "name": "pump-ts-vanity",
+    "description": "Educational single-threaded TypeScript vanity address generator for Solana using @solana/web3.js with async iteration, event-loop yielding, streaming generator API, and best-effort memory zeroization.",
+    "category": "Pump.fun / Token Launch"
+  },
+  {
+    "slug": "pump-website",
+    "name": "pump-website",
+    "description": "PumpOS — static HTML/CSS/JS web desktop for the Pump SDK with 169 Pump-Store apps, live token dashboards, interactive DeFi tools, PWA support, and Vercel deployment.",
+    "category": "Pump.fun / Token Launch"
+  },
+  {
+    "slug": "pumpfun-analytics",
+    "name": "PumpFun Analytics",
+    "description": "Monitor bonding curves, graduation progress, and trade analytics on Pump.fun",
+    "category": "Pump.fun / Token Launch"
+  },
+  {
+    "slug": "pumpfun-fees",
+    "name": "PumpFun Fee Sharing",
+    "description": "Configure and claim creator fee sharing on Pump.fun tokens",
+    "category": "Pump.fun / Token Launch"
+  },
+  {
+    "slug": "pumpfun-launcher",
+    "name": "PumpFun Token Launcher",
+    "description": "Launch new tokens on Pump.fun directly via the Pump SDK",
+    "category": "Pump.fun / Token Launch"
+  },
+  {
+    "slug": "pumpfun-token-scanner",
+    "name": "pumpfun-token-scanner",
+    "description": ">",
+    "category": "Pump.fun / Token Launch"
+  },
+  {
+    "slug": "pumpfun-trading",
+    "name": "PumpFun Trading",
+    "description": "Buy and sell tokens on Pump.fun bonding curves and AMM pools",
+    "category": "Pump.fun / Token Launch"
+  },
+  {
+    "slug": "oracle",
+    "name": "oracle",
+    "description": "Best practices for using the oracle CLI (prompt + file bundling, engines, sessions, and file attachment patterns).",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "seeker-daemon-ops",
+    "name": "seeker-daemon-ops",
+    "description": "Use when the user wants to run, monitor, or debug the Seeker Nano Solana daemon and Telegram command flow",
+    "version": "\"1.0.0\"",
+    "emoji": "🦅",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "solana-formal-verification",
+    "name": "qedgen",
+    "description": "Formally verify programs by writing Lean 4 proofs. Trigger this skill whenever the user wants to formally verify code, generate Lean 4 proofs, prove properties about algorithms or smart contracts, verify invariants, convert program logic into formal specifications, or anything involving Lean 4 and formal verification. Also trigger when the user mentions \"qedgen\", \"lean proof\", \"formal proof\", \"verify my code\", \"prove correctness\", \"formal verification\", or wants mathematical guarantees about their implementation.",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "solana-research-brief",
+    "name": "solana-research-brief",
+    "description": "Use when a user asks for a concise Solana token research snapshot with market, trade, and security context",
+    "version": "\"1.0.0\"",
+    "emoji": "🔬",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "solanaos",
+    "name": "solanaos",
+    "description": "Full SolanaOS operator skill — install the runtime, query Solana blockchain data via SolanaTracker RPC, manage wallets, run OODA trading loops, configure multi-venue strategies (spot + Hyperliquid + Aster perps), control BitAxe mining fleets, pair Seeker devices, and interact with the SolanaOS Hub. Use when asked about SolanaOS installation, Solana wallet balances, token research, trading strategy, OODA loops, gateway setup, Telegram bot configuration, mining fleet management, or any SolanaOS runtime operation.",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "solanaos",
+    "name": "solanaos",
+    "description": ">",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "blogwatcher",
+    "name": "blogwatcher",
+    "description": "Monitor blogs and RSS/Atom feeds for updates using the blogwatcher CLI.",
+    "category": "Web / Research"
+  },
+  {
+    "slug": "browse",
+    "name": "browse",
+    "description": "Playwright-powered browser automation and E2E testing for SolanaOS Hub. Covers test configuration, agent-driven test generation (planner/generator/healer), NanoHub route testing, Convex API validation, wallet flow testing, IPFS Hub verification, and CI/CD integration. Use when asked about E2E tests, browser automation, Playwright setup, NanoHub testing, visual regression, or Hub route verification.",
+    "version": "1.0.0",
+    "category": "Web / Research"
+  },
+  {
+    "slug": "gog",
+    "name": "gog",
+    "description": "Google Workspace CLI for Gmail, Calendar, Drive, Contacts, Sheets, and Docs.",
+    "category": "Web / Research"
+  },
+  {
+    "slug": "goplaces",
+    "name": "goplaces",
+    "description": "Query Google Places API (New) via the goplaces CLI for text search, place details, resolve, and reviews. Use for human-friendly place lookup or JSON output for scripts.",
+    "category": "Web / Research"
+  },
+  {
+    "slug": "mcporter",
+    "name": "mcporter",
+    "description": "Use the mcporter CLI to list, configure, auth, and call MCP servers/tools directly (HTTP or stdio), including ad-hoc servers, config edits, and CLI/type generation.",
+    "category": "Web / Research"
+  },
+  {
+    "slug": "nano-pdf",
+    "name": "nano-pdf",
+    "description": "Edit PDFs with natural-language instructions using the nano-pdf CLI.",
+    "category": "Web / Research"
+  },
+  {
+    "slug": "pdf-to-markdown",
+    "name": "pdf-to-markdown",
+    "description": "Convert PDF documents to clean structured Markdown for LLM context. Supports two modes: fast (PyMuPDF) and accurate (IBM Docling TableFormer AI). Features aggressive persistent caching, image extraction with metadata, table detection, and batch processing. Use when asked to convert PDFs, extract PDF content, parse documents, or prepare PDF data for AI/LLM consumption.",
+    "version": "1.0.0",
+    "category": "Web / Research"
+  },
+  {
+    "slug": "summarize",
+    "name": "summarize",
+    "description": "Summarize or extract text/transcripts from URLs, podcasts, and local files (great fallback for “transcribe this YouTube/video”).",
+    "category": "Web / Research"
+  },
+  {
+    "slug": "wacli",
+    "name": "wacli",
+    "description": "Send WhatsApp messages to other people or search/sync WhatsApp history via the wacli CLI (not for normal user chats).",
+    "category": "Web / Research"
+  },
+  {
+    "slug": "weather",
+    "name": "weather",
+    "description": "Get current weather and forecasts via wttr.in or Open-Meteo. Use when: user asks about weather, temperature, or forecasts for any location. NOT for: historical weather data, severe weather alerts, or detailed meteorological analysis. No API key needed.",
+    "category": "Web / Research"
+  },
+  {
+    "slug": "xurl",
+    "name": "xurl",
+    "description": "A CLI tool for making authenticated requests to the X (Twitter) API. Use this skill when you need to post tweets, reply, quote, search, read posts, manage followers, send DMs, upload media, or interact with any X API v2 endpoint.",
+    "category": "Web / Research"
+  }
+]

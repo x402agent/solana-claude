@@ -241,20 +241,17 @@ let allSkills = [];
 let activeFilter = 'All';
 
 async function loadCatalog() {
-  try {
-    const res = await fetch('../../skills/catalog.json');
-    allSkills = await res.json();
-  } catch {
-    // Fallback: try relative path
+  const urls = ['./catalog.json', '../../skills/catalog.json', '/skills/catalog.json', '/catalog.json'];
+  for (const url of urls) {
     try {
-      const res2 = await fetch('/skills/catalog.json');
-      allSkills = await res2.json();
-    } catch {
-      document.getElementById('grid').innerHTML = '<div class="empty"><div class="empty-icon">\u{1F50D}</div><p>Could not load catalog.json. Run the catalog generator first.</p></div>';
+      const res = await fetch(url);
+      if (!res.ok) continue;
+      allSkills = await res.json();
+      init();
       return;
-    }
+    } catch {}
   }
-  init();
+  document.getElementById('grid').innerHTML = '<div class="empty"><div class="empty-icon">\u{1F50D}</div><p>Could not load catalog.json. Run <code>npm run skills:catalog</code> first.</p></div>';
 }
 
 function init() {

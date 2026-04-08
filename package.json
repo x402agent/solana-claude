@@ -42,7 +42,7 @@
     "spinners": "node dist/entrypoints/clawd.js spinners",
     "setup": "bash scripts/setup.sh",
     "skills:catalog": "node scripts/generate-skills-catalog.js",
-    "skills:serve": "node scripts/generate-skills-catalog.js && npx serve web/skills -l 3333"
+    "skills:serve": "node scripts/generate-skills-catalog.js && cp skills/catalog.json web/skills/catalog.json && npx serve web/skills -p 3333"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.39.0",
