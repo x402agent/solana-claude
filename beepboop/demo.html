@@ -1,0 +1,1449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Beep Boop - The Solana Clawd Demo</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #101211;
+    --surface1: #171918;
+    --surface2: #202221;
+    --surface3: #272A29;
+    --border-subtle: #373B39;
+    --border-strong: #444947;
+    --text-primary: #ECEEED;
+    --text-secondary: #ADB5B2;
+    --text-tertiary: #6B736F;
+    --lobster-50: #fff7ed;
+    --lobster-100: #ffedd5;
+    --lobster-200: #fed7aa;
+    --lobster-300: #fdba74;
+    --lobster-400: #fb923c;
+    --lobster-500: #f97316;
+    --lobster-600: #ea580c;
+    --lobster-700: #c2410c;
+    --lobster-800: #9a3412;
+    --lobster-900: #7c2d12;
+    --lobster-950: #431407;
+    --solana-green: #14F195;
+    --solana-purple: #9945FF;
+    --success: #34D399;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text-primary);
+    font-family: 'Space Grotesk', -apple-system, sans-serif;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* ── CUSTOM CLAW CURSOR ── */
+  #claw-cursor {
+    position: fixed;
+    pointer-events: none;
+    z-index: 10000;
+    transform: translate(-12px, -4px);
+    transition: transform 0.05s linear;
+    filter: drop-shadow(0 0 8px rgba(234, 88, 12, 0.5));
+  }
+
+  #claw-cursor svg {
+    width: 36px;
+    height: 36px;
+  }
+
+  /* ── LOBSTER CLAW BUDDY ── */
+  #claw-buddy {
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    transition: left 0.15s cubic-bezier(0.34, 1.56, 0.64, 1), top 0.15s cubic-bezier(0.34, 1.56, 0.64, 1);
+    filter: drop-shadow(0 0 12px rgba(234, 88, 12, 0.4));
+  }
+
+  #claw-buddy svg {
+    width: 44px;
+    height: 44px;
+  }
+
+  /* ── SPEECH BUBBLE ── */
+  #speech-bubble {
+    position: fixed;
+    pointer-events: none;
+    z-index: 9998;
+    background: var(--surface1);
+    border: 1px solid rgba(234, 88, 12, 0.25);
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 13px;
+    color: var(--text-primary);
+    max-width: 300px;
+    line-height: 1.5;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    opacity: 0;
+    transform: scale(0.8);
+    transition: opacity 0.3s, transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  #speech-bubble.visible {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  /* ── WAVEFORM ── */
+  #waveform {
+    position: fixed;
+    pointer-events: none;
+    z-index: 9997;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  #waveform.visible { opacity: 1; }
+
+  .wave-bar {
+    width: 3px;
+    background: var(--lobster-400);
+    border-radius: 2px;
+    animation: waveAnim 0.6s ease-in-out infinite alternate;
+  }
+
+  @keyframes waveAnim {
+    0% { height: 4px; }
+    100% { height: 18px; }
+  }
+
+  /* ── HERO SECTION ── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 40px 20px;
+    text-align: center;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    background: var(--lobster-950);
+    border: 1px solid var(--lobster-800);
+    border-radius: 20px;
+    font-size: 0.8rem;
+    color: var(--lobster-300);
+    margin-bottom: 24px;
+  }
+
+  .hero-badge .dot {
+    width: 6px; height: 6px;
+    background: var(--solana-green);
+    border-radius: 50%;
+    animation: dotPulse 2s infinite;
+  }
+
+  @keyframes dotPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  .hero h1 {
+    font-size: clamp(3rem, 8vw, 5.5rem);
+    font-weight: 700;
+    letter-spacing: -2px;
+    line-height: 1.05;
+    margin-bottom: 20px;
+  }
+
+  .hero h1 .gradient {
+    background: linear-gradient(135deg, var(--lobster-400), var(--lobster-600), var(--lobster-300));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-sub {
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+    max-width: 560px;
+    line-height: 1.6;
+    margin-bottom: 40px;
+  }
+
+  .hero-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 28px;
+    background: var(--lobster-600);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: none;
+    transition: background 0.2s, transform 0.2s;
+    text-decoration: none;
+  }
+
+  .hero-cta:hover {
+    background: var(--lobster-700);
+    transform: translateY(-2px);
+  }
+
+  .scroll-hint {
+    position: absolute;
+    bottom: 30px;
+    color: var(--text-tertiary);
+    font-size: 0.8rem;
+    animation: scrollBounce 2s infinite;
+  }
+
+  @keyframes scrollBounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(6px); }
+  }
+
+  /* ── DEMO SECTIONS ── */
+  section {
+    padding: 100px 20px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--lobster-400);
+    margin-bottom: 12px;
+  }
+
+  .section-title {
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 700;
+    letter-spacing: -1px;
+    margin-bottom: 16px;
+  }
+
+  .section-desc {
+    font-size: 1.05rem;
+    color: var(--text-secondary);
+    max-width: 600px;
+    line-height: 1.6;
+    margin-bottom: 48px;
+  }
+
+  /* ── SIMULATED SCREEN ── */
+  .sim-screen {
+    position: relative;
+    background: var(--surface1);
+    border: 1px solid var(--border-subtle);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 24px 80px rgba(0,0,0,0.5);
+  }
+
+  .sim-titlebar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 16px;
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .sim-dot { width: 12px; height: 12px; border-radius: 50%; }
+  .sim-dot.red { background: #FF5F57; }
+  .sim-dot.yellow { background: #FEBC2E; }
+  .sim-dot.green { background: #28C840; }
+
+  .sim-titlebar-text {
+    flex: 1;
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--text-tertiary);
+  }
+
+  .sim-body {
+    padding: 32px;
+    min-height: 400px;
+    position: relative;
+  }
+
+  /* ── DEMO: PUSH TO TALK ── */
+  .ptt-demo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    min-height: 380px;
+  }
+
+  .ptt-keys {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .ptt-key {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 16px;
+    background: var(--surface3);
+    border: 1px solid var(--border-strong);
+    border-radius: 8px;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    box-shadow: 0 2px 0 var(--border-subtle);
+    transition: all 0.15s;
+  }
+
+  .ptt-key.active {
+    background: var(--lobster-600);
+    border-color: var(--lobster-500);
+    color: white;
+    box-shadow: 0 0 16px rgba(234, 88, 12, 0.4);
+    transform: translateY(2px);
+  }
+
+  .ptt-plus {
+    color: var(--text-tertiary);
+    font-size: 1.2rem;
+  }
+
+  .ptt-status {
+    font-size: 0.9rem;
+    color: var(--text-tertiary);
+    transition: color 0.3s;
+  }
+
+  .ptt-status.listening {
+    color: var(--lobster-400);
+  }
+
+  .ptt-waveform-display {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    height: 40px;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .ptt-waveform-display.active { opacity: 1; }
+
+  .ptt-bar {
+    width: 4px;
+    background: var(--lobster-400);
+    border-radius: 2px;
+    transition: height 0.1s;
+  }
+
+  /* ── DEMO: SCREENSHOT + CLAUDE ── */
+  .vision-demo {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    align-items: start;
+  }
+
+  @media (max-width: 768px) {
+    .vision-demo { grid-template-columns: 1fr; }
+  }
+
+  .vision-screenshot {
+    background: var(--surface2);
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    padding: 20px;
+    position: relative;
+  }
+
+  .vision-screenshot .scan-line {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--lobster-400), transparent);
+    opacity: 0;
+    animation: scanDown 3s ease-in-out infinite;
+    animation-delay: 1s;
+  }
+
+  @keyframes scanDown {
+    0% { top: 0; opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { top: 100%; opacity: 0; }
+  }
+
+  .vision-screenshot-label {
+    font-size: 0.7rem;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--lobster-400);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .vision-mock-ui {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .mock-line {
+    height: 10px;
+    background: var(--surface3);
+    border-radius: 4px;
+  }
+
+  .mock-line.short { width: 60%; }
+  .mock-line.medium { width: 80%; }
+  .mock-line.long { width: 95%; }
+
+  .mock-btn {
+    display: inline-block;
+    width: 80px;
+    height: 28px;
+    background: var(--lobster-600);
+    border-radius: 6px;
+    margin-top: 8px;
+    position: relative;
+  }
+
+  .mock-btn .claw-target {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    width: 16px;
+    height: 16px;
+    border: 2px solid var(--lobster-400);
+    border-radius: 50%;
+    animation: targetPulse 1.5s infinite;
+  }
+
+  @keyframes targetPulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.4); opacity: 0.3; }
+  }
+
+  .vision-response {
+    background: var(--surface2);
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    padding: 20px;
+  }
+
+  .vision-response-label {
+    font-size: 0.7rem;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--lobster-400);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .streaming-text {
+    font-size: 0.9rem;
+    color: var(--text-primary);
+    line-height: 1.7;
+    min-height: 120px;
+  }
+
+  .streaming-text .cursor-blink {
+    display: inline-block;
+    width: 2px;
+    height: 14px;
+    background: var(--lobster-400);
+    margin-left: 2px;
+    animation: blink 0.8s infinite;
+    vertical-align: middle;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+
+  .claw-tag {
+    display: inline;
+    background: var(--lobster-950);
+    border: 1px solid var(--lobster-800);
+    border-radius: 4px;
+    padding: 1px 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--lobster-300);
+  }
+
+  /* ── DEMO: SOLANA ── */
+  .solana-demo {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+  }
+
+  @media (max-width: 768px) {
+    .solana-demo { grid-template-columns: 1fr; }
+  }
+
+  .sol-card {
+    background: var(--surface2);
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    padding: 24px;
+    transition: border-color 0.3s, transform 0.3s;
+  }
+
+  .sol-card:hover {
+    border-color: var(--solana-green);
+    transform: translateY(-2px);
+  }
+
+  .sol-card-label {
+    font-size: 0.7rem;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+
+  .sol-card-value {
+    font-size: 1.8rem;
+    font-weight: 700;
+    font-family: 'JetBrains Mono', monospace;
+    margin-bottom: 4px;
+  }
+
+  .sol-card-value .sol-symbol {
+    color: var(--solana-green);
+  }
+
+  .sol-card-sub {
+    font-size: 0.75rem;
+    color: var(--text-tertiary);
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .sol-card-network {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 12px;
+    padding: 3px 8px;
+    background: rgba(20, 241, 149, 0.08);
+    border: 1px solid rgba(20, 241, 149, 0.2);
+    border-radius: 4px;
+    font-size: 0.65rem;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--solana-green);
+  }
+
+  /* ── DEMO: TTS ── */
+  .tts-demo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .tts-visualizer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    height: 80px;
+    width: 100%;
+    max-width: 500px;
+  }
+
+  .tts-vbar {
+    width: 4px;
+    border-radius: 2px;
+    background: var(--lobster-400);
+    transition: height 0.1s;
+  }
+
+  .tts-label {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    text-align: center;
+  }
+
+  .tts-voice-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: var(--surface2);
+    border: 1px solid var(--border-subtle);
+    border-radius: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+  }
+
+  /* ── DEMO: CLAW POINTING ── */
+  .pointing-demo {
+    position: relative;
+    min-height: 350px;
+  }
+
+  .point-target {
+    position: absolute;
+    width: 120px;
+    padding: 14px;
+    background: var(--surface3);
+    border: 1px solid var(--border-subtle);
+    border-radius: 10px;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    text-align: center;
+    cursor: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+
+  .point-target.highlighted {
+    border-color: var(--lobster-400);
+    box-shadow: 0 0 20px rgba(234, 88, 12, 0.2);
+  }
+
+  .point-target-icon {
+    font-size: 1.5rem;
+    margin-bottom: 6px;
+    display: block;
+  }
+
+  /* Bezier flight path SVG */
+  #flight-path-svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+
+  .flight-path {
+    fill: none;
+    stroke: var(--lobster-400);
+    stroke-width: 2;
+    stroke-dasharray: 8 4;
+    opacity: 0.3;
+  }
+
+  .flight-dot {
+    fill: var(--lobster-400);
+    filter: drop-shadow(0 0 4px var(--lobster-400));
+  }
+
+  /* ── GATEWAY LIVE TEST ── */
+  .gateway-live {
+    background: var(--surface1);
+    border: 1px solid var(--border-subtle);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  .gateway-terminal-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .gateway-terminal-body {
+    padding: 20px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    line-height: 1.8;
+    color: var(--text-secondary);
+    max-height: 300px;
+    overflow-y: auto;
+  }
+
+  .term-prompt { color: var(--lobster-400); }
+  .term-cmd { color: var(--text-primary); }
+  .term-success { color: var(--success); }
+  .term-key { color: var(--solana-purple); }
+  .term-val { color: var(--lobster-300); }
+  .term-dim { color: var(--text-tertiary); }
+
+  /* ── STACK SECTION ── */
+  .stack-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-top: 48px;
+  }
+
+  .stack-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 18px;
+    background: var(--surface1);
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    transition: border-color 0.3s;
+  }
+
+  .stack-item:hover { border-color: var(--border-strong); }
+
+  .stack-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    flex-shrink: 0;
+  }
+
+  .stack-item-text h4 {
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+
+  .stack-item-text p {
+    font-size: 0.75rem;
+    color: var(--text-tertiary);
+  }
+
+  /* ── FOOTER ── */
+  .footer {
+    text-align: center;
+    padding: 60px 20px 30px;
+    color: var(--text-tertiary);
+    font-size: 0.8rem;
+  }
+
+  .footer a { color: var(--lobster-400); text-decoration: none; }
+  .footer a:hover { text-decoration: underline; }
+
+  /* ── FADE-IN ON SCROLL ── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    section { padding: 60px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- CLAW CURSOR -->
+<div id="claw-cursor">
+  <svg viewBox="0 0 36 36" fill="none">
+    <path d="M6 4C6 4 3 8 4 12C5 16 8 16 8 16L6 22C6 22 4 26 8 28C12 30 14 27 14 27L16 22L18 27C18 27 20 30 24 28C28 26 26 22 26 22L24 16C24 16 27 16 28 12C29 8 26 4 26 4" stroke="#ea580c" stroke-width="2.5" stroke-linecap="round" fill="#431407"/>
+    <path d="M12 16L16 6L20 16" stroke="#fb923c" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+    <circle cx="13" cy="10" r="1.5" fill="#fb923c"/>
+    <circle cx="19" cy="10" r="1.5" fill="#fb923c"/>
+  </svg>
+</div>
+
+<!-- CLAW BUDDY (follows with spring) -->
+<div id="claw-buddy">
+  <svg viewBox="0 0 44 44" fill="none">
+    <ellipse cx="22" cy="30" rx="10" ry="6" fill="#7c2d12"/>
+    <path d="M8 18C6 12 10 6 16 6L18 14Z" fill="#ea580c" stroke="#fb923c" stroke-width="1"/>
+    <path d="M36 18C38 12 34 6 28 6L26 14Z" fill="#ea580c" stroke="#fb923c" stroke-width="1"/>
+    <ellipse cx="22" cy="22" rx="12" ry="10" fill="#c2410c"/>
+    <ellipse cx="22" cy="22" rx="10" ry="8" fill="#ea580c"/>
+    <circle cx="18" cy="20" r="2.5" fill="#fff7ed"/>
+    <circle cx="26" cy="20" r="2.5" fill="#fff7ed"/>
+    <circle cx="18.5" cy="20.5" r="1.2" fill="#431407"/>
+    <circle cx="26.5" cy="20.5" r="1.2" fill="#431407"/>
+    <path d="M19 26Q22 28 25 26" stroke="#9a3412" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+  </svg>
+</div>
+
+<!-- SPEECH BUBBLE -->
+<div id="speech-bubble"></div>
+
+<!-- WAVEFORM -->
+<div id="waveform"></div>
+
+<!-- ═══════════════════════════════════════ HERO ═══════════════════════════════════════ -->
+
+<div class="hero">
+  <div class="hero-badge"><span class="dot"></span> Built on Solana Mainnet</div>
+  <h1>
+    <span class="gradient">Beep Boop</span><br>
+    The Solana Clawd
+  </h1>
+  <p class="hero-sub">
+    A lobster claw companion that lives in your macOS menu bar. It sees your screen, speaks with a lobster voice, writes code, and connects to Solana.
+  </p>
+  <a href="#demo-ptt" class="hero-cta">
+    See How It Works
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 3v10m0 0l4-4m-4 4L4 9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+  </a>
+  <div class="scroll-hint">Scroll to explore</div>
+</div>
+
+<!-- ═══════════════════════════════════ STEP 1: PUSH TO TALK ═══════════════════════════════════ -->
+
+<section id="demo-ptt">
+  <div class="reveal">
+    <div class="section-label">Step 1</div>
+    <div class="section-title">Push to Talk</div>
+    <p class="section-desc">Hold Ctrl+Option to activate the microphone. Your voice is captured by AVAudioEngine and streamed to AssemblyAI in real-time.</p>
+  </div>
+
+  <div class="sim-screen reveal">
+    <div class="sim-titlebar">
+      <span class="sim-dot red"></span>
+      <span class="sim-dot yellow"></span>
+      <span class="sim-dot green"></span>
+      <span class="sim-titlebar-text">Beep Boop - Push to Talk</span>
+    </div>
+    <div class="sim-body">
+      <div class="ptt-demo">
+        <div class="ptt-keys">
+          <span class="ptt-key" id="key-ctrl">Ctrl</span>
+          <span class="ptt-plus">+</span>
+          <span class="ptt-key" id="key-option">Option</span>
+        </div>
+        <div class="ptt-status" id="ptt-status">Press and hold to talk</div>
+        <div class="ptt-waveform-display" id="ptt-waveform"></div>
+        <div id="ptt-transcript" style="font-size: 0.9rem; color: var(--text-secondary); max-width: 400px; text-align: center; min-height: 24px;"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════ STEP 2: VISION + CLAUDE ═══════════════════════════════════ -->
+
+<section id="demo-vision">
+  <div class="reveal">
+    <div class="section-label">Step 2</div>
+    <div class="section-title">Screenshot + Claude Vision</div>
+    <p class="section-desc">A screenshot is captured via ScreenCaptureKit and sent alongside the transcript to Claude, which sees and understands your screen.</p>
+  </div>
+
+  <div class="vision-demo reveal">
+    <div class="vision-screenshot">
+      <div class="scan-line"></div>
+      <div class="vision-screenshot-label">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="1" y="1" width="10" height="10" rx="2" stroke="#fb923c" stroke-width="1.5"/><path d="M4 8L6 5L8 8" stroke="#fb923c" stroke-width="1" stroke-linecap="round"/></svg>
+        ScreenCaptureKit Capture
+      </div>
+      <div class="vision-mock-ui">
+        <div class="mock-line long"></div>
+        <div class="mock-line medium"></div>
+        <div class="mock-line short"></div>
+        <div class="mock-line long"></div>
+        <div class="mock-line medium"></div>
+        <div style="display: flex; gap: 8px; margin-top: 8px;">
+          <div class="mock-btn">
+            <div class="claw-target"></div>
+          </div>
+          <div style="width: 60px; height: 28px; background: var(--surface3); border-radius: 6px;"></div>
+        </div>
+        <div class="mock-line short" style="margin-top: 12px;"></div>
+        <div class="mock-line long"></div>
+      </div>
+    </div>
+
+    <div class="vision-response">
+      <div class="vision-response-label">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="#fb923c" stroke-width="1.5"/><path d="M6 3v3l2 2" stroke="#fb923c" stroke-width="1" stroke-linecap="round"/></svg>
+        Claude SSE Stream
+      </div>
+      <div class="streaming-text" id="stream-text"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════ STEP 3: CLAW POINTING ═══════════════════════════════════ -->
+
+<section id="demo-pointing">
+  <div class="reveal">
+    <div class="section-label">Step 3</div>
+    <div class="section-title">Claw Points at UI Elements</div>
+    <p class="section-desc">Claude embeds <code class="claw-tag">[CLAW:x,y:label:screenN]</code> tags in responses. The lobster claw flies along a bezier arc to point at the referenced element.</p>
+  </div>
+
+  <div class="sim-screen reveal">
+    <div class="sim-titlebar">
+      <span class="sim-dot red"></span>
+      <span class="sim-dot yellow"></span>
+      <span class="sim-dot green"></span>
+      <span class="sim-titlebar-text">Claw Overlay - Full Screen NSPanel</span>
+    </div>
+    <div class="sim-body">
+      <div class="pointing-demo" id="pointing-area">
+        <svg id="flight-path-svg"><path class="flight-path" id="flight-path" d=""/></svg>
+
+        <div class="point-target" id="pt-1" style="top: 20px; left: 30px;">
+          <span class="point-target-icon">📝</span>
+          Text Editor
+        </div>
+        <div class="point-target" id="pt-2" style="top: 30px; right: 60px;">
+          <span class="point-target-icon">⚙️</span>
+          Settings
+        </div>
+        <div class="point-target" id="pt-3" style="bottom: 40px; left: 50%; transform: translateX(-50%);">
+          <span class="point-target-icon">🚀</span>
+          Deploy
+        </div>
+        <div class="point-target" id="pt-4" style="bottom: 30px; left: 40px;">
+          <span class="point-target-icon">💰</span>
+          Wallet
+        </div>
+        <div class="point-target" id="pt-5" style="top: 140px; right: 30px;">
+          <span class="point-target-icon">📊</span>
+          Analytics
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════ STEP 4: SOLANA ═══════════════════════════════════ -->
+
+<section id="demo-solana">
+  <div class="reveal">
+    <div class="section-label">Step 4</div>
+    <div class="section-title">Solana On-Chain Lookups</div>
+    <p class="section-desc">The Clawd Gateway proxies Solana JSON-RPC calls. Balance checks, token accounts, and raw RPC all flow through Cloudflare Workers.</p>
+  </div>
+
+  <div class="solana-demo reveal">
+    <div class="sol-card">
+      <div class="sol-card-label">SOL Balance</div>
+      <div class="sol-card-value"><span class="sol-symbol" id="sol-bal">0.000</span></div>
+      <div class="sol-card-sub">SOL</div>
+      <div class="sol-card-network"><span class="dot" style="width:5px;height:5px;background:var(--solana-green);border-radius:50%;"></span> mainnet-beta</div>
+    </div>
+    <div class="sol-card">
+      <div class="sol-card-label">Lamports</div>
+      <div class="sol-card-value" id="sol-lamports" style="font-size: 1.2rem;">0</div>
+      <div class="sol-card-sub">raw value</div>
+      <div class="sol-card-network"><span class="dot" style="width:5px;height:5px;background:var(--solana-green);border-radius:50%;"></span> JSON-RPC</div>
+    </div>
+    <div class="sol-card">
+      <div class="sol-card-label">Token Accounts</div>
+      <div class="sol-card-value" id="sol-tokens" style="color: var(--solana-purple);">--</div>
+      <div class="sol-card-sub">SPL tokens</div>
+      <div class="sol-card-network"><span class="dot" style="width:5px;height:5px;background:var(--solana-purple);border-radius:50%;"></span> getTokenAccountsByOwner</div>
+    </div>
+  </div>
+
+  <div style="margin-top: 32px;" class="reveal">
+    <div class="gateway-live">
+      <div class="gateway-terminal-bar">
+        <span class="sim-dot red"></span>
+        <span class="sim-dot yellow"></span>
+        <span class="sim-dot green"></span>
+        <span style="flex:1; text-align:center; font-size:0.75rem; color:var(--text-tertiary); font-family:'JetBrains Mono',monospace;">Clawd Gateway - Live</span>
+      </div>
+      <div class="gateway-terminal-body" id="gateway-output">
+        <div><span class="term-prompt">$</span> <span class="term-cmd">curl /health</span></div>
+        <div class="term-dim">connecting to beepboop-clawd-gateway...</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════ STEP 5: TTS ═══════════════════════════════════ -->
+
+<section id="demo-tts">
+  <div class="reveal">
+    <div class="section-label">Step 5</div>
+    <div class="section-title">Lobster Voice</div>
+    <p class="section-desc">ElevenLabs converts Claude's response into speech with a custom lobster voice. The audio plays while the claw points at referenced elements.</p>
+  </div>
+
+  <div class="sim-screen reveal">
+    <div class="sim-titlebar">
+      <span class="sim-dot red"></span>
+      <span class="sim-dot yellow"></span>
+      <span class="sim-dot green"></span>
+      <span class="sim-titlebar-text">ElevenLabs TTS - eleven_flash_v2_5</span>
+    </div>
+    <div class="sim-body">
+      <div class="tts-demo">
+        <div class="tts-visualizer" id="tts-visualizer"></div>
+        <div class="tts-label" id="tts-text">"I see you're looking at the deploy button. Click it to ship your changes to mainnet!"</div>
+        <div class="tts-voice-badge">
+          <span style="color: var(--lobster-400);">🦞</span>
+          Voice: Lobster Clawd &bull; kPzsL2i3teMYv0FxEYQ6
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════ TECH STACK ═══════════════════════════════════ -->
+
+<section id="stack">
+  <div class="reveal">
+    <div class="section-label">Built With</div>
+    <div class="section-title">The Clawd Stack</div>
+  </div>
+
+  <div class="stack-grid reveal">
+    <div class="stack-item">
+      <div class="stack-icon" style="background: rgba(234,88,12,0.1);">🧠</div>
+      <div class="stack-item-text">
+        <h4>Claude</h4>
+        <p>Sonnet & Opus with vision</p>
+      </div>
+    </div>
+    <div class="stack-item">
+      <div class="stack-icon" style="background: rgba(59,130,246,0.1);">🎤</div>
+      <div class="stack-item-text">
+        <h4>AssemblyAI</h4>
+        <p>Real-time websocket STT</p>
+      </div>
+    </div>
+    <div class="stack-item">
+      <div class="stack-icon" style="background: rgba(6,182,212,0.1);">🔊</div>
+      <div class="stack-item-text">
+        <h4>ElevenLabs</h4>
+        <p>Custom lobster TTS voice</p>
+      </div>
+    </div>
+    <div class="stack-item">
+      <div class="stack-icon" style="background: rgba(20,241,149,0.1);">⚡</div>
+      <div class="stack-item-text">
+        <h4>Solana</h4>
+        <p>JSON-RPC via Helius</p>
+      </div>
+    </div>
+    <div class="stack-item">
+      <div class="stack-icon" style="background: rgba(153,69,255,0.1);">☁️</div>
+      <div class="stack-item-text">
+        <h4>Cloudflare Workers</h4>
+        <p>API proxy gateway</p>
+      </div>
+    </div>
+    <div class="stack-item">
+      <div class="stack-icon" style="background: rgba(244,133,95,0.1);">🍎</div>
+      <div class="stack-item-text">
+        <h4>SwiftUI + AppKit</h4>
+        <p>macOS native, menu bar</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="footer">
+  Built with 🦞 &mdash; <a href="https://github.com/julianjear/makesomething-mac-app">GitHub</a> &bull; MIT License
+</div>
+
+<script>
+// ── CLAW CURSOR ──
+const clawCursor = document.getElementById('claw-cursor');
+const clawBuddy = document.getElementById('claw-buddy');
+const speechBubble = document.getElementById('speech-bubble');
+const waveform = document.getElementById('waveform');
+let mouseX = 0, mouseY = 0;
+let buddyX = 0, buddyY = 0;
+
+document.addEventListener('mousemove', e => {
+  mouseX = e.clientX;
+  mouseY = e.clientY;
+  clawCursor.style.left = mouseX + 'px';
+  clawCursor.style.top = mouseY + 'px';
+});
+
+// Buddy follows with spring lag
+function updateBuddy() {
+  buddyX += (mouseX + 30 - buddyX) * 0.08;
+  buddyY += (mouseY + 20 - buddyY) * 0.08;
+  clawBuddy.style.left = buddyX + 'px';
+  clawBuddy.style.top = buddyY + 'px';
+
+  speechBubble.style.left = (buddyX + 48) + 'px';
+  speechBubble.style.top = (buddyY - 10) + 'px';
+
+  waveform.style.left = (buddyX + 48) + 'px';
+  waveform.style.top = (buddyY + 12) + 'px';
+
+  requestAnimationFrame(updateBuddy);
+}
+updateBuddy();
+
+// ── SPEECH BUBBLE TRIGGERS ──
+const buddySayings = [
+  "hey! i'm beep boop 🦞",
+  "click that button!",
+  "I see your screen...",
+  "want me to explain this?",
+  "let me check the chain...",
+  "right here!",
+  "deploying to mainnet!",
+];
+
+let sayingIndex = 0;
+function showBuddySpeech(text, duration = 2500) {
+  speechBubble.textContent = text;
+  speechBubble.classList.add('visible');
+  setTimeout(() => speechBubble.classList.remove('visible'), duration);
+}
+
+// Show greeting on load
+setTimeout(() => showBuddySpeech("hey! i'm beep boop 🦞", 3000), 1500);
+
+// ── SCROLL REVEAL ──
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) e.target.classList.add('visible');
+  });
+}, { threshold: 0.15 });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// ── PTT DEMO ──
+const pttObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) startPTTDemo();
+  });
+}, { threshold: 0.4 });
+
+const pttSection = document.querySelector('#demo-ptt .sim-screen');
+if (pttSection) pttObserver.observe(pttSection);
+
+let pttRunning = false;
+function startPTTDemo() {
+  if (pttRunning) return;
+  pttRunning = true;
+
+  const keyCtrl = document.getElementById('key-ctrl');
+  const keyOption = document.getElementById('key-option');
+  const status = document.getElementById('ptt-status');
+  const waveDiv = document.getElementById('ptt-waveform');
+  const transcript = document.getElementById('ptt-transcript');
+
+  // Create waveform bars
+  waveDiv.innerHTML = '';
+  for (let i = 0; i < 24; i++) {
+    const bar = document.createElement('div');
+    bar.className = 'ptt-bar';
+    bar.style.height = '4px';
+    bar.style.animationDelay = (i * 0.05) + 's';
+    waveDiv.appendChild(bar);
+  }
+
+  const transcriptText = "Hey, can you look at this deploy button and tell me what it does?";
+
+  function runCycle() {
+    // Phase 1: Keys press
+    setTimeout(() => {
+      keyCtrl.classList.add('active');
+      keyOption.classList.add('active');
+      status.textContent = 'Listening...';
+      status.classList.add('listening');
+      waveDiv.classList.add('active');
+      transcript.textContent = '';
+
+      // Animate waveform
+      const waveInterval = setInterval(() => {
+        waveDiv.querySelectorAll('.ptt-bar').forEach(bar => {
+          bar.style.height = (4 + Math.random() * 28) + 'px';
+        });
+      }, 100);
+
+      // Stream transcript
+      let charIdx = 0;
+      const typeInterval = setInterval(() => {
+        if (charIdx < transcriptText.length) {
+          transcript.textContent += transcriptText[charIdx];
+          charIdx++;
+        } else {
+          clearInterval(typeInterval);
+        }
+      }, 50);
+
+      // Phase 2: Release keys
+      setTimeout(() => {
+        clearInterval(waveInterval);
+        keyCtrl.classList.remove('active');
+        keyOption.classList.remove('active');
+        status.textContent = 'Processing...';
+        status.classList.remove('listening');
+        waveDiv.classList.remove('active');
+        waveDiv.querySelectorAll('.ptt-bar').forEach(bar => bar.style.height = '4px');
+
+        setTimeout(() => {
+          status.textContent = 'Press and hold to talk';
+          transcript.textContent = '';
+          setTimeout(runCycle, 3000);
+        }, 2000);
+      }, 3500);
+    }, 500);
+  }
+
+  runCycle();
+}
+
+// ── STREAMING TEXT DEMO ──
+const streamObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) startStreamDemo();
+  });
+}, { threshold: 0.3 });
+
+const visionSection = document.querySelector('#demo-vision .vision-demo');
+if (visionSection) streamObserver.observe(visionSection);
+
+let streamRunning = false;
+function startStreamDemo() {
+  if (streamRunning) return;
+  streamRunning = true;
+
+  const el = document.getElementById('stream-text');
+  const fullText = `I can see you have a code editor open with a deploy button in the lower left. That button will push your changes to the Solana mainnet. <span class="claw-tag">[CLAW:120,380:Deploy Button:screen0]</span>\n\nBefore clicking, make sure your program has been built with <code style="background:var(--surface3);padding:2px 6px;border-radius:4px;font-size:0.8rem;">anchor build</code> and the IDL is up to date. I'd also recommend checking your wallet balance first.`;
+
+  function runStream() {
+    el.innerHTML = '<span class="cursor-blink"></span>';
+    let idx = 0;
+    const interval = setInterval(() => {
+      if (idx < fullText.length) {
+        // Handle HTML tags as chunks
+        if (fullText[idx] === '<') {
+          const closeIdx = fullText.indexOf('>', idx);
+          if (closeIdx !== -1) {
+            el.innerHTML = fullText.substring(0, closeIdx + 1) + '<span class="cursor-blink"></span>';
+            idx = closeIdx + 1;
+            return;
+          }
+        }
+        idx++;
+        el.innerHTML = fullText.substring(0, idx) + '<span class="cursor-blink"></span>';
+      } else {
+        clearInterval(interval);
+        setTimeout(() => {
+          streamRunning = false;
+          setTimeout(runStream, 4000);
+        }, 5000);
+      }
+    }, 25);
+  }
+
+  runStream();
+}
+
+// ── POINTING DEMO ──
+const pointObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) startPointingDemo();
+  });
+}, { threshold: 0.3 });
+
+const pointSection = document.querySelector('#demo-pointing .sim-screen');
+if (pointSection) pointObserver.observe(pointSection);
+
+let pointRunning = false;
+function startPointingDemo() {
+  if (pointRunning) return;
+  pointRunning = true;
+
+  const targets = ['pt-1', 'pt-2', 'pt-3', 'pt-4', 'pt-5'];
+  const labels = ['right here!', 'check this!', 'click to deploy!', 'your wallet', 'analytics panel'];
+  let idx = 0;
+
+  function pointAtNext() {
+    const prevIdx = (idx - 1 + targets.length) % targets.length;
+    document.getElementById(targets[prevIdx]).classList.remove('highlighted');
+
+    const target = document.getElementById(targets[idx]);
+    target.classList.add('highlighted');
+
+    // Show buddy speech
+    showBuddySpeech(labels[idx], 2000);
+
+    idx = (idx + 1) % targets.length;
+    setTimeout(pointAtNext, 3000);
+  }
+
+  setTimeout(pointAtNext, 1000);
+}
+
+// ── SOLANA LIVE DATA ──
+const solanaObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) fetchSolanaData();
+  });
+}, { threshold: 0.3 });
+
+const solSection = document.querySelector('#demo-solana .solana-demo');
+if (solSection) solanaObserver.observe(solSection);
+
+let solFetched = false;
+async function fetchSolanaData() {
+  if (solFetched) return;
+  solFetched = true;
+
+  const gateway = 'https://beepboop-clawd-gateway.x402.workers.dev';
+  const termOut = document.getElementById('gateway-output');
+  const testAddr = 'vines1vzrYbzLMRdu58ou5XTby4qAqVRLmqo36NKPTg';
+
+  function log(html) {
+    const div = document.createElement('div');
+    div.innerHTML = html;
+    termOut.appendChild(div);
+    termOut.scrollTop = termOut.scrollHeight;
+  }
+
+  try {
+    // Health
+    log(`<span class="term-prompt">$</span> <span class="term-cmd">curl ${gateway}/health</span>`);
+    const health = await fetch(gateway + '/health').then(r => r.json());
+    log(`<span class="term-success">✓ status: "${health.status}"</span>`);
+    log(`<span class="term-dim">  network: ${health.network} | routes: ${health.routes.length}</span>`);
+    log('');
+
+    // Balance
+    log(`<span class="term-prompt">$</span> <span class="term-cmd">curl -X POST ${gateway}/solana/balance</span>`);
+    log(`<span class="term-dim">  {"address": "${testAddr.slice(0,12)}..."}</span>`);
+    const bal = await fetch(gateway + '/solana/balance', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ address: testAddr })
+    }).then(r => r.json());
+
+    document.getElementById('sol-bal').textContent = bal.sol.toFixed(6);
+    document.getElementById('sol-lamports').textContent = bal.lamports.toLocaleString();
+    log(`<span class="term-success">✓ ${bal.sol} SOL</span> <span class="term-dim">(${bal.lamports} lamports)</span>`);
+    log('');
+
+    // Tokens
+    log(`<span class="term-prompt">$</span> <span class="term-cmd">curl -X POST ${gateway}/solana/tokens</span>`);
+    const tokens = await fetch(gateway + '/solana/tokens', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ address: testAddr })
+    }).then(r => r.json());
+
+    const tokenCount = tokens?.result?.value?.length || 0;
+    document.getElementById('sol-tokens').textContent = tokenCount;
+    log(`<span class="term-success">✓ ${tokenCount} token accounts found</span>`);
+    log('');
+    log(`<span class="term-dim">All requests proxied through Clawd Gateway — no keys in the app binary.</span>`);
+
+  } catch (err) {
+    log(`<span style="color:#E5484D;">✗ ${err.message}</span>`);
+    // Fallback mock data
+    document.getElementById('sol-bal').textContent = '0.039769';
+    document.getElementById('sol-lamports').textContent = '39,769,364';
+    document.getElementById('sol-tokens').textContent = '0';
+  }
+}
+
+// ── TTS VISUALIZER ──
+const ttsObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) startTTSDemo();
+  });
+}, { threshold: 0.3 });
+
+const ttsSection = document.querySelector('#demo-tts .sim-screen');
+if (ttsSection) ttsObserver.observe(ttsSection);
+
+let ttsRunning = false;
+function startTTSDemo() {
+  if (ttsRunning) return;
+  ttsRunning = true;
+
+  const container = document.getElementById('tts-visualizer');
+  container.innerHTML = '';
+
+  const barCount = 60;
+  for (let i = 0; i < barCount; i++) {
+    const bar = document.createElement('div');
+    bar.className = 'tts-vbar';
+    bar.style.height = '4px';
+    container.appendChild(bar);
+  }
+
+  const bars = container.querySelectorAll('.tts-vbar');
+  const ttsText = document.getElementById('tts-text');
+  const phrases = [
+    '"I see you\'re looking at the deploy button. Click it to ship your changes to mainnet!"',
+    '"Your wallet has 0.039 SOL. That\'s enough for a few transactions."',
+    '"This code looks good. The function handles errors correctly."',
+    '"Let me point you to the settings panel — you can configure the RPC endpoint there."',
+  ];
+  let phraseIdx = 0;
+
+  function animateTTS() {
+    ttsText.textContent = phrases[phraseIdx];
+    phraseIdx = (phraseIdx + 1) % phrases.length;
+
+    let frame = 0;
+    const totalFrames = 180;
+
+    function tick() {
+      if (frame >= totalFrames) {
+        bars.forEach(b => b.style.height = '4px');
+        setTimeout(animateTTS, 2000);
+        return;
+      }
+
+      const progress = frame / totalFrames;
+      bars.forEach((bar, i) => {
+        const center = barCount * progress;
+        const dist = Math.abs(i - center);
+        const envelope = Math.max(0, 1 - dist / 12);
+        const noise = Math.random() * 0.5 + 0.5;
+        const h = 4 + envelope * noise * 60;
+        bar.style.height = h + 'px';
+        bar.style.background = envelope > 0.3
+          ? `var(--lobster-${envelope > 0.6 ? '400' : '500'})`
+          : 'var(--lobster-800)';
+      });
+
+      frame++;
+      requestAnimationFrame(tick);
+    }
+
+    tick();
+  }
+
+  animateTTS();
+}
+</script>
+</body>
+</html>

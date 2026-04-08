@@ -30,8 +30,12 @@ Powered by **$CLAWD** on Solana & Pump.fun
 [![Tools](https://img.shields.io/badge/MCP%20tools-31-ff6b35)](mcp-server/src/server.ts)
 [![Buddies](https://img.shields.io/badge/Blockchain%20Buddies-18%20species-ff69b4)](src/buddy/)
 [![Animations](https://img.shields.io/badge/unicode%20spinners-9%20custom-00ffcc)](src/animations/)
+[![Voice](https://img.shields.io/badge/Voice-ElevenLabs%20%2B%20Grok-ff4444)](web/app/voice/)
+[![Telegram](https://img.shields.io/badge/Telegram-60%2B%20commands-26A5E4?logo=telegram)](src/telegram/)
+[![Skills](https://img.shields.io/badge/Skills-95%20catalog-yellow)](skills/)
+[![Live](https://img.shields.io/badge/live-solanaclawd.com-00ff88)](https://solanaclawd.com)
 
-[**One-Shot Install**](#one-shot-install) · [**Blockchain Buddies**](#blockchain-buddies) · [**Animations**](#clawd-animations) · [**MCP Tools**](#mcp-tools-31) · [**Metaplex Agents**](#metaplex-agent-minting-mpl-agent-registry) · [**Worker Swarm**](#solana-worker-swarm-iii-sdk) · [**Skills**](#skills-catalog-88-skills) · [**Deploy**](#deploy-to-flyio)
+[**One-Shot Install**](#one-shot-install) · [**Blockchain Buddies**](#blockchain-buddies) · [**Animations**](#clawd-animations) · [**MCP Tools**](#mcp-tools-31) · [**Voice Mode**](#voice-mode) · [**Telegram Bot**](#telegram-trading-bot) · [**Metaplex Agents**](#metaplex-agent-minting-mpl-agent-registry) · [**Worker Swarm**](#solana-worker-swarm-iii-sdk) · [**Skills**](#skills-catalog-88-skills) · [**Deploy**](#deploy-to-flyio)
 
 </div>
 
@@ -620,7 +624,7 @@ Solana-branded agentic dashboard (`tailclawd/`) — Solana Purple (#9945FF) + Gr
 
 ### Web App
 
-The `web/` directory contains the Next.js frontend — chat UI, buddies page, voice mode, and REST API.
+The `web/` directory contains the Next.js frontend — chat UI, buddies page, dual-provider voice mode, and REST API. Live at **[solanaclawd.com](https://solanaclawd.com)**.
 
 ```bash
 cd web && npm install && npm run build    # production build
@@ -633,22 +637,46 @@ cd web && npm run dev                     # dev server on :3000
 |---|---|
 | `/` | Chat interface |
 | `/buddies` | Blockchain Buddy gallery + hatch |
-| `/voice` | Voice mode (STT/TTS) |
+| `/voice` | Voice mode — ElevenLabs + Grok dual-provider |
 | `/api/chat` | Streaming chat API |
-| `/api/voice/tts` | Text-to-speech |
+| `/api/voice/tts` | ElevenLabs text-to-speech proxy |
+| `/api/voice/grok-tts` | Grok (xAI) text-to-speech proxy |
+| `/api/voice/agent` | ElevenLabs Conversational Agent (signed URL) |
+| `/api/voice/grok` | Grok Realtime Voice Agent (ephemeral token) |
 | `/api/share` | Conversation sharing |
+
+### Voice Mode
+
+The `/voice` page provides a **dual-provider voice experience** — toggle between **ElevenLabs** and **Grok** in the header:
+
+| Feature | ElevenLabs | Grok (xAI) |
+|---|---|---|
+| **Voice Agent** | Conversational AI via WebSocket | Realtime API with server VAD |
+| **TTS Voices** | Roger, Sarah, River, Will (4) | Rex, Eve, Ara, Sal, Leo (5) |
+| **Speech Tags** | — | `[laugh]` `[pause]` `<whisper>` `<emphasis>` `<slow>` |
+| **Live Tools** | — | Web search enabled during conversation |
+| **Auth Model** | Signed conversation URL | Ephemeral tokens (5-min TTL) |
+
+All API keys stay server-side — ElevenLabs uses signed URLs, Grok uses ephemeral tokens via `sec-websocket-protocol`.
+
+```bash
+# Required env vars (web/.env)
+ELEVEN_LABS_API_KEY=       # ElevenLabs TTS + Voice Agents
+ELEVENLABS_AGENT_ID=       # Your conversational agent ID
+XAI_API_KEY=               # xAI Grok voice + TTS
+```
 
 **Deploy to Netlify:**
 
 ```bash
-# In web/
-netlify deploy --prod --dir=.next
+netlify deploy --prod
 ```
 
 Or connect the GitHub repo and set:
-- **Build command:** `cd web && npm install && npm run build`
+- **Build command:** `npm --prefix web run build`
 - **Publish directory:** `web/.next`
 - **Custom domain:** `solanaclawd.com`
+- **Env vars:** `ELEVEN_LABS_API_KEY`, `ELEVENLABS_AGENT_ID`, `XAI_API_KEY`
 
 ### Solana Vault (AES-256-GCM)
 

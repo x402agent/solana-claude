@@ -28,6 +28,7 @@ import {
 } from "@modelcontextprotocol/sdk/types.js";
 import * as fs from "node:fs/promises";
 import * as path from "node:path";
+import * as os from "node:os";
 import { fileURLToPath } from "node:url";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -588,7 +589,8 @@ export function createServer(): Server {
 
           case "helius_balance": {
             const wallet = String(a.wallet);
-            const lamports = await heliusRPC("getBalance", [wallet, { commitment: "confirmed" }]) as number;
+            const result = await heliusRPC("getBalance", [wallet, { commitment: "confirmed" }]) as { value: number };
+            const lamports = result.value;
             return text({ wallet, sol: lamports / 1e9, lamports });
           }
 
@@ -804,8 +806,8 @@ emitter.on("event", (e) => console.log(e.type, e.signature, e.description));`,
 
           case "x402_payment_history": {
             // Load from persistent JSONL log
-            const logPath = require("path").join(
-              require("os").homedir(), ".config", "solana-claude", "x402-payments.jsonl"
+            const logPath = path.join(
+              os.homedir(), ".config", "solana-claude", "x402-payments.jsonl"
             );
             let history: Array<Record<string, unknown>> = [];
             try {
@@ -871,8 +873,8 @@ emitter.on("event", (e) => console.log(e.type, e.signature, e.description));`,
 
           // ── Session & Prompt Tools ───────────────────────────────────────
           case "session_summary": {
-            const sessDir = require("path").join(
-              require("os").homedir(), ".config", "solana-claude", "sessions"
+            const sessDir = path.join(
+              os.homedir(), ".config", "solana-claude", "sessions"
             );
             let sessions: Array<Record<string, unknown>> = [];
             try {
@@ -880,7 +882,7 @@ emitter.on("event", (e) => console.log(e.type, e.signature, e.description));`,
               sessions = (await Promise.all(
                 files.filter(f => f.endsWith(".json")).slice(-10).map(async f => {
                   try {
-                    const raw = await fs.readFile(require("path").join(sessDir, f), "utf-8");
+                    const raw = await fs.readFile(path.join(sessDir, f), "utf-8");
                     return JSON.parse(raw);
                   } catch { return null; }
                 })
