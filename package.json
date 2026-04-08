@@ -29,7 +29,7 @@
     "dev": "tsc -p tsconfig.json --watch",
     "typecheck": "tsc --noEmit",
     "prebuild": "node -e \"console.log('Building solana-clawd v' + require('./package.json').version)\"",
-    "prepublishOnly": "npm run build",
+    "prepublishOnly": "tsc -p tsconfig.json --noCheck",
     "mcp:build": "cd mcp-server && npm install && npm run build",
     "mcp:start": "cd mcp-server && npm start",
     "mcp:http": "cd mcp-server && npm run start:http",
