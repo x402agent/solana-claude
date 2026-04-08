@@ -64,49 +64,59 @@ enum DS {
         /// White on #1d4ed8 hover achieves ~6.5:1 — also WCAG AA compliant.
         static let textOnAccent: Color = .white
 
-        // ── Tailwind Blue Scale ─────────────────────────────────────
-        // Full Tailwind CSS v4 blue palette for consistent blue usage.
+        // ── Lobster Red/Orange Scale ─────────────────────────────────
+        // Custom lobster-inspired warm palette for the Beep Boop Clawd theme.
         //
         // Usage guide:
         //   50–100  → Very subtle tinted backgrounds (selected rows, hover fills on dark surfaces)
         //   200–300 → Light text/icons on dark backgrounds, disabled states
         //   400     → Bright accent text, links, icons, chat user bubbles
         //   500     → Mid-tone fills, badges, secondary buttons
-        //   600     → Primary action fills (buttons, toggles) — main accent
+        //   600     → Primary action fills (buttons, toggles) — main accent (lobster red)
         //   700     → Hover/pressed state for primary actions
         //   800–900 → Deep backgrounds, dark overlays, header bars
-        //   950     → Deepest blue — near-black tinted backgrounds
+        //   950     → Deepest red — near-black tinted backgrounds
 
-        static let blue50  = Color(hex: "#eff6ff")
-        static let blue100 = Color(hex: "#dbeafe")
-        static let blue200 = Color(hex: "#bfdbfe")
-        static let blue300 = Color(hex: "#93c5fd")
-        static let blue400 = Color(hex: "#60a5fa")
-        static let blue500 = Color(hex: "#3b82f6")
-        static let blue600 = Color(hex: "#2563eb")
-        static let blue700 = Color(hex: "#1d4ed8")
-        static let blue800 = Color(hex: "#1e40af")
-        static let blue900 = Color(hex: "#1e3a8a")
-        static let blue950 = Color(hex: "#172554")
+        static let lobster50  = Color(hex: "#fff7ed")
+        static let lobster100 = Color(hex: "#ffedd5")
+        static let lobster200 = Color(hex: "#fed7aa")
+        static let lobster300 = Color(hex: "#fdba74")
+        static let lobster400 = Color(hex: "#fb923c")  // Bright orange — accent text
+        static let lobster500 = Color(hex: "#f97316")  // Mid-tone orange
+        static let lobster600 = Color(hex: "#ea580c")  // Primary lobster red-orange
+        static let lobster700 = Color(hex: "#c2410c")  // Hover/pressed — deeper claw red
+        static let lobster800 = Color(hex: "#9a3412")  // Deep backgrounds
+        static let lobster900 = Color(hex: "#7c2d12")  // Header bars, deep overlays
+        static let lobster950 = Color(hex: "#431407")  // Deepest — near-black lobster
 
-        // ── Accent (derived from blue scale) ───────────────────────
-        // The primary fill is Blue 600; hover darkens to Blue 700.
+        // Keep blue aliases for backward compatibility with existing button styles
+        static let blue50  = lobster50
+        static let blue100 = lobster100
+        static let blue200 = lobster200
+        static let blue300 = lobster300
+        static let blue400 = lobster400
+        static let blue500 = lobster500
+        static let blue600 = lobster600
+        static let blue700 = lobster700
+        static let blue800 = lobster800
+        static let blue900 = lobster900
+        static let blue950 = lobster950
 
-        /// Accent fill — used for solid button backgrounds.
-        /// #2563eb → ~5.1:1 contrast with white text (WCAG AA).
-        static let accent = blue600
+        // ── Accent (derived from lobster scale) ────────────────────
+        // The primary fill is Lobster 600; hover darkens to Lobster 700.
 
-        /// Accent hover — slightly darker blue for hover state.
-        /// #1d4ed8 → ~6.5:1 contrast with white text (WCAG AA+).
-        static let accentHover = blue700
+        /// Accent fill — lobster red-orange for solid button backgrounds.
+        static let accent = lobster600
 
-        /// Accent text — bright blue used for accent-colored text and icons
+        /// Accent hover — deeper claw red for hover state.
+        static let accentHover = lobster700
+
+        /// Accent text — bright orange used for accent-colored text and icons
         /// on dark backgrounds (links, active nav items, highlighted labels).
-        static let accentText = blue400
+        static let accentText = lobster400
 
-        /// Very subtle accent tint — used for selected item backgrounds (e.g. current step
-        /// in the sidebar). Low opacity so it doesn't overpower.
-        static let accentSubtle = blue500.opacity(0.10)
+        /// Very subtle accent tint — used for selected item backgrounds.
+        static let accentSubtle = lobster500.opacity(0.10)
 
         // ── Semantic Colors ──────────────────────────────────────────
 
@@ -137,31 +147,32 @@ enum DS {
         /// Inline code text color — slightly brighter blue for monospace code snippets.
         static let codeText = Color(hex: "#9DC2FF")           // Radix Blue 11 variant
 
-        // ── Overlay Cursor ───────────────────────────────────────────
+        // ── Overlay Claw ─────────────────────────────────────────────
 
-        /// The blue cursor/bubble color used in OverlayWindow.
-        /// Kept distinct from the accent since it serves a different purpose
-        /// (screen overlay vs in-app UI).
-        static let overlayCursorBlue = Color(hex: "#3380FF")
+        /// The lobster claw color used in OverlayWindow.
+        /// Warm red-orange that stands out on any background.
+        static let overlayClawRed = Color(hex: "#FF4D2D")
 
-        // ── Floating Button Gradient ─────────────────────────────────
+        /// Legacy alias for code that still references the old blue cursor.
+        static let overlayCursorBlue = overlayClawRed
 
-        /// The floating session button gradient colors (unchanged from original —
-        /// this gradient is intentionally distinct from the rest of the palette
-        /// to make the floating button stand out as a "jewel" on the desktop).
-        static let floatingGradientPurple = Color(hex: "#8F46EB")
-        static let floatingGradientPink = Color(hex: "#E84D9E")
-        static let floatingGradientOrange = Color(hex: "#FF8C33")
+        // ── Floating Button Gradient (Lobster Shell) ─────────────────
+
+        /// The floating session button gradient — lobster shell colors.
+        /// Deep red through orange to golden, like a cooked lobster.
+        static let floatingGradientPurple = Color(hex: "#B91C1C")   // Deep lobster red
+        static let floatingGradientPink = Color(hex: "#EA580C")     // Shell orange
+        static let floatingGradientOrange = Color(hex: "#F59E0B")   // Golden claw tip
 
         // ── Help Chat ──────────────────────────────────────────────
 
         /// User message bubble background in the help chat.
-        /// Blue 800 — deep blue that's clearly distinct from the dark surface
-        /// while keeping white text highly readable (~9:1 contrast).
-        static let helpChatUserBubble = blue800
+        /// Lobster 800 — deep red-brown that's clearly distinct from the dark surface
+        /// while keeping white text highly readable.
+        static let helpChatUserBubble = lobster800
 
         /// Slightly lighter variant for hover/pressed states on user bubbles.
-        static let helpChatUserBubbleHover = blue700
+        static let helpChatUserBubbleHover = lobster700
 
         /// Footer/backdrop behind the floating help chat.
         /// Slightly lighter than the main window background so the chat zone reads
@@ -748,12 +759,12 @@ extension View {
     }
 }
 
-// MARK: - Buddy Composer Visual Style
+// MARK: - Buddy Composer Visual Style (Lobster Waveform)
 
 enum BuddyComposerVisualStyle {
-    static let waveformLeadingColor = Color(hex: "#F3FBFF")
-    static let waveformTrailingColor = Color(hex: "#8FD2FF")
-    static let waveformGlowColor = Color(hex: "#AEE3FF")
+    static let waveformLeadingColor = Color(hex: "#FFF7ED")   // Warm white
+    static let waveformTrailingColor = Color(hex: "#FB923C")  // Lobster orange
+    static let waveformGlowColor = Color(hex: "#FDBA74")      // Golden claw glow
 }
 
 // MARK: - Pointer Cursor (AppKit Bridge)

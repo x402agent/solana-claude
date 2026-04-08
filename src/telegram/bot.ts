@@ -273,6 +273,15 @@ class TelegramAPI {
         { command: "video", description: "Generate video with Grok" },
         { command: "vision", description: "Analyze an image with Grok" },
         { command: "file", description: "Chat with a file (PDF, CSV)" },
+        { command: "tweet", description: "Post a tweet on X" },
+        { command: "reply", description: "Reply to a tweet on X" },
+        { command: "deltweet", description: "Delete one of your tweets" },
+        { command: "like", description: "Like a tweet on X" },
+        { command: "rt", description: "Retweet a tweet on X" },
+        { command: "tsearch", description: "Search tweets on X" },
+        { command: "mytweets", description: "Show your recent tweets" },
+        { command: "autotweet", description: "Control the auto-tweet daemon" },
+        { command: "smarttweet", description: "Generate a tweet draft with Grok" },
       ],
     });
   }
@@ -281,6 +290,20 @@ class TelegramAPI {
 // ─── Bot Class ────────────────────────────────────────────────────────────────
 
 export class SolanaClaudeBot {
+  private static readonly adminOnlyCommands = new Set([
+    "snipe",
+    "tweet",
+    "reply",
+    "deltweet",
+    "like",
+    "rt",
+    "autotweet",
+  ]);
+
+  private static readonly privateChatOnlyCommands = new Set([
+    "vault",
+  ]);
+
   private api: TelegramAPI;
   private config: TelegramBotConfig;
   private state: BotState;
@@ -380,6 +403,7 @@ export class SolanaClaudeBot {
 
     return {
       chatId,
+      chatType: msg.chat.type,
       userId,
       username,
       session,
@@ -452,7 +476,18 @@ export class SolanaClaudeBot {
     this.state.messageCount++;
 
     try {
-      if (rawCmd === "snipe" && !this.isAdmin(ctx.userId)) {
+      if (
+        SolanaClaudeBot.privateChatOnlyCommands.has(rawCmd) &&
+        msg.chat.type !== "private"
+      ) {
+        await ctx.reply("⛔ This command is only available in a direct message with the bot.");
+        return;
+      }
+
+      if (
+        SolanaClaudeBot.adminOnlyCommands.has(rawCmd) &&
+        !this.isAdmin(ctx.userId)
+      ) {
         await ctx.reply("⛔ This command is restricted to configured admin users.");
         return;
       }
@@ -520,6 +555,22 @@ export class SolanaClaudeBot {
         case "video": return void cmdVideo(ctx);
         case "vision": return void cmdVision(ctx);
         case "file": return void cmdFile(ctx);
+        case "tweet": return void cmdTweet(ctx);
+        case "reply": return void cmdReply(ctx);
+        case "deltweet": return void cmdDelTweet(ctx);
+        case "like": return void cmdLike(ctx);
+        case "rt": return void cmdRT(ctx);
+        case "tsearch": return void cmdTSearch(ctx);
+        case "mytweets": return void cmdMyTweets(ctx);
+        case "autotweet":
+          return void cmdAutoTweet(
+            ctx,
+            msg.chat.id,
+            async (chatId, text) => {
+              await this.api.sendMessage(chatId, text);
+            },
+          );
+        case "smarttweet": return void cmdSmartTweet(ctx);
         case "status": return void cmdStatus(ctx, this.state);
         default:
           await ctx.reply(`❓ Unknown command: \`/${rawCmd}\`\n\nUse /help for the full list.`);

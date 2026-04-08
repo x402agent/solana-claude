@@ -69,6 +69,7 @@ export interface BotState {
 
 export interface CommandContext {
   chatId: number;
+  chatType: string;
   userId: number;
   username?: string;
   session: TelegramSession;

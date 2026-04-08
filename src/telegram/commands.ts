@@ -149,6 +149,16 @@ export async function cmdHelp(ctx: CommandContext): Promise<void> {
     `/vault get <id> — show a masked secret\n` +
     `/vault delete <id> — remove an entry\n` +
     `/vault lock — wipe the vault key from memory\n\n` +
+    `*🐦 X / Twitter*\n` +
+    `/tweet <text> — post a tweet\n` +
+    `/reply <tweet_id> <text> — reply to a tweet\n` +
+    `/deltweet <tweet_id> — delete your tweet\n` +
+    `/like <tweet_id> — like a tweet\n` +
+    `/rt <tweet_id> — retweet a tweet\n` +
+    `/tsearch <query> — search recent tweets\n` +
+    `/mytweets — show recent tweets from the account\n` +
+    `/autotweet ... — control the auto-tweet daemon\n` +
+    `/smarttweet <topic> — generate a tweet draft\n\n` +
     `*🧠 xAI / Grok*\n` +
     `/grok <question> — chat with Grok AI\n` +
     `/xsearch <query> — search X/Twitter live\n` +
@@ -947,6 +957,11 @@ export async function cmdVault(ctx: CommandContext): Promise<void> {
   const sub = ctx.args[0]?.toLowerCase();
 
   try {
+    if (ctx.chatType !== "private") {
+      await ctx.reply("⛔ Vault commands are only available in a direct message with the bot.");
+      return;
+    }
+
     const vault = await openVaultForChat(ctx);
     if (!vault) return;
 
