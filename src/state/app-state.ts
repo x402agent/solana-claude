@@ -34,7 +34,7 @@ export type MemoryEntry = {
 /** OODA cycle phase */
 export type OODAPhase = "observe" | "orient" | "decide" | "act" | "learn" | "idle";
 
-/** A running or completed agent task (adapted from Claude Code's LocalAgentTask) */
+/** A running or completed agent task (adapted from Clawd Code's LocalAgentTask) */
 export type AgentTask = {
   id: string;
   type: "research" | "analysis" | "ooda" | "scanner" | "monitor" | "dream";
