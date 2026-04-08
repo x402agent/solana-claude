@@ -7,6 +7,9 @@ const withBundleAnalyzer = bundleAnalyzer({
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  // Exclude wiki sub-project from Next.js compilation
+  eslint: { ignoreDuringBuilds: false, dirs: ["app", "components", "hooks", "lib"] },
+  typescript: { ignoreBuildErrors: false },
   experimental: {
     optimizePackageImports: ["lucide-react", "@radix-ui/react-dialog", "@radix-ui/react-dropdown-menu", "@radix-ui/react-tooltip"],
   },

@@ -618,6 +618,102 @@ Cypherpunk Web Dashboard in `/tailclawd`: CRT-styled command center bridging Eng
 
 ---
 
+## CLAWD Wiki — Trading Intelligence Knowledge Base
+
+Inspired by [Karpathy's LLM Wiki](https://github.com/karpathy/llm-wiki), adapted for Solana trading agents. A self-evolving knowledge base where OODA loops, scanner signals, and agent memory compile into structured wiki articles.
+
+### Architecture
+
+```
+┌──────────────────────────────────────────────────────┐
+│                    CLAWD Wiki                         │
+│                                                      │
+│  ┌──────────────┐  ┌──────────────┐  ┌────────────┐ │
+│  │  Next.js UI   │  │  REST API    │  │  Agent API │ │
+│  │  :3777        │  │  /api/       │  │  (MCP)     │ │
+│  └──────┬────────┘  └──────┬───────┘  └──────┬─────┘ │
+│         └────────┬─────────┘                 │       │
+│         ┌───────▼──────────────────────────▼──────┐ │
+│         │           Wiki Store (JSON)              │ │
+│         │  ┌─────────┐ ┌─────────┐ ┌───────────┐  │ │
+│         │  │  KNOWN   │ │ LEARNED │ │ INFERRED  │  │ │
+│         │  │  (fresh) │ │ (valid) │ │ (tentative│  │ │
+│         │  └─────────┘ └─────────┘ └───────────┘  │ │
+│         └──────────────────────────────────────────┘ │
+│                          ▲                           │
+│  ┌───────┐ ┌─────────┐  │  ┌──────────┐             │
+│  │Scanner│→│ OODA    │→─┘  │  Dream   │             │
+│  │signals│ │ loops   │     │  agent   │             │
+│  └───────┘ └─────────┘     └──────────┘             │
+│              Helius RPC + Birdeye + Solana Tracker    │
+└──────────────────────────────────────────────────────┘
+```
+
+### Categories
+
+| Category | Icon | What It Covers |
+|----------|------|---------------|
+| **Tokens** | 💰 | Token profiles — SOL, BONK, JUP, memecoins |
+| **Wallets** | 👛 | Smart money, whale wallets, PnL tracking |
+| **Protocols** | 🔗 | Jupiter, Raydium, Pump.fun, Marinade |
+| **Strategies** | 🎯 | OODA loops, scalping, arbitrage, sniper configs |
+| **Signals** | 📡 | Market patterns, rug detection, alpha signals |
+| **Agents** | 🤖 | Agent configs, Dream consolidation, fleet management |
+| **Trade Log** | 📜 | Executed trades, PnL records, post-mortems |
+| **Research** | 🔬 | Deep-dive analysis, sector reports |
+| **Glossary** | 📖 | DeFi/Solana term definitions |
+
+### Memory Tiers (SolanaOS Epistemology)
+
+- **KNOWN** (blue) — Fresh market data from API calls. Auto-expires.
+- **LEARNED** (green) — Validated patterns confirmed by Dream agent. Permanent.
+- **INFERRED** (amber) — Tentative signals from scanners. Promoted or expired by Dream.
+
+### Quick Start
+
+```bash
+cd web/wiki
+npm install
+npm run seed     # Pre-populate with Solana trading knowledge
+npm run dev      # http://localhost:3777
+```
+
+### REST API
+
+```
+GET  /api/articles                  -- All articles
+GET  /api/articles?q=bonk           -- Full-text search
+GET  /api/articles?category=token   -- Filter by category
+GET  /api/articles?tier=LEARNED     -- Filter by memory tier
+GET  /api/articles?tree=true        -- Sidebar navigation tree
+GET  /api/articles?ooda=true        -- OODA context (for agent injection)
+GET  /api/articles?slug=ooda-loop   -- Single article by slug
+POST /api/articles                  -- Create article (JSON body)
+PUT  /api/articles                  -- Update article (requires id)
+DELETE /api/articles?id=xxx         -- Soft-delete
+```
+
+### Agent Integration
+
+Agents write to the wiki during OODA loops:
+- **OBSERVE:** Scanner writes KNOWN articles (token prices, trending data)
+- **ORIENT:** Analyst writes research articles with signal scores
+- **LEARN:** Dream agent promotes INFERRED → LEARNED, expires stale signals
+- **OODA context:** `GET /api/articles?ooda=true` returns structured memory for prompt injection
+
+### Seed Articles (6 foundational)
+
+| Article | Category | Tier |
+|---------|----------|------|
+| OODA Trading Loop | Strategy | LEARNED |
+| SOL (Solana) | Token | LEARNED |
+| Pump.fun Bonding Curve | Protocol | LEARNED |
+| Three-Tier Memory System | Agent | LEARNED |
+| Jupiter Aggregator | Protocol | LEARNED |
+| Rug Pull Detection Patterns | Signal | LEARNED |
+
+---
+
 ## Solana Worker Swarm (iii SDK)
 
 The `tailclawd/quickstart/` directory contains a **four-worker distributed swarm** built on the [iii SDK](https://iii.dev) -- a cross-language worker framework that lets TypeScript, Rust, and Python workers call each other as if they were local functions.
