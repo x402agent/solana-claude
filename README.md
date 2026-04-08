@@ -10,6 +10,10 @@ ___/ / /_/ / / /_/ / / / / /_/ /   / /___/ / /_/ / /_/ / /_/ /  __/
 
 # solana-clawd
 
+Powered by $CLAWD Token on Solana and Pump.fun
+
+8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump
+
 **The Clawd Code agentic engine, rebuilt for Solana.**
 
 [![MIT License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
