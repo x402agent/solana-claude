@@ -41,6 +41,13 @@
     "birth": "node dist/entrypoints/clawd.js birth",
     "spinners": "node dist/entrypoints/clawd.js spinners",
     "setup": "bash scripts/setup.sh",
+    "lint": "biome check src/",
+    "lint:fix": "biome check --write src/",
+    "format": "biome format --write src/",
+    "format:check": "biome format src/",
+    "check": "npm run typecheck && npm run lint",
+    "ci": "npm run check && npm run build",
+    "clean": "node -e \"require('fs').rmSync('dist', { recursive: true, force: true })\"",
     "skills:catalog": "node scripts/generate-skills-catalog.js",
     "skills:serve": "node scripts/generate-skills-catalog.js && cp skills/catalog.json web/skills/catalog.json && npx serve web/skills -p 3333"
   },
@@ -145,11 +152,14 @@
   "engines": {
     "node": ">=20"
   },
+  "packageManager": "npm@10.9.2",
+  "sideEffects": false,
   "keywords": [
     "solana",
     "ai",
     "agent",
     "mcp",
+    "model-context-protocol",
     "clawd",
     "trading",
     "agentic",
@@ -165,7 +175,11 @@
     "wallet",
     "jupiter",
     "raydium",
-    "pumpfun"
+    "pumpfun",
+    "helius",
+    "metaplex",
+    "ooda",
+    "web3"
   ],
   "license": "MIT",
   "repository": {
@@ -179,6 +193,15 @@
   "files": [
     "dist",
     "README.md",
-    "LICENSE"
-  ]
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "funding": {
+    "type": "individual",
+    "url": "https://github.com/x402agent/solana-clawd"
+  }
 }

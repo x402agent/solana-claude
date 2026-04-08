@@ -1,0 +1,91 @@
+name: CI
+
+on:
+  push:
+    branches: [main, newnew]
+  pull_request:
+    branches: [main, newnew]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build & Check
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [20, 22]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Format check
+        run: npm run format:check
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Build
+        run: npm run build
+
+      - name: Verify CLI entrypoint
+        run: node dist/entrypoints/clawd.js --version
+
+      - name: Verify package exports
+        run: |
+          node -e "import('solana-clawd').then(m => { if (!m.getBuiltInAgents) throw new Error('missing export') })" || \
+          node -e "const m = require('./dist/index.js'); if (!m.getBuiltInAgents) throw new Error('missing export')"
+
+  mcp-server:
+    name: MCP Server Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install root deps
+        run: npm ci
+
+      - name: Build MCP server
+        run: npm run mcp:build
+
+  pkg-size:
+    name: Package Size
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install & build
+        run: npm ci && npm run build
+
+      - name: Pack and report size
+        run: |
+          npm pack --dry-run 2>&1 | tail -5
+          SIZE=$(npm pack --dry-run 2>&1 | grep 'total files' || echo "check manually")
+          echo "## Package size" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          npm pack --dry-run 2>&1 >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY

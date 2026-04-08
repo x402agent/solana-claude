@@ -12,7 +12,9 @@
  *   npx solana-clawd --version    # version
  */
 
-const VERSION = '1.6.0'
+import { createRequire } from 'node:module'
+const require = createRequire(import.meta.url)
+const { version: VERSION } = require('../../package.json')
 
 const c = {
   reset: '\x1b[0m',
