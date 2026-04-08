@@ -1180,124 +1180,122 @@ solana-clawd/
 │   │   └── index.ts      STDIO transport (Clawd Desktop)
 │   ├── Dockerfile
 │   └── fly.toml
-├── src/
+├── src/                  Core engine (58 subsystems, 400+ source files)
 │   ├── animations/       $CLAWD unicode spinners (9 custom)
-│   │   ├── clawd-frames.ts    Braille-grid spinner definitions
-│   │   ├── spinner.ts         createClawdSpinner / withSpinner
-│   │   ├── birth-ceremony.ts  Animated buddy hatching sequence
-│   │   └── index.ts
-│   ├── buddy/            Blockchain Buddy companion system
-│   │   ├── blockchain-types.ts   18 species, 8 trading personalities
-│   │   ├── blockchain-sprites.ts ASCII art sprites (multi-frame)
-│   │   ├── blockchain-wallet.ts  Per-buddy simulated wallets
-│   │   ├── companion.ts          Buddy creation + formatting
-│   │   ├── CompanionSprite.tsx   React component
-│   │   ├── useBuddyNotification.tsx  Hook for buddy alerts
-│   │   └── index.ts
+│   ├── buddy/            Blockchain Buddy companion system (18 species)
 │   ├── helius/           Helius RPC + DAS + Webhooks + WebSocket listener
-│   │   ├── helius-client.ts     HTTP client (RPC, DAS, enhanced txs, priority fees)
-│   │   ├── onchain-listener.ts  WebSocket (account/tx/logs/slot/signature/enhanced)
-│   │   └── index.ts
-│   ├── state/            AppState (adapted from Clawd Code)
-│   │   ├── store.ts      Reactive store (pure TS, no React)
-│   │   └── app-state.ts  OODA phases, memory tiers, permissions, agent fleet
-│   ├── agents/           Agent definitions
-│   │   └── built-in-agents.ts  Explore, Scanner, OODA, Dream, Analyst, Monitor, Metaplex
-│   ├── metaplex/         Metaplex Agent Registry integration
-│   │   ├── metaplex-types.ts   Types, networks, Clawd role templates
-│   │   ├── agent-minter.ts     Mint agents via Metaplex API
-│   │   ├── agent-registry.ts   Register, read, delegate, wallet ops
-│   │   └── index.ts
-│   ├── tools/            Tool definitions and registry
-│   │   └── tool-registry.ts    ToolDef interface, registry, executor
-│   ├── services/          Unified data + agent layer
-│   │   ├── solanaTrackerAPI.ts  Unified client (Solana Tracker + Helius + Birdeye + CoinGecko)
-│   │   └── solanaAgent.ts       Autonomous agent (OODA, research, watchlist, memory)
-│   ├── telegram/          Full Telegram trading bot (60+ commands)
-│   │   ├── bot.ts               SolanaClaudeBot class (long-poll + webhook)
-│   │   ├── commands.ts          60+ command handlers
-│   │   ├── types.ts             Session, signal, sniper types
-│   │   ├── pump-sniper.ts       PumpPortal WebSocket scanner + sniper
-│   │   ├── xai.ts               xAI/Grok integration (vision, gen, search)
-│   │   ├── twitter.ts           Twitter/X OAuth 1.0a + auto-tweet daemon
-│   │   └── index.ts             Entry point
-│   ├── vault/             AES-256-GCM encrypted secret store
-│   ├── engine/           Permission + query engine
-│   ├── coordinator/      Multi-agent coordinator
-│   ├── memory/           Memory extraction (KNOWN/LEARNED/INFERRED)
-│   ├── gateway/          SSE transport (gateway bridge)
-│   ├── tasks/            Task lifecycle manager
+│   ├── state/            AppState (Zustand — OODA phases, memory, permissions)
+│   ├── agents/           7 built-in agents (Explore, Scanner, OODA, Dream, Analyst, Monitor, Metaplex)
+│   ├── metaplex/         MPL Core agent minting + identity PDAs
+│   ├── pump/             Pump.fun bonding curve scanner + client
+│   ├── telegram/         Full Telegram trading bot (60+ commands, pump sniper, xAI/Grok, Twitter)
+│   ├── engine/           QueryEngine (multi-LLM), PermissionEngine (deny-first), RiskEngine (128-bit)
+│   ├── coordinator/      Multi-agent orchestrator (fan-out, task notifications)
+│   ├── memory/           KNOWN/LEARNED/INFERRED auto-extraction
+│   ├── vault/            AES-256-GCM encrypted secret store
+│   ├── gateway/          SSE/WebSocket transport bridge
+│   ├── bridge/           Remote bridge (JWT, device auth, session management — 34 modules)
+│   ├── voice/            Voice mode (ElevenLabs + Anthropic providers)
+│   ├── monitor/          Birdeye stream, Solana Tracker, wallet monitoring
+│   ├── tools/            Tool registry + executor (31 MCP tools)
+│   ├── services/         autoDream, SessionMemory, analytics, MCP, LSP, compact (19 modules)
+│   ├── tasks/            DreamTask, LocalAgent, RemoteAgent, LocalShell, Monitor
 │   ├── skills/           Skill registry and loader
-│   │   ├── skill-registry.ts   SkillRegistry class, frontmatter parser, bootstrap
-│   │   ├── bundledSkills.ts    Bundled skill definitions
-│   │   └── loadSkillsDir.ts    Filesystem skill loader
-│   ├── entrypoints/      CLI entry (demo, birth, spinners)
+│   ├── server/           Web server, PTY terminal, session manager, auth adapters
+│   ├── cli/              CLI handlers, transports, structured I/O
+│   ├── commands/         60+ slash commands (agents, memory, plan, config, permissions...)
+│   ├── components/       113 Ink/React UI components
+│   ├── hooks/            83 custom hooks
+│   ├── vim/              Vi/Vim editor mode
+│   ├── entrypoints/      CLI entry (demo, birth, spinners, wallet)
 │   └── shared/           Message types, model catalog, tool policy
-├── solana-tracker/       Solana data API server + client
-│   ├── server/
-│   │   ├── index.js             Express + WebSocket server
-│   │   ├── services/
-│   │   │   ├── helius.js        Helius RPC/DAS/Wallet API service
-│   │   │   └── solanaTracker.js Solana Tracker Data API service
-│   │   └── routes/
-│   │       ├── wallet.js        Helius wallet endpoints
-│   │       ├── das.js           Helius DAS endpoints
-│   │       ├── tracking.js      Composite tracking endpoints
-│   │       ├── tokens.js        Solana Tracker token endpoints (trending/chart/trades/pools)
-│   │       └── trading.js       Trading endpoints (PnL/research/overview/scoring)
-│   └── client/            React dashboard (wallet tracker UI)
-├── skills/              88 SKILL.md knowledge documents (agentskills.io format)
-│   ├── pump-sdk-core/SKILL.md
-│   ├── pumpfun-trading/SKILL.md
-│   ├── solanaos/SKILL.md
-│   ├── coding-agent/SKILL.md
-│   ├── ... (89 total)
-│   └── catalog.json     Generated skill manifest
-├── web/
-│   └── skills/index.html  Static skills catalog browser
-├── scripts/
-│   ├── setup.sh           One-shot setup
-│   └── generate-skills-catalog.js  Catalog generator
-├── tailclawd/           Cypherpunk Telegram Gateway + Worker Swarm
-│   └── quickstart/      iii SDK worker swarm
-│       ├── workers/
-│       │   ├── client/          TS orchestrator (7 HTTP endpoints)
-│       │   ├── compute-worker/  Rust tx builder (Jupiter, fees, risk)
-│       │   ├── data-worker/     Python analytics (balances, holders)
-│       │   └── payment-worker/  TS tx submission (transfers, airdrop)
-│       ├── docker-compose.yaml  Spin up all 4 workers
-│       └── iii-config.yaml      iii engine configuration
-├── docs/                 Specs including risk-engine-spec.md
+├── web/                  Next.js frontend — solanaclawd.com
+│   ├── app/              Chat, Buddies, Voice (ElevenLabs + Grok dual-provider)
+│   ├── components/       UI components (Button, Dialog, Tabs, Toast, etc.)
+│   ├── hooks/            useConversation, useToast, useTheme, usePresence...
+│   └── lib/              Store (Zustand), API client, search, export
+├── gateway/              HTTP API + Telegram bot + Birdeye WebSocket
+│   ├── src/index.ts      Express REST (14 endpoints: balance, tokens, txs, price, search...)
+│   ├── src/telegram.ts   TelegramBot class (long-poll, access control)
+│   ├── src/birdeye.ts    BirdeyeWS (live prices, new listings, whale alerts)
+│   └── src/solana.ts     Helius RPC + wallet helpers
+├── packages/
+│   └── agentwallet/      Encrypted wallet vault SDK
+│       ├── src/vault.ts  AES-256-GCM encrypted Solana + EVM keypair storage
+│       ├── src/server.ts Express HTTP API (port 9099, Bearer auth)
+│       ├── src/cli.ts    CLI tool (create, import, export, deploy)
+│       └── src/deploy/   E2B sandbox + Cloudflare Workers deployment
+├── beepboop/             macOS menu bar companion app (SwiftUI)
+│   ├── leanring-buddy/   Claude vision + push-to-talk voice + screen capture
+│   │   ├── CompanionManager.swift    Central state machine (1026 lines)
+│   │   ├── ElevenLabsTTSClient.swift ElevenLabs voice output
+│   │   ├── BuddyDictationManager.swift  Voice pipeline
+│   │   └── OverlayWindow.swift       Lobster claw overlay (points at UI)
+│   └── worker/           Cloudflare Worker proxy (Claude, ElevenLabs, AssemblyAI, Solana RPC)
+├── MCP/                  X/Twitter FastMCP server (Python, 140+ tools)
+│   └── x-mcp/           OAuth1/OAuth2, tool allowlisting, Grok test client
+├── llm-wiki-tang/        Clawd Vault — research knowledge base
+│   ├── web/              Next.js 16 dashboard (PDF viewer, wiki renderer)
+│   ├── api/              FastAPI backend (auth, OCR, document processing)
+│   └── mcp/              MCP tools (guide, search, read, write, delete)
+├── tailclawd/            TailClawd — web UI wrapper via Tailscale
+│   ├── src/proxy.ts      HTTP proxy with OTel tracing (38KB)
+│   ├── src/ui.html       Full UI (4 tabs, activity sidebar — 30KB)
+│   └── quickstart/       iii SDK worker swarm (TS + Rust + Python)
+├── elevenlabs-mcp-main/  ElevenLabs MCP server (TTS, voice agents, cloning)
+├── formal_verification/  Lean 4 risk engine specification (SPEC.md)
+├── solana-tradingview-advanced-chart-example-main/
+│                         TradingView Advanced Charts + Solana Tracker reference
+├── skills/               95 SKILL.md knowledge documents
+│   └── catalog.json      Generated skill manifest
 ├── examples/
-│   ├── listen-wallet.ts  Real-time wallet monitor
-│   └── ooda-loop.ts      Full OODA cycle demo
-├── SOUL.md               Agent identity
+│   ├── blockchain-buddies-demo.ts  Full buddy demo
+│   ├── listen-wallet.ts            Real-time wallet monitor
+│   ├── ooda-loop.ts                Full OODA cycle demo
+│   └── x402-solana.ts              x402 micropayment protocol demo
+├── docs/
+│   ├── architecture.md             System overview + data flow diagrams (48KB)
+│   ├── migrate-from-openclaw.md    clawd migrate guide + config mappings
+│   └── risk-engine-spec.md         128-bit perp DEX risk engine
+├── scripts/
+│   ├── setup.sh                    One-shot setup
+│   └── generate-skills-catalog.js  Catalog generator
+├── SOUL.md               Agent identity + epistemological model
 ├── strategy.md           Multi-venue trading strategy (SolanaOS v2.0)
-└── .env.example          All env vars documented
+└── .env.example          All env vars documented (55 lines)
 ```
 
 ---
 
 ## Environment Variables
 
+See [`.env.example`](.env.example) for the full list (55 lines with comments). Key groups:
+
 ```bash
-# Recommended -- free at helius.dev (1M credits/month)
-HELIUS_API_KEY=            # RPC, DAS, enhanced txs, webhooks, WebSocket
-HELIUS_RPC_URL=            # auto-built from key if blank
-HELIUS_WSS_URL=            # WebSocket endpoint
+# Core (free at helius.dev)
+HELIUS_API_KEY=               # RPC, DAS, enhanced txs, webhooks, WebSocket
+SOLANA_TRACKER_API_KEY=       # Trend data, token info
 
-# Optional -- public APIs work without these
-SOLANA_TRACKER_API_KEY=    # trend data, enhanced token info
+# LLM providers (pick one+)
+ANTHROPIC_API_KEY=            # Claude
+OPENROUTER_API_KEY=           # Multi-model routing
+XAI_API_KEY=                  # Grok (chat, voice, vision, search)
 
-# Optional -- MCP mode uses Clawd's built-in model
-OPENROUTER_API_KEY=        # or XAI_API_KEY or ANTHROPIC_API_KEY
+# Voice
+ELEVEN_LABS_API_KEY=          # ElevenLabs TTS + STT + Voice Agents
+ELEVENLABS_AGENT_ID=          # Conversational Agent ID
 
-# Optional -- secure public deployment
-MCP_API_KEY=               # Bearer token for remote MCP server
+# Telegram
+TELEGRAM_BOT_TOKEN=           # From @BotFather
+TELEGRAM_CHAT_ID=             # Alert destination
 
-# Optional -- Metaplex agent minting
-SOLANA_RPC_URL=            # Custom RPC endpoint (defaults to devnet)
-SOLANA_SECRET_KEY=         # JSON array of secret key bytes
+# Wallet (optional — signal-only works without)
+SOLANA_PUBLIC_KEY=            # Default wallet
+SOLANA_PRIVATE_KEY=           # Live trade execution only
+VAULT_PASSPHRASE=             # AES-256-GCM master key
+
+# Deployment
+MCP_API_KEY=                  # Bearer token for remote MCP server
 ```
 
 ---
@@ -1306,11 +1304,12 @@ SOLANA_SECRET_KEY=         # JSON array of secret key bytes
 
 | Doc | Description |
 | --- | --- |
-| [Architecture](docs/architecture.md) | System overview, data flow diagrams, 10 major subsystems |
-| [Migrate from OpenClaw](docs/migrate-from-openclaw.md) | `clawd migrate` guide with config mappings and troubleshooting |
-| [Contributing](CONTRIBUTING.md) | Setup, code style, PR process, how to add species/spinners |
+| [Architecture](docs/architecture.md) | System overview, data flow diagrams, directory structure, 10 major subsystems (48KB) |
+| [Migrate from OpenClaw](docs/migrate-from-openclaw.md) | `clawd migrate` guide — config mappings, memory tier conversion, wallet migration, troubleshooting |
 | [Risk Engine Spec](docs/risk-engine-spec.md) | 128-bit perpetual DEX risk engine design |
-| [SOUL.md](SOUL.md) | Agent identity and core principles |
+| [Formal Verification](formal_verification/SPEC.md) | Lean 4 property specification (`prop_protected_principal`, `prop_conservation`) |
+| [Contributing](CONTRIBUTING.md) | Setup, code style, PR process, walkthroughs for adding species/spinners |
+| [SOUL.md](SOUL.md) | Agent identity, 3-tier epistemology, permission principles |
 
 ## Contributing
 
@@ -1321,10 +1320,11 @@ High-impact areas:
 - **New Solana tools** -- DeFi protocols, NFT markets, compressed NFTs
 - **LaserStream gRPC** -- ultra-low latency with `helius-laserstream` package
 - **Persistent memory** -- swap in-process memory for Honcho v3 or SQLite
-- **Voice integration** -- SolanaOS STT/TTS surfaces
 - **Yellowstone gRPC** -- Geyser plugin integration
 - **New Buddy species** -- submit a PR with sprites + trading config
 - **New spinners** -- braille-grid art welcome
+- **Voice agent skills** -- teach the voice agents new Solana-specific capabilities
+- **Mobile companion** -- Android port of the beepboop macOS menu bar app
 
 ---
 
