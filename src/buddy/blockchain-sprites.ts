@@ -522,6 +522,8 @@ export function renderBlockchainFace(species: BlockchainSpecies, eye: Eye): stri
     case 'jupiter':
     case 'raydium':
       return `(${eye}${eye})`
+    case 'octopus':
+      return `~(${eye}${eye})~`
     case 'whale':
       return `~(${eye}${eye})~`
     case 'bull':
@@ -557,6 +559,7 @@ export const SPECIES_DISPLAY_NAMES: Record<BlockchainSpecies, string> = {
   wif: 'dogwifhat',
   jupiter: 'Jupiter Agg',
   raydium: 'Raydium LP',
+  octopus: 'Octopus',
   whale: 'Whale',
   bull: 'Bull',
   bear: 'Bear',

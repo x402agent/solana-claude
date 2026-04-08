@@ -198,7 +198,13 @@ export const SPECIES_TRADING_CONFIG: Record<BlockchainSpecies, {
     riskTolerance: 'medium',
     preferredVenues: ['jupiter', 'raydium', 'meteora'],
   },
-  
+  octopus: {
+    defaultPersonality: 'ninja',
+    baseStats: { TIMING: 80, ALPHA: 75, GAS_EFF: 85 },
+    riskTolerance: 'medium',
+    preferredVenues: ['jupiter', 'raydium', 'orca', 'meteora'],
+  },
+
   // NFT ecosystem
   degod: {
     defaultPersonality: 'diamond_hands',
