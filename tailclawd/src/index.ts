@@ -212,7 +212,7 @@ useCron(
   "Cleanup old usage and trace data every 6 hours",
 );
 
-pushActivity("worker_started", "TailClaude v1.3 worker started", {});
+pushActivity("worker_started", "TailClawd v1.6 worker started", {});
 
 indexSessions()
   .then((count) => {
