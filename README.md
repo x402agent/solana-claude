@@ -1274,9 +1274,21 @@ SOLANA_SECRET_KEY=         # JSON array of secret key bytes
 
 ---
 
+## Documentation
+
+| Doc | Description |
+| --- | --- |
+| [Architecture](docs/architecture.md) | System overview, data flow diagrams, 10 major subsystems |
+| [Migrate from OpenClaw](docs/migrate-from-openclaw.md) | `clawd migrate` guide with config mappings and troubleshooting |
+| [Contributing](CONTRIBUTING.md) | Setup, code style, PR process, how to add species/spinners |
+| [Risk Engine Spec](docs/risk-engine-spec.md) | 128-bit perpetual DEX risk engine design |
+| [SOUL.md](SOUL.md) | Agent identity and core principles |
+
 ## Contributing
 
-PRs welcome. High-impact areas:
+PRs welcome. See **[CONTRIBUTING.md](CONTRIBUTING.md)** for full setup and guidelines.
+
+High-impact areas:
 
 - **New Solana tools** -- DeFi protocols, NFT markets, compressed NFTs
 - **LaserStream gRPC** -- ultra-low latency with `helius-laserstream` package
@@ -1301,6 +1313,6 @@ PRs welcome. High-impact areas:
 
 **$CLAWD** `8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump`
 
-MIT · [github.com/x402agent/solana-clawd](https://github.com/x402agent/solana-clawd) · [seeker.solanaos.net](https://seeker.solanaos.net)
+MIT · [github.com/x402agent/solana-clawd](https://github.com/x402agent/solana-clawd) · [solanaclawd.com](https://solanaclawd.com)
 
 </div>
