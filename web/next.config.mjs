@@ -7,6 +7,7 @@ const withBundleAnalyzer = bundleAnalyzer({
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  skipTrailingSlashRedirect: true,
   // Exclude wiki sub-project from Next.js compilation
   eslint: { ignoreDuringBuilds: false, dirs: ["app", "components", "hooks", "lib"] },
   typescript: { ignoreBuildErrors: false },
