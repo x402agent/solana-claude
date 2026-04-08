@@ -27,7 +27,7 @@ llm-wiki-tang
 .npmrc
 .mcp.json
 .claude/
-
+llm-wiki-tang
 # Vault (encrypted keypairs — never commit)
 vault-data/
 .clawd/
