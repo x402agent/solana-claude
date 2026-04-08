@@ -18,6 +18,8 @@ import type { TradingSignal, SniperPosition } from "./types.js";
 // ─── Config ──────────────────────────────────────────────────────────────────
 
 export interface SniperConfig {
+  /** Whether this instance is allowed to execute live buys/sells */
+  executionEnabled: boolean;
   /** SOL amount to buy per launch (default 0.05) */
   solAmount: number;
   /** Take-profit % above buy price (default 50) */
@@ -42,6 +44,7 @@ export interface SniperConfig {
 
 export function defaultSniperConfig(): SniperConfig {
   return {
+    executionEnabled: false,
     solAmount: parseFloat(process.env.BOT_BUY_AMOUNT ?? "0.05"),
     takeProfitPct: parseFloat(process.env.BOT_TAKE_PROFIT ?? "50"),
     stopLossPct: parseFloat(process.env.BOT_STOP_LOSS ?? "15"),
@@ -247,6 +250,11 @@ export class PumpSniper {
 
     if (this.openPositions.size >= this.config.maxPositions) {
       this.callbacks.onSkip(signal, `Max positions (${this.config.maxPositions}) reached`);
+      return;
+    }
+
+    if (!this.config.executionEnabled) {
+      this.callbacks.onSkip(signal, "SIGNAL_ONLY mode");
       return;
     }
 

@@ -95,6 +95,7 @@ export async function cmdStart(ctx: CommandContext): Promise<void> {
     `Quick commands:\n` +
     `/sol — SOL price now\n` +
     `/price <token> — any token price\n` +
+    `/balance [wallet] — SOL balance via Helius\n` +
     `/scan — start Pump.fun scanner\n` +
     `/ooda — run OODA trading loop\n` +
     `/research <mint|symbol> — deep analysis\n` +
@@ -112,6 +113,16 @@ export async function cmdHelp(ctx: CommandContext): Promise<void> {
     `/trending — top trending tokens\n` +
     `/token <mint> — token info + security\n` +
     `/wallet <address> — wallet PnL\n\n` +
+    `*⛓ Helius RPC*\n` +
+    `/balance [address] — SOL balance\n` +
+    `/tokens [address] — token accounts\n` +
+    `/txs [address] — recent transactions\n` +
+    `/slot — current slot + block height\n` +
+    `/assets [address] — Helius DAS assets\n\n` +
+    `*🛰 Birdeye*\n` +
+    `/bprice <mint> — Birdeye price\n` +
+    `/bsearch <query> — Birdeye search\n` +
+    `/btoken <mint> — Birdeye overview\n\n` +
     `*🎯 Pump.fun*\n` +
     `/scan — toggle background scanner\n` +
     `/signal — show active pump signals\n` +
@@ -264,6 +275,7 @@ export async function cmdScanToggle(
   isScannerRunning: () => boolean,
 ): Promise<void> {
   if (isScannerRunning()) {
+    ctx.session.mode = "idle";
     setScannerRunning(false);
     await ctx.reply("⏹️ *Pump.fun Scanner* stopped.");
   } else {

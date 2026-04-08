@@ -26,7 +26,7 @@ import type {
   TelegramSession,
   CommandContext,
   TradingSignal,
-  SniperPosition,
+  ReplyOptions,
 } from "./types.js";
 
 import {
@@ -86,29 +86,66 @@ class TelegramAPI {
   }
 
   async sendMessage(chatId: number, text: string, opts?: {
-    parse_mode?: string;
-    disable_web_page_preview?: boolean;
-    reply_markup?: unknown;
+    parseMode?: string;
+    disablePreview?: boolean;
+    replyMarkup?: unknown;
   }): Promise<{ message_id: number }> {
-    const result = await this.request<{ message_id: number }>("sendMessage", {
+    const payload = {
       chat_id: chatId,
       text: text.slice(0, 4096),
-      parse_mode: opts?.parse_mode ?? "Markdown",
-      disable_web_page_preview: opts?.disable_web_page_preview ?? true,
-      reply_markup: opts?.reply_markup,
-    });
+      parse_mode: opts?.parseMode ?? "Markdown",
+      disable_web_page_preview: opts?.disablePreview ?? true,
+      reply_markup: opts?.replyMarkup,
+    };
+
+    let result: { message_id: number };
+    try {
+      result = await this.request<{ message_id: number }>("sendMessage", payload);
+    } catch (error) {
+      if (
+        payload.parse_mode &&
+        error instanceof Error &&
+        error.message.includes("can't parse entities")
+      ) {
+        result = await this.request<{ message_id: number }>("sendMessage", {
+          ...payload,
+          parse_mode: undefined,
+        });
+      } else {
+        throw error;
+      }
+    }
+
     this.lastSentMessageId.set(chatId, result.message_id);
     return result;
   }
 
-  async editMessage(chatId: number, messageId: number, text: string): Promise<void> {
-    await this.request("editMessageText", {
+  async editMessage(chatId: number, messageId: number, text: string, opts?: {
+    parseMode?: string;
+    disablePreview?: boolean;
+  }): Promise<void> {
+    const payload = {
       chat_id: chatId,
       message_id: messageId,
       text: text.slice(0, 4096),
-      parse_mode: "Markdown",
-      disable_web_page_preview: true,
-    }).catch(() => { /* ignore if message unchanged */ });
+      parse_mode: opts?.parseMode ?? "Markdown",
+      disable_web_page_preview: opts?.disablePreview ?? true,
+    };
+
+    await this.request("editMessageText", payload).catch(async (error) => {
+      if (
+        payload.parse_mode &&
+        error instanceof Error &&
+        error.message.includes("can't parse entities")
+      ) {
+        await this.request("editMessageText", {
+          ...payload,
+          parse_mode: undefined,
+        }).catch(() => {});
+        return;
+      }
+      /* ignore if message unchanged */
+    });
   }
 
   async sendChatAction(chatId: number, action: string): Promise<void> {
@@ -153,6 +190,14 @@ class TelegramAPI {
         { command: "memory", description: "Recall/write memory" },
         { command: "dream", description: "Memory consolidation" },
         { command: "agent", description: "Agent fleet management" },
+        { command: "balance", description: "SOL balance via Helius RPC" },
+        { command: "tokens", description: "Token accounts for a wallet" },
+        { command: "txs", description: "Recent transactions for a wallet" },
+        { command: "slot", description: "Current slot and block height" },
+        { command: "assets", description: "Helius DAS assets by owner" },
+        { command: "bprice", description: "Birdeye token price" },
+        { command: "bsearch", description: "Birdeye token search" },
+        { command: "btoken", description: "Birdeye token overview" },
         { command: "status", description: "Bot status" },
         { command: "skills", description: "Available skills" },
         { command: "tailscale", description: "Tailscale setup guide" },
@@ -175,11 +220,14 @@ export class SolanaClaudeBot {
   private api: TelegramAPI;
   private config: TelegramBotConfig;
   private state: BotState;
+  private scanner: PumpSniper | null = null;
   private sniper: PumpSniper | null = null;
   private signals: TradingSignal[] = [];
   private memories: Array<{ tier: string; content: string; timestamp: string }> = [];
   private updateOffset = 0;
   private running = false;
+  private scannerChatIds = new Set<number>();
+  private sniperChatIds = new Set<number>();
 
   constructor(config: TelegramBotConfig) {
     this.config = config;
@@ -235,12 +283,16 @@ export class SolanaClaudeBot {
     const session = this.getSession(chatId, userId, username);
     let lastMessageId = 0;
 
-    const reply = async (text: string) => {
-      const m = await this.api.sendMessage(chatId, text);
+    const reply = async (text: string, opts?: ReplyOptions) => {
+      const m = await this.api.sendMessage(chatId, text, {
+        parseMode: opts?.parseMode,
+        disablePreview: opts?.disablePreview,
+        replyMarkup: opts?.replyMarkup,
+      });
       lastMessageId = m.message_id;
     };
     const replyHTML = async (html: string) => {
-      const m = await this.api.sendMessage(chatId, html, { parse_mode: "HTML" });
+      const m = await this.api.sendMessage(chatId, html, { parseMode: "HTML" });
       lastMessageId = m.message_id;
     };
     const editLast = async (text: string) => {
@@ -288,6 +340,11 @@ export class SolanaClaudeBot {
     this.state.messageCount++;
 
     try {
+      if (rawCmd === "snipe" && !this.isAdmin(ctx.userId)) {
+        await ctx.reply("⛔ This command is restricted to configured admin users.");
+        return;
+      }
+
       switch (rawCmd) {
         case "start": return void cmdStart(ctx);
         case "help": return void cmdHelp(ctx);
@@ -299,13 +356,22 @@ export class SolanaClaudeBot {
         case "scan": return void cmdScanToggle(
           ctx,
           (running) => {
-            this.state.scannerRunning = running;
-            if (running) this.startPumpScanner(msg.chat.id);
-            else this.stopPumpScanner();
+            if (running) {
+              this.startPumpScanner(msg.chat.id);
+            } else {
+              this.scannerChatIds.delete(msg.chat.id);
+              if (this.scannerChatIds.size === 0) {
+                this.stopPumpScanner();
+              } else {
+                this.state.scannerRunning = true;
+              }
+            }
           },
-          () => this.state.scannerRunning,
+          () => this.scannerChatIds.has(msg.chat.id),
         );
-        case "signal": return void cmdSignals(ctx, () => this.signals as unknown as Array<Record<string, unknown>>);
+        case "signal":
+        case "signals":
+          return void cmdSignals(ctx, () => this.signals as unknown as Array<Record<string, unknown>>);
         case "snipe": return void cmdSnipe(
           ctx,
           (chatId, cfg) => this.startSniper(chatId, cfg as Record<string, unknown>),
@@ -326,6 +392,14 @@ export class SolanaClaudeBot {
         case "skills": return void cmdSkills(ctx);
         case "tailscale": return void cmdTailscale(ctx);
         case "agent": return void cmdAgent(ctx);
+        case "balance": return void cmdBalance(ctx);
+        case "tokens": return void cmdTokens(ctx);
+        case "txs": return void cmdTxs(ctx);
+        case "slot": return void cmdSlot(ctx);
+        case "assets": return void cmdAssets(ctx);
+        case "bprice": return void cmdBirdeyePrice(ctx);
+        case "bsearch": return void cmdBirdeyeSearch(ctx);
+        case "btoken": return void cmdBirdeyeOverview(ctx);
         case "status": return void cmdStatus(ctx, this.state);
         default:
           await ctx.reply(`❓ Unknown command: \`/${rawCmd}\`\n\nUse /help for the full list.`);
@@ -338,16 +412,16 @@ export class SolanaClaudeBot {
 
   // ─── Pump Scanner (signal-only, no key needed) ────────────────────────────
 
-  private scannerChatIds = new Set<number>();
-
   private startPumpScanner(chatId: number): void {
     this.scannerChatIds.add(chatId);
-    if (this.sniper) return; // scanner re-uses sniper connection
+    this.state.scannerRunning = true;
+    if (this.scanner) return;
 
     const config = defaultSniperConfig();
+    config.executionEnabled = false;
     config.minScore = parseInt(process.env.PUMP_MIN_SCORE ?? "60", 10);
 
-    this.sniper = new PumpSniper(config, {
+    this.scanner = new PumpSniper(config, {
       onNewToken: (signal) => {
         this.signals.unshift(signal);
         if (this.signals.length > 200) this.signals.pop();
@@ -378,15 +452,56 @@ export class SolanaClaudeBot {
           }
         }
       },
+      onBuy: () => {},
+      onSell: () => {},
+      onError: (err) => {
+        console.error("[PumpSniper]", err);
+      },
+      onSkip: (signal, reason) => {
+        if (process.env.PUMP_VERBOSE === "true") {
+          console.log(`[Scanner] Skip ${signal.symbol} (${signal.score}/100): ${reason}`);
+        }
+      },
+    });
+
+    this.scanner.start();
+    console.log("[Bot] Pump scanner started");
+  }
+
+  private stopPumpScanner(): void {
+    this.scannerChatIds.clear();
+    this.scanner?.stop();
+    this.scanner = null;
+    this.state.scannerRunning = false;
+    console.log("[Bot] Pump scanner stopped");
+  }
+
+  private startSniper(chatId: number, cfgOverrides: Record<string, unknown>): void {
+    this.sniperChatIds.add(chatId);
+    this.state.sniperRunning = true;
+
+    const config = defaultSniperConfig();
+    config.executionEnabled = true;
+    if (cfgOverrides.solAmount) config.solAmount = Number(cfgOverrides.solAmount);
+    if (cfgOverrides.tp) config.takeProfitPct = Number(cfgOverrides.tp);
+    if (cfgOverrides.sl) config.stopLossPct = Number(cfgOverrides.sl);
+    if (cfgOverrides.mayhemOnly) config.mayhemOnly = Boolean(cfgOverrides.mayhemOnly);
+
+    this.sniper = new PumpSniper(config, {
+      onNewToken: (signal) => {
+        this.signals.unshift(signal);
+        if (this.signals.length > 200) this.signals.pop();
+      },
       onBuy: (position, signal) => {
+        position.chatId = chatId;
         const msg =
           `🛒 *Sniper Buy Executed*\n\n` +
           `*${position.symbol}*\n` +
           `Mint: \`${position.mint}\`\n` +
           `Amount: ${position.buySolAmount} SOL\n` +
-          `TP: +${this.sniper ? (this.config as unknown as Record<string, unknown>) : "50"}% | SL: -${15}%\n` +
+          `TP: +${config.takeProfitPct}% | SL: -${config.stopLossPct}%\n` +
           `Signal: ${signal.score}/100`;
-        for (const cid of this.scannerChatIds) {
+        for (const cid of this.sniperChatIds) {
           this.api.sendMessage(cid, msg).catch(console.error);
         }
       },
@@ -399,55 +514,37 @@ export class SolanaClaudeBot {
           `SOL out: ${solOut.toFixed(4)}\n` +
           `PnL: ${pnl > 0 ? "+" : ""}${pnl.toFixed(4)} SOL\n` +
           `Reason: ${reason}`;
-        for (const cid of this.scannerChatIds) {
+        for (const cid of this.sniperChatIds) {
           this.api.sendMessage(cid, msg).catch(console.error);
         }
       },
       onError: (err) => {
-        console.error("[PumpSniper]", err);
+        console.error("[Sniper]", err);
       },
       onSkip: (signal, reason) => {
         if (process.env.PUMP_VERBOSE === "true") {
-          console.log(`[Scanner] Skip ${signal.symbol} (${signal.score}/100): ${reason}`);
+          console.log(`[Sniper] Skip ${signal.symbol} (${signal.score}/100): ${reason}`);
         }
       },
     });
 
     this.sniper.start();
-    console.log("[Bot] Pump scanner started");
-  }
-
-  private stopPumpScanner(): void {
-    this.scannerChatIds.clear();
-    this.sniper?.stop();
-    this.sniper = null;
-    this.state.scannerRunning = false;
-    console.log("[Bot] Pump scanner stopped");
-  }
-
-  private startSniper(chatId: number, cfgOverrides: Record<string, unknown>): void {
-    this.state.sniperRunning = true;
-
-    const config = defaultSniperConfig();
-    if (cfgOverrides.solAmount) config.solAmount = Number(cfgOverrides.solAmount);
-    if (cfgOverrides.tp) config.takeProfitPct = Number(cfgOverrides.tp);
-    if (cfgOverrides.sl) config.stopLossPct = Number(cfgOverrides.sl);
-    if (cfgOverrides.mayhemOnly) config.mayhemOnly = Boolean(cfgOverrides.mayhemOnly);
-
-    if (!this.sniper) {
-      this.startPumpScanner(chatId);
-    }
   }
 
   private stopForChat(chatId: number): void {
     this.scannerChatIds.delete(chatId);
+    this.sniperChatIds.delete(chatId);
     const session = this.state.sessions.get(chatId);
     if (session) session.mode = "idle";
 
-    // If no more chats using scanner, stop it
+    if (this.sniperChatIds.size === 0) {
+      this.sniper?.stop();
+      this.sniper = null;
+      this.state.sniperRunning = false;
+    }
+
     if (this.scannerChatIds.size === 0) {
       this.stopPumpScanner();
-      this.state.sniperRunning = false;
     }
   }
 
@@ -532,6 +629,8 @@ export class SolanaClaudeBot {
 
   stop(): void {
     this.running = false;
+    this.sniper?.stop();
+    this.sniper = null;
     this.stopPumpScanner();
   }
 }
