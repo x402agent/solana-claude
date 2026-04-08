@@ -31,7 +31,7 @@ Powered by **$CLAWD** on Solana & Pump.fun
 [![Buddies](https://img.shields.io/badge/Blockchain%20Buddies-18%20species-ff69b4)](src/buddy/)
 [![Animations](https://img.shields.io/badge/unicode%20spinners-9%20custom-00ffcc)](src/animations/)
 
-[**One-Shot Install**](#one-shot-install) · [**Blockchain Buddies**](#blockchain-buddies) · [**Animations**](#clawd-animations) · [**MCP Tools**](#mcp-tools-31) · [**Risk Engine**](#128-bit-risk-engine) · [**npm Package**](#npm-package) · [**Deploy**](#deploy-to-flyio)
+[**One-Shot Install**](#one-shot-install) · [**Blockchain Buddies**](#blockchain-buddies) · [**Animations**](#clawd-animations) · [**MCP Tools**](#mcp-tools-31) · [**Metaplex Agents**](#metaplex-agent-minting-mpl-agent-registry) · [**Worker Swarm**](#solana-worker-swarm-iii-sdk) · [**Skills**](#skills-catalog-88-skills) · [**Deploy**](#deploy-to-flyio)
 
 </div>
 
@@ -201,7 +201,7 @@ Add to `~/Library/Application Support/Clawd/clawd_desktop_config.json`:
   "mcpServers": {
     "solana-clawd": {
       "command": "node",
-      "args": ["/absolute/path/to/solana-claude/mcp-server/dist/index.js"],
+      "args": ["/absolute/path/to/solana-clawd/mcp-server/dist/index.js"],
       "env": {
         "HELIUS_API_KEY": "your-free-key-from-helius.dev"
       }
@@ -373,9 +373,199 @@ Bundled out of the box in `/tailclawd`:
 - **Cypherpunk Web Dashboard:** CRT-styled command center bridging Engine Memory, Session Tracking, and Activity traces. Live at **[stalwart-queijadas-a9cb83.netlify.app](https://stalwart-queijadas-a9cb83.netlify.app)**
 - **Telegram Bot Integration:** Control your swarm over Telegram -- dispatch OODA loops, run the Pump Scanner, or monitor Snipe agents from your phone
 
+### CLAWD Gateway (`/gateway`)
+
+A standalone Telegram bot + HTTP API that gives you full Solana access from any Telegram chat. Built on Helius RPC, Helius DAS, and Birdeye real-time WebSocket feeds.
+
+#### Quick Start
+
+```bash
+cd gateway
+npm install && npm run build
+npm start
+```
+
+The gateway starts three services simultaneously:
+- **Telegram Bot** -- long-polling, zero webhook setup needed
+- **HTTP API** on `:8080` -- RESTful endpoints for every Solana query
+- **Birdeye WebSocket** -- real-time price, transaction, and listing feeds
+
+#### Telegram Bot Commands
+
+| Command | Description |
+|---------|-------------|
+| `/start` | Show all available commands |
+| `/wallet` | Full wallet summary (SOL + tokens) |
+| `/balance [address]` | SOL balance for any address |
+| `/tokens [address]` | SPL token holdings |
+| `/txs [address]` | Recent transaction history |
+| `/price <mint>` | Live token price via Birdeye |
+| `/search <query>` | Search tokens by name/symbol |
+| `/slot` | Current Solana slot + block height |
+| `/assets [address]` | Helius DAS asset query (NFTs, compressed NFTs) |
+| `/watch <mint>` | Subscribe to real-time OHLCV price alerts |
+| `/whales <min_usd>` | Large trade alerts (default $10k+) |
+| `/newpairs` | New DEX pair listing alerts |
+| `/newlistings` | New token listing alerts |
+| `/alerts on/off` | Toggle Birdeye alerts for this chat |
+| `/status` | Gateway health, RPC, wallet, Birdeye connection |
+
+#### HTTP API Endpoints
+
+```
+GET  /health                      -- Gateway status + wallet + Birdeye connection
+GET  /api/balance/:address?       -- SOL balance (default: configured wallet)
+GET  /api/tokens/:address?        -- SPL token accounts
+GET  /api/transactions/:address?  -- Recent signatures (accepts ?limit=N)
+GET  /api/slot                    -- Current slot number
+GET  /api/assets/:address?        -- Helius DAS getAssetsByOwner
+GET  /api/price/:address          -- Birdeye token price
+GET  /api/token/:address          -- Birdeye token overview (full metadata)
+GET  /api/search?q=               -- Search tokens by keyword
+```
+
+#### Birdeye Real-Time WebSocket
+
+The gateway maintains a persistent Birdeye WebSocket connection with automatic reconnection and ping/pong heartbeat. Supported subscription types:
+
+| Subscription | Birdeye Event | What It Streams |
+|---|---|---|
+| `SUBSCRIBE_PRICE` | OHLCV candles | Open/High/Low/Close/Volume per interval (1s to 1M) |
+| `SUBSCRIBE_TXS` | Swap/liquidity txs | Real-time token or pair transactions |
+| `SUBSCRIBE_TOKEN_NEW_LISTING` | New tokens | Newly listed tokens with liquidity data |
+| `SUBSCRIBE_NEW_PAIR` | New DEX pairs | New trading pairs across all DEXes |
+| `SUBSCRIBE_LARGE_TRADE_TXS` | Whale trades | Trades above USD threshold |
+| `SUBSCRIBE_WALLET_TXS` | Wallet activity | All transactions for a tracked wallet |
+
+Alerts from these feeds are forwarded to any Telegram chat that has run `/alerts on`.
+
+#### Architecture
+
+```
+┌──────────────────────────────────────────────────────┐
+│                  CLAWD Gateway                        │
+│                                                      │
+│  ┌─────────────┐  ┌──────────────┐  ┌─────────────┐ │
+│  │  Telegram    │  │  Express     │  │  Birdeye    │ │
+│  │  Bot (poll)  │  │  HTTP :8080  │  │  WebSocket  │ │
+│  └──────┬───────┘  └──────┬───────┘  └──────┬──────┘ │
+│         │                 │                 │        │
+│         └────────┬────────┘                 │        │
+│                  │                          │        │
+│         ┌───────▼────────┐     ┌───────────▼──────┐ │
+│         │  Solana Service │     │  Birdeye Service │ │
+│         │  (Helius RPC)   │     │  (REST + WS)    │ │
+│         │  • Balance      │     │  • Price         │ │
+│         │  • Tokens       │     │  • Search        │ │
+│         │  • Transactions │     │  • New Listings  │ │
+│         │  • DAS Assets   │     │  • Large Trades  │ │
+│         └────────┬────────┘     └─────────────────┘ │
+│                  │                                   │
+│         ┌───────▼────────┐                          │
+│         │  Helius RPC     │                          │
+│         │  (Gatekeeper)   │                          │
+│         │  + Atlas WSS    │                          │
+│         └────────────────┘                          │
+└──────────────────────────────────────────────────────┘
+```
+
+#### Environment Variables
+
+```bash
+# Required
+TELEGRAM_BOT_TOKEN=        # From @BotFather
+HELIUS_RPC_URL=            # Helius mainnet RPC
+HELIUS_API_KEY=            # For DAS and enhanced APIs
+
+# Optional — enhanced features
+GATEKEEPER_RPC_URL=        # Helius beta RPC (faster)
+HELIUS_ATLAS_WSS_URL=      # Atlas WebSocket endpoint
+HELIUS_PARSE_URL=          # Helius transaction parser
+BIRDEYE_API_KEY=           # Real-time WebSocket + REST
+TELEGRAM_ALLOW_FROM=       # Comma-separated Telegram user IDs (access control)
+GATEWAY_PORT=8080          # HTTP API port
+SOLANA_PRIVATE_KEY=        # Base58 private key (for wallet commands)
+SOLANA_PUBLIC_KEY=         # Public key (read-only mode if no private key)
+```
+
 ---
 
-## Skills Catalog (89 Skills)
+## Solana Worker Swarm (iii SDK)
+
+The `tailclawd/quickstart/` directory contains a **four-worker distributed swarm** built on the [iii SDK](https://iii.dev) -- a cross-language worker framework that lets TypeScript, Rust, and Python workers call each other as if they were local functions.
+
+### Architecture
+
+```
+              POST /swap
+                  |
+        ┌────────▼────────┐
+        │  Client (TS)     │  Orchestrator — routes, fans out, aggregates
+        │  /health /wallet │
+        │  /research /swap │
+        │  /transfer /fees │
+        │  /orchestrate    │
+        └──┬──────┬──────┬─┘
+           │      │      │
+    ┌──────▼──┐ ┌─▼────────┐ ┌──▼──────────┐
+    │  Data   │ │  Compute  │ │  Payment    │
+    │ (Python)│ │  (Rust)   │ │  (TS)       │
+    │ balance │ │ fees      │ │ submit_tx   │
+    │ tokens  │ │ risk_score│ │ transfer    │
+    │ holders │ │ swap_tx   │ │ airdrop     │
+    └─────────┘ └───────────┘ └─────────────┘
+```
+
+### Workers
+
+| Worker | Language | Functions | What It Does |
+| ------ | -------- | --------- | ------------ |
+| **client** | TypeScript | `wallet`, `research`, `swap`, `transfer`, `estimate_fees`, `orchestrate` | Central orchestrator with 7 HTTP endpoints, fans out to other workers |
+| **compute-worker** | Rust | `compute`, `priority_fees`, `risk_score`, `build_swap_tx` | High-perf tx building, Jupiter v6 swap quotes, priority fee percentiles, risk heuristics |
+| **data-worker** | Python | `transform`, `wallet_balance`, `wallet_tokens`, `token_analytics` | On-chain intelligence via Solana RPC -- balances, SPL holdings, top-10 holder concentration |
+| **payment-worker** | TypeScript | `record`, `submit_transaction`, `transfer`, `airdrop` | Tx signing/submission, SOL/SPL transfers, devnet airdrops |
+
+### Run the Swarm
+
+```bash
+cd tailclawd/quickstart
+
+# 1. Start the iii engine
+iii -c iii-config.yaml
+
+# 2. Start all workers
+docker compose up --build
+```
+
+### Example: Token Research
+
+```bash
+curl -X POST http://localhost:3111/research \
+  -H 'Content-Type: application/json' \
+  -d '{"mint": "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263"}'
+```
+
+Returns analytics from data-worker (supply, top holders, concentration %) and risk score from compute-worker (heuristic 0-100).
+
+### Example: Jupiter Swap
+
+```bash
+curl -X POST http://localhost:3111/swap \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "input_mint": "So11111111111111111111111111111111111111112",
+    "output_mint": "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263",
+    "amount_lamports": 100000000,
+    "slippage_bps": 100,
+    "wallet": "YOUR_WALLET_ADDRESS"
+  }'
+```
+
+Compute-worker fetches Jupiter v6 quote + builds the swap tx, payment-worker submits it.
+
+---
+
+## Skills Catalog (88 Skills)
 
 `solana-clawd` ships with **89 on-demand knowledge skills** the agent can load when needed. Skills follow the [agentskills.io](https://agentskills.io) open standard with YAML frontmatter and progressive disclosure to minimize token usage.
 
@@ -727,7 +917,7 @@ solana-clawd/
 │   │   └── loadSkillsDir.ts    Filesystem skill loader
 │   ├── entrypoints/      CLI entry (demo, birth, spinners)
 │   └── shared/           Message types, model catalog, tool policy
-├── skills/              89 SKILL.md knowledge documents (agentskills.io format)
+├── skills/              88 SKILL.md knowledge documents (agentskills.io format)
 │   ├── pump-sdk-core/SKILL.md
 │   ├── pumpfun-trading/SKILL.md
 │   ├── solanaos/SKILL.md
@@ -739,15 +929,19 @@ solana-clawd/
 ├── scripts/
 │   ├── setup.sh           One-shot setup
 │   └── generate-skills-catalog.js  Catalog generator
-├── tailclawd/           Cypherpunk Telegram Gateway + Next.js UI
+├── tailclawd/           Cypherpunk Telegram Gateway + Worker Swarm
+│   └── quickstart/      iii SDK worker swarm
+│       ├── workers/
+│       │   ├── client/          TS orchestrator (7 HTTP endpoints)
+│       │   ├── compute-worker/  Rust tx builder (Jupiter, fees, risk)
+│       │   ├── data-worker/     Python analytics (balances, holders)
+│       │   └── payment-worker/  TS tx submission (transfers, airdrop)
+│       ├── docker-compose.yaml  Spin up all 4 workers
+│       └── iii-config.yaml      iii engine configuration
 ├── docs/                 Specs including risk-engine-spec.md
 ├── examples/
-│   ├── listen-wallet.ts  Real-time wallet monitor (account + tx + slot subs)
+│   ├── listen-wallet.ts  Real-time wallet monitor
 │   └── ooda-loop.ts      Full OODA cycle demo
-├── skills/
-│   └── solanaos.md       SolanaOS install + operate skill
-├── scripts/
-│   └── setup.sh          One-shot setup
 ├── SOUL.md               Agent identity
 ├── strategy.md           Multi-venue trading strategy (SolanaOS v2.0)
 └── .env.example          All env vars documented

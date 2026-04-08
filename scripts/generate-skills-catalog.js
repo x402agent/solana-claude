@@ -65,20 +65,29 @@ function categorize(slug) {
 }
 
 const results = [];
+const seen = new Set();
 
 for (const entry of fs.readdirSync(SKILLS_DIR, { withFileTypes: true })) {
   let filePath;
+  let slug;
   if (entry.isDirectory()) {
     filePath = path.join(SKILLS_DIR, entry.name, 'SKILL.md');
     if (!fs.existsSync(filePath)) continue;
+    slug = entry.name;
   } else if (entry.name.endsWith('.md') && entry.name !== 'catalog.json') {
+    slug = entry.name.replace('.md', '');
+    // Skip loose .md files if a directory version exists (directory takes priority)
+    if (fs.existsSync(path.join(SKILLS_DIR, slug, 'SKILL.md'))) continue;
     filePath = path.join(SKILLS_DIR, entry.name);
   } else continue;
+
+  // Deduplicate by slug
+  if (seen.has(slug)) continue;
+  seen.add(slug);
 
   const content = fs.readFileSync(filePath, 'utf8');
   const { yaml, body } = parseFrontmatter(content);
   const meta = extractMeta(yaml);
-  const slug = entry.isDirectory() ? entry.name : entry.name.replace('.md', '');
 
   if (!meta.name) {
     const heading = body.match(/^#\s+(.+)$/m);

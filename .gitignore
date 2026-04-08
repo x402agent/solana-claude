@@ -5,7 +5,7 @@ node_modules/
 dist/
 mcp-server/dist/
 mcp-server/node_modules/
-
+solana-tracker
 # Environment & secrets
 .env
 .env.*

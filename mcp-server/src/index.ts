@@ -1,14 +1,14 @@
 #!/usr/bin/env node
 /**
- * solana-claude MCP Server — STDIO entrypoint
+ * solana-clawd MCP Server — STDIO entrypoint
  * For Claude Desktop, Cursor (local), VS Code
  *
  * Add to ~/Library/Application Support/Claude/claude_desktop_config.json:
  * {
  *   "mcpServers": {
- *     "solana-claude": {
+ *     "solana-clawd": {
  *       "command": "node",
- *       "args": ["/absolute/path/to/solana-claude/mcp-server/dist/index.js"]
+ *       "args": ["/absolute/path/to/solana-clawd/mcp-server/dist/index.js"]
  *     }
  *   }
  * }

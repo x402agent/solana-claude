@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * solana-claude MCP Server — HTTP + SSE entrypoint
+ * solana-clawd MCP Server — HTTP + SSE entrypoint
  * Deploy to Fly.io: fly launch --config mcp-server/fly.toml
  *
  * No private key, no wallet required.
@@ -40,10 +40,10 @@ async function main(): Promise<void> {
 
   app.get("/health", (_req, res) => res.json({
     status: "ok",
-    server: "solana-claude",
+    server: "solana-clawd",
     version: "1.0.0",
     auth: API_KEY ? "enabled" : "open",
-    docs: "https://github.com/x402agent/solana-claude",
+    docs: "https://github.com/x402agent/solana-clawd",
   }));
 
   // ── Streamable HTTP ──────────────────────────────────────────────────────
@@ -93,7 +93,7 @@ async function main(): Promise<void> {
   });
 
   app.listen(PORT, () => {
-    console.log(`\n🌊 solana-claude MCP server on :${PORT}`);
+    console.log(`\n🌊 solana-clawd MCP server on :${PORT}`);
     console.log(`   POST/GET http://0.0.0.0:${PORT}/mcp   (Streamable HTTP)`);
     console.log(`   GET      http://0.0.0.0:${PORT}/sse   (Legacy SSE)`);
     console.log(`   GET      http://0.0.0.0:${PORT}/health`);

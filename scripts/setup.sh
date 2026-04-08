@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# solana-claude one-shot setup script
+# solana-clawd one-shot setup script
 # Usage: bash scripts/setup.sh
 # No private key or wallet required.
 
@@ -47,8 +47,7 @@ cd mcp-server && npm install && cd ..
 
 # ── Build ─────────────────────────────────────────────────────────────────────
 echo -e "\n${BOLD}Building TypeScript...${RESET}"
-npm run build 2>/dev/null || true
-chmod +x dist/entrypoints/clawd.js 2>/dev/null || echo -e "${YELLOW}⚠ Root build skipped (no entry point yet)${RESET}"
+npm run build
 
 echo -e "\n${BOLD}Building MCP server...${RESET}"
 npm run mcp:build
@@ -65,11 +64,11 @@ echo -e "${BOLD}${GREEN}✓ Setup complete!${RESET}"
 echo ""
 echo -e "${BOLD}Quick start options:${RESET}"
 echo ""
-echo -e "  ${CYAN}1. MCP with Claude Desktop (recommended — no API key needed):${RESET}"
+echo -e "  ${CYAN}1. MCP with Clawd Desktop (recommended — no API key needed):${RESET}"
 echo "     Add to ~/Library/Application\\ Support/Claude/claude_desktop_config.json:"
 echo '     {'
 echo '       "mcpServers": {'
-echo '         "solana-claude": {'
+echo '         "solana-clawd": {'
 echo '           "command": "node",'
 echo "           \"args\": [\"$(pwd)/mcp-server/dist/index.js\"]"
 echo '         }'
@@ -81,7 +80,7 @@ echo "     npm run mcp:http"
 echo "     # Connect at http://localhost:3000/mcp"
 echo ""
 echo -e "  ${CYAN}3. Deploy to Fly.io (24/7 public access):${RESET}"
-echo "     fly launch --name solana-claude --config mcp-server/fly.toml"
+echo "     fly launch --name solana-clawd --config mcp-server/fly.toml"
 echo "     fly deploy"
 echo ""
 echo -e "  ${CYAN}4. Add an LLM key for standalone agent mode (optional):${RESET}"

@@ -1,5 +1,5 @@
 /**
- * solana-claude MCP Server
+ * solana-clawd MCP Server
  *
  * Standalone — calls public Solana APIs directly.
  * NO private key, NO wallet, NO paid API required for basic usage.
@@ -134,7 +134,7 @@ let _taskCounter = 0;
 
 export function createServer(): Server {
   const server = new Server(
-    { name: "solana-claude", version: "1.0.0" },
+    { name: "solana-clawd", version: "1.0.0" },
     { capabilities: { tools: {}, resources: {}, prompts: {} } },
   );
 
@@ -142,30 +142,30 @@ export function createServer(): Server {
 
   server.setRequestHandler(ListResourcesRequestSchema, async () => ({
     resources: [
-      { uri: "solana-claude://readme", name: "README", description: "solana-claude documentation", mimeType: "text/markdown" },
-      { uri: "solana-claude://soul", name: "SOUL.md", description: "Agent identity and operating principles", mimeType: "text/markdown" },
-      { uri: "solana-claude://skills", name: "Skills", description: "Available agent skills", mimeType: "application/json" },
-      { uri: "solana-claude://tools", name: "Source Tools", description: "TypeScript tool source listing", mimeType: "application/json" },
+      { uri: "solana-clawd://readme", name: "README", description: "solana-clawd documentation", mimeType: "text/markdown" },
+      { uri: "solana-clawd://soul", name: "SOUL.md", description: "Agent identity and operating principles", mimeType: "text/markdown" },
+      { uri: "solana-clawd://skills", name: "Skills", description: "Available agent skills", mimeType: "application/json" },
+      { uri: "solana-clawd://tools", name: "Source Tools", description: "TypeScript tool source listing", mimeType: "application/json" },
     ],
   }));
 
   server.setRequestHandler(ListResourceTemplatesRequestSchema, async () => ({
     resourceTemplates: [
-      { uriTemplate: "solana-claude://source/{path}", name: "Source file", description: "Read a src/ file", mimeType: "text/plain" },
+      { uriTemplate: "solana-clawd://source/{path}", name: "Source file", description: "Read a src/ file", mimeType: "text/plain" },
     ],
   }));
 
   server.setRequestHandler(ReadResourceRequestSchema, async (req: { params: { uri: string } }) => {
     const { uri } = req.params;
-    if (uri === "solana-claude://readme") {
+    if (uri === "solana-clawd://readme") {
       const text = (await readFileText(path.join(REPO_ROOT, "README.md"))) ?? "README.md not found.";
       return { contents: [{ uri, mimeType: "text/markdown", text }] };
     }
-    if (uri === "solana-claude://soul") {
+    if (uri === "solana-clawd://soul") {
       const text = (await readFileText(path.join(REPO_ROOT, "SOUL.md"))) ?? "No SOUL.md found — create one to give your agent an identity!";
       return { contents: [{ uri, mimeType: "text/markdown", text }] };
     }
-    if (uri === "solana-claude://skills") {
+    if (uri === "solana-clawd://skills") {
       let skills: string[] = [];
       try {
         const entries = await fs.readdir(path.join(REPO_ROOT, "skills"), { withFileTypes: true });
@@ -173,7 +173,7 @@ export function createServer(): Server {
       } catch { /**/ }
       return { contents: [{ uri, mimeType: "application/json", text: JSON.stringify({ skills }, null, 2) }] };
     }
-    if (uri === "solana-claude://tools") {
+    if (uri === "solana-clawd://tools") {
       let tools: string[] = [];
       try {
         const entries = await fs.readdir(path.join(SRC_ROOT, "engine"), { withFileTypes: true });
@@ -181,8 +181,8 @@ export function createServer(): Server {
       } catch { /**/ }
       return { contents: [{ uri, mimeType: "application/json", text: JSON.stringify({ tools }, null, 2) }] };
     }
-    if (uri.startsWith("solana-claude://source/")) {
-      const rel = uri.slice("solana-claude://source/".length);
+    if (uri.startsWith("solana-clawd://source/")) {
+      const rel = uri.slice("solana-clawd://source/".length);
       const abs = safePath(SRC_ROOT, rel);
       if (!abs) throw new Error("Invalid path");
       const text = await readFileText(abs);

@@ -45,9 +45,8 @@ ${BANNER}
     ${c.cyan}birth${c.reset} [species]     Hatch a new Blockchain Buddy
     ${c.cyan}spinners${c.reset}            Preview all $CLAWD unicode animations
     ${c.cyan}demo${c.reset}               Full animated walkthrough
-    ${c.cyan}wallet${c.reset}             Show buddy wallet & PnL
+    ${c.cyan}wallet${c.reset} [species]    Preview a buddy wallet & PnL card
     ${c.cyan}species${c.reset}            List all available species
-    ${c.cyan}start${c.reset}              Launch the full agentic engine
 
   ${c.bold}Flags:${c.reset}
 
@@ -112,6 +111,28 @@ async function runBirth(species?: string): Promise<void> {
   await birthCeremony(validSpecies as any)
 }
 
+async function showWallet(species?: string): Promise<void> {
+  const {
+    BLOCKCHAIN_SPECIES,
+    createBlockchainBuddy,
+    formatBuddyCard,
+  } = await import('../buddy/index.js')
+
+  const validSpecies = species && (BLOCKCHAIN_SPECIES as readonly string[]).includes(species)
+    ? species
+    : BLOCKCHAIN_SPECIES[Math.floor(Math.random() * BLOCKCHAIN_SPECIES.length)]
+
+  const buddy = createBlockchainBuddy(validSpecies as any, {
+    initialSolBalance: 3.25,
+    isSimulated: true,
+  })
+
+  console.log(BANNER)
+  console.log(`  ${c.bold}Simulated Buddy Wallet${c.reset}\n`)
+  process.stdout.write(formatBuddyCard(buddy))
+  console.log(`  ${c.dim}Wallets shown here are simulated by default.${c.reset}\n`)
+}
+
 async function runDemo(): Promise<void> {
   const { createClawdSpinner } = await import('../animations/spinner.js')
 
@@ -172,10 +193,14 @@ async function main(): Promise<void> {
     case 'demo':
       await runDemo()
       break
+    case 'wallet':
+      await showWallet(args[1])
+      break
     case 'start':
     case 'run':
-      // Delegate to the main CLI
-      await import('./cli.js')
+      console.error(`\n  ${c.yellow}The interactive runtime is not bundled in the published CLI yet.${c.reset}`)
+      console.error(`  ${c.dim}Use the repo's MCP server instead: npm run mcp:http${c.reset}\n`)
+      process.exit(1)
       break
     default:
       console.log(`  ${c.red}Unknown command: ${cmd}${c.reset}`)

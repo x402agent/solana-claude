@@ -8,6 +8,9 @@
    ===================================================== */
 @layer base {
   :root {
+    --font-inter: "Avenir Next", "Segoe UI", "Helvetica Neue", sans-serif;
+    --font-jetbrains-mono: "JetBrains Mono", "SFMono-Regular", "SF Mono", "Menlo", monospace;
+
     /* Backgrounds */
     --color-bg-primary: #09090b;
     --color-bg-secondary: #18181b;
