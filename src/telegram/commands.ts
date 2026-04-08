@@ -24,6 +24,8 @@
 
 import type { CommandContext } from "./types.js";
 import { SolanaVault } from "../vault/index.js";
+import { getSolanaTracker } from "../services/solanaTrackerAPI.js";
+import { getSolanaAgent } from "../services/solanaAgent.js";
 
 export interface Command {
   name: string;
@@ -32,6 +34,11 @@ export interface Command {
   adminOnly?: boolean;
   handler: (ctx: CommandContext) => Promise<void>;
 }
+
+// ─── Unified API + Agent singletons ─────────────────────────────────────────
+
+const api = getSolanaTracker();
+const agent = getSolanaAgent();
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -48,38 +55,21 @@ function progressBar(pct: number): string {
   return "█".repeat(filled) + "░".repeat(10 - filled) + ` ${pct.toFixed(1)}%`;
 }
 
-// ─── Solana API helpers (inline, no dep on MCP server in Telegram process) ───
+// ─── Solana API helpers — backed by unified SolanaTrackerAPI ────────────────
 
 async function fetchSOLPrice(): Promise<number> {
-  try {
-    const res = await fetch(
-      "https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=usd",
-      { headers: { Accept: "application/json" } }
-    );
-    const data = await res.json() as { solana: { usd: number } };
-    return data.solana.usd;
-  } catch {
-    return 0;
-  }
+  return api.getSOLPrice();
 }
 
 async function fetchTokenInfo(mintOrSymbol: string): Promise<Record<string, unknown> | null> {
-  const TRACKER_KEY = process.env.SOLANA_TRACKER_API_KEY ?? "";
   try {
     const isMint = mintOrSymbol.length >= 32;
-    const url = isMint
-      ? `https://data.solanatracker.io/tokens/${mintOrSymbol}`
-      : `https://data.solanatracker.io/search?query=${encodeURIComponent(mintOrSymbol)}&limit=1`;
-    const res = await fetch(url, {
-      headers: { Accept: "application/json", "x-api-key": TRACKER_KEY },
-    });
-    if (!res.ok) return null;
-    const data = await res.json() as Record<string, unknown>;
-    if (!isMint) {
-      const tokens = data.tokens as Array<Record<string, unknown>> | undefined;
-      return tokens?.[0] ?? null;
+    if (isMint) {
+      return await api.getTokenInfo(mintOrSymbol) as unknown as Record<string, unknown>;
     }
-    return data;
+    const results = await api.searchTokens(mintOrSymbol, 1);
+    if (!results.length) return null;
+    return await api.getTokenInfo(results[0].mint) as unknown as Record<string, unknown>;
   } catch {
     return null;
   }
@@ -135,9 +125,21 @@ export async function cmdHelp(ctx: CommandContext): Promise<void> {
     `*🤖 Agent Fleet*\n` +
     `/ooda — run OODA trading loop\n` +
     `/research <mint|symbol> — deep analysis\n` +
+    `/deepresearch <mint> — full research report\n` +
+    `/market — market overview + signals\n` +
     `/agent list — active agents\n` +
-    `/agent spawn <type> — spawn agent\n` +
-    `/agent stop <id> — stop agent\n\n` +
+    `/agentstate — show agent internal state\n\n` +
+    `*📈 Trading Data*\n` +
+    `/chart <mint> [tf] — OHLCV chart summary\n` +
+    `/trades <mint> — recent token trades\n` +
+    `/toptraders <mint> — top traders\n` +
+    `/holders <mint> — holder count + history\n` +
+    `/pools <mint> — liquidity pools\n` +
+    `/walletfull <addr> — full wallet profile\n` +
+    `/latest — latest launched tokens\n` +
+    `/graduated — recently graduated tokens\n` +
+    `/watch <mint> — add/remove watchlist\n` +
+    `/watch check — scan watchlist for moves\n\n` +
     `*💾 Memory*\n` +
     `/memory — recall recent signals\n` +
     `/memory recall <query> — search memory\n` +
@@ -214,23 +216,16 @@ export async function cmdPrice(ctx: CommandContext): Promise<void> {
 
 export async function cmdTrending(ctx: CommandContext): Promise<void> {
   await ctx.typing();
-  const TRACKER_KEY = process.env.SOLANA_TRACKER_API_KEY ?? "";
   try {
-    const res = await fetch("https://data.solanatracker.io/tokens/trending?limit=10", {
-      headers: { Accept: "application/json", "x-api-key": TRACKER_KEY },
-    });
-    const data = await res.json() as { tokens?: Array<Record<string, unknown>> } | Array<Record<string, unknown>>;
-    const tokens = Array.isArray(data) ? data : (data as { tokens?: Array<Record<string, unknown>> }).tokens ?? [];
+    const tokens = await api.getTrending(10);
     if (!tokens.length) {
       await ctx.reply("❌ No trending data available.");
       return;
     }
     const lines = tokens.slice(0, 10).map((t, i) => {
-      const sym = String(t.symbol ?? "???");
-      const price = Number(t.price ?? 0);
-      const change = Number(t.priceChange24h ?? 0);
+      const change = Number((t as any).priceChange24h ?? 0);
       const sign = change >= 0 ? "📈 +" : "📉 ";
-      return `${i + 1}. *${sym}* — $${price.toFixed(6)} ${sign}${change.toFixed(1)}%`;
+      return `${i + 1}. *${t.symbol}* — $${t.price.toFixed(6)} ${sign}${change.toFixed(1)}%`;
     });
     await ctx.reply(`🔥 *Trending Solana Tokens*\n\n${lines.join("\n")}`);
   } catch {
@@ -273,21 +268,14 @@ export async function cmdWallet(ctx: CommandContext): Promise<void> {
     return;
   }
   await ctx.typing();
-  const TRACKER_KEY = process.env.SOLANA_TRACKER_API_KEY ?? "";
   try {
-    const res = await fetch(`https://data.solanatracker.io/pnl/${address}`, {
-      headers: { Accept: "application/json", "x-api-key": TRACKER_KEY },
-    });
-    const pnl = await res.json() as Record<string, unknown>;
-    const realized = Number(pnl.realizedPnl ?? pnl.pnl ?? 0);
-    const winRate = Number(pnl.winRate ?? 0);
-    const trades = Number(pnl.totalTrades ?? 0);
+    const pnl = await api.getWalletPnL(address);
     await ctx.reply(
       `👛 *Wallet Analysis*\n` +
       `\`${address.slice(0, 8)}...${address.slice(-6)}\`\n\n` +
-      `Realized PnL: ${realized > 0 ? "+" : ""}$${realized.toFixed(2)}\n` +
-      `Win Rate: ${(winRate * 100).toFixed(1)}%\n` +
-      `Total Trades: ${trades.toLocaleString()}\n\n` +
+      `Realized PnL: ${pnl.realizedPnl > 0 ? "+" : ""}$${pnl.realizedPnl.toFixed(2)}\n` +
+      `Win Rate: ${(pnl.winRate * 100).toFixed(1)}%\n` +
+      `Total Trades: ${pnl.totalTrades.toLocaleString()}\n\n` +
       `[View on Solscan](https://solscan.io/account/${address})`
     );
   } catch {
@@ -445,35 +433,30 @@ export async function cmdOODA(ctx: CommandContext): Promise<void> {
   );
   await ctx.typing();
 
-  // Perform a real OODA observe step
-  const [solPrice, trendingRes] = await Promise.allSettled([
-    fetchSOLPrice(),
-    fetch("https://data.solanatracker.io/tokens/trending?limit=10", {
-      headers: { Accept: "application/json", "x-api-key": process.env.SOLANA_TRACKER_API_KEY ?? "" },
-    }).then(r => r.json() as Promise<unknown>),
-  ]);
+  // Perform a real OODA observe step via the agent
+  try {
+    const snapshot = await agent.ooda();
 
-  const sol = solPrice.status === "fulfilled" ? solPrice.value : 0;
-  const trending = trendingRes.status === "fulfilled" ? trendingRes.value as { tokens?: Array<Record<string, unknown>> } | Array<Record<string, unknown>> : null;
-  const tokens = trending ? (Array.isArray(trending) ? trending : (trending as { tokens?: Array<Record<string, unknown>> }).tokens ?? []) : [];
+    const observeLines = snapshot.topMovers.map(t =>
+      `• *${t.symbol}* — ${t.priceChange24h > 0 ? "+" : ""}${t.priceChange24h.toFixed(1)}% | $${t.price.toFixed(6)}`
+    );
 
-  const topMovers = tokens
-    .filter(t => Math.abs(Number(t.priceChange24h ?? 0)) > 30)
-    .slice(0, 3);
+    const signalLines = snapshot.signals.map(s =>
+      `${s.strength === "STRONG" ? "🟢" : s.strength === "MODERATE" ? "🟡" : "🔴"} *${s.symbol}* — ${s.score}/100 → ${s.action}`
+    );
 
-  const observeLines = topMovers.map(t =>
-    `• *${t.symbol}* — ${Number(t.priceChange24h ?? 0) > 0 ? "+" : ""}${Number(t.priceChange24h ?? 0).toFixed(1)}% | $${Number(t.price ?? 0).toFixed(6)}`
-  );
-
-  await ctx.reply(
-    `📡 *OBSERVE Complete*\n\n` +
-    `SOL: $${sol.toFixed(2)}\n\n` +
-    `*Top Movers (>30% 24h):*\n${observeLines.join("\n") || "_No major movers_"}\n\n` +
-    `*ORIENT:* Scoring opportunities...\n` +
-    `*DECIDE:* Use /research <mint> for deep analysis\n` +
-    `*ACT:* Trading requires authorized mode\n\n` +
-    `Use /signal to see scanner memory`
-  );
+    await ctx.reply(
+      `📡 *OBSERVE Complete*\n\n` +
+      `SOL: $${snapshot.solPrice.toFixed(2)}\n\n` +
+      `*Top Movers (>20% 24h):*\n${observeLines.join("\n") || "_No major movers_"}\n\n` +
+      (signalLines.length ? `*ORIENT — Signals:*\n${signalLines.join("\n")}\n\n` : "") +
+      `*DECIDE:* Use /research <mint> for deep analysis\n` +
+      `*ACT:* Trading requires authorized mode\n\n` +
+      `Use /signal to see scanner memory`
+    );
+  } catch {
+    await ctx.reply("❌ OODA loop failed. Check API keys.");
+  }
 }
 
 export async function cmdResearch(ctx: CommandContext): Promise<void> {
@@ -725,23 +708,12 @@ export async function cmdAgent(ctx: CommandContext): Promise<void> {
   await ctx.reply(`Use /ooda, /scan, /snipe, or /research to interact with agents.`);
 }
 
-// ─── Helius RPC Commands ─────────────────────────────────────────────────────
+// ─── Helius RPC Commands (via unified API) ──────────────────────────────────
 
-const HELIUS_RPC = process.env.HELIUS_RPC_URL ?? process.env.GATEKEEPER_RPC_URL ?? "";
-const HELIUS_API_KEY = process.env.HELIUS_API_KEY ?? "";
-const HELIUS_PARSE_URL = process.env.HELIUS_PARSE_URL ?? "";
 const DEFAULT_WALLET = process.env.SOLANA_PUBLIC_KEY ?? process.env.SOLANA_WALLET_PUBKEY ?? "";
 
 async function rpcCall(method: string, params: unknown[]): Promise<unknown> {
-  if (!HELIUS_RPC) throw new Error("No HELIUS_RPC_URL configured");
-  const res = await fetch(HELIUS_RPC, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ jsonrpc: "2.0", id: 1, method, params }),
-  });
-  const json = await res.json() as { result?: unknown; error?: { message: string } };
-  if (json.error) throw new Error(json.error.message);
-  return json.result;
+  return api.rpcCall(method, params);
 }
 
 export async function cmdBalance(ctx: CommandContext): Promise<void> {
@@ -819,51 +791,27 @@ export async function cmdSlot(ctx: CommandContext): Promise<void> {
 export async function cmdAssets(ctx: CommandContext): Promise<void> {
   const address = ctx.args[0] || DEFAULT_WALLET;
   if (!address) { await ctx.reply("Usage: `/assets [address]`"); return; }
-  if (!HELIUS_API_KEY && !HELIUS_RPC) { await ctx.reply("❌ No Helius API key configured."); return; }
   await ctx.typing();
   try {
-    const url = HELIUS_RPC || `https://mainnet.helius-rpc.com/?api-key=${HELIUS_API_KEY}`;
-    const res = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        jsonrpc: "2.0", id: "assets", method: "getAssetsByOwner",
-        params: { ownerAddress: address, page: 1, limit: 50 },
-      }),
-    });
-    const data = await res.json() as { result?: { items?: Array<{ content?: { metadata?: { name?: string } }; id?: string }> } };
-    const items = data?.result?.items ?? [];
-    if (!items.length) { await ctx.reply("📦 No assets found (Helius DAS)."); return; }
-    const lines = items.slice(0, 15).map(a => `• ${a.content?.metadata?.name ?? "Unknown"} — \`${a.id?.slice(0, 12)}…\``);
-    await ctx.reply(`🗂 *Assets (${items.length}):*\n${lines.join("\n")}`);
+    const assets = await api.getAssetsByOwner(address);
+    if (!assets.length) { await ctx.reply("📦 No assets found (Helius DAS)."); return; }
+    const lines = assets.slice(0, 15).map(a => `• ${a.name ?? "Unknown"} — \`${a.id.slice(0, 12)}…\``);
+    await ctx.reply(`🗂 *Assets (${assets.length}):*\n${lines.join("\n")}`);
   } catch (e) {
     await ctx.reply(`❌ ${e instanceof Error ? e.message : String(e)}`);
   }
 }
 
-// ─── Birdeye Commands ────────────────────────────────────────────────────────
-
-const BIRDEYE_API_KEY = process.env.BIRDEYE_API_KEY ?? "";
-
-async function birdeyeGet(path: string): Promise<Record<string, unknown>> {
-  if (!BIRDEYE_API_KEY) throw new Error("No BIRDEYE_API_KEY configured");
-  const res = await fetch(`https://public-api.birdeye.so${path}`, {
-    headers: { "X-API-KEY": BIRDEYE_API_KEY, "x-chain": "solana" },
-  });
-  if (!res.ok) throw new Error(`Birdeye ${res.status}`);
-  return res.json() as Promise<Record<string, unknown>>;
-}
+// ─── Birdeye Commands (via unified API) ─────────────────────────────────────
 
 export async function cmdBirdeyePrice(ctx: CommandContext): Promise<void> {
   const mint = ctx.args[0];
   if (!mint) { await ctx.reply("Usage: `/bprice <token_mint>`"); return; }
   await ctx.typing();
   try {
-    const data = await birdeyeGet(`/defi/price?address=${mint}`);
-    const inner = data.data as Record<string, unknown> | undefined;
-    const price = inner?.value as number | undefined;
-    await ctx.reply(price != null
-      ? `💲 *Birdeye Price:* $${price}\nMint: \`${mint}\``
+    const data = await api.getBirdeyePrice(mint);
+    await ctx.reply(data
+      ? `💲 *Birdeye Price:* $${data.price}\nMint: \`${mint}\``
       : `No price data for \`${mint}\``);
   } catch (e) {
     await ctx.reply(`❌ ${e instanceof Error ? e.message : String(e)}`);
@@ -875,11 +823,9 @@ export async function cmdBirdeyeSearch(ctx: CommandContext): Promise<void> {
   if (!query) { await ctx.reply("Usage: `/bsearch <token name or symbol>`"); return; }
   await ctx.typing();
   try {
-    const data = await birdeyeGet(`/defi/v3/search?keyword=${encodeURIComponent(query)}&chain=solana&target=token`);
-    const inner = data.data as { items?: Array<{ name: string; symbol: string; address: string }> } | undefined;
-    const items = inner?.items ?? [];
+    const items = await api.birdeyeSearch(query, 10);
     if (!items.length) { await ctx.reply(`No results for "${query}".`); return; }
-    const lines = items.slice(0, 10).map(t => `• *${t.symbol}* — ${t.name}\n  \`${t.address}\``);
+    const lines = items.slice(0, 10).map(t => `• *${t.symbol}* — ${t.name}\n  \`${t.mint}\``);
     await ctx.reply(`🔍 *Birdeye Search "${query}":*\n\n${lines.join("\n\n")}`);
   } catch (e) {
     await ctx.reply(`❌ ${e instanceof Error ? e.message : String(e)}`);
@@ -891,8 +837,7 @@ export async function cmdBirdeyeOverview(ctx: CommandContext): Promise<void> {
   if (!mint) { await ctx.reply("Usage: `/btoken <token_mint>`"); return; }
   await ctx.typing();
   try {
-    const data = await birdeyeGet(`/defi/token_overview?address=${mint}`);
-    const t = data.data as Record<string, unknown> | undefined;
+    const t = await api.getBirdeyeOverview(mint);
     if (!t) { await ctx.reply(`No data for \`${mint}\``); return; }
     await ctx.reply(
       `📊 *${t.symbol ?? "?"} — ${t.name ?? "Unknown"}*\n\n` +
@@ -1421,4 +1366,243 @@ export async function cmdSmartTweet(ctx: CommandContext): Promise<void> {
   } catch (e) {
     await ctx.reply(`❌ ${e instanceof Error ? e.message : String(e)}`);
   }
+}
+
+// ─── Agent-Powered Commands (via SolanaAgent + SolanaTrackerAPI) ─────────────
+
+/** /deepresearch <mint|symbol> — Full agent research report */
+export async function cmdDeepResearch(ctx: CommandContext): Promise<void> {
+  const target = ctx.args[0];
+  if (!target) {
+    await ctx.reply("Usage: `/deepresearch <mint|symbol>`\nExample: `/deepresearch BONK`");
+    return;
+  }
+  await ctx.typing();
+  await ctx.reply(`🔬 *Deep Research: ${target}*\n\n_Fetching token, holders, pools, top traders, chart..._`);
+  try {
+    const report = await agent.research(target);
+    const t = report.token;
+    const s = report.signal;
+    const strengthEmoji = s.strength === "STRONG" ? "🟢" : s.strength === "MODERATE" ? "🟡" : s.strength === "WEAK" ? "🟠" : "🔴";
+
+    await ctx.reply(
+      `🔬 *${t.symbol} — ${t.name}*\n` +
+      `Mint: \`${t.mint}\`\n\n` +
+      `*Price:* $${t.price.toFixed(8)}\n` +
+      `*MCap:* $${(t.marketCapUSD * report.solPrice).toLocaleString(undefined, { maximumFractionDigits: 0 })}\n` +
+      `*Vol 24h:* $${(t.volume24h / 1e6).toFixed(2)}M\n` +
+      `*Holders:* ${t.holderCount.toLocaleString()} | Top10: ${t.top10HolderPercent.toFixed(1)}%\n` +
+      `*Liquidity:* $${t.liquidity.toLocaleString(undefined, { maximumFractionDigits: 0 })}\n` +
+      `*Status:* ${t.isGraduated ? "🎓 Graduated" : `📈 Bonding ${t.bondingCurveProgress.toFixed(1)}%`}\n\n` +
+      `*Signal: ${strengthEmoji} ${s.strength} (${s.score}/100)*\n` +
+      (s.reasons.length ? `✅ ${s.reasons.join(" | ")}\n` : "") +
+      (s.risks.length ? `⚠️ ${s.risks.join(" | ")}\n` : "") +
+      `\n*Pools:* ${report.pools.length ? report.pools.map(p => p.dex).join(", ") : "None"}\n` +
+      `*Top Traders:* ${report.topTraders.length}\n` +
+      `*Chart bars:* ${report.chart.length}\n\n` +
+      `${report.recommendation}`
+    );
+  } catch (e) {
+    await ctx.reply(`❌ ${e instanceof Error ? e.message : String(e)}`);
+  }
+}
+
+/** /market — Full market overview */
+export async function cmdMarket(ctx: CommandContext): Promise<void> {
+  await ctx.typing();
+  try {
+    const brief = await agent.marketBrief();
+    await ctx.reply(`📊 *Market Overview*\n\n${brief}`);
+  } catch (e) {
+    await ctx.reply(`❌ ${e instanceof Error ? e.message : String(e)}`);
+  }
+}
+
+/** /walletfull <address> — Full wallet profile (identity + balance + PnL) */
+export async function cmdWalletFull(ctx: CommandContext): Promise<void> {
+  const address = ctx.args[0] || DEFAULT_WALLET;
+  if (!address) { await ctx.reply("Usage: `/walletfull <address>`"); return; }
+  await ctx.typing();
+  try {
+    const report = await agent.analyzeWallet(address);
+    await ctx.reply(
+      `👛 *Full Wallet Profile*\n` +
+      `\`${address.slice(0, 8)}...${address.slice(-6)}\`\n\n` +
+      `SOL: ${report.solBalance.toFixed(4)}\n` +
+      `Tokens: ${report.tokenCount}\n` +
+      `PnL: ${report.pnl.realizedPnl > 0 ? "+" : ""}$${report.pnl.realizedPnl.toFixed(2)}\n` +
+      `Win Rate: ${(report.pnl.winRate * 100).toFixed(1)}%\n` +
+      `Trades: ${report.pnl.totalTrades.toLocaleString()}\n` +
+      `Risk: ${report.riskLevel}\n\n` +
+      `[View on Solscan](https://solscan.io/account/${address})`
+    );
+  } catch (e) {
+    await ctx.reply(`❌ ${e instanceof Error ? e.message : String(e)}`);
+  }
+}
+
+/** /chart <mint> [timeframe] — OHLCV chart summary */
+export async function cmdChart(ctx: CommandContext): Promise<void> {
+  const mint = ctx.args[0];
+  const tf = ctx.args[1] ?? "5m";
+  if (!mint) { await ctx.reply("Usage: `/chart <mint> [1m|5m|15m|1h|4h|1d]`"); return; }
+  await ctx.typing();
+  try {
+    const bars = await api.getChartData(mint, tf);
+    if (!bars.length) { await ctx.reply("❌ No chart data available."); return; }
+    const last = bars[bars.length - 1];
+    const first = bars[0];
+    const high = Math.max(...bars.map(b => b.high));
+    const low = Math.min(...bars.map(b => b.low));
+    const change = first.open ? ((last.close - first.open) / first.open * 100) : 0;
+    await ctx.reply(
+      `📈 *Chart: ${mint.slice(0, 8)}...* (${tf}, ${bars.length} bars)\n\n` +
+      `Open: $${first.open.toFixed(8)}\n` +
+      `Close: $${last.close.toFixed(8)}\n` +
+      `High: $${high.toFixed(8)}\n` +
+      `Low: $${low.toFixed(8)}\n` +
+      `Change: ${change > 0 ? "+" : ""}${change.toFixed(2)}%\n` +
+      `Volume: $${bars.reduce((s, b) => s + b.volume, 0).toFixed(2)}`
+    );
+  } catch (e) {
+    await ctx.reply(`❌ ${e instanceof Error ? e.message : String(e)}`);
+  }
+}
+
+/** /trades <mint> — Recent token trades */
+export async function cmdTrades(ctx: CommandContext): Promise<void> {
+  const mint = ctx.args[0];
+  if (!mint) { await ctx.reply("Usage: `/trades <mint>`"); return; }
+  await ctx.typing();
+  try {
+    const { trades } = await api.getTokenTrades(mint);
+    if (!trades.length) { await ctx.reply("📭 No recent trades."); return; }
+    const lines = trades.slice(0, 10).map(t => {
+      const emoji = t.type === "buy" ? "🟢" : "🔴";
+      return `${emoji} ${t.type.toUpperCase()} ${t.solAmount.toFixed(4)} SOL ($${t.priceUsd.toFixed(6)})\n   \`${t.wallet.slice(0, 8)}…\` — ${new Date(t.timestamp * 1000).toISOString().slice(11, 19)}`;
+    });
+    await ctx.reply(`📊 *Recent Trades: ${mint.slice(0, 8)}...*\n\n${lines.join("\n\n")}`);
+  } catch (e) {
+    await ctx.reply(`❌ ${e instanceof Error ? e.message : String(e)}`);
+  }
+}
+
+/** /toptraders <mint> — Top traders for a token */
+export async function cmdTopTraders(ctx: CommandContext): Promise<void> {
+  const mint = ctx.args[0];
+  if (!mint) { await ctx.reply("Usage: `/toptraders <mint>`"); return; }
+  await ctx.typing();
+  try {
+    const traders = await api.getTopTraders(mint, 10);
+    if (!traders.length) { await ctx.reply("📭 No trader data."); return; }
+    const lines = traders.map((t, i) =>
+      `${i + 1}. \`${t.wallet.slice(0, 8)}…\` — PnL: $${t.pnl.toFixed(2)} | ${t.trades} trades`
+    );
+    await ctx.reply(`🏆 *Top Traders: ${mint.slice(0, 8)}...*\n\n${lines.join("\n")}`);
+  } catch (e) {
+    await ctx.reply(`❌ ${e instanceof Error ? e.message : String(e)}`);
+  }
+}
+
+/** /holders <mint> — Holder count and distribution */
+export async function cmdHolders(ctx: CommandContext): Promise<void> {
+  const mint = ctx.args[0];
+  if (!mint) { await ctx.reply("Usage: `/holders <mint>`"); return; }
+  await ctx.typing();
+  try {
+    const data = await api.getHolderData(mint);
+    const histLine = data.history.length
+      ? `\nHistory: ${data.history.slice(-5).map(h => h.count.toLocaleString()).join(" → ")}`
+      : "";
+    await ctx.reply(`👥 *Holders: ${mint.slice(0, 8)}...*\n\nCount: ${data.count.toLocaleString()}${histLine}`);
+  } catch (e) {
+    await ctx.reply(`❌ ${e instanceof Error ? e.message : String(e)}`);
+  }
+}
+
+/** /pools <mint> — Liquidity pools for a token */
+export async function cmdPools(ctx: CommandContext): Promise<void> {
+  const mint = ctx.args[0];
+  if (!mint) { await ctx.reply("Usage: `/pools <mint>`"); return; }
+  await ctx.typing();
+  try {
+    const pools = await api.getTokenPools(mint);
+    if (!pools.length) { await ctx.reply("📭 No pools found."); return; }
+    const lines = pools.map(p =>
+      `• *${p.dex}* — Liq: $${p.liquidity.toLocaleString(undefined, { maximumFractionDigits: 0 })} | Vol: $${p.volume24h.toLocaleString(undefined, { maximumFractionDigits: 0 })}\n  \`${p.poolAddress.slice(0, 12)}…\``
+    );
+    await ctx.reply(`💧 *Pools: ${mint.slice(0, 8)}...*\n\n${lines.join("\n\n")}`);
+  } catch (e) {
+    await ctx.reply(`❌ ${e instanceof Error ? e.message : String(e)}`);
+  }
+}
+
+/** /latest — Latest launched tokens */
+export async function cmdLatest(ctx: CommandContext): Promise<void> {
+  await ctx.typing();
+  try {
+    const tokens = await api.getLatestTokens(10);
+    if (!tokens.length) { await ctx.reply("❌ No data."); return; }
+    const lines = tokens.map((t, i) => `${i + 1}. *${t.symbol}* — $${t.price.toFixed(6)} | MCap $${t.marketCap.toLocaleString()}`);
+    await ctx.reply(`🆕 *Latest Tokens*\n\n${lines.join("\n")}`);
+  } catch (e) {
+    await ctx.reply(`❌ ${e instanceof Error ? e.message : String(e)}`);
+  }
+}
+
+/** /graduated — Recently graduated tokens */
+export async function cmdGraduated(ctx: CommandContext): Promise<void> {
+  await ctx.typing();
+  try {
+    const tokens = await api.getGraduatedTokens(10);
+    if (!tokens.length) { await ctx.reply("❌ No data."); return; }
+    const lines = tokens.map((t, i) => `${i + 1}. *${t.symbol}* — $${t.price.toFixed(6)} | MCap $${t.marketCap.toLocaleString()}`);
+    await ctx.reply(`🎓 *Graduated Tokens*\n\n${lines.join("\n")}`);
+  } catch (e) {
+    await ctx.reply(`❌ ${e instanceof Error ? e.message : String(e)}`);
+  }
+}
+
+/** /watch <mint> — Add/remove from watchlist */
+export async function cmdWatch(ctx: CommandContext): Promise<void> {
+  const sub = ctx.args[0];
+  if (!sub) {
+    const list = agent.getWatchlist();
+    if (!list.length) { await ctx.reply("📭 Watchlist empty.\n\nUsage: `/watch <mint>` to add"); return; }
+    await ctx.reply(`👀 *Watchlist (${list.length}):*\n${list.map(m => `• \`${m.slice(0, 12)}…\``).join("\n")}`);
+    return;
+  }
+  if (sub === "check") {
+    await ctx.typing();
+    try {
+      const alerts = await agent.checkWatchlist();
+      if (!alerts.length) { await ctx.reply("✅ No significant watchlist moves."); return; }
+      const lines = alerts.map(a =>
+        `${a.strength === "STRONG" ? "🟢" : "🟡"} *${a.symbol}* — ${a.score}/100 → ${a.action}\n${a.reasons.join(" | ")}`
+      );
+      await ctx.reply(`🚨 *Watchlist Alerts:*\n\n${lines.join("\n\n")}`);
+    } catch (e) {
+      await ctx.reply(`❌ ${e instanceof Error ? e.message : String(e)}`);
+    }
+    return;
+  }
+  if (agent.getWatchlist().includes(sub)) {
+    agent.removeFromWatchlist(sub);
+    await ctx.reply(`❌ Removed \`${sub.slice(0, 12)}…\` from watchlist.`);
+  } else {
+    agent.addToWatchlist(sub);
+    await ctx.reply(`✅ Added \`${sub.slice(0, 12)}…\` to watchlist.\n\nUse \`/watch check\` to scan for moves.`);
+  }
+}
+
+/** /agentstate — Show agent internal state */
+export async function cmdAgentState(ctx: CommandContext): Promise<void> {
+  const state = agent.getState();
+  await ctx.reply(
+    `🤖 *Agent State*\n\n` +
+    `Mode: ${state.mode}\n` +
+    `Memories: ${state.memoriesCount}\n` +
+    `Signals: ${state.signalsCount}\n` +
+    `Watchlist: ${state.watchlistCount}`
+  );
 }

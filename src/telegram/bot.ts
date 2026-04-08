@@ -41,6 +41,10 @@ import {
   cmdGrok, cmdXSearch, cmdWebSearch, cmdImagine, cmdVideo, cmdVision, cmdFile,
   cmdTweet, cmdReply, cmdDelTweet, cmdLike, cmdRT,
   cmdTSearch, cmdMyTweets, cmdAutoTweet, cmdSmartTweet,
+  // Agent-powered commands (Solana Tracker Data API)
+  cmdDeepResearch, cmdMarket, cmdWalletFull, cmdChart, cmdTrades,
+  cmdTopTraders, cmdHolders, cmdPools, cmdLatest, cmdGraduated,
+  cmdWatch, cmdAgentState,
 } from "./commands.js";
 
 import { PumpSniper, defaultSniperConfig } from "./pump-sniper.js";
@@ -572,6 +576,19 @@ export class SolanaClaudeBot {
           );
         case "smarttweet": return void cmdSmartTweet(ctx);
         case "status": return void cmdStatus(ctx, this.state);
+        // Agent-powered commands (Solana Tracker Data API)
+        case "deepresearch": return void cmdDeepResearch(ctx);
+        case "market": return void cmdMarket(ctx);
+        case "walletfull": return void cmdWalletFull(ctx);
+        case "chart": return void cmdChart(ctx);
+        case "trades": return void cmdTrades(ctx);
+        case "toptraders": return void cmdTopTraders(ctx);
+        case "holders": return void cmdHolders(ctx);
+        case "pools": return void cmdPools(ctx);
+        case "latest": return void cmdLatest(ctx);
+        case "graduated": return void cmdGraduated(ctx);
+        case "watch": return void cmdWatch(ctx);
+        case "agentstate": return void cmdAgentState(ctx);
         default:
           await ctx.reply(`❓ Unknown command: \`/${rawCmd}\`\n\nUse /help for the full list.`);
       }

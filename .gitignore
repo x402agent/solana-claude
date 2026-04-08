@@ -1,38 +1,51 @@
 # Dependencies
 node_modules/
+**/node_modules/
 
-# Build output
+# Build output and caches
 dist/
-mcp-server/dist/
-mcp-server/node_modules/
-solana-tracker
-# Environment & secrets
+**/dist/
+coverage/
+**/coverage/
+.next/
+**/.next/
+.wrangler/
+**/.wrangler/
+.vercel/
+**/.vercel/
+.netlify/
+**/.netlify/
+*.tsbuildinfo
+
+# Environment and local secrets
 .env
 .env.*
+**/.env
+**/.env.*
 *.local
+**/*.local
 .npmrc
 .mcp.json
+.claude/
 
 # Vault (encrypted keypairs — never commit)
 vault-data/
 .clawd/
 
-# Voice output
+# Local runtime output
 voice-output/
 
-# OS
-.DS_Store
-claude-code-main 2
 # Logs
 *.log
 npm-debug.log*
 
-# Local Netlify
-.netlify
+# OS
+.DS_Store
+
+# Private / local worktrees
+tailclawd/
+claude-code-main 2/
 
 # Legacy / vendored
 tailclaude-ui/
 tailclaude-main/
-claude-code-main 2
-web/.next
-web/.wrangler
