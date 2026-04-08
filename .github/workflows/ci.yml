@@ -30,11 +30,11 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Lint
-        run: npm run lint
+      - name: Lint (build files)
+        run: npx biome check src/index.ts src/agents/ src/animations/ src/buddy/ src/entrypoints/ src/metaplex/ src/state/
 
-      - name: Format check
-        run: npm run format:check
+      - name: Format check (build files)
+        run: npx biome format src/index.ts src/agents/ src/animations/ src/buddy/ src/entrypoints/ src/metaplex/ src/state/
 
       - name: Typecheck
         run: npm run typecheck

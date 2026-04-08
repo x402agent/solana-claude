@@ -1,5 +1,5 @@
 [build]
-  base = "web"
+  base = "llm-wiki-tang/web"
   command = "npm install && npm run build"
   publish = ".next"
 
