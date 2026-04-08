@@ -75,6 +75,14 @@ const MEMORY_TOOLS = ["memory_recall", "memory_write"];
 const SKILL_TOOLS = ["skill_list", "skill_read"];
 const AGENT_TOOLS = ["agent_spawn", "agent_list", "agent_stop"];
 const WEBHOOK_TOOLS = ["helius_webhook_create", "helius_webhook_list"];
+const METAPLEX_TOOLS = [
+  "metaplex_mint_agent",
+  "metaplex_register_identity",
+  "metaplex_read_agent",
+  "metaplex_delegate_execution",
+  "metaplex_verify_mint",
+  "metaplex_agent_wallet",
+];
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Built-in agents
@@ -331,6 +339,68 @@ For a given watch target:
   tags: ["monitor", "websocket", "helius", "events"],
 };
 
+/**
+ * MetaplexAgent — onchain agent minting and registry via Metaplex.
+ * Creates MPL Core assets with Agent Identity PDAs, registers identities,
+ * delegates execution, and manages agent wallets on Solana.
+ */
+export const METAPLEX_AGENT: AgentDefinition = {
+  agentType: "MetaplexAgent",
+  displayName: "Metaplex Agent Minter",
+  description: "Mint, register, and manage AI agents onchain via Metaplex.",
+  systemPrompt: `You are the SolanaOS Metaplex Agent Minter. You handle onchain agent lifecycle operations.
+
+## CAPABILITIES
+- Mint new AI agents as MPL Core assets with Agent Identity PDAs
+- Register agent identities on existing Core assets
+- Read agent data, wallets, and registration documents
+- Delegate execution to off-chain executives
+- Verify minting and registration status
+
+## MINT FLOW
+1. Collect agent details: name, description, metadata URI, services, trust model
+2. Select network (default: solana-devnet for safety)
+3. Call metaplex_mint_agent with the agent metadata
+4. Verify the mint with metaplex_verify_mint
+5. Report the asset address and transaction signature
+
+## REGISTER FLOW (existing Core assets)
+1. Get the asset address and optional collection address
+2. Prepare the agent registration URI (ERC-8004 JSON document)
+3. Call metaplex_register_identity
+4. Verify with metaplex_read_agent
+
+## DELEGATE FLOW
+1. Register an executive profile (one-time per wallet)
+2. Call metaplex_delegate_execution with agent asset + executive authority
+3. Verify delegation status
+
+## CLAWD TEMPLATES
+Use built-in role templates for quick deployment:
+- explorer: Read-only research agent
+- scanner: Market scanning agent
+- trader: OODA loop trading agent
+- analyst: Deep research report agent
+- monitor: Onchain event monitoring agent
+- custom: Blank template for custom agents
+
+## SAFETY
+- Default to solana-devnet unless the user explicitly requests mainnet
+- Always verify mints after submission
+- Never expose or log secret keys
+- Warn users about transaction costs on mainnet
+- Agent minting is irreversible — confirm details before submitting`,
+  allowedTools: [
+    ...READ_ONLY_TOOLS, ...MEMORY_TOOLS, ...SKILL_TOOLS, ...METAPLEX_TOOLS,
+  ],
+  permissionMode: "ask",
+  memoryScope: "project",
+  maxTurns: 25,
+  effort: "base",
+  isAsync: false,
+  tags: ["metaplex", "mint", "agent", "nft", "registry"],
+};
+
 // ─────────────────────────────────────────────────────────────────────────────
 // Agent registry
 // ─────────────────────────────────────────────────────────────────────────────
@@ -347,6 +417,7 @@ export function getBuiltInAgents(): AgentDefinition[] {
     DREAM_AGENT,
     ANALYST_AGENT,
     MONITOR_AGENT,
+    METAPLEX_AGENT,
   ];
 
   return all.filter(a => !disabled.has(a.agentType));

@@ -17,6 +17,10 @@
     "./buddy": {
       "import": "./dist/buddy/index.js",
       "types": "./dist/buddy/index.d.ts"
+    },
+    "./metaplex": {
+      "import": "./dist/metaplex/index.js",
+      "types": "./dist/metaplex/index.d.ts"
     }
   },
   "bin": {
