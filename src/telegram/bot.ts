@@ -35,6 +35,8 @@ import {
   cmdCashback, cmdSignals, cmdStatus, cmdOODA, cmdResearch,
   cmdMemory, cmdDream, cmdSkills, cmdTailscale,
   cmdSnipe, cmdStop, cmdAgent,
+  cmdBalance, cmdTokens, cmdTxs, cmdSlot, cmdAssets,
+  cmdBirdeyePrice, cmdBirdeyeSearch, cmdBirdeyeOverview,
 } from "./commands.js";
 
 import { PumpSniper, defaultSniperConfig } from "./pump-sniper.js";
@@ -154,6 +156,14 @@ class TelegramAPI {
         { command: "status", description: "Bot status" },
         { command: "skills", description: "Available skills" },
         { command: "tailscale", description: "Tailscale setup guide" },
+        { command: "balance", description: "SOL balance (Helius RPC)" },
+        { command: "tokens", description: "SPL token holdings (Helius)" },
+        { command: "txs", description: "Recent transactions (Helius)" },
+        { command: "slot", description: "Current Solana slot" },
+        { command: "assets", description: "Helius DAS assets" },
+        { command: "bprice", description: "Token price (Birdeye)" },
+        { command: "bsearch", description: "Search tokens (Birdeye)" },
+        { command: "btoken", description: "Token overview (Birdeye)" },
       ],
     });
   }
