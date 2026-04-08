@@ -1,0 +1,45 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --clawd-purple: #9945FF;
+  --clawd-green: #14F195;
+  --clawd-bg: #0a0a0f;
+  --clawd-surface: #12121a;
+  --clawd-border: #1e1e2e;
+  --clawd-text: #e0e0e0;
+  --clawd-dim: #666680;
+}
+
+body {
+  background: var(--clawd-bg);
+  color: var(--clawd-text);
+}
+
+/* CRT scanline effect on headers */
+.crt-glow {
+  text-shadow: 0 0 10px var(--clawd-green), 0 0 20px var(--clawd-green);
+}
+
+/* Tier badges */
+.tier-known { color: #3b82f6; border-color: #3b82f6; }
+.tier-learned { color: #14F195; border-color: #14F195; }
+.tier-inferred { color: #f59e0b; border-color: #f59e0b; }
+
+/* Markdown content */
+.wiki-content h1 { font-size: 1.5rem; font-weight: bold; margin: 1.5rem 0 0.75rem; color: var(--clawd-green); }
+.wiki-content h2 { font-size: 1.25rem; font-weight: bold; margin: 1.25rem 0 0.5rem; color: var(--clawd-purple); }
+.wiki-content h3 { font-size: 1.1rem; font-weight: 600; margin: 1rem 0 0.5rem; }
+.wiki-content p { margin: 0.5rem 0; line-height: 1.7; }
+.wiki-content code { background: var(--clawd-surface); padding: 0.15rem 0.4rem; border-radius: 3px; font-size: 0.9em; }
+.wiki-content pre { background: var(--clawd-surface); padding: 1rem; border-radius: 6px; overflow-x: auto; margin: 0.75rem 0; border: 1px solid var(--clawd-border); }
+.wiki-content pre code { background: none; padding: 0; }
+.wiki-content table { width: 100%; border-collapse: collapse; margin: 0.75rem 0; }
+.wiki-content th, .wiki-content td { border: 1px solid var(--clawd-border); padding: 0.5rem 0.75rem; text-align: left; }
+.wiki-content th { background: var(--clawd-surface); color: var(--clawd-green); }
+.wiki-content ul, .wiki-content ol { padding-left: 1.5rem; margin: 0.5rem 0; }
+.wiki-content li { margin: 0.25rem 0; }
+.wiki-content strong { color: #fff; }
+.wiki-content a { color: var(--clawd-purple); text-decoration: underline; }
+.wiki-content blockquote { border-left: 3px solid var(--clawd-purple); padding-left: 1rem; color: var(--clawd-dim); margin: 0.75rem 0; }
