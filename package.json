@@ -28,12 +28,12 @@
     "clawd": "dist/entrypoints/clawd.js"
   },
   "scripts": {
-    "build": "tsc -p tsconfig.json",
+    "build": "tsc -p tsconfig.json; node -e \"require('fs').chmodSync('dist/entrypoints/clawd.js', 0o755)\"",
     "build:watch": "tsc -p tsconfig.json --watch",
     "dev": "tsc -p tsconfig.json --watch",
     "typecheck": "tsc --noEmit",
     "prebuild": "node -e \"console.log('Building solana-clawd v' + require('./package.json').version)\"",
-    "prepublishOnly": "tsc -p tsconfig.json --noCheck",
+    "prepublishOnly": "tsc -p tsconfig.json --noCheck && node -e \"require('fs').chmodSync('dist/entrypoints/clawd.js', 0o755)\"",
     "mcp:build": "cd mcp-server && npm install && npm run build",
     "mcp:start": "cd mcp-server && npm start",
     "mcp:http": "cd mcp-server && npm run start:http",

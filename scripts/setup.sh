@@ -47,13 +47,14 @@ cd mcp-server && npm install && cd ..
 
 # ── Build ─────────────────────────────────────────────────────────────────────
 echo -e "\n${BOLD}Building TypeScript...${RESET}"
-npm run build 2>/dev/null || echo -e "${YELLOW}⚠ Root build skipped (no entry point yet)${RESET}"
+npm run build 2>/dev/null || true
+chmod +x dist/entrypoints/clawd.js 2>/dev/null || echo -e "${YELLOW}⚠ Root build skipped (no entry point yet)${RESET}"
 
 echo -e "\n${BOLD}Building MCP server...${RESET}"
 npm run mcp:build
 
 # ── .env ─────────────────────────────────────────────────────────────────────
-if [ ! -f .env ]; then
+if [ ! -f .env ] && [ -f .env.example ]; then
   cp .env.example .env
   echo -e "${GREEN}✓ Created .env from .env.example${RESET}"
 fi
