@@ -24,6 +24,7 @@ import {
   getTokenOverview,
   searchTokens,
 } from './birdeye.js';
+import { supabase } from './supabase.js';
 
 // ---------------------------------------------------------------------------
 // HTTP Gateway (Express)
@@ -37,8 +38,20 @@ app.get('/health', (_req, res) => {
     status: 'ok',
     wallet: getPublicKey()?.toBase58() ?? null,
     birdeye: birdeye.isConnected(),
+    supabase: !!process.env.SUPABASE_URL,
     uptime: process.uptime(),
   });
+});
+
+app.get('/api/supabase/health', async (_req, res) => {
+  try {
+    const { error } = await supabase.from('_health_check_dummy').select('*').limit(0);
+    // A "relation does not exist" error still means Supabase is reachable
+    const reachable = !error || error.code === '42P01' || error.code === 'PGRST116';
+    res.json({ supabase: reachable ? 'connected' : 'error', detail: error?.message ?? 'ok' });
+  } catch (e: unknown) {
+    res.status(500).json({ supabase: 'unreachable', detail: (e as Error).message });
+  }
 });
 
 app.get('/api/balance/:address?', async (req, res) => {

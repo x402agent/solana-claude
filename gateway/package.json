@@ -11,10 +11,11 @@
   },
   "dependencies": {
     "@solana/web3.js": "^1.95.0",
+    "@supabase/supabase-js": "^2.102.1",
     "bs58": "^6.0.0",
-    "ws": "^8.18.0",
+    "dotenv": "^16.4.0",
     "express": "^4.21.0",
-    "dotenv": "^16.4.0"
+    "ws": "^8.18.0"
   },
   "devDependencies": {
     "@types/express": "^5.0.6",
