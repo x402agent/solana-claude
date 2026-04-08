@@ -33,3 +33,29 @@ declare module 'vscode-jsonrpc/node.js' { export function createMessageConnectio
 declare module 'vscode-languageserver-protocol' { const x: any; export = x; }
 declare module 'vscode-languageserver-types' { export type Position = { line: number; character: number }; export type Range = { start: Position; end: Position }; export type Location = { uri: string; range: Range }; export type Diagnostic = any; }
 declare module 'react/compiler-runtime' { export const c: any; }
+
+// Bun text loader — .md files imported as strings
+declare module '*.md' {
+  const content: string;
+  export default content;
+}
+
+// Bun bundle feature gate
+declare module 'bun:bundle' {
+  export function feature(name: string): boolean;
+}
+
+// ErrnoException (Node.js internal)
+interface ErrnoException extends Error {
+  errno?: number;
+  code?: string;
+  path?: string;
+  syscall?: string;
+}
+
+// PromiseWithResolvers polyfill
+interface PromiseWithResolvers<T> {
+  promise: Promise<T>;
+  resolve: (value: T | PromiseLike<T>) => void;
+  reject: (reason?: any) => void;
+}

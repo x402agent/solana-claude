@@ -4,8 +4,8 @@ import { ThemeProvider } from "@/components/layout/ThemeProvider";
 import { ToastProvider } from "@/components/notifications/ToastProvider";
 
 export const metadata: Metadata = {
-  title: "Blockchain Buddies",
-  description: "Solana-native trading companions with unique wallets, personalities, and trading styles",
+  title: "solana-clawd",
+  description: "The agentic engine Solana deserves: MCP tools, buddies, gateway, TailClawd, and distributed worker swarm.",
   icons: {
     icon: "/favicon.ico",
   },

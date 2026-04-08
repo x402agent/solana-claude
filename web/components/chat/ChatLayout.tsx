@@ -16,7 +16,7 @@ export function ChatLayout() {
     if (conversations.length === 0) {
       createConversation();
     }
-  }, []);
+  }, [conversations.length, createConversation]);
 
   return (
     <AnnouncerProvider>

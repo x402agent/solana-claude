@@ -64,7 +64,7 @@ export function PermissionSettings() {
       <SectionHeader title="Permissions & Safety" onReset={() => resetSettings("permissions")} />
 
       <div className="mb-4 p-3 rounded-md bg-amber-500/10 border border-amber-500/20 text-xs text-amber-300">
-        Auto-approving tools means Claude can perform these actions without asking for confirmation.
+        Auto-approving tools means solana-clawd can perform these actions without asking for confirmation.
         Use with caution.
       </div>
 

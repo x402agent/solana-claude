@@ -23,7 +23,7 @@ export function Header() {
   return (
     <header className="flex items-center justify-between px-4 py-2.5 border-b border-surface-800 bg-surface-900/50 backdrop-blur-sm">
       <div className="flex items-center gap-3">
-        <h1 className="text-sm font-medium text-surface-100">Chat</h1>
+        <h1 className="text-sm font-medium text-surface-100">solana-clawd console</h1>
       </div>
 
       <div className="flex items-center gap-2">

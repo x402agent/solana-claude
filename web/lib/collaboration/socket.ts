@@ -199,15 +199,20 @@ export type CollabEvent =
   | ErrorEvent;
 
 // Outgoing-only events (client → server) that don't need timestamp/sessionId
-export type OutgoingEvent = Omit<CollabEvent, "timestamp">;
+export type OutgoingEvent = CollabEvent extends infer Event
+  ? Event extends CollabEvent
+    ? Omit<Event, "timestamp">
+    : never
+  : never;
 
-type EventHandler<T extends CollabEvent = CollabEvent> = (event: T) => void;
+type EventForType<T extends CollabEventType> = Extract<CollabEvent, { type: T }>;
+type EventHandler<T extends CollabEventType> = (event: EventForType<T>) => void;
 
 // ─── CollabSocket ─────────────────────────────────────────────────────────────
 
 export class CollabSocket {
   private ws: WebSocket | null = null;
-  private handlers = new Map<CollabEventType, Set<EventHandler>>();
+  private handlers = new Map<CollabEventType, Set<EventHandler<CollabEventType>>>();
   private reconnectTimer: ReturnType<typeof setTimeout> | null = null;
   private reconnectAttempts = 0;
   private readonly maxReconnectAttempts = 5;
@@ -280,19 +285,23 @@ export class CollabSocket {
     this.ws.send(JSON.stringify({ ...event, timestamp: Date.now() }));
   }
 
-  on<T extends CollabEvent>(
-    type: T["type"],
+  on<T extends CollabEventType>(
+    type: T,
     handler: EventHandler<T>
   ): () => void {
     if (!this.handlers.has(type)) {
       this.handlers.set(type, new Set());
     }
-    this.handlers.get(type)!.add(handler as EventHandler);
+    this.handlers
+      .get(type)!
+      .add(handler as unknown as EventHandler<CollabEventType>);
     return () => this.off(type, handler);
   }
 
-  off<T extends CollabEvent>(type: T["type"], handler: EventHandler<T>): void {
-    this.handlers.get(type)?.delete(handler as EventHandler);
+  off<T extends CollabEventType>(type: T, handler: EventHandler<T>): void {
+    this.handlers
+      .get(type)
+      ?.delete(handler as unknown as EventHandler<CollabEventType>);
   }
 
   private dispatch(event: CollabEvent): void {

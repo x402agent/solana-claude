@@ -151,7 +151,7 @@ function BuddyTerminalCard({ buddy, onSelect, isSelected }: {
           </div>
           
           <div className="text-cyan-400 text-xs italic mb-2">
-            "{buddy.catchphrase}"
+            &quot;{buddy.catchphrase}&quot;
           </div>
           
           <div className="flex gap-4 text-xs mb-2">
@@ -239,6 +239,9 @@ export default function BuddiesTerminalPage() {
     '> Type "help" for available commands',
     '',
   ])
+  const addLog = useCallback((msg: string) => {
+    setLogs(prev => [...prev.slice(-100), msg])
+  }, [])
   
   // Load from localStorage
   useEffect(() => {
@@ -258,7 +261,7 @@ export default function BuddiesTerminalPage() {
         addLog('> ERROR: Failed to load buddies')
       }
     }
-  }, [])
+  }, [addLog])
   
   // Save to localStorage
   useEffect(() => {
@@ -273,10 +276,6 @@ export default function BuddiesTerminalPage() {
       localStorage.setItem('blockchain-buddies', JSON.stringify(data))
     }
   }, [buddies])
-  
-  const addLog = useCallback((msg: string) => {
-    setLogs(prev => [...prev.slice(-100), msg])
-  }, [])
   
   const handleCommand = useCallback((cmd: string) => {
     const parts = cmd.split(' ')
@@ -444,7 +443,7 @@ export default function BuddiesTerminalPage() {
               <div className="p-4 text-center text-gray-600 font-mono text-xs">
                 No buddies yet.
                 <br />
-                Type "hatch" below.
+                Type &quot;hatch&quot; below.
               </div>
             ) : (
               <div className="divide-y divide-gray-900">

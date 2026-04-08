@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { X, ChevronUp, ChevronDown, Regex, CaseSensitive } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -18,6 +18,15 @@ export function SearchBar({ content, containerRef, onClose }: SearchBarProps) {
   const [totalMatches, setTotalMatches] = useState(0);
   const [hasError, setHasError] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const clearHighlights = useCallback(() => {
+    if (!containerRef.current) return;
+    const marks = containerRef.current.querySelectorAll("mark.search-highlight");
+    marks.forEach((mark) => {
+      mark.replaceWith(mark.textContent ?? "");
+    });
+    containerRef.current.normalize();
+  }, [containerRef]);
 
   useEffect(() => {
     inputRef.current?.focus();
@@ -44,11 +53,12 @@ export function SearchBar({ content, containerRef, onClose }: SearchBarProps) {
       setTotalMatches(0);
       setCurrentMatch(0);
     }
-  }, [query, isRegex, caseSensitive, content]);
+  }, [query, isRegex, caseSensitive, content, clearHighlights]);
 
   // Apply DOM highlights
   useEffect(() => {
-    if (!containerRef.current) return;
+    const container = containerRef.current;
+    if (!container) return;
     clearHighlights();
 
     if (!query || hasError || totalMatches === 0) return;
@@ -58,7 +68,7 @@ export function SearchBar({ content, containerRef, onClose }: SearchBarProps) {
       const pattern = isRegex ? new RegExp(query, flags) : new RegExp(escapeRegex(query), flags);
 
       const walker = document.createTreeWalker(
-        containerRef.current,
+        container,
         NodeFilter.SHOW_TEXT,
         {
           acceptNode: (node) => {
@@ -121,27 +131,16 @@ export function SearchBar({ content, containerRef, onClose }: SearchBarProps) {
       }
 
       // Scroll current match into view
-      const currentEl = containerRef.current?.querySelector(".search-highlight-current");
+      const currentEl = container.querySelector(".search-highlight-current");
       currentEl?.scrollIntoView({ block: "center", behavior: "smooth" });
     } catch {
       // Ignore DOM errors
     }
 
     return () => {
-      if (containerRef.current) clearHighlights();
+      clearHighlights();
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [query, isRegex, caseSensitive, currentMatch, totalMatches]);
-
-  function clearHighlights() {
-    if (!containerRef.current) return;
-    const marks = containerRef.current.querySelectorAll("mark.search-highlight");
-    marks.forEach((mark) => {
-      mark.replaceWith(mark.textContent ?? "");
-    });
-    // Normalize text nodes
-    containerRef.current.normalize();
-  }
+  }, [query, isRegex, caseSensitive, currentMatch, totalMatches, hasError, clearHighlights, containerRef]);
 
   const goNext = () => {
     setCurrentMatch((c) => (c >= totalMatches ? 1 : c + 1));

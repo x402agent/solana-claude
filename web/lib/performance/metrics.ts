@@ -14,6 +14,10 @@ export interface PerformanceMetric {
 }
 
 type MetricSink = (metric: PerformanceMetric) => void;
+type LayoutShiftLike = PerformanceEntry & {
+  value: number;
+  hadRecentInput: boolean;
+};
 
 let sink: MetricSink = () => {};
 
@@ -80,7 +84,7 @@ export function observeWebVitals(): void {
     let clsSessionValue = 0;
     const clsObs = new PerformanceObserver((list) => {
       for (const entry of list.getEntries()) {
-        const e = entry as LayoutShift;
+        const e = entry as LayoutShiftLike;
         if (!e.hadRecentInput) {
           const now = e.startTime;
           if (now - clsSessionGap > 1000 || clsValue === 0) {

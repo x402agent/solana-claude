@@ -70,6 +70,7 @@ export function CollaborationProvider({
   const socketRef = useRef<CollabSocket | null>(null);
 
   const collab = useCollaboration({ sessionId, currentUser, wsUrl });
+  socketRef.current = collab.socket;
 
   // Access the socket from the ref (set by the hook internally)
   // Since useCollaboration creates the socket internally, we expose a proxy

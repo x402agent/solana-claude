@@ -22,7 +22,7 @@
  *   /tailscale  — show Tailscale Funnel setup instructions
  */
 
-import type { CommandContext, TelegramSession } from "./types.js";
+import type { CommandContext } from "./types.js";
 
 export interface Command {
   name: string;
@@ -685,4 +685,187 @@ export async function cmdAgent(ctx: CommandContext): Promise<void> {
     return;
   }
   await ctx.reply(`Use /ooda, /scan, /snipe, or /research to interact with agents.`);
+}
+
+// ─── Helius RPC Commands ─────────────────────────────────────────────────────
+
+const HELIUS_RPC = process.env.HELIUS_RPC_URL ?? process.env.GATEKEEPER_RPC_URL ?? "";
+const HELIUS_API_KEY = process.env.HELIUS_API_KEY ?? "";
+const HELIUS_PARSE_URL = process.env.HELIUS_PARSE_URL ?? "";
+const DEFAULT_WALLET = process.env.SOLANA_PUBLIC_KEY ?? process.env.SOLANA_WALLET_PUBKEY ?? "";
+
+async function rpcCall(method: string, params: unknown[]): Promise<unknown> {
+  if (!HELIUS_RPC) throw new Error("No HELIUS_RPC_URL configured");
+  const res = await fetch(HELIUS_RPC, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ jsonrpc: "2.0", id: 1, method, params }),
+  });
+  const json = await res.json() as { result?: unknown; error?: { message: string } };
+  if (json.error) throw new Error(json.error.message);
+  return json.result;
+}
+
+export async function cmdBalance(ctx: CommandContext): Promise<void> {
+  const address = ctx.args[0] || DEFAULT_WALLET;
+  if (!address) { await ctx.reply("Usage: `/balance [address]`"); return; }
+  await ctx.typing();
+  try {
+    const lamports = await rpcCall("getBalance", [address, { commitment: "confirmed" }]) as { value: number };
+    const sol = (lamports.value ?? lamports) as number / 1e9;
+    await ctx.reply(`💰 \`${address.slice(0, 8)}…${address.slice(-6)}\`\n*${sol.toFixed(4)} SOL*`);
+  } catch (e) {
+    await ctx.reply(`❌ ${e instanceof Error ? e.message : String(e)}`);
+  }
+}
+
+export async function cmdTokens(ctx: CommandContext): Promise<void> {
+  const address = ctx.args[0] || DEFAULT_WALLET;
+  if (!address) { await ctx.reply("Usage: `/tokens [address]`"); return; }
+  await ctx.typing();
+  try {
+    const TOKEN_PROGRAM = "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA";
+    const resp = await rpcCall("getTokenAccountsByOwner", [
+      address,
+      { programId: TOKEN_PROGRAM },
+      { encoding: "jsonParsed" },
+    ]) as { value: Array<{ account: { data: { parsed: { info: { mint: string; tokenAmount: { uiAmount: number } } } } } }> };
+    const accts = resp.value
+      .map(a => ({
+        mint: a.account.data.parsed.info.mint,
+        amount: a.account.data.parsed.info.tokenAmount.uiAmount,
+      }))
+      .filter(t => t.amount > 0);
+    if (!accts.length) { await ctx.reply("📦 No token accounts found."); return; }
+    const lines = accts.slice(0, 15).map(t => `• \`${t.mint.slice(0, 12)}…\` — ${t.amount}`);
+    if (accts.length > 15) lines.push(`…and ${accts.length - 15} more`);
+    await ctx.reply(`📦 *Token Accounts (${accts.length}):*\n${lines.join("\n")}`);
+  } catch (e) {
+    await ctx.reply(`❌ ${e instanceof Error ? e.message : String(e)}`);
+  }
+}
+
+export async function cmdTxs(ctx: CommandContext): Promise<void> {
+  const address = ctx.args[0] || DEFAULT_WALLET;
+  if (!address) { await ctx.reply("Usage: `/txs [address]`"); return; }
+  await ctx.typing();
+  try {
+    const sigs = await rpcCall("getSignaturesForAddress", [address, { limit: 5 }]) as Array<{
+      signature: string; blockTime: number | null; err: unknown;
+    }>;
+    if (!sigs.length) { await ctx.reply("No recent transactions found."); return; }
+    const lines = sigs.map(t => {
+      const time = t.blockTime ? new Date(t.blockTime * 1000).toISOString().slice(0, 19) : "?";
+      const status = t.err ? "❌" : "✅";
+      return `${status} \`${t.signature.slice(0, 16)}…\` — ${time}`;
+    });
+    await ctx.reply(`📜 *Recent Transactions:*\n${lines.join("\n")}`);
+  } catch (e) {
+    await ctx.reply(`❌ ${e instanceof Error ? e.message : String(e)}`);
+  }
+}
+
+export async function cmdSlot(ctx: CommandContext): Promise<void> {
+  await ctx.typing();
+  try {
+    const [slot, height] = await Promise.all([
+      rpcCall("getSlot", []) as Promise<number>,
+      rpcCall("getBlockHeight", []) as Promise<number>,
+    ]);
+    await ctx.reply(`⛓ *Slot:* ${slot.toLocaleString()}\n📏 *Block Height:* ${height.toLocaleString()}`);
+  } catch (e) {
+    await ctx.reply(`❌ ${e instanceof Error ? e.message : String(e)}`);
+  }
+}
+
+export async function cmdAssets(ctx: CommandContext): Promise<void> {
+  const address = ctx.args[0] || DEFAULT_WALLET;
+  if (!address) { await ctx.reply("Usage: `/assets [address]`"); return; }
+  if (!HELIUS_API_KEY && !HELIUS_RPC) { await ctx.reply("❌ No Helius API key configured."); return; }
+  await ctx.typing();
+  try {
+    const url = HELIUS_RPC || `https://mainnet.helius-rpc.com/?api-key=${HELIUS_API_KEY}`;
+    const res = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        jsonrpc: "2.0", id: "assets", method: "getAssetsByOwner",
+        params: { ownerAddress: address, page: 1, limit: 50 },
+      }),
+    });
+    const data = await res.json() as { result?: { items?: Array<{ content?: { metadata?: { name?: string } }; id?: string }> } };
+    const items = data?.result?.items ?? [];
+    if (!items.length) { await ctx.reply("📦 No assets found (Helius DAS)."); return; }
+    const lines = items.slice(0, 15).map(a => `• ${a.content?.metadata?.name ?? "Unknown"} — \`${a.id?.slice(0, 12)}…\``);
+    await ctx.reply(`🗂 *Assets (${items.length}):*\n${lines.join("\n")}`);
+  } catch (e) {
+    await ctx.reply(`❌ ${e instanceof Error ? e.message : String(e)}`);
+  }
+}
+
+// ─── Birdeye Commands ────────────────────────────────────────────────────────
+
+const BIRDEYE_API_KEY = process.env.BIRDEYE_API_KEY ?? "";
+
+async function birdeyeGet(path: string): Promise<Record<string, unknown>> {
+  if (!BIRDEYE_API_KEY) throw new Error("No BIRDEYE_API_KEY configured");
+  const res = await fetch(`https://public-api.birdeye.so${path}`, {
+    headers: { "X-API-KEY": BIRDEYE_API_KEY, "x-chain": "solana" },
+  });
+  if (!res.ok) throw new Error(`Birdeye ${res.status}`);
+  return res.json() as Promise<Record<string, unknown>>;
+}
+
+export async function cmdBirdeyePrice(ctx: CommandContext): Promise<void> {
+  const mint = ctx.args[0];
+  if (!mint) { await ctx.reply("Usage: `/bprice <token_mint>`"); return; }
+  await ctx.typing();
+  try {
+    const data = await birdeyeGet(`/defi/price?address=${mint}`);
+    const inner = data.data as Record<string, unknown> | undefined;
+    const price = inner?.value as number | undefined;
+    await ctx.reply(price != null
+      ? `💲 *Birdeye Price:* $${price}\nMint: \`${mint}\``
+      : `No price data for \`${mint}\``);
+  } catch (e) {
+    await ctx.reply(`❌ ${e instanceof Error ? e.message : String(e)}`);
+  }
+}
+
+export async function cmdBirdeyeSearch(ctx: CommandContext): Promise<void> {
+  const query = ctx.args.join(" ");
+  if (!query) { await ctx.reply("Usage: `/bsearch <token name or symbol>`"); return; }
+  await ctx.typing();
+  try {
+    const data = await birdeyeGet(`/defi/v3/search?keyword=${encodeURIComponent(query)}&chain=solana&target=token`);
+    const inner = data.data as { items?: Array<{ name: string; symbol: string; address: string }> } | undefined;
+    const items = inner?.items ?? [];
+    if (!items.length) { await ctx.reply(`No results for "${query}".`); return; }
+    const lines = items.slice(0, 10).map(t => `• *${t.symbol}* — ${t.name}\n  \`${t.address}\``);
+    await ctx.reply(`🔍 *Birdeye Search "${query}":*\n\n${lines.join("\n\n")}`);
+  } catch (e) {
+    await ctx.reply(`❌ ${e instanceof Error ? e.message : String(e)}`);
+  }
+}
+
+export async function cmdBirdeyeOverview(ctx: CommandContext): Promise<void> {
+  const mint = ctx.args[0];
+  if (!mint) { await ctx.reply("Usage: `/btoken <token_mint>`"); return; }
+  await ctx.typing();
+  try {
+    const data = await birdeyeGet(`/defi/token_overview?address=${mint}`);
+    const t = data.data as Record<string, unknown> | undefined;
+    if (!t) { await ctx.reply(`No data for \`${mint}\``); return; }
+    await ctx.reply(
+      `📊 *${t.symbol ?? "?"} — ${t.name ?? "Unknown"}*\n\n` +
+      `Price: $${Number(t.price ?? 0).toFixed(8)}\n` +
+      `MCap: $${Number(t.mc ?? 0).toLocaleString(undefined, { maximumFractionDigits: 0 })}\n` +
+      `Vol 24h: $${(Number(t.v24hUSD ?? 0) / 1e6).toFixed(2)}M\n` +
+      `Holders: ${Number(t.holder ?? 0).toLocaleString()}\n` +
+      `Liquidity: $${Number(t.liquidity ?? 0).toLocaleString(undefined, { maximumFractionDigits: 0 })}\n` +
+      `Mint: \`${mint}\``
+    );
+  } catch (e) {
+    await ctx.reply(`❌ ${e instanceof Error ? e.message : String(e)}`);
+  }
 }

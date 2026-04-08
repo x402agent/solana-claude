@@ -1,4 +1,5 @@
 import * as React from 'react'
+import Image from 'next/image'
 import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/lib/utils'
 
@@ -64,10 +65,12 @@ function Avatar({ className, size, src, alt, name, ...props }: AvatarProps) {
   return (
     <span className={cn(avatarVariants({ size, className }))} {...props}>
       {showImage ? (
-        <img
+        <Image
           src={src}
           alt={alt ?? name ?? 'Avatar'}
-          className="h-full w-full object-cover"
+          fill
+          sizes="64px"
+          className="object-cover"
           onError={() => setImgError(true)}
         />
       ) : (

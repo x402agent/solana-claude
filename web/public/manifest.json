@@ -1,7 +1,7 @@
 {
-  "name": "Claude Code",
-  "short_name": "Claude",
-  "description": "Claude Code — AI-powered development assistant",
+  "name": "solana-clawd",
+  "short_name": "clawd",
+  "description": "solana-clawd — Solana-native agentic engine",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#09090f",
@@ -28,7 +28,7 @@
     {
       "name": "New Conversation",
       "short_name": "New Chat",
-      "description": "Start a new conversation",
+      "description": "Start a new solana-clawd session",
       "url": "/?new=1",
       "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
     }

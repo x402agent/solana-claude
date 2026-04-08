@@ -224,6 +224,20 @@ export const useChatStore = create<ChatState>()(
         }));
       },
 
+      truncateMessages: (conversationId, keepCount) => {
+        set((state) => ({
+          conversations: state.conversations.map((c) =>
+            c.id === conversationId
+              ? {
+                  ...c,
+                  messages: c.messages.slice(0, Math.max(0, keepCount)),
+                  updatedAt: Date.now(),
+                }
+              : c
+          ),
+        }));
+      },
+
       toggleSelectConversation: (id) => {
         set((state) => ({
           selectedConversationIds: state.selectedConversationIds.includes(id)
@@ -395,3 +409,5 @@ export const useChatStore = create<ChatState>()(
     }
   )
 );
+
+export type UseChatStore = typeof useChatStore;

@@ -50,7 +50,7 @@ function classifyLine(line: string): TokenLine {
   return { type: "text", content: line };
 }
 
-function process(msg: InMessage): OutMessage {
+function processMarkdown(msg: InMessage): OutMessage {
   const lines = msg.markdown.split("\n");
   const tokens: TokenLine[] = lines.map(classifyLine);
   const headings = tokens
@@ -62,5 +62,5 @@ function process(msg: InMessage): OutMessage {
 }
 
 self.addEventListener("message", (e: MessageEvent<InMessage>) => {
-  self.postMessage(process(e.data));
+  self.postMessage(processMarkdown(e.data));
 });

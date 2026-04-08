@@ -9,11 +9,13 @@ interface ChatWindowProps {
   conversationId: string;
 }
 
+const EMPTY_MESSAGES: NonNullable<ReturnType<typeof useChatStore.getState>["conversations"][number]>["messages"] = [];
+
 export function ChatWindow({ conversationId }: ChatWindowProps) {
   const bottomRef = useRef<HTMLDivElement>(null);
   const { conversations } = useChatStore();
   const conversation = conversations.find((c) => c.id === conversationId);
-  const messages = conversation?.messages ?? [];
+  const messages = conversation?.messages ?? EMPTY_MESSAGES;
 
   const isStreaming = messages.some((m) => m.status === "streaming");
 
@@ -33,10 +35,10 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
       // Announce a short preview so screen reader users know a reply arrived
       const preview = lastMsg.content.slice(0, 100);
       setAnnouncement("");
-      setTimeout(() => setAnnouncement(`Claude replied: ${preview}`), 50);
+      setTimeout(() => setAnnouncement(`solana-clawd replied: ${preview}`), 50);
     }
     prevLengthRef.current = messages.length;
-  }, [messages.length, messages]);
+  }, [messages]);
 
   if (messages.length === 0) {
     return (
@@ -50,7 +52,7 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
         <div>
           <h2 className="text-lg font-semibold text-surface-100">How can I help?</h2>
           <p className="text-sm text-surface-400 mt-1">
-            Start a conversation with Claude Code
+            Start a conversation with solana-clawd
           </p>
         </div>
       </div>
@@ -63,7 +65,7 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
       aria-busy={isStreaming}
       aria-label="Conversation"
     >
-      {/* Polite live region — announces when Claude finishes a reply */}
+      {/* Polite live region — announces when solana-clawd finishes a reply */}
       <div
         role="status"
         aria-live="polite"

@@ -27,6 +27,7 @@ export interface CollaborationState {
   pendingToolUses: PendingToolUse[];
   annotations: Record<string, CollabAnnotation[]>; // messageId → annotations
   toolApprovalPolicy: "owner-only" | "any-collaborator";
+  socket: CollabSocket | null;
 }
 
 // ─── Hook ─────────────────────────────────────────────────────────────────────
@@ -43,6 +44,7 @@ export function useCollaboration({
     pendingToolUses: [],
     annotations: {},
     toolApprovalPolicy: "any-collaborator",
+    socket: null,
   });
 
   const effectiveWsUrl =
@@ -54,6 +56,7 @@ export function useCollaboration({
   useEffect(() => {
     const socket = new CollabSocket(sessionId, currentUser.id);
     socketRef.current = socket;
+    setState((s) => ({ ...s, socket }));
 
     socket.onConnectionChange = (connected) => {
       setState((s) => ({ ...s, isConnected: connected }));
@@ -181,6 +184,8 @@ export function useCollaboration({
     return () => {
       cleanup.forEach((off) => off());
       socket.disconnect();
+      socketRef.current = null;
+      setState((s) => ({ ...s, socket: null }));
     };
   }, [sessionId, currentUser.id, effectiveWsUrl]);
 

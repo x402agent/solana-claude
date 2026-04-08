@@ -55,7 +55,7 @@ class McpClient {
         params: {
           protocolVersion: "2024-11-05",
           capabilities: {},
-          clientInfo: { name: "claude-code-web", version: "1.0.0" },
+          clientInfo: { name: "solana-clawd-web", version: "1.0.0" },
         },
       } satisfies McpRequest),
     });

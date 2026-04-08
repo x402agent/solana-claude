@@ -163,7 +163,7 @@ export function McpSettings() {
       <SectionHeader title="MCP Servers" />
 
       <p className="text-xs text-surface-400 mb-4">
-        Model Context Protocol servers extend Claude with external tools and data sources.
+        Model Context Protocol servers extend solana-clawd with external tools and data sources.
       </p>
 
       <div className="space-y-2 mb-4">

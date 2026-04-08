@@ -4,8 +4,7 @@ import type { Conversation } from "../types";
 
 // Lazy import to avoid circular deps at module init time
 function getStore() {
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  return require("../store").useChatStore as import("../store").UseChatStore;
+  return require("../store").useChatStore as typeof import("../store").useChatStore;
 }
 
 // ---------------------------------------------------------------------------
@@ -37,7 +36,7 @@ export interface ConversationAPI {
 
 function findConversation(id: string): Conversation {
   const store = getStore();
-  const conv = store.getState().conversations.find((c) => c.id === id);
+  const conv = store.getState().conversations.find((c: Conversation) => c.id === id);
   if (!conv) throw new ApiError(404, `Conversation ${id} not found`, "not_found");
   return conv;
 }
@@ -90,14 +89,14 @@ export const conversationAPI: ConversationAPI = {
     // Markdown export
     const lines: string[] = [`# ${conv.title}`, ""];
     const created = new Date(conv.createdAt).toISOString();
-    lines.push(`> Exported from Claude Code · ${created}`, "");
+    lines.push(`> Exported from solana-clawd · ${created}`, "");
 
     for (const msg of conv.messages) {
       const heading =
         msg.role === "user"
           ? "**You**"
           : msg.role === "assistant"
-            ? "**Claude**"
+            ? "**solana-clawd**"
             : `**${msg.role}**`;
       lines.push(heading, "");
       lines.push(extractTextContent(msg.content), "");

@@ -85,7 +85,7 @@ export function CursorGhost({ textareaRef }: CursorGhostProps) {
       }
     }
     setRendered(next);
-  });
+  }, [ctx, textareaRef]);
 
   if (!ctx || rendered.length === 0) return null;
 

@@ -37,7 +37,7 @@ function backoffMs(attempt: number): number {
 }
 
 /** Combine multiple AbortSignals into one. Aborts if any source aborts. */
-function combineSignals(...signals: (AbortSignal | undefined)[]): {
+function combineSignals(...signals: (AbortSignal | null | undefined)[]): {
   signal: AbortSignal;
   cleanup: () => void;
 } {
@@ -161,7 +161,7 @@ class ApiClient {
     const url = `${this.baseUrl}${path}`;
     const headers = this.buildHeaders(extraHeaders);
 
-    const timeoutSignals: (AbortSignal | undefined)[] = [userSignal];
+    const timeoutSignals: (AbortSignal | null | undefined)[] = [userSignal];
     let timeoutController: AbortController | undefined;
     let timeoutId: ReturnType<typeof setTimeout> | undefined;
 

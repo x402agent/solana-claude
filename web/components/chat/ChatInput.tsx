@@ -135,7 +135,7 @@ export function ChatInput({ conversationId }: ChatInputProps) {
               adjustHeight();
             }}
             onKeyDown={handleKeyDown}
-            placeholder="Message Claude Code..."
+            placeholder="Message solana-clawd..."
             rows={1}
             aria-label="Message"
             className={cn(
@@ -172,7 +172,7 @@ export function ChatInput({ conversationId }: ChatInputProps) {
         </div>
 
         <p className="text-xs text-surface-600 text-center mt-2">
-          Claude can make mistakes. Verify important information.
+          solana-clawd can make mistakes. Verify important information.
         </p>
       </div>
     </div>

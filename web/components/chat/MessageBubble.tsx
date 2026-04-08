@@ -20,7 +20,7 @@ export function MessageBubble({ message }: MessageBubbleProps) {
         "flex gap-3 animate-fade-in",
         isUser && "flex-row-reverse"
       )}
-      aria-label={isUser ? "You" : isError ? "Error from Claude" : "Claude"}
+      aria-label={isUser ? "You" : isError ? "Error from solana-clawd" : "solana-clawd"}
     >
       {/* Avatar — purely decorative, role conveyed by article label */}
       <div

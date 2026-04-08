@@ -72,7 +72,7 @@ export function toMarkdown(conv: Conversation, options: ExportOptions): string {
   }
 
   lines.push("---");
-  lines.push("*Exported from Claude Code*");
+  lines.push("*Exported from solana-clawd*");
 
   return lines.join("\n");
 }
