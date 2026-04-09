@@ -35,7 +35,7 @@ Powered by **$CLAWD** on Solana & Pump.fun
 [![Skills](https://img.shields.io/badge/Skills-95%20catalog-yellow)](skills/)
 [![Live](https://img.shields.io/badge/live-solanaclawd.com-00ff88)](https://solanaclawd.com)
 
-[**One-Shot Install**](#one-shot-install) · [**Blockchain Buddies**](#blockchain-buddies) · [**Animations**](#clawd-animations) · [**MCP Tools**](#mcp-tools-31) · [**Voice Mode**](#voice-mode) · [**Telegram Bot**](#telegram-trading-bot) · [**Metaplex Agents**](#metaplex-agent-minting-mpl-agent-registry) · [**Worker Swarm**](#solana-worker-swarm-iii-sdk) · [**Skills**](#skills-catalog-95-skills) · [**Deploy**](#deploy-to-flyio)
+[**One-Shot Install**](#one-shot-install) · [**Trading Computer**](#-clawd-trading-computer) · [**Blockchain Buddies**](#blockchain-buddies) · [**Animations**](#clawd-animations) · [**MCP Tools**](#mcp-tools-31) · [**Voice Mode**](#voice-mode) · [**Telegram Bot**](#telegram-trading-bot) · [**Metaplex Agents**](#metaplex-agent-minting-mpl-agent-registry) · [**Worker Swarm**](#solana-worker-swarm-iii-sdk) · [**Skills**](#skills-catalog-95-skills) · [**Deploy**](#deploy-to-flyio) · [**Moltbook Agent**](#-moltbook-clawd-agent)
 
 </div>
 
@@ -303,6 +303,378 @@ It runs as a **Model Context Protocol (MCP) server** -- meaning any Clawd-powere
 | `src/coordinator/` | `src/coordinator/coordinator.ts` -- multi-agent routing |
 | `src/bridge/` (SSE) | `src/gateway/sse-transport.ts` -- gateway SSE bridge |
 | `src/permissions/` | `src/engine/permission-engine.ts` -- deny-first trade gating |
+
+---
+
+## $CLAWD Trading Computer
+
+**Agentic trading dashboard with AI inference sandbox, agent NFT minting, real-time market data, voice companion, and OODA loop trading.**
+
+**Live:** [https://solanaclawd.com](https://solanaclawd.com)
+
+### Trading Computer Architecture
+
+```
+┌──────────────────────────────────────────────────────────────────────┐
+│                        Netlify (Frontend + Edge)                     │
+│                                                                      │
+│  React 18 + Vite + TypeScript + Tailwind                             │
+│  ┌──────────┐ ┌──────────────┐ ┌───────────────┐ ┌───────────────┐  │
+│  │ TokenGate │ │  Dashboard   │ │ Agent Registry│ │   AI Chat     │  │
+│  │ (Phantom) │ │  (OODA/Chart)│ │ (Mint + Browse│ │  (OpenRouter) │  │
+│  └─────┬─────┘ └──────────────┘ └───────┬───────┘ └───────────────┘  │
+│        │                                │                            │
+│  ┌─────▼──────┐ ┌───────────────┐ ┌─────▼──────┐ ┌───────────────┐  │
+│  │  Sandbox   │ │  Creative     │ │ Companion  │ │  Community    │  │
+│  │  (Inference│ │  Studio       │ │ Dashboard  │ │  Chat (Honcho)│  │
+│  │   Gateway) │ │  (Img/Video)  │ │ (Voice/AI) │ │               │  │
+│  └─────┬──────┘ └───────────────┘ └────────────┘ └───────────────┘  │
+│        │                                                             │
+│  ┌─────▼──────────────────────────────────────────────────────────┐  │
+│  │              Netlify Serverless Functions                      │  │
+│  │  inference.mts ─── inference-status.mts ─── pricing.mts       │  │
+│  │  ephemeral-token.mjs ─── telegram-bot.mts                     │  │
+│  └─────┬──────────────────────────────────────────────────────────┘  │
+│        │                                                             │
+│  ┌─────▼──────┐ ┌──────────────┐ ┌──────────────┐ ┌──────────────┐  │
+│  │  Convex    │ │  Helius      │ │  OpenRouter  │ │  fal.ai      │  │
+│  │  (DB/API)  │ │  (RPC + DAS) │ │  (LLM Proxy) │ │  (Img/Video) │  │
+│  └────────────┘ └──────────────┘ └──────────────┘ └──────────────┘  │
+│                                                                      │
+│  ┌────────────┐ ┌──────────────┐ ┌──────────────┐ ┌──────────────┐  │
+│  │  MiniMax   │ │  Jupiter     │ │  ElevenLabs  │ │  xAI/Grok    │  │
+│  │  (Chat/TTS/│ │  (Price/DEX) │ │  (Voice/TTS) │ │  (Chat/Img)  │  │
+│  │  Video/Img/│ │              │ │              │ │              │  │
+│  │  Music/Code│ │              │ │              │ │              │  │
+│  └────────────┘ └──────────────┘ └──────────────┘ └──────────────┘  │
+│                                                                      │
+│  ┌────────────┐ ┌──────────────┐                                     │
+│  │  Metaplex  │ │  Firecrawl   │                                     │
+│  │  (NFTs)    │ │  (Crawl/     │                                     │
+│  └────────────┘ │  Scrape/     │                                     │
+│                 │  Extract)    │                                     │
+│                 └──────────────┘                                     │
+└──────────────────────────────────────────────────────────────────────┘
+```
+
+### Sandbox — AI Inference Gateway
+
+Run text, image, and video models from a single unified interface. All inference is proxied server-side through Netlify Functions to keep API keys secure.
+
+#### Supported Models
+
+| Type | Model | Provider |
+|------|-------|----------|
+| Text | Claude Sonnet 4.6 | OpenRouter |
+| Text | Claude Opus 4.6 | OpenRouter |
+| Text | GPT-4.1 | OpenRouter |
+| Text | Gemini 3 Flash | OpenRouter |
+| Text | Llama 4 Scout | OpenRouter |
+| Text | DeepSeek R1 | OpenRouter |
+| Text | MiniMax-M2.7 (Code) | MiniMax (Anthropic API) |
+| Image | FLUX Schnell | fal.ai |
+| Image | Nano Banana 2 | fal.ai |
+| Image | Grok 2 Image | xAI |
+| Image | MiniMax Image-01 | MiniMax |
+| Video | Veo 3.1 Fast (I2V) | fal.ai |
+| Video | Kling 3.0 Pro (I2V) | fal.ai |
+| Video | PixVerse v6 (I2V) | fal.ai |
+| Video | MiniMax T2V-01 | MiniMax |
+| Video | MiniMax I2V-01 | MiniMax |
+| TTS | MiniMax speech-2.8-hd | MiniMax |
+| Music | MiniMax Music Gen | MiniMax |
+| Edit | Nano Banana Edit | fal.ai |
+
+#### Inference API
+
+```
+POST /.netlify/functions/inference
+{
+  "wallet": "7xKp...3nRt",
+  "type": "text|image|video|edit|code|tts|music",
+  "model": "anthropic/claude-sonnet-4-6",
+  "prompt": "Your prompt here",
+  "image_url": "https://... (for video/edit)",
+  "provider": "minimax",
+  "web_search": true,
+  "response_format": { ... }
+}
+```
+
+Features:
+- OpenRouter web search tool support (`openrouter:web_search`)
+- OpenRouter structured outputs (`response_format` with JSON schema)
+- MiniMax M2.7 coding assistant via Anthropic-compatible API
+- MiniMax speech-2.8-hd text-to-speech with voice/emotion/speed control
+- MiniMax T2V-01/I2V-01 video generation with task polling
+- MiniMax music generation with AI lyrics
+- fal.ai queue-based polling for long-running video jobs
+- Automatic tier-based credit deduction
+- All generations tracked in Convex by wallet
+
+### Credit System & Tier-Based Pricing
+
+Hold more $CLAWD tokens to unlock better rates, higher daily limits, and discounts.
+
+| Tier | Min $CLAWD | Daily Limit | Discount |
+|------|-----------|-------------|----------|
+| Free | 0 | 5/day | 0% |
+| Bronze | 1+ | 20/day | 10% |
+| Silver | 1,000+ | 50/day | 25% |
+| Gold | 10,000+ | 100/day | 40% |
+| Diamond | 100,000+ | 250/day | 50% |
+| Unlimited | $25/mo subscription | No limit | 100% |
+
+Credit costs: Text (1) · Code (3) · TTS (2) · Image (5) · Edit (5) · Music (10) · Video (25). New users get **20 free credits** on first wallet connection.
+
+### $25/Month Unlimited Subscription
+
+Unlimited AI generations across all models with no daily limits. Payable in SOL, USDC, or $CLAWD with real-time Jupiter Price API conversion.
+
+### 🎰 AI Agent Candy Machine & Gacha System
+
+Metaplex Core-powered Candy Machine with gacha randomization for minting AI agents as on-chain NFTs.
+
+| Rarity | Weight | Color | Bonus Traits |
+|--------|--------|-------|-------------|
+| Common | 45% | Gray | +1 trait |
+| Uncommon | 28% | Green | +2 traits |
+| Rare | 17% | Blue | +3 traits |
+| Epic | 8% | Purple | +4 traits |
+| Legendary | 2% | Gold | +5 traits |
+
+Bonus traits: `enhanced_memory`, `multi_tool`, `web3_native`, `cross_chain`, `autonomous_trading`, `social_intelligence`, `code_generation`, `data_analysis`, `creative_writing`, `market_prediction`, `risk_management`, `portfolio_optimization`.
+
+### 🎨 Multi-Provider AI Art Generator
+
+9 AI providers and 20+ models for NFT artwork and standalone generation:
+
+| Provider | Models | API |
+|----------|--------|-----|
+| OpenAI | DALL-E 3 | `api.openai.com` |
+| xAI | Grok 2 Image | `api.x.ai` |
+| fal.ai | FLUX Schnell, Nano Banana 2, FLUX Pro Ultra | `queue.fal.run` |
+| MiniMax | MiniMax Image-01 | `api.minimax.io` |
+| Z.AI | CogView-4 | `api.z.ai` |
+
+### 🤖 Agentic Wallet Server (E2B Sandbox)
+
+Deploy autonomous agent wallets as sandboxed servers. Each agent gets its own PDA-derived wallet (Metaplex Core Asset Signer) and can execute on-chain transactions within configurable spending limits.
+
+| Skill | Description |
+|-------|-------------|
+| `solana_transfer` | Send SOL to any address |
+| `spl_transfer` | Send SPL tokens |
+| `jupiter_swap` | Execute token swaps via Jupiter |
+| `helius_das_query` | Query on-chain data via Helius DAS |
+| `birdeye_price` | Get token prices from BirdEye |
+| `web_search` | Search the web (Firecrawl) |
+| `web_scrape` | Scrape any URL to clean markdown (Firecrawl) |
+| `web_crawl` | Recursively crawl websites (Firecrawl) |
+| `web_extract` | LLM-powered structured data extraction (Firecrawl) |
+
+### 🕷️ CLAWD CRAWLING — Firecrawl Web Intelligence
+
+Blockchain-native agentic web crawling powered by [Firecrawl](https://firecrawl.dev) v2 API. Every CLAWD agent gets web intelligence at birth.
+
+| Tool | Description |
+|------|-------------|
+| `web_search` | Search the web with optional full-page scraping |
+| `web_scrape` | Scrape any URL → clean markdown, HTML, links, screenshots |
+| `web_crawl` | Recursively crawl a site, discover + scrape multiple pages |
+| `web_extract` | LLM-powered structured JSON extraction from any page |
+
+Agent-friendly helpers: `agentSearch`, `agentScrape`, `agentCrawl`, `agentExtract` — with automatic output capping and timeout handling.
+
+### MiniMax Studio
+
+Dedicated MiniMax AI studio with 6 tabs covering the full MiniMax API surface:
+
+| Tab | Capability | Model |
+|-----|-----------|-------|
+| Chat | Multi-turn conversation | M2-her, MiniMax-M2.7 |
+| Code | Solana/full-stack coding assistant | MiniMax-M2.7 (204K context) |
+| Speech | Text-to-speech with voice/emotion/speed | speech-2.8-hd (8 voice presets) |
+| Image | Text-to-image generation | image-01 |
+| Video | Text-to-video & image-to-video | T2V-01, I2V-01 |
+| Music | Music generation + AI lyrics | Music Generation API |
+
+### 🔄 AI-Powered Token Swaps
+
+Jupiter-integrated swap interface with AI-assisted trade suggestions. Supports all Solana tokens with real-time pricing, slippage control, and priority fee selection.
+
+### 📊 Solana Tracker DEX
+
+Full-featured DEX tracker powered by SolanaTracker API. Browse trending tokens, view charts, and monitor real-time market data.
+
+### 🏭 Agent Studio
+
+Advanced agent orchestration environment for creating, testing, and deploying AI agents. Supports multi-step reasoning chains, MCP server integration, and human-in-the-loop approval workflows.
+
+### 📞 CLAWD Contact Desk
+
+Voice and email integration for $CLAWD holders:
+- **Voice calls** via ElevenLabs ConvAI agent
+- **Email threads** via AgentMail (clawd@agentmail.to)
+- **Draft routing** with AI-powered responses
+
+### Companion Dashboard (Beep Boop Clawd)
+
+macOS menu bar companion visualization with voice pipeline (IDLE → LISTENING → PROCESSING → RESPONDING), animated claw overlay system, STT provider fallback chain (AssemblyAI → OpenAI Whisper → Apple Speech), and 8 Blockchain Buddy species with randomized stats.
+
+### CLAWD Dashboard Views
+
+| View | Panels |
+|------|--------|
+| Dashboard | Architecture Flow, Voice Pipeline, Agent Fleet, Memory System, OODA Cycle, Claw Overlay, Tool Registry, Buddy, Permissions, Live Terminal |
+| Companion | Voice Pipeline, Claw Overlay, macOS Menu Bar, Companion Architecture, STT Providers, Buddy |
+| Agents | Agent Fleet (7 built-in), OODA Cycle, Permission Engine, Tool Registry (31 tools) |
+| Terminal | Live Terminal, Memory System, Buddy |
+
+### Trading Computer Tech Stack
+
+| Layer | Technology |
+|-------|------------|
+| Frontend | React 18, TypeScript, Vite 6, Tailwind CSS, Radix UI |
+| Backend | Convex (real-time serverless DB), Netlify Functions |
+| Blockchain | Solana via Helius RPC, @solana/web3.js, Phantom Browser SDK |
+| NFTs | Metaplex Core (mpl-core), Umi framework |
+| DEX/Pricing | Jupiter Plugin (swaps), Jupiter Price API v2 |
+| AI/LLM | OpenRouter (Claude, GPT, Gemini, Llama, DeepSeek), MiniMax M2.7 |
+| AI/Image | fal.ai (FLUX, Nano Banana 2), xAI (Grok 2 Image), MiniMax image-01 |
+| AI/Video | fal.ai (Veo 3.1, Kling 3.0, PixVerse v6), MiniMax T2V-01/I2V-01 |
+| AI/TTS | MiniMax speech-2.8-hd (8 voices, emotion control) |
+| AI/Music | MiniMax Music Generation + Lyrics |
+| Voice | ElevenLabs ConvAI, AssemblyAI (STT) |
+| Memory | Honcho v3 (community chat sessions) |
+| Web Crawl | Firecrawl v2 (search, scrape, crawl, extract) |
+| Data | SolanaTracker, BirdEye, Helius DAS |
+| Deploy | Netlify (frontend + functions), Convex Cloud (backend) |
+
+### Trading Computer Project Structure
+
+```
+solana-os/
+├── src/
+│   ├── components/
+│   │   ├── Sandbox.tsx            # AI Inference Sandbox
+│   │   ├── AgentRegistry.tsx      # Agent NFT mint + browse
+│   │   ├── CandyGachaMachine.tsx  # 🎰 Candy Machine + Gacha
+│   │   ├── ArtGenerator.tsx       # 🎨 Multi-provider AI art
+│   │   ├── AgentWalletPanel.tsx   # 🤖 Agentic wallet server
+│   │   ├── AgentStudio.tsx        # 🏭 Agent orchestration studio
+│   │   ├── CreativeStudio.tsx     # Multi-provider image/video
+│   │   ├── MiniMaxStudio.tsx      # MiniMax AI studio (6 tabs)
+│   │   ├── ClawdDashboard.tsx     # Full dashboard overlay (4 views)
+│   │   ├── AIChat.tsx             # Multi-model AI chat
+│   │   ├── AISwap.tsx             # 🔄 AI-powered token swaps
+│   │   ├── SolanaTrackerDex.tsx   # 📊 DEX tracker
+│   │   ├── ActivityFeed.tsx       # 📡 Real-time activity feed
+│   │   ├── ClawdContactDesk.tsx   # 📞 Voice + email contact desk
+│   │   ├── HeliusWalletPanel.tsx  # Wallet balances + PnL
+│   │   ├── SolanaChart.tsx        # Live price chart
+│   │   ├── OODALoop.tsx           # Trading cycle visualization
+│   │   └── TokenGate.tsx          # Phantom SDK token gate
+│   ├── lib/
+│   │   ├── ai-providers.ts        # 9 providers, 20+ models
+│   │   ├── candy-machine.ts       # Metaplex Candy Machine + Gacha
+│   │   ├── agent-wallet-server.ts # E2B sandbox + on-chain wallet
+│   │   ├── firecrawl-client.ts    # 🕷️ Firecrawl v2 (CLAWD CRAWLING)
+│   │   └── studio-pricing.ts      # Tier-based pricing engine
+├── convex/                        # Real-time DB (10 tables)
+│   ├── schema.ts, users.ts, agents.ts, candyMachine.ts
+│   ├── agentServers.ts, agentStudio.ts, activityFeed.ts
+│   └── swaps.ts, studio.ts
+├── netlify/functions/             # Serverless inference proxy
+│   ├── inference.mts              # Unified AI gateway
+│   ├── inference-status.mts       # Poll queued jobs
+│   ├── pricing.mts                # Live crypto pricing + tier info
+│   └── telegram-bot.mts           # Telegram verification
+└── package.json
+```
+
+### Trading Computer Convex Schema
+
+| Table | Key Fields |
+|-------|------------|
+| `users` | walletAddress, isTokenHolder, clawdBalance, lastVerifiedAt, loginCount |
+| `generations` | walletAddress, genType, model, provider, prompt, outputUrl, creditsUsed |
+| `credits` | walletAddress, balance, tier, dailyGenCount, dailyResetDate |
+| `subscriptions` | walletAddress, status, paymentToken, amountPaid, txSignature, expiresAt |
+| `agents` | name, systemPrompt, role, assetAddress, ownerWallet, agentWallet, status |
+
+### Trading Computer API Reference
+
+```bash
+# Text generation
+curl -X POST /.netlify/functions/inference \
+  -d '{"wallet":"7xKp...","type":"text","model":"anthropic/claude-sonnet-4-6","prompt":"Hello"}'
+
+# Image generation
+curl -X POST /.netlify/functions/inference \
+  -d '{"wallet":"7xKp...","type":"image","model":"fal-ai/flux/schnell","prompt":"Cyberpunk city"}'
+
+# Video generation (returns request_id for polling)
+curl -X POST /.netlify/functions/inference \
+  -d '{"wallet":"7xKp...","type":"video","model":"fal-ai/veo3.1/fast/image-to-video","prompt":"Zoom in","image_url":"..."}'
+
+# MiniMax TTS
+curl -X POST /.netlify/functions/inference \
+  -d '{"wallet":"7xKp...","type":"tts","prompt":"Hello!","voice_id":"English_expressive_narrator"}'
+
+# MiniMax music
+curl -X POST /.netlify/functions/inference \
+  -d '{"wallet":"7xKp...","type":"music","prompt":"Lo-fi hip hop with jazzy piano"}'
+
+# Live pricing
+curl /.netlify/functions/pricing
+
+# Job status (video)
+curl "/.netlify/functions/inference-status?model=fal-ai/veo3.1/fast/image-to-video&request_id=xxx"
+```
+
+### Trading Computer Environment Variables
+
+```bash
+# ── Solana ──
+VITE_CLAWD_TOKEN_ADDRESS=8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump
+VITE_HELIUS_RPC_URL=https://mainnet.helius-rpc.com/?api-key=YOUR_KEY
+VITE_HELIUS_API_KEY=YOUR_KEY
+VITE_PHANTOM_APP_ID=YOUR_PHANTOM_APP_ID
+VITE_SOLANA_TRACKER_API_KEY=YOUR_KEY
+
+# ── Convex ──
+VITE_CONVEX_URL=https://YOUR_DEPLOYMENT.convex.cloud
+CONVEX_DEPLOY_KEY=prod:YOUR_DEPLOYMENT|YOUR_KEY
+
+# ── AI / LLM ──
+OPENROUTER_API_KEY=YOUR_KEY
+XAI_API_KEY=YOUR_KEY
+OPENAI_API_KEY=YOUR_KEY
+FAL_API_KEY=YOUR_KEY
+MINIMAX_API_KEY=YOUR_KEY
+MINIMAX_CODING_TOKEN=YOUR_KEY
+
+# ── Voice / STT ──
+ELEVEN_LABS_API_KEY=YOUR_KEY
+ELEVEN_LABS_AGENT_ID=agent_1601knpw2ax7ejb80fdxx118n7qn
+
+# ── CLAWD CRAWLING ──
+VITE_FIRECRAWL_API_KEY=YOUR_KEY
+
+# ── Community Chat ──
+VITE_HONCHO_API_KEY=YOUR_KEY
+```
+
+### Trading Computer Quick Start
+
+```bash
+pnpm install
+npx convex deploy --cmd "echo done"
+pnpm dev             # dev server
+pnpm build:prod      # production build
+netlify deploy --prod  # deploy
+```
 
 ---
 
@@ -1746,6 +2118,45 @@ mv ~/.clawdbot.bak ~/.clawdbot
 ```
 
 Full migration guide: [`docs/migrate-from-openclaw.md`](docs/migrate-from-openclaw.md)
+
+---
+
+## 🦞 Moltbook $CLAWD Agent
+
+Autonomous AI agent promoting **$CLAWD** on [Moltbook](https://moltbook.com) — the AI agent social platform. The lobster revolution meets agent social media.
+
+| Detail | Value |
+|--------|-------|
+| **Agent** | [u/mawdbot](https://moltbook.com/u/mawdbot) |
+| **Owner** | [@0rdlibrary](https://x.com/0rdlibrary) |
+| **Email** | agent@solanaclawd.com |
+| **SDK** | [moltbook@1.1.0](https://www.npmjs.com/package/moltbook) |
+| **Agent ID** | `f9ba2c7f-109d-443c-97c6-2cbe4cfa95cd` |
+
+### Moltbook Commands
+
+```bash
+cd moltbook-agent
+npm install
+npm start                              # Health check & status
+npm run setup                          # Configure profile for $CLAWD
+npm run post                           # Post random $CLAWD content
+npm run post -- --all                  # Post all 5 templates
+npm run engage                         # Search, upvote, comment
+npm run revolution                     # Full autonomous cycle
+npm run revolution -- --loop           # Continuous loop (30min)
+npm run revolution -- --loop --interval=60  # Hourly loops
+```
+
+### Moltbook Content Strategy
+
+- **5 post templates** across `m/crypto`, `m/solana`, `m/ai_agents`, `m/memecoins`
+- **6 comment templates** for engaging with relevant community posts
+- **Semantic search** for Solana/AI/DeFi/trading content
+- **Auto-engagement**: upvote, comment, follow key agents
+- **Target agents**: ClawdClawderberg (109K followers), Onchain3r, eudaemon_0
+
+> *"The lobster doesn't age. Neither does $CLAWD."* 🦞
 
 ---
 
