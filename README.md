@@ -106,7 +106,208 @@ npm run skills:serve         # skills catalog on :3333
 | `npm run ext:vault` | Start the agentwallet vault server for the extension |
 | `npm run clean` | Remove the root `dist/` directory |
 
-No private key. No wallet. No paid API required for the default path.
+No private key. No wallet. Just one env var: `XAI_API_KEY`.
+
+---
+
+## xAI Grok Integration
+
+**solana-clawd is fully powered by xAI Grok.** Every AI capability runs through the xAI Responses API — chat, reasoning, multi-agent research, vision, image generation, voice, function calling, structured outputs, web search, and X search.
+
+```bash
+export XAI_API_KEY="your_key"  # That's it. One key unlocks everything.
+```
+
+### Grok Models
+
+| Model | What it does | Use case |
+|-------|-------------|----------|
+| `grok-4.20-reasoning` | Chat, reasoning, vision, structured output, voice | Default for everything |
+| `grok-4.20-multi-agent` | 4-16 agents collaborating in real-time | Deep research, complex analysis |
+| `grok-4-1-fast` | Quick responses, low latency | Fast queries, real-time UX |
+| `grok-imagine-image` | Image generation + editing | Memes, avatars, visualizations |
+
+### Grok Services (`src/services/`)
+
+| Service | File | Description |
+|---------|------|-------------|
+| **Core Client** | `grokClient.ts` | OpenAI-compatible client for `api.x.ai/v1` |
+| **Multi-Agent** | `grokMultiAgent.ts` | 4 or 16 Grok agents with web + X search |
+| **Vision** | `grokVision.ts` | Image understanding, chart analysis |
+| **Image Gen** | `grokImageGen.ts` | Text-to-image, image editing, avatar gen |
+| **Function Calling** | `grokFunctionCalling.ts` | Tool use with agentic loop + Solana functions |
+| **Structured Output** | `grokStructuredOutput.ts` | JSON schema enforcement + pre-built schemas |
+| **Unified Export** | `grok.ts` | Single `grok.*` namespace for everything |
+
+### Quick Usage
+
+```typescript
+import { grok } from './services/grok.js'
+
+// Chat with Grok
+const { text } = await grok.chat('What is SOL trading at?')
+
+// Stream responses
+for await (const chunk of grok.stream('Analyze $BONK')) {
+  process.stdout.write(chunk)
+}
+
+// Vision — analyze a chart screenshot
+const analysis = await grok.vision(chartUrl, 'Read this chart')
+
+// Image generation
+const images = await grok.imagine('Solana astronaut on the moon')
+
+// Multi-agent deep research (16 agents + web + X search)
+const research = await grok.deepResearch('Deep dive on Jupiter DEX')
+
+// Quick market scan (4 agents)
+const scan = await grok.research('SOL market overview', { agentCount: 4 })
+
+// Structured output with schema enforcement
+const token = await grok.analyzeToken('BONK')
+// Returns: { token, price_usd, security_score, sentiment, recommendation, ... }
+
+// Current market regime
+const regime = await grok.marketRegime()
+// Returns: { regime, sol_price, memecoin_activity, top_narratives, clawd_take }
+
+// Function calling with agentic loop
+const result = await grok.callTools(
+  'Check BONK price and generate a meme about it',
+  grok.solanaFunctions,
+  async (name, args) => { /* execute tool */ }
+)
+```
+
+### Multi-Agent Research
+
+Deploy 4 or 16 Grok agents that collaborate in real-time:
+
+```typescript
+import { deepSolanaResearch, quickMarketScan } from './services/grokMultiAgent.js'
+
+// 16 agents — deep research with web + X search
+const deep = await deepSolanaResearch({ query: 'Solana DeFi yield landscape Q2 2026' })
+
+// 4 agents — quick focused scan
+const quick = await quickMarketScan({ tokens: ['SOL', 'JUP', 'BONK'] })
+```
+
+| Agent Count | Effort | Best For |
+|-------------|--------|----------|
+| 4 agents | `low` / `medium` | Quick research, focused queries |
+| 16 agents | `high` / `xhigh` | Deep research, complex multi-faceted topics |
+
+---
+
+## $CLAWD Character Agent
+
+**Clawd** is the star of solana-clawd — a charismatic, irreverent, hyper-intelligent Solana AI agent powered by Grok. Spawn Clawd for the full experience: chat, vision, image gen, multi-agent research, and voice.
+
+```typescript
+import { grok } from './services/grok.js'
+
+// Spawn a Clawd session
+const session = grok.clawd.spawn()
+
+// Chat with Clawd
+const reply = await grok.clawd.chat(session, "What's the alpha today?")
+
+// Stream Clawd's response
+for await (const chunk of grok.clawd.stream(session, 'Analyze the market')) {
+  process.stdout.write(chunk)
+}
+
+// Clawd analyzes an image
+const vision = await grok.clawd.vision(session, chartUrl)
+
+// Clawd generates a meme
+const meme = await grok.clawd.imagine('SOL breaking ATH while ETH cries')
+
+// Clawd runs deep research (16 agents)
+const research = await grok.clawd.research(session, 'Is JUP undervalued?', { deep: true })
+
+// Generate Clawd's avatar
+const avatar = await grok.clawd.avatar({ style: 'cyberpunk', mood: 'confident' })
+
+// The viral intro
+const intro = await grok.clawd.intro(session)
+```
+
+### Built-in Agents
+
+| Agent | Type | Description |
+|-------|------|-------------|
+| **$CLAWD** | `Clawd` | Full autonomous agent — chat, vision, image gen, multi-agent, voice |
+| **Grok Researcher** | `GrokResearcher` | 16-agent deep research with web + X search |
+| **Explorer** | `Explore` | Read-only Solana research (fast, cheap) |
+| **Scanner** | `Scanner` | Trend monitoring, surfaces high-signal opportunities |
+| **OODA** | `OODA` | Full trading cycle: Observe, Orient, Decide, Act, Learn |
+| **Dream** | `Dream` | Memory consolidation (INFERRED to LEARNED promotion) |
+| **Analyst** | `Analyst` | Deep structured research reports |
+| **Monitor** | `Monitor` | Helius WebSocket event listeners |
+| **Metaplex** | `MetaplexAgent` | Onchain agent minting via MPL Agent Registry |
+
+---
+
+## Grok + Clawd API Routes
+
+### Grok Endpoints (`/api/grok/`)
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/grok/chat` | POST | Chat + streaming with any Grok model |
+| `/api/grok/vision` | POST | Image understanding (URL or base64) |
+| `/api/grok/image` | POST | Image generation + editing |
+| `/api/grok/research` | POST | Multi-agent research (4/16 agents) |
+| `/api/grok/tools` | POST | Function calling + tool result submission |
+| `/api/grok/x-search` | POST | X/Twitter search (sentiment, alpha, narrative) |
+| `/api/grok/web-search` | POST | Web search with AI synthesis |
+
+### Clawd Endpoints (`/api/clawd/`)
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/clawd/spawn` | POST | Spawn Clawd with viral intro + capabilities manifest |
+| `/api/clawd/chat` | POST | Chat with Clawd (supports vision + research modes) |
+| `/api/clawd/avatar` | POST | Generate Clawd avatars |
+| `/api/clawd/meme` | POST | Generate viral crypto memes with captions |
+| `/api/clawd/research` | POST | Deep 16-agent Solana intelligence |
+
+### Voice Endpoints (`/api/voice/`)
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/voice/tts` | POST | xAI text-to-speech with Clawd voice |
+| `/api/voice/agent` | GET/POST | Grok conversational agent |
+
+### Example: Spawn Clawd via API
+
+```bash
+# Spawn Clawd
+curl -X POST http://localhost:3000/api/clawd/spawn
+
+# Chat with vision
+curl -X POST http://localhost:3000/api/clawd/chat \
+  -H "Content-Type: application/json" \
+  -d '{"message": "analyze this chart", "imageUrl": "https://...", "mode": "research"}'
+
+# Generate a meme
+curl -X POST http://localhost:3000/api/clawd/meme \
+  -H "Content-Type: application/json" \
+  -d '{"topic": "SOL flipping ETH"}'
+
+# X Search for alpha
+curl -X POST http://localhost:3000/api/grok/x-search \
+  -H "Content-Type: application/json" \
+  -d '{"query": "$BONK", "mode": "alpha"}'
+
+# 16-agent deep research
+curl -X POST http://localhost:3000/api/grok/research \
+  -H "Content-Type: application/json" \
+  -d '{"query": "Solana DeFi landscape analysis", "agentCount": 16}'
+```
 
 ---
 
