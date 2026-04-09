@@ -6,6 +6,7 @@
         "allowImportingTsExtensions": false,
         "baseUrl": ".",
         "outDir": "dist",
+        "ignoreDeprecations": "6.0",
         "paths": {
             "@page-agent/llms": ["../llms/src/index.ts"],
             "@page-agent/page-controller": ["../page-controller/src/PageController.ts"],
