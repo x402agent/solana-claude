@@ -1,4 +1,4 @@
-// SolanaOS Chrome Extension — Background Service Worker
+// Solana Clawd pAGENT — Background Service Worker
 // Manages connection state and badge updates
 
 const DEFAULT_API = 'http://127.0.0.1:7777';
@@ -21,8 +21,7 @@ function gatewayAuthHeaders(secret) {
   if (!trimmed) return {};
   return {
     'Authorization': `Bearer ${trimmed}`,
-    'X-SolanaOS-Secret': trimmed,
-    'X-SolanaOS-Secret': trimmed,
+    'X-Clawd-Secret': trimmed,
   };
 }
 
@@ -134,9 +133,9 @@ function deriveBadge(status) {
 }
 
 // Check every 30 seconds
-chrome.alarms.create('solanaos-status', { periodInMinutes: 0.5 });
+chrome.alarms.create('clawd-status', { periodInMinutes: 0.5 });
 chrome.alarms.onAlarm.addListener((alarm) => {
-  if (alarm.name === 'solanaos-status') checkStatus();
+  if (alarm.name === 'clawd-status') checkStatus();
 });
 
 // Check on install/startup

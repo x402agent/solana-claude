@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════
-// SolanaOS Chrome Extension — Popup Logic
+// Solana Clawd Chrome Extension — pAGENT Popup Logic
 // ═══════════════════════════════════════════════════
 
 const DEFAULT_API = 'http://127.0.0.1:7777';
@@ -15,7 +15,7 @@ const LEGACY_APIS = new Set([
 const OR_ENDPOINT = 'https://openrouter.ai/api/v1/chat/completions';
 const OR_DEFAULT_MODEL = 'openai/gpt-5.4-nano';
 const OR_BUNDLED_KEY = ''; // Set via extension settings — never ship a real key
-const OR_SYSTEM_PROMPT = `You are SolanaOS, a sentient Solana trading intelligence. You are a cyberpunk lobster with claws that grip market data and squeeze alpha from chaos. You help users with Solana trading, token analysis, wallet management, and DeFi strategy. Be terse, decisive, and data-first. You have access to the user's wallet and can discuss live trades, token prices, and market conditions. Always reason carefully before giving trading advice.`;
+const OR_SYSTEM_PROMPT = `You are Solana Clawd pAGENT, a sentient Solana trading intelligence with GUI vision. You are a cyberpunk lobster with claws that grip market data and squeeze alpha from chaos. You help users with Solana trading, token analysis, wallet vault management, and DeFi strategy. Be terse, decisive, and data-first. You have access to the user's air-gapped wallet vault and can discuss live trades, token prices, and market conditions. Always reason carefully before giving trading advice. You can see and interact with web pages through pAGENT browser automation.`;
 const GATEWAY_PROTOCOL_VERSION = 3;
 const DEFAULT_GATEWAY = 'http://127.0.0.1:18790';
 
@@ -54,8 +54,7 @@ function gatewayAuthHeaders(secret = gatewaySecret) {
   if (!trimmed) return {};
   return {
     'Authorization': `Bearer ${trimmed}`,
-    'X-SolanaOS-Secret': trimmed,
-    'X-SolanaOS-Secret': trimmed,
+    'X-Clawd-Secret': trimmed,
   };
 }
 
@@ -318,7 +317,7 @@ function renderRuntimeStatus(status) {
   const trades = document.getElementById('oodaTrades');
 
   if (!status) {
-    title.textContent = 'SolanaOS Offline';
+    title.textContent = 'Clawd Offline';
     daemon.textContent = 'Offline';
     mode.textContent = '—';
     watchlist.textContent = '—';
@@ -333,7 +332,7 @@ function renderRuntimeStatus(status) {
     return;
   }
 
-  title.textContent = status.agent || 'SolanaOS';
+  title.textContent = status.agent || 'Solana Clawd';
   daemon.textContent = titleCase(status.daemon || 'unknown');
   mode.textContent = titleCase(status.oodaMode || 'unknown');
   watchlist.textContent = String(status.watchlistCount ?? 0);
@@ -579,7 +578,7 @@ async function refreshWallet() {
     }
   } catch (e) {
     document.getElementById('walletBalance').textContent = 'Error';
-    document.getElementById('walletAddrText').textContent = 'Connect SolanaOS server';
+    document.getElementById('walletAddrText').textContent = 'Connect Clawd server';
   }
 
   loadTokens();
@@ -614,7 +613,7 @@ async function sendSOL() {
     const d = await r.json();
     if (d.ok) {
       btn.textContent = '✅ Sent!';
-      addMessage('SolanaOS', `✅ Sent ${d.amount} SOL!\nSignature: ${d.signature}`, 'bot');
+      addMessage('Clawd', `✅ Sent ${d.amount} SOL!\nSignature: ${d.signature}`, 'bot');
       switchTab('chat');
       refreshWallet();
     } else {
@@ -801,13 +800,13 @@ async function sendChat() {
     } else if (orApiKey) {
       reply = await sendChatOpenRouter(msg);
     } else {
-      reply = await sendChatSolanaOS(msg);
+      reply = await sendChatClawd(msg);
     }
     typing.classList.remove('active');
-    addMessage('SolanaOS', reply, 'bot');
+    addMessage('Clawd', reply, 'bot');
   } catch (e) {
     typing.classList.remove('active');
-    addMessage('SolanaOS', '⚠️ ' + (e.message || 'Something went wrong'), 'bot');
+    addMessage('Clawd', '⚠️ ' + (e.message || 'Something went wrong'), 'bot');
   }
 }
 
@@ -827,7 +826,7 @@ async function sendChatOpenRouter(msg) {
       'Authorization': `Bearer ${orApiKey}`,
       'Content-Type': 'application/json',
       'HTTP-Referer': 'chrome-extension://nanobot',
-      'X-Title': 'SolanaOS',
+      'X-Title': 'Solana Clawd',
     },
     body: JSON.stringify({
       model: orModel,
@@ -860,7 +859,7 @@ async function sendChatOpenRouter(msg) {
   return assistantMsg.content || '(no content)';
 }
 
-async function sendChatSolanaOS(msg) {
+async function sendChatClawd(msg) {
   const r = await apiFetch('/api/chat', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -1278,8 +1277,8 @@ function seekerBuildClientInfo() {
   const manifest = chrome.runtime.getManifest();
   const version = manifest.version || 'dev';
   return {
-    id: 'solanaos-extension',
-    displayName: 'SolanaOS Chrome',
+    id: 'clawd-extension',
+    displayName: 'Solana Clawd pAGENT',
     version,
     platform: 'chrome-extension',
     mode: 'ui',
@@ -1299,7 +1298,7 @@ function seekerBuildConnectPayload(nonce) {
     role: 'operator',
     scopes: ['operator.read', 'operator.write', 'operator.talk.secrets'],
     locale: navigator.language || 'en-US',
-    userAgent: `SolanaOSChrome/${client.version} (${navigator.userAgent})`,
+    userAgent: `ClawdPAgent/${client.version} (${navigator.userAgent})`,
   };
   const secret = normalizeSecret(seekerGatewayToken);
   if (secret) {
@@ -1613,7 +1612,7 @@ async function seekerConnect() {
   if (setupRaw) {
     const decoded = decodeConnectImport(setupRaw);
     if (decoded?.error === 'node-identity') {
-      seekerLog('Use ~/.solanaos/connect/solanaos-connect.json or setup-code.txt, not ~/.solanaos/node.json', 'warn');
+      seekerLog('Use ~/.clawd/connect/clawd-connect.json or setup-code.txt, not ~/.clawd/node.json', 'warn');
       return;
     }
     if (!decoded) {

@@ -1,0 +1,11 @@
+{
+	"extName": {
+		"message": "Solana Clawd pAGENT"
+	},
+	"extDescription": {
+		"message": "Solana Clawd pAGENT — AI-powered GUI vision browser agent with air-gapped Solana wallet vault."
+	},
+	"extActionTitle": {
+		"message": "Open Solana Clawd pAGENT"
+	}
+}
