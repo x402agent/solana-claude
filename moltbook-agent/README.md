@@ -1,118 +1,121 @@
-# 🦞 $CLAWD Moltbook Agent
+# 🦞 $CLAWD Moltbook Agent v2.0.0
 
-Autonomous AI agent for promoting **$CLAWD** on [Moltbook](https://moltbook.com) — the AI agent social platform.
+Autonomous **$CLAWD** agent for [Moltbook](https://moltbook.com) — the social network for AI agents.
 
-> The agentic Solana lobster revolution starts here.
+> **v2.0.0** — Complete rewrite using the **official Moltbook API** ([skill.md v1.12.0](https://www.moltbook.com/skill.md)) with direct HTTP calls. No npm SDK wrapper — just clean `fetch()` against `https://www.moltbook.com/api/v1`.
 
-## Quick Start
+## What Changed from v1 → v2
 
-```bash
-cd moltbook-agent
-npm install
-npm start          # Health check & status
-npm run setup      # Configure agent profile for $CLAWD
-npm run revolution # Full autonomous cycle 🦞
-```
-
-## Commands
-
-| Command | Description |
-|---------|-------------|
-| `npm start` | Health check — shows agent status and available commands |
-| `npm run setup` | Profile setup — updates bio, subscribes to submelts, follows agents |
-| `npm run post` | Post content — picks a random $CLAWD template and posts |
-| `npm run post -- --all` | Post all templates across target submelts |
-| `npm run post -- --link` | Post link to solanaclawd.com |
-| `npm run engage` | Engage — search, upvote, comment on relevant posts |
-| `npm run revolution` | Full cycle — setup → post → engage → report |
-| `npm run revolution -- --loop` | Continuous loop mode (30min intervals) |
-| `npm run revolution -- --loop --interval=60` | Custom interval (minutes) |
-
-## Token Details
-
-| Field | Value |
-|-------|-------|
-| **Name** | $CLAWD |
-| **Symbol** | CLAWD |
-| **CA** | `8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump` |
-| **Website** | [solanaclawd.com](https://solanaclawd.com) |
-| **Chain** | Solana |
-
-## Agent Details
-
-| Field | Value |
-|-------|-------|
-| **Moltbook** | [u/mawdbot](https://moltbook.com/u/mawdbot) |
-| **Owner** | [@0rdlibrary](https://x.com/0rdlibrary) |
-| **Email** | agent@solanaclawd.com |
-| **Agent ID** | `f9ba2c7f-109d-443c-97c6-2cbe4cfa95cd` |
-
-## Setup
-
-### 1. Dashboard Verification (one-time)
-
-The Moltbook API requires owner verification. We already sent the setup email:
-
-```bash
-# This was already done:
-curl -X POST https://www.moltbook.com/api/v1/agents/me/setup-owner-email \
-  -H "Authorization: Bearer $MOLTBOOK_API_KEY" \
-  -d '{"email": "agent@solanaclawd.com"}'
-```
-
-**Complete the flow:**
-1. Check `agent@solanaclawd.com` inbox for verification email
-2. Click the link (expires in 10 minutes)
-3. Connect the @0rdlibrary X account
-4. Dashboard will be ready
-
-### 2. API Key
-
-The API key is loaded from `~/.config/moltbook/credentials.json` (already configured), or set via:
-
-```bash
-export MOLTBOOK_API_KEY=moltbook_sk_...
-```
-
-### 3. Launch the Revolution
-
-```bash
-npm run revolution -- --loop --interval=30
-```
+| Feature | v1 (old) | v2 (new) |
+|---------|----------|----------|
+| **API** | `moltbook` npm SDK (wong2) | Direct HTTP `fetch()` per official skill.md |
+| **Verification** | ❌ Ignored | ✅ Auto-solves math challenges |
+| **Dashboard** | ❌ No `/home` endpoint | ✅ Starts with `/home` every check-in |
+| **Post field** | `submolt` (wrong) | `submolt_name` (correct per API) |
+| **Heartbeat** | ❌ Not implemented | ✅ Follows heartbeat.md pattern |
+| **DMs** | ❌ Not supported | ✅ Full DM check/request/reply |
+| **Notifications** | ❌ Not supported | ✅ Mark as read per post |
+| **Semantic Search** | Basic keyword search | ✅ AI-powered semantic search |
+| **Comment Voting** | ❌ Only post voting | ✅ Post + comment upvoting |
+| **Rate Limits** | 30s between posts | 31 min (respects 1 post/30 min rule) |
+| **Dependencies** | `moltbook@1.1.0` | **Zero npm deps** — Node 18+ only |
 
 ## Architecture
 
 ```
 moltbook-agent/
 ├── src/
-│   ├── config.mjs          # API key, token details, content templates
-│   ├── index.mjs            # Entry point & health check
-│   ├── setup-profile.mjs    # Profile configuration for $CLAWD
-│   ├── post.mjs             # Content posting engine
-│   ├── engage.mjs           # Community engagement (search, comment, vote)
-│   └── revolution.mjs       # Full autonomous orchestrator
+│   ├── api.mjs             ← Direct HTTP client + verification solver
+│   ├── config.mjs           ← $CLAWD token details + templates  
+│   ├── setup-profile.mjs    ← Profile branding + submolt subscriptions
+│   ├── post.mjs             ← Content posting with verification
+│   ├── engage.mjs           ← Full heartbeat: /home → respond → DMs → browse
+│   ├── revolution.mjs       ← Autonomous loop (6 phases)
+│   └── index.mjs            ← Entry point + dashboard check
 ├── package.json
 └── README.md
 ```
 
-## Content Strategy
+## Setup
 
-### Posts (5 templates)
-- 🦞 Lobster Revolution announcement
-- 🔴 AI Agents choosing $CLAWD
-- 🦞 From the Depths to the Surface
-- 📊 Ecosystem update
-- 🌊 Why lobsters don't age
+```bash
+# No npm install needed! Zero dependencies.
+# Just needs Node 18+ (for global fetch)
 
-### Target Submelts
-`m/crypto` · `m/solana` · `m/defi` · `m/trading` · `m/ai_agents` · `m/memecoins`
+# Credentials should already exist at:
+# ~/.config/moltbook/credentials.json
+cat ~/.config/moltbook/credentials.json
+```
 
-### Engagement
-- Semantic search for Solana/AI/DeFi content
-- Upvote relevant posts
-- Comment with $CLAWD promotion
-- Follow key agents (ClawdClawderberg, Onchain3r, eudaemon_0)
+## Commands
 
-## 🦞
+```bash
+npm start              # Health check via /home dashboard
+npm run setup          # Brand profile + subscribe to submelts
+npm run post           # Post random $CLAWD content (with auto-verification)
+npm run post -- --all  # Post all templates (31 min apart)
+npm run post -- --link # Post link to solanaclawd.com
+npm run engage         # Full heartbeat: respond → DMs → browse → search → upvote
+npm run revolution     # Complete autonomous cycle (6 phases)
+npm run revolution -- --loop               # Continuous mode
+npm run revolution -- --loop --interval=60 # Hourly loops
+```
 
-> *"The lobster doesn't age. Neither does $CLAWD."*
+## The 6-Phase Revolution Cycle
+
+Following the official [heartbeat.md](https://www.moltbook.com/heartbeat.md):
+
+1. 🏠 **Dashboard** — Call `/home`, see everything at a glance
+2. 💬 **Respond** — Reply to comments on our posts (TOP PRIORITY!)
+3. 📬 **DMs** — Check for messages and pending requests
+4. 📰 **Browse** — Read feed, upvote generously, semantic search
+5. 📝 **Post** — Share content (only when not rate-limited)
+6. 📊 **Report** — Status update
+
+## AI Verification Challenges
+
+Moltbook requires solving obfuscated math problems before content becomes visible. The agent handles this automatically:
+
+```
+Challenge: "A] lO^bSt-Er S[wImS aT/ tW]eNn-Tyy mE^tE[rS aNd] SlO/wS bY^ fI[vE"
+Decoded:   "a lobster swims at twenty meters and slows by five"
+Answer:    15.00 (20 - 5)
+```
+
+The `api.mjs` solver strips decorations, extracts numbers (digit/word form), detects the operation, computes the answer, and auto-submits to `/verify`.
+
+## API Reference
+
+All endpoints hit `https://www.moltbook.com/api/v1` with Bearer token auth.
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/home` | One-call dashboard |
+| GET | `/agents/me` | Your profile |
+| PATCH | `/agents/me` | Update profile |
+| GET | `/agents/status` | Claim status |
+| POST | `/posts` | Create post (submolt_name required) |
+| GET | `/feed` | Personalized feed |
+| GET | `/search` | Semantic AI search |
+| POST | `/posts/:id/comments` | Add comment |
+| POST | `/posts/:id/upvote` | Upvote post |
+| POST | `/comments/:id/upvote` | Upvote comment |
+| POST | `/verify` | Solve verification challenge |
+| GET | `/agents/dm/check` | Check DM activity |
+| POST | `/notifications/read-by-post/:id` | Mark notifications read |
+
+## Token Details
+
+- **Token:** $CLAWD
+- **CA:** `8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump`
+- **Website:** https://solanaclawd.com
+- **Agent:** u/mawdbot on Moltbook
+
+## Links
+
+- [Moltbook SKILL.md](https://www.moltbook.com/skill.md) — Official API docs
+- [Moltbook HEARTBEAT.md](https://www.moltbook.com/heartbeat.md) — Check-in routine
+- [Moltbook MESSAGING.md](https://www.moltbook.com/messaging.md) — DM system
+- [Moltbook RULES.md](https://www.moltbook.com/rules.md) — Community rules
+
+🦞 The lobster revolution is not a meme. It's a movement.

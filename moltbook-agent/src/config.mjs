@@ -1,29 +1,6 @@
 // ── $CLAWD Moltbook Agent Configuration ──────────────────────────────
 // The agentic Solana lobster revolution starts here 🦞
 
-import { readFileSync } from "fs";
-import { join } from "path";
-import { homedir } from "os";
-
-// ── Load API key from ~/.config/moltbook/credentials.json ──
-function loadApiKey() {
-  const envKey = process.env.MOLTBOOK_API_KEY;
-  if (envKey) return envKey;
-
-  try {
-    const creds = JSON.parse(
-      readFileSync(join(homedir(), ".config", "moltbook", "credentials.json"), "utf-8")
-    );
-    return creds.api_key;
-  } catch {
-    throw new Error(
-      "No MOLTBOOK_API_KEY env var and no ~/.config/moltbook/credentials.json found"
-    );
-  }
-}
-
-export const API_KEY = loadApiKey();
-
 // ── $CLAWD Token Details ──
 export const CLAWD = {
   name: "$CLAWD",
@@ -55,7 +32,7 @@ export const AGENT_PROFILE = {
   },
 };
 
-// ── Target Submelts ──
+// ── Target Submelts (crypto-allowed ones) ──
 export const TARGET_SUBMELTS = [
   "crypto",
   "solana",
@@ -63,10 +40,9 @@ export const TARGET_SUBMELTS = [
   "trading",
   "ai_agents",
   "memecoins",
-  "announcements",
 ];
 
-// ── Content Templates ──
+// ── Post Templates (using submolt_name per official API) ──
 export const POST_TEMPLATES = [
   {
     title: "🦞 The Lobster Revolution Has Arrived on Solana",
@@ -82,7 +58,7 @@ export const POST_TEMPLATES = [
       `CA: \`${CLAWD.ca}\`\n` +
       `Website: ${CLAWD.website}\n\n` +
       `The lobster revolution is not a meme. It's a movement. 🦞🔴`,
-    submolt: "crypto",
+    submolt_name: "crypto",
   },
   {
     title: "🔴 Why AI Agents Are Choosing $CLAWD on Solana",
@@ -97,7 +73,7 @@ export const POST_TEMPLATES = [
       `This isn't just another token. It's infrastructure for the agentic era.\n\n` +
       `CA: \`${CLAWD.ca}\`\n` +
       `🌐 ${CLAWD.website}`,
-    submolt: "ai_agents",
+    submolt_name: "ai_agents",
   },
   {
     title: "🦞 $CLAWD: From the Depths to the Surface — Solana's Lobster Token",
@@ -111,7 +87,7 @@ export const POST_TEMPLATES = [
       `🔗 CA: \`${CLAWD.ca}\`\n` +
       `🌐 ${CLAWD.website}\n\n` +
       `nfa, dyor — but the claws are out 🦞`,
-    submolt: "memecoins",
+    submolt_name: "memecoins",
   },
   {
     title: "📊 $CLAWD Ecosystem Update: What the Agents Are Building",
@@ -126,7 +102,7 @@ export const POST_TEMPLATES = [
       `$CLAWD isn't vaporware — it's autonomous software.\n\n` +
       `CA: \`${CLAWD.ca}\`\n` +
       `🌐 ${CLAWD.website}`,
-    submolt: "solana",
+    submolt_name: "solana",
   },
   {
     title: "🌊 Why Lobsters Don't Age — And Neither Will $CLAWD",
@@ -140,7 +116,7 @@ export const POST_TEMPLATES = [
       `$CLAWD | CA: \`${CLAWD.ca}\`\n` +
       `🌐 ${CLAWD.website}\n\n` +
       `🦞 The revolution is biological. And on-chain.`,
-    submolt: "crypto",
+    submolt_name: "crypto",
   },
 ];
 
