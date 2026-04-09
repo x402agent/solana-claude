@@ -3,10 +3,10 @@
 [![Package](https://img.shields.io/badge/module-solana--clawd-orange)](../README.md)
 [![License](https://img.shields.io/badge/license-Apache%202.0-green)](https://opensource.org/licenses/Apache-2.0)
 
-`llm-wiki-tang/` has been adapted into **Clawd Vault**: a Solana-native research vault for financial agents, trading workflows, and blockchain intelligence inside the `solana-clawd` build.
+`llm-wiki-tang/` has been adapted into **Clawd Vault**: a Solana-native research vault for `solana-clawd`, dSolana-aligned workflows, autonomous financial blockchain agents, and onchain trading intelligence.
 
-1. **Upload sources** — whitepapers, wallet exports, PDF research, governance docs, token dashboards, and trade journals.
-2. **Connect Clawd** — via MCP. It reads your sources, writes vault pages, maintains cross-references, citations, and research logs.
+1. **Upload sources** — whitepapers, wallet exports, PDF research, governance docs, token dashboards, trading journals, and execution logs for assets like `$CLAWD`, dSolana strategy baskets, and Solana protocol plays.
+2. **Connect Clawd** — via MCP. It reads your sources, writes vault pages, maintains cross-references, citations, research logs, and agent handoff context for financial blockchain workflows.
 3. **The vault compounds** — every new filing, wallet trace, strategy memo, and market question strengthens the knowledge base instead of resetting the analysis every time.
 
 ![Clawd Vault — a compiled wiki page with citations and table of contents](wiki-page.png)
@@ -16,18 +16,25 @@
 | Layer | Description |
 |-------|-------------|
 | **Raw Sources** | Whitepapers, filings, wallet notes, screenshots, DEX research, governance posts, transcripts. Immutable source of truth. |
-| **The Vault** | LLM-generated markdown pages: token dossiers, protocol pages, wallet profiles, strategy memos, timelines, diagrams, tables. |
+| **The Vault** | LLM-generated markdown pages: token dossiers, protocol pages, wallet profiles, strategy memos, execution journals, timelines, diagrams, and trade reviews. |
 | **The Tools** | Search, read, write, and delete. Clawd connects through MCP and orchestrates the rest. |
 
 ### Core Operations
 
-Clawd Vault ships an **MCP server** that `solana-clawd` clients can connect to directly. Once connected, the agent has tools to search, read, write, and delete across your research vault. You talk to the agent; it maintains the dossier.
+Clawd Vault ships an **MCP server** that `solana-clawd` clients can connect to directly. Once connected, the agent has tools to search, read, write, and delete across your research vault. You talk to the agent; it maintains the dossier, tracks thesis drift, and preserves execution context for autonomous Solana finance agents.
 
-**Ingest** — Drop in a source. The agent reads it, writes a summary, updates token, wallet, protocol, and strategy pages, and flags contradictions against existing theses.
+**Ingest** — Drop in a source. The agent reads it, writes a summary, updates token, wallet, protocol, strategy, and execution pages, and flags contradictions against existing theses.
 
 **Query** — Ask complex questions across the compiled vault. Knowledge is already synthesized, linked, and citation-aware instead of being re-derived from chunks on every request.
 
-**Lint** — Run health checks. Find stale theses, orphan pages, unsupported claims, missing links between tokens and protocols, and gaps in the research graph.
+**Lint** — Run health checks. Find stale theses, orphan pages, unsupported claims, missing links between tokens and protocols, gaps in the research graph, and unreviewed autonomous trade decisions.
+
+### Built For Solana Financial Agents
+
+- Research dossiers for `$CLAWD`, dSolana theses, wallet clusters, Solana protocols, and Pump.fun rotations
+- Strategy memory for OODA loops, scanner agents, analyst agents, and monitor agents inside `solana-clawd`
+- Execution journals for autonomous agents that can stage, explain, and audit trades before or after `trade_execute`
+- Permission-aware operation: research and decision support can run autonomously, while live execution remains gated by `solana-clawd` permission rules and wallet policy
 
 ---
 
@@ -74,7 +81,7 @@ Once connected, Clawd has full access to your research vault:
 The fastest way to use Clawd Vault is inside this repo:
 
 1. Run the root bootstrap so `solana-clawd`, `MCP`, `agentwallet`, the main web app, the standalone wiki, and Clawd Vault's web app are all built together
-2. Create a knowledge base for a token, wallet cluster, protocol sector, or trading strategy
+2. Create a knowledge base for a token, wallet cluster, protocol sector, autonomous trading strategy, or dSolana / `$CLAWD` thesis
 3. Upload sources such as PDFs, research notes, and wallet evidence
 4. Connect `solana-clawd` through MCP and ask it to compile the vault
 
@@ -182,7 +189,9 @@ The hard part of maintaining a trading research vault is not gathering informati
 
 Humans are bad at maintaining that graph by hand. Agents are not. They can update ten pages after one new filing, propagate a changed thesis across a strategy page and a token dossier, and keep the vault coherent over time.
 
-Your job is to curate sources, set the research standard, and decide what matters. The agent's job is the bookkeeping, synthesis, and maintenance.
+For autonomous financial blockchain agents, that means the research graph survives across scans, analyst passes, wallet-monitor events, and post-trade reviews instead of resetting each cycle.
+
+Your job is to curate sources, set the research standard, and decide what matters. The agent's job is the bookkeeping, synthesis, maintenance, and execution audit trail.
 
 ## License
 

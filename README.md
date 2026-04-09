@@ -847,14 +847,14 @@ Full docs: [`packages/agentwallet/README.md`](packages/agentwallet/README.md)
 
 ## Clawd Vault — Solana Research Knowledge Base
 
-`llm-wiki-tang/` is **Clawd Vault**: a Solana-native research vault for financial agents and trading workflows. Upload sources (whitepapers, wallet exports, PDFs, governance docs), connect via MCP, and let the agent compile and maintain token dossiers, protocol pages, wallet profiles, strategy memos, and cross-referenced research.
+`llm-wiki-tang/` is **Clawd Vault**: a Solana-native research vault for `solana-clawd`, dSolana-aligned workflows, autonomous financial blockchain agents, and trading intelligence. Upload sources (whitepapers, wallet exports, PDFs, governance docs), connect via MCP, and let the agent compile and maintain token dossiers, protocol pages, wallet profiles, strategy memos, execution journals, and cross-referenced research.
 
 ### Three Layers
 
 | Layer | Description |
 |-------|-------------|
 | **Raw Sources** | Whitepapers, filings, wallet notes, DEX research, governance posts, transcripts. Immutable. |
-| **The Vault** | LLM-generated markdown pages: token dossiers, protocol pages, wallet profiles, strategy memos, timelines, diagrams. |
+| **The Vault** | LLM-generated markdown pages: token dossiers, protocol pages, wallet profiles, strategy memos, execution journals, timelines, diagrams. |
 | **The Tools** | Search, read, write, delete. Clawd connects through MCP and orchestrates the rest. |
 
 ### Architecture
@@ -891,9 +891,16 @@ Full docs: [`packages/agentwallet/README.md`](packages/agentwallet/README.md)
 
 ### Core Operations
 
-- **Ingest** — Drop in a source. The agent reads it, writes a summary, updates token/wallet/protocol/strategy pages, and flags contradictions against existing theses.
+- **Ingest** — Drop in a source. The agent reads it, writes a summary, updates token/wallet/protocol/strategy/execution pages, and flags contradictions against existing theses.
 - **Query** — Ask complex questions across the compiled vault. Knowledge is already synthesized, linked, and citation-aware.
-- **Lint** — Run health checks. Find stale theses, orphan pages, unsupported claims, missing links, and gaps in the research graph.
+- **Lint** — Run health checks. Find stale theses, orphan pages, unsupported claims, missing links, gaps in the research graph, and unreviewed autonomous trade decisions.
+
+### Vault Use Cases
+
+- Build living dossiers for `$CLAWD`, dSolana theses, Pump.fun rotations, and wallet-cluster surveillance
+- Give OODA, scanner, analyst, and monitor agents a shared Solana memory surface across sessions
+- Preserve autonomous trading context before and after execution, including thesis, catalyst, sizing rationale, and review notes
+- Keep live execution policy consistent with `solana-clawd`: agents can research and plan autonomously, while `trade_execute` stays permission-gated unless the operator changes policy
 
 ### Quick Start
 
@@ -925,6 +932,50 @@ npm run vault:web:dev
 - **KNOWN** (blue) — Fresh market data from API calls. Auto-expires.
 - **LEARNED** (green) — Validated patterns confirmed by Dream agent. Permanent.
 - **INFERRED** (amber) — Tentative signals from scanners. Promoted or expired by Dream.
+
+---
+
+## Trading Strategy & Execution
+
+The $CLAWD trading system is documented in two files that power the agent fleet's trading decisions:
+
+### [`STRATEGY.md`](STRATEGY.md) — Multi-Venue Trading Strategy
+
+The master strategy document covering three venues with one shared risk engine:
+
+| Venue | Type | Intent |
+|-------|------|--------|
+| **Solana Spot** | Pump.fun + Raydium meme tokens | Breakout continuation, recovery bounces, long-only |
+| **Hyperliquid** | Perpetuals | Trend continuation, exhaustion reversals, funding/OI edge |
+| **Aster** | Solana-native perps | On-chain perp expression with wallet-context priority |
+
+**Key components:**
+- **OODA flow** — Observe/Orient/Decide/Act/Learn cycle integrated with wiki memory tiers
+- **Confidence model** — Weighted 0.00-1.00 score across trend, momentum, liquidity, participation, execution risk
+- **Drawdown cascade** — 5% reduce, 8% close perps, 12% full halt
+- **Kill switch** — Agent death protocol when wallet depletes (SOL < 0.01)
+- **Auto-optimizer** — Parameter mutation within bounded ranges, anti-overfitting protection
+- **Venue selection matrix** — Routes trades to the correct venue based on conditions
+
+### [`TRADE.md`](TRADE.md) — Pump.fun Trading Agent Skill
+
+The Pump.fun-specific execution layer on top of STRATEGY.md Venue 1:
+
+| Tier | Criteria | Strategy |
+|------|----------|----------|
+| **Fresh Snipers** | age <= 15m | Small size, fast flip, 10min TTL |
+| **Near-Graduation** | bonding >= 75% | Medium size, exit before 100% graduation |
+| **Micro-Cap** | MC < $10K | Speculative, < 0.05 SOL |
+| **Mid-Cap** | $10K-$100K | Trend-follow with trailing stops |
+| **Large-Cap** | > $100K | Scalps on dips |
+
+**CLAWD integration:**
+- All trades gated by OODA confidence scoring and risk engine
+- Decision table includes risk engine checks (drawdown state, exposure limits, wallet reserve)
+- Trade outcomes feed wiki memory (INFERRED -> LEARNED promotion)
+- Dev-wallet dumps, liquidity collapse, and holder drain trigger immediate exits
+- Kill switch from STRATEGY.md applies across all Pump.fun positions
+- Scanner agent detects candidates, OODA agent evaluates and executes
 
 ---
 

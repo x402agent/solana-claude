@@ -4,13 +4,16 @@ import { DocsClient } from "./DocsClient";
 
 const DOCS = [
   { slug: "architecture", label: "Runtime Map", file: "architecture.md" },
+  { slug: "trade", label: "Trading Skill", file: "docs/TRADE.md" },
   { slug: "risk-engine", label: "Risk Engine Spec", file: "docs/risk-engine-spec.md" },
   { slug: "migration", label: "Migration Guide", file: "docs/migrate-from-openclaw.md" },
+  { slug: "soul", label: "SOUL.md", file: "SOUL.md" },
+  { slug: "contributing", label: "Contributing", file: "CONTRIBUTING.md" },
 ] as const;
 
 export const metadata = {
   title: "Docs — $CLAWD",
-  description: "Runtime map, risk engine specification, and migration guide for the $CLAWD Solana blockchain and finance agent stack.",
+  description: "Runtime map, trading skill, risk engine, migration guide, identity, and contribution guide for the $CLAWD Solana agent stack.",
 };
 
 export default function DocsPage() {

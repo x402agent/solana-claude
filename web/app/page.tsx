@@ -140,7 +140,7 @@ ___/ / /_/ / / /_/ / / / / /_/ /   / /___/ / /_/ /| |/ |/ / /_/ /
             ))}
           </div>
 
-          <div className="mt-10 flex flex-col justify-center gap-4 sm:flex-row">
+          <div className="mt-10 flex flex-wrap justify-center gap-4">
             <Link
               href="/buddies"
               className="rounded-lg border border-green-400 bg-green-400 px-6 py-3 font-mono text-sm font-semibold text-black transition hover:bg-green-300"
@@ -148,10 +148,22 @@ ___/ / /_/ / / /_/ / / / / /_/ /   / /___/ / /_/ /| |/ |/ / /_/ /
               Hatch A Buddy
             </Link>
             <Link
+              href="/trade"
+              className="rounded-lg border border-orange-400 bg-orange-500/20 px-6 py-3 font-mono text-sm font-semibold text-orange-200 transition hover:bg-orange-500/30 hover:border-orange-300 hover:text-white"
+            >
+              Trading Skill
+            </Link>
+            <Link
               href="/docs"
               className="rounded-lg border border-purple-400 bg-purple-500/20 px-6 py-3 font-mono text-sm font-semibold text-purple-200 transition hover:bg-purple-500/30 hover:border-purple-300 hover:text-white"
             >
               Browse Runtime Docs
+            </Link>
+            <Link
+              href="/migrate"
+              className="rounded-lg border border-cyan-500/30 bg-cyan-500/10 px-6 py-3 font-mono text-sm font-semibold text-cyan-200 transition hover:bg-cyan-500/20 hover:border-cyan-400 hover:text-white"
+            >
+              Migrate from OpenClaw
             </Link>
             <a
               href="https://github.com/x402agent/solana-clawd"

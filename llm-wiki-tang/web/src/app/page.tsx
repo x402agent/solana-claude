@@ -12,12 +12,12 @@ const ease: [number, number, number, number] = [0.16, 1, 0.3, 1]
 const WIKI_TREE = [
   { label: 'Overview', active: true, depth: 0 },
   { label: 'Tokens', depth: 0, folder: true },
-  { label: 'BONK', depth: 1 },
-  { label: 'JUP', depth: 1 },
-  { label: 'Protocols', depth: 0, folder: true },
-  { label: 'Jupiter', depth: 1 },
+  { label: '$CLAWD', depth: 1 },
+  { label: 'dSOLANA', depth: 1 },
+  { label: 'Agents', depth: 0, folder: true },
+  { label: 'OODA Trader', depth: 1 },
   { label: 'Sources', depth: 0, folder: true },
-  { label: 'Log', depth: 0 },
+  { label: 'Execution Log', depth: 0 },
 ]
 
 export default function LandingPage() {
@@ -75,7 +75,7 @@ export default function LandingPage() {
                 href="https://github.com/x402agent/solana-clawd"
                 className="text-foreground underline underline-offset-2 decoration-foreground/30 hover:decoration-foreground transition-colors"
               >
-                agentic trading and blockchain intelligence
+                solana-clawd, dSolana workflows, and autonomous financial blockchain agents
               </Link>
             </p>
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight leading-[1.05]">
@@ -89,7 +89,7 @@ export default function LandingPage() {
             transition={{ duration: 0.8, delay: 0.12, ease }}
             className="mt-6 text-base sm:text-lg text-muted-foreground max-w-md mx-auto leading-relaxed"
           >
-            solana-clawd compiles and maintains a structured research vault for tokens, wallets, protocols, and trading playbooks.
+            solana-clawd compiles and maintains a structured research vault for `$CLAWD`, dSolana theses, wallet clusters, protocol risk, and autonomous trade playbooks.
           </motion.p>
 
           <motion.div
@@ -175,20 +175,20 @@ export default function LandingPage() {
                     12 sources &middot; Last updated 2 hours ago
                   </p>
                   <p className="text-sm text-muted-foreground leading-relaxed mb-3">
-                    This vault tracks Solana memecoin rotation, wallet flows, and protocol catalysts.
+                    This vault tracks Solana memecoin rotation, dSolana strategy flow, wallet behavior, and protocol catalysts for autonomous financial agents.
                     It synthesizes findings from <span className="font-medium text-foreground">12 sources</span> across 47 pages.
                   </p>
                   <h3 className="text-sm font-semibold mt-5 mb-2">Key Findings</h3>
                   <p className="text-sm text-muted-foreground leading-relaxed mb-3">
                     Smart-money wallet inflows have started rotating from majors into{' '}
-                    <span className="font-medium text-foreground">high-beta Solana assets</span> &mdash;
-                    BONK and WIF are leading while Jupiter remains the core routing dependency.
+                    <span className="font-medium text-foreground">$CLAWD and other high-beta Solana assets</span> &mdash;
+                    dSOLANA strategy notes, Jupiter routing dependencies, and execution risk thresholds are now linked inside one dossier.
                   </p>
                   <h3 className="text-sm font-semibold mt-5 mb-2">Recent Updates</h3>
                   <ul className="space-y-1 ml-4">
-                    <li className="text-sm text-muted-foreground list-disc">Added wallet cluster notes for BONK accumulators</li>
-                    <li className="text-sm text-muted-foreground list-disc">Updated Jupiter routing risk and fee notes</li>
-                    <li className="text-sm text-muted-foreground list-disc">Flagged contradiction between holder concentration and marketing claims</li>
+                    <li className="text-sm text-muted-foreground list-disc">Added `$CLAWD` wallet-cluster notes and execution review links</li>
+                    <li className="text-sm text-muted-foreground list-disc">Updated dSOLANA strategy thesis with Jupiter routing and fee notes</li>
+                    <li className="text-sm text-muted-foreground list-disc">Flagged contradiction between autonomous buy criteria and holder concentration risk</li>
                   </ul>
                 </div>
               </div>
@@ -221,17 +221,17 @@ export default function LandingPage() {
               {
                 icon: FileText,
                 title: 'Raw Sources',
-                body: 'Whitepapers, wallet exports, filings, notes, screenshots, governance posts. Immutable source of truth.',
+                body: 'Whitepapers, wallet exports, filings, execution journals, screenshots, governance posts, and token dashboards. Immutable source of truth.',
               },
               {
                 icon: BookOpen,
                 title: 'The Vault',
-                body: 'LLM-generated markdown pages with token dossiers, wallet notes, strategy memos, timelines, and cross-references.',
+                body: 'LLM-generated markdown pages with `$CLAWD` dossiers, dSOLANA theses, wallet notes, strategy memos, execution reviews, and cross-references.',
               },
               {
                 icon: PenTool,
                 title: 'The Workflows',
-                body: 'A repeatable structure for ingest, research, thesis updates, and contradiction tracking across the whole graph.',
+                body: 'A repeatable structure for ingest, research, thesis updates, autonomous trade review, and contradiction tracking across the whole graph.',
               },
             ].map((item, i) => (
               <motion.div
@@ -272,7 +272,7 @@ export default function LandingPage() {
               {
                 step: '01',
                 title: 'Ingest',
-                body: 'Drop in a whitepaper, wallet export, dashboard PDF, or trade journal. The agent writes a summary, updates token, protocol, wallet, and strategy pages, and flags contradictions.',
+                body: 'Drop in a whitepaper, wallet export, dashboard PDF, or trade journal. The agent writes a summary, updates token, protocol, wallet, strategy, and execution pages, and flags contradictions.',
               },
               {
                 step: '02',
@@ -282,7 +282,7 @@ export default function LandingPage() {
               {
                 step: '03',
                 title: 'Lint',
-                body: 'Run health checks over the vault. Find stale theses, unsupported claims, missing token-to-protocol links, and untracked wallet behavior.',
+                body: 'Run health checks over the vault. Find stale theses, unsupported claims, missing token-to-protocol links, untracked wallet behavior, and unreviewed autonomous trading decisions.',
               },
             ].map((item, i) => (
               <motion.div
@@ -314,7 +314,7 @@ export default function LandingPage() {
           className="max-w-2xl mx-auto text-center"
         >
           <blockquote className="text-lg sm:text-xl leading-relaxed text-foreground/80 italic">
-            &ldquo;The hard part of trading research is not finding one more chart. It is keeping every thesis, wallet note, catalyst, and contradiction in sync as the market moves.&rdquo;
+            &ldquo;The hard part of autonomous trading research is not finding one more chart. It is keeping every thesis, wallet note, catalyst, execution rule, and contradiction in sync as the market moves.&rdquo;
           </blockquote>
           <p className="mt-5 text-sm text-muted-foreground">
             solana-clawd research workflow
@@ -336,7 +336,7 @@ export default function LandingPage() {
         >
           <h2 className="text-2xl sm:text-3xl font-bold tracking-tight mb-4">Start building your vault</h2>
           <p className="text-muted-foreground mb-8">
-            Replace scattered notes with a compounding Solana research graph.
+            Replace scattered notes with a compounding Solana research graph for `$CLAWD`, dSolana theses, and autonomous financial agents.
           </p>
           <Link
             href="/signup"
