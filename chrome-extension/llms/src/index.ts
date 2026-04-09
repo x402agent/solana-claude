@@ -6,7 +6,7 @@
  */
 
 import OpenAI from 'openai'
-import type * as z from 'zod/v4'
+// zod types resolved via peer dependency
 
 // ─── Types ──────────────────────────────────────────────────────────
 
@@ -37,7 +37,7 @@ export interface Message {
 
 export interface Tool<TParams = any, TResult = any> {
   description?: string
-  inputSchema: z.ZodType<TParams>
+  inputSchema: any
   execute: (args: TParams) => Promise<TResult>
 }
 
