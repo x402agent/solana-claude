@@ -96,39 +96,39 @@
 }
 
 .dark {
-  /* Dark theme — lamp light (warm darks, not pure black) */
-  --background: 20 14% 4%;
-  --foreground: 40 10% 90%;
-  --card: 20 12% 8%;
-  --card-foreground: 40 10% 90%;
-  --popover: 20 12% 8%;
-  --popover-foreground: 40 10% 90%;
-  --primary: 40 10% 90%;
-  --primary-foreground: 20 14% 4%;
-  --secondary: 20 10% 10%;
-  --secondary-foreground: 40 10% 90%;
-  --muted: 20 10% 10%;
-  --muted-foreground: 24 5% 55%;
-  --accent: 20 10% 12%;
-  --accent-foreground: 40 10% 90%;
+  /* Dark theme — deep Solana-native dark (matches solanaclawd.com) */
+  --background: 240 10% 3.9%;
+  --foreground: 0 0% 96%;
+  --card: 240 6% 6%;
+  --card-foreground: 0 0% 96%;
+  --popover: 240 6% 6%;
+  --popover-foreground: 0 0% 96%;
+  --primary: 263 70% 50%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 240 4% 10%;
+  --secondary-foreground: 0 0% 96%;
+  --muted: 240 4% 10%;
+  --muted-foreground: 240 5% 55%;
+  --accent: 240 4% 12%;
+  --accent-foreground: 0 0% 96%;
   --destructive: 0 62.8% 30.6%;
-  --border: 20 6% 16%;
-  --input: 20 6% 16%;
-  --ring: 24 5% 55%;
+  --border: 240 4% 14%;
+  --input: 240 4% 14%;
+  --ring: 263 70% 50%;
   --chart-1: oklch(0.488 0.243 264.376);
   --chart-2: oklch(0.696 0.17 162.48);
   --chart-3: oklch(0.769 0.188 70.08);
   --chart-4: oklch(0.627 0.265 303.9);
   --chart-5: oklch(0.645 0.246 16.439);
-  --accent-blue: 220 35% 55%;
-  --sidebar: 20 14% 3%;
-  --sidebar-foreground: 40 10% 90%;
-  --sidebar-primary: 40 10% 90%;
-  --sidebar-primary-foreground: 20 14% 4%;
-  --sidebar-accent: 20 10% 12%;
-  --sidebar-accent-foreground: 40 10% 90%;
-  --sidebar-border: 20 6% 16%;
-  --sidebar-ring: 24 5% 55%;
+  --accent-blue: 220 40% 50%;
+  --sidebar: 240 10% 3%;
+  --sidebar-foreground: 0 0% 96%;
+  --sidebar-primary: 263 70% 50%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 240 4% 12%;
+  --sidebar-accent-foreground: 0 0% 96%;
+  --sidebar-border: 240 4% 14%;
+  --sidebar-ring: 263 70% 50%;
 }
 
 @layer base {

@@ -18,11 +18,11 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Clawd Vault",
   description: "Solana-native research vault for tokens, wallets, protocols, and trading agents. Upload sources and let solana-clawd maintain a compounding wiki.",
-  metadataBase: new URL("https://solanaclawd.net"),
+  metadataBase: new URL("https://vault.solanaclawd.com"),
   openGraph: {
     title: "Clawd Vault",
     description: "Solana-native research vault for tokens, wallets, protocols, and trading agents. Upload sources and let solana-clawd maintain a compounding wiki.",
-    url: "https://solanaclawd.net",
+    url: "https://vault.solanaclawd.com",
     siteName: "Clawd Vault",
     type: "website",
     images: [{ url: "/og.png", width: 1200, height: 630, alt: "Clawd Vault" }],
@@ -43,7 +43,7 @@ const themeScript = `
       var storageKey = 'theme';
       var stored = localStorage.getItem(storageKey);
       var isValid = stored === 'light' || stored === 'dark';
-      var theme = isValid ? stored : 'light';
+      var theme = isValid ? stored : 'dark';
 
       // Persist a sane default so a refresh doesn't fall back to light/system
       if (!isValid) {
@@ -54,7 +54,7 @@ const themeScript = `
       document.documentElement.classList.add(theme);
       document.documentElement.style.colorScheme = theme;
     } catch (e) {
-      document.documentElement.classList.add('light');
+      document.documentElement.classList.add('dark');
       document.documentElement.style.colorScheme = 'dark';
     }
   })();
@@ -78,7 +78,7 @@ export default function RootLayout({
       >
         <ThemeProvider
           attribute="class"
-          defaultTheme="light"
+          defaultTheme="dark"
           enableSystem={false}
           disableTransitionOnChange
           storageKey="theme"

@@ -43,7 +43,7 @@ npm-debug.log*
 .DS_Store
 
 # Private / local worktrees
-tailclawd/
+/
 claude-code-main 2/
 
 # Legacy / vendored
