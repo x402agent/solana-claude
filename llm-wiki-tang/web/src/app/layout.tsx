@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { ThemeProvider } from "next-themes";
 import { Toaster } from "@/components/ui/sonner";
 import Script from "next/script";
 import "./globals.css";
@@ -10,7 +9,7 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://vault.solanaclawd.com"),
   openGraph: {
     title: "Clawd Vault",
-    description: "Solana-native research vault for tokens, wallets, protocols, and trading agents. Upload sources and let solana-clawd maintain a compounding wiki.",
+    description: "Solana-native research vault for tokens, wallets, protocols, and trading agents.",
     url: "https://vault.solanaclawd.com",
     siteName: "Clawd Vault",
     type: "website",
@@ -19,35 +18,10 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Clawd Vault",
-    description: "Solana-native research vault for tokens, wallets, protocols, and trading agents. Upload sources and let solana-clawd maintain a compounding wiki.",
+    description: "Solana-native research vault for tokens, wallets, protocols, and trading agents.",
     images: ["/og.png"],
   },
 };
-
-// Script to prevent theme flash - runs before React hydrates
-// Must match the storageKey used by ThemeProvider (default is 'theme')
-const themeScript = `
-  (function() {
-    try {
-      var storageKey = 'theme';
-      var stored = localStorage.getItem(storageKey);
-      var isValid = stored === 'light' || stored === 'dark';
-      var theme = isValid ? stored : 'dark';
-
-      // Persist a sane default so a refresh doesn't fall back to light/system
-      if (!isValid) {
-        localStorage.setItem(storageKey, theme);
-      }
-
-      document.documentElement.classList.remove('light', 'dark');
-      document.documentElement.classList.add(theme);
-      document.documentElement.style.colorScheme = theme;
-    } catch (e) {
-      document.documentElement.classList.add('light');
-      document.documentElement.style.colorScheme = 'light';
-    }
-  })();
-`;
 
 export default function RootLayout({
   children,
@@ -55,24 +29,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <head>
-        <script
-          dangerouslySetInnerHTML={{ __html: themeScript }}
-          suppressHydrationWarning
-        />
-      </head>
-      <body className="antialiased">
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
-          enableSystem={false}
-          disableTransitionOnChange
-          storageKey="theme"
-        >
-          {children}
-          <Toaster richColors />
-        </ThemeProvider>
+    <html lang="en" className="dark" style={{ colorScheme: "dark" }} suppressHydrationWarning>
+      <body className="antialiased bg-background text-foreground">
+        {children}
+        <Toaster richColors theme="dark" />
         {/* @ts-expect-error -- ElevenLabs ConvAI web component */}
         <elevenlabs-convai agent-id="agent_1601knpw2ax7ejb80fdxx118n7qn" />
         <Script

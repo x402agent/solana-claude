@@ -207,6 +207,68 @@
   .rounded-app-sm { border-radius: var(--radius-sm); }
 }
 
+/* Cypherpunk scanline overlay — subtle CRT effect */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.03;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 3px,
+    rgba(34, 197, 94, 0.08) 3px,
+    rgba(34, 197, 94, 0.08) 4px
+  );
+}
+
+/* Selection highlight — green terminal */
+::selection {
+  background: hsl(142 72% 45% / 0.3);
+  color: hsl(142 20% 95%);
+}
+
+/* Scrollbar — dark minimal */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: hsl(150 5% 18%);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(142 30% 25%);
+}
+
+/* Focus ring — green glow */
+*:focus-visible {
+  outline: 2px solid hsl(142 72% 45% / 0.5);
+  outline-offset: 2px;
+}
+
+/* Input placeholder — muted green */
+input::placeholder,
+textarea::placeholder {
+  color: hsl(150 8% 32%);
+}
+
+/* Link hover glow */
+a:hover {
+  text-shadow: 0 0 8px hsl(142 72% 45% / 0.2);
+}
+
+/* Button primary glow on hover */
+button[data-slot="primary"]:hover,
+.bg-primary:hover {
+  box-shadow: 0 0 16px hsl(142 72% 45% / 0.15);
+}
+
 /* Smooth panel collapse/expand — disabled while user is dragging the separator */
 .panel-transition:not(:has([data-resize-handle-active])) [data-panel] {
   transition: flex-grow 150ms ease-out;
