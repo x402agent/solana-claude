@@ -16,7 +16,7 @@
     "files": [
         "dist/"
     ],
-    "description": "GUI agent for web applications - add intelligent automation to any webpage with a single script",
+    "description": "Solana Clawd pAGENT core — GUI vision agent for web applications (forked from @page-agent/core)",
     "keywords": [
         "ai",
         "automation",

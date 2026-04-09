@@ -1,5 +1,5 @@
 /**
- * Minimal UI stub for Page Agent.
+ * Minimal UI stub for Solana Clawd pAGENT.
  * The full Panel UI is in the Chrome extension; this provides the type interface.
  */
 
