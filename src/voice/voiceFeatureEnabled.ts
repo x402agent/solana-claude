@@ -8,7 +8,6 @@ export function isVoiceFeatureEnabled(): boolean {
 
   return (
     isEnvTruthy(process.env.CLAUDE_CODE_VOICE_MODE) ||
-    Boolean(process.env.ELEVEN_LABS_API_KEY?.trim()) ||
-    Boolean(process.env.ELEVENLABS_API_KEY?.trim())
+    Boolean(process.env.XAI_API_KEY?.trim())
   )
 }

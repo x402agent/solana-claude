@@ -11,7 +11,7 @@
  *   - Jupiter price API (no key)
  *   - Public Solana mainnet RPC (fallback)
  *
- * Tools: 37 (15 original + 8 Helius + 6 services: x402, autoDream, session, prompts + 8 Pump.fun)
+ * Tools: 44 (15 original + 8 Helius + 6 services + 8 Pump.fun + 7 Chess.com)
  * Resources: 4 (README, soul, skills, tools)
  * Prompts: 5
  */
@@ -1200,6 +1200,123 @@ emitter.on("event", (e) => console.log(e.type, e.signature, e.description));`,
               return text(`### Cashback for ${tracker?.symbol ?? mint.slice(0, 8)}\nEnabled: ${enabled}\n\n---\n\n${docs}`);
             }
             return text(docs);
+          }
+
+          // ── Chess.com ─────────────────────────────────────────────────
+
+          case "chess_player": {
+            const username = String(a.username ?? "").trim();
+            if (!username) return text("Error: username is required");
+            const CHESS_API = "https://api.chess.com/pub";
+            const [playerRes, statsRes] = await Promise.all([
+              fetch(`${CHESS_API}/player/${username}`, { headers: { Accept: "application/json" }, signal: AbortSignal.timeout(10_000) }),
+              fetch(`${CHESS_API}/player/${username}/stats`, { headers: { Accept: "application/json" }, signal: AbortSignal.timeout(10_000) }),
+            ]);
+            if (!playerRes.ok) throw new Error(`Player "${username}" not found (${playerRes.status})`);
+            const player = await playerRes.json() as Record<string, unknown>;
+            const stats = statsRes.ok ? await statsRes.json() as Record<string, unknown> : {};
+            const ratings: Record<string, number> = {};
+            let totalW = 0;
+            let totalL = 0;
+            let totalD = 0;
+            let best: { cat: string; r: number } | null = null;
+            for (const key of ["chess_daily", "chess_rapid", "chess_bullet", "chess_blitz"]) {
+              const cat = stats[key] as { last?: { rating: number }; record?: { win: number; loss: number; draw: number } } | undefined;
+              if (!cat?.last) continue;
+              const label = key.replace("chess_", "");
+              ratings[label] = cat.last.rating;
+              if (!best || cat.last.rating > best.r) best = { cat: label, r: cat.last.rating };
+              if (cat.record) { totalW += cat.record.win; totalL += cat.record.loss; totalD += cat.record.draw; }
+            }
+            const total = totalW + totalL + totalD;
+            return text({
+              username: player.username, title: player.title, status: player.status,
+              ratings, bestRating: best, totalGames: total,
+              winRate: total > 0 ? `${((totalW / total) * 100).toFixed(1)}%` : "N/A",
+              lastOnline: player.last_online ? new Date((player.last_online as number) * 1000).toISOString() : "unknown",
+              avatar: player.avatar, country: player.country, followers: player.followers,
+            });
+          }
+
+          case "chess_recent_games": {
+            const username = String(a.username ?? "").trim();
+            if (!username) return text("Error: username is required");
+            const limit = Math.min(Number(a.limit) || 10, 50);
+            const CHESS_API = "https://api.chess.com/pub";
+            const archRes = await fetch(`${CHESS_API}/player/${username}/games/archives`, { headers: { Accept: "application/json" }, signal: AbortSignal.timeout(10_000) });
+            if (!archRes.ok) throw new Error(`Archives for "${username}" → ${archRes.status}`);
+            const archives = (await archRes.json() as { archives: string[] }).archives;
+            if (!archives.length) return text({ username, games: [], message: "No game archives found" });
+            const latestUrl = archives[archives.length - 1];
+            const gamesRes = await fetch(latestUrl, { headers: { Accept: "application/json" }, signal: AbortSignal.timeout(15_000) });
+            if (!gamesRes.ok) throw new Error(`Games fetch → ${gamesRes.status}`);
+            const allGames = ((await gamesRes.json()) as { games: Array<Record<string, unknown>> }).games;
+            const sorted = allGames.sort((x, y) => (y.end_time as number) - (x.end_time as number)).slice(0, limit);
+            const uLow = username.toLowerCase();
+            let w = 0;
+            let l = 0;
+            let d = 0;
+            const accs: number[] = [];
+            const games = sorted.map((g) => {
+              const wh = g.white as Record<string, unknown>;
+              const bl = g.black as Record<string, unknown>;
+              const isWhite = (wh.username as string).toLowerCase() === uLow;
+              const me = isWhite ? wh : bl;
+              const opp = isWhite ? bl : wh;
+              const color = isWhite ? "white" : "black";
+              if (me.result === "win") w++;
+              else if (["checkmated", "resigned", "timeout", "abandoned", "lose"].includes(me.result as string)) l++;
+              else d++;
+              const acc = (g.accuracies as Record<string, number> | undefined)?.[color];
+              if (acc) accs.push(acc);
+              return { opponent: opp.username, result: me.result, color, rating: me.rating, oppRating: opp.rating, timeClass: g.time_class, accuracy: acc ?? null, eco: g.eco ?? null, url: g.url };
+            });
+            return text({ username, games, stats: { wins: w, losses: l, draws: d, avgAccuracy: accs.length ? (accs.reduce((a2, b) => a2 + b, 0) / accs.length).toFixed(1) : null } });
+          }
+
+          case "chess_current_games": {
+            const username = String(a.username ?? "").trim();
+            if (!username) return text("Error: username is required");
+            const CHESS_API = "https://api.chess.com/pub";
+            const [gamesRes, moveRes] = await Promise.all([
+              fetch(`${CHESS_API}/player/${username}/games`, { headers: { Accept: "application/json" }, signal: AbortSignal.timeout(10_000) }),
+              fetch(`${CHESS_API}/player/${username}/games/to-move`, { headers: { Accept: "application/json" }, signal: AbortSignal.timeout(10_000) }),
+            ]);
+            const current = gamesRes.ok ? (await gamesRes.json() as { games: unknown[] }).games : [];
+            const toMove = moveRes.ok ? (await moveRes.json() as { games: unknown[] }).games : [];
+            return text({ username, totalOngoing: current.length, gamesToMove: toMove.length, currentGames: current.slice(0, 10), toMoveGames: toMove });
+          }
+
+          case "chess_daily_puzzle": {
+            const res = await fetch("https://api.chess.com/pub/puzzle", { headers: { Accept: "application/json" }, signal: AbortSignal.timeout(10_000) });
+            if (!res.ok) throw new Error(`Daily puzzle → ${res.status}`);
+            return text(await res.json());
+          }
+
+          case "chess_random_puzzle": {
+            const res = await fetch("https://api.chess.com/pub/puzzle/random", { headers: { Accept: "application/json" }, signal: AbortSignal.timeout(10_000) });
+            if (!res.ok) throw new Error(`Random puzzle → ${res.status}`);
+            return text(await res.json());
+          }
+
+          case "chess_leaderboards": {
+            const category = String(a.category ?? "live_blitz").trim();
+            const res = await fetch("https://api.chess.com/pub/leaderboards", { headers: { Accept: "application/json" }, signal: AbortSignal.timeout(10_000) });
+            if (!res.ok) throw new Error(`Leaderboards → ${res.status}`);
+            const data = await res.json() as Record<string, unknown[]>;
+            const board = data[category];
+            if (!board) return text({ error: `Unknown category: ${category}`, available: Object.keys(data) });
+            return text({ category, players: board.slice(0, 20) });
+          }
+
+          case "chess_titled_players": {
+            const title = String(a.title ?? "GM").trim().toUpperCase();
+            const valid = ["GM", "WGM", "IM", "WIM", "FM", "WFM", "NM", "WNM", "CM", "WCM"];
+            if (!valid.includes(title)) return text({ error: `Invalid title. Must be one of: ${valid.join(", ")}` });
+            const res = await fetch(`https://api.chess.com/pub/titled/${title}`, { headers: { Accept: "application/json" }, signal: AbortSignal.timeout(10_000) });
+            if (!res.ok) throw new Error(`Titled players → ${res.status}`);
+            const data = await res.json() as { players: string[] };
+            return text({ title, count: data.players.length, players: data.players.slice(0, 50) });
           }
 
           default:

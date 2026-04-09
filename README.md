@@ -12,7 +12,7 @@ ___/ / /_/ / / /_/ / / / / /_/ /   / /___/ / /_/ /| |/ |/ / /_/ /
 
 **The agentic engine Solana deserves.**
 
-31 MCP tools. Blockchain Buddies. Custom unicode animations. One command.
+44 MCP tools. Blockchain Buddies. Custom unicode animations. One command.
 
 Powered by **$CLAWD** on Solana & Pump.fun
 
@@ -1637,9 +1637,53 @@ npm run skills:catalog   # regenerate the catalog
 
 ---
 
-## Chess.com Status
+## Chess.com Agent
 
-Base Chess.com README integration is wired through GitHub Actions. Set the repository variable `CHESS_COM_USERNAME`, or run the workflow manually with a `chess_username` input, and the section below will auto-refresh.
+Autonomous Chess.com integration — agents can analyze players, monitor games, solve puzzles, and study openings via 7 MCP tools.
+
+### Chess MCP Tools
+
+| Tool | Description |
+|------|-------------|
+| `chess_player` | Full player analysis — ratings, win rate, best rating, total games |
+| `chess_recent_games` | Recent games with results, accuracy, openings, opponent ratings |
+| `chess_current_games` | Ongoing daily games + games waiting for a move |
+| `chess_daily_puzzle` | Today's puzzle with FEN and PGN solution |
+| `chess_random_puzzle` | Random puzzle for agent practice |
+| `chess_leaderboards` | Global leaderboards across all time controls |
+| `chess_titled_players` | All players with a specific title (GM, IM, FM, etc.) |
+
+### Usage
+
+```text
+You: "Analyze chess player hikaru"
+Clawd: [calls chess_player] → ratings, win rate, best rating across all time controls
+
+You: "Show me hikaru's last 5 games"
+Clawd: [calls chess_recent_games] → results, accuracy, openings, opponent info
+
+You: "Give me today's chess puzzle"
+Clawd: [calls chess_daily_puzzle] → FEN position + PGN solution to analyze
+
+You: "Who are the top blitz players?"
+Clawd: [calls chess_leaderboards] → top 20 live_blitz players globally
+```
+
+### Chess Architecture
+
+```text
+src/chess/
+├── chess-client.ts    Typed Chess.com API client (zero deps, fetch-based)
+└── index.ts           Module exports
+
+chess/
+├── chess-web-api/     npm chess-web-api wrapper (upstream reference)
+└── chess-mcp-main/    Python MCP server (standalone alternative)
+```
+
+### Chess.com Stats
+
+Set the repository variable `CHESS_COM_USERNAME` and the section below auto-refreshes via GitHub Actions.
 
 <!--START_SECTION:chessStats-->
 Chess.com stats will appear here after `.github/workflows/chess-stats.yml` runs.

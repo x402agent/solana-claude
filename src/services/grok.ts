@@ -62,6 +62,16 @@ export {
   SOLANA_FUNCTIONS,
 } from './grokFunctionCalling.js'
 
+export {
+  generateStructured,
+  analyzeTokenStructured,
+  analyzeWalletStructured,
+  getMarketRegime,
+  TOKEN_ANALYSIS_SCHEMA,
+  WALLET_ANALYSIS_SCHEMA,
+  MARKET_REGIME_SCHEMA,
+} from './grokStructuredOutput.js'
+
 export type {
   ImageGenResult,
 } from './grokImageGen.js'
@@ -131,6 +141,16 @@ export const grok = {
     functions: FunctionDefinition[],
     executor: (name: string, args: Record<string, any>) => Promise<string>,
   ) => runAgentLoop({ prompt, functions, executor }),
+
+  /** Structured output with JSON schema enforcement */
+  structured: (prompt: string, schema: Record<string, any>, opts?: { system?: string }) =>
+    generateStructured({ prompt, schema, ...opts }),
+
+  /** Quick token analysis with structured output */
+  analyzeToken: (token: string) => analyzeTokenStructured(token),
+
+  /** Get current market regime */
+  marketRegime: () => getMarketRegime(),
 
   /** Pre-built Solana functions */
   solanaFunctions: SOLANA_FUNCTIONS,
