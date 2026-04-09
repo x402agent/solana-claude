@@ -1,0 +1,645 @@
+{
+  "generatedAt": "2026-04-09T18:41:58.611Z",
+  "upstreamRoot": "claude-code-main 2/src",
+  "targetRoot": "src",
+  "upstreamStats": {
+    "dirCount": 308,
+    "fileCount": 1940
+  },
+  "targetStats": {
+    "dirCount": 368,
+    "fileCount": 2170
+  },
+  "summary": {
+    "present": 43,
+    "adapted": 11,
+    "missing": 0
+  },
+  "rows": [
+    {
+      "key": "assistant",
+      "kind": "dir",
+      "phase": "P1 Runtime Core",
+      "status": "present",
+      "targetPaths": [
+        "src/assistant"
+      ],
+      "rationale": "Session and assistant state can stay close to upstream while remaining local-first."
+    },
+    {
+      "key": "bootstrap",
+      "kind": "dir",
+      "phase": "P1 Runtime Core",
+      "status": "present",
+      "targetPaths": [
+        "src/bootstrap"
+      ],
+      "rationale": "Boot flow should stay compatible, then layer Solana services during initialization."
+    },
+    {
+      "key": "bridge",
+      "kind": "dir",
+      "phase": "P1 Runtime Core",
+      "status": "adapted",
+      "targetPaths": [
+        "src/bridge",
+        "src/gateway"
+      ],
+      "rationale": "Split generic remote bridge concerns from Solana-clawd gateway transports and event routing."
+    },
+    {
+      "key": "buddy",
+      "kind": "dir",
+      "phase": "P5 Review",
+      "status": "present",
+      "targetPaths": [
+        "src/buddy"
+      ],
+      "rationale": "Buddy layer is already blockchain-native and should remain a Solana specialization rather than an upstream clone."
+    },
+    {
+      "key": "cli",
+      "kind": "dir",
+      "phase": "P2 Operator Surfaces",
+      "status": "present",
+      "targetPaths": [
+        "src/cli"
+      ],
+      "rationale": "Top-level structure already exists in Solana-clawd."
+    },
+    {
+      "key": "commands",
+      "kind": "dir",
+      "phase": "P2 Operator Surfaces",
+      "status": "present",
+      "targetPaths": [
+        "src/commands"
+      ],
+      "rationale": "Top-level structure already exists in Solana-clawd."
+    },
+    {
+      "key": "components",
+      "kind": "dir",
+      "phase": "P2 Operator Surfaces",
+      "status": "present",
+      "targetPaths": [
+        "src/components"
+      ],
+      "rationale": "Top-level structure already exists in Solana-clawd."
+    },
+    {
+      "key": "constants",
+      "kind": "dir",
+      "phase": "P1 Runtime Core",
+      "status": "present",
+      "targetPaths": [
+        "src/constants"
+      ],
+      "rationale": "Top-level structure already exists in Solana-clawd."
+    },
+    {
+      "key": "context",
+      "kind": "dir",
+      "phase": "P1 Runtime Core",
+      "status": "present",
+      "targetPaths": [
+        "src/context"
+      ],
+      "rationale": "Top-level structure already exists in Solana-clawd."
+    },
+    {
+      "key": "coordinator",
+      "kind": "dir",
+      "phase": "P3 Agent Orchestration",
+      "status": "adapted",
+      "targetPaths": [
+        "src/coordinator",
+        "src/agents"
+      ],
+      "rationale": "Coordinator behavior maps to upstream, while `src/agents` is the Solana-clawd specialization for role policy."
+    },
+    {
+      "key": "entrypoints",
+      "kind": "dir",
+      "phase": "P2 Operator Surfaces",
+      "status": "present",
+      "targetPaths": [
+        "src/entrypoints"
+      ],
+      "rationale": "Top-level structure already exists in Solana-clawd."
+    },
+    {
+      "key": "hooks",
+      "kind": "dir",
+      "phase": "P2 Operator Surfaces",
+      "status": "present",
+      "targetPaths": [
+        "src/hooks"
+      ],
+      "rationale": "Top-level structure already exists in Solana-clawd."
+    },
+    {
+      "key": "ink",
+      "kind": "dir",
+      "phase": "P2 Operator Surfaces",
+      "status": "present",
+      "targetPaths": [
+        "src/ink"
+      ],
+      "rationale": "Top-level structure already exists in Solana-clawd."
+    },
+    {
+      "key": "keybindings",
+      "kind": "dir",
+      "phase": "P2 Operator Surfaces",
+      "status": "present",
+      "targetPaths": [
+        "src/keybindings"
+      ],
+      "rationale": "Top-level structure already exists in Solana-clawd."
+    },
+    {
+      "key": "memdir",
+      "kind": "dir",
+      "phase": "P1 Runtime Core",
+      "status": "present",
+      "targetPaths": [
+        "src/memdir"
+      ],
+      "rationale": "Top-level structure already exists in Solana-clawd."
+    },
+    {
+      "key": "migrations",
+      "kind": "dir",
+      "phase": "P1 Runtime Core",
+      "status": "present",
+      "targetPaths": [
+        "src/migrations"
+      ],
+      "rationale": "Top-level structure already exists in Solana-clawd."
+    },
+    {
+      "key": "moreright",
+      "kind": "dir",
+      "phase": "P1 Runtime Core",
+      "status": "present",
+      "targetPaths": [
+        "src/moreright"
+      ],
+      "rationale": "Top-level structure already exists in Solana-clawd."
+    },
+    {
+      "key": "native-ts",
+      "kind": "dir",
+      "phase": "P1 Runtime Core",
+      "status": "present",
+      "targetPaths": [
+        "src/native-ts"
+      ],
+      "rationale": "Top-level structure already exists in Solana-clawd."
+    },
+    {
+      "key": "outputStyles",
+      "kind": "dir",
+      "phase": "P2 Operator Surfaces",
+      "status": "present",
+      "targetPaths": [
+        "src/outputStyles"
+      ],
+      "rationale": "Top-level structure already exists in Solana-clawd."
+    },
+    {
+      "key": "plugins",
+      "kind": "dir",
+      "phase": "P3 Agent Orchestration",
+      "status": "present",
+      "targetPaths": [
+        "src/plugins"
+      ],
+      "rationale": "Top-level structure already exists in Solana-clawd."
+    },
+    {
+      "key": "query",
+      "kind": "dir",
+      "phase": "P1 Runtime Core",
+      "status": "adapted",
+      "targetPaths": [
+        "src/query",
+        "src/engine"
+      ],
+      "rationale": "Generic query helpers stay in `src/query`; provider execution and permission/risk loops live in `src/engine`."
+    },
+    {
+      "key": "remote",
+      "kind": "dir",
+      "phase": "P4 Privacy + Local/Cloud",
+      "status": "adapted",
+      "targetPaths": [
+        "src/remote",
+        "src/server",
+        "src/gateway"
+      ],
+      "rationale": "Privacy-first local/cloud mode requires remote transport to stay opt-in and separable from local execution."
+    },
+    {
+      "key": "schemas",
+      "kind": "dir",
+      "phase": "P1 Runtime Core",
+      "status": "present",
+      "targetPaths": [
+        "src/schemas"
+      ],
+      "rationale": "Top-level structure already exists in Solana-clawd."
+    },
+    {
+      "key": "screens",
+      "kind": "dir",
+      "phase": "P2 Operator Surfaces",
+      "status": "present",
+      "targetPaths": [
+        "src/screens"
+      ],
+      "rationale": "Top-level structure already exists in Solana-clawd."
+    },
+    {
+      "key": "server",
+      "kind": "dir",
+      "phase": "P4 Privacy + Local/Cloud",
+      "status": "adapted",
+      "targetPaths": [
+        "src/server",
+        "src/gateway"
+      ],
+      "rationale": "Server layer is preserved, with gateway additions for MCP, web, and Solana operator surfaces."
+    },
+    {
+      "key": "services",
+      "kind": "dir",
+      "phase": "P3 Agent Orchestration",
+      "status": "adapted",
+      "targetPaths": [
+        "src/services",
+        "src/memory",
+        "src/monitor"
+      ],
+      "rationale": "Most services port directly; memory extraction and monitoring are split into Solana-specific subsystems."
+    },
+    {
+      "key": "shims",
+      "kind": "dir",
+      "phase": "P1 Runtime Core",
+      "status": "present",
+      "targetPaths": [
+        "src/shims"
+      ],
+      "rationale": "Top-level structure already exists in Solana-clawd."
+    },
+    {
+      "key": "skills",
+      "kind": "dir",
+      "phase": "P3 Agent Orchestration",
+      "status": "present",
+      "targetPaths": [
+        "src/skills"
+      ],
+      "rationale": "Top-level structure already exists in Solana-clawd."
+    },
+    {
+      "key": "state",
+      "kind": "dir",
+      "phase": "P1 Runtime Core",
+      "status": "present",
+      "targetPaths": [
+        "src/state"
+      ],
+      "rationale": "Top-level structure already exists in Solana-clawd."
+    },
+    {
+      "key": "tasks",
+      "kind": "dir",
+      "phase": "P3 Agent Orchestration",
+      "status": "present",
+      "targetPaths": [
+        "src/tasks"
+      ],
+      "rationale": "Background task model is shared and should stay close to upstream interfaces."
+    },
+    {
+      "key": "tools",
+      "kind": "dir",
+      "phase": "P3 Agent Orchestration",
+      "status": "adapted",
+      "targetPaths": [
+        "src/tools",
+        "src/engine"
+      ],
+      "rationale": "Tool inventory ports directly; execution policy stays in Solana-clawd permission and risk layers."
+    },
+    {
+      "key": "types",
+      "kind": "dir",
+      "phase": "P1 Runtime Core",
+      "status": "present",
+      "targetPaths": [
+        "src/types"
+      ],
+      "rationale": "Top-level structure already exists in Solana-clawd."
+    },
+    {
+      "key": "upstreamproxy",
+      "kind": "dir",
+      "phase": "P4 Privacy + Local/Cloud",
+      "status": "present",
+      "targetPaths": [
+        "src/upstreamproxy"
+      ],
+      "rationale": "Top-level structure already exists in Solana-clawd."
+    },
+    {
+      "key": "utils",
+      "kind": "dir",
+      "phase": "P1 Runtime Core",
+      "status": "present",
+      "targetPaths": [
+        "src/utils"
+      ],
+      "rationale": "Top-level structure already exists in Solana-clawd."
+    },
+    {
+      "key": "vim",
+      "kind": "dir",
+      "phase": "P2 Operator Surfaces",
+      "status": "present",
+      "targetPaths": [
+        "src/vim"
+      ],
+      "rationale": "Top-level structure already exists in Solana-clawd."
+    },
+    {
+      "key": "voice",
+      "kind": "dir",
+      "phase": "P4 Privacy + Local/Cloud",
+      "status": "adapted",
+      "targetPaths": [
+        "src/voice",
+        "web/app/voice"
+      ],
+      "rationale": "Voice core remains local/cloud capable, with Solana-clawd surfacing it in both CLI and web."
+    },
+    {
+      "key": "QueryEngine.ts",
+      "kind": "file",
+      "phase": "P1 Runtime Core",
+      "status": "adapted",
+      "targetPaths": [
+        "src/QueryEngine.ts",
+        "src/engine/query-engine.ts"
+      ],
+      "rationale": "Keep compatibility shim plus runtime engine implementation for staged adaptation."
+    },
+    {
+      "key": "Task.ts",
+      "kind": "file",
+      "phase": "P3 Agent Orchestration",
+      "status": "adapted",
+      "targetPaths": [
+        "src/Task.ts",
+        "src/tasks"
+      ],
+      "rationale": "Retain task contracts while extending runtime task kinds for monitors and local workflows."
+    },
+    {
+      "key": "Tool.ts",
+      "kind": "file",
+      "phase": "P3 Agent Orchestration",
+      "status": "adapted",
+      "targetPaths": [
+        "src/Tool.ts",
+        "src/engine/tool-base.ts"
+      ],
+      "rationale": "Preserve upstream tool typing while enforcing Solana-clawd permission levels and schemas."
+    },
+    {
+      "key": "commands.ts",
+      "kind": "file",
+      "phase": "P2 Operator Surfaces",
+      "status": "present",
+      "targetPaths": [
+        "src/commands.ts"
+      ],
+      "rationale": "Top-level structure already exists in Solana-clawd."
+    },
+    {
+      "key": "context.ts",
+      "kind": "file",
+      "phase": "P1 Runtime Core",
+      "status": "present",
+      "targetPaths": [
+        "src/context.ts"
+      ],
+      "rationale": "Top-level structure already exists in Solana-clawd."
+    },
+    {
+      "key": "cost-tracker.ts",
+      "kind": "file",
+      "phase": "P1 Runtime Core",
+      "status": "present",
+      "targetPaths": [
+        "src/cost-tracker.ts"
+      ],
+      "rationale": "Top-level structure already exists in Solana-clawd."
+    },
+    {
+      "key": "costHook.ts",
+      "kind": "file",
+      "phase": "P1 Runtime Core",
+      "status": "present",
+      "targetPaths": [
+        "src/costHook.ts"
+      ],
+      "rationale": "Top-level structure already exists in Solana-clawd."
+    },
+    {
+      "key": "dialogLaunchers.tsx",
+      "kind": "file",
+      "phase": "P2 Operator Surfaces",
+      "status": "present",
+      "targetPaths": [
+        "src/dialogLaunchers.tsx"
+      ],
+      "rationale": "Top-level structure already exists in Solana-clawd."
+    },
+    {
+      "key": "history.ts",
+      "kind": "file",
+      "phase": "P1 Runtime Core",
+      "status": "present",
+      "targetPaths": [
+        "src/history.ts"
+      ],
+      "rationale": "Top-level structure already exists in Solana-clawd."
+    },
+    {
+      "key": "ink.ts",
+      "kind": "file",
+      "phase": "P2 Operator Surfaces",
+      "status": "present",
+      "targetPaths": [
+        "src/ink.ts"
+      ],
+      "rationale": "Top-level structure already exists in Solana-clawd."
+    },
+    {
+      "key": "interactiveHelpers.tsx",
+      "kind": "file",
+      "phase": "P2 Operator Surfaces",
+      "status": "present",
+      "targetPaths": [
+        "src/interactiveHelpers.tsx"
+      ],
+      "rationale": "Top-level structure already exists in Solana-clawd."
+    },
+    {
+      "key": "main.tsx",
+      "kind": "file",
+      "phase": "P2 Operator Surfaces",
+      "status": "present",
+      "targetPaths": [
+        "src/main.tsx"
+      ],
+      "rationale": "Top-level structure already exists in Solana-clawd."
+    },
+    {
+      "key": "projectOnboardingState.ts",
+      "kind": "file",
+      "phase": "P2 Operator Surfaces",
+      "status": "present",
+      "targetPaths": [
+        "src/projectOnboardingState.ts"
+      ],
+      "rationale": "Top-level structure already exists in Solana-clawd."
+    },
+    {
+      "key": "query.ts",
+      "kind": "file",
+      "phase": "P1 Runtime Core",
+      "status": "present",
+      "targetPaths": [
+        "src/query.ts"
+      ],
+      "rationale": "Top-level structure already exists in Solana-clawd."
+    },
+    {
+      "key": "replLauncher.tsx",
+      "kind": "file",
+      "phase": "P2 Operator Surfaces",
+      "status": "present",
+      "targetPaths": [
+        "src/replLauncher.tsx"
+      ],
+      "rationale": "Top-level structure already exists in Solana-clawd."
+    },
+    {
+      "key": "setup.ts",
+      "kind": "file",
+      "phase": "P1 Runtime Core",
+      "status": "present",
+      "targetPaths": [
+        "src/setup.ts"
+      ],
+      "rationale": "Top-level structure already exists in Solana-clawd."
+    },
+    {
+      "key": "tasks.ts",
+      "kind": "file",
+      "phase": "P3 Agent Orchestration",
+      "status": "present",
+      "targetPaths": [
+        "src/tasks.ts"
+      ],
+      "rationale": "Top-level structure already exists in Solana-clawd."
+    },
+    {
+      "key": "tools.ts",
+      "kind": "file",
+      "phase": "P3 Agent Orchestration",
+      "status": "present",
+      "targetPaths": [
+        "src/tools.ts"
+      ],
+      "rationale": "Top-level structure already exists in Solana-clawd."
+    }
+  ],
+  "solanaOnlyModules": [
+    {
+      "key": "agents",
+      "targetPaths": [
+        "src/agents"
+      ],
+      "rationale": "Built-in Solana research, OODA, scanner, monitor, and minting agents."
+    },
+    {
+      "key": "engine",
+      "targetPaths": [
+        "src/engine"
+      ],
+      "rationale": "Solana-clawd execution core: multi-LLM routing, permission engine, and risk engine."
+    },
+    {
+      "key": "gateway",
+      "targetPaths": [
+        "src/gateway"
+      ],
+      "rationale": "Privacy-preserving local/cloud transport bridge beyond upstream bridge abstractions."
+    },
+    {
+      "key": "helius",
+      "targetPaths": [
+        "src/helius"
+      ],
+      "rationale": "Helius RPC, DAS, webhooks, and streaming integrations."
+    },
+    {
+      "key": "memory",
+      "targetPaths": [
+        "src/memory"
+      ],
+      "rationale": "KNOWN / LEARNED / INFERRED extraction and consolidation."
+    },
+    {
+      "key": "metaplex",
+      "targetPaths": [
+        "src/metaplex"
+      ],
+      "rationale": "On-chain agent identity, minting, and wallet delegation."
+    },
+    {
+      "key": "monitor",
+      "targetPaths": [
+        "src/monitor"
+      ],
+      "rationale": "Solana market and wallet monitoring services."
+    },
+    {
+      "key": "pump",
+      "targetPaths": [
+        "src/pump"
+      ],
+      "rationale": "Pump.fun market scanner and bonding curve logic."
+    },
+    {
+      "key": "shared",
+      "targetPaths": [
+        "src/shared"
+      ],
+      "rationale": "Shared Solana-clawd message, model, and policy contracts."
+    },
+    {
+      "key": "telegram",
+      "targetPaths": [
+        "src/telegram"
+      ],
+      "rationale": "Telegram operator terminal for Solana trading and monitoring workflows."
+    }
+  ]
+}

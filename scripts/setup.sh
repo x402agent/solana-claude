@@ -98,6 +98,9 @@ ${BOLD}Recommended next commands:${RESET}
   ${CYAN}Wiki app${RESET}
     npm --prefix web/wiki run dev
 
+  ${CYAN}Standalone solana-clawd skill${RESET}
+    npx skills add x402agent/solana-clawd --path skill/solana-clawd
+
   ${CYAN}Agentwallet vault server${RESET}
     npm run agentwallet:start
     # then connect at http://localhost:9099/api/health

@@ -81,6 +81,8 @@ npm run skills:serve         # skills catalog on :3333
 | `npm run format:check` | Check formatting on `src/` |
 | `npm run check` | Run typecheck and Biome lint |
 | `npm run ci` | Run checks and build |
+| `npm run adaptation:report` | Generate the Claude Code -> Solana-clawd adaptation inventory |
+| `npm run skill:sync` | Sync the standalone `skill/solana-clawd` install bundle from the canonical master skill |
 | `npm run mcp:build` | Install and build the MCP package |
 | `npm run mcp:start` | Start the MCP package in stdio mode |
 | `npm run mcp:http` | Start the MCP package over HTTP |
@@ -359,9 +361,13 @@ Add to your MCP config:
 
 ### Option D -- Solana OS Skill (Global)
 
-If you are running the `skills` CLI framework across Solana OS, install the complete agent globally:
+If you are running the `skills` CLI framework across Solana OS, you have two install modes:
 
 ```bash
+# Install only the master solana-clawd skill
+npx skills add x402agent/solana-clawd --path skill/solana-clawd
+
+# Install the full bundled Solana-clawd skill catalog
 npx skills add x402agent/solana-clawd
 ```
 
@@ -1189,7 +1195,10 @@ Trigger conditions for this skill.
 ### Install Skills
 
 ```bash
-# Add from the skills hub
+# Install only the master solana-clawd skill
+npx skills add x402agent/solana-clawd --path skill/solana-clawd
+
+# Add the full Solana-clawd skill pack from GitHub
 npx skills add x402agent/solana-clawd
 
 # Or copy a skill directory into skills/
@@ -1742,6 +1751,8 @@ Full migration guide: [`docs/migrate-from-openclaw.md`](docs/migrate-from-opencl
 | Doc | Description |
 | --- | --- |
 | [Architecture](docs/architecture.md) | System overview, data flow diagrams, directory structure, 10 major subsystems (48KB) |
+| [Claude Adaptation Plan](docs/claude-code-adaptation-plan.md) | Privacy-first plan for adapting the local Claude Code tree into Solana-clawd |
+| [Claude Adaptation Report](docs/claude-code-adaptation-report.md) | Generated upstream-to-target inventory and migration status report |
 | [Migrate from OpenClaw](docs/migrate-from-openclaw.md) | `clawd migrate` guide — config mappings, memory tier conversion, wallet migration, troubleshooting |
 | [Risk Engine Spec](docs/risk-engine-spec.md) | 128-bit perpetual DEX risk engine design |
 | [Formal Verification](formal_verification/SPEC.md) | Lean 4 property specification (`prop_protected_principal`, `prop_conservation`) |

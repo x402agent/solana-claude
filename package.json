@@ -52,6 +52,8 @@
     "check": "npm run typecheck && npm run lint",
     "ci": "npm run check && npm run build",
     "clean": "node -e \"require('fs').rmSync('dist', { recursive: true, force: true })\"",
+    "adaptation:report": "node scripts/generate-claude-adaptation-report.mjs",
+    "skill:sync": "node scripts/sync-solana-clawd-skill.mjs",
     "skills:catalog": "node scripts/generate-skills-catalog.js",
     "skills:serve": "node scripts/generate-skills-catalog.js && cp skills/catalog.json web/skills/catalog.json && npx serve web/skills -p 3333"
   },
