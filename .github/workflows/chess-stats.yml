@@ -1,0 +1,55 @@
+name: Chess.com Games & Stats
+
+on:
+  schedule:
+    - cron: "0 12 * * *"
+  workflow_dispatch:
+    inputs:
+      chess_username:
+        description: "Chess.com username to sync into README"
+        required: false
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: chess-stats-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  update-readme:
+    name: Update README with Chess.com stats
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Resolve Chess.com username
+        id: resolve-username
+        env:
+          INPUT_USERNAME: ${{ inputs.chess_username }}
+          VAR_USERNAME: ${{ vars.CHESS_COM_USERNAME }}
+        run: |
+          USERNAME="${INPUT_USERNAME:-}"
+          if [ -z "$USERNAME" ]; then
+            USERNAME="${VAR_USERNAME:-}"
+          fi
+
+          if [ -z "$USERNAME" ]; then
+            echo "Set repository variable CHESS_COM_USERNAME or provide workflow_dispatch input chess_username." >&2
+            exit 1
+          fi
+
+          echo "username=$USERNAME" >> "$GITHUB_OUTPUT"
+
+      - name: Update README chess section
+        uses: Balastrong/chess-stats-action@v2.0.1
+        with:
+          CHESS_USERNAME: ${{ steps.resolve-username.outputs.username }}
+          FILE_NAME: README.md
+          GAMES_SIZE: 8
+          SHOW_STATS: true
+          SHOW_DATE: true
+          SHOW_FEN: false
+          SHOW_TIME_CLASS: true
+          COMMIT_MSG: "♟️ Update Chess.com stats"

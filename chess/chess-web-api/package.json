@@ -1,0 +1,41 @@
+{
+  "name": "chess-web-api",
+  "version": "1.2.0",
+  "description": "chess.com api wrapper",
+  "main": "src/index.js",
+  "types": "./types/main.d.ts",
+  "scripts": {
+    "lint": "eslint . --ignore-pattern node_modules/",
+    "lint:fix": "eslint . --ignore-pattern node_modules/ --fix",
+    "test": "jest --runInBand --detectOpenHandles",
+    "test:ci": "jest --verbose --runInBand --detectOpenHandles",
+    "test:watch": "jest --watch --runInBand --detectOpenHandles"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andyruwruw/chess-web-api.git"
+  },
+  "keywords": [
+    "Chess",
+    "API",
+    "chess.com",
+    "wrapper"
+  ],
+  "author": "Andrew Young",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/andyruwruw/chess-web-api/issues"
+  },
+  "homepage": "https://github.com/andyruwruw/chess-web-api#readme",
+  "dependencies": {
+    "chess.js": "^0.11.0",
+    "superagent": "^5.2.1"
+  },
+  "devDependencies": {
+    "eslint": "^7.9.0",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-plugin-import": "^2.22.0",
+    "jest": "^26.4.2",
+    "jest-each": "^26.6.2"
+  }
+}

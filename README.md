@@ -1199,6 +1199,16 @@ npm run skills:catalog   # regenerate the catalog
 
 ---
 
+## Chess.com Status
+
+Base Chess.com README integration is wired through GitHub Actions. Set the repository variable `CHESS_COM_USERNAME`, or run the workflow manually with a `chess_username` input, and the section below will auto-refresh.
+
+<!--START_SECTION:chessStats-->
+Chess.com stats will appear here after `.github/workflows/chess-stats.yml` runs.
+<!--END_SECTION:chessStats-->
+
+---
+
 ## Metaplex Agent Minting (MPL Agent Registry)
 
 `solana-clawd` fully integrates the **Metaplex mpl-agent-registry SDK** to mint, register, and manage AI agents as on-chain MPL Core assets on Solana.
