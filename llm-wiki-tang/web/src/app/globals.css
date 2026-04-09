@@ -207,6 +207,48 @@
   .rounded-app-sm { border-radius: var(--radius-sm); }
 }
 
+/* Neon glow logo animation — purple & green */
+@keyframes neon-glow {
+  0%, 100% {
+    filter: drop-shadow(0 0 8px rgba(168, 85, 247, 0.8))
+            drop-shadow(0 0 20px rgba(168, 85, 247, 0.4))
+            drop-shadow(0 0 40px rgba(34, 197, 94, 0.3));
+  }
+  50% {
+    filter: drop-shadow(0 0 12px rgba(34, 197, 94, 0.8))
+            drop-shadow(0 0 24px rgba(34, 197, 94, 0.4))
+            drop-shadow(0 0 48px rgba(168, 85, 247, 0.3));
+  }
+}
+
+@keyframes neon-pulse {
+  0%, 100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.logo-neon-glow {
+  animation: neon-glow 3s ease-in-out infinite;
+}
+
+.logo-neon-glow-ring {
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  background: conic-gradient(
+    from 0deg,
+    rgba(168, 85, 247, 0.3),
+    rgba(34, 197, 94, 0.3),
+    rgba(168, 85, 247, 0.3)
+  );
+  filter: blur(16px);
+  animation: neon-pulse 3s ease-in-out infinite;
+  z-index: -1;
+}
+
 /* Cypherpunk scanline overlay — subtle CRT effect */
 body::after {
   content: "";

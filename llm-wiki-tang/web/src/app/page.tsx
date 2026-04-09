@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { useUserStore } from '@/stores'
+import Image from 'next/image'
 import { ArrowRight, BookOpen, FileText, PenTool, Search, GitBranch } from 'lucide-react'
 
 const ease: [number, number, number, number] = [0.16, 1, 0.3, 1]
@@ -33,10 +34,13 @@ export default function LandingPage() {
       {/* Nav */}
       <nav className="fixed top-0 inset-x-0 z-50 flex items-center justify-between px-6 lg:px-10 h-14 bg-background/80 backdrop-blur-sm">
         <span className="flex items-center gap-2.5 text-sm font-semibold tracking-tight">
-          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 32 32">
-            <rect width="32" height="32" rx="7" fill="currentColor" className="text-foreground" />
-            <polyline points="11,8 21,16 11,24" fill="none" stroke="currentColor" className="text-background" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
+          <img
+            src="https://pub-9a12d2869ea54d26bc39b55ba9a84e9a.r2.dev/gfx/logo1.png"
+            alt="Clawd Vault"
+            width={28}
+            height={28}
+            className="logo-neon-glow rounded-md"
+          />
           Clawd Vault
         </span>
         <div className="flex items-center gap-5">
@@ -65,9 +69,27 @@ export default function LandingPage() {
       <section className="pt-32 pb-20 px-6 lg:px-10">
         <div className="max-w-2xl mx-auto text-center">
           <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1, ease }}
+            className="mb-8 flex justify-center"
+          >
+            <div className="relative">
+              <div className="logo-neon-glow-ring" />
+              <img
+                src="https://pub-9a12d2869ea54d26bc39b55ba9a84e9a.r2.dev/gfx/logo1.png"
+                alt="Clawd Vault Logo"
+                width={120}
+                height={120}
+                className="logo-neon-glow relative z-10 rounded-2xl"
+              />
+            </div>
+          </motion.div>
+
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease }}
+            transition={{ duration: 0.8, delay: 0.15, ease }}
           >
             <p className="text-sm text-muted-foreground mb-4">
               Solana research vault for{' '}
