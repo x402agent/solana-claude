@@ -173,12 +173,12 @@ var background = (function() {
 	//#endregion
 	//#region src/entrypoints/background.ts
 	var background_default = defineBackground(() => {
-		console.log("[Background] SolanaOS Agent Service Worker started");
+		console.log("[Background] Solana Clawd pAGENT Service Worker started");
 		setupTabChangeEvents();
-		chrome.storage.local.get("PageAgentExtUserAuthToken").then((result) => {
-			if (result.PageAgentExtUserAuthToken) return;
+		chrome.storage.local.get("PAgentUserAuthToken").then((result) => {
+			if (result.PAgentUserAuthToken) return;
 			const userAuthToken = crypto.randomUUID();
-			chrome.storage.local.set({ PageAgentExtUserAuthToken: userAuthToken });
+			chrome.storage.local.set({ PAgentUserAuthToken: userAuthToken });
 		});
 		chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 			if (message.type === "TAB_CONTROL") return handleTabControlMessage(message, sender, sendResponse);

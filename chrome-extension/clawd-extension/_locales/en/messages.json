@@ -1,11 +1,11 @@
 {
 	"extName": {
-		"message": "SolanaOS Agent"
+		"message": "Solana Clawd pAGENT"
 	},
 	"extDescription": {
-		"message": "SolanaOS Browser Agent — AI-powered browsing with Solana wallet integration."
+		"message": "Solana Clawd pAGENT — AI-powered GUI vision browser agent with air-gapped Solana wallet vault."
 	},
 	"extActionTitle": {
-		"message": "Open SolanaOS Agent"
+		"message": "Open Solana Clawd pAGENT"
 	}
 }

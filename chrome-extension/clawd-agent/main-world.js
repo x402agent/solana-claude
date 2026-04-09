@@ -5,7 +5,7 @@ var mainWorld = (function() {
 		return arg;
 	}
 	//#endregion
-	//#region src/entrypoints/main-world.ts
+	//#region src/entrypoints/main-world.ts — Solana Clawd pAGENT GUI Vision
 	var main_world_default = defineUnlistedScript(() => {
 		let _lastId = 0;
 		function getId() {
@@ -23,7 +23,7 @@ var mainWorld = (function() {
 				function handleMessage(e) {
 					const data = e.data;
 					if (typeof data !== "object" || data === null) return;
-					if (data.channel !== "PAGE_AGENT_EXT_RESPONSE") return;
+					if (data.channel !== "PAGENT_RESPONSE") return;
 					if (data.id !== id) return;
 					if (data.action === "status_change_event" && config.onStatusChange) {
 						config.onStatusChange(data.payload);
@@ -37,6 +37,10 @@ var mainWorld = (function() {
 						config.onHistoryUpdate(data.payload);
 						return;
 					}
+					if (data.action === "gui_vision_event" && config.onGuiVision) {
+						config.onGuiVision(data.payload);
+						return;
+					}
 					if (data.action !== "execute_result") return;
 					window.removeEventListener("message", handleMessage);
 					if (data.error) reject(new Error(data.error));
@@ -45,7 +49,7 @@ var mainWorld = (function() {
 				window.addEventListener("message", handleMessage);
 			});
 			window.postMessage({
-				channel: "PAGE_AGENT_EXT_REQUEST",
+				channel: "PAGENT_REQUEST",
 				id,
 				action: "execute",
 				payload: {
@@ -54,7 +58,8 @@ var mainWorld = (function() {
 						baseURL: config.baseURL,
 						model: config.model,
 						apiKey: config.apiKey,
-						includeInitialTab: config.includeInitialTab
+						includeInitialTab: config.includeInitialTab,
+						guiVision: config.guiVision !== false
 					}
 				}
 			}, "*");
@@ -63,22 +68,45 @@ var mainWorld = (function() {
 		const stop = () => {
 			const id = getId();
 			window.postMessage({
-				channel: "PAGE_AGENT_EXT_REQUEST",
+				channel: "PAGENT_REQUEST",
 				id,
 				action: "stop"
 			}, "*");
 		};
-		window.PAGE_AGENT_EXT_VERSION = "1.6.2";
-		window.PAGE_AGENT_EXT = {
-			version: "1.6.2",
-			execute,
-			stop
+		const getVisualState = () => {
+			const id = getId();
+			return new Promise((resolve) => {
+				function handleMessage(e) {
+					const data = e.data;
+					if (typeof data !== "object" || data === null) return;
+					if (data.channel !== "PAGENT_RESPONSE") return;
+					if (data.id !== id) return;
+					if (data.action !== "visual_state_result") return;
+					window.removeEventListener("message", handleMessage);
+					resolve(data.payload);
+				}
+				window.addEventListener("message", handleMessage);
+				window.postMessage({
+					channel: "PAGENT_REQUEST",
+					id,
+					action: "get_visual_state"
+				}, "*");
+			});
 		};
+		window.PAGENT_VERSION = "2.0.0";
+		window.PAGENT = {
+			version: "2.0.0",
+			execute,
+			stop,
+			getVisualState
+		};
+		// Backward compat
+		window.PAGE_AGENT_EXT_VERSION = window.PAGENT_VERSION;
+		window.PAGE_AGENT_EXT = window.PAGENT;
 	});
 	//#endregion
-	//#region \0virtual:wxt-unlisted-script-entrypoint?/Users/8bit/Downloads/solanaos-go/chrome-extension/extension/src/entrypoints/main-world.ts
+	//#region Solana Clawd pAGENT bootstrap
 	function print(method, ...args) {}
-	/** Wrapper around `console` with a "[wxt]" prefix */
 	var logger = {
 		debug: (...args) => print(console.debug, ...args),
 		log: (...args) => print(console.log, ...args),
@@ -91,11 +119,11 @@ var mainWorld = (function() {
 		try {
 			result = main_world_default.main();
 			if (result instanceof Promise) result = result.catch((err) => {
-				logger.error(`The unlisted script "main-world" crashed on startup!`, err);
+				logger.error("pAGENT main-world crashed on startup!", err);
 				throw err;
 			});
 		} catch (err) {
-			logger.error(`The unlisted script "main-world" crashed on startup!`, err);
+			logger.error("pAGENT main-world crashed on startup!", err);
 			throw err;
 		}
 		return result;
