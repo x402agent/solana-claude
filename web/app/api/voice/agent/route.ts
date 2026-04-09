@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
 
-const AGENT_ID = process.env.ELEVENLABS_AGENT_ID ?? "agent_1601knpw2ax7ejb80fdxx118n7qn";
+const AGENT_ID =
+  process.env.ELEVEN_LABS_AGENT_ID ??
+  process.env.ELEVENLABS_AGENT_ID ??
+  "agent_1601knpw2ax7ejb80fdxx118n7qn";
 const ELEVENLABS_API_KEY = process.env.ELEVEN_LABS_API_KEY ?? process.env.ELEVENLABS_API_KEY ?? "";
 
 export async function GET() {

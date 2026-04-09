@@ -4,6 +4,11 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/layout/ThemeProvider";
 import { ToastProvider } from "@/components/notifications/ToastProvider";
 
+const ELEVENLABS_WIDGET_AGENT_ID =
+  process.env.ELEVEN_LABS_AGENT_ID ??
+  process.env.ELEVENLABS_AGENT_ID ??
+  "agent_1601knpw2ax7ejb80fdxx118n7qn";
+
 export const metadata: Metadata = {
   title: "$CLAWD | Solana Blockchain & Finance Agents",
   description: "Solana-native blockchain and finance agent stack for $CLAWD: MCP tools, built-in agents, wiki, skills catalog, gateway, voice, and risk-aware execution surfaces.",
@@ -26,7 +31,7 @@ export default function RootLayout({
           </ToastProvider>
         </ThemeProvider>
         {/* @ts-expect-error -- ElevenLabs ConvAI web component */}
-        <elevenlabs-convai agent-id="agent_1601knpw2ax7ejb80fdxx118n7qn" />
+        <elevenlabs-convai agent-id={ELEVENLABS_WIDGET_AGENT_ID} />
         <Script
           src="https://unpkg.com/@elevenlabs/convai-widget-embed"
           strategy="afterInteractive"

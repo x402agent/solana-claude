@@ -721,7 +721,11 @@ cd web && npm run dev                     # dev server on :3000
 | `/` | Chat interface |
 | `/buddies` | Blockchain Buddy gallery + hatch |
 | `/voice` | Voice mode — ElevenLabs + Grok dual-provider |
+| `/` | Homepage now includes a call-or-email `$CLAWD` holder communications panel |
 | `/api/chat` | Streaming chat API |
+| `/api/agentmail/holders` | Provision a holder inbox and send a welcome email |
+| `/api/agentmail/messages` | Send to or read from holder inbox threads |
+| `/api/agentmail/webhook` | AgentMail email worker webhook for inbound events |
 | `/api/voice/tts` | ElevenLabs text-to-speech proxy |
 | `/api/voice/grok-tts` | Grok (xAI) text-to-speech proxy |
 | `/api/voice/agent` | ElevenLabs Conversational Agent (signed URL) |
@@ -746,7 +750,26 @@ All API keys stay server-side — ElevenLabs uses signed URLs, Grok uses ephemer
 # Required env vars (web/.env)
 ELEVEN_LABS_API_KEY=       # ElevenLabs TTS + Voice Agents
 ELEVENLABS_AGENT_ID=       # Your conversational agent ID
+ELEVEN_LABS_AGENT_ID=      # Alias also supported by web widget + voice API
 XAI_API_KEY=               # xAI Grok voice + TTS
+```
+
+### Call + Email $CLAWD
+
+The main website now exposes a holder communications surface so users can:
+
+- Call `$CLAWD` at `+19094135567`
+- Use the ElevenLabs ConvAI widget embedded site-wide
+- Provision a holder inbox through AgentMail
+- Send research and execution requests to the agent by email
+
+AgentMail server-side env vars:
+
+```bash
+AGENTMAIL_API_KEY=                 # AgentMail API key
+AGENTMAIL_CLAWD_INBOX_ID=clawd@agentmail.to
+AGENTMAIL_WEBHOOK_SECRET=          # Optional Svix-style verification secret
+NEXT_PUBLIC_CLAWD_AGENT_NUMBER=+19094135567
 ```
 
 **Deploy to Netlify:**

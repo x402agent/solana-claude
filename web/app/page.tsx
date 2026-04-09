@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { ClawdCommsPanel } from '@/components/contact/ClawdCommsPanel'
 
 const badgeItems = [
   '31 MCP tools',
@@ -92,6 +93,10 @@ const quickstartOptions = [
 ]
 
 export default function Home() {
+  const supportEmail = process.env.AGENTMAIL_CLAWD_INBOX_ID ?? 'clawd@agentmail.to'
+  const agentNumber = process.env.NEXT_PUBLIC_CLAWD_AGENT_NUMBER ?? process.env.AGENT_NUMBER ?? '+19094135567'
+  const voicePath = '/voice'
+
   return (
     <main className="min-h-screen bg-[radial-gradient(circle_at_top,rgba(34,197,94,0.14),transparent_32%),linear-gradient(180deg,#020617_0%,#030712_40%,#000000_100%)] text-green-100">
       <div className="pointer-events-none fixed inset-0 opacity-[0.08] [background-image:linear-gradient(rgba(34,197,94,0.16)_1px,transparent_1px),linear-gradient(90deg,rgba(34,197,94,0.16)_1px,transparent_1px)] [background-size:24px_24px]" />
@@ -220,6 +225,12 @@ ___/ / /_/ / / /_/ / / / / /_/ /   / /___/ / /_/ /| |/ |/ / /_/ /
           </div>
         </div>
       </section>
+
+      <ClawdCommsPanel
+        agentNumber={agentNumber}
+        supportEmail={supportEmail}
+        voicePath={voicePath}
+      />
 
       <section className="relative mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
