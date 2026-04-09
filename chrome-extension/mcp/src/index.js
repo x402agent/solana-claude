@@ -25,12 +25,12 @@ await hub.start()
 const url = `http://localhost:${port}`
 const cmd = platform() === 'darwin' ? 'open' : platform() === 'win32' ? 'start ""' : 'xdg-open'
 exec(`${cmd} "${url}"`, (err) => {
-	if (err) console.error(`[solanaos-mcp] Could not open browser: ${err.message}`)
+	if (err) console.error(`[clawd-mcp] Could not open browser: ${err.message}`)
 })
 
 // --- MCP server (stdio) ---
 
-const mcpServer = new McpServer({ name: 'solanaos-browser', version: '1.6.2' })
+const mcpServer = new McpServer({ name: 'clawd-pagent-browser', version: '2.0.0' })
 
 mcpServer.registerTool(
 	'execute_task',
@@ -95,4 +95,4 @@ mcpServer.registerTool(
 
 const transport = new StdioServerTransport()
 await mcpServer.connect(transport)
-console.error('[solanaos-mcp] MCP server ready (stdio)')
+console.error('[clawd-mcp] MCP server ready (stdio)')
