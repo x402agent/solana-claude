@@ -35,7 +35,7 @@ Powered by **$CLAWD** on Solana & Pump.fun
 [![Skills](https://img.shields.io/badge/Skills-95%20catalog-yellow)](skills/)
 [![Live](https://img.shields.io/badge/live-solanaclawd.com-00ff88)](https://solanaclawd.com)
 
-[**One-Shot Install**](#one-shot-install) · [**Trading Computer**](#-clawd-trading-computer) · [**Blockchain Buddies**](#blockchain-buddies) · [**Animations**](#clawd-animations) · [**MCP Tools**](#mcp-tools-31) · [**Voice Mode**](#voice-mode) · [**Telegram Bot**](#telegram-trading-bot) · [**Metaplex Agents**](#metaplex-agent-minting-mpl-agent-registry) · [**Worker Swarm**](#solana-worker-swarm-iii-sdk) · [**Skills**](#skills-catalog-95-skills) · [**Deploy**](#deploy-to-flyio) · [**Moltbook Agent**](#-moltbook-clawd-agent)
+[**One-Shot Install**](#one-shot-install) · [**Chrome Extension**](#chrome-extension) · [**Trading Computer**](#-clawd-trading-computer) · [**Blockchain Buddies**](#blockchain-buddies) · [**Animations**](#clawd-animations) · [**MCP Tools**](#mcp-tools-31) · [**Voice Mode**](#voice-mode) · [**Telegram Bot**](#telegram-trading-bot) · [**Metaplex Agents**](#metaplex-agent-minting-mpl-agent-registry) · [**Worker Swarm**](#solana-worker-swarm-iii-sdk) · [**Skills**](#skills-catalog-95-skills) · [**Deploy**](#deploy-to-flyio) · [**Moltbook Agent**](#-moltbook-clawd-agent)
 
 </div>
 
@@ -60,6 +60,7 @@ npm run spinners             # preview all 9 custom unicode spinners
 npm run mcp:http             # MCP HTTP server on :3000
 npm run mcp:start            # MCP stdio server
 npm run agentwallet:start    # wallet vault server on :9099
+npm run ext:vault            # start vault for chrome extension
 npm run vault:web:dev        # Clawd Vault app
 npm --prefix web run dev     # main website on :3000
 npm --prefix web/wiki run dev  # wiki app
@@ -95,9 +96,65 @@ npm run skills:serve         # skills catalog on :3333
 | `npm run spinners` | Preview the spinner gallery |
 | `npm run skills:catalog` | Regenerate `skills/catalog.json` |
 | `npm run skills:serve` | Regenerate and serve the skills catalog |
+| `npm run ext:dev` | Instructions to load the Chrome extension |
+| `npm run ext:vault` | Start the agentwallet vault server for the extension |
 | `npm run clean` | Remove the root `dist/` directory |
 
 No private key. No wallet. No paid API required for the default path.
+
+---
+
+## Chrome Extension
+
+**Solana Clawd pAGENT** — AI-powered GUI vision browser agent with air-gapped wallet vault.
+
+```bash
+# Load in Chrome/Brave/Edge
+# 1. Go to chrome://extensions
+# 2. Enable Developer mode
+# 3. Load unpacked → select chrome-extension/clawd-agent/
+```
+
+### 6 Tabs
+
+| Tab | What it does |
+|-----|-------------|
+| **Wallet** | SOL balance, token portfolio, send/swap, OODA trade history, Bitaxe miner card |
+| **Seeker** | WebSocket bridge to Solana Seeker phone via gateway |
+| **Miner** | MawdAxe fleet monitoring (aggregate + per-device, SSE live) |
+| **Chat** | Multi-turn AI chat (OpenRouter or native Clawd daemon) |
+| **Tools** | RPC health, trending tokens, system status, on-chain agent identity |
+| **Vault** | Air-gapped AES-256-GCM wallet vault (localhost:9099, never online) |
+
+### pAGENT — Browser Automation
+
+The `clawd-agent/` variant injects `window.PAGENT` into every page for AI-driven GUI automation:
+
+```javascript
+await window.PAGENT.execute("Find the cheapest SOL swap route", {
+  baseURL: "https://api.openrouter.ai/v1",
+  model: "anthropic/claude-sonnet-4-6",
+  apiKey: "sk-or-...",
+  guiVision: true,
+});
+```
+
+The MCP bridge at `chrome-extension/mcp/` connects pAGENT to Claude Desktop, Cursor, or VS Code over stdio.
+
+### Agent Wallet Vault
+
+Air-gapped keypair management — private keys **never leave your machine**.
+
+```bash
+npm run ext:vault  # start vault at localhost:9099
+```
+
+- Generate Solana (Ed25519) and EVM (secp256k1) keypairs
+- AES-256-GCM encryption at rest (0600 file permissions)
+- Import/export/pause/delete wallets
+- Bearer token auth for API access
+
+See [chrome-extension/README.md](chrome-extension/README.md) for full documentation.
 
 ```
 You: "What are the top 5 trending tokens right now?"
@@ -1897,6 +1954,18 @@ solana-clawd/
 │   ├── src/telegram.ts   TelegramBot class (long-poll, access control)
 │   ├── src/birdeye.ts    BirdeyeWS (live prices, new listings, whale alerts)
 │   └── src/solana.ts     Helius RPC + wallet helpers
+├── chrome-extension/     Solana Clawd pAGENT Chrome Extension
+│   ├── manifest.json     Popup extension (Manifest V3, localhost only)
+│   ├── popup.html/js/css 6-tab UI (Wallet, Seeker, Miner, Chat, Tools, Vault)
+│   ├── background.js     Service worker (status polling, badge updates)
+│   ├── clawd-agent/      Full pAGENT browser agent (side panel, GUI vision, content scripts)
+│   │   ├── main-world.js Injects window.PAGENT API into every page
+│   │   └── hub.html      WebSocket hub for MCP bridge
+│   ├── clawd-extension/  Mirror of clawd-agent (alternate build)
+│   ├── core/             @page-agent/core — Re-Act agent loop library
+│   ├── page-controller/  DOM state management + element interaction
+│   ├── mcp/              MCP server bridge (Claude Desktop ↔ browser)
+│   └── icons/            Extension icons
 ├── packages/
 │   └── agentwallet/      Encrypted wallet vault SDK
 │       ├── src/vault.ts  AES-256-GCM encrypted Solana + EVM keypair storage

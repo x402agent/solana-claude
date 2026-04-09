@@ -1,15 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const ELEVENLABS_API_KEY = process.env.ELEVEN_LABS_API_KEY ?? process.env.ELEVENLABS_API_KEY ?? "";
-const DEFAULT_VOICE_ID = "CwhRBWXzGAHq8TQ4Fs17"; // Roger
+const XAI_API_KEY = process.env.XAI_API_KEY ?? "";
+const XAI_BASE_URL = "https://api.x.ai/v1";
 
 export async function POST(req: NextRequest) {
-  if (!ELEVENLABS_API_KEY) {
-    return NextResponse.json({ error: "ElevenLabs API key not configured" }, { status: 500 });
+  if (!XAI_API_KEY) {
+    return NextResponse.json({ error: "XAI_API_KEY not configured" }, { status: 500 });
   }
 
   try {
-    const { text, voiceId, modelId, stability, similarityBoost } = await req.json();
+    const { text, voice, model, speed } = await req.json();
 
     if (!text || typeof text !== "string") {
       return NextResponse.json({ error: "text is required" }, { status: 400 });
@@ -19,32 +19,65 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "text exceeds 5000 character limit" }, { status: 400 });
     }
 
-    const voice = voiceId || DEFAULT_VOICE_ID;
-    const response = await fetch(
-      `https://api.elevenlabs.io/v1/text-to-speech/${voice}`,
-      {
-        method: "POST",
-        headers: {
-          "xi-api-key": ELEVENLABS_API_KEY,
-          "Content-Type": "application/json",
-          Accept: "audio/mpeg",
-        },
-        body: JSON.stringify({
-          text,
-          model_id: modelId || "eleven_turbo_v2",
-          voice_settings: {
-            stability: stability ?? 0.5,
-            similarity_boost: similarityBoost ?? 0.8,
-          },
-        }),
-      }
-    );
+    // Use xAI audio speech endpoint (OpenAI-compatible)
+    const response = await fetch(`${XAI_BASE_URL}/audio/speech`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${XAI_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model: model || "grok-4.20-reasoning",
+        input: text,
+        voice: voice || "clawd",
+        speed: speed ?? 1.0,
+        response_format: "mp3",
+      }),
+    });
 
     if (!response.ok) {
-      const detail = await response.text();
+      // Fallback: use Grok to generate spoken-style text response
+      // if native TTS is not available, return synthesized text
+      const fallbackResponse = await fetch(`${XAI_BASE_URL}/responses`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${XAI_API_KEY}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          model: "grok-4.20-reasoning",
+          input: [
+            {
+              role: "system",
+              content:
+                "You are Clawd, an AI agent on Solana. Convert the following text into a natural, expressive spoken format. Keep it concise and charismatic.",
+            },
+            { role: "user", content: text },
+          ],
+          store: false,
+        }),
+      });
+
+      if (!fallbackResponse.ok) {
+        const detail = await fallbackResponse.text();
+        return NextResponse.json(
+          { error: `xAI error: ${fallbackResponse.status}`, detail },
+          { status: fallbackResponse.status }
+        );
+      }
+
+      const data = await fallbackResponse.json();
+      const spokenText =
+        data.output
+          ?.filter((o: any) => o.type === "message")
+          .flatMap((o: any) => o.content)
+          .filter((c: any) => c.type === "output_text")
+          .map((c: any) => c.text)
+          .join("") ?? text;
+
       return NextResponse.json(
-        { error: `ElevenLabs error: ${response.status}`, detail },
-        { status: response.status }
+        { text: spokenText, mode: "text-fallback" },
+        { headers: { "Cache-Control": "public, max-age=3600" } }
       );
     }
 
