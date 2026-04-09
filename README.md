@@ -658,8 +658,8 @@ It runs as a **Model Context Protocol (MCP) server** -- meaning any Clawd-powere
 │  └────────────┘ └──────────────┘ └──────────────┘ └──────────────┘  │
 │                                                                      │
 │  ┌────────────┐ ┌──────────────┐ ┌──────────────┐ ┌──────────────┐  │
-│  │  MiniMax   │ │  Jupiter     │ │  ElevenLabs  │ │  xAI/Grok    │  │
-│  │  (Chat/TTS/│ │  (Price/DEX) │ │  (Voice/TTS) │ │  (Chat/Img)  │  │
+│  │  MiniMax   │ │  Jupiter     │ │  xAI/Grok    │ │  xAI/Grok    │  │
+│  │  (Chat/TTS/│ │  (Price/DEX) │ │  (Voice/TTS) │ │  (Multi-Agt) │  │
 │  │  Video/Img/│ │              │ │              │ │              │  │
 │  │  Music/Code│ │              │ │              │ │              │  │
 │  └────────────┘ └──────────────┘ └──────────────┘ └──────────────┘  │
@@ -830,7 +830,7 @@ Advanced agent orchestration environment for creating, testing, and deploying AI
 ### 📞 CLAWD Contact Desk
 
 Voice and email integration for $CLAWD holders:
-- **Voice calls** via ElevenLabs ConvAI agent
+- **Voice calls** via xAI Grok conversational agent
 - **Email threads** via AgentMail (clawd@agentmail.to)
 - **Draft routing** with AI-powered responses
 
@@ -861,7 +861,7 @@ macOS menu bar companion visualization with voice pipeline (IDLE → LISTENING �
 | AI/Video | fal.ai (Veo 3.1, Kling 3.0, PixVerse v6), MiniMax T2V-01/I2V-01 |
 | AI/TTS | MiniMax speech-2.8-hd (8 voices, emotion control) |
 | AI/Music | MiniMax Music Generation + Lyrics |
-| Voice | ElevenLabs ConvAI, AssemblyAI (STT) |
+| Voice | xAI Grok TTS + STT |
 | Memory | Honcho v3 (community chat sessions) |
 | Web Crawl | Firecrawl v2 (search, scrape, crawl, extract) |
 | Data | SolanaTracker, BirdEye, Helius DAS |
@@ -971,9 +971,8 @@ FAL_API_KEY=YOUR_KEY
 MINIMAX_API_KEY=YOUR_KEY
 MINIMAX_CODING_TOKEN=YOUR_KEY
 
-# ── Voice / STT ──
-ELEVEN_LABS_API_KEY=YOUR_KEY
-ELEVEN_LABS_AGENT_ID=agent_1601knpw2ax7ejb80fdxx118n7qn
+# ── Voice / STT (powered by xAI Grok) ──
+XAI_API_KEY=YOUR_KEY  # Same key powers voice, chat, vision, everything
 
 # ── CLAWD CRAWLING ──
 VITE_FIRECRAWL_API_KEY=YOUR_KEY
