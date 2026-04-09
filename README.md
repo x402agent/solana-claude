@@ -38,7 +38,7 @@ Powered by **$CLAWD** on Solana & Pump.fun
 [![Skills](https://img.shields.io/badge/Skills-95%20catalog-yellow)](skills/)
 [![Live](https://img.shields.io/badge/live-solanaclawd.com-00ff88)](https://solanaclawd.com)
 
-[**Install**](#one-shot-install) · [**Chrome Extension**](#chrome-extension) · [**Grok Harness**](#grok-api-harness) · [**Chess Agent**](#chescom-agent) · [**Trading Computer**](#clawd-trading-computer) · [**MCP Tools**](#mcp-tools-44) · [**Buddies**](#blockchain-buddies) · [**Voice**](#voice-mode) · [**Telegram**](#telegram-trading-bot) · [**Metaplex**](#metaplex-agent-minting-mpl-agent-registry) · [**Skills**](#skills-catalog-95-skills) · [**Deploy**](#deploy-to-flyio)
+[**Install**](#one-shot-install) · [**Chrome Extension**](#chrome-extension) · [**Grok Harness**](#grok-api-harness) · [**Chess Agent**](#chess-agent) · [**Trading**](#clawd-trading-computer) · [**MCP Tools**](#mcp-tools-44) · [**Buddies**](#blockchain-buddies) · [**Voice**](#voice-mode) · [**Telegram**](#telegram-trading-bot) · [**Metaplex**](#metaplex-agent-minting-mpl-agent-registry) · [**Skills**](#skills-catalog-95-skills) · [**Deploy**](#deploy-to-flyio)
 
 </div>
 
@@ -158,6 +158,58 @@ npm run ext:vault  # start vault at localhost:9099
 - Bearer token auth for API access
 
 See [chrome-extension/README.md](chrome-extension/README.md) for full documentation.
+
+---
+
+## Grok API Harness
+
+Full xAI Grok integration — 7 API endpoints powering the Clawd character agent with reasoning, vision, image gen, multi-agent research, and X/Twitter intelligence.
+
+### Endpoints
+
+| Endpoint | Model | What it does |
+| --- | --- | --- |
+| `POST /api/grok/chat` | `grok-4.20-reasoning` | Conversational chat with streaming and multi-turn context |
+| `POST /api/grok/vision` | `grok-4.20-reasoning` | Multimodal image analysis (URL or base64) |
+| `POST /api/grok/image` | `grok-imagine-image` | Image generation + editing (1-4 images, 1024x1024) |
+| `POST /api/grok/research` | `grok-4.20-multi-agent` | Multi-agent research with web + X search (4 or 16 agents) |
+| `POST /api/grok/tools` | `grok-4.20-reasoning` | Function calling with tool results workflow |
+| `POST /api/grok/x-search` | `grok-4.20-reasoning` | X/Twitter search with sentiment/alpha/narrative modes |
+| `POST /api/grok/web-search` | `grok-4.20-reasoning` | Web search with AI synthesis and source citation |
+
+### Clawd Character Agent
+
+The Grok harness powers the **Clawd character** (`src/agents/clawd-character.ts`) — a fully autonomous agent with:
+
+- **Voice** — Text-to-speech personality (confident, slightly cocky degen trader)
+- **Vision** — Chart analysis and image understanding via Grok vision
+- **Image Gen** — Avatar and meme generation via `grok-imagine-image`
+- **Multi-Agent Research** — Deep Solana research with 4-16 parallel agents
+- **X/Twitter Intel** — Sentiment scoring, alpha detection, narrative tracking
+- **Function Calling** — Structured tool use for onchain operations
+
+### Service Modules
+
+```text
+src/services/
+├── grokClient.ts           Core chat (generateGrokText, streamGrokText)
+├── grokVision.ts           Image analysis (analyzeImage, analyzeChart)
+├── grokImageGen.ts         Image generation (generateImage, generateClawdAvatar)
+├── grokMultiAgent.ts       Multi-agent research (deepSolanaResearch, quickMarketScan)
+├── grokFunctionCalling.ts  Structured function calling
+└── grokStructuredOutput.ts Typed JSON output extraction
+```
+
+### X-Search Modes
+
+| Mode | Use case |
+| --- | --- |
+| `sentiment` | Crypto sentiment analysis (-100 to +100), influencer tracking |
+| `alpha` | Early signals, whale alerts, breaking news (1-24 hour window) |
+| `narrative` | Emerging memes, trending topics, cultural shifts |
+| `default` | General market analysis |
+
+Requires `XAI_API_KEY` environment variable.
 
 ```
 You: "What are the top 5 trending tokens right now?"
@@ -366,7 +418,7 @@ It runs as a **Model Context Protocol (MCP) server** -- meaning any Clawd-powere
 
 ---
 
-## $CLAWD Trading Computer
+## CLAWD Trading Computer
 
 **Agentic trading dashboard with AI inference sandbox, agent NFT minting, real-time market data, voice companion, and OODA loop trading.**
 
@@ -843,7 +895,7 @@ solana-clawd spinners   # preview all 9 unicode spinners
 
 ---
 
-## MCP Tools (31)
+## MCP Tools (44)
 
 ### Solana Market Data
 | Tool | What it does | API key needed |
@@ -897,6 +949,31 @@ solana-clawd spinners   # preview all 9 unicode spinners
 |---|---|
 | `skill_list` | List available SKILL.md files |
 | `skill_read` | Read a skill's content |
+
+### Pump.fun
+
+| Tool | What it does |
+|---|---|
+| `pump_token_scan` | Scan a Pump.fun token (bonding curve, holders, volume) |
+| `pump_buy_quote` | Get a buy quote for a Pump.fun token |
+| `pump_sell_quote` | Get a sell quote for a Pump.fun token |
+| `pump_graduation` | Check if a token graduated from bonding curve |
+| `pump_market_cap` | Get current market cap of a Pump.fun token |
+| `pump_top_tokens` | Top Pump.fun tokens by volume/market cap |
+| `pump_new_tokens` | Most recently launched Pump.fun tokens |
+| `pump_cashback_info` | Pump.fun cashback mechanics and PDA info |
+
+### Chess.com
+
+| Tool | What it does |
+|---|---|
+| `chess_player` | Full player analysis — ratings, win rate, best rating |
+| `chess_recent_games` | Recent games with accuracy, openings, opponent ratings |
+| `chess_current_games` | Ongoing daily games + games awaiting a move |
+| `chess_daily_puzzle` | Today's puzzle with FEN and PGN solution |
+| `chess_random_puzzle` | Random puzzle for agent practice |
+| `chess_leaderboards` | Global leaderboards by time control |
+| `chess_titled_players` | All players with a specific title (GM, IM, FM, etc.) |
 
 ---
 
@@ -1640,7 +1717,7 @@ npm run skills:catalog   # regenerate the catalog
 
 ---
 
-## Chess.com Agent
+## Chess Agent
 
 Autonomous Chess.com integration — agents can analyze players, monitor games, solve puzzles, and study openings via 7 MCP tools.
 
