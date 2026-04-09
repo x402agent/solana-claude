@@ -1706,3 +1706,176 @@ document.addEventListener('DOMContentLoaded', async () => {
     seekerEnsureConnected().catch(error => seekerLog(`Gateway restore failed: ${error.message}`, 'warn'));
   }
 });
+
+// ═══════════════════════════════════════════════════
+// Agent Wallet Vault — Air-gapped local keypair management
+// Connects to agentwallet-vault at localhost:9099
+// ═══════════════════════════════════════════════════
+
+const VAULT_API = 'http://127.0.0.1:9099';
+let vaultOnline = false;
+
+async function vaultFetch(path, init = {}) {
+  const headers = { ...init.headers };
+  const stored = await getStorage(['vaultApiToken']);
+  if (stored.vaultApiToken) {
+    headers.Authorization = `Bearer ${stored.vaultApiToken}`;
+  }
+  return fetch(VAULT_API + path, { ...init, headers, signal: AbortSignal.timeout(5000) });
+}
+
+async function checkVaultStatus() {
+  const dot = document.getElementById('vaultDot');
+  const label = document.getElementById('vaultStatusLabel');
+  try {
+    const r = await vaultFetch('/api/health');
+    if (r.ok) {
+      vaultOnline = true;
+      dot.className = 'vault-status-dot online';
+      label.textContent = 'Vault online — keys encrypted at rest';
+      refreshVaultWallets();
+    } else {
+      throw new Error('not ok');
+    }
+  } catch {
+    vaultOnline = false;
+    dot.className = 'vault-status-dot offline';
+    label.textContent = 'Vault offline — run: npx agentwallet serve';
+  }
+}
+
+async function refreshVaultWallets() {
+  const container = document.getElementById('vaultWalletList');
+  if (!vaultOnline) {
+    container.innerHTML = '<div class="empty-state">Vault offline</div>';
+    return;
+  }
+  try {
+    const r = await vaultFetch('/api/wallets');
+    const wallets = await r.json();
+    if (!Array.isArray(wallets) || wallets.length === 0) {
+      container.innerHTML = '<div class="empty-state">No vault wallets yet</div>';
+      return;
+    }
+    container.innerHTML = wallets.map(w => `
+      <div class="vault-wallet-card" data-id="${w.id}">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <span class="vault-wallet-label">${escapeHtml(w.label || w.id)}</span>
+          <span class="vault-wallet-chain">${escapeHtml(w.chainType || 'solana')}</span>
+        </div>
+        <div class="vault-wallet-addr" title="Click to copy" onclick="navigator.clipboard.writeText('${escapeHtml(w.address)}')">${w.address}</div>
+        <div class="vault-wallet-actions">
+          <button onclick="vaultCopyAddress('${escapeHtml(w.address)}')">Copy</button>
+          <button onclick="vaultPauseWallet('${escapeHtml(w.id)}', ${!w.paused})">${w.paused ? 'Unpause' : 'Pause'}</button>
+          <button class="danger" onclick="vaultDeleteWallet('${escapeHtml(w.id)}')">Delete</button>
+        </div>
+      </div>
+    `).join('');
+  } catch {
+    container.innerHTML = '<div class="empty-state">Failed to load wallets</div>';
+  }
+}
+
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+async function vaultCreateWallet() {
+  const label = document.getElementById('vaultLabel').value.trim();
+  const chainType = document.getElementById('vaultChainType').value;
+  if (!label) { alert('Enter a wallet label'); return; }
+  try {
+    const r = await vaultFetch('/api/wallets', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ label, chainType }),
+    });
+    const d = await r.json();
+    if (d.error) { alert(d.error); return; }
+    document.getElementById('vaultLabel').value = '';
+    refreshVaultWallets();
+  } catch (e) {
+    alert(`Vault error: ${e.message || 'unknown'}`);
+  }
+}
+
+async function vaultImportWallet() {
+  const label = document.getElementById('vaultImportLabel').value.trim();
+  const privateKey = document.getElementById('vaultImportKey').value.trim();
+  const chainType = document.getElementById('vaultImportChain').value;
+  if (!label || !privateKey) { alert('Label and private key required'); return; }
+  try {
+    const r = await vaultFetch('/api/wallets/import', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ label, privateKey, chainType }),
+    });
+    const d = await r.json();
+    if (d.error) { alert(d.error); return; }
+    document.getElementById('vaultImportLabel').value = '';
+    document.getElementById('vaultImportKey').value = '';
+    document.getElementById('vaultImportForm').style.display = 'none';
+    refreshVaultWallets();
+  } catch (e) {
+    alert(`Import error: ${e.message || 'unknown'}`);
+  }
+}
+
+async function vaultExportVault() {
+  try {
+    const r = await vaultFetch('/api/vault/export');
+    const data = await r.json();
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'clawd-vault-backup.json';
+    a.click();
+    URL.revokeObjectURL(url);
+  } catch (e) {
+    alert(`Export failed: ${e.message || 'unknown'}`);
+  }
+}
+
+window.vaultCopyAddress = (addr) => {
+  navigator.clipboard.writeText(addr);
+};
+
+window.vaultPauseWallet = async (id, pause) => {
+  try {
+    await vaultFetch(`/api/wallets/${id}/${pause ? 'pause' : 'unpause'}`, { method: 'POST' });
+    refreshVaultWallets();
+  } catch (e) {
+    alert(`Error: ${e.message || 'unknown'}`);
+  }
+};
+
+window.vaultDeleteWallet = async (id) => {
+  if (!confirm('Delete this wallet? This cannot be undone.')) return;
+  try {
+    await vaultFetch(`/api/wallets/${id}`, { method: 'DELETE' });
+    refreshVaultWallets();
+  } catch (e) {
+    alert(`Delete failed: ${e.message || 'unknown'}`);
+  }
+};
+
+// Wire up vault UI on DOM load
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('vaultCreateBtn')?.addEventListener('click', vaultCreateWallet);
+  document.getElementById('vaultImportBtn')?.addEventListener('click', vaultImportWallet);
+  document.getElementById('vaultExportBtn')?.addEventListener('click', vaultExportVault);
+  document.getElementById('vaultImportToggle')?.addEventListener('click', () => {
+    const form = document.getElementById('vaultImportForm');
+    form.style.display = form.style.display === 'none' ? 'block' : 'none';
+  });
+  // Check vault on tab switch
+  const vaultTab = document.getElementById('tabVault');
+  if (vaultTab) {
+    vaultTab.addEventListener('click', checkVaultStatus);
+  }
+  // Initial check
+  checkVaultStatus();
+});

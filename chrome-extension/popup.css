@@ -1020,6 +1020,92 @@ body::before {
 }
 .retry-btn:hover { background: var(--surface); border-color: var(--sol-green); box-shadow: 0 0 15px rgba(20, 241, 149, 0.08); }
 
+/* ── Vault Tab ── */
+.vault-section { padding: 10px; }
+.vault-hero { text-align: center; padding: 16px 12px 10px; }
+.vault-hero-icon { font-size: 32px; margin-bottom: 6px; }
+.vault-hero-title { font-size: 15px; font-weight: 700; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.vault-hero-desc { font-size: 11px; color: var(--text-dim); margin-top: 4px; line-height: 1.4; }
+
+.vault-status {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 12px; margin: 6px 0;
+  background: var(--surface); border-radius: var(--radius);
+  border: 1px solid var(--border);
+}
+.vault-status-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--sol-amber); flex-shrink: 0;
+}
+.vault-status-dot.online { background: var(--sol-green); box-shadow: 0 0 6px rgba(20, 241, 149, 0.5); }
+.vault-status-dot.offline { background: var(--sol-red); }
+.vault-status-label { font-size: 11px; color: var(--text-dim); }
+
+.vault-wallets { margin: 6px 0; }
+.vault-wallet-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 10px 12px; margin-bottom: 6px;
+  transition: border-color .2s;
+}
+.vault-wallet-card:hover { border-color: var(--border-hover); }
+.vault-wallet-card .vault-wallet-label { font-size: 12px; font-weight: 600; color: var(--text); }
+.vault-wallet-card .vault-wallet-chain { font-size: 10px; color: var(--sol-purple); font-weight: 600; text-transform: uppercase; }
+.vault-wallet-card .vault-wallet-addr {
+  font-family: var(--mono); font-size: 10px; color: var(--text-muted);
+  margin-top: 4px; word-break: break-all; cursor: pointer;
+}
+.vault-wallet-card .vault-wallet-addr:hover { color: var(--sol-green); }
+.vault-wallet-card .vault-wallet-actions {
+  display: flex; gap: 6px; margin-top: 6px;
+}
+.vault-wallet-card .vault-wallet-actions button {
+  flex: 1; padding: 4px 8px; border-radius: 6px;
+  border: 1px solid var(--border); background: var(--glass);
+  color: var(--text-dim); font-size: 10px; cursor: pointer;
+  transition: all .2s; font-family: var(--font);
+}
+.vault-wallet-card .vault-wallet-actions button:hover {
+  border-color: var(--sol-green); color: var(--sol-green);
+}
+.vault-wallet-card .vault-wallet-actions button.danger:hover {
+  border-color: var(--sol-red); color: var(--sol-red);
+}
+
+.vault-actions-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 12px; margin-top: 8px;
+}
+.vault-actions-title { font-size: 12px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+.vault-input {
+  display: block; width: 100%; padding: 8px 10px; margin-bottom: 6px;
+  border-radius: 8px; border: 1px solid var(--border);
+  background: var(--glass); color: var(--text);
+  font-size: 11px; font-family: var(--font);
+  outline: none; transition: border-color .2s;
+}
+.vault-input:focus { border-color: var(--sol-green); }
+.vault-input option { background: #0a0a1e; color: var(--text); }
+.vault-btn {
+  width: 100%; padding: 8px 12px; border-radius: 8px;
+  border: none; background: var(--gradient);
+  color: #fff; font-size: 12px; font-weight: 600;
+  cursor: pointer; font-family: var(--font);
+  transition: opacity .2s;
+}
+.vault-btn:hover { opacity: 0.9; }
+.vault-btn-secondary {
+  background: var(--glass); border: 1px solid var(--border);
+  color: var(--text-dim);
+}
+.vault-btn-secondary:hover { border-color: var(--sol-green); color: var(--sol-green); opacity: 1; }
+.vault-note {
+  font-size: 10px; color: var(--text-muted); margin-top: 8px; line-height: 1.4;
+}
+.vault-note code {
+  font-family: var(--mono); font-size: 10px; color: var(--sol-cyan);
+  background: rgba(0, 255, 224, 0.05); padding: 1px 4px; border-radius: 3px;
+}
+
 /* ── Scrollbar ── */
 ::-webkit-scrollbar { width: 3px; }
 ::-webkit-scrollbar-track { background: transparent; }
