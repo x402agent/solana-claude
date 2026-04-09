@@ -7,6 +7,7 @@ import Link from 'next/link'
 import { useUserStore } from '@/stores'
 import Image from 'next/image'
 import { ArrowRight, BookOpen, FileText, PenTool, Search, GitBranch } from 'lucide-react'
+import { WalletConnectButton } from '@/components/auth/WalletConnectButton'
 
 const ease: [number, number, number, number] = [0.16, 1, 0.3, 1]
 
@@ -56,6 +57,7 @@ export default function LandingPage() {
           >
             Sign in
           </Link>
+          <WalletConnectButton variant="compact" />
           <Link
             href="/signup"
             className="hidden sm:inline-flex items-center gap-1.5 rounded-full bg-foreground text-background px-4 py-1.5 text-sm font-medium hover:opacity-90 transition-opacity"

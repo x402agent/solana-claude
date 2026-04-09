@@ -4,6 +4,7 @@ import { Suspense } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
+import { WalletConnectButton } from '@/components/auth/WalletConnectButton'
 
 function LoginForm() {
   const [email, setEmail] = useState('')
@@ -58,6 +59,8 @@ function LoginForm() {
           </svg>
           Continue with Google
         </button>
+
+        <WalletConnectButton />
 
         <div className="relative">
           <div className="absolute inset-0 flex items-center">
