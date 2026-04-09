@@ -1,30 +1,39 @@
 {
-  "slug": "rug-detection",
-  "title": "Rug Pull Detection Patterns",
+  "slug": "execution-risk-rails",
+  "title": "Execution Risk Rails",
   "category": "signal",
-  "summary": "Common rug pull indicators and how to detect them before entry.",
+  "summary": "Risk rails for $CLAWD combine deny-first permissions, execution gating, memory discipline, and risk-engine checks before any finance action is treated as safe.",
   "tags": [
-    "rug",
-    "security",
     "risk",
-    "detection"
+    "permissions",
+    "execution",
+    "finance",
+    "safety"
   ],
   "memoryTier": "LEARNED",
   "riskLevel": "high",
   "metadata": {
     "signalStrength": "STRONG",
-    "signalScore": 90
+    "signalScore": 92
   },
   "sources": [
     {
-      "label": "OODA trade history",
-      "type": "agent"
+      "label": "src/engine/risk-engine.ts",
+      "type": "manual"
+    },
+    {
+      "label": "src/engine/permission-engine.ts",
+      "type": "manual"
+    },
+    {
+      "label": "docs/risk-engine-spec.md",
+      "type": "manual"
     }
   ],
-  "content": "# Rug Pull Detection Patterns\n\n## Red Flags (Auto-AVOID)\n1. **Creator sold >50%** — check `creatorSold` field\n2. **Top 10 holders >60%** — extreme whale concentration\n3. **No social links** — zero Twitter/Telegram/website\n4. **Mint authority not revoked** — can inflate supply\n5. **Freeze authority active** — can freeze your tokens\n\n## Yellow Flags (Proceed with caution)\n1. Top 10 holders 30-50%\n2. <100 holders after 1 hour\n3. Bonding curve progress <10% after 30 minutes\n4. No dev buy (creator didn't buy their own token)\n5. Name/symbol cloning a popular token\n\n## Green Signals\n1. LP burned or locked (graduated tokens)\n2. Dev holding <5%\n3. Organic holder growth (not botted)\n4. Cashback enabled (creator aligned with traders)\n5. Community verified on Pump.fun\n\n## Automated Scoring\nThe Scanner agent scores 0-100:\n- >= 75: STRONG (auto-snipe eligible)\n- 55-74: MODERATE (research first)\n- 35-54: WEAK (high risk)\n- < 35: AVOID\n",
+  "content": "# Execution Risk Rails\n\n## What Must Stay True\n- Research can be cheap and fast\n- Execution must stay gated\n- Memory should not silently become truth without validation\n- Wallet, trade, and delegation flows need explicit operator intent\n\n## Main Rails\n1. **Permission engine**\n   - deny-first\n   - explicit allow patterns\n   - no silent escalation for finance actions\n2. **Risk engine**\n   - persistent source of truth for position and vault logic\n   - protects against loose accounting and invalid state transitions\n3. **Memory discipline**\n   - `KNOWN` for fresh facts\n   - `LEARNED` for validated patterns\n   - `INFERRED` for tentative signals\n4. **Surface consistency**\n   - the web app, docs, and wiki should present the same risk framing as the runtime\n\n## Practical Rule\nIf a page markets blockchain or finance agents, it should also make the risk rails visible. Otherwise the positioning is incomplete.\n",
   "id": "l0Oe0D9EaSEm",
   "createdAt": "2026-04-08T16:07:42.280Z",
-  "updatedAt": "2026-04-08T16:07:42.280Z",
-  "version": 1,
+  "updatedAt": "2026-04-09T14:00:00.000Z",
+  "version": 2,
   "archived": false
 }

@@ -19,10 +19,13 @@ export function DocsClient({ docs }: { docs: Doc[] }) {
       {/* Header */}
       <header className="sticky top-0 z-50 border-b border-[#1a1a2e] bg-[#0a0a0f]/95 backdrop-blur">
         <div className="mx-auto flex max-w-7xl items-center gap-6 px-6 py-3">
-          <a href="/" className="text-lg font-bold text-[#9945FF]">
-            $CLAWD
-          </a>
-          <nav className="flex gap-1">
+          <div>
+            <a href="/" className="text-lg font-bold text-[#9945FF]">
+              $CLAWD Docs
+            </a>
+            <div className="text-xs text-gray-500">Solana blockchain, finance, agent runtime, and execution rails</div>
+          </div>
+          <nav className="flex flex-wrap gap-1">
             {docs.map((d) => (
               <button
                 key={d.slug}

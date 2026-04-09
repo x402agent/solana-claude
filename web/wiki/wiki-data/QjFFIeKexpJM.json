@@ -1,29 +1,38 @@
 {
-  "slug": "jupiter-routing",
-  "title": "Jupiter Aggregator",
-  "category": "protocol",
-  "summary": "Jupiter — Solana's leading DEX aggregator. Best-price routing across all venues.",
+  "slug": "connected-surface-map",
+  "title": "Connected Surface Map",
+  "category": "research",
+  "summary": "Map of how web/app, web/wiki, web/skills, docs, and src/ fit together so the $CLAWD stack reads as one connected Solana blockchain and finance system.",
   "tags": [
-    "jupiter",
-    "dex",
-    "swap",
-    "routing"
+    "architecture",
+    "web",
+    "wiki",
+    "skills",
+    "docs",
+    "runtime"
   ],
-  "memoryTier": "LEARNED",
+  "memoryTier": "KNOWN",
   "metadata": {
-    "mint": "JUPyiwrYJFskUPiHa7hkeR8VUtAeFoSYbKedZNsDvCN",
-    "symbol": "JUP"
+    "expiresAt": "2027-01-01T00:00:00.000Z"
   },
   "sources": [
     {
-      "label": "Jupiter API docs",
+      "label": "docs/architecture.md",
+      "type": "manual"
+    },
+    {
+      "label": "web/app/page.tsx",
+      "type": "manual"
+    },
+    {
+      "label": "scripts/generate-skills-catalog.js",
       "type": "manual"
     }
   ],
-  "content": "# Jupiter Aggregator\n\n## Overview\nJupiter is Solana's #1 DEX aggregator — routes swaps across Raydium, Orca, Meteora, and 20+ venues for best price.\n\n## Key Endpoints\n- **Quote:** `GET /v6/quote?inputMint=X&outputMint=Y&amount=Z`\n- **Swap:** `POST /v6/swap` — returns serialized transaction\n- **Ultra:** `POST /ultra/v1/order` — intent-based, MEV-protected\n\n## Integration Notes\n- Always use `slippageBps` (basis points, not percent)\n- Set `prioritizationFeeLamports` from Helius fee estimate\n- For large swaps: use Ultra API (MEV protection, better fills)\n\n## Referral\n- Referral account earns fee share on swaps\n- CLAWD referral: `2mE1EbETC8e8XyJomMkvQ3jXzoGBZAqRRSRFJv9AHRD9`\n",
+  "content": "# Connected Surface Map\n\n## User-Facing Surfaces\n- **web/app** — landing page, docs browser, buddies terminal, voice UI, API routes\n- **web/wiki** — operational wiki for token, agent, strategy, risk, and architecture knowledge\n- **web/skills** — lightweight browser for the skill catalog\n- **docs/** — long-form architecture and risk specifications\n\n## Runtime Source Of Truth\n- **src/agents** — built-in agent fleet\n- **src/engine** — query engine, tool executor, permission engine, risk engine\n- **src/gateway** and **src/server** — remote control and operator transport\n- **src/memory** and **src/memdir** — KNOWN / LEARNED / INFERRED memory behavior\n- **src/helius**, **src/pump**, **src/metaplex**, **src/voice**, **src/buddy** — domain integrations\n\n## Skill Catalog Path\n1. Skills live in `skills/`\n2. `scripts/generate-skills-catalog.js` generates `skills/catalog.json`\n3. The catalog is copied into `web/skills/catalog.json`\n4. `web/skills/index.html` renders the browser\n\n## Objective\nThe repo should read like one connected Solana blockchain and finance agent system, not a set of disconnected experiments.\n",
   "id": "QjFFIeKexpJM",
   "createdAt": "2026-04-08T16:07:42.280Z",
-  "updatedAt": "2026-04-08T16:07:42.280Z",
-  "version": 1,
+  "updatedAt": "2026-04-09T14:00:00.000Z",
+  "version": 2,
   "archived": false
 }

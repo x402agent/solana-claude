@@ -5,8 +5,8 @@ import { ThemeProvider } from "@/components/layout/ThemeProvider";
 import { ToastProvider } from "@/components/notifications/ToastProvider";
 
 export const metadata: Metadata = {
-  title: "solana-clawd",
-  description: "The agentic engine Solana deserves: MCP tools, buddies, gateway, TailClawd, and distributed worker swarm.",
+  title: "$CLAWD | Solana Blockchain & Finance Agents",
+  description: "Solana-native blockchain and finance agent stack for $CLAWD: MCP tools, built-in agents, wiki, skills catalog, gateway, voice, and risk-aware execution surfaces.",
   icons: {
     icon: "/favicon.ico",
   },

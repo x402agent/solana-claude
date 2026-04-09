@@ -1,29 +1,36 @@
 {
-  "slug": "solana-sol",
-  "title": "SOL (Solana)",
+  "slug": "clawd-token",
+  "title": "$CLAWD Token",
   "category": "token",
-  "summary": "Solana's native token — L1 gas, staking, and the base pair for all Solana DeFi.",
+  "summary": "$CLAWD is the onchain identity token used across the solana-clawd stack, linking the brand, wiki, operator UX, and Solana-native agent positioning.",
   "tags": [
-    "sol",
-    "l1",
-    "base-pair"
+    "clawd",
+    "token",
+    "solana",
+    "pumpfun",
+    "brand"
   ],
   "memoryTier": "LEARNED",
   "metadata": {
-    "mint": "So11111111111111111111111111111111111111112",
-    "symbol": "SOL",
-    "solscanLink": "https://solscan.io/token/So11111111111111111111111111111111111111112"
+    "mint": "8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump",
+    "symbol": "CLAWD",
+    "pumpfunLink": "https://pump.fun",
+    "solscanLink": "https://solscan.io/token/8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump"
   },
   "sources": [
     {
-      "label": "Helius RPC",
-      "type": "api"
+      "label": "web/app/page.tsx",
+      "type": "manual"
+    },
+    {
+      "label": "package.json",
+      "type": "manual"
     }
   ],
-  "content": "# SOL (Solana)\n\n## Token Info\n- **Mint:** `So11111111111111111111111111111111111111112`\n- **Type:** Native L1 token\n- **Use:** Gas fees, staking, base pair for all DEX trading\n\n## Trading Notes\n- SOL is the denominator for most Solana trades\n- Monitor SOL price before any memecoin entry (correlation risk)\n- Priority fees are paid in SOL — high network activity = higher execution cost\n- Staking yield: ~7% APY via liquid staking (Marinade, Jito)\n\n## Key Signals\n- SOL dominance rising = risk-off (memes dump)\n- SOL flat + memecoin volume rising = rotation opportunity\n- SOL + ETH correlation breakdown = Solana-specific catalyst\n",
+  "content": "# $CLAWD Token\n\n## Role In The Stack\n$CLAWD is the Solana-native identity layer for the repo's operator story. It is the token-facing surface that ties together:\n- the landing page in `web/app`\n- the wiki in `web/wiki`\n- the skills catalog in `web/skills`\n- the runtime modules in `src/`\n\n## Mint\n- **Mint:** `8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump`\n- **Network:** Solana\n- **Positioning:** blockchain and finance agent stack identity\n\n## Operator Notes\n- Treat the token as part of the onchain brand surface, not as a substitute for runtime capability\n- The actual product value lives in the agent fleet, tools, skills, memory, gateway, and risk engine\n- Any token-related messaging should stay consistent with the real modules shipped in this repo\n\n## Connected Surfaces\n- `web/app/page.tsx`\n- `web/wiki/src/app/page.tsx`\n- `docs/architecture.md`\n",
   "id": "-Ll79FjPcBrw",
   "createdAt": "2026-04-08T16:07:42.280Z",
-  "updatedAt": "2026-04-08T16:07:42.280Z",
-  "version": 1,
+  "updatedAt": "2026-04-09T14:00:00.000Z",
+  "version": 2,
   "archived": false
 }

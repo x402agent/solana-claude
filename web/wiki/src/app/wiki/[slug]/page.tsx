@@ -24,7 +24,7 @@ export default async function WikiArticlePage({ params }: { params: Promise<{ sl
       <nav className="w-64 border-r border-[var(--clawd-border)] bg-[var(--clawd-surface)] p-4 flex-shrink-0">
         <Link href="/" className="block mb-6">
           <h1 className="text-lg font-bold crt-glow">CLAWD WIKI</h1>
-          <p className="text-xs text-[var(--clawd-dim)] mt-1">Solana Trading Intelligence</p>
+          <p className="text-xs text-[var(--clawd-dim)] mt-1">Solana Blockchain &amp; Finance Agents</p>
         </Link>
         {tree.map((cat) => (
           <div key={cat.category} className="mb-4">

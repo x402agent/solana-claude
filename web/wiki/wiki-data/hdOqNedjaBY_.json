@@ -1,28 +1,35 @@
 {
-  "slug": "memory-system",
-  "title": "Three-Tier Memory System",
+  "slug": "blockchain-finance-agent-fleet",
+  "title": "Blockchain & Finance Agent Fleet",
   "category": "agent",
-  "summary": "KNOWN/LEARNED/INFERRED memory tiers — how agents accumulate and validate trading knowledge.",
+  "summary": "The built-in $CLAWD fleet covers research, scanning, OODA trading, memory consolidation, deep analysis, monitoring, and Metaplex agent lifecycle operations.",
   "tags": [
-    "memory",
-    "agent",
+    "agents",
+    "explore",
+    "scanner",
     "ooda",
-    "dream"
+    "dream",
+    "analyst",
+    "monitor"
   ],
   "memoryTier": "LEARNED",
   "metadata": {
-    "agentType": "Dream"
+    "agentType": "Explore, Scanner, OODA, Dream, Analyst, Monitor, MetaplexAgent"
   },
   "sources": [
     {
-      "label": "SolanaOS epistemology",
+      "label": "src/agents/built-in-agents.ts",
+      "type": "manual"
+    },
+    {
+      "label": "src/coordinator/coordinator.ts",
       "type": "manual"
     }
   ],
-  "content": "# Three-Tier Memory System\n\n## KNOWN (Ephemeral)\n- **Source:** API calls, price feeds, scanner signals\n- **Lifetime:** Expires after set duration (default 60s for prices)\n- **Example:** \"SOL: $142.30, +3.2% 24h\"\n- **Use:** OODA OBSERVE phase — fresh market context\n\n## LEARNED (Persistent)\n- **Source:** Validated patterns, confirmed by Dream agent\n- **Lifetime:** Permanent until explicitly revoked\n- **Example:** \"BONK typically leads meme rallies by 2-4h\"\n- **Use:** OODA ORIENT phase — pattern matching\n\n## INFERRED (Tentative)\n- **Source:** Scanner signals, single-observation correlations\n- **Lifetime:** Expires in 24h unless promoted\n- **Example:** \"WIF showing accumulation pattern similar to March 2025\"\n- **Use:** Candidate for promotion → LEARNED via Dream consolidation\n\n## Dream Agent\nThe Dream agent runs periodically to:\n1. Review all INFERRED signals\n2. Find recurring themes (token, pattern, wallet)\n3. Promote high-confidence signals to LEARNED\n4. Expire stale or contradicted signals\n5. Write consolidated insights\n\nRun manually: `/dream` in Telegram\n",
+  "content": "# Blockchain & Finance Agent Fleet\n\n## Built-In Agents\n- **Explore:** read-only Solana research\n- **Scanner:** trending and opportunity detection\n- **OODA:** full Observe → Orient → Decide → Act → Learn cycle\n- **Dream:** memory consolidation and pattern promotion\n- **Analyst:** deep token and wallet reports\n- **Monitor:** live listener and webhook setup\n- **MetaplexAgent:** onchain agent minting and registry operations\n\n## Operating Principle\nEvery agent is only useful if the surrounding surfaces explain what it connects to. The homepage, docs, skills catalog, and wiki should all point back to this fleet.\n\n## Connected Modules\n- `src/agents/built-in-agents.ts`\n- `src/coordinator/`\n- `src/tasks/`\n- `src/commands/`\n",
   "id": "hdOqNedjaBY_",
   "createdAt": "2026-04-08T16:07:42.280Z",
-  "updatedAt": "2026-04-08T16:07:42.280Z",
-  "version": 1,
+  "updatedAt": "2026-04-09T14:00:00.000Z",
+  "version": 2,
   "archived": false
 }

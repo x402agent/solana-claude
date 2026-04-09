@@ -1,29 +1,35 @@
 {
-  "slug": "pump-fun-mechanics",
-  "title": "Pump.fun Bonding Curve",
+  "slug": "market-data-and-execution-stack",
+  "title": "Market Data & Execution Stack",
   "category": "protocol",
-  "summary": "How Pump.fun bonding curves work — launch mechanics, graduation, and cashback.",
+  "summary": "How the $CLAWD stack connects Helius, Jupiter, Pump.fun, Metaplex, and the runtime modules that power Solana blockchain and finance agents.",
   "tags": [
+    "helius",
+    "jupiter",
     "pumpfun",
-    "bonding-curve",
-    "memecoin",
-    "launch"
+    "metaplex",
+    "execution"
   ],
   "memoryTier": "LEARNED",
-  "metadata": {
-    "birdeyeLink": "https://birdeye.so",
-    "pumpfunLink": "https://pump.fun"
-  },
+  "metadata": {},
   "sources": [
     {
-      "label": "pump-sdk-core SKILL.md",
+      "label": "src/helius/helius-client.ts",
+      "type": "manual"
+    },
+    {
+      "label": "src/pump/scanner.ts",
+      "type": "manual"
+    },
+    {
+      "label": "src/metaplex/agent-registry.ts",
       "type": "manual"
     }
   ],
-  "content": "# Pump.fun Bonding Curve\n\n## How It Works\n1. Creator launches token on pump.fun (no code needed)\n2. Token starts on a **bonding curve** — price increases with buys\n3. At ~$69k market cap, token **graduates** to PumpSwap AMM\n4. Post-graduation: normal DEX trading on Raydium/Jupiter\n\n## Key Metrics\n- **Bonding curve progress:** 0-100% (use `/grad <mint>`)\n- **Sweet spot:** 60-90% progress — pre-graduation momentum\n- **Risk zone:** <20% progress — high chance of abandonment\n\n## Graduation\n- Triggered automatically at market cap threshold\n- Liquidity migrates from bonding curve → PumpSwap AMM pool\n- LP tokens are burned (locked forever)\n\n## Cashback\n- Creator fee redirected back to traders\n- Auto on buys during bonding curve\n- Requires UserVolumeAccumulator PDA for sells\n- Claim via `claim_cashback` instruction\n\n## Mayhem Mode\n- 2B supply variant (vs standard 1B)\n- Higher volatility, faster graduation\n- Use `/snipe mayhem` to filter for these only\n",
+  "content": "# Market Data & Execution Stack\n\n## Core Providers\n- **Helius:** account data, DAS, transactions, priority fees, webhooks, listeners\n- **Jupiter:** routing and swap path intelligence\n- **Pump.fun:** launch discovery, bonding curve scanning, early-stage signal generation\n- **Metaplex:** onchain agent identity and registration flows\n\n## Runtime Path\n1. Fetch live Solana context from Helius-backed tools\n2. Rank opportunities through Scanner, Analyst, or OODA flows\n3. Route execution or reporting through the approved venue\n4. Write memory, alerts, or monitor subscriptions back into the system\n\n## Why This Matters\nThis repo is positioned for blockchain and finance agents, so the surface area must show real venue connectivity instead of generic chatbot framing.\n\n## Connected Modules\n- `src/helius/`\n- `src/pump/`\n- `src/metaplex/`\n- `src/tools.ts`\n",
   "id": "39CnmVz3vfGJ",
   "createdAt": "2026-04-08T16:07:42.280Z",
-  "updatedAt": "2026-04-08T16:07:42.280Z",
-  "version": 1,
+  "updatedAt": "2026-04-09T14:00:00.000Z",
+  "version": 2,
   "archived": false
 }

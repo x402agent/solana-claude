@@ -1,6 +1,6 @@
 #!/usr/bin/env tsx
 /**
- * Seed the CLAWD Wiki with foundational Solana trading knowledge.
+ * Seed the CLAWD Wiki with Solana blockchain and finance agent knowledge.
  * Run: cd web/wiki && npx tsx src/lib/seed.ts
  */
 import { createArticle, getAllArticles } from "./store.js";
@@ -12,244 +12,248 @@ if (getAllArticles().length > 0) {
 
 const articles = [
   {
-    slug: "ooda-loop",
-    title: "OODA Trading Loop",
+    slug: "ooda-finance-loop",
+    title: "OODA Finance Loop",
     category: "strategy" as const,
-    summary: "The Observe-Orient-Decide-Act cycle adapted for Solana DeFi trading with multi-venue signal scoring.",
-    tags: ["ooda", "strategy", "core"],
+    summary: "The Observe-Orient-Decide-Act-Learn cycle adapted for Solana blockchain and finance agents, with explicit routing through risk rails and memory tiers.",
+    tags: ["ooda", "strategy", "trading", "finance", "solana"],
+    memoryTier: "LEARNED" as const,
+    metadata: {
+      entryRules: ["Score >= 60", "Liquidity and holder quality confirmed", "Execution venue available"],
+      exitRules: ["Target or stop hit", "Execution risk expands", "Signal invalidated by fresh KNOWN data"],
+      stopLossPct: 12,
+      takeProfitPct: 25,
+    },
+    sources: [
+      { label: "src/agents/built-in-agents.ts", type: "manual" as const },
+      { label: "src/memory/extract-memories.ts", type: "manual" as const },
+    ],
+    content: `# OODA Finance Loop
+
+## Purpose
+The OODA loop is the core operating model for $CLAWD finance agents. It is not just market analysis. It is the glue between live Solana data, memory, risk gating, and operator approval.
+
+## Observe
+- Pull live market context from Helius and Solana data tools
+- Check trending tokens, wallet activity, and execution venue state
+- Recall \`KNOWN\` memory for active conditions and \`INFERRED\` memory for candidate signals
+
+## Orient
+- Score tokens, wallets, and venues on trend, liquidity, participation, and execution risk
+- Cross-check with \`LEARNED\` memory for recurring patterns
+- Decide whether the signal belongs in research only, watchlist mode, or trade-ready state
+
+## Decide
+- Require confidence bands before sizing
+- Prefer read-only research when data quality is weak
+- Keep trade execution behind explicit approval and permission gates
+
+## Act
+- Route research and execution through Jupiter, Pump.fun, wallet, or monitoring workflows
+- Emit structured outputs for Telegram, web, or downstream agents
+- Record both the action and the reason
+
+## Learn
+- Promote corroborated patterns from \`INFERRED\` to \`LEARNED\`
+- Expire stale observations
+- Keep the wiki, docs, and operator understanding aligned with the runtime
+
+## Connected Modules
+- \`src/agents/built-in-agents.ts\`
+- \`src/engine/tool-executor.ts\`
+- \`src/memory/extract-memories.ts\`
+- \`src/tasks/\`
+`,
+  },
+  {
+    slug: "clawd-token",
+    title: "$CLAWD Token",
+    category: "token" as const,
+    summary: "$CLAWD is the onchain identity token used across the solana-clawd stack, linking the brand, wiki, operator UX, and Solana-native agent positioning.",
+    tags: ["clawd", "token", "solana", "pumpfun", "brand"],
+    memoryTier: "LEARNED" as const,
+    metadata: {
+      mint: "8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump",
+      symbol: "CLAWD",
+      pumpfunLink: "https://pump.fun",
+      solscanLink: "https://solscan.io/token/8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump",
+    },
+    sources: [
+      { label: "web/app/page.tsx", type: "manual" as const },
+      { label: "package.json", type: "manual" as const },
+    ],
+    content: `# $CLAWD Token
+
+## Role In The Stack
+$CLAWD is the Solana-native identity layer for the repo's operator story. It is the token-facing surface that ties together:
+- the landing page in \`web/app\`
+- the wiki in \`web/wiki\`
+- the skills catalog in \`web/skills\`
+- the runtime modules in \`src/\`
+
+## Mint
+- **Mint:** \`8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump\`
+- **Network:** Solana
+- **Positioning:** blockchain and finance agent stack identity
+
+## Operator Notes
+- Treat the token as part of the onchain brand surface, not as a substitute for runtime capability
+- The actual product value lives in the agent fleet, tools, skills, memory, gateway, and risk engine
+- Any token-related messaging should stay consistent with the real modules shipped in this repo
+
+## Connected Surfaces
+- \`web/app/page.tsx\`
+- \`web/wiki/src/app/page.tsx\`
+- \`docs/architecture.md\`
+`,
+  },
+  {
+    slug: "market-data-and-execution-stack",
+    title: "Market Data & Execution Stack",
+    category: "protocol" as const,
+    summary: "How the $CLAWD stack connects Helius, Jupiter, Pump.fun, Metaplex, and the runtime modules that power Solana blockchain and finance agents.",
+    tags: ["helius", "jupiter", "pumpfun", "metaplex", "execution"],
     memoryTier: "LEARNED" as const,
     metadata: {},
-    sources: [{ label: "SolanaOS strategy.md", type: "manual" as const }],
-    content: `# OODA Trading Loop
+    sources: [
+      { label: "src/helius/helius-client.ts", type: "manual" as const },
+      { label: "src/pump/scanner.ts", type: "manual" as const },
+      { label: "src/metaplex/agent-registry.ts", type: "manual" as const },
+    ],
+    content: `# Market Data & Execution Stack
 
-## Overview
-The OODA loop (Observe, Orient, Decide, Act) is the core decision-making framework for CLAWD agents. Adapted from military strategy for the speed and chaos of Solana DeFi markets.
+## Core Providers
+- **Helius:** account data, DAS, transactions, priority fees, webhooks, listeners
+- **Jupiter:** routing and swap path intelligence
+- **Pump.fun:** launch discovery, bonding curve scanning, early-stage signal generation
+- **Metaplex:** onchain agent identity and registration flows
 
-## Phases
+## Runtime Path
+1. Fetch live Solana context from Helius-backed tools
+2. Rank opportunities through Scanner, Analyst, or OODA flows
+3. Route execution or reporting through the approved venue
+4. Write memory, alerts, or monitor subscriptions back into the system
 
-### OBSERVE
-Gather real-time market data:
-- \`sol_price\` — Current SOL/USD
-- \`solana_trending\` — Top movers by volume/momentum
-- \`helius_priority_fee\` — Network congestion indicator
-- \`memory_recall(KNOWN)\` — Fresh cached signals
+## Why This Matters
+This repo is positioned for blockchain and finance agents, so the surface area must show real venue connectivity instead of generic chatbot framing.
 
-### ORIENT
-Score each candidate using weighted factors:
-| Factor | Weight | Source |
-|--------|--------|--------|
-| Trend alignment | 25% | 24h price change |
-| Momentum | 20% | Volume acceleration |
-| Liquidity depth | 20% | DEX pool sizes |
-| Smart money participation | 15% | Top trader wallets |
-| Execution risk | -20% | Slippage + priority fee |
-
-### DECIDE
-- Confidence >= 60 → Size band selection
-  - 60-69: 0.5x base size
-  - 70-79: 1.0x
-  - 80-89: 1.25x
-  - 90+: 1.5x (max conviction)
-- Below 60 → SKIP, write INFERRED signal for Dream agent
-
-### ACT
-Execute via Jupiter/Raydium with:
-- Priority fee from helius estimate
-- Slippage protection (adaptive)
-- Permission gate: \`ask\` mode requires human approval
-
-### LEARN
-Post-trade:
-- Write result to INFERRED memory
-- Dream agent consolidates INFERRED → LEARNED
-- Failed trades write risk patterns to LEARNED
+## Connected Modules
+- \`src/helius/\`
+- \`src/pump/\`
+- \`src/metaplex/\`
+- \`src/tools.ts\`
 `,
   },
   {
-    slug: "solana-sol",
-    title: "SOL (Solana)",
-    category: "token" as const,
-    summary: "Solana's native token — L1 gas, staking, and the base pair for all Solana DeFi.",
-    tags: ["sol", "l1", "base-pair"],
-    memoryTier: "LEARNED" as const,
-    metadata: {
-      mint: "So11111111111111111111111111111111111111112",
-      symbol: "SOL",
-      solscanLink: "https://solscan.io/token/So11111111111111111111111111111111111111112",
-    },
-    sources: [{ label: "Helius RPC", type: "api" as const }],
-    content: `# SOL (Solana)
-
-## Token Info
-- **Mint:** \`So11111111111111111111111111111111111111112\`
-- **Type:** Native L1 token
-- **Use:** Gas fees, staking, base pair for all DEX trading
-
-## Trading Notes
-- SOL is the denominator for most Solana trades
-- Monitor SOL price before any memecoin entry (correlation risk)
-- Priority fees are paid in SOL — high network activity = higher execution cost
-- Staking yield: ~7% APY via liquid staking (Marinade, Jito)
-
-## Key Signals
-- SOL dominance rising = risk-off (memes dump)
-- SOL flat + memecoin volume rising = rotation opportunity
-- SOL + ETH correlation breakdown = Solana-specific catalyst
-`,
-  },
-  {
-    slug: "pump-fun-mechanics",
-    title: "Pump.fun Bonding Curve",
-    category: "protocol" as const,
-    summary: "How Pump.fun bonding curves work — launch mechanics, graduation, and cashback.",
-    tags: ["pumpfun", "bonding-curve", "memecoin", "launch"],
-    memoryTier: "LEARNED" as const,
-    metadata: {
-      birdeyeLink: "https://birdeye.so",
-      pumpfunLink: "https://pump.fun",
-    },
-    sources: [{ label: "pump-sdk-core SKILL.md", type: "manual" as const }],
-    content: `# Pump.fun Bonding Curve
-
-## How It Works
-1. Creator launches token on pump.fun (no code needed)
-2. Token starts on a **bonding curve** — price increases with buys
-3. At ~$69k market cap, token **graduates** to PumpSwap AMM
-4. Post-graduation: normal DEX trading on Raydium/Jupiter
-
-## Key Metrics
-- **Bonding curve progress:** 0-100% (use \`/grad <mint>\`)
-- **Sweet spot:** 60-90% progress — pre-graduation momentum
-- **Risk zone:** <20% progress — high chance of abandonment
-
-## Graduation
-- Triggered automatically at market cap threshold
-- Liquidity migrates from bonding curve → PumpSwap AMM pool
-- LP tokens are burned (locked forever)
-
-## Cashback
-- Creator fee redirected back to traders
-- Auto on buys during bonding curve
-- Requires UserVolumeAccumulator PDA for sells
-- Claim via \`claim_cashback\` instruction
-
-## Mayhem Mode
-- 2B supply variant (vs standard 1B)
-- Higher volatility, faster graduation
-- Use \`/snipe mayhem\` to filter for these only
-`,
-  },
-  {
-    slug: "memory-system",
-    title: "Three-Tier Memory System",
+    slug: "blockchain-finance-agent-fleet",
+    title: "Blockchain & Finance Agent Fleet",
     category: "agent" as const,
-    summary: "KNOWN/LEARNED/INFERRED memory tiers — how agents accumulate and validate trading knowledge.",
-    tags: ["memory", "agent", "ooda", "dream"],
+    summary: "The built-in $CLAWD fleet covers research, scanning, OODA trading, memory consolidation, deep analysis, monitoring, and Metaplex agent lifecycle operations.",
+    tags: ["agents", "explore", "scanner", "ooda", "dream", "analyst", "monitor"],
     memoryTier: "LEARNED" as const,
-    metadata: { agentType: "Dream" },
-    sources: [{ label: "SolanaOS epistemology", type: "manual" as const }],
-    content: `# Three-Tier Memory System
+    metadata: { agentType: "Explore, Scanner, OODA, Dream, Analyst, Monitor, MetaplexAgent" },
+    sources: [
+      { label: "src/agents/built-in-agents.ts", type: "manual" as const },
+      { label: "src/coordinator/coordinator.ts", type: "manual" as const },
+    ],
+    content: `# Blockchain & Finance Agent Fleet
 
-## KNOWN (Ephemeral)
-- **Source:** API calls, price feeds, scanner signals
-- **Lifetime:** Expires after set duration (default 60s for prices)
-- **Example:** "SOL: $142.30, +3.2% 24h"
-- **Use:** OODA OBSERVE phase — fresh market context
+## Built-In Agents
+- **Explore:** read-only Solana research
+- **Scanner:** trending and opportunity detection
+- **OODA:** full Observe → Orient → Decide → Act → Learn cycle
+- **Dream:** memory consolidation and pattern promotion
+- **Analyst:** deep token and wallet reports
+- **Monitor:** live listener and webhook setup
+- **MetaplexAgent:** onchain agent minting and registry operations
 
-## LEARNED (Persistent)
-- **Source:** Validated patterns, confirmed by Dream agent
-- **Lifetime:** Permanent until explicitly revoked
-- **Example:** "BONK typically leads meme rallies by 2-4h"
-- **Use:** OODA ORIENT phase — pattern matching
+## Operating Principle
+Every agent is only useful if the surrounding surfaces explain what it connects to. The homepage, docs, skills catalog, and wiki should all point back to this fleet.
 
-## INFERRED (Tentative)
-- **Source:** Scanner signals, single-observation correlations
-- **Lifetime:** Expires in 24h unless promoted
-- **Example:** "WIF showing accumulation pattern similar to March 2025"
-- **Use:** Candidate for promotion → LEARNED via Dream consolidation
-
-## Dream Agent
-The Dream agent runs periodically to:
-1. Review all INFERRED signals
-2. Find recurring themes (token, pattern, wallet)
-3. Promote high-confidence signals to LEARNED
-4. Expire stale or contradicted signals
-5. Write consolidated insights
-
-Run manually: \`/dream\` in Telegram
+## Connected Modules
+- \`src/agents/built-in-agents.ts\`
+- \`src/coordinator/\`
+- \`src/tasks/\`
+- \`src/commands/\`
 `,
   },
   {
-    slug: "jupiter-routing",
-    title: "Jupiter Aggregator",
-    category: "protocol" as const,
-    summary: "Jupiter — Solana's leading DEX aggregator. Best-price routing across all venues.",
-    tags: ["jupiter", "dex", "swap", "routing"],
-    memoryTier: "LEARNED" as const,
-    metadata: {
-      mint: "JUPyiwrYJFskUPiHa7hkeR8VUtAeFoSYbKedZNsDvCN",
-      symbol: "JUP",
-    },
-    sources: [{ label: "Jupiter API docs", type: "manual" as const }],
-    content: `# Jupiter Aggregator
+    slug: "connected-surface-map",
+    title: "Connected Surface Map",
+    category: "research" as const,
+    summary: "Map of how web/app, web/wiki, web/skills, docs, and src/ fit together so the $CLAWD stack reads as one connected Solana blockchain and finance system.",
+    tags: ["architecture", "web", "wiki", "skills", "docs", "runtime"],
+    memoryTier: "KNOWN" as const,
+    metadata: { expiresAt: "2027-01-01T00:00:00.000Z" },
+    sources: [
+      { label: "docs/architecture.md", type: "manual" as const },
+      { label: "web/app/page.tsx", type: "manual" as const },
+      { label: "scripts/generate-skills-catalog.js", type: "manual" as const },
+    ],
+    content: `# Connected Surface Map
 
-## Overview
-Jupiter is Solana's #1 DEX aggregator — routes swaps across Raydium, Orca, Meteora, and 20+ venues for best price.
+## User-Facing Surfaces
+- **web/app** — landing page, docs browser, buddies terminal, voice UI, API routes
+- **web/wiki** — operational wiki for token, agent, strategy, risk, and architecture knowledge
+- **web/skills** — lightweight browser for the skill catalog
+- **docs/** — long-form architecture and risk specifications
 
-## Key Endpoints
-- **Quote:** \`GET /v6/quote?inputMint=X&outputMint=Y&amount=Z\`
-- **Swap:** \`POST /v6/swap\` — returns serialized transaction
-- **Ultra:** \`POST /ultra/v1/order\` — intent-based, MEV-protected
+## Runtime Source Of Truth
+- **src/agents** — built-in agent fleet
+- **src/engine** — query engine, tool executor, permission engine, risk engine
+- **src/gateway** and **src/server** — remote control and operator transport
+- **src/memory** and **src/memdir** — KNOWN / LEARNED / INFERRED memory behavior
+- **src/helius**, **src/pump**, **src/metaplex**, **src/voice**, **src/buddy** — domain integrations
 
-## Integration Notes
-- Always use \`slippageBps\` (basis points, not percent)
-- Set \`prioritizationFeeLamports\` from Helius fee estimate
-- For large swaps: use Ultra API (MEV protection, better fills)
+## Skill Catalog Path
+1. Skills live in \`skills/\`
+2. \`scripts/generate-skills-catalog.js\` generates \`skills/catalog.json\`
+3. The catalog is copied into \`web/skills/catalog.json\`
+4. \`web/skills/index.html\` renders the browser
 
-## Referral
-- Referral account earns fee share on swaps
-- CLAWD referral: \`2mE1EbETC8e8XyJomMkvQ3jXzoGBZAqRRSRFJv9AHRD9\`
+## Objective
+The repo should read like one connected Solana blockchain and finance agent system, not a set of disconnected experiments.
 `,
   },
   {
-    slug: "rug-detection",
-    title: "Rug Pull Detection Patterns",
+    slug: "execution-risk-rails",
+    title: "Execution Risk Rails",
     category: "signal" as const,
-    summary: "Common rug pull indicators and how to detect them before entry.",
-    tags: ["rug", "security", "risk", "detection"],
+    summary: "Risk rails for $CLAWD combine deny-first permissions, execution gating, memory discipline, and risk-engine checks before any finance action is treated as safe.",
+    tags: ["risk", "permissions", "execution", "finance", "safety"],
     memoryTier: "LEARNED" as const,
-    riskLevel: "high",
-    metadata: { signalStrength: "STRONG", signalScore: 90 },
-    sources: [{ label: "OODA trade history", type: "agent" as const }],
-    content: `# Rug Pull Detection Patterns
+    riskLevel: "high" as const,
+    metadata: { signalStrength: "STRONG" as const, signalScore: 92 },
+    sources: [
+      { label: "src/engine/risk-engine.ts", type: "manual" as const },
+      { label: "src/engine/permission-engine.ts", type: "manual" as const },
+      { label: "docs/risk-engine-spec.md", type: "manual" as const },
+    ],
+    content: `# Execution Risk Rails
 
-## Red Flags (Auto-AVOID)
-1. **Creator sold >50%** — check \`creatorSold\` field
-2. **Top 10 holders >60%** — extreme whale concentration
-3. **No social links** — zero Twitter/Telegram/website
-4. **Mint authority not revoked** — can inflate supply
-5. **Freeze authority active** — can freeze your tokens
+## What Must Stay True
+- Research can be cheap and fast
+- Execution must stay gated
+- Memory should not silently become truth without validation
+- Wallet, trade, and delegation flows need explicit operator intent
 
-## Yellow Flags (Proceed with caution)
-1. Top 10 holders 30-50%
-2. <100 holders after 1 hour
-3. Bonding curve progress <10% after 30 minutes
-4. No dev buy (creator didn't buy their own token)
-5. Name/symbol cloning a popular token
+## Main Rails
+1. **Permission engine**
+   - deny-first
+   - explicit allow patterns
+   - no silent escalation for finance actions
+2. **Risk engine**
+   - persistent source of truth for position and vault logic
+   - protects against loose accounting and invalid state transitions
+3. **Memory discipline**
+   - \`KNOWN\` for fresh facts
+   - \`LEARNED\` for validated patterns
+   - \`INFERRED\` for tentative signals
+4. **Surface consistency**
+   - the web app, docs, and wiki should present the same risk framing as the runtime
 
-## Green Signals
-1. LP burned or locked (graduated tokens)
-2. Dev holding <5%
-3. Organic holder growth (not botted)
-4. Cashback enabled (creator aligned with traders)
-5. Community verified on Pump.fun
-
-## Automated Scoring
-The Scanner agent scores 0-100:
-- >= 75: STRONG (auto-snipe eligible)
-- 55-74: MODERATE (research first)
-- 35-54: WEAK (high risk)
-- < 35: AVOID
+## Practical Rule
+If a page markets blockchain or finance agents, it should also make the risk rails visible. Otherwise the positioning is incomplete.
 `,
   },
 ];

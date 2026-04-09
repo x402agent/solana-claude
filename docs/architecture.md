@@ -86,6 +86,26 @@
 
 ---
 
+## 1.1 Connected Surface Map
+
+The repo is not just a CLI runtime. The web surfaces are intended to be connected views over the same Solana blockchain and finance stack:
+
+- `web/app/`
+  - Main operator-facing surface for the landing page, docs browser, buddies terminal, voice UI, and API endpoints.
+  - Connects conceptually to `src/server/`, `src/gateway/`, `src/voice/`, `src/buddy/`, and the runtime state/query pipeline.
+- `web/wiki/`
+  - Separate Next.js wiki focused on operational knowledge for `$CLAWD`, OODA memory, risk rails, agent roles, and codebase mapping.
+  - Reads article JSON from `web/wiki/wiki-data/` and presents an internal map of the stack.
+- `web/skills/`
+  - Static browser for the repo skill catalog.
+  - `scripts/generate-skills-catalog.js` builds `skills/catalog.json`, which is then copied into `web/skills/catalog.json` for lightweight browsing.
+- `docs/`
+  - Long-form source-of-truth specs such as this architecture document and the risk engine spec.
+
+That means the user-facing story should consistently point back to the real runtime modules in `src/`: `src/agents/`, `src/engine/`, `src/memory/`, `src/skills/`, `src/gateway/`, `src/helius/`, `src/pump/`, `src/metaplex/`, `src/server/`, and `src/voice/`.
+
+---
+
 ## 2. Directory Structure
 
 ```

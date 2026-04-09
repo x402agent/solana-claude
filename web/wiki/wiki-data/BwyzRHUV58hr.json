@@ -1,25 +1,44 @@
 {
-  "slug": "ooda-loop",
-  "title": "OODA Trading Loop",
+  "slug": "ooda-finance-loop",
+  "title": "OODA Finance Loop",
   "category": "strategy",
-  "summary": "The Observe-Orient-Decide-Act cycle adapted for Solana DeFi trading with multi-venue signal scoring.",
+  "summary": "The Observe-Orient-Decide-Act-Learn cycle adapted for Solana blockchain and finance agents, with explicit routing through risk rails and memory tiers.",
   "tags": [
     "ooda",
     "strategy",
-    "core"
+    "trading",
+    "finance",
+    "solana"
   ],
   "memoryTier": "LEARNED",
-  "metadata": {},
+  "metadata": {
+    "entryRules": [
+      "Score >= 60",
+      "Liquidity and holder quality confirmed",
+      "Execution venue available"
+    ],
+    "exitRules": [
+      "Target or stop hit",
+      "Execution risk expands",
+      "Signal invalidated by fresh KNOWN data"
+    ],
+    "stopLossPct": 12,
+    "takeProfitPct": 25
+  },
   "sources": [
     {
-      "label": "SolanaOS strategy.md",
+      "label": "src/agents/built-in-agents.ts",
+      "type": "manual"
+    },
+    {
+      "label": "src/memory/extract-memories.ts",
       "type": "manual"
     }
   ],
-  "content": "# OODA Trading Loop\n\n## Overview\nThe OODA loop (Observe, Orient, Decide, Act) is the core decision-making framework for CLAWD agents. Adapted from military strategy for the speed and chaos of Solana DeFi markets.\n\n## Phases\n\n### OBSERVE\nGather real-time market data:\n- `sol_price` — Current SOL/USD\n- `solana_trending` — Top movers by volume/momentum\n- `helius_priority_fee` — Network congestion indicator\n- `memory_recall(KNOWN)` — Fresh cached signals\n\n### ORIENT\nScore each candidate using weighted factors:\n| Factor | Weight | Source |\n|--------|--------|--------|\n| Trend alignment | 25% | 24h price change |\n| Momentum | 20% | Volume acceleration |\n| Liquidity depth | 20% | DEX pool sizes |\n| Smart money participation | 15% | Top trader wallets |\n| Execution risk | -20% | Slippage + priority fee |\n\n### DECIDE\n- Confidence >= 60 → Size band selection\n  - 60-69: 0.5x base size\n  - 70-79: 1.0x\n  - 80-89: 1.25x\n  - 90+: 1.5x (max conviction)\n- Below 60 → SKIP, write INFERRED signal for Dream agent\n\n### ACT\nExecute via Jupiter/Raydium with:\n- Priority fee from helius estimate\n- Slippage protection (adaptive)\n- Permission gate: `ask` mode requires human approval\n\n### LEARN\nPost-trade:\n- Write result to INFERRED memory\n- Dream agent consolidates INFERRED → LEARNED\n- Failed trades write risk patterns to LEARNED\n",
+  "content": "# OODA Finance Loop\n\n## Purpose\nThe OODA loop is the core operating model for $CLAWD finance agents. It is not just market analysis. It is the glue between live Solana data, memory, risk gating, and operator approval.\n\n## Observe\n- Pull live market context from Helius and Solana data tools\n- Check trending tokens, wallet activity, and execution venue state\n- Recall `KNOWN` memory for active conditions and `INFERRED` memory for candidate signals\n\n## Orient\n- Score tokens, wallets, and venues on trend, liquidity, participation, and execution risk\n- Cross-check with `LEARNED` memory for recurring patterns\n- Decide whether the signal belongs in research only, watchlist mode, or trade-ready state\n\n## Decide\n- Require confidence bands before sizing\n- Prefer read-only research when data quality is weak\n- Keep trade execution behind explicit approval and permission gates\n\n## Act\n- Route research and execution through Jupiter, Pump.fun, wallet, or monitoring workflows\n- Emit structured outputs for Telegram, web, or downstream agents\n- Record both the action and the reason\n\n## Learn\n- Promote corroborated patterns from `INFERRED` to `LEARNED`\n- Expire stale observations\n- Keep the wiki, docs, and operator understanding aligned with the runtime\n\n## Connected Modules\n- `src/agents/built-in-agents.ts`\n- `src/engine/tool-executor.ts`\n- `src/memory/extract-memories.ts`\n- `src/tasks/`\n",
   "id": "BwyzRHUV58hr",
   "createdAt": "2026-04-08T16:07:42.278Z",
-  "updatedAt": "2026-04-08T16:07:42.278Z",
-  "version": 1,
+  "updatedAt": "2026-04-09T14:00:00.000Z",
+  "version": 2,
   "archived": false
 }

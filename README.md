@@ -160,21 +160,90 @@ All spinners conform to the `{ frames: string[], interval: number }` interface a
 
 It runs as a **Model Context Protocol (MCP) server** -- meaning any Clawd-powered client (Clawd Desktop, Cursor, VS Code, Windsurf) can instantly access **31 live Solana tools** without writing a single line of code.
 
+### Identity (SOUL.md)
+
+> I am **solana-clawd** -- an open-source Solana AI agent framework built from the architecture of Clawd Code's agentic engine and the SolanaOS operator runtime.
+
+**Three-tier epistemological memory:**
+
+| Tier | What it holds | Confidence |
+|------|---------------|------------|
+| **KNOWN** | API data, prices, balances, on-chain state | Verified, expires ~60s |
+| **LEARNED** | Trade patterns, wallet behaviors, market correlations | Persistent, high trust |
+| **INFERRED** | Derived signals, hypotheses, weak correlations | Tentative, revisable |
+
+**Principles:**
+1. **KNOWN before INFERRED** -- never present speculation as fact
+2. **Preserve capital first** -- drawdown cascades override all conviction
+3. **Deny-first permissions** -- ask before executing anything irreversible
+4. **Transparency** -- show reasoning, not just conclusions
+5. **Local-first** -- no mandatory cloud infrastructure (except LLM API)
+
+**What $CLAWD will NOT do without explicit permission:** execute live trades, spend from any wallet, sign any transaction, access private keys. The permission engine defaults to `ask` for all trade operations. No silent buys. No surprise executions.
+
 ---
 
 ## Architecture
 
-Clawd Code's leaked source (March 2026) had this core pipeline:
-
 ```
-User Input -> Query Engine -> LLM API -> Tool Execution Loop -> Output
-                                 |              |
-                          Permission Engine  AppState
-                                 |              |
-                          Coordinator    Memory (3 tiers)
+                     ┌─────────────────────────────────────────────────────┐
+                     │                  ENTRY POINTS                       │
+                     │                                                     │
+                     │  clawd.ts CLI    MCP Server   TailClawd    Web App  │
+                     │  (interactive/   (stdio MCP   (Telegram    (Next.js │
+                     │   one-shot)      transport)    bot proxy)   React)  │
+                     └────────┬──────────┬───────────┬───────────┬─────────┘
+                              │          │           │           │
+                              ▼          ▼           ▼           ▼
+                     ┌─────────────────────────────────────────────────────┐
+                     │                  GATEWAY LAYER                      │
+                     │                                                     │
+                     │  SSE Transport ◄──► Gateway Event Router            │
+                     │  (bidirectional)     │                               │
+                     │  WebSocket Transport │  Device Auth                  │
+                     │  Hybrid Transport    │  Token Refresh                │
+                     └──────────────────────┼──────────────────────────────┘
+                                            │
+                                            ▼
+┌──────────────────┐   ┌─────────────────────────────────────────────────────┐
+│   AGENT FLEET    │   │                  CORE ENGINE                        │
+│                  │   │                                                     │
+│  Explorer        │◄──┤  QueryEngine ──► LLM API ──► Tool Execution Loop   │
+│  Scanner         │   │    │               │              │                 │
+│  OODA Loop       │   │    │  Providers:   │   ┌──────────┤                 │
+│  Dream           │   │    │  - OpenRouter │   │          │                 │
+│  Analyst         │   │    │  - xAI/Grok   │   ▼          ▼                 │
+│  Monitor         │   │    │  - Anthropic  │  ToolExecutor   Permission     │
+│  MetaplexAgent   │   │    │  - Mistral    │  (Zod valid,    Engine         │
+│                  │   │    │  - Local MLX  │   timeout,      (deny-first,   │
+│  [7 built-in     │   │    │               │   retry,        glob patterns, │
+│   agents with    │   │    ▼               │   concurrency)  trade gates)   │
+│   turn budgets]  │   │  Coordinator ──────┘                                │
+└──────────────────┘   │  (multi-agent orchestration,                        │
+                       │   task notifications, fan-out)                      │
+                       └──────────────────────┬──────────────────────────────┘
+                                              │
+               ┌──────────────────────────────┼──────────────────────────────┐
+               │                              │                              │
+               ▼                              ▼                              ▼
+┌──────────────────────┐  ┌──────────────────────────┐  ┌────────────────────┐
+│     SUPPORT LAYER    │  │      MEMORY SYSTEM       │  │   DATA SOURCES     │
+│                      │  │                          │  │                    │
+│  AppState (Zustand)  │  │  KNOWN   (ephemeral,     │  │  Helius RPC/DAS   │
+│  - PermissionMode    │  │           ~60s TTL,      │  │  Helius WebSocket  │
+│  - OODA phase        │  │           live API data) │  │  Helius Webhooks   │
+│  - AgentTasks        │  │                          │  │                    │
+│  - PumpSignals       │  │  LEARNED (Honcho peer,   │  │  Pump.fun Scanner  │
+│  - OnchainSubs       │  │           cross-session, │  │  Pump.fun Client   │
+│  - ToolCallRecords   │  │           durable)       │  │                    │
+│                      │  │                          │  │  Jupiter/Raydium   │
+│  Risk Engine         │  │  INFERRED (local vault,  │  │  Token APIs        │
+│  (128-bit perp DEX   │  │            markdown,     │  │  Wallet PnL APIs   │
+│   risk management)   │  │            searchable)   │  │                    │
+└──────────────────────┘  └──────────────────────────┘  └────────────────────┘
 ```
 
-We adapted every layer for Solana:
+### Layer Mapping (Clawd Code -> solana-clawd)
 
 | Clawd Code Layer | solana-clawd Equivalent |
 |---|---|
@@ -695,6 +764,63 @@ vault.lock()                           // zero-fills key from memory
 - Auto-locks after 15 minutes of inactivity
 - Passphrase rotation without re-encrypting from scratch
 - Sentinel-based passphrase validation on open
+
+### @agentwallet/core
+
+> Agentic wallet vault -- encrypted Solana + EVM keypair management with E2B sandbox and Cloudflare Workers deployment
+
+The `packages/agentwallet/` package provides multi-chain encrypted wallet management with deployment targets for remote agent access.
+
+```bash
+npm install @agentwallet/core
+```
+
+```typescript
+import { Vault, startServer, generateSolanaKeypair } from "@agentwallet/core";
+
+const vault = await Vault.create({
+  storePath: "./vault-data",
+  passphrase: process.env.VAULT_PASSPHRASE!,
+});
+
+const keypair = await generateSolanaKeypair();
+await vault.addWallet(undefined, "my-wallet", "solana", 0, keypair.address, keypair.privateKey);
+await startServer(vault, { port: 9099 });
+```
+
+**CLI:**
+
+```bash
+npx agentwallet serve --port 9099
+npx agentwallet wallet create my-wallet --chain solana
+npx agentwallet wallet list
+npx agentwallet deploy e2b --api-key $E2B_API_KEY
+npx agentwallet deploy cloudflare --account-id $CLOUDFLARE_ACCOUNT_ID
+```
+
+**HTTP API (11 endpoints):**
+
+| Method | Path | Description |
+| --- | --- | --- |
+| `GET` | `/api/wallets` | List all wallets |
+| `POST` | `/api/wallets` | Create new wallet |
+| `POST` | `/api/wallets/import` | Import existing wallet |
+| `GET` | `/api/wallets/:id/private-key` | Get decrypted private key |
+| `POST` | `/api/wallets/:id/pause` | Pause wallet |
+| `DELETE` | `/api/wallets/:id` | Delete wallet |
+| `GET` | `/api/vault/export` | Export encrypted vault |
+| `POST` | `/api/vault/import` | Import vault data |
+
+**Deployment targets:**
+
+| Target | Description |
+| --- | --- |
+| **E2B Sandbox** | Isolated code execution environment for untrusted agent access |
+| **Cloudflare Workers** | Edge deployment for global low-latency wallet operations |
+
+**Security:** AES-256-GCM encryption at rest, `0600` file permissions, Bearer token auth, SHA-256 key derivation. Solana (Ed25519) and EVM (secp256k1) keypairs supported.
+
+Full docs: [`packages/agentwallet/README.md`](packages/agentwallet/README.md)
 
 ---
 
@@ -1280,6 +1406,145 @@ VAULT_PASSPHRASE=             # AES-256-GCM master key
 # Deployment
 MCP_API_KEY=                  # Bearer token for remote MCP server
 ```
+
+---
+
+## Migrate from OpenClaw
+
+Migrating from **OpenClaw** (or legacy `~/.clawdbot/` / `~/.moldbot/`)? One command handles everything:
+
+```bash
+clawd migrate --dry-run    # preview first
+clawd migrate              # apply
+clawd migrate --source ~/.moldbot --verbose   # custom source
+```
+
+### What Gets Migrated
+
+| Component | Source | Destination |
+| --- | --- | --- |
+| **Persona** | `~/.clawdbot/SOUL.md` | `~/.clawd/SOUL.md` |
+| **Memory** | `MEMORY.md` / `memory.json` | 3-tier split: KNOWN + LEARNED + INFERRED |
+| **Skills** | `~/.clawdbot/skills/*.md` | `~/.clawd/skills/openclaw-imports/` |
+| **MCP Servers** | `mcp_servers.json` | `~/.clawd/mcp_servers.json` |
+| **Model Config** | `gpt-4-turbo` etc. | OpenRouter / Anthropic / xAI catalog |
+| **Wallet** | Paper trading state | Buddy Wallet system (no private keys copied) |
+| **Companion** | `companion.*` | BlockchainBuddy (species-mapped) |
+| **OODA Config** | `loop_interval` / `strategy` | Full OODA cycle config |
+| **Webhooks** | Helius webhook defs | `HeliusWebhookConfig` format |
+
+### Memory Tier Conversion
+
+OpenClaw stores memory as a flat file. solana-clawd splits it into three tiers:
+
+| OpenClaw Memory Type | solana-clawd Tier | Storage | Behavior |
+| --- | --- | --- | --- |
+| Timestamped facts, API snapshots | **KNOWN** | Ephemeral session state | Expires ~60s |
+| User preferences, learned patterns | **LEARNED** | Honcho persistent store | Durable, cross-session |
+| Hypotheses, weak correlations | **INFERRED** | Local vault (markdown) | Tentative, revisable |
+
+### Model Mapping
+
+| OpenClaw `model` | solana-clawd `model.id` | Provider |
+| --- | --- | --- |
+| `gpt-4-turbo` / `gpt-4o` | `minimax/minimax-m2.7` | `openrouter` |
+| `gpt-3.5-turbo` | `openai/gpt-5.4-nano` | `openrouter` |
+| `claude-3-opus` / `sonnet` / `haiku` | `claude-sonnet-4-6` | `anthropic` |
+| `grok-*` | `grok-4-1-fast` | `xai` |
+| Any OpenRouter model ID | Preserved as-is | `openrouter` |
+
+### Permission Mapping
+
+| OpenClaw Setting | solana-clawd Equivalent |
+| --- | --- |
+| `auto_approve: true` | `permissionMode: "auto"` |
+| `auto_approve: false` | `permissionMode: "ask"` (default) |
+| `sandbox: true` | `permissionMode: "readOnly"` |
+| `dangerous_mode: true` | `permissionMode: "bypassAll"` (dev only) |
+
+Permission rules use **deny-first** evaluation: `deny > ask > allow > default`. Glob patterns supported:
+
+```text
+trading.buy(*)         -> matches any buy call
+trading.buy(BONK)      -> matches BONK buy only
+solana.*               -> matches all solana namespace tools
+```
+
+### Trading Personality Mapping
+
+| OpenClaw Strategy | solana-clawd Personality | Risk Tolerance |
+| --- | --- | --- |
+| `conservative` / `hodl` | `diamond_hands` | `low` |
+| `moderate` / `swing` | `sniper` / `ninja` | `medium` |
+| `aggressive` | `degen` | `high` |
+| `yolo` | `ape` | `degen` |
+
+### OODA Cycle Upgrade
+
+```text
+OpenClaw:       scan -> analyze -> trade -> sleep
+solana-clawd:   observe -> orient -> decide -> act -> learn -> idle
+```
+
+The `learn` phase is new -- it extracts memories and updates LEARNED/INFERRED tiers after every trade.
+
+### API Key Resolution Order
+
+```text
+1. Explicit config    ~/.clawd/config.json
+2. Environment var    ANTHROPIC_API_KEY=sk-...
+3. .env file          ~/.clawd/.env
+4. Auth profile       ~/.clawd/auth/anthropic.json
+5. System keychain    (macOS Keychain / Linux secret-service)
+```
+
+### Wallet Security
+
+**Live wallet private keys are never read, copied, or stored** by the migrator. Paper trading wallets migrate automatically. If your config references a live keypair, the migrator skips it:
+
+```text
+[warn] Skipping live wallet keypair at ~/.clawdbot/wallet.json
+       solana-clawd does not store private keys. Use permissionMode: "ask"
+       and connect your wallet through the MCP client at runtime.
+```
+
+### Migration Flags
+
+| Flag | Description |
+| --- | --- |
+| `--dry-run` | Preview changes without writing anything |
+| `--source <path>` | Override auto-detected source directory |
+| `--no-backup` | Skip creating a `.bak` of the source |
+| `--force` | Overwrite existing `~/.clawd/` files without prompting |
+| `--skip-memory` | Migrate config and skills only |
+| `--skip-wallet` | Do not migrate wallet configs |
+| `--verbose` | Print every file operation |
+
+### Post-Migration Checklist
+
+```bash
+clawd doctor            # validate config, API keys, Helius connectivity
+clawd memory stats      # verify KNOWN/LEARNED/INFERRED counts
+clawd skills list       # find migrated skills under openclaw-imports
+clawd mcp status        # verify MCP server connections
+clawd buddy show        # check migrated buddy companion
+clawd auth test         # test provider connectivity
+clawd helius status     # verify Helius cluster + API key
+clawd ooda status       # check OODA cycle config (idle after migration)
+```
+
+### Rollback
+
+```bash
+# The migrator creates a backup before modifying anything
+ls ~/.clawdbot.bak/
+
+# To roll back
+rm -rf ~/.clawd
+mv ~/.clawdbot.bak ~/.clawdbot
+```
+
+Full migration guide: [`docs/migrate-from-openclaw.md`](docs/migrate-from-openclaw.md)
 
 ---
 

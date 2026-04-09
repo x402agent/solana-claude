@@ -2,11 +2,11 @@ import Link from 'next/link'
 
 const badgeItems = [
   '31 MCP tools',
-  '18 buddies',
-  '9 animations',
-  'Fly.io deployable',
-  'Telegram gateway',
-  'iii worker swarm',
+  '7 built-in agents',
+  '89 skills',
+  '3 memory tiers',
+  'Helius + Jupiter + Pump.fun',
+  'Web + Telegram + voice',
 ]
 
 const installCommands = [
@@ -17,41 +17,42 @@ const installCommands = [
 
 const capabilityCards = [
   {
-    title: 'MCP Tools',
-    eyebrow: 'Live Solana access',
+    title: 'MCP + Agent Fleet',
+    eyebrow: 'Live Solana finance operations',
     body:
-      'Market data, Helius RPC/DAS, memory tiers, agent fleet, Metaplex agent registry, and skill loading through one MCP surface.',
-    bullets: ['Trending + price data', 'Wallet + DAS lookups', 'Read/write memory', 'Agent spawn + stop'],
+      'Market data, Helius RPC/DAS, memory tiers, built-in agents, Metaplex agent registry, and skill loading through one operator surface.',
+    bullets: ['Explore, Scanner, OODA, Dream', 'Wallet + DAS lookups', 'Read/write memory', 'Agent spawn + stop'],
   },
   {
-    title: 'Blockchain Buddies',
-    eyebrow: 'Companion system',
+    title: 'Knowledge Surfaces',
+    eyebrow: 'Docs, wiki, skills, and control UI',
     body:
-      'Procedurally generated Solana-native companions with rarity, personality, wallet simulation, stat rolls, and animated ASCII sprites.',
-    bullets: ['18 species', '8 stat categories', 'Paper trading wallets', 'Terminal-native sprites'],
+      'The web app, wiki, docs browser, and skills catalog are positioned as one Solana blockchain and finance stack instead of disconnected demos.',
+    bullets: ['web/app operator UI', 'web/wiki operational memory', 'web/skills catalog', 'docs + architecture map'],
   },
   {
-    title: 'Gateway + TailClawd',
+    title: 'Execution + Risk Rails',
+    eyebrow: 'Finance-safe by default',
+    body:
+      'Deny-first permissions, risk-aware execution, memory promotion, and routing across Helius, Jupiter, Pump.fun, and Metaplex keep the stack finance-native.',
+    bullets: ['Risk engine', 'Permission engine', 'OODA memory loop', 'Jupiter + Pump.fun flows'],
+  },
+  {
+    title: 'Control Surface',
     eyebrow: 'Operate from anywhere',
     body:
-      'Telegram control plane, HTTP gateway, Birdeye streams, and the TailClawd browser UI for remote command-center workflows.',
-    bullets: ['Telegram bot', 'HTTP API', 'Birdeye WebSocket alerts', 'Mobile-friendly control surface'],
-  },
-  {
-    title: 'Worker Swarm',
-    eyebrow: 'Distributed execution',
-    body:
-      'A four-worker iii SDK quickstart spanning TypeScript, Rust, and Python for research, pricing, transaction building, and payments.',
-    bullets: ['TypeScript client orchestrator', 'Rust compute worker', 'Python data worker', 'TS payment worker'],
+      'Telegram control plane, browser ops, buddy terminal, voice interface, and the gateway layer all map back to the same runtime under src/.',
+    bullets: ['Telegram bot', 'Voice assistant', 'Buddy terminal', 'Gateway + server integration'],
   },
 ]
 
 const architectureRows = [
-  ['Clawd Code Layer', 'solana-clawd Equivalent'],
-  ['State store', 'Reactive app state with OODA phase, memory, subscriptions'],
-  ['Agent toolset', 'Explore, Scanner, OODA, Dream, Analyst, Monitor, Metaplex'],
-  ['Bridge / transport', 'Gateway SSE + MCP transports'],
-  ['Permissions', 'Deny-first trade gating'],
+  ['Surface', 'Connected modules'],
+  ['Home, docs, voice, buddies', 'web/app -> src/server, src/gateway, src/voice, src/buddy'],
+  ['Wiki knowledge base', 'web/wiki + wiki-data -> OODA memory model and operator docs'],
+  ['Skills catalog', 'skills/ + scripts/generate-skills-catalog.js -> web/skills/catalog.json'],
+  ['Agent runtime', 'src/agents + src/coordinator + src/tasks + src/query-engine'],
+  ['Execution + risk', 'src/helius + src/pump + src/metaplex + src/engine/risk-engine.ts'],
 ]
 
 const quickstartOptions = [
@@ -98,7 +99,7 @@ export default function Home() {
 
       <section className="relative mx-auto flex max-w-7xl flex-col px-4 pb-16 pt-8 sm:px-6 lg:px-8">
         <div className="rounded-full border border-green-500/20 bg-black/30 px-4 py-2 text-center font-mono text-xs uppercase tracking-[0.3em] text-green-300/80 backdrop-blur">
-          solana-clawd / agentic engine / solana-native runtime
+          $clawd / solana blockchain agents / finance runtime
         </div>
 
         <div className="mx-auto mt-10 max-w-5xl text-center">
@@ -111,17 +112,17 @@ ___/ / /_/ / / /_/ / / / / /_/ /   / /___/ / /_/ /| |/ |/ / /_/ /
           </pre>
 
           <h1 className="mt-8 text-4xl font-semibold tracking-tight text-white sm:text-6xl">
-            The agentic engine Solana deserves.
+            The Solana blockchain and finance agent stack for $CLAWD.
           </h1>
           <p className="mx-auto mt-5 max-w-3xl text-base leading-7 text-green-100/70 sm:text-lg">
-            31 MCP tools. Blockchain Buddies. Custom unicode animations. One command.
-            A Solana-native adaptation of the Clawd workflow, packaged for MCP clients,
-            Telegram control, browser ops, and distributed worker execution.
+            31 MCP tools, 7 built-in agents, 89 skills, a connected wiki, and a web control surface.
+            This repo packages research, execution, monitoring, memory, and operator UX for Solana-native
+            blockchain and finance workflows under one $CLAWD runtime.
           </p>
 
           <div className="mt-6 flex flex-wrap items-center justify-center gap-3 font-mono text-sm text-green-200">
             <span className="rounded-full border border-orange-400/30 bg-orange-500/10 px-4 py-2">
-              Powered by $CLAWD on Solana &amp; Pump.fun
+              Powered by $CLAWD on Solana
             </span>
             <code className="rounded-full border border-green-500/30 bg-black/50 px-4 py-2 text-green-300">
               8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump
@@ -147,10 +148,10 @@ ___/ / /_/ / / /_/ / / / / /_/ /   / /___/ / /_/ /| |/ |/ / /_/ /
               Hatch A Buddy
             </Link>
             <Link
-              href="/voice"
+              href="/docs"
               className="rounded-lg border border-purple-400 bg-purple-500/20 px-6 py-3 font-mono text-sm font-semibold text-purple-200 transition hover:bg-purple-500/30 hover:border-purple-300 hover:text-white"
             >
-              Talk to Clawd
+              Browse Runtime Docs
             </Link>
             <a
               href="https://github.com/x402agent/solana-clawd"
@@ -178,7 +179,8 @@ ___/ / /_/ / / /_/ / / / / /_/ /   / /___/ / /_/ /| |/ |/ / /_/ /
             </div>
             <p className="mt-4 text-sm leading-6 text-green-100/60">
               No private key. No wallet. No paid API required for the default path.
-              Clone it, run it, ask it for prices, wallet activity, scanners, or deployable listener code.
+              Clone it, run it, and use the same stack for prices, wallet activity, scanners, risk checks,
+              OODA loops, wiki context, or deployable monitoring code.
             </p>
           </div>
 
@@ -199,8 +201,8 @@ ___/ / /_/ / / /_/ / / / / /_/ /   / /___/ / /_/ /| |/ |/ / /_/ /
               </div>
               <div className="rounded-xl border border-green-500/10 bg-black/60 p-4">
                 <div className="text-cyan-400">You</div>
-                <div className="mt-2">&quot;Start a Pump.fun scanner&quot;</div>
-                <div className="mt-2 text-green-400/70">scanner agent + Telegram routing + watchlist workflow</div>
+                <div className="mt-2">&quot;Run the OODA + Scanner loop for the $CLAWD watchlist&quot;</div>
+                <div className="mt-2 text-green-400/70">scanner agent + memory tiers + risk rails + operator workflow</div>
               </div>
             </div>
           </div>
@@ -285,11 +287,11 @@ ___/ / /_/ / / /_/ / / / / /_/ /   / /___/ / /_/ /| |/ |/ / /_/ /
             Ready To Deploy
           </div>
           <h2 className="mt-4 text-3xl font-semibold text-white">
-            Package, MCP server, gateway, worker swarm, and web surface aligned.
+            Package, docs, wiki, skills catalog, runtime, and web surface aligned.
           </h2>
           <p className="mx-auto mt-4 max-w-3xl text-sm leading-7 text-green-100/65">
-            Use the website as the polished top-of-funnel, the MCP server as the integration layer,
-            the gateway for Telegram-native control, and TailClawd for browser-based operations.
+            Use the website as the operator shell, the wiki as the internal map, the skills catalog as the
+            discovery surface, the MCP server as the integration layer, and the gateway for Telegram-native control.
           </p>
           <div className="mt-8 flex flex-col justify-center gap-4 sm:flex-row">
             <a

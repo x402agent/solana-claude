@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "CLAWD Wiki — Solana Trading Intelligence",
-  description: "AI-compiled knowledge base for Solana trading agents. OODA loops, market signals, agent memory.",
+  title: "$CLAWD Wiki — Solana Blockchain & Finance Agents",
+  description: "Operational wiki for the $CLAWD Solana blockchain and finance agent stack: agent fleet, memory, risk rails, web surfaces, and execution flow.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
