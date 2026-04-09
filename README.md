@@ -26,8 +26,8 @@ Powered by **$CLAWD** on Solana & Pump.fun
 [![Helius](https://img.shields.io/badge/Helius-RPC%20%2B%20WebSocket-orange)](https://helius.dev)
 [![No Private Key](https://img.shields.io/badge/private%20key-not%20required-brightgreen)](README.md)
 [![Clawd Desktop](https://img.shields.io/badge/Clawd%20Desktop-ready-purple)](README.md#clawd-desktop)
-[![Fly.io](https://img.shields.io/badge/Fly.io-deployable-blue)](mcp-server/fly.toml)
-[![Tools](https://img.shields.io/badge/MCP%20tools-31-ff6b35)](mcp-server/src/server.ts)
+[![Fly.io](https://img.shields.io/badge/Fly.io-deployable-blue)](MCP/fly.toml)
+[![Tools](https://img.shields.io/badge/MCP%20tools-31-ff6b35)](MCP/src/server.ts)
 [![Buddies](https://img.shields.io/badge/Blockchain%20Buddies-18%20species-ff69b4)](src/buddy/)
 [![Animations](https://img.shields.io/badge/unicode%20spinners-9%20custom-00ffcc)](src/animations/)
 [![Voice](https://img.shields.io/badge/Voice-ElevenLabs%20%2B%20Grok-ff4444)](web/app/voice/)
@@ -44,12 +44,25 @@ Powered by **$CLAWD** on Solana & Pump.fun
 ## One-Shot Install
 
 ```bash
-npx solana-clawd demo    # animated walkthrough
-npx solana-clawd birth   # hatch a blockchain buddy
-npm i -g solana-clawd    # global install
+git clone https://github.com/x402agent/solana-clawd
+cd solana-clawd
+npm run setup
 ```
 
-No private key. No wallet. No paid API. Clone it, run it, ask it anything.
+That single command installs root dependencies, builds the runtime, builds the integrated MCP package in `MCP/`, installs and builds the web apps, and syncs the skills catalog.
+It also installs and builds the encrypted wallet vault package in `packages/agentwallet/`.
+
+After setup:
+
+```bash
+npm run demo            # animated walkthrough
+npm run birth           # hatch a blockchain buddy
+npm run mcp:http        # local MCP server on :3000
+npm run agentwallet:start
+npm --prefix web run dev
+```
+
+No private key. No wallet. No paid API required for the default path.
 
 ```
 You: "What are the top 5 trending tokens right now?"
@@ -264,7 +277,8 @@ It runs as a **Model Context Protocol (MCP) server** -- meaning any Clawd-powere
 
 ```bash
 git clone https://github.com/x402agent/solana-clawd
-cd solana-clawd && bash scripts/setup.sh
+cd solana-clawd
+npm run setup
 ```
 
 Add to `~/Library/Application Support/Clawd/clawd_desktop_config.json`:
@@ -274,7 +288,7 @@ Add to `~/Library/Application Support/Clawd/clawd_desktop_config.json`:
   "mcpServers": {
     "solana-clawd": {
       "command": "node",
-      "args": ["/absolute/path/to/solana-clawd/mcp-server/dist/index.js"],
+      "args": ["/absolute/path/to/solana-clawd/MCP/dist/index.js"],
       "env": {
         "HELIUS_API_KEY": "your-free-key-from-helius.dev"
       }
@@ -293,7 +307,7 @@ Add to your MCP config:
 {
   "solana-clawd": {
     "command": "node",
-    "args": ["mcp-server/dist/index.js"],
+    "args": ["MCP/dist/index.js"],
     "cwd": "/path/to/solana-clawd"
   }
 }
@@ -765,18 +779,25 @@ vault.lock()                           // zero-fills key from memory
 - Passphrase rotation without re-encrypting from scratch
 - Sentinel-based passphrase validation on open
 
-### @agentwallet/core
+### agentwallet-vault
 
 > Agentic wallet vault -- encrypted Solana + EVM keypair management with E2B sandbox and Cloudflare Workers deployment
 
 The `packages/agentwallet/` package provides multi-chain encrypted wallet management with deployment targets for remote agent access.
 
+It is included in the repo bootstrap path:
+
 ```bash
-npm install @agentwallet/core
+npm run setup
+npm run agentwallet:start
+```
+
+```bash
+npm install agentwallet-vault
 ```
 
 ```typescript
-import { Vault, startServer, generateSolanaKeypair } from "@agentwallet/core";
+import { Vault, startServer, generateSolanaKeypair } from "agentwallet-vault";
 
 const vault = await Vault.create({
   storePath: "./vault-data",
@@ -890,6 +911,13 @@ cd mcp && pip install -r requirements.txt && uvicorn server:app --reload --port 
 
 # Web
 cd web && npm install && npm run dev
+```
+
+Or use the root bootstrap and root-level Clawd Vault web command:
+
+```bash
+npm run setup
+npm run vault:web:dev
 ```
 
 ### Memory Tiers
@@ -1167,6 +1195,50 @@ MetaplexAgent  -- onchain agent minting via Metaplex MPL Core, 25 turns
 
 ---
 
+## Pump.fun Trading Skill
+
+The OODA loop includes a full **pump.fun trading skill** with token classification, position sizing, and guardrails. See [`docs/TRADE.md`](docs/TRADE.md) for the complete spec.
+
+### Token Tiers
+
+| Tier | Criteria | Strategy | Max Size |
+| --- | --- | --- | --- |
+| **Fresh Snipers** | age <= 15m | Fast flip, 2-5x target, 10min TTL | 0.05 SOL |
+| **Near-Graduation** | bonding >= 75% | Ride pump, exit before 100% | 0.1 SOL |
+| **Micro-Cap** | MC < $10K | Speculative, high risk | 0.05 SOL |
+| **Mid-Cap** | MC $10K-$100K | Trend-follow, trailing stop | 0.2 SOL |
+| **Large-Cap** | MC > $100K | Scalps on dips | 0.3 SOL |
+
+### Decision Table
+
+| Condition | Action |
+|-----------|--------|
+| Age <= 5m AND MC < $5K | **SNIPE** -- 0.05 SOL |
+| Age <= 15m AND bonding >= 50% | **BUY** -- 0.1 SOL, exit at 3x |
+| bonding >= 90% | **AVOID** -- graduation imminent |
+| MC > $500K AND age < 2h | **SCALP** -- tight stops |
+| MC > $1M | **SKIP** -- pump.fun tokens rarely sustain |
+
+### Guardrails
+
+- **Never** exceed 1 SOL total exposure on pump.fun tokens simultaneously
+- **Never** trade tokens with bonding% = 100% (already graduated)
+- **Never** bypass the permission engine -- all trades require human approval
+- **Never** execute without writing a trade plan to INFERRED memory first
+- **Never** retry failed swaps more than 2 times (bad liquidity signal)
+
+### MCP Tool Chain
+
+```text
+OBSERVE:  solana_trending -> scan_pump_token -> memory_recall(KNOWN)
+ORIENT:   solana_token_info -> solana_top_traders -> score candidates
+DECIDE:   score >= 60 -> generate trade plan -> memory_write(INFERRED)
+ACT:      *** HUMAN APPROVAL *** -> Jupiter swap -> memory_write(KNOWN)
+LEARN:    write outcome -> Dream agent promotes to LEARNED
+```
+
+---
+
 ## Onchain Event Listener
 
 Built on [Helius WebSockets](https://docs.helius.dev/data-streaming-event-listening/overview). Auto-reconnects with exponential backoff. Uses Node 22 native `WebSocket`.
@@ -1266,7 +1338,7 @@ type PermissionMode =
 24/7 public MCP endpoint in 2 minutes:
 
 ```bash
-cd mcp-server
+cd MCP
 fly launch --config fly.toml
 fly secrets set HELIUS_API_KEY=your-key MCP_API_KEY=optional-bearer-token
 ```
@@ -1282,7 +1354,7 @@ Then connect anyone via:
 
 ```
 solana-clawd/
-├── mcp-server/           MCP server (Clawd Desktop, Cursor, Fly.io)
+├── MCP/                  MCP server (Clawd Desktop, Cursor, VS Code, Fly.io)
 │   ├── src/
 │   │   ├── server.ts     31 tools, 4 resources, 5 prompts
 │   │   ├── http.ts       HTTP + SSE + Streamable transport
@@ -1341,8 +1413,9 @@ solana-clawd/
 │   │   ├── BuddyDictationManager.swift  Voice pipeline
 │   │   └── OverlayWindow.swift       Lobster claw overlay (points at UI)
 │   └── worker/           Cloudflare Worker proxy (Claude, ElevenLabs, AssemblyAI, Solana RPC)
-├── MCP/                  X/Twitter FastMCP server (Python, 140+ tools)
-│   └── x-mcp/           OAuth1/OAuth2, tool allowlisting, Grok test client
+├── MCP/                  Integrated solana-clawd MCP package
+│   ├── src/             STDIO + HTTP/SSE entrypoints and tool server
+│   └── dist/            Built server artifacts
 ├── llm-wiki-tang/        Clawd Vault — research knowledge base
 │   ├── web/              Next.js 16 dashboard (PDF viewer, wiki renderer)
 │   ├── api/              FastAPI backend (auth, OCR, document processing)
@@ -1556,6 +1629,7 @@ Full migration guide: [`docs/migrate-from-openclaw.md`](docs/migrate-from-opencl
 | [Migrate from OpenClaw](docs/migrate-from-openclaw.md) | `clawd migrate` guide — config mappings, memory tier conversion, wallet migration, troubleshooting |
 | [Risk Engine Spec](docs/risk-engine-spec.md) | 128-bit perpetual DEX risk engine design |
 | [Formal Verification](formal_verification/SPEC.md) | Lean 4 property specification (`prop_protected_principal`, `prop_conservation`) |
+| [Trading Guide](docs/TRADE.md) | Pump.fun trading skill -- token tiers, OODA execution, position sizing, guardrails |
 | [Contributing](CONTRIBUTING.md) | Setup, code style, PR process, walkthroughs for adding species/spinners |
 | [SOUL.md](SOUL.md) | Agent identity, 3-tier epistemology, permission principles |
 

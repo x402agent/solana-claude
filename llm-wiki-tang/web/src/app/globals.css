@@ -55,80 +55,83 @@
 }
 
 :root {
+  --font-geist-sans: "SF Pro Display", "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-geist-mono: "SFMono-Regular", "SF Mono", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   --sidebar-width: 14rem;
-  --radius: 1rem;
+  --radius: 0.5rem;
   --radius-md: calc(var(--radius) - 2px);
   --radius-sm: calc(var(--radius) - 4px);
 
-  /* Light theme — warm paper */
-  --background: 30 3% 96%;
-  --foreground: 20 14% 4%;
-  --card: 0 0% 100%;
-  --card-foreground: 20 14% 10%;
-  --popover: 0 0% 100%;
-  --popover-foreground: 20 14% 10%;
-  --primary: 24 10% 10%;
-  --primary-foreground: 60 9% 98%;
-  --secondary: 30 6% 96%;
-  --secondary-foreground: 20 14% 10%;
-  --muted: 30 6% 96%;
-  --muted-foreground: 25 5% 45%;
-  --accent: 30 6% 94%;
-  --accent-foreground: 20 14% 10%;
-  --destructive: 0 84.2% 60.2%;
-  --border: 24 6% 83%;
-  --input: 24 6% 83%;
-  --ring: 25 5% 45%;
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
+  /* Dark-only cypherpunk theme — no light mode */
+  color-scheme: dark;
+  --background: 150 8% 3%;
+  --foreground: 142 20% 82%;
+  --card: 150 6% 5%;
+  --card-foreground: 142 20% 82%;
+  --popover: 150 8% 6%;
+  --popover-foreground: 142 20% 82%;
+  --primary: 142 72% 45%;
+  --primary-foreground: 0 0% 2%;
+  --secondary: 150 6% 8%;
+  --secondary-foreground: 142 20% 82%;
+  --muted: 150 5% 8%;
+  --muted-foreground: 150 8% 42%;
+  --accent: 150 6% 10%;
+  --accent-foreground: 142 20% 82%;
+  --destructive: 0 62% 35%;
+  --border: 150 5% 12%;
+  --input: 150 5% 12%;
+  --ring: 142 72% 45%;
+  --chart-1: oklch(0.65 0.22 142);
+  --chart-2: oklch(0.55 0.18 262);
+  --chart-3: oklch(0.70 0.15 85);
+  --chart-4: oklch(0.60 0.20 30);
+  --chart-5: oklch(0.50 0.15 310);
   --accent-blue: 220 40% 50%;
-  --sidebar: 30 3% 96%;
-  --sidebar-foreground: 20 14% 4%;
-  --sidebar-primary: 24 10% 10%;
-  --sidebar-primary-foreground: 60 9% 98%;
-  --sidebar-accent: 30 6% 94%;
-  --sidebar-accent-foreground: 20 14% 10%;
-  --sidebar-border: 24 6% 90%;
-  --sidebar-ring: 25 5% 45%;
+  --sidebar: 150 10% 2.5%;
+  --sidebar-foreground: 142 20% 82%;
+  --sidebar-primary: 142 72% 45%;
+  --sidebar-primary-foreground: 0 0% 2%;
+  --sidebar-accent: 150 6% 10%;
+  --sidebar-accent-foreground: 142 20% 82%;
+  --sidebar-border: 150 5% 12%;
+  --sidebar-ring: 142 72% 45%;
 }
 
+/* Force dark class for any component that checks */
 .dark {
-  /* Dark theme — deep Solana-native dark (matches solanaclawd.com) */
-  --background: 240 10% 3.9%;
-  --foreground: 0 0% 96%;
-  --card: 240 6% 6%;
-  --card-foreground: 0 0% 96%;
-  --popover: 240 6% 6%;
-  --popover-foreground: 0 0% 96%;
-  --primary: 263 70% 50%;
-  --primary-foreground: 0 0% 100%;
-  --secondary: 240 4% 10%;
-  --secondary-foreground: 0 0% 96%;
-  --muted: 240 4% 10%;
-  --muted-foreground: 240 5% 55%;
-  --accent: 240 4% 12%;
-  --accent-foreground: 0 0% 96%;
-  --destructive: 0 62.8% 30.6%;
-  --border: 240 4% 14%;
-  --input: 240 4% 14%;
-  --ring: 263 70% 50%;
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
+  --background: 150 8% 3%;
+  --foreground: 142 20% 82%;
+  --card: 150 6% 5%;
+  --card-foreground: 142 20% 82%;
+  --popover: 150 8% 6%;
+  --popover-foreground: 142 20% 82%;
+  --primary: 142 72% 45%;
+  --primary-foreground: 0 0% 2%;
+  --secondary: 150 6% 8%;
+  --secondary-foreground: 142 20% 82%;
+  --muted: 150 5% 8%;
+  --muted-foreground: 150 8% 42%;
+  --accent: 150 6% 10%;
+  --accent-foreground: 142 20% 82%;
+  --destructive: 0 62% 35%;
+  --border: 150 5% 12%;
+  --input: 150 5% 12%;
+  --ring: 142 72% 45%;
+  --chart-1: oklch(0.65 0.22 142);
+  --chart-2: oklch(0.55 0.18 262);
+  --chart-3: oklch(0.70 0.15 85);
+  --chart-4: oklch(0.60 0.20 30);
+  --chart-5: oklch(0.50 0.15 310);
   --accent-blue: 220 40% 50%;
-  --sidebar: 240 10% 3%;
-  --sidebar-foreground: 0 0% 96%;
-  --sidebar-primary: 263 70% 50%;
-  --sidebar-primary-foreground: 0 0% 100%;
-  --sidebar-accent: 240 4% 12%;
-  --sidebar-accent-foreground: 0 0% 96%;
-  --sidebar-border: 240 4% 14%;
-  --sidebar-ring: 263 70% 50%;
+  --sidebar: 150 10% 2.5%;
+  --sidebar-foreground: 142 20% 82%;
+  --sidebar-primary: 142 72% 45%;
+  --sidebar-primary-foreground: 0 0% 2%;
+  --sidebar-accent: 150 6% 10%;
+  --sidebar-accent-foreground: 142 20% 82%;
+  --sidebar-border: 150 5% 12%;
+  --sidebar-ring: 142 72% 45%;
 }
 
 @layer base {

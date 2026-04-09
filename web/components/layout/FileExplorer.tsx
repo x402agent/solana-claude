@@ -4,7 +4,7 @@ const FILE_SURFACES = [
   "web/app",
   "web/components",
   "web/lib",
-  "mcp-server/src",
+  "MCP/src",
   "gateway/src",
   "tailclawd/",
 ];

@@ -1,8 +1,21 @@
-# @agentwallet/core
+# agentwallet-vault
 
 > Agentic wallet vault — encrypted Solana + EVM keypair management with E2B sandbox and Cloudflare Workers deployment
 
 A TypeScript npm package for managing encrypted wallet keypairs, exposing an HTTP API, and deploying to secure sandboxes for remote agent access.
+
+## solana-clawd Integration
+
+This package is part of the main `solana-clawd` bootstrap path.
+
+From the repo root:
+
+```bash
+npm run setup
+npm run agentwallet:start
+```
+
+That one-shot setup installs dependencies, builds this package into `packages/agentwallet/dist`, and keeps it aligned with the root runtime, MCP server, web app, wiki, and skills catalog.
 
 ## Features
 
@@ -16,7 +29,7 @@ A TypeScript npm package for managing encrypted wallet keypairs, exposing an HTT
 ## Installation
 
 ```bash
-npm install @agentwallet/core
+npm install agentwallet-vault
 
 # Optional: install deployment dependencies
 npm install e2b        # for E2B sandbox deployment
@@ -58,7 +71,7 @@ npx agentwallet deploy cloudflare --account-id $CLOUDFLARE_ACCOUNT_ID
 ### Programmatic Usage
 
 ```typescript
-import { Vault, startServer, generateSolanaKeypair } from "@agentwallet/core";
+import { Vault, startServer, generateSolanaKeypair } from "agentwallet-vault";
 
 // Create or load a vault
 const vault = await Vault.create({
@@ -129,7 +142,7 @@ curl http://localhost:9099/api/wallets/abc123/private-key \
 Deploy to an isolated E2B sandbox for secure remote agent access:
 
 ```typescript
-import { deployToE2B } from "@agentwallet/core/deploy/e2b";
+import { deployToE2B } from "agentwallet-vault/deploy/e2b";
 
 const instance = await deployToE2B({
   apiKey: process.env.E2B_API_KEY!,
@@ -148,7 +161,7 @@ console.log(`Vault running at: ${instance.url}`);
 Deploy to Cloudflare's edge network:
 
 ```typescript
-import { deployToCloudflare } from "@agentwallet/core/deploy/cloudflare";
+import { deployToCloudflare } from "agentwallet-vault/deploy/cloudflare";
 
 const instance = await deployToCloudflare({
   apiToken: process.env.CLOUDFLARE_API_TOKEN!,
@@ -189,7 +202,7 @@ console.log(`Worker deployed at: ${instance.url}`);
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                      @agentwallet/core                       │
+│                     agentwallet-vault                       │
 ├─────────────────────────────────────────────────────────────┤
 │  CLI (cli.ts)          │  HTTP Server (server.ts)           │
 │  - serve               │  - Express router                  │

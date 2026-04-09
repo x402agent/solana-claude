@@ -62,7 +62,7 @@ const quickstartOptions = [
   "mcpServers": {
     "solana-clawd": {
       "command": "node",
-      "args": ["/absolute/path/to/solana-clawd/mcp-server/dist/index.js"],
+      "args": ["/absolute/path/to/solana-clawd/MCP/dist/index.js"],
       "env": {
         "HELIUS_API_KEY": "your-free-key"
       }
@@ -75,7 +75,7 @@ const quickstartOptions = [
     code: `{
   "solana-clawd": {
     "command": "node",
-    "args": ["mcp-server/dist/index.js"],
+    "args": ["MCP/dist/index.js"],
     "cwd": "/path/to/solana-clawd"
   }
 }`,

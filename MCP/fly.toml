@@ -1,11 +1,11 @@
-# fly.toml — SolanaOS MCP Server on Fly.io
-# Run: fly launch --config mcp-server/fly.toml
+# fly.toml — solana-clawd MCP Server on Fly.io
+# Run: fly launch --config MCP/fly.toml
 
-app = "solanaos-mcp"
+app = "solana-clawd-mcp"
 primary_region = "ord"
 
 [build]
-  dockerfile = "mcp-server/Dockerfile"
+  dockerfile = "MCP/Dockerfile"
 
 [env]
   NODE_ENV = "production"

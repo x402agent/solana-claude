@@ -1,0 +1,16 @@
+name = "clawd-email-worker"
+main = "src/index.ts"
+compatibility_date = "2024-12-01"
+
+# send_email binding — allows the worker to send reply emails
+[[send_email]]
+name = "SEND_EMAIL"
+
+[vars]
+FORWARD_TO = "beetsbyj@gmail.com"
+REPLY_FROM = "clawd@solanaclawd.com"
+REPLY_FROM_NAME = "Clawd | Solana Clawd"
+
+# Secrets required:
+#   npx wrangler secret put ANTHROPIC_API_KEY         (Claude for auto-replies)
+#   npx wrangler secret put NOTIFICATION_WEBHOOK_URL  (optional — Discord/Slack alerts)

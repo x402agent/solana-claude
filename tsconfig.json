@@ -15,12 +15,7 @@
     "noUnusedParameters": false,
 
     /* Emit */
-    "noEmit": false,
-    "declaration": true,
-    "declarationMap": true,
-    "sourceMap": true,
-    "outDir": "./dist",
-    "rootDir": "./src",
+    "noEmit": true,
 
     /* Module resolution */
     "esModuleInterop": true,

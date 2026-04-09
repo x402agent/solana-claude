@@ -6,14 +6,17 @@ import { useSearchParams } from 'next/navigation'
 import { Loader2, Shield, Check, X } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 
+interface AuthorizationDetails {
+  client: { name?: string }
+  redirect_uri?: string
+  scope?: string
+}
+
 function OAuthConsentContent() {
   const searchParams = useSearchParams()
   const authorizationId = searchParams.get('authorization_id')
 
-  const [details, setDetails] = React.useState<{
-    client?: { name?: string }
-    scopes?: string[]
-  } | null>(null)
+  const [details, setDetails] = React.useState<AuthorizationDetails | null>(null)
   const [loading, setLoading] = React.useState(true)
   const [error, setError] = React.useState<string | null>(null)
   const [submitting, setSubmitting] = React.useState(false)
@@ -28,8 +31,8 @@ function OAuthConsentContent() {
 
     const supabase = createClient()
 
-    supabase.auth.getSession().then(async ({ data: { session } }) => {
-      if (!session) {
+    supabase.auth.getUser().then(async ({ data: { user } }) => {
+      if (!user) {
         const returnUrl = `/oauth/authorize?authorization_id=${authorizationId}`
         window.location.href = `/login?returnTo=${encodeURIComponent(returnUrl)}`
         return
@@ -41,49 +44,30 @@ function OAuthConsentContent() {
         setDetails(data)
       } catch (err: any) {
         console.error('Failed to get authorization details:', err)
+        setError(err?.message || 'Failed to load authorization details')
       } finally {
         setLoading(false)
       }
     })
   }, [authorizationId])
 
-  const handleApprove = async () => {
+  const handleDecision = async (approve: boolean) => {
     if (!authorizationId || submitting) return
     setSubmitting(true)
     setError(null)
     try {
       const supabase = createClient()
-      const result = await (supabase.auth as any).oauth.approveAuthorization(authorizationId)
+      const method = approve ? 'approveAuthorization' : 'denyAuthorization'
+      const result = await (supabase.auth as any).oauth[method](authorizationId)
       if (result.error) throw result.error
-      const redirectUrl = result.data?.redirect_to || result.data?.redirect_uri || result.data?.url
+      const redirectUrl = result.data?.redirect_to
       if (redirectUrl) {
         window.location.href = redirectUrl
       } else {
-        setSuccess('Access granted successfully.')
+        setSuccess(approve ? 'Access granted successfully.' : 'Access denied.')
       }
     } catch (err: any) {
-      setError(err?.message || 'Failed to approve authorization.')
-    } finally {
-      setSubmitting(false)
-    }
-  }
-
-  const handleDeny = async () => {
-    if (!authorizationId || submitting) return
-    setSubmitting(true)
-    setError(null)
-    try {
-      const supabase = createClient()
-      const result = await (supabase.auth as any).oauth.denyAuthorization(authorizationId)
-      if (result.error) throw result.error
-      const redirectUrl = result.data?.redirect_to || result.data?.redirect_uri || result.data?.url
-      if (redirectUrl) {
-        window.location.href = redirectUrl
-      } else {
-        setSuccess('Access denied.')
-      }
-    } catch (err: any) {
-      setError(err?.message || 'Failed to deny authorization.')
+      setError(err?.message || `Failed to ${approve ? 'approve' : 'deny'} authorization.`)
     } finally {
       setSubmitting(false)
     }
@@ -126,6 +110,7 @@ function OAuthConsentContent() {
   const rawName = details?.client?.name || ''
   const isClaude = rawName.toLowerCase().includes('claude') || rawName.toLowerCase().includes('anthropic')
   const clientName = isClaude ? 'Claude' : rawName || 'An MCP client'
+  const scopes = details?.scope?.split(' ').filter(Boolean) ?? []
 
   return (
     <div className="min-h-svh flex items-center justify-center bg-background p-8">
@@ -167,18 +152,27 @@ function OAuthConsentContent() {
               Delete documents and research pages
             </li>
           </ul>
+          {scopes.length > 0 && (
+            <div className="mt-3 pt-3 border-t border-border">
+              <p className="text-xs text-muted-foreground">
+                Scopes: {scopes.join(', ')}
+              </p>
+            </div>
+          )}
         </div>
 
         <div className="flex gap-3">
           <button
-            onClick={handleDeny}
+            type="button"
+            onClick={() => handleDecision(false)}
             disabled={submitting}
             className="flex-1 rounded-lg border border-input bg-background px-4 py-2.5 text-sm font-medium hover:bg-accent transition-colors cursor-pointer disabled:opacity-50"
           >
             Deny
           </button>
           <button
-            onClick={handleApprove}
+            type="button"
+            onClick={() => handleDecision(true)}
             disabled={submitting}
             className="flex-1 flex items-center justify-center gap-2 rounded-lg bg-foreground text-background px-4 py-2.5 text-sm font-medium hover:opacity-90 transition-opacity cursor-pointer disabled:opacity-50"
           >

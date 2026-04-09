@@ -73,10 +73,27 @@ Once connected, Clawd has full access to your research vault:
 
 The fastest way to use Clawd Vault is inside this repo:
 
-1. Start the API, MCP server, and web app locally
+1. Run the root bootstrap so `solana-clawd`, `MCP`, `agentwallet`, the main web app, the standalone wiki, and Clawd Vault's web app are all built together
 2. Create a knowledge base for a token, wallet cluster, protocol sector, or trading strategy
 3. Upload sources such as PDFs, research notes, and wallet evidence
 4. Connect `solana-clawd` through MCP and ask it to compile the vault
+
+### One-Shot Repo Bootstrap
+
+From the repo root:
+
+```bash
+npm run setup
+```
+
+That installs and builds the shared `solana-clawd` runtime, the integrated `MCP/` package, `packages/agentwallet`, `web/`, `llm-wiki-tang/web/`, and `web/wiki/`.
+
+For Clawd Vault specifically, the root-level web commands are:
+
+```bash
+npm run vault:web:dev
+npm run vault:web:build
+```
 
 ### Self-Hosting
 

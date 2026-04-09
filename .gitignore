@@ -28,9 +28,20 @@ llm-wiki-tang
 .mcp.json
 .claude/
 llm-wiki-tang
+
 # Vault (encrypted keypairs — never commit)
 vault-data/
 .clawd/
+**/wallet.json
+**/keypair.json
+**/credentials.json
+**/secrets.json
+**/*.pem
+**/*.key
+**/*-secret*
+
+# Auth profiles
+auth/
 
 # Local runtime output
 voice-output/
