@@ -1,11 +1,11 @@
 {
 	"extName": {
-		"message": "SolanaOS Agent"
+		"message": "Solana Clawd pAGENT"
 	},
 	"extDescription": {
-		"message": "SolanaOS 浏览器代理 — AI 驱动的浏览器自动化，集成 Solana 钱包。"
+		"message": "Solana Clawd pAGENT — AI 驱动的 GUI 视觉浏览器代理，集成离线 Solana 钱包保险库。"
 	},
 	"extActionTitle": {
-		"message": "打开 SolanaOS Agent"
+		"message": "打开 Solana Clawd pAGENT"
 	}
 }
