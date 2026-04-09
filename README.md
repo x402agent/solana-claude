@@ -1471,45 +1471,49 @@ cd web && npm run dev                     # dev server on :3000
 |---|---|
 | `/` | Homepage, chat interface, and call-or-email `$CLAWD` holder communications panel |
 | `/buddies` | Blockchain Buddy gallery + hatch |
-| `/voice` | Voice mode — ElevenLabs + Grok dual-provider |
+| `/voice` | Voice mode — xAI Grok powered |
 | `/api/chat` | Streaming chat API |
 | `/api/agentmail/holders` | Provision a holder inbox and send a welcome email |
 | `/api/agentmail/messages` | Send to or read from holder inbox threads |
 | `/api/agentmail/webhook` | AgentMail email worker webhook for inbound events |
-| `/api/voice/tts` | ElevenLabs text-to-speech proxy |
-| `/api/voice/grok-tts` | Grok (xAI) text-to-speech proxy |
-| `/api/voice/agent` | ElevenLabs Conversational Agent (signed URL) |
-| `/api/voice/grok` | Grok Realtime Voice Agent (ephemeral token) |
+| `/api/voice/tts` | xAI Grok text-to-speech |
+| `/api/voice/agent` | Grok Conversational Agent |
+| `/api/grok/chat` | Grok chat + streaming |
+| `/api/grok/vision` | Grok image understanding |
+| `/api/grok/image` | Grok image generation + editing |
+| `/api/grok/research` | Multi-agent research (4-16 agents) |
+| `/api/grok/tools` | Function calling + tool use |
+| `/api/grok/x-search` | X/Twitter real-time search |
+| `/api/grok/web-search` | Web search with AI synthesis |
+| `/api/clawd/spawn` | Spawn Clawd character agent |
+| `/api/clawd/chat` | Chat with Clawd (vision + research modes) |
+| `/api/clawd/avatar` | Generate Clawd avatars |
+| `/api/clawd/meme` | Generate viral crypto memes |
+| `/api/clawd/research` | Deep 16-agent Solana intelligence |
 | `/api/share` | Conversation sharing |
 
 ### Voice Mode
 
-The `/voice` page provides a **dual-provider voice experience** — toggle between **ElevenLabs** and **Grok** in the header:
+Voice is powered entirely by **xAI Grok** — one API key, full voice stack:
 
-| Feature | ElevenLabs | Grok (xAI) |
-|---|---|---|
-| **Voice Agent** | Conversational AI via WebSocket | Realtime API with server VAD |
-| **TTS Voices** | Roger, Sarah, River, Will (4) | Rex, Eve, Ara, Sal, Leo (5) |
-| **Speech Tags** | — | `[laugh]` `[pause]` `<whisper>` `<emphasis>` `<slow>` |
-| **Live Tools** | — | Web search enabled during conversation |
-| **Auth Model** | Signed conversation URL | Ephemeral tokens (5-min TTL) |
-
-All API keys stay server-side — ElevenLabs uses signed URLs, Grok uses ephemeral tokens via `sec-websocket-protocol`.
+| Feature | Grok (xAI) |
+|---|---|
+| **Voice Agent** | Conversational AI via Responses API |
+| **TTS** | Clawd voice character |
+| **STT** | Audio transcription API |
+| **Live Tools** | Web search + X search during conversation |
 
 ```bash
-# Required env vars (web/.env)
-ELEVEN_LABS_API_KEY=       # ElevenLabs TTS + Voice Agents
-ELEVENLABS_AGENT_ID=       # Your conversational agent ID
-ELEVEN_LABS_AGENT_ID=      # Alias also supported by web widget + voice API
-XAI_API_KEY=               # xAI Grok voice + TTS
+# Required env var (web/.env)
+XAI_API_KEY=               # Powers voice, chat, vision, everything
 ```
 
 ### Call + Email $CLAWD
 
-The main website now exposes a holder communications surface so users can:
+The main website exposes a holder communications surface:
 
 - Call `$CLAWD` at `+19094135567`
-- Use the ElevenLabs ConvAI widget embedded site-wide
+- Use the Grok-powered voice agent embedded site-wide
 - Provision a holder inbox through AgentMail
 - Send research and execution requests to the agent by email
 
@@ -1532,7 +1536,7 @@ Or connect the GitHub repo and set:
 - **Build command:** `npm --prefix web run build`
 - **Publish directory:** `web/.next`
 - **Custom domain:** `solanaclawd.com`
-- **Env vars:** `ELEVEN_LABS_API_KEY`, `ELEVENLABS_AGENT_ID`, `ELEVEN_LABS_AGENT_ID`, `XAI_API_KEY`, `AGENTMAIL_API_KEY`, `AGENTMAIL_CLAWD_INBOX_ID`
+- **Env vars:** `XAI_API_KEY`, `AGENTMAIL_API_KEY`, `AGENTMAIL_CLAWD_INBOX_ID`
 
 ### Solana Vault (AES-256-GCM)
 
@@ -2257,7 +2261,7 @@ solana-clawd/
 │   ├── vault/            AES-256-GCM encrypted secret store
 │   ├── gateway/          SSE/WebSocket transport bridge
 │   ├── bridge/           Remote bridge (JWT, device auth, session management — 34 modules)
-│   ├── voice/            Voice mode (ElevenLabs + Anthropic providers)
+│   ├── voice/            Voice mode (xAI Grok)
 │   ├── monitor/          Birdeye stream, Solana Tracker, wallet monitoring
 │   ├── tools/            Tool registry + executor (31 MCP tools)
 │   ├── services/         autoDream, SessionMemory, analytics, MCP, LSP, compact (19 modules)
@@ -2273,7 +2277,7 @@ solana-clawd/
 │   ├── entrypoints/      CLI entry (demo, birth, spinners, wallet)
 │   └── shared/           Message types, model catalog, tool policy
 ├── web/                  Next.js frontend — solanaclawd.com
-│   ├── app/              Chat, Buddies, Voice (ElevenLabs + Grok dual-provider)
+│   ├── app/              Chat, Buddies, Voice (xAI Grok voice + multi-agent)
 │   ├── components/       UI components (Button, Dialog, Tabs, Toast, etc.)
 │   ├── hooks/            useConversation, useToast, useTheme, usePresence...
 │   └── lib/              Store (Zustand), API client, search, export
@@ -2303,10 +2307,10 @@ solana-clawd/
 ├── beepboop/             macOS menu bar companion app (SwiftUI)
 │   ├── leanring-buddy/   Claude vision + push-to-talk voice + screen capture
 │   │   ├── CompanionManager.swift    Central state machine (1026 lines)
-│   │   ├── ElevenLabsTTSClient.swift ElevenLabs voice output
+│   │   ├── GrokTTSClient.swift       xAI Grok voice output
 │   │   ├── BuddyDictationManager.swift  Voice pipeline
 │   │   └── OverlayWindow.swift       Lobster claw overlay (points at UI)
-│   └── worker/           Cloudflare Worker proxy (Claude, ElevenLabs, AssemblyAI, Solana RPC)
+│   └── worker/           Cloudflare Worker proxy (xAI Grok, Solana RPC)
 ├── MCP/                  Integrated solana-clawd MCP package
 │   ├── src/             STDIO + HTTP/SSE entrypoints and tool server
 │   └── dist/            Built server artifacts
@@ -2318,7 +2322,7 @@ solana-clawd/
 │   ├── src/proxy.ts      HTTP proxy with OTel tracing (38KB)
 │   ├── src/ui.html       Full UI (4 tabs, activity sidebar — 30KB)
 │   └── quickstart/       iii SDK worker swarm (TS + Rust + Python)
-├── elevenlabs-mcp-main/  ElevenLabs MCP server (TTS, voice agents, cloning)
+├── elevenlabs-mcp-main/  (legacy — replaced by xAI Grok voice)
 ├── formal_verification/  Lean 4 risk engine specification (SPEC.md)
 ├── solana-tradingview-advanced-chart-example-main/
 │                         TradingView Advanced Charts + Solana Tracker reference
@@ -2358,7 +2362,7 @@ OPENROUTER_API_KEY=           # Multi-model routing
 XAI_API_KEY=                  # Grok (chat, voice, vision, search)
 
 # Voice
-ELEVEN_LABS_API_KEY=          # ElevenLabs TTS + STT + Voice Agents
+XAI_API_KEY=                  # xAI Grok — chat, vision, image gen, voice, multi-agent, X search
 ELEVENLABS_AGENT_ID=          # Conversational Agent ID
 
 # Telegram
