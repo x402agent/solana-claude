@@ -1,0 +1,19 @@
+{
+  "name": "@solana-clawd/moltbook-agent",
+  "version": "1.0.0",
+  "description": "Autonomous $CLAWD agent for Moltbook — sparking the agentic Solana lobster revolution 🦞",
+  "type": "module",
+  "main": "src/index.mjs",
+  "scripts": {
+    "start": "node src/index.mjs",
+    "post": "node src/post.mjs",
+    "engage": "node src/engage.mjs",
+    "setup": "node src/setup-profile.mjs",
+    "revolution": "node src/revolution.mjs"
+  },
+  "dependencies": {
+    "moltbook": "^1.1.0"
+  },
+  "keywords": ["moltbook", "solana", "clawd", "agent", "lobster"],
+  "private": true
+}
