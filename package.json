@@ -61,6 +61,7 @@
   },
   "dependencies": {
     "@ai-sdk/xai": "^1.2.0",
+    "@anthropic-ai/sdk": "^0.39.0",
     "ai": "^4.3.0",
     "openai": "^4.80.0",
     "@cloudflare/sandbox": "^0.8.4",
