@@ -143,14 +143,22 @@ export const grok = {
   ) => runAgentLoop({ prompt, functions, executor }),
 
   /** Structured output with JSON schema enforcement */
-  structured: (prompt: string, schema: Record<string, any>, opts?: { system?: string }) =>
-    generateStructured({ prompt, schema, ...opts }),
+  structured: async (prompt: string, schema: Record<string, any>, opts?: { system?: string }) => {
+    const { generateStructured: gen } = await import('./grokStructuredOutput.js')
+    return gen({ prompt, schema, ...opts })
+  },
 
   /** Quick token analysis with structured output */
-  analyzeToken: (token: string) => analyzeTokenStructured(token),
+  analyzeToken: async (token: string) => {
+    const { analyzeTokenStructured: analyze } = await import('./grokStructuredOutput.js')
+    return analyze(token)
+  },
 
   /** Get current market regime */
-  marketRegime: () => getMarketRegime(),
+  marketRegime: async () => {
+    const { getMarketRegime: regime } = await import('./grokStructuredOutput.js')
+    return regime()
+  },
 
   /** Pre-built Solana functions */
   solanaFunctions: SOLANA_FUNCTIONS,

@@ -1986,6 +1986,7 @@ solana-clawd/
 │   ├── components/       113 Ink/React UI components
 │   ├── hooks/            83 custom hooks
 │   ├── vim/              Vi/Vim editor mode
+│   ├── chess/            Chess.com agent (typed API client, player analysis)
 │   ├── entrypoints/      CLI entry (demo, birth, spinners, wallet)
 │   └── shared/           Message types, model catalog, tool policy
 ├── web/                  Next.js frontend — solanaclawd.com
