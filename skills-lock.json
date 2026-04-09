@@ -1,20 +1,425 @@
 {
   "version": 1,
   "skills": {
+    "1password": {
+      "source": "x402agent/solana-clawd",
+      "sourceType": "github",
+      "computedHash": "9ae2d88a92ab2a1a5248aec175968b8abaae8f89b99550b789548bb2fed9a3d6"
+    },
+    "apple-notes": {
+      "source": "x402agent/solana-clawd",
+      "sourceType": "github",
+      "computedHash": "b6398412cb232a085374a3c4cf8182f0b70d39b65243572290d87a77f6937846"
+    },
+    "apple-reminders": {
+      "source": "x402agent/solana-clawd",
+      "sourceType": "github",
+      "computedHash": "7ecdd709ed1ba576321baba69f63a964cfff717acefa3da2e8e59084d64a444c"
+    },
+    "bear-notes": {
+      "source": "x402agent/solana-clawd",
+      "sourceType": "github",
+      "computedHash": "65b14ebcc76f93134990ccb12302ab025cc1791be2376404771f971fe788c21a"
+    },
+    "blogwatcher": {
+      "source": "x402agent/solana-clawd",
+      "sourceType": "github",
+      "computedHash": "8083e7ce61fba7145fc4789c762b32da26609eb9e74ca07892411bb3d38a3eab"
+    },
+    "blucli": {
+      "source": "x402agent/solana-clawd",
+      "sourceType": "github",
+      "computedHash": "dfd32a07701ea1172d2e638898ae3c7a9cf0c8703f9890c5694c182434e60f7c"
+    },
+    "bluebubbles": {
+      "source": "x402agent/solana-clawd",
+      "sourceType": "github",
+      "computedHash": "884da1ee7928714a9d5708c55024b96fef38601a141914f98f24c1f13087aa58"
+    },
+    "browse": {
+      "source": "x402agent/solana-clawd",
+      "sourceType": "github",
+      "computedHash": "6c4a8c67d12bce46612047f4d64dda04cd229f8ceefcc4ef7b10e2fcad982c2e"
+    },
+    "camsnap": {
+      "source": "x402agent/solana-clawd",
+      "sourceType": "github",
+      "computedHash": "01ec753d177e80870ea481b700c1febfc19b4229702f7e306bba42dad392d51b"
+    },
+    "claude-code-skill": {
+      "source": "x402agent/solana-clawd",
+      "sourceType": "github",
+      "computedHash": "2d129214c991ca31a705a86333d34a4f74c329bab454af3ec3e4073327cdf5e2"
+    },
+    "clawhub": {
+      "source": "x402agent/solana-clawd",
+      "sourceType": "github",
+      "computedHash": "f43683c87c7faeb3a61ef68038245e7bce8d686e91c4eb21e1a0c17eb1b1f622"
+    },
+    "coding-agent": {
+      "source": "x402agent/solana-clawd",
+      "sourceType": "github",
+      "computedHash": "27db4460750e49a7ba82c04ea37bea4677530454690c6f835bc46c208ab328eb"
+    },
+    "cua": {
+      "source": "x402agent/solana-clawd",
+      "sourceType": "github",
+      "computedHash": "45885ac5764503db18ce134108556bb65d38838179ca1ed15c930a6b2f295ffc"
+    },
+    "discord": {
+      "source": "x402agent/solana-clawd",
+      "sourceType": "github",
+      "computedHash": "69e52a25c7b74557319f3a7c05dc54f7ff28fb792e6ff1f3f768acf749f97f9b"
+    },
+    "e2b": {
+      "source": "x402agent/solana-clawd",
+      "sourceType": "github",
+      "computedHash": "99557ad534a1c35143e4682ddc67803ed5cf16d1f73d71a60cf416a3104d68e1"
+    },
+    "eightctl": {
+      "source": "x402agent/solana-clawd",
+      "sourceType": "github",
+      "computedHash": "be4954d74698ea90eefae5d577a2dec0fa1c0868e2bff2f2ec552a7deaa434c2"
+    },
+    "gemini": {
+      "source": "x402agent/solana-clawd",
+      "sourceType": "github",
+      "computedHash": "d75eb15fba9aa5b0afa9d823ce23ce5f52065db04017660f08fcfa298d6e17e4"
+    },
+    "gh-issues": {
+      "source": "x402agent/solana-clawd",
+      "sourceType": "github",
+      "computedHash": "176f7f9c6ada8c526a130836935d888e362cb4783fca603f5608fb2cfcf2798f"
+    },
+    "gifgrep": {
+      "source": "x402agent/solana-clawd",
+      "sourceType": "github",
+      "computedHash": "8e70e02a01b1c1e221e87e2595940bae843d41b8b3fbebaa7853f195b3fce12c"
+    },
+    "github": {
+      "source": "x402agent/solana-clawd",
+      "sourceType": "github",
+      "computedHash": "f0a8c16548fc3c1460783bd9b2ee8daf5285334178a88c405af23629c7c997d0"
+    },
+    "gog": {
+      "source": "x402agent/solana-clawd",
+      "sourceType": "github",
+      "computedHash": "f1d916a957b3fb67c24aaeb56ba4ba8893b4dd55e1867c39b7f5b766efff6341"
+    },
+    "goplaces": {
+      "source": "x402agent/solana-clawd",
+      "sourceType": "github",
+      "computedHash": "6c407ceb1b821e848f7111df088b23e88bdebfbfd5d1f570ee95159a29107c39"
+    },
+    "healthcheck": {
+      "source": "x402agent/solana-clawd",
+      "sourceType": "github",
+      "computedHash": "97675d338f6d1487ede9fdd6b36e78f820067c573bfd8e532d8202184090d972"
+    },
+    "himalaya": {
+      "source": "x402agent/solana-clawd",
+      "sourceType": "github",
+      "computedHash": "18079645b7a5ab516e2478105d54318242979e6bba4b1cb9a51490896e421ba2"
+    },
+    "imsg": {
+      "source": "x402agent/solana-clawd",
+      "sourceType": "github",
+      "computedHash": "58b2b722e3ac4401932c21d6cb8662edbf7f6e97fca974ad96d8a4777b7916b4"
+    },
+    "mcporter": {
+      "source": "x402agent/solana-clawd",
+      "sourceType": "github",
+      "computedHash": "fc29e1f8341cd79cff6ca38e7c094e55d1980494d1f15f3f40a864f4ffd44792"
+    },
     "metaplex": {
-      "source": "metaplex-foundation/skill",
+      "source": "x402agent/solana-clawd",
       "sourceType": "github",
       "computedHash": "23f0679e334c8cb7078d07859d2c6c27031353261207b1814337db50004156fa"
     },
-    "qedgen": {
-      "source": "qedgen/solana-skills",
+    "model-usage": {
+      "source": "x402agent/solana-clawd",
       "sourceType": "github",
-      "computedHash": "b9b5749d0365d085e295090ec254d3b7343bdb09335d3817b5f5e7855ff5d52c"
+      "computedHash": "026785deb3005d66ba03c57cd2ee604da654b5485bef9373337fe992bfa237d9"
+    },
+    "nano-banana-pro": {
+      "source": "x402agent/solana-clawd",
+      "sourceType": "github",
+      "computedHash": "1d1899cb82e7fe40d90b651e0a7175cfd278ebe7a4716f5ed6db311effd0d0d9"
+    },
+    "nano-pdf": {
+      "source": "x402agent/solana-clawd",
+      "sourceType": "github",
+      "computedHash": "6b59373472d945e249364b2a732dbd0ca849b9c9e29ca5ed04ab92e21f2dadae"
+    },
+    "notion": {
+      "source": "x402agent/solana-clawd",
+      "sourceType": "github",
+      "computedHash": "cd47c2d06975ba9989d248d04afeb430cced9260f06138d99d10e150f1d12c41"
+    },
+    "obsidian": {
+      "source": "x402agent/solana-clawd",
+      "sourceType": "github",
+      "computedHash": "e5e79c0a215a23377d8037c3317d0279820921c8b7578dd036a6c66559e2637f"
+    },
+    "openai-image-gen": {
+      "source": "x402agent/solana-clawd",
+      "sourceType": "github",
+      "computedHash": "a8c7d81e3d713d32d0a56e593049254fac02ac15fbcf34112cfc54110dcb4757"
+    },
+    "openai-whisper": {
+      "source": "x402agent/solana-clawd",
+      "sourceType": "github",
+      "computedHash": "59c8673347dc1e573234952e5c7e1ef995a5fc5a296e68f1715af75d972945c7"
+    },
+    "openai-whisper-api": {
+      "source": "x402agent/solana-clawd",
+      "sourceType": "github",
+      "computedHash": "8f396a4f98e97389e07b6a3e06263cbe7fb7cbf1e16c78b1f50795b6b72beb5b"
+    },
+    "openhue": {
+      "source": "x402agent/solana-clawd",
+      "sourceType": "github",
+      "computedHash": "4086cd2daab45c9d2e11a0e79a1aa5e942872d37c8c2059084275357be314b86"
+    },
+    "oracle": {
+      "source": "x402agent/solana-clawd",
+      "sourceType": "github",
+      "computedHash": "8f99e0600fe946f4f11cfe52bc606c4cc2455aa50f9f9ad297f589a74a23b477"
+    },
+    "ordercli": {
+      "source": "x402agent/solana-clawd",
+      "sourceType": "github",
+      "computedHash": "3cc07a5214ef1296e67ccbdbcbd2b7025329ba56691998d7dbb4d91dbf8c8bb3"
+    },
+    "pdf-to-markdown": {
+      "source": "x402agent/solana-clawd",
+      "sourceType": "github",
+      "computedHash": "bc894351919cdf798e6f63be637c40cbbb73aa4a596c1a1db80ff879c39cea48"
+    },
+    "peekaboo": {
+      "source": "x402agent/solana-clawd",
+      "sourceType": "github",
+      "computedHash": "aa5dbad58654afcd1b00c72a0bdaffdd029632fffd4dbc3c8ce2caa2e985eb9f"
+    },
+    "pump-admin-ops": {
+      "source": "x402agent/solana-clawd",
+      "sourceType": "github",
+      "computedHash": "81aa1e2c92f6365dcf3e2e0c4291c6ca2748b4e4c060917c2399c13332499ad2"
+    },
+    "pump-ai-agents": {
+      "source": "x402agent/solana-clawd",
+      "sourceType": "github",
+      "computedHash": "3de870f25cc5ba9b4929791d0b33877d52101f73b0957f607dc15fbd4e5aadd1"
+    },
+    "pump-bonding-curve": {
+      "source": "x402agent/solana-clawd",
+      "sourceType": "github",
+      "computedHash": "c5bbca5774fa0577c2b63ea3958233b2ccdacf9851b719642f105154d11b1aea"
+    },
+    "pump-build-release": {
+      "source": "x402agent/solana-clawd",
+      "sourceType": "github",
+      "computedHash": "6998ad01c0a346f31a75de841392a1b51cb961110031e8859850050a527dd991"
+    },
+    "pump-claims-readonly": {
+      "source": "x402agent/solana-clawd",
+      "sourceType": "github",
+      "computedHash": "bfdb7a4f741a3719c7ad7bd1e59bb58684df8199fbd457ba4a6662a91f2b41c2"
+    },
+    "pump-fee-sharing": {
+      "source": "x402agent/solana-clawd",
+      "sourceType": "github",
+      "computedHash": "f28526277c616ba27cca838f85b3feb5685cfc98cf75d4407409766f8960015f"
+    },
+    "pump-fee-system": {
+      "source": "x402agent/solana-clawd",
+      "sourceType": "github",
+      "computedHash": "036a77239f8d4d6b6bd2b6c56006d3cc84cbb0ae5e35b7ed9392a3e5459d03c7"
+    },
+    "pump-mcp-server": {
+      "source": "x402agent/solana-clawd",
+      "sourceType": "github",
+      "computedHash": "861aa82ab0eafc47387c3aa1465ee59c6ba89c58971c1a451ee3d75d169015cd"
+    },
+    "pump-rust-vanity": {
+      "source": "x402agent/solana-clawd",
+      "sourceType": "github",
+      "computedHash": "fc09303c9f45274622b9b5af702f518d30df59ef0501462a0c8272333fd34ab2"
+    },
+    "pump-sdk-core": {
+      "source": "x402agent/solana-clawd",
+      "sourceType": "github",
+      "computedHash": "d0187557ffa2512aeb29d6ffa104bda400b6093b3a77d6b06215ee78168bc34c"
+    },
+    "pump-security": {
+      "source": "x402agent/solana-clawd",
+      "sourceType": "github",
+      "computedHash": "ff3dafccd8d2b6edbbd221300431828c1c1175c9728edfa4ffade337bc5fc451"
+    },
+    "pump-shell-scripts": {
+      "source": "x402agent/solana-clawd",
+      "sourceType": "github",
+      "computedHash": "bc1a90d317c6cf398dddbdb398910325b8ad2823a7e3916e74212daa48fdc6ca"
+    },
+    "pump-solana-architecture": {
+      "source": "x402agent/solana-clawd",
+      "sourceType": "github",
+      "computedHash": "b86a57e31652591d257d42b24c4ae2be7856de4d2d38746800b77684fbe26606"
+    },
+    "pump-solana-dev": {
+      "source": "x402agent/solana-clawd",
+      "sourceType": "github",
+      "computedHash": "bd89b76a58339ee59d6ace12636de521a5300678a13339b91f189585f5ec3f8b"
+    },
+    "pump-solana-wallet": {
+      "source": "x402agent/solana-clawd",
+      "sourceType": "github",
+      "computedHash": "2269fb85c654e1149d587cf31bc0f4d261eabe10e519ccc8fcda6907e5c168f0"
+    },
+    "pump-testing": {
+      "source": "x402agent/solana-clawd",
+      "sourceType": "github",
+      "computedHash": "27dfa4722895de58b3a48db818ba66e193e23901246854e6f913aacb45e80d1d"
+    },
+    "pump-token-incentives": {
+      "source": "x402agent/solana-clawd",
+      "sourceType": "github",
+      "computedHash": "e912a3cb508f662313d5db12f54705a3acf5b2a29681ef65f914ff0bbd627508"
+    },
+    "pump-token-lifecycle": {
+      "source": "x402agent/solana-clawd",
+      "sourceType": "github",
+      "computedHash": "9aca0c1a450681c7fd1671b3283259339c18312adfbfeb74e271c8d07c7623fa"
+    },
+    "pump-ts-vanity": {
+      "source": "x402agent/solana-clawd",
+      "sourceType": "github",
+      "computedHash": "eac434ed5f234ddb3196ef53b0194660f49db1cb2e020142ad242a1588a0d7fb"
+    },
+    "pump-website": {
+      "source": "x402agent/solana-clawd",
+      "sourceType": "github",
+      "computedHash": "ac86c41bed0fa0a33ec43ad705dd1ca7d3b7d6f6ac236336f3ac72b366052118"
+    },
+    "pumpfun-token-scanner": {
+      "source": "x402agent/solana-clawd",
+      "sourceType": "github",
+      "computedHash": "989e5782e09c26f3921ae46560c25476b198088aa5c4fefe0ec23733689bf857"
+    },
+    "qedgen": {
+      "source": "x402agent/solana-clawd",
+      "sourceType": "github",
+      "computedHash": "dd996ab510e64bbde856182254a6d45e3db15bc52075c422c3aff2473499d0a6"
+    },
+    "sag": {
+      "source": "x402agent/solana-clawd",
+      "sourceType": "github",
+      "computedHash": "997934cffe72cbd19a1b11bb9346c12de499b08eef703b728391f60b84f665d3"
+    },
+    "seeker-daemon-ops": {
+      "source": "x402agent/solana-clawd",
+      "sourceType": "github",
+      "computedHash": "6901757b6ff7c9ded35bc377b67d1443ff6dfc2fa942ce88faf6fc03989dfb26"
+    },
+    "session-logs": {
+      "source": "x402agent/solana-clawd",
+      "sourceType": "github",
+      "computedHash": "0171624ba19814351120e8b54b654076b1753202d50f0cffde2ceb1e65e45cad"
+    },
+    "sherpa-onnx-tts": {
+      "source": "x402agent/solana-clawd",
+      "sourceType": "github",
+      "computedHash": "e9d7b928ee567d6925077a39ffabfd27cd7ab070725bbb9d95e572f29fbe5a0c"
+    },
+    "skill-creator": {
+      "source": "x402agent/solana-clawd",
+      "sourceType": "github",
+      "computedHash": "0860b4c5cef23db1cc52a37a8dd4fc2dbbf121e29b6789be260cfe556e0451f4"
+    },
+    "slack": {
+      "source": "x402agent/solana-clawd",
+      "sourceType": "github",
+      "computedHash": "754300a425c9a2cf8015952d2aeb6f97839c1afa46aa0f53d5bdf4b565b0d971"
+    },
+    "solana-clawd": {
+      "source": "x402agent/solana-clawd",
+      "sourceType": "github",
+      "computedHash": "657939993ce1ad810bbe869331fa697bba9c0d1449b7e3b9bb0bb1a06fdff4ab"
     },
     "solana-dev": {
       "source": "solana-foundation/solana-dev-skill",
       "sourceType": "github",
       "computedHash": "2a0b3c2a739988f3a6d583b68951de142864ac19debd56994aa1dc074c2b3831"
+    },
+    "solana-research-brief": {
+      "source": "x402agent/solana-clawd",
+      "sourceType": "github",
+      "computedHash": "c32e41f24d751bbdd033124f2dba64169271d468bf1f7f4e1fece24fd71a14d0"
+    },
+    "solanaos": {
+      "source": "x402agent/solana-clawd",
+      "sourceType": "github",
+      "computedHash": "93cb6ac8a79e3ca8e9d010189a392c245c2c23ca7c56568def82a6bae62497d8"
+    },
+    "songsee": {
+      "source": "x402agent/solana-clawd",
+      "sourceType": "github",
+      "computedHash": "18c2e176f7d9a90a62c88fbd1623edf8079edc9ff25649bfb22eb8dc5127b965"
+    },
+    "sonoscli": {
+      "source": "x402agent/solana-clawd",
+      "sourceType": "github",
+      "computedHash": "e9de806dfb4b19f99d598c2ef1a00503396a30a8ec70e79f9efc7af37b728ff4"
+    },
+    "spotify-player": {
+      "source": "x402agent/solana-clawd",
+      "sourceType": "github",
+      "computedHash": "48dfd02355cca423199b95df694f5a6e5ee5c6d7f3b728554121fe1fd66fb7a9"
+    },
+    "summarize": {
+      "source": "x402agent/solana-clawd",
+      "sourceType": "github",
+      "computedHash": "a2c17aad22869c3a9e7c3e97b1347c8d4b5b01662e181fdf2ce4a5a1abf4fe32"
+    },
+    "things-mac": {
+      "source": "x402agent/solana-clawd",
+      "sourceType": "github",
+      "computedHash": "e0c98554bcc4e30712d8acf29801b3360ec74c8cffd232d8aa91487a8533ded8"
+    },
+    "tmux": {
+      "source": "x402agent/solana-clawd",
+      "sourceType": "github",
+      "computedHash": "c84fb8a25a767e1b92a8d037434acfc30adc54d8119e4a1c20d3b9499c6c7acd"
+    },
+    "trello": {
+      "source": "x402agent/solana-clawd",
+      "sourceType": "github",
+      "computedHash": "70ddab53decdbf5a97e1e9dc05c54eace9701ac706428ac0cef5a1a9ba0ef2be"
+    },
+    "video-frames": {
+      "source": "x402agent/solana-clawd",
+      "sourceType": "github",
+      "computedHash": "7dfe40830dd92f1de0ae39fed001e454b33b9a9709aaf782a3aafcb61dc15118"
+    },
+    "voice-call": {
+      "source": "x402agent/solana-clawd",
+      "sourceType": "github",
+      "computedHash": "1240074ae9284ae0afc4541f699200a0f9a4c9f701fdb6440c9eebbf51f8626b"
+    },
+    "wacli": {
+      "source": "x402agent/solana-clawd",
+      "sourceType": "github",
+      "computedHash": "9060187bec5f5ac8e2340943e181a84fc8096f565d7b3216ffc517fe386bc12d"
+    },
+    "weather": {
+      "source": "x402agent/solana-clawd",
+      "sourceType": "github",
+      "computedHash": "cd7a3a93b319a8f585789283b58dc3699521228ca4b5fbb1b46662575f642e6d"
+    },
+    "xurl": {
+      "source": "x402agent/solana-clawd",
+      "sourceType": "github",
+      "computedHash": "f443db88c944a1d9b98fcbf3d23adaa15d3225e25100638d354d7f400c52ebb7"
     }
   }
 }

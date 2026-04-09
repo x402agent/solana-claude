@@ -1603,6 +1603,9 @@ VAULT_PASSPHRASE=             # AES-256-GCM master key
 
 # Deployment
 MCP_API_KEY=                  # Bearer token for remote MCP server
+
+# npm Registry
+NPM_TOKEN=                        # npm publish token (get from vault or 1Password)
 ```
 
 ---
