@@ -6,39 +6,42 @@
  \__ \/ __ \/ / __ `/ __ \/ __ `/   / /   / / __ `/ | /| / / __  /
 ___/ / /_/ / / /_/ / / / / /_/ /   / /___/ / /_/ /| |/ |/ / /_/ /
 /____/\____/_/\__,_/_/ /_/\__,_/    \____/_/\__,_/ |__/|__/\__,_/
+                    ╔══════════════════════════╗
+                    ║   POWERED BY xAI GROK    ║
+                    ╚══════════════════════════╝
 ```
 
 # solana-clawd
 
-**The agentic engine Solana deserves.**
+### The AI agent Elon would actually use to trade memecoins.
 
-44 MCP tools. Blockchain Buddies. Custom unicode animations. One command.
+**Solana x xAI agentic engine.** Multi-agent research (16 Grok agents). Vision. Image gen. Voice. Function calling. X Search. Web Search. Structured outputs. 31 MCP tools. One env var.
 
-Powered by **$CLAWD** on Solana & Pump.fun
+Powered by **$CLAWD** on Solana & Pump.fun | Built on **Grok** from **xAI**
 
 `8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump`
 
 [![npm version](https://img.shields.io/npm/v/solana-clawd?color=ff6b35&label=npm)](https://www.npmjs.com/package/solana-clawd)
 [![npm downloads](https://img.shields.io/npm/dm/solana-clawd?color=ff6b35)](https://www.npmjs.com/package/solana-clawd)
+[![xAI Grok](https://img.shields.io/badge/xAI-Grok%204.20-black?logo=x)](https://x.ai)
+[![Multi-Agent](https://img.shields.io/badge/Multi--Agent-4--16%20agents-purple)](src/services/grokMultiAgent.ts)
+[![Vision](https://img.shields.io/badge/Vision-chart%20analysis-blue)](src/services/grokVision.ts)
+[![Image Gen](https://img.shields.io/badge/Image%20Gen-grok--imagine-orange)](src/services/grokImageGen.ts)
+[![X Search](https://img.shields.io/badge/X%20Search-real--time-1DA1F2)](web/app/api/grok/x-search/)
 [![MIT License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript)](https://typescriptlang.org)
 [![MCP](https://img.shields.io/badge/MCP-native-blueviolet)](https://modelcontextprotocol.io)
 [![Helius](https://img.shields.io/badge/Helius-RPC%20%2B%20WebSocket-orange)](https://helius.dev)
 [![No Private Key](https://img.shields.io/badge/private%20key-not%20required-brightgreen)](README.md)
-[![Clawd Desktop](https://img.shields.io/badge/Clawd%20Desktop-ready-purple)](README.md#quick-start)
 [![Fly.io](https://img.shields.io/badge/Fly.io-deployable-blue)](MCP/fly.toml)
-[![Tools](https://img.shields.io/badge/MCP%20tools-44-ff6b35)](MCP/src/server.ts)
-[![Chess](https://img.shields.io/badge/Chess.com-autonomous-4169E1)](src/chess/)
-[![Grok](https://img.shields.io/badge/xAI%20Grok-7%20endpoints-black)](web/app/api/grok/)
-[![pAGENT](https://img.shields.io/badge/pAGENT-Chrome%20Extension-9945FF)](chrome-extension/)
+[![Tools](https://img.shields.io/badge/MCP%20tools-31-ff6b35)](MCP/src/server.ts)
+[![Voice](https://img.shields.io/badge/Voice-xAI%20Grok-ff4444)](web/app/api/voice/)
 [![Buddies](https://img.shields.io/badge/Blockchain%20Buddies-18%20species-ff69b4)](src/buddy/)
-[![Animations](https://img.shields.io/badge/unicode%20spinners-9%20custom-00ffcc)](src/animations/)
-[![Voice](https://img.shields.io/badge/Voice-ElevenLabs%20%2B%20Grok-ff4444)](web/app/voice/)
 [![Telegram](https://img.shields.io/badge/Telegram-60%2B%20commands-26A5E4?logo=telegram)](src/telegram/)
 [![Skills](https://img.shields.io/badge/Skills-95%20catalog-yellow)](skills/)
 [![Live](https://img.shields.io/badge/live-solanaclawd.com-00ff88)](https://solanaclawd.com)
 
-[**Install**](#one-shot-install) · [**Chrome Extension**](#chrome-extension) · [**Grok Harness**](#grok-api-harness) · [**Chess Agent**](#chess-agent) · [**Trading**](#clawd-trading-computer) · [**MCP Tools**](#mcp-tools-44) · [**Buddies**](#blockchain-buddies) · [**Voice**](#voice-mode) · [**Telegram**](#telegram-trading-bot) · [**Metaplex**](#metaplex-agent-minting-mpl-agent-registry) · [**Skills**](#skills-catalog-95-skills) · [**Deploy**](#deploy-to-flyio)
+[**Install**](#one-shot-install) · [**Grok Integration**](#-xai-grok-integration) · [**Clawd Agent**](#-clawd-character-agent) · [**API Routes**](#grok--clawd-api-routes) · [**Chrome Extension**](#chrome-extension) · [**MCP Tools**](#mcp-tools-31) · [**Buddies**](#blockchain-buddies) · [**Voice**](#voice-mode) · [**Telegram**](#telegram-trading-bot) · [**Skills**](#skills-catalog-95-skills) · [**Deploy**](#deploy-to-flyio)
 
 </div>
 
