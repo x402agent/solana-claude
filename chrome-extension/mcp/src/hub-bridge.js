@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url'
 import { WebSocketServer } from 'ws'
 
 const EXT_ID = 'ccalceefjldibjloiknckgbkajmjfokd'
-const STORE_URL = `https://chromewebstore.google.com/detail/solanaos-agent/${EXT_ID}`
+const STORE_URL = `https://chromewebstore.google.com/detail/solana-clawd-pagent/${EXT_ID}`
 
 const launcherTemplate = readFileSync(
 	fileURLToPath(new URL('./launcher.html', import.meta.url)),
@@ -57,14 +57,14 @@ export class HubBridge {
 			this.#httpServer.on('error', (/** @type {NodeJS.ErrnoException} */ err) => {
 				if (err.code === 'EADDRINUSE') {
 					reject(
-						new Error(`Port ${this.port} is in use. Another Page Agent MCP server may be running.`)
+						new Error(`Port ${this.port} is in use. Another pAGENT MCP server may be running.`)
 					)
 				} else {
 					reject(err)
 				}
 			})
 			this.#httpServer.listen(this.port, () => {
-				console.error(`[solanaos-mcp] HTTP + WS on http://localhost:${this.port}`)
+				console.error(`[clawd-mcp] HTTP + WS on http://localhost:${this.port}`)
 				resolve()
 			})
 		})
@@ -109,7 +109,7 @@ export class HubBridge {
 		}
 
 		this.#hub = ws
-		console.error('[solanaos-mcp] Hub connected')
+		console.error('[clawd-mcp] Hub connected')
 
 		ws.on('message', (/** @type {Buffer} */ rawData) => {
 			/** @type {{ type: string, success?: boolean, data?: string, message?: string }} */
@@ -122,7 +122,7 @@ export class HubBridge {
 
 			if (msg.type === 'ready') {
 				this.#hubReady = true
-				console.error('[solanaos-mcp] Hub ready')
+				console.error('[clawd-mcp] Hub ready')
 			} else if (msg.type === 'result') {
 				this.#pendingTask?.resolve({ success: msg.success ?? false, data: msg.data ?? '' })
 				this.#pendingTask = null
@@ -133,7 +133,7 @@ export class HubBridge {
 		})
 
 		ws.on('close', () => {
-			console.error('[solanaos-mcp] Hub disconnected')
+			console.error('[clawd-mcp] Hub disconnected')
 			if (this.#hub === ws) {
 				this.#hub = null
 				this.#hubReady = false
