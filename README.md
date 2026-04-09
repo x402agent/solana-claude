@@ -27,7 +27,10 @@ Powered by **$CLAWD** on Solana & Pump.fun
 [![No Private Key](https://img.shields.io/badge/private%20key-not%20required-brightgreen)](README.md)
 [![Clawd Desktop](https://img.shields.io/badge/Clawd%20Desktop-ready-purple)](README.md#quick-start)
 [![Fly.io](https://img.shields.io/badge/Fly.io-deployable-blue)](MCP/fly.toml)
-[![Tools](https://img.shields.io/badge/MCP%20tools-31-ff6b35)](MCP/src/server.ts)
+[![Tools](https://img.shields.io/badge/MCP%20tools-44-ff6b35)](MCP/src/server.ts)
+[![Chess](https://img.shields.io/badge/Chess.com-autonomous-4169E1)](src/chess/)
+[![Grok](https://img.shields.io/badge/xAI%20Grok-7%20endpoints-black)](web/app/api/grok/)
+[![pAGENT](https://img.shields.io/badge/pAGENT-Chrome%20Extension-9945FF)](chrome-extension/)
 [![Buddies](https://img.shields.io/badge/Blockchain%20Buddies-18%20species-ff69b4)](src/buddy/)
 [![Animations](https://img.shields.io/badge/unicode%20spinners-9%20custom-00ffcc)](src/animations/)
 [![Voice](https://img.shields.io/badge/Voice-ElevenLabs%20%2B%20Grok-ff4444)](web/app/voice/)
@@ -35,7 +38,7 @@ Powered by **$CLAWD** on Solana & Pump.fun
 [![Skills](https://img.shields.io/badge/Skills-95%20catalog-yellow)](skills/)
 [![Live](https://img.shields.io/badge/live-solanaclawd.com-00ff88)](https://solanaclawd.com)
 
-[**One-Shot Install**](#one-shot-install) · [**Chrome Extension**](#chrome-extension) · [**Trading Computer**](#-clawd-trading-computer) · [**Blockchain Buddies**](#blockchain-buddies) · [**Animations**](#clawd-animations) · [**MCP Tools**](#mcp-tools-31) · [**Voice Mode**](#voice-mode) · [**Telegram Bot**](#telegram-trading-bot) · [**Metaplex Agents**](#metaplex-agent-minting-mpl-agent-registry) · [**Worker Swarm**](#solana-worker-swarm-iii-sdk) · [**Skills**](#skills-catalog-95-skills) · [**Deploy**](#deploy-to-flyio) · [**Moltbook Agent**](#-moltbook-clawd-agent)
+[**Install**](#one-shot-install) · [**Chrome Extension**](#chrome-extension) · [**Grok Harness**](#grok-api-harness) · [**Chess Agent**](#chescom-agent) · [**Trading Computer**](#clawd-trading-computer) · [**MCP Tools**](#mcp-tools-44) · [**Buddies**](#blockchain-buddies) · [**Voice**](#voice-mode) · [**Telegram**](#telegram-trading-bot) · [**Metaplex**](#metaplex-agent-minting-mpl-agent-registry) · [**Skills**](#skills-catalog-95-skills) · [**Deploy**](#deploy-to-flyio)
 
 </div>
 
