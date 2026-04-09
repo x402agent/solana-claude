@@ -406,6 +406,43 @@ export function createServer(): Server {
         description: "Explain Pump.fun cashback mechanics — UserVolumeAccumulator PDAs, unclaimed cashback balance, and how to claim for a specific token.",
         inputSchema: { type: "object" as const, properties: { mint: { type: "string", description: "Token mint (optional — if omitted returns general cashback docs)" } } },
       },
+
+      // ── Chess.com (autonomous agent chess) ──────────────────────────────
+      {
+        name: "chess_player",
+        description: "Get a Chess.com player profile and full rating analysis — ratings across all time controls, win rate, best rating, total games played.",
+        inputSchema: { type: "object" as const, properties: { username: { type: "string", description: "Chess.com username" } }, required: ["username"] },
+      },
+      {
+        name: "chess_recent_games",
+        description: "Get a player's recent games with results, ratings, accuracy, and openings. Returns the last N games from the most recent archive.",
+        inputSchema: { type: "object" as const, properties: { username: { type: "string", description: "Chess.com username" }, limit: { type: "number", description: "Number of games (default 10, max 50)" } }, required: ["username"] },
+      },
+      {
+        name: "chess_current_games",
+        description: "Get a player's ongoing daily chess games. Shows games where it's their turn to move — useful for autonomous play monitoring.",
+        inputSchema: { type: "object" as const, properties: { username: { type: "string", description: "Chess.com username" } }, required: ["username"] },
+      },
+      {
+        name: "chess_daily_puzzle",
+        description: "Get today's Chess.com daily puzzle with FEN, PGN, and solution. Great for agent puzzle-solving practice.",
+        inputSchema: { type: "object" as const, properties: {} },
+      },
+      {
+        name: "chess_random_puzzle",
+        description: "Get a random Chess.com puzzle for practice. Returns FEN position and PGN solution for the agent to analyze.",
+        inputSchema: { type: "object" as const, properties: {} },
+      },
+      {
+        name: "chess_leaderboards",
+        description: "Get Chess.com leaderboards across all time controls (daily, rapid, blitz, bullet, bughouse, etc). Shows top players globally.",
+        inputSchema: { type: "object" as const, properties: { category: { type: "string", description: "Leaderboard category: daily, live_rapid, live_blitz, live_bullet, live_bughouse, tactics (default: live_blitz)" } } },
+      },
+      {
+        name: "chess_titled_players",
+        description: "Get all Chess.com players with a specific title (GM, IM, FM, etc). Useful for finding opponents or studying titled player games.",
+        inputSchema: { type: "object" as const, properties: { title: { type: "string", description: "Chess title: GM, WGM, IM, WIM, FM, WFM, NM, WNM, CM, WCM" } }, required: ["title"] },
+      },
     ],
   }));
 
