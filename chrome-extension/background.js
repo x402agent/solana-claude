@@ -27,10 +27,10 @@ function gatewayAuthHeaders(secret) {
 
 async function migrateSettings() {
   return new Promise(resolve => {
-    chrome.storage.local.get(['nanobotUrl', 'solanaosGatewaySecret', 'seekerGatewayUrl', 'seekerGatewayToken', 'seekerGatewayAuthMode'], data => {
+    chrome.storage.local.get(['nanobotUrl', 'clawdGatewaySecret', 'seekerGatewayUrl', 'seekerGatewayToken', 'seekerGatewayAuthMode'], data => {
       const url = normalizeApi(data.nanobotUrl);
       const updates = {
-        solanaosGatewaySecret: normalizeSecret(data.solanaosGatewaySecret),
+        clawdGatewaySecret: normalizeSecret(data.clawdGatewaySecret),
         seekerGatewayToken: normalizeSecret(data.seekerGatewayToken),
         seekerGatewayAuthMode: ['token', 'password'].includes(String(data.seekerGatewayAuthMode || '').trim().toLowerCase())
           ? String(data.seekerGatewayAuthMode).trim().toLowerCase()
@@ -55,14 +55,14 @@ function normalizeApi(url) {
 
 async function getNanobotUrl() {
   return new Promise(resolve => {
-    chrome.storage.local.get(['nanobotUrl', 'solanaosGatewaySecret'], data => {
+    chrome.storage.local.get(['nanobotUrl', 'clawdGatewaySecret'], data => {
       const url = normalizeApi(data.nanobotUrl);
       if (url !== data.nanobotUrl) {
         chrome.storage.local.set({ nanobotUrl: url });
       }
       resolve({
         url,
-        secret: normalizeSecret(data.solanaosGatewaySecret),
+        secret: normalizeSecret(data.clawdGatewaySecret),
       });
     });
   });
@@ -160,7 +160,7 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
       'heliusApiKey',
       'nanobotUrl',
       'network',
-      'solanaosGatewaySecret',
+      'clawdGatewaySecret',
       'seekerGatewayUrl',
       'seekerGatewayToken',
       'seekerGatewayAuthMode',

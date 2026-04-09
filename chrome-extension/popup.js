@@ -189,13 +189,13 @@ function shortDisplay(value, left = 8, right = 6) {
 // ── Init ──
 document.addEventListener('DOMContentLoaded', async () => {
   // Load saved settings
-  const settings = await getStorage(['nanobotUrl', 'network', 'orApiKey', 'orModel', 'mawdaxeUrl', 'mawdaxeKey', 'solanaosGatewaySecret']);
+  const settings = await getStorage(['nanobotUrl', 'network', 'orApiKey', 'orModel', 'mawdaxeUrl', 'mawdaxeKey', 'clawdGatewaySecret']);
   API = normalizeApi(settings.nanobotUrl);
   orApiKey = settings.orApiKey || OR_BUNDLED_KEY;
   orModel = settings.orModel || OR_DEFAULT_MODEL;
   MAWDAXE_API = settings.mawdaxeUrl || MAWDAXE_DEFAULT;
   mawdaxeKey = settings.mawdaxeKey || '';
-  gatewaySecret = normalizeSecret(settings.solanaosGatewaySecret);
+  gatewaySecret = normalizeSecret(settings.clawdGatewaySecret);
   // Persist bundled key on first load so settings panel shows it
   if (!settings.orApiKey) await setStorage({ orApiKey: orApiKey, orModel: orModel });
   if (API !== settings.nanobotUrl) {
@@ -452,7 +452,7 @@ function setupButtons() {
     await setStorage({
       nanobotUrl: url,
       network,
-      solanaosGatewaySecret: secret,
+      clawdGatewaySecret: secret,
       orApiKey: key,
       orModel: model,
       mawdaxeUrl: mawdUrl,
