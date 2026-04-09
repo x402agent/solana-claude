@@ -70,7 +70,7 @@ mcpServer.registerTool(
 mcpServer.registerTool(
 	'get_status',
 	{
-		description: 'Check the current status of the Page Agent hub.',
+		description: 'Check the current status of the pAGENT hub.',
 	},
 	async () => ({
 		content: [
