@@ -25,7 +25,7 @@ Powered by **$CLAWD** on Solana & Pump.fun
 [![MCP](https://img.shields.io/badge/MCP-native-blueviolet)](https://modelcontextprotocol.io)
 [![Helius](https://img.shields.io/badge/Helius-RPC%20%2B%20WebSocket-orange)](https://helius.dev)
 [![No Private Key](https://img.shields.io/badge/private%20key-not%20required-brightgreen)](README.md)
-[![Clawd Desktop](https://img.shields.io/badge/Clawd%20Desktop-ready-purple)](README.md#clawd-desktop)
+[![Clawd Desktop](https://img.shields.io/badge/Clawd%20Desktop-ready-purple)](README.md#quick-start)
 [![Fly.io](https://img.shields.io/badge/Fly.io-deployable-blue)](MCP/fly.toml)
 [![Tools](https://img.shields.io/badge/MCP%20tools-31-ff6b35)](MCP/src/server.ts)
 [![Buddies](https://img.shields.io/badge/Blockchain%20Buddies-18%20species-ff69b4)](src/buddy/)
@@ -49,18 +49,51 @@ cd solana-clawd
 npm run setup
 ```
 
-That single command installs root dependencies, builds the runtime, builds the integrated MCP package in `MCP/`, installs and builds the web apps, and syncs the skills catalog.
-It also installs and builds the encrypted wallet vault package in `packages/agentwallet/`.
+`npm run setup` is the full repo bootstrap. It checks for Node 20+, installs dependencies, builds the root runtime, builds the integrated MCP package in `MCP/`, installs and builds `packages/agentwallet/`, builds the main `web/` app, builds the Clawd Vault app in `llm-wiki-tang/web/`, builds the wiki app in `web/wiki/`, syncs the skills catalog, and creates `.env` from `.env.example` if needed.
 
-After setup:
+Common next commands after setup:
 
 ```bash
-npm run demo            # animated walkthrough
-npm run birth           # hatch a blockchain buddy
-npm run mcp:http        # local MCP server on :3000
-npm run agentwallet:start
-npm --prefix web run dev
+npm run demo                 # animated walkthrough
+npm run birth                # hatch a blockchain buddy
+npm run spinners             # preview all 9 custom unicode spinners
+npm run mcp:http             # MCP HTTP server on :3000
+npm run mcp:start            # MCP stdio server
+npm run agentwallet:start    # wallet vault server on :9099
+npm run vault:web:dev        # Clawd Vault app
+npm --prefix web run dev     # main website on :3000
+npm --prefix web/wiki run dev  # wiki app
+npm run skills:serve         # skills catalog on :3333
 ```
+
+### Root Scripts
+
+| Script | What it does |
+|---|---|
+| `npm run setup` | One-shot bootstrap for the full repo |
+| `npm run build` | Build the root TypeScript runtime into `dist/` |
+| `npm run build:watch` | Rebuild the root runtime on file changes |
+| `npm run dev` | Watch-mode TypeScript build for the root runtime |
+| `npm run typecheck` | Run TypeScript checks without emitting |
+| `npm run lint` | Run Biome lint checks on `src/` |
+| `npm run lint:fix` | Apply Biome lint fixes on `src/` |
+| `npm run format` | Format `src/` with Biome |
+| `npm run format:check` | Check formatting on `src/` |
+| `npm run check` | Run typecheck and Biome lint |
+| `npm run ci` | Run checks and build |
+| `npm run mcp:build` | Install and build the MCP package |
+| `npm run mcp:start` | Start the MCP package in stdio mode |
+| `npm run mcp:http` | Start the MCP package over HTTP |
+| `npm run agentwallet:build` | Install and build `packages/agentwallet/` |
+| `npm run agentwallet:start` | Start the agent wallet vault server |
+| `npm run vault:web:build` | Build the Clawd Vault web app |
+| `npm run vault:web:dev` | Start the Clawd Vault web app in dev mode |
+| `npm run demo` | Run the CLI walkthrough |
+| `npm run birth` | Hatch a Blockchain Buddy |
+| `npm run spinners` | Preview the spinner gallery |
+| `npm run skills:catalog` | Regenerate `skills/catalog.json` |
+| `npm run skills:serve` | Regenerate and serve the skills catalog |
+| `npm run clean` | Remove the root `dist/` directory |
 
 No private key. No wallet. No paid API required for the default path.
 
@@ -707,7 +740,7 @@ Solana-branded agentic dashboard (`tailclawd/`) — Solana Purple (#9945FF) + Gr
 
 ### Web App
 
-The `web/` directory contains the Next.js frontend — chat UI, buddies page, dual-provider voice mode, and REST API. Live at **[solanaclawd.com](https://solanaclawd.com)**.
+The `web/` directory contains the Next.js frontend — homepage/chat UI, buddies page, holder communications, dual-provider voice mode, and REST API. Live at **[solanaclawd.com](https://solanaclawd.com)**.
 
 ```bash
 cd web && npm install && npm run build    # production build
@@ -718,10 +751,9 @@ cd web && npm run dev                     # dev server on :3000
 
 | Route | Description |
 |---|---|
-| `/` | Chat interface |
+| `/` | Homepage, chat interface, and call-or-email `$CLAWD` holder communications panel |
 | `/buddies` | Blockchain Buddy gallery + hatch |
 | `/voice` | Voice mode — ElevenLabs + Grok dual-provider |
-| `/` | Homepage now includes a call-or-email `$CLAWD` holder communications panel |
 | `/api/chat` | Streaming chat API |
 | `/api/agentmail/holders` | Provision a holder inbox and send a welcome email |
 | `/api/agentmail/messages` | Send to or read from holder inbox threads |
@@ -782,7 +814,7 @@ Or connect the GitHub repo and set:
 - **Build command:** `npm --prefix web run build`
 - **Publish directory:** `web/.next`
 - **Custom domain:** `solanaclawd.com`
-- **Env vars:** `ELEVEN_LABS_API_KEY`, `ELEVENLABS_AGENT_ID`, `XAI_API_KEY`
+- **Env vars:** `ELEVEN_LABS_API_KEY`, `ELEVENLABS_AGENT_ID`, `ELEVEN_LABS_AGENT_ID`, `XAI_API_KEY`, `AGENTMAIL_API_KEY`, `AGENTMAIL_CLAWD_INBOX_ID`
 
 ### Solana Vault (AES-256-GCM)
 
@@ -1237,7 +1269,7 @@ Six built-in templates for instant agent deployment:
 
 ## OODA Trading Loop
 
-The multi-venue OODA cycle adapted from [SolanaOS strategy.md](strategy.md):
+The multi-venue OODA cycle adapted from [STRATEGY.md](STRATEGY.md):
 
 ```
 OBSERVE  -> sol_price, trending, helius_priority_fee, memory KNOWN
@@ -1517,7 +1549,7 @@ solana-clawd/
 │   ├── setup.sh                    One-shot setup
 │   └── generate-skills-catalog.js  Catalog generator
 ├── SOUL.md               Agent identity + epistemological model
-├── strategy.md           Multi-venue trading strategy (SolanaOS v2.0)
+├── STRATEGY.md           Multi-venue trading strategy (SolanaOS v2.0)
 └── .env.example          All env vars documented (55 lines)
 ```
 
