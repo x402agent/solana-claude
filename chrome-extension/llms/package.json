@@ -1,0 +1,27 @@
+{
+  "name": "@page-agent/llms",
+  "private": true,
+  "version": "1.6.2",
+  "type": "module",
+  "main": "./dist/lib/page-agent-llms.js",
+  "types": "./dist/lib/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/lib/index.d.ts",
+      "import": "./dist/lib/page-agent-llms.js",
+      "default": "./dist/lib/page-agent-llms.js"
+    }
+  },
+  "scripts": {
+    "build": "vite build"
+  },
+  "dependencies": {
+    "openai": "^4.80.0"
+  },
+  "peerDependencies": {
+    "zod": "^3.25.0 || ^4.0.0"
+  },
+  "devDependencies": {
+    "zod": "^4.3.5"
+  }
+}
