@@ -15,7 +15,7 @@
     "files": [
         "dist/"
     ],
-    "description": "Page controller for page-agent - DOM operations and element interactions",
+    "description": "Solana Clawd pAGENT page controller — DOM operations and element interactions",
     "keywords": [
         "page-agent",
         "dom",
