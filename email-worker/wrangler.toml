@@ -1,4 +1,4 @@
-name = "clawd-email-worker"
+name = "solanaclawd-email"
 main = "src/index.ts"
 compatibility_date = "2024-12-01"
 
