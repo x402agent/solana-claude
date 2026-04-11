@@ -1,0 +1,16 @@
+name: '😇 疑问或帮助 Help Wanted'
+description: '疑问或需要帮助 | Need help'
+title: '[Question] '
+labels: '😇 Help Wanted'
+body:
+  - type: textarea
+    attributes:
+      label: '🧐 问题描述 | Proposed Solution'
+      description: A clear and concise description of the proplem.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: '📝 补充信息 | Additional Information'
+      description: Add any other context about the problem here.
+

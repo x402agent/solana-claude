@@ -1,0 +1,12 @@
+{
+  "meta": {
+    "title": "Convertitore di Epoch",
+    "description": "Convertitore di timestamp Unix con supporto per i fusi orari",
+    "tags": [
+      "epoch",
+      "timestamp",
+      "data"
+    ]
+  }
+}
+

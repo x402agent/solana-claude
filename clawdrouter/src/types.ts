@@ -200,7 +200,26 @@ export interface ClawdRouterConfig {
   walletPath: string;       // Path to wallet file
   excludedModels: string[];
   debug: boolean;
-  upstreamUrl: string;      // BlockRun API endpoint
+  upstreamUrl: string;      // Legacy upstream endpoint
+
+  // ── $CLAWD Token Integration ──────────────────────────────────
+  clawdTokenMint: string;           // $CLAWD SPL token mint address
+  heliusApiKey: string;             // Helius API key for DAS lookups
+  holderThresholds: {
+    whale: number;                  // Tokens for WHALE tier
+    diamond: number;                // Tokens for DIAMOND tier
+    holder: number;                 // Tokens for HOLDER tier
+  };
+
+  // ── OpenRouter Integration ────────────────────────────────────
+  openRouterApiKey: string;         // OpenRouter API key
+  openRouterSiteTitle: string;      // X-Title header
+  openRouterEnabled: boolean;       // Route through OpenRouter
+
+  // ── x402 Payment Config ───────────────────────────────────────
+  x402PayTo: string;                // Solana address for x402 payments
+  x402Price: string;                // Default price per request
+  x402Description: string;          // Payment description
 }
 
 // ── Usage Stats ─────────────────────────────────────────────────────

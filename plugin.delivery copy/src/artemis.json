@@ -1,0 +1,20 @@
+{
+  "author": "SperaxOS",
+  "createdAt": "2025-01-01",
+  "homepage": "https://github.com/nirholas/plugin.delivery",
+  "identifier": "artemis",
+  "manifest": "https://plugin.delivery/artemis/manifest.json",
+  "meta": {
+    "avatar": "🏹",
+    "description": "Developer activity and ecosystem metrics",
+    "tags": [
+      "artemis",
+      "developers",
+      "activity"
+    ],
+    "title": "Artemis",
+    "category": "science-education"
+  },
+  "schemaVersion": 1
+}
+

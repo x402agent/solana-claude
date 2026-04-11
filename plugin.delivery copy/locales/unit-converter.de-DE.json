@@ -1,0 +1,13 @@
+{
+  "meta": {
+    "title": "Einheitenumrechner",
+    "description": "Multieinheitenumrechner für Krypto (wei, gwei, satoshi)",
+    "tags": [
+      "umrechner",
+      "wei",
+      "gwei",
+      "satoshi"
+    ]
+  }
+}
+
