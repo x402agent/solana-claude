@@ -87,6 +87,13 @@ const BUDGET_MODELS: ModelEntry[] = [
     contextWindow: 131_000, features: ['reasoning'], tier: 'budget',
     qualityScore: 67, speedMs: 900, enabled: true, free: true,
   },
+  {
+    id: 'google/gemini-3.1-flash-lite',
+    provider: 'google', name: 'Gemini 3.1 Flash Lite',
+    inputPricePerM: 0.25, outputPricePerM: 1.50,
+    contextWindow: 1_000_000, features: ['tools'], tier: 'budget',
+    qualityScore: 70, speedMs: 250, enabled: true, free: false,
+  },
 
   // Low-cost paid models
   {

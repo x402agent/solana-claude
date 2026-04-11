@@ -144,22 +144,22 @@ export function scoreRequest(messages: ChatMessage[]): ScoredRequest {
 
     // 2. Linguistic complexity — sentence length, vocabulary diversity
     complexity: normalize(
-      (charCount / Math.max(wordCount, 1)) * 0.1 + // avg word length
-      (new Set(text.toLowerCase().split(/\s+/)).size / Math.max(wordCount, 1)) * 0.5, // vocabulary diversity
-      1.0
+      (charCount / Math.max(wordCount, 1)) * 0.05 + // avg word length (reduced weight)
+      (new Set(text.toLowerCase().split(/\s+/)).size / Math.max(wordCount, 1)) * 0.3, // vocabulary diversity
+      0.6
     ),
 
     // 3. Technical depth — domain-specific terminology density
     technicalDepth: normalize(
-      countMatches(text, [...SOLANA_PATTERNS, ...MATH_PATTERNS, ...CODE_PATTERNS]) * 0.05,
+      countMatches(text, [...SOLANA_PATTERNS, ...MATH_PATTERNS, ...CODE_PATTERNS]) * 0.15,
       1.0
     ),
 
     // 4. Code generation requirements
-    codeGeneration: normalize(countMatches(text, CODE_PATTERNS), 20),
+    codeGeneration: normalize(countMatches(text, CODE_PATTERNS), 8),
 
     // 5. Reasoning requirements
-    reasoning: normalize(countMatches(text, REASONING_PATTERNS), 10),
+    reasoning: normalize(countMatches(text, REASONING_PATTERNS), 5),
 
     // 6. Creativity level
     creativity: normalize(countMatches(text, CREATIVE_PATTERNS), 8),
@@ -222,8 +222,8 @@ export function scoreRequest(messages: ChatMessage[]): ScoredRequest {
 // ── Tier Determination ──────────────────────────────────────────────
 
 function determineTier(totalScore: number, scores: DimensionScores): RequestTier {
-  // Reasoning override: if reasoning score is very high, always use REASONING tier
-  if (scores.reasoning > 0.7 || scores.mathScience > 0.7) {
+  // Reasoning override: if reasoning score is high, always use REASONING tier
+  if (scores.reasoning > 0.5 || scores.mathScience > 0.5) {
     return 'REASONING';
   }
 
@@ -232,10 +232,15 @@ function determineTier(totalScore: number, scores: DimensionScores): RequestTier
     return 'COMPLEX';
   }
 
+  // Code/Solana override: even short technical requests should be MEDIUM+
+  if (scores.codeGeneration > 0.3 || scores.solanaSpecific > 0.2 || scores.technicalDepth > 0.4) {
+    if (totalScore < 0.20) return 'MEDIUM';
+  }
+
   // Score-based tiers
-  if (totalScore < 0.20) return 'SIMPLE';
-  if (totalScore < 0.45) return 'MEDIUM';
-  if (totalScore < 0.70) return 'COMPLEX';
+  if (totalScore < 0.15) return 'SIMPLE';
+  if (totalScore < 0.40) return 'MEDIUM';
+  if (totalScore < 0.65) return 'COMPLEX';
   return 'REASONING';
 }
 
