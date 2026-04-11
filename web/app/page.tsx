@@ -165,6 +165,12 @@ ___/ / /_/ / / /_/ / / / / /_/ /   / /___/ / /_/ /| |/ |/ / /_/ /
               Browse Runtime Docs
             </Link>
             <Link
+              href="/solana-clawd"
+              className="rounded-lg border border-cyan-300 bg-cyan-400/20 px-6 py-3 font-mono text-sm font-semibold text-cyan-100 transition hover:bg-cyan-400/30 hover:border-cyan-200 hover:text-white"
+            >
+              Solana Clawd App
+            </Link>
+            <Link
               href="/migrate"
               className="rounded-lg border border-cyan-500/30 bg-cyan-500/10 px-6 py-3 font-mono text-sm font-semibold text-cyan-200 transition hover:bg-cyan-500/20 hover:border-cyan-400 hover:text-white"
             >
