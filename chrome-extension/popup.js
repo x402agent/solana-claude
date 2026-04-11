@@ -25,6 +25,28 @@ const MAWDAXE_CANDIDATES = [
   'http://localhost:8420',
 ];
 
+// ── Clawd Pro tier gate ──
+const CLAWD_MINT = '8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump';
+const CLAWD_BUY_URL = `https://pump.fun/${CLAWD_MINT}`;
+const CLAWD_TIERS = [
+  { id: 'diamond',  label: 'Diamond',  min: 100000, dailyRuns: 250, color: '#7fe6ff' },
+  { id: 'gold',     label: 'Gold',     min: 10000,  dailyRuns: 100, color: '#ffcc33' },
+  { id: 'silver',   label: 'Silver',   min: 1000,   dailyRuns: 50,  color: '#c0c6d1' },
+  { id: 'bronze',   label: 'Bronze',   min: 1,      dailyRuns: 20,  color: '#d49a5c' },
+  { id: 'free',     label: 'Free',     min: 0,      dailyRuns: 5,   color: '#7a869a' },
+];
+// Feature unlock matrix — lowest tier that enables each feature.
+const CLAWD_PRO_FEATURES = {
+  watchlist:       'bronze',
+  oodaAutopilot:   'silver',
+  telegramMirror:  'silver',
+  multiAgent4:     'gold',
+  xAlphaFeed:      'gold',
+  pumpSniper:      'diamond',
+  mevRouting:      'diamond',
+  priorityRpc:     'diamond',
+};
+
 let API = DEFAULT_API;
 let MAWDAXE_API = MAWDAXE_DEFAULT;
 let mawdaxeKey = '';
@@ -35,6 +57,8 @@ let orApiKey = '';
 let orModel = OR_DEFAULT_MODEL;
 let mawdaxeSSE = null;
 let mawdaxeOnline = false;
+let clawdTier = null;
+let clawdBalance = 0;
 
 // Conversation history for multi-turn reasoning
 let chatHistory = [];
@@ -56,6 +80,62 @@ function gatewayAuthHeaders(secret = gatewaySecret) {
     'Authorization': `Bearer ${trimmed}`,
     'X-Clawd-Secret': trimmed,
   };
+}
+
+function resolveClawdTier(balance) {
+  const amount = Number(balance) || 0;
+  for (const tier of CLAWD_TIERS) {
+    if (amount >= tier.min) return { ...tier, balance: amount };
+  }
+  return { ...CLAWD_TIERS[CLAWD_TIERS.length - 1], balance: amount };
+}
+
+function tierRank(id) {
+  const idx = CLAWD_TIERS.findIndex((t) => t.id === id);
+  return idx === -1 ? CLAWD_TIERS.length : CLAWD_TIERS.length - idx;
+}
+
+function hasFeature(featureKey, tierId = clawdTier?.id) {
+  const required = CLAWD_PRO_FEATURES[featureKey];
+  if (!required) return true;
+  return tierRank(tierId) >= tierRank(required);
+}
+
+function applyClawdTier(tier) {
+  clawdTier = tier;
+  clawdBalance = tier?.balance ?? 0;
+
+  const badge = document.getElementById('clawdTierBadge');
+  if (badge) {
+    badge.textContent = tier.label.toUpperCase();
+    badge.style.color = tier.color;
+    badge.style.borderColor = tier.color;
+    badge.title = `$CLAWD balance: ${clawdBalance.toLocaleString()} · ${tier.dailyRuns} daily agent runs`;
+    badge.dataset.tier = tier.id;
+  }
+
+  for (const el of document.querySelectorAll('[data-pro-feature]')) {
+    const key = el.getAttribute('data-pro-feature');
+    const unlocked = hasFeature(key, tier.id);
+    el.classList.toggle('pro-locked', !unlocked);
+    if (el.tagName === 'BUTTON' || el.tagName === 'INPUT') {
+      el.disabled = !unlocked;
+    }
+    if (!unlocked && !el.dataset.proTitleOriginal) {
+      el.dataset.proTitleOriginal = el.title || '';
+      el.title = `🔒 Requires Clawd ${CLAWD_PRO_FEATURES[key].toUpperCase()} — hold $CLAWD to unlock`;
+    } else if (unlocked && el.dataset.proTitleOriginal !== undefined) {
+      el.title = el.dataset.proTitleOriginal;
+      delete el.dataset.proTitleOriginal;
+    }
+  }
+}
+
+function extractClawdBalance(tokens) {
+  if (!Array.isArray(tokens)) return 0;
+  const match = tokens.find((t) => (t?.mint || '').toLowerCase() === CLAWD_MINT.toLowerCase());
+  if (!match) return 0;
+  return Number(match.uiAmount ?? match.ui_amount ?? match.balance ?? 0) || 0;
 }
 
 function apiFetch(path, init = {}) {
@@ -200,6 +280,15 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (!settings.orApiKey) await setStorage({ orApiKey: orApiKey, orModel: orModel });
   if (API !== settings.nanobotUrl) {
     await setStorage({ nanobotUrl: API });
+  }
+
+  // Default to Free tier until portfolio resolves
+  applyClawdTier(resolveClawdTier(0));
+  const badge = document.getElementById('clawdTierBadge');
+  if (badge) {
+    badge.addEventListener('click', () => {
+      chrome.tabs.create({ url: CLAWD_BUY_URL });
+    });
   }
 
   // Setup event listeners
@@ -685,6 +774,7 @@ async function loadTokens() {
       // Fall back to basic tokens
       const r2 = await apiFetch('/api/wallet/tokens');
       const d2 = await r2.json();
+      applyClawdTier(resolveClawdTier(extractClawdBalance(d2.tokens)));
       if (!d2.tokens || d2.tokens.length === 0) {
         el.innerHTML = '<div class="empty-state">No tokens found</div>';
         return;
@@ -701,6 +791,8 @@ async function loadTokens() {
       `).join('');
       return;
     }
+
+    applyClawdTier(resolveClawdTier(extractClawdBalance(d.tokens)));
 
     if (!d.tokens || d.tokens.length === 0) {
       el.innerHTML = '<div class="empty-state">No tokens found</div>';

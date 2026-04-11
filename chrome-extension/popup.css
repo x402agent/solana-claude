@@ -1106,6 +1106,47 @@ body::before {
   background: rgba(0, 255, 224, 0.05); padding: 1px 4px; border-radius: 3px;
 }
 
+/* ── Clawd Pro tier badge ── */
+.clawd-tier-badge {
+  font-family: var(--mono, monospace);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  padding: 3px 7px;
+  border: 1px solid #7a869a;
+  border-radius: 4px;
+  color: #7a869a;
+  background: rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+.clawd-tier-badge:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 0 10px currentColor;
+}
+.clawd-tier-badge[data-tier="diamond"],
+.clawd-tier-badge[data-tier="gold"] {
+  animation: clawd-pro-glow 2.4s ease-in-out infinite;
+}
+@keyframes clawd-pro-glow {
+  0%, 100% { box-shadow: 0 0 4px currentColor; }
+  50%      { box-shadow: 0 0 14px currentColor; }
+}
+.pro-locked {
+  opacity: 0.45;
+  cursor: not-allowed !important;
+  position: relative;
+}
+.pro-locked::after {
+  content: '🔒';
+  position: absolute;
+  top: 2px;
+  right: 4px;
+  font-size: 10px;
+  pointer-events: none;
+}
+
 /* ── Scrollbar ── */
 ::-webkit-scrollbar { width: 3px; }
 ::-webkit-scrollbar-track { background: transparent; }

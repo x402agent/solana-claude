@@ -3,7 +3,9 @@
   "name": "Solana Clawd — pAGENT Browser",
   "short_name": "Clawd",
   "version": "2.0.0",
-  "description": "Solana Clawd browser companion with pAGENT GUI vision. Wallet vault, chat, tools, Seeker mobile gateway, and native daemon access from one extension.",
+  "description": "Solana wallet, AI chat, and an air-gapped local vault — in one extension. Your keys never leave your machine.",
+  "author": "Solana Clawd",
+  "homepage_url": "https://github.com/x402agent/solana-clawd",
   "icons": {
     "16": "icons/icon16.png",
     "32": "icons/icon32.png",
