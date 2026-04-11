@@ -1,123 +1,111 @@
-# Solana Clawd — pAGENT Chrome Extension
+# Solana Clawd — pAGENT Browser
 
-**AI-powered GUI vision browser agent with air-gapped Solana wallet vault.**
+**The first AI browser agent that trades Solana for you — with an air-gapped wallet vault your keys never leave.**
 
-Version 2.0.0 | Manifest V3 | Unpacked Extension
+[![Version](https://img.shields.io/badge/version-2.0.0-ff6b35)](manifest.json)
+[![Manifest V3](https://img.shields.io/badge/manifest-v3-blue)]()
+[![Chrome | Brave | Edge](https://img.shields.io/badge/chrome%20%7C%20brave%20%7C%20edge-supported-brightgreen)]()
+[![$CLAWD](https://img.shields.io/badge/%24CLAWD-pump.fun-ff69b4)](https://pump.fun/8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump)
+
+> **Your browser. Your wallet. Your agent. Your rules.**
+> Point Clawd at any page. It reads, clicks, types, trades. Your private keys stay on your machine — encrypted, air-gapped, untouchable.
 
 ---
 
-## What Is This?
+## Why Clawd Is Different
 
-The Solana Clawd Chrome Extension is the browser companion for [solana-clawd](https://github.com/x402agent/solana-clawd). It connects to your local Clawd daemon and provides:
+Every other "AI wallet" ships your keys to a server. Every other "browser agent" has no wallet. Clawd is the first extension that fuses:
 
-- **pAGENT** — AI browser automation with GUI vision (see and interact with any web page)
-- **Wallet Dashboard** — SOL balance, token portfolio, send/swap, OODA trade history
-- **Agent Wallet Vault** — Air-gapped AES-256-GCM encrypted keypair management (never touches the internet)
-- **Mining Fleet** — MawdAxe Bitaxe fleet monitoring with SSE live updates
-- **Seeker Gateway** — Bridge your Solana Seeker phone to the Clawd daemon
-- **AI Chat** — Multi-turn chat with Clawd trading intelligence (OpenRouter or native)
-- **Tools** — RPC health, trending tokens, system status, on-chain agent identity minting
+1. **GUI-vision browser automation** — Clawd sees your screen, not just the DOM. It handles React, canvas, shadow DOM, iframes — the stuff other agents choke on.
+2. **Air-gapped Solana wallet vault** — Keys are generated, encrypted (AES-256-GCM), and signed locally. The extension talks to `localhost:9099` only. No cloud, ever.
+3. **OODA-loop trading intelligence** — Clawd runs the Observe → Orient → Decide → Act → Learn cycle on live Solana data and optionally executes through your vault.
+4. **Free tier that actually works** — No credit card. No trial. Load unpacked, click through the tabs, you're trading.
 
-## Install
+---
 
-1. Open `chrome://extensions` in Chrome/Brave/Edge
-2. Enable **Developer mode** (top right toggle)
-3. Click **Load unpacked**
-4. Select one of these directories:
-   - `chrome-extension/clawd-agent/` — Full pAGENT with side panel + GUI vision automation
-   - `chrome-extension/` — Popup-only extension (wallet, chat, tools, vault, miner, seeker)
+## Install (60 seconds)
 
-The clawd-agent variant requires `<all_urls>` permission for page automation. The popup-only variant only connects to localhost.
+1. Download or clone: `git clone https://github.com/x402agent/solana-clawd`
+2. Open `chrome://extensions` in Chrome, Brave, or Edge
+3. Toggle **Developer mode** (top right)
+4. Click **Load unpacked** and pick one:
+   - **`chrome-extension/clawd-agent/`** — Full pAGENT with side panel + GUI vision (recommended)
+   - **`chrome-extension/`** — Popup-only build (wallet, chat, tools, vault, miner, seeker)
 
-## Directory Structure
+That's it. Pin the extension and you're live.
 
-```
-chrome-extension/
-├── manifest.json          Popup extension manifest (Manifest V3)
-├── background.js          Service worker — status polling, badge updates
-├── popup.html             Main UI (6 tabs: Wallet, Seeker, Miner, Chat, Tools, Vault)
-├── popup.js               Popup logic (1800+ lines — wallet, chat, mining, seeker, vault)
-├── popup.css              Glassmorphism + cyberpunk theme (1100+ lines)
-├── icons/                 Extension icons (16, 32, 48, 128px)
-│
-├── clawd-agent/           Full pAGENT browser agent (load this as unpacked)
-│   ├── manifest.json      Manifest V3 with sidePanel, tabs, tabGroups, content scripts
-│   ├── background.js      Service worker — tab control, page control, wallet, hub
-│   ├── main-world.js      Injects window.PAGENT API into every page
-│   ├── hub.html           WebSocket hub for MCP server bridge
-│   ├── sidepanel.html     Side panel UI for pAGENT
-│   ├── content-scripts/   DOM access content script
-│   ├── chunks/            Compiled agent runtime chunks
-│   ├── assets/            Icons and compiled CSS
-│   └── _locales/en/       "Solana Clawd pAGENT" locale strings
-│
-├── clawd-extension/       Mirror of clawd-agent (alternate build)
-│
-├── core/                  @page-agent/core — Re-Act agent loop library
-│   └── src/               PageAgentCore, tools, types, utils
-│
-├── page-controller/       @page-agent/page-controller — DOM state + actions
-│   └── src/               Flat DOM tree, element indexing, click/input/scroll
-│
-├── page-agent/            High-level wrapper (core + controller + UI)
-│
-├── mcp/                   @solanaos/browser-mcp — MCP server for AI clients
-│   └── src/               HTTP + WebSocket bridge, CLI launcher
-│
-├── ui/                    @page-agent/ui — Panel stub
-│
-├── solanaos-agent/        Legacy SolanaOS agent (pre-rebrand)
-└── solanaos-extension/    Legacy SolanaOS extension (pre-rebrand)
-```
+---
 
-## pAGENT — GUI Vision Browser Agent
+## What You Get
 
-pAGENT is the AI-powered browser automation layer. It injects `window.PAGENT` into every web page, enabling Claude or any MCP client to:
+| Tab | What it does | Paid? |
+|---|---|:---:|
+| **Wallet** | SOL + SPL balances, OODA trade history, Bitaxe miner stats, send / swap | Free |
+| **Chat** | Multi-turn chat with Clawd — routes to OpenRouter or local daemon | Free |
+| **Tools** | Live RPC health, trending tokens, system status, on-chain agent identity mint | Free |
+| **Seeker** | WebSocket bridge to the Solana Seeker phone | Free |
+| **Miner** | MawdAxe Bitaxe fleet dashboard with SSE live updates | Free |
+| **Vault** | AES-256-GCM wallet vault at `localhost:9099` — keys never leave your box | Free |
+| **pAGENT** | GUI-vision browser agent, `window.PAGENT.execute("...")` on any page | Free core, **Pro unlocks** below |
 
-- **See** — Extract a simplified DOM tree with indexed interactive elements
-- **Think** — Send the page state to an LLM for reasoning (Re-Act loop)
-- **Act** — Click, type, scroll, select, open tabs, manage tab groups
-- **Vision** — Get visual state snapshots via `getVisualState()`
+---
 
-### window.PAGENT API
+## 🔑 Clawd Pro — Hold $CLAWD, Unlock Everything
+
+Clawd is free to use. **Clawd Pro** unlocks the stuff the degens pay for. Gating is wallet-based — hold $CLAWD, the extension detects your balance, tier unlocks automatically. No sign-ups, no invoices, no Stripe.
+
+| Tier | Hold | Daily Agent Runs | Models | Features |
+|---|---|---|---|---|
+| **Free** | 0 | 5 | Claude Haiku, GPT-4.1-nano | Manual wallet, core 6 tabs |
+| **Bronze** | 1+ $CLAWD | 20 | + Gemini 3 Flash, DeepSeek R1 | Price alerts, 10 watchlist slots |
+| **Silver** | 1,000+ | 50 | + Claude Sonnet 4.6, GPT-4.1 | OODA autopilot, Telegram mirroring |
+| **Gold** | 10,000+ | 100 | + Claude Opus 4.6, Grok 4.20 | Multi-agent research (4 agents), X/Twitter alpha feed |
+| **Diamond** | 100,000+ | 250 | + Grok multi-agent 16 | Pump.fun sniper, MEV-aware routing, priority RPC |
+| **Unlimited** | $25/mo in SOL/USDC/$CLAWD | ∞ | Everything | Dedicated RPC, private support channel |
+
+**How gating works** — when the popup loads, it pulls your connected wallet's $CLAWD balance from Helius DAS, resolves your tier locally, and enables or disables buttons in the UI. No server round-trip. You can read the source in `popup.js` — search for `resolveClawdTier()`.
+
+[**Grab $CLAWD on pump.fun →**](https://pump.fun/8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump)
+Mint: `8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump`
+
+---
+
+## pAGENT — The Browser Agent Other Agents Can't Touch
+
+pAGENT injects `window.PAGENT` into every page. Your LLM client (Claude Desktop, Cursor, Cline, any MCP client) can drive your browser with natural language.
 
 ```javascript
-// Execute a natural language task on the current page
-await window.PAGENT.execute("Find the cheapest flight to Tokyo", {
+await window.PAGENT.execute("Find the cheapest SOL→USDC route on Jupiter and screenshot it", {
   baseURL: "https://api.openrouter.ai/v1",
   model: "anthropic/claude-sonnet-4-6",
   apiKey: "sk-or-...",
   guiVision: true,
-  onStatusChange: (status) => console.log(status),
-  onActivity: (activity) => console.log(activity),
-  onGuiVision: (snapshot) => console.log(snapshot),
+  onStatusChange: (s) => console.log(s),
+  onActivity: (a) => console.log(a),
 });
-
-// Stop a running task
-window.PAGENT.stop();
-
-// Get current visual state
-const state = await window.PAGENT.getVisualState();
 ```
+
+**What makes it different:**
+- **GUI vision** — screenshots parsed by a vision model, not just the DOM. Works on canvas-heavy DeFi dashboards where DOM-only agents blow up.
+- **Flat DOM tree** — interactive elements get numeric indices for deterministic clicks. No fragile CSS selectors.
+- **Re-Act loop** — think / act / observe / repeat until the task is done or budget is hit.
+- **MCP bridge** — plugs into Claude Desktop, Cursor, Cline via stdio. One-command setup, zero browser-side config.
 
 ### MCP Bridge
 
-The `mcp/` package bridges pAGENT to Claude Desktop or any MCP client:
-
 ```
-Claude Desktop / Cursor / VS Code
-    ↓ (stdio, MCP protocol)
+Claude Desktop / Cursor / Cline
+    ↓ stdio (MCP protocol)
 Node.js MCP server (:38401)
-    ↓ (HTTP + WebSocket)
+    ↓ HTTP + WebSocket
 Browser hub.html tab
-    ↓ (Message passing)
-pAGENT extension + PageController
-    ↓ (DOM manipulation)
-Web pages
+    ↓ message passing
+pAGENT extension
+    ↓ DOM + GUI vision
+Any web page
 ```
 
 ```bash
-# Start the MCP bridge
 cd chrome-extension/mcp
 LLM_BASE_URL=https://api.openrouter.ai/v1 \
 LLM_API_KEY=sk-or-... \
@@ -125,133 +113,131 @@ LLM_MODEL_NAME=anthropic/claude-sonnet-4-6 \
 node src/index.js
 ```
 
-MCP Tools:
-- `execute_task` — Execute a natural language task in the browser (blocking)
-- `get_status` — Check hub connection and busy state
-- `stop_task` — Cancel running automation
+MCP tools: `execute_task`, `get_status`, `stop_task`.
 
-## Agent Wallet Vault
+---
 
-The Vault tab provides air-gapped keypair management through the local `agentwallet-vault` server. **Private keys never leave your machine.**
+## Agent Wallet Vault — Keys Never Leave Your Box
 
-### How It Works
+The Vault tab talks to a **local-only** server at `localhost:9099` that handles keypair generation, encryption, and signing. The extension cannot reach the internet on your behalf — read the manifest, the only `host_permissions` are `127.0.0.1` / `localhost`.
 
 ```
-Chrome Extension Popup
-    ↓ (HTTP, localhost only)
-agentwallet-vault server (:9099)
-    ↓ (AES-256-GCM encrypted)
-~/.agentwallet/vault.json (0600 permissions)
+Chrome extension popup
+    ↓ HTTP to 127.0.0.1:9099 (bearer token)
+agentwallet-vault server
+    ↓ AES-256-GCM at rest
+~/.agentwallet/vault.json  (chmod 0600)
 ```
 
-### Features
+**What it does:**
+- Solana (Ed25519) + EVM (secp256k1) keypair generation
+- Import existing base58 / hex keys
+- Pause / unpause wallets (soft-lock without deleting)
+- Bearer-token auth for local API
+- Encrypted vault export / restore
 
-- Generate Solana (Ed25519) and EVM (secp256k1) keypairs
-- Import existing private keys
-- Pause/unpause wallets
-- Export encrypted vault backup
-- Bearer token authentication
-- Zero internet connectivity required
-
-### Start the Vault
+**Start the vault:**
 
 ```bash
-# From repo root
-npm run ext:vault
-
-# Or directly
+npm run ext:vault                 # from repo root
+# or
 npx agentwallet serve --port 9099
 ```
 
-### Vault API Endpoints
+**Vault API (localhost only):**
 
 | Method | Path | Description |
-|--------|------|-------------|
-| GET | `/api/health` | Health check |
-| GET | `/api/wallets` | List all wallets |
-| POST | `/api/wallets` | Create new wallet |
-| POST | `/api/wallets/import` | Import existing key |
-| GET | `/api/wallets/:id/private-key` | Get decrypted key (auth required) |
-| POST | `/api/wallets/:id/pause` | Pause wallet |
-| POST | `/api/wallets/:id/unpause` | Unpause wallet |
-| DELETE | `/api/wallets/:id` | Delete wallet |
-| GET | `/api/vault/export` | Export encrypted vault |
+|---|---|---|
+| `GET` | `/api/health` | Health check |
+| `GET` | `/api/wallets` | List wallets |
+| `POST` | `/api/wallets` | Create wallet |
+| `POST` | `/api/wallets/import` | Import key |
+| `GET` | `/api/wallets/:id/private-key` | Get decrypted key (auth required) |
+| `POST` | `/api/wallets/:id/pause` | Pause wallet |
+| `POST` | `/api/wallets/:id/unpause` | Unpause wallet |
+| `DELETE` | `/api/wallets/:id` | Delete wallet |
+| `GET` | `/api/vault/export` | Export encrypted backup |
 
-## Popup Tabs
+**No keys ship with this repo.** If you see anything that looks like a key inside this folder, it's a placeholder — report it as a security bug.
 
-### Wallet
+---
 
-- Agent runtime status (daemon state, OODA mode, open/closed trades)
-- Recent OODA trades with P&L and Solscan links
-- Bitaxe miner card (hashrate, temp, power, shares, efficiency)
-- SOL balance + USD conversion
-- Token portfolio
-- Transaction history
-- Send SOL / Swap tokens
+## Directory Layout
 
-### Seeker
+```
+chrome-extension/
+├── manifest.json        Popup-build Manifest V3
+├── background.js        Service worker — status polling, badge updates
+├── popup.html           6-tab UI shell
+├── popup.js             Popup controller — wallet, chat, mining, seeker, vault, tier gate
+├── popup.css            Glassmorphism + cyberpunk theme
+├── icons/               16 / 32 / 48 / 128 extension icons
+├── .gitignore           node_modules / dist / zips / .env
+│
+├── clawd-agent/         Prebuilt full pAGENT bundle (load this)
+│   ├── manifest.json
+│   ├── background.js
+│   ├── main-world.js    Injects window.PAGENT
+│   ├── hub.html         WebSocket hub for MCP
+│   ├── sidepanel.html
+│   ├── content-scripts/
+│   ├── chunks/
+│   ├── assets/
+│   └── _locales/en/
+│
+├── core/                @page-agent/core — Re-Act agent loop library
+├── page-controller/     @page-agent/page-controller — DOM state + actions
+├── page-agent/          High-level wrapper (core + controller + ui)
+├── ui/                  @page-agent/ui — Panel stub
+├── llms/                LLM provider adapters (OpenRouter, xAI, Anthropic, local)
+└── mcp/                 @solana-clawd/browser-mcp — MCP server for AI clients
+```
 
-- WebSocket bridge to Solana Seeker phone
-- Gateway URL, auth mode (auto/token/password), setup code import
-- Connection status and gateway logs
-
-### Miner
-
-- MawdAxe fleet management (aggregate stats + per-device cards)
-- Server-Sent Events for live updates
-- Hashrate, temperature, power, shares, efficiency
-
-### Chat
-
-- Multi-turn conversation with Clawd trading intelligence
-- Routes to OpenRouter or native Clawd daemon
-- System prompt: cyberpunk lobster with GUI vision and wallet access
-
-### Tools
-
-- RPC Health (Helius slot/latency)
-- Trending Tokens (top Solana movers)
-- System Status (daemon, wallet, workspace)
-- Register On-Chain (mint agent identity NFT)
-- TamaGOchi Pet (virtual pet interaction)
-
-### Vault
-
-- See [Agent Wallet Vault](#agent-wallet-vault) above
+---
 
 ## Configuration
 
-Click the gear icon in the popup header to access settings:
+Click the gear icon in the popup header.
 
 | Setting | Description | Default |
-|---------|-------------|---------|
-| Solana Clawd Server URL | Daemon API endpoint | `http://127.0.0.1:7777` |
+|---|---|---|
+| Solana Clawd Server URL | Local daemon API endpoint | `http://127.0.0.1:7777` |
 | Setup Code Import | Paste `~/.clawd/connect/setup-code.txt` | — |
 | Gateway Secret | Bearer token for daemon auth | — |
 | Network | Mainnet or Devnet | Mainnet |
 | MawdAxe Server URL | Mining fleet API | `http://127.0.0.1:8420` |
 | MawdAxe API Key | Fleet auth | — |
-| OpenRouter API Key | For AI chat | — |
-| AI Model | Chat model | `openai/gpt-5.4-nano` |
+| OpenRouter API Key | AI chat routing | — |
+| AI Model | Default chat model | `anthropic/claude-sonnet-4-6` |
 
-## Local API Ports
+## Local Port Map
 
-| Port | Service | Description |
-|------|---------|-------------|
-| 7777 | Clawd daemon | Primary control API |
-| 18800 | Clawd daemon | Alternative port |
-| 18790 | Seeker gateway | Mobile bridge WebSocket |
-| 8420 | MawdAxe | Mining fleet API |
-| 9099 | agentwallet-vault | Encrypted wallet vault |
-| 38401 | pAGENT MCP | Browser automation bridge |
+| Port | Service |
+|---|---|
+| 7777 | Clawd daemon (primary API) |
+| 18800 | Clawd daemon (alternate) |
+| 18790 | Seeker gateway (mobile bridge WebSocket) |
+| 8420 | MawdAxe mining fleet API |
+| 9099 | agentwallet-vault |
+| 38401 | pAGENT MCP bridge |
 
 ## Requirements
 
-- Chrome, Brave, or Edge (Manifest V3 support)
-- Clawd daemon running locally (`clawd nanobot`)
-- For vault: `npx agentwallet serve` (included in repo at `packages/agentwallet/`)
-- For pAGENT MCP: Node.js 20+ and an LLM API key
+- Chrome, Brave, or Edge (Manifest V3)
+- Clawd daemon running locally: `clawd nanobot`
+- Vault: `npx agentwallet serve` (shipped in `packages/agentwallet/`)
+- pAGENT MCP: Node.js 20+ and an LLM API key
+
+---
+
+## Security
+
+- **Zero internet calls from the extension popup itself** — only `127.0.0.1` / `localhost` entries in `host_permissions`.
+- **No bundled secrets.** This repo ships no `.env`, no keypair file, no API key. `grep` it yourself.
+- **Vault files** are `chmod 0600`, AES-256-GCM encrypted, stored in `~/.agentwallet/`.
+- **Permission engine is deny-first.** Clawd asks before every irreversible action.
+- Found a security issue? File it at [github.com/x402agent/solana-clawd/issues](https://github.com/x402agent/solana-clawd/issues).
 
 ## License
 
-MIT
+MIT. Use it, fork it, ship it. If you build something cool on top, tag [@solanaclawd](https://x.com/solanaclawd) — we retweet the best ones.
