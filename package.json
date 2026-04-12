@@ -1,7 +1,7 @@
 {
   "name": "solana-clawd",
-  "version": "1.6.0",
-  "description": "$CLAWD — Solana x xAI agentic engine powered by Grok. Multi-agent research (16 agents), vision, image gen, voice, function calling, X search, and 31 MCP tools. The AI agent Elon would actually use.",
+  "version": "1.7.0",
+  "description": "$CLAWD — Solana x xAI agentic engine powered by Grok. Multi-agent research (16 agents), vision, image gen, voice, function calling, X search, and 31 MCP tools. CLAWD Cloud OS bootstrap for E2B/Docker/any terminal.",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -194,7 +194,11 @@
     "ooda",
     "web3",
     "grok-4",
-    "responses-api"
+    "responses-api",
+    "cloud-os",
+    "e2b",
+    "bootstrap",
+    "solanaos"
   ],
   "license": "MIT",
   "repository": {
@@ -207,6 +211,10 @@
   },
   "files": [
     "dist",
+    "clawd-cloud-os/scripts/bootstrap.sh",
+    "clawd-cloud-os/scripts/install-go.sh",
+    "clawd-cloud-os/tools/clawd-cli.sh",
+    "clawd-cloud-os/README.md",
     "README.md",
     "LICENSE",
     "CHANGELOG.md"
