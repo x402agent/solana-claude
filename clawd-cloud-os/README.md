@@ -14,6 +14,8 @@
 
 The fastest way to boot a Solana-native operator stack with Grok-powered agents, local-first tooling, and one-shot setup. Works on E2B sandboxes, fresh Linux terminals, Docker containers, macOS, and WSL.
 
+> **Don't need the full stack?** Just run `npx solana-clawd demo` or `npm i solana-clawd` — the [npm package](https://www.npmjs.com/package/solana-clawd) (v1.6.0) gives you 31 MCP tools, 9 agents, Blockchain Buddies, and unicode spinners without any Go or SolanaOS setup.
+
 ## What is CLAWD Cloud OS?
 
 Three projects, one bootstrap:
@@ -22,7 +24,7 @@ Three projects, one bootstrap:
 | ----- | ------- | ------------ |
 | **Bootstrap** | CLAWD Cloud OS | Installs Go, SolanaOS, and solana-clawd in one shot |
 | **Runtime** | [SolanaOS](https://github.com/SolanaOS/SolanaOS) | Go-native Solana operator runtime (daemon, Control UI, MCP, wallets) |
-| **Agent** | [solana-clawd](https://github.com/x402agent/solana-clawd) | xAI Grok agentic engine (chat, vision, voice, 16-agent research, 31 MCP tools) |
+| **Agent** | [solana-clawd](https://github.com/x402agent/solana-clawd) ([npm](https://www.npmjs.com/package/solana-clawd)) | xAI Grok agentic engine (chat, vision, voice, 16-agent research, 31 MCP tools) |
 
 ## Why this exists
 

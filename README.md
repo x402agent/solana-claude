@@ -49,6 +49,42 @@ Powered by **$CLAWD** on Solana & Pump.fun | Built on **Grok** from **xAI**
 
 ## One-Shot Install
 
+There are **four ways** to install solana-clawd, from lightest to full stack:
+
+### npm (quickest — try it now)
+
+```bash
+npx solana-clawd demo        # animated walkthrough — zero install
+npx solana-clawd birth       # hatch a blockchain buddy
+npm i -g solana-clawd        # global install for CLI + imports
+```
+
+No private key. No wallet. No paid API. Run it, ask it anything.
+
+### npm package
+
+```bash
+npm i solana-clawd
+```
+
+```typescript
+// Core engine
+import { getBuiltInAgents, getBuiltInAgent } from 'solana-clawd'
+
+// Animated spinners
+import { createClawdSpinner, withSpinner } from 'solana-clawd/animations'
+import { CLAWD_SPINNERS } from 'solana-clawd/animations'
+
+// Blockchain Buddy companion system
+import { createBlockchainBuddy } from 'solana-clawd/buddy'
+import { renderBlockchainSprite, formatBuddyCard } from 'solana-clawd/buddy'
+
+// Metaplex agent minting
+import { mintClawdAgent, registerAgentIdentity } from 'solana-clawd/metaplex'
+```
+
+### Git clone (full repo — dev + MCP + web)
+
 ```bash
 git clone https://github.com/x402agent/solana-clawd
 cd solana-clawd
@@ -57,7 +93,18 @@ npm run setup
 
 `npm run setup` is the full repo bootstrap. It checks for Node 20+, installs dependencies, builds the root runtime, builds the integrated MCP package in `MCP/`, installs and builds `packages/agentwallet/`, builds the main `web/` app, builds the Clawd Vault app in `llm-wiki-tang/web/`, builds the wiki app in `web/wiki/`, syncs the skills catalog, and creates `.env` from `.env.example` if needed.
 
-Common next commands after setup:
+### CLAWD Cloud OS (full stack — Go + SolanaOS + solana-clawd)
+
+For E2B sandboxes, fresh Linux terminals, Docker, or any shell where Go is missing:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/x402agent/solana-clawd/main/clawd-cloud-os/scripts/bootstrap.sh | bash
+source ~/.bashrc
+```
+
+One command installs Go (user-space, no root needed), SolanaOS, and solana-clawd. See the [CLAWD Cloud OS](#clawd-cloud-os) section below.
+
+### After any install
 
 ```bash
 npm run demo                 # animated walkthrough
@@ -79,7 +126,17 @@ npm run skills:serve         # skills catalog on :3333
 
 **One-shot bootstrap for E2B sandboxes, fresh Linux terminals, Docker, macOS, WSL — any shell where Go is missing.**
 
-CLAWD Cloud OS brings together **SolanaOS** (Go-native Solana operator runtime), **solana-clawd** (xAI Grok agentic engine), and a terminal-first install path that works even on non-root sandboxes.
+CLAWD Cloud OS brings together **SolanaOS** (Go-native Solana operator runtime), **solana-clawd** (xAI Grok agentic engine), and a terminal-first install path that works even on non-root sandboxes. After bootstrap, you get the same 31 MCP tools, 9 built-in agents, Blockchain Buddies, and the full [`solana-clawd` npm package](https://www.npmjs.com/package/solana-clawd) experience — plus Go, SolanaOS daemon, and terminal aliases.
+
+### Install Paths at a Glance
+
+| What you need | Command | What you get |
+| --- | --- | --- |
+| Just try it | `npx solana-clawd demo` | Walkthrough, no install |
+| npm package only | `npm i solana-clawd` | Agents, buddies, spinners, MCP tools |
+| Full repo dev | `git clone` + `npm run setup` | Everything above + web app + vault + wiki |
+| Just Go (E2B/Docker) | `curl .../install-go.sh \| bash` | Go runtime on any terminal |
+| Full Cloud OS stack | `curl .../bootstrap.sh \| bash` | Go + SolanaOS + solana-clawd + aliases |
 
 ### Cloud Bootstrap (remote — works anywhere)
 
@@ -146,7 +203,7 @@ clawd-cli birth              # Hatch a Blockchain Buddy
 | --- | --- | --- |
 | Go | `~/.local/go` or `/usr/local/go` | Go runtime for SolanaOS |
 | SolanaOS | `~/.solanaos/` | Go-native Solana operator runtime |
-| solana-clawd | `~/src/solana-clawd/` | xAI Grok agentic engine + 31 MCP tools |
+| solana-clawd | `~/src/solana-clawd/` | Full repo ([npm](https://www.npmjs.com/package/solana-clawd) v1.6.0) — 31 MCP tools, 9 agents, buddies, spinners |
 | MOTD + aliases | `~/.bashrc` | Terminal banner, `clawd-*` shortcuts, `sos` alias |
 
 ### Cloud OS Architecture
@@ -160,16 +217,18 @@ clawd-cli birth              # Hatch a Blockchain Buddy
 │       ▼                 ▼                ▼                   │
 │  ┌─────────┐    ┌───────────┐    ┌─────────────┐            │
 │  │   Go    │    │ SolanaOS  │    │solana-clawd │            │
-│  │ runtime │───►│  daemon   │    │  MCP + Web  │            │
-│  └─────────┘    │  server   │    │  Grok agent │            │
+│  │ runtime │───►│  daemon   │    │  npm v1.6.0 │            │
+│  └─────────┘    │  server   │    │  MCP + Web  │            │
 │                 │  wallet   │    │  31 tools   │            │
-│                 │  MCP      │    │  voice/img  │            │
-│                 └───────────┘    └─────────────┘            │
-│                      │                │                      │
-│                      ▼                ▼                      │
+│                 │  MCP      │    │  9 agents   │            │
+│                 └───────────┘    │  buddies    │            │
+│                      │           │  spinners   │            │
+│                      │           └─────────────┘            │
+│                      ▼                │                      │
 │              ┌────────────────────────────────┐              │
 │              │  Terminal experience            │              │
 │              │  MOTD · aliases · clawd-cli    │              │
+│              │  npx solana-clawd demo/birth   │              │
 │              └────────────────────────────────┘              │
 └──────────────────────────────────────────────────────────────┘
 ```
