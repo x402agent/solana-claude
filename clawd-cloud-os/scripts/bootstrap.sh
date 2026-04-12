@@ -305,7 +305,7 @@ cat <<'DONE'
 ║                  BOOTSTRAP COMPLETE                         ║
 ║                                                             ║
 ║  CLAWD Cloud OS is ready.                                   ║
-║  SolanaOS + solana-clawd + Go + xAI Grok                    ║
+║  SolanaOS + solana-clawd + Go + xAI Grok + E2B-ready        ║
 ╚══════════════════════════════════════════════════════════════╝
 DONE
 echo -e "${RESET}"
@@ -327,6 +327,11 @@ echo -e "     ${YELLOW}clawd-birth${RESET}      Hatch a Blockchain Buddy"
 echo -e "     ${YELLOW}clawd-mcp${RESET}        Start MCP server"
 echo -e "     ${YELLOW}clawd-web${RESET}        Launch web UI"
 echo -e "     ${YELLOW}clawd-help${RESET}       Full command reference"
+echo ""
+echo -e "  ${CYAN}5.${RESET} Optional E2B packages:"
+echo -e "     ${YELLOW}npm i @e2b/desktop${RESET}            Desktop computer use"
+echo -e "     ${YELLOW}npm i @e2b/code-interpreter${RESET}   Python + chart streaming"
+echo -e "     ${YELLOW}npm i e2b${RESET}                     Core sandbox SDK"
 echo ""
 echo -e "  ${DIM}Tip: set XAI_API_KEY before bootstrap to auto-inject it.${RESET}"
 echo -e "  ${DIM}     export XAI_API_KEY=your_key && ./bootstrap.sh${RESET}"
