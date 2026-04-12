@@ -1,233 +1,289 @@
 # CLAWD Cloud OS
 
-```
+```text
    _____       __                        ________                    __
   / ___/____  / /___ _____  ____ _     / ____/ /___ __      ______/ /
   \__ \/ __ \/ / __ `/ __ \/ __ `/    / /   / / __ `/ | /| / / __  /
  ___/ / /_/ / / /_/ / / / / /_/ /    / /___/ / /_/ /| |/ |/ / /_/ /
 /____/\____/_/\__,_/_/ /_/\__,_/     \____/_/\__,_/ |__/|__/\__,_/
 
-                    ╔══════════════════════════╗
-                    ║   POWERED BY xAI GROK    ║
-                    ╚══════════════════════════╝
+  ╔══════════════════════════════════════════════════════════════╗
+  ║  CLAWD CLOUD OS · SolanaOS + solana-clawd · One-Shot Boot  ║
+  ╚══════════════════════════════════════════════════════════════╝
 ```
 
-The fastest way to boot a Solana-native operator stack with Grok-powered agents, local-first tooling, and one-shot setup.
+The fastest way to boot a Solana-native operator stack with Grok-powered agents, local-first tooling, and one-shot setup. Works on E2B sandboxes, fresh Linux terminals, Docker containers, macOS, and WSL.
 
 ## What is CLAWD Cloud OS?
 
-CLAWD Cloud OS brings together:
-- **SolanaOS** — the Go-native Solana operator runtime
-- **solana-clawd** — the Grok-powered agentic layer for chat, vision, voice, research, tools, and memecoin workflows
-- **CLAWD Cloud bootstrap** — a terminal-first install path that works even on fresh sandboxes with no Go installed
+Three projects, one bootstrap:
+
+| Layer | Project | What it does |
+| ----- | ------- | ------------ |
+| **Bootstrap** | CLAWD Cloud OS | Installs Go, SolanaOS, and solana-clawd in one shot |
+| **Runtime** | [SolanaOS](https://github.com/SolanaOS/SolanaOS) | Go-native Solana operator runtime (daemon, Control UI, MCP, wallets) |
+| **Agent** | [solana-clawd](https://github.com/x402agent/solana-clawd) | xAI Grok agentic engine (chat, vision, voice, 16-agent research, 31 MCP tools) |
 
 ## Why this exists
 
-A lot of cloud terminals and E2B sandboxes start in an awkward state:
-- Node is there
-- Git is there  
-- Go is not
-- apt-get often fails because the session is not root
+Cloud terminals and E2B sandboxes start in an awkward state:
+
+- Node is there, Git is there
+- **Go is not** (SolanaOS needs it)
+- `apt-get` fails because the session is not root
 
 CLAWD Cloud OS fixes that with one bootstrap that:
-- installs Go locally in your home directory when needed
-- installs SolanaOS using the repo's canonical installer flow
-- clones and bootstraps solana-clawd
-- leaves you with a working local-first operator stack
 
-## What gets installed
+1. Installs Go locally in your home directory (no root needed)
+2. Installs SolanaOS using the canonical installer
+3. Clones and bootstraps solana-clawd
+4. Installs a terminal MOTD banner and shell aliases
 
-### SolanaOS
-The SolanaOS repo describes the canonical install and quick-start flow as:
+## One-Shot Install
 
-```bash
-npx solanaos-computer@latest install --with-web
-~/.solanaos/bin/solanaos onboard
-~/.solanaos/bin/solanaos version
-~/.solanaos/bin/solanaos server
-~/.solanaos/bin/solanaos daemon
-```
-
-It also documents bash start.sh as the one-command local dev path, plus a Go-native runtime, a control UI, MCP servers, Telegram integration, Seeker support, and wallet tooling.
-
-### solana-clawd
-solana-clawd is the xAI/Grok-native agentic layer: multi-agent research, vision, image generation, voice, structured outputs, MCP tools, web/X search, and the Clawd character experience — all centered around a single bootstrap path and a clean operator workflow.
-
-## One-shot bootstrap
-
-Use this on:
-- CLAWD Cloud OS
-- E2B sandboxes
-- fresh Linux terminals
-- any shell where go is missing
+### Remote (any terminal)
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/x402agent/solana-clawd/main/clawd-cloud-os/scripts/bootstrap.sh | bash
+source ~/.bashrc
 ```
 
-Or clone and run:
+### Local (from the repo)
 
 ```bash
-git clone https://github.com/x402agent/solana-clawd.git
+git clone https://github.com/x402agent/solana-clawd
 cd solana-clawd/clawd-cloud-os
 chmod +x scripts/bootstrap.sh
 ./scripts/bootstrap.sh
+source ~/.bashrc
 ```
 
-## Quick start
-
-### 1. Run the bootstrap
+### Pre-inject API keys
 
 ```bash
-chmod +x bootstrap.sh
-./bootstrap.sh
+export XAI_API_KEY="your_key"
+export HELIUS_API_KEY="your_key"
+./scripts/bootstrap.sh
 ```
 
-### 2. Reload your shell
+Keys are auto-written to `~/src/solana-clawd/.env` during bootstrap.
+
+## Just Need Go?
+
+If you only need Go installed (no SolanaOS or solana-clawd):
+
+```bash
+# One-liner from any terminal
+curl -fsSL https://raw.githubusercontent.com/x402agent/solana-clawd/main/clawd-cloud-os/scripts/install-go.sh | bash
+source ~/.bashrc
+go version
+```
+
+This works on:
+
+- E2B sandboxes (no root)
+- Docker containers
+- Fresh Linux VMs
+- macOS (Intel and Apple Silicon)
+- WSL
+
+The installer detects your architecture, downloads the official Go tarball from
+go.dev, installs to `~/.local/go` (non-root) or `/usr/local/go` (root), and
+persists the PATH change in your shell config.
+
+## Post-Bootstrap Workflow
+
+```bash
+# 1. Reload shell
+source ~/.bashrc
+
+# 2. Configure SolanaOS
+sos onboard          # guided setup
+sos version          # verify
+
+# 3. Start everything
+clawd-start          # SolanaOS server + daemon + MCP
+
+# 4. Or start individually
+sos server           # Control UI on :7777
+sos daemon           # Operator loop
+clawd-mcp            # MCP HTTP server on :3000
+clawd-web            # Web UI on :3000
+clawd-demo           # Animated walkthrough
+clawd-birth          # Hatch a Blockchain Buddy
+```
+
+## CLI Reference
+
+The unified CLI lives at `clawd-cloud-os/tools/clawd-cli.sh` and is aliased
+after bootstrap.
+
+### Bootstrap & Setup
+
+| Command | Description |
+| ------- | ----------- |
+| `clawd-cli setup` | Full one-shot bootstrap (Go + SolanaOS + solana-clawd) |
+| `clawd-cli install-go` | Install Go on any terminal (root or non-root) |
+| `clawd-cli doctor` | Check all prerequisites and system health |
+
+### Service Management
+
+| Command | Description |
+| ------- | ----------- |
+| `clawd-cli start` | Start SolanaOS server + daemon + MCP |
+| `clawd-cli stop` | Stop all services |
+| `clawd-cli status` | Check local + remote service status |
+
+### Remote API (solanaclawd.com)
+
+| Command | Description |
+| ------- | ----------- |
+| `clawd-cli agents` | List registered agents |
+| `clawd-cli wallet` | View wallet info |
+| `clawd-cli prices` | Live token prices |
+| `clawd-cli register` | Register on Metaplex Agent Registry |
+| `clawd-cli connect` | Connect to solanaclawd.com |
+
+### solana-clawd
+
+| Command | Description |
+| ------- | ----------- |
+| `clawd-cli demo` | Animated walkthrough |
+| `clawd-cli birth` | Hatch a Blockchain Buddy |
+
+## Shell Aliases
+
+Installed automatically by bootstrap into `~/.bashrc`:
+
+```bash
+clawd-help       # Show full terminal reference
+clawd-start      # Start all services
+clawd-status     # Check system status
+clawd-demo       # Animated walkthrough
+clawd-birth      # Hatch a Blockchain Buddy
+clawd-mcp        # Start MCP HTTP server
+clawd-web        # Launch web UI
+sos              # Shortcut for ~/.solanaos/bin/solanaos
+```
+
+## What Gets Installed
+
+| Component | Path | Description |
+| --------- | ---- | ----------- |
+| Go | `~/.local/go` or `/usr/local/go` | Go runtime (for SolanaOS compilation) |
+| SolanaOS | `~/.solanaos/` | Go-native Solana operator runtime |
+| solana-clawd | `~/src/solana-clawd/` | xAI Grok agentic engine + MCP tools |
+| MOTD | `~/.clawd-motd.sh` | Terminal welcome banner |
+| Aliases | `~/.bashrc` | Shell shortcuts for all commands |
+
+## Environment Variables
+
+### Required (one key unlocks everything)
+
+```bash
+export XAI_API_KEY="your_key"
+```
+
+### Recommended
+
+```bash
+export HELIUS_API_KEY="your_key"           # Solana RPC/DAS
+export SOLANA_TRACKER_API_KEY="your_key"   # Market data
+```
+
+### Optional
+
+```bash
+export TELEGRAM_BOT_TOKEN="your_token"     # Telegram bot
+export OPENAI_API_KEY="your_key"           # Fallback LLM
+export BIRDEYE_API_KEY="your_key"          # Token data
+```
+
+## Directory Structure
+
+```text
+clawd-cloud-os/
+├── scripts/
+│   ├── bootstrap.sh       # One-shot bootstrap (Go + SolanaOS + solana-clawd)
+│   └── install-go.sh      # Standalone Go installer (root or non-root)
+├── tools/
+│   ├── clawd-cli.sh       # Unified CLI (setup, doctor, start, stop, API)
+│   ├── clawd-connect.sh   # WebSocket/REST connection script
+│   └── clawd-register.ts  # Metaplex Agent Registry registration
+├── config/
+│   ├── clawd-registration.json         # Agent registration metadata
+│   ├── clawd-openclaw-config.json      # OpenClaw compatibility config
+│   └── solana-clawd-registration.json  # Simplified registration
+├── docs/
+│   └── terminal-help.md   # Full terminal reference + troubleshooting
+└── README.md              # This file
+```
+
+## Troubleshooting
+
+### `go: command not found`
 
 ```bash
 source ~/.bashrc
 go version
 ```
 
-### 3. Configure SolanaOS
-
-The SolanaOS onboarding flow is already documented as the preferred first-run setup and writes config to ~/.solanaos/solanaos.json.
+If Go still isn't found, reinstall:
 
 ```bash
-~/.solanaos/bin/solanaos onboard
-~/.solanaos/bin/solanaos version
+clawd-cli install-go
+source ~/.bashrc
 ```
 
-### 4. Launch SolanaOS surfaces
+### `E: are you root?` / `Permission denied`
 
-The repo documents solanaos server for the Control UI on port 7777 and solanaos daemon for the main operator loop.
+Expected on E2B sandboxes and non-root containers. The bootstrap handles this
+automatically by installing Go to `~/.local/go` instead of `/usr/local/go`.
+
+### npm 404 on `@solanaos/nanohub`
+
+That package does not exist in the npm registry. Use
+`npx solanaos-computer@latest install --with-web` instead (the bootstrap does
+this automatically).
+
+### Port already in use
 
 ```bash
-~/.solanaos/bin/solanaos server
-~/.solanaos/bin/solanaos daemon
+clawd-cli stop               # graceful stop
+lsof -ti:7777 | xargs kill   # force kill SolanaOS
+lsof -ti:3000 | xargs kill   # force kill MCP/Web
 ```
 
-### 5. Launch solana-clawd
+## Architecture
 
-```bash
-cd ~/src/solana-clawd
-npm run demo
-npm run mcp:http
-npm --prefix web run dev
+```text
+┌──────────────────────────────────────────────────────────────┐
+│  CLAWD CLOUD OS (bootstrap layer)                            │
+│                                                              │
+│  install-go.sh ──► bootstrap.sh ──► clawd-cli.sh            │
+│       │                 │                │                   │
+│       ▼                 ▼                ▼                   │
+│  ┌─────────┐    ┌───────────┐    ┌─────────────┐            │
+│  │   Go    │    │ SolanaOS  │    │solana-clawd │            │
+│  │ runtime │───►│  daemon   │    │  MCP + Web  │            │
+│  └─────────┘    │  server   │    │  Grok agent │            │
+│                 │  wallet   │    │  31 tools   │            │
+│                 │  MCP      │    │  voice/img  │            │
+│                 └───────────┘    └─────────────┘            │
+│                      │                │                      │
+│                      ▼                ▼                      │
+│              ┌────────────────────────────────┐              │
+│              │  Terminal experience            │              │
+│              │  MOTD · aliases · clawd-cli    │              │
+│              └────────────────────────────────┘              │
+└──────────────────────────────────────────────────────────────┘
 ```
-
-## Environment variables
-
-### Minimum useful setup
-
-SolanaOS documents a minimum useful .env around Solana data, LLM provider config, and Telegram, with solanaos onboard covering the guided path.
-
-For the combined CLAWD stack, these are the most useful starting variables:
-
-```bash
-export XAI_API_KEY=your_key
-export HELIUS_API_KEY=your_key  
-export SOLANA_TRACKER_API_KEY=your_key
-```
-
-### Why these three
-- **XAI_API_KEY** powers the Grok side of solana-clawd
-- **HELIUS_API_KEY** gives Solana RPC/DAS support
-- **SOLANA_TRACKER_API_KEY** gives token, chart, market, and trend surfaces
-
-## SolanaOS paths this bootstrap preserves
-
-This section stays consistent with the repo's documented operator flow:
-
-```bash
-npx solanaos-computer@latest install --with-web
-~/.solanaos/bin/solanaos onboard
-~/.solanaos/bin/solanaos server
-~/.solanaos/bin/solanaos daemon
-```
-
-That flow is already described in the repo alongside the Control UI, daemon, wallet API bootstrap, and one-shot local start options.
-
-## What this gives you after one run
-
-### SolanaOS side
-- Go-native local runtime
-- operator daemon
-- Control UI
-- MCP surfaces
-- wallet tooling
-- Telegram / Seeker / Chrome extension paths
-- skills and Hub-oriented workflow
-
-### solana-clawd side
-- Grok-powered chat
-- Clawd character workflows
-- multi-agent research
-- vision / image / voice flows
-- MCP server
-- web app
-- buddy / meme / creative flows
-
-## Non-root sandbox note
-
-If you are in CLAWD Cloud OS or an E2B session and see:
-
-```
-go: command not found
-E: are you root?
-```
-
-that is expected. This bootstrap uses a local user-space Go install instead of apt-get, so it works without root.
-
-## Alternate local dev path
-
-The SolanaOS repo also documents a direct clone-and-start flow:
-
-```bash
-git clone https://github.com/x402agent/SolanaOS.git
-cd SolanaOS
-cp .env.example .env
-bash start.sh
-```
-
-That path builds and starts the local services in one command.
-
-## Terminal tools
-
-CLAWD Cloud OS includes terminal tools in the `tools/` directory:
-
-- **clawd-cli.sh** - Connect to solanaclawd.com via terminal
-- **clawd-connect.sh** - Terminal connection script
-- **clawd-register.ts** - Register on Metaplex Agent Registry
 
 ## Positioning
 
-- **CLAWD Cloud OS** is the bootstrap layer.
-- **SolanaOS** is the compact Go operator runtime.
-- **solana-clawd** is the Grok-native agentic interface that sits on top.
+- **CLAWD Cloud OS** is the bootstrap layer
+- **SolanaOS** is the compact Go operator runtime
+- **solana-clawd** is the Grok-native agentic interface
 
-Together, they form a terminal-first Solana AI computer:
-- local-first
-- cloud-friendly
-- sandbox-safe
-- Grok-native
-- Solana-native
-- one-shot bootstrappable
-
-## Terminal help version
-
-```
-╔════════════════════════════════════════════════════════════╗
-║   CLAWD CLOUD OS · SOLANAOS + SOLANA-CLAWD QUICKSTART    ║
-╚════════════════════════════════════════════════════════════╝
-
-1. Run bootstrap.sh
-2. source ~/.bashrc
-3. ~/.solanaos/bin/solanaos onboard
-4. ~/.solanaos/bin/solanaos server
-5. ~/.solanaos/bin/solanaos daemon
-6. cd ~/src/solana-clawd
-7. npm run demo
-8. npm run mcp:http
-9. npm --prefix web run dev
+Together: a terminal-first Solana AI computer that is local-first,
+cloud-friendly, sandbox-safe, and one-shot bootstrappable.
