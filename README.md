@@ -41,7 +41,7 @@ Powered by **$CLAWD** on Solana & Pump.fun | Built on **Grok** from **xAI**
 [![Skills](https://img.shields.io/badge/Skills-95%20catalog-yellow)](skills/)
 [![Live](https://img.shields.io/badge/live-solanaclawd.com-00ff88)](https://solanaclawd.com)
 
-[**Install**](#one-shot-install) · [**Grok Integration**](#-xai-grok-integration) · [**Clawd Agent**](#-clawd-character-agent) · [**API Routes**](#grok--clawd-api-routes) · [**Chrome Extension**](#chrome-extension) · [**MCP Tools**](#mcp-tools-31) · [**Buddies**](#blockchain-buddies) · [**Voice**](#voice-mode) · [**Telegram**](#telegram-trading-bot) · [**Skills**](#skills-catalog-95-skills) · [**Deploy**](#deploy-to-flyio)
+[**Install**](#one-shot-install) · [**Cloud OS**](#clawd-cloud-os) · [**Grok Integration**](#-xai-grok-integration) · [**Clawd Agent**](#-clawd-character-agent) · [**API Routes**](#grok--clawd-api-routes) · [**Chrome Extension**](#chrome-extension) · [**MCP Tools**](#mcp-tools-31) · [**Buddies**](#blockchain-buddies) · [**Voice**](#voice-mode) · [**Telegram**](#telegram-trading-bot) · [**Skills**](#skills-catalog-95-skills) · [**Deploy**](#deploy-to-flyio)
 
 </div>
 
@@ -72,6 +72,109 @@ npm --prefix web run dev     # main website on :3000
 npm --prefix web/wiki run dev  # wiki app
 npm run skills:serve         # skills catalog on :3333
 ```
+
+---
+
+## CLAWD Cloud OS
+
+**One-shot bootstrap for E2B sandboxes, fresh Linux terminals, Docker, macOS, WSL — any shell where Go is missing.**
+
+CLAWD Cloud OS brings together **SolanaOS** (Go-native Solana operator runtime), **solana-clawd** (xAI Grok agentic engine), and a terminal-first install path that works even on non-root sandboxes.
+
+### Cloud Bootstrap (remote — works anywhere)
+
+```bash
+# Install Go + SolanaOS + solana-clawd in one shot
+curl -fsSL https://raw.githubusercontent.com/x402agent/solana-clawd/main/clawd-cloud-os/scripts/bootstrap.sh | bash
+source ~/.bashrc
+```
+
+### Just Need Go? (E2B / Docker / non-root terminals)
+
+SolanaOS is a Go binary. If your terminal says `go: command not found` and `apt-get` fails because you are not root, this installs Go into your home directory:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/x402agent/solana-clawd/main/clawd-cloud-os/scripts/install-go.sh | bash
+source ~/.bashrc
+go version
+```
+
+The installer auto-detects your architecture (x86_64/arm64) and OS (Linux/macOS), installs to `~/.local/go` (non-root) or `/usr/local/go` (root), and persists to your shell config.
+
+### Post-Bootstrap
+
+```bash
+source ~/.bashrc
+
+# Configure SolanaOS
+sos onboard                  # guided setup wizard
+sos version                  # verify installation
+
+# Start everything
+clawd-start                  # SolanaOS server + daemon + MCP
+
+# Or start individually
+sos server                   # Control UI on :7777
+sos daemon                   # Operator loop
+clawd-mcp                    # MCP HTTP server on :3000
+clawd-web                    # Web UI on :3000
+clawd-demo                   # Animated walkthrough
+clawd-birth                  # Hatch a Blockchain Buddy
+```
+
+### CLAWD CLI
+
+The unified CLI manages the full stack:
+
+```bash
+clawd-cli setup              # One-shot bootstrap (Go + SolanaOS + solana-clawd)
+clawd-cli install-go         # Install Go on any terminal (root or non-root)
+clawd-cli doctor             # Check all prerequisites and system health
+clawd-cli start              # Start SolanaOS + MCP server
+clawd-cli stop               # Stop all services
+clawd-cli status             # Check local + remote service status
+clawd-cli agents             # List registered agents
+clawd-cli wallet             # View wallet info
+clawd-cli prices             # Live token prices
+clawd-cli demo               # Animated walkthrough
+clawd-cli birth              # Hatch a Blockchain Buddy
+```
+
+### What Gets Installed
+
+| Component | Path | Description |
+| --- | --- | --- |
+| Go | `~/.local/go` or `/usr/local/go` | Go runtime for SolanaOS |
+| SolanaOS | `~/.solanaos/` | Go-native Solana operator runtime |
+| solana-clawd | `~/src/solana-clawd/` | xAI Grok agentic engine + 31 MCP tools |
+| MOTD + aliases | `~/.bashrc` | Terminal banner, `clawd-*` shortcuts, `sos` alias |
+
+### Architecture
+
+```
+┌──────────────────────────────────────────────────────────────┐
+│  CLAWD CLOUD OS (bootstrap layer)                            │
+│                                                              │
+│  install-go.sh ──► bootstrap.sh ──► clawd-cli.sh            │
+│       │                 │                │                   │
+│       ▼                 ▼                ▼                   │
+│  ┌─────────┐    ┌───────────┐    ┌─────────────┐            │
+│  │   Go    │    │ SolanaOS  │    │solana-clawd │            │
+│  │ runtime │───►│  daemon   │    │  MCP + Web  │            │
+│  └─────────┘    │  server   │    │  Grok agent │            │
+│                 │  wallet   │    │  31 tools   │            │
+│                 │  MCP      │    │  voice/img  │            │
+│                 └───────────┘    └─────────────┘            │
+│                      │                │                      │
+│                      ▼                ▼                      │
+│              ┌────────────────────────────────┐              │
+│              │  Terminal experience            │              │
+│              │  MOTD · aliases · clawd-cli    │              │
+│              └────────────────────────────────┘              │
+└──────────────────────────────────────────────────────────────┘
+```
+
+See [clawd-cloud-os/README.md](clawd-cloud-os/README.md) for the full reference, troubleshooting, and environment variable guide.
 
 ### Root Scripts
 
