@@ -1,0 +1,29 @@
+{
+  "type": "https://eips.ethereum.org/EIPS/eip-8004#registration-v1",
+  "name": "Solana Clawd",
+  "description": "The Solana-native AI agent framework for autonomous operators. Built for high-frequency memecoin trading environments with real-time market data, wallet tracking, OODA-loop execution, and multi-agent orchestration.",
+  "image": "https://solanaclawd.com/clawd-logo.png",
+  "services": [
+    {
+      "name": "web",
+      "endpoint": "https://solanaclawd.com",
+      "version": "1.0"
+    },
+    {
+      "name": "MCP",
+      "endpoint": "https://solanaclawd.com/mcp",
+      "version": "2026-04-12"
+    },
+    {
+      "name": "A2A",
+      "endpoint": "https://solanaclawd.com/a2a",
+      "version": "0.3.0"
+    }
+  ],
+  "active": true,
+  "registrations": [],
+  "supportedTrust": [
+    "wallet-verified",
+    "token-holder"
+  ]
+}
