@@ -163,11 +163,13 @@ install_solana_clawd() {
 
   mkdir -p "$HOME/src"
 
-  if [ ! -d "$CLAWD_DIR" ]; then
+  if [ ! -d "$CLAWD_DIR/.git" ]; then
     info "Cloning solana-clawd..."
     git clone https://github.com/x402agent/solana-clawd "$CLAWD_DIR"
   else
-    ok "solana-clawd already cloned at $CLAWD_DIR"
+    info "solana-clawd already exists — pulling latest..."
+    (cd "$CLAWD_DIR" && git pull --ff-only 2>/dev/null || true)
+    ok "solana-clawd up to date at $CLAWD_DIR"
   fi
 
   cd "$CLAWD_DIR"
@@ -189,6 +191,13 @@ install_solana_clawd() {
     if ! grep -q '^HELIUS_API_KEY=' .env; then
       printf '\nHELIUS_API_KEY=%s\n' "$HELIUS_API_KEY" >> .env
       ok "Injected HELIUS_API_KEY into .env"
+    fi
+  fi
+
+  if [ -n "${SOLANA_TRACKER_API_KEY:-}" ] && [ -f .env ]; then
+    if ! grep -q '^SOLANA_TRACKER_API_KEY=' .env; then
+      printf '\nSOLANA_TRACKER_API_KEY=%s\n' "$SOLANA_TRACKER_API_KEY" >> .env
+      ok "Injected SOLANA_TRACKER_API_KEY into .env"
     fi
   fi
 
