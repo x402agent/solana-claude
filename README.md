@@ -149,9 +149,9 @@ clawd-cli birth              # Hatch a Blockchain Buddy
 | solana-clawd | `~/src/solana-clawd/` | xAI Grok agentic engine + 31 MCP tools |
 | MOTD + aliases | `~/.bashrc` | Terminal banner, `clawd-*` shortcuts, `sos` alias |
 
-### Architecture
+### Cloud OS Architecture
 
-```
+```text
 ┌──────────────────────────────────────────────────────────────┐
 │  CLAWD CLOUD OS (bootstrap layer)                            │
 │                                                              │
