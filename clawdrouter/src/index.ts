@@ -23,6 +23,7 @@ import { MODEL_REGISTRY, formatModelTable } from './models/registry.js';
 import { formatProfileTable } from './router/profiles.js';
 import { getTierCostBreakdown } from './router/tiers.js';
 import { scoreRequest } from './router/scorer.js';
+import { CLAWD_TOKEN_MINT } from './token/clawd-gate.js';
 
 // ── ASCII Banner ────────────────────────────────────────────────────
 
@@ -41,6 +42,11 @@ const BANNER = `
 // ── Default Configuration ───────────────────────────────────────────
 
 function getDefaultConfig(): ClawdRouterConfig {
+  const openRouterApiKey = process.env['OPENROUTER_API_KEY'] ?? process.env['CLAWDROUTER_OPENROUTER_API_KEY'] ?? '';
+  const openRouterEnabled =
+    process.env['CLAWDROUTER_OPENROUTER_ENABLED'] === 'true' ||
+    (process.env['CLAWDROUTER_OPENROUTER_ENABLED'] !== 'false' && openRouterApiKey.length > 0);
+
   return {
     port: parseInt(process.env['CLAWDROUTER_PORT'] ?? '8402', 10),
     profile: (process.env['CLAWDROUTER_PROFILE'] ?? 'auto') as RoutingProfile,
@@ -52,6 +58,19 @@ function getDefaultConfig(): ClawdRouterConfig {
     excludedModels: [],
     debug: process.env['CLAWDROUTER_DEBUG'] === 'true',
     upstreamUrl: process.env['CLAWDROUTER_UPSTREAM'] ?? 'https://api.blockrun.ai',
+    clawdTokenMint: process.env['CLAWDROUTER_CLAWD_TOKEN_MINT'] ?? CLAWD_TOKEN_MINT,
+    heliusApiKey: process.env['HELIUS_API_KEY'] ?? process.env['CLAWDROUTER_HELIUS_API_KEY'] ?? '',
+    holderThresholds: {
+      whale: parseFloat(process.env['CLAWDROUTER_WHALE_THRESHOLD'] ?? '1000000'),
+      diamond: parseFloat(process.env['CLAWDROUTER_DIAMOND_THRESHOLD'] ?? '100000'),
+      holder: parseFloat(process.env['CLAWDROUTER_HOLDER_THRESHOLD'] ?? '1000'),
+    },
+    openRouterApiKey,
+    openRouterSiteTitle: process.env['CLAWDROUTER_OPENROUTER_SITE_TITLE'] ?? 'ClawdRouter',
+    openRouterEnabled,
+    x402PayTo: process.env['CLAWDROUTER_X402_PAY_TO'] ?? '',
+    x402Price: process.env['CLAWDROUTER_X402_PRICE'] ?? '10000',
+    x402Description: process.env['CLAWDROUTER_X402_DESCRIPTION'] ?? 'ClawdRouter access',
   };
 }
 

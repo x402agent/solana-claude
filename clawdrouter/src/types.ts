@@ -38,6 +38,7 @@ export interface DimensionScores {
 
 export type ModelProvider =
   | 'anthropic'
+  | 'clawdrouter'
   | 'openai'
   | 'google'
   | 'xai'
