@@ -235,6 +235,44 @@ clawd-cli birth              # Hatch a Blockchain Buddy
 
 See [clawd-cloud-os/README.md](clawd-cloud-os/README.md) for the full reference, troubleshooting, and environment variable guide.
 
+### E2B-Native Workflows
+
+CLAWD Cloud OS is designed to run inside E2B sandboxes or alongside them. E2B provides secure cloud sandboxes for desktop GUI agents, coding agents, and data work.
+
+```bash
+npm i e2b @e2b/desktop @e2b/code-interpreter
+```
+
+| Template | What it does | Quick start |
+| --- | --- | --- |
+| `claude` | Claude Code in a sandbox | `e2b sbx create claude && claude` |
+| `opencode` | Headless coding agent | `e2b sbx create opencode && opencode` |
+| `openclaw` | Browser gateway + Telegram | `e2b sbx create openclaw && openclaw` |
+| Desktop | Ubuntu/XFCE with screenshot/mouse/keyboard | `npm i @e2b/desktop` |
+| Code Interpreter | Python execution + chart streaming | `npm i @e2b/code-interpreter` |
+
+Key E2B capabilities:
+
+- **Desktop computer use** — screenshot, mouse, keyboard, VNC streaming (`@e2b/desktop`)
+- **Pause/resume** — preserve filesystem + memory + running processes
+- **List/connect** — reconnect to running or paused sandboxes by ID
+- **Internet controls** — allow/deny outbound traffic per domain
+- **Git helpers** — clone, pull, push with credential handling
+- **Code Interpreter** — Python execution, Matplotlib plots, interactive charts, stdout/stderr streaming
+
+See [clawd-cloud-os/README.md](clawd-cloud-os/README.md) for full E2B code examples.
+
+### Service Ports
+
+| Service | Port | Start path |
+| --- | ---: | --- |
+| SolanaOS daemon / gateway | 18790 | `bash start.sh` or `solanaos daemon` |
+| SolanaOS Control UI | 7777 | `solanaos server` |
+| Agent Wallet | 8421 | auto-started by `start.sh` |
+| solanaos-mcp | 3001 | auto-started by `start.sh` |
+| solana-clawd MCP | 3000 | `npm run mcp:http` |
+| control-api | 18789 | standalone control API |
+
 ### Root Scripts
 
 | Script | What it does |
