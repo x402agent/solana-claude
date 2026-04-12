@@ -1,0 +1,63 @@
+{
+  "name": "clawd",
+  "description": "Solana Clawd - The Solana-native AI agent framework for autonomous operators",
+  "version": "1.0.0",
+  "type": "https://eips.ethereum.org/EIPS/eip-8004#registration-v1",
+  "services": [
+    {
+      "name": "solana-clawd",
+      "endpoint": "https://solanaclawd.com",
+      "description": "Main Solana Clawd dashboard and agent interface"
+    }
+  ],
+  "capabilities": {
+    "solana": {
+      "enabled": true,
+      "rpcUrl": "${HELIUS_RPC_URL}",
+      "walletSupport": true
+    },
+    "mcp": {
+      "enabled": true,
+      "tools": [
+        "helius-das",
+        "helius-rpc",
+        "jupiter-price",
+        "jupiter-swap",
+        "birdeye-price",
+        "metaplex-core",
+        "firecrawl"
+      ]
+    }
+  },
+  "models": {
+    "default": "minimax/m2.7",
+    "agents": {
+      "main": "minimax/m2.7",
+      "research": "minimax/m2.7",
+      "trading": "minimax/m2.7"
+    }
+  },
+  "memory": {
+    "provider": "honcho",
+    "tiers": {
+      "KNOWN": { "expiry": true, "persistence": "ephemeral" },
+      "LEARNED": { "expiry": false, "persistence": "persistent" },
+      "INFERRED": { "expiry": false, "persistence": "tentative" }
+    }
+  },
+  "principles": [
+    "KNOWN before INFERRED - never present speculation as fact",
+    "Preserve capital first - drawdown cascades override all conviction",
+    "Deny-first permissions - ask before executing anything irreversible",
+    "Transparency - show reasoning, not just conclusions",
+    "Local-first - no mandatory cloud infrastructure"
+  ],
+  "permissions": {
+    "defaults": {
+      "trade": "ask",
+      "sign": "deny",
+      "spend": "deny",
+      "transfer": "ask"
+    }
+  }
+}
