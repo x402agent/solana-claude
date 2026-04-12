@@ -497,17 +497,29 @@ lsof -ti:3000 | xargs kill   # force kill MCP/Web
 │       ▼                 ▼                ▼                   │
 │  ┌─────────┐    ┌───────────┐    ┌─────────────┐            │
 │  │   Go    │    │ SolanaOS  │    │solana-clawd │            │
-│  │ runtime │───►│  daemon   │    │  MCP + Web  │            │
-│  └─────────┘    │  server   │    │  Grok agent │            │
+│  │ runtime │───►│  daemon   │    │  npm v1.7.0 │            │
+│  └─────────┘    │  server   │    │  MCP + Web  │            │
 │                 │  wallet   │    │  31 tools   │            │
-│                 │  MCP      │    │  voice/img  │            │
+│                 │  MCP      │    │  9 agents   │            │
 │                 └───────────┘    └─────────────┘            │
 │                      │                │                      │
 │                      ▼                ▼                      │
-│              ┌────────────────────────────────┐              │
-│              │  Terminal experience            │              │
-│              │  MOTD · aliases · clawd-cli    │              │
-│              └────────────────────────────────┘              │
+│  ┌────────────────────────────────────────────────────────┐  │
+│  │  Terminal experience                                    │  │
+│  │  MOTD · aliases · clawd-cli · npx solana-clawd         │  │
+│  └────────────────────────────────────────────────────────┘  │
+│                      │                                       │
+│                      ▼                                       │
+│  ┌────────────────────────────────────────────────────────┐  │
+│  │  E2B Sandbox Layer (optional)                           │  │
+│  │  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌───────────┐ │  │
+│  │  │ Desktop  │ │  Claude  │ │ OpenCode │ │  OpenClaw │ │  │
+│  │  │ computer │ │  Code    │ │          │ │  gateway  │ │  │
+│  │  │ use      │ │  agent   │ │  agent   │ │  + Tg     │ │  │
+│  │  └──────────┘ └──────────┘ └──────────┘ └───────────┘ │  │
+│  │  pause/resume · list/connect · internet controls       │  │
+│  │  git helpers · code interpreter · chart streaming      │  │
+│  └────────────────────────────────────────────────────────┘  │
 └──────────────────────────────────────────────────────────────┘
 ```
 
@@ -516,6 +528,15 @@ lsof -ti:3000 | xargs kill   # force kill MCP/Web
 - **CLAWD Cloud OS** is the bootstrap layer
 - **SolanaOS** is the compact Go operator runtime
 - **solana-clawd** is the Grok-native agentic interface
+- **E2B** is the secure execution and desktop substrate
 
 Together: a terminal-first Solana AI computer that is local-first,
-cloud-friendly, sandbox-safe, and one-shot bootstrappable.
+cloud-friendly, sandbox-safe, E2B-native, and one-shot bootstrappable.
+
+## Key Details
+
+- `solanaos-computer` is the canonical one-shot installer; `solanaos-cli` is an alias; `@solanaos/nanohub` is the separate skill-registry CLI (not on npm yet)
+- SolanaOS's first-run path: `npx solanaos-computer@latest install --with-web` then `solanaos onboard` (writes config to `~/.solanaos/solanaos.json`)
+- E2B prebuilt agent templates: `claude`, `opencode`, `openclaw`
+- E2B Code Interpreter SDK: `@e2b/code-interpreter` for Python execution with chart streaming
+- E2B Desktop SDK: `@e2b/desktop` for GUI agent workflows with screenshot/mouse/keyboard
