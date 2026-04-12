@@ -220,8 +220,7 @@
     "CHANGELOG.md"
   ],
   "publishConfig": {
-    "access": "public",
-    "provenance": true
+    "access": "public"
   },
   "funding": {
     "type": "individual",
