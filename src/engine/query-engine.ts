@@ -318,6 +318,15 @@ export class QueryEngine {
       Authorization: `Bearer ${provider.apiKey}`,
     };
 
+    // Add OpenRouter attribution headers for app rankings & analytics
+    // See: https://openrouter.ai/docs/features/app-attribution
+    if (provider.provider === "openrouter") {
+      headers["X-OpenRouter-Title"] = process.env["OPENROUTER_SITE_TITLE"] ?? "Solana Clawd";
+      headers["X-Title"] = process.env["OPENROUTER_SITE_TITLE"] ?? "Solana Clawd";
+      headers["X-OpenRouter-Categories"] = process.env["OPENROUTER_CATEGORIES"] ?? "cli-agent,cloud-agent";
+      headers["HTTP-Referer"] = process.env["OPENROUTER_SITE_URL"] ?? "https://github.com/x402agent/solana-clawd";
+    }
+
     // Streaming response
     const response = await fetch(`${baseUrl}/chat/completions`, {
       method: "POST",
