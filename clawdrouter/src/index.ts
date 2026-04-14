@@ -67,6 +67,8 @@ function getDefaultConfig(): ClawdRouterConfig {
     },
     openRouterApiKey,
     openRouterSiteTitle: process.env['CLAWDROUTER_OPENROUTER_SITE_TITLE'] ?? 'ClawdRouter',
+    openRouterSiteUrl: process.env['CLAWDROUTER_OPENROUTER_SITE_URL'] ?? 'https://github.com/x402agent/solana-clawd',
+    openRouterCategories: (process.env['CLAWDROUTER_OPENROUTER_CATEGORIES'] ?? 'cli-agent,cloud-agent').split(',').map(s => s.trim()),
     openRouterEnabled,
     x402PayTo: process.env['CLAWDROUTER_X402_PAY_TO'] ?? '',
     x402Price: process.env['CLAWDROUTER_X402_PRICE'] ?? '10000',

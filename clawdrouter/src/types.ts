@@ -214,8 +214,10 @@ export interface ClawdRouterConfig {
 
   // ── OpenRouter Integration ────────────────────────────────────
   openRouterApiKey: string;         // OpenRouter API key
-  openRouterSiteTitle: string;      // X-Title header
-  openRouterEnabled: boolean;       // Route through OpenRouter
+  openRouterSiteTitle: string;      // X-OpenRouter-Title / X-Title header
+  openRouterSiteUrl: string;       // HTTP-Referer header (your app's URL)
+  openRouterCategories: string[];   // X-OpenRouter-Categories header (max 2)
+  openRouterEnabled: boolean;      // Route through OpenRouter
 
   // ── x402 Payment Config ───────────────────────────────────────
   x402PayTo: string;                // Solana address for x402 payments

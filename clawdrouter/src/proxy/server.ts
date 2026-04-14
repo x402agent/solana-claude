@@ -390,6 +390,8 @@ export class ClawdRouterProxy {
         {
           apiKey: this.config.openRouterApiKey,
           siteTitle: this.config.openRouterSiteTitle,
+          siteUrl: this.config.openRouterSiteUrl,
+          categories: this.config.openRouterCategories,
         },
       );
 

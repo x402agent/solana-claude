@@ -59,6 +59,7 @@ export interface OpenRouterConfig {
   apiKey: string;
   siteTitle?: string;
   siteUrl?: string;
+  categories?: string[];
 }
 
 // ── Live Model Fetching ─────────────────────────────────────────────
@@ -110,19 +111,34 @@ export function clearModelCache(): void {
 /**
  * Forward a chat completion request to OpenRouter
  * Returns the raw Response for streaming support
+ *
+ * Attribution headers for OpenRouter App Rankings & Analytics:
+ * - HTTP-Referer: Primary identifier (URL of your app)
+ * - X-OpenRouter-Title: Display name in rankings (X-Title also supported)
+ * - X-OpenRouter-Categories: Comma-separated marketplace categories (max 2 per request)
+ *
+ * See: https://openrouter.ai/docs/features/app-attribution
  */
 export async function proxyToOpenRouter(
   request: OpenRouterChatRequest,
   config: OpenRouterConfig,
 ): Promise<Response> {
-  const { apiKey, siteTitle, siteUrl } = config;
+  const { apiKey, siteTitle, siteUrl, categories } = config;
 
   const headers: Record<string, string> = {
     'Authorization': `Bearer ${apiKey}`,
     'Content-Type': 'application/json',
-    'X-Title': siteTitle ?? 'ClawdRouter — Solana Agent LLM Router',
+    // OpenRouter attribution headers for app rankings & analytics
     'HTTP-Referer': siteUrl ?? 'https://github.com/x402agent/solana-clawd',
+    'X-OpenRouter-Title': siteTitle ?? 'ClawdRouter — Solana Agent LLM Router',
+    // X-Title is also supported for backwards compatibility
+    'X-Title': siteTitle ?? 'ClawdRouter — Solana Agent LLM Router',
   };
+
+  // Add categories header if provided (max 2 categories per request, merged up to 10 total)
+  if (categories && categories.length > 0) {
+    headers['X-OpenRouter-Categories'] = categories.slice(0, 2).join(',');
+  }
 
   const response = await fetch(OPENROUTER_API_URL, {
     method: 'POST',
