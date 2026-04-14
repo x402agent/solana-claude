@@ -1260,6 +1260,67 @@ npx skills add x402agent/solana-clawd
 
 ---
 
+## OpenRouter Integration
+
+`solana-clawd` integrates with **OpenRouter** for multi-model LLM routing with [App Attribution](https://openrouter.ai/docs/features/app-attribution) for public rankings and analytics.
+
+### Quick Setup
+
+```bash
+# Add to your .env
+OPENROUTER_API_KEY=sk-or-v1-...
+
+# OpenRouter App Attribution (optional — for rankings visibility)
+OPENROUTER_SITE_URL=https://github.com/x402agent/solana-clawd
+OPENROUTER_SITE_TITLE=Solana Clawd
+OPENROUTER_CATEGORIES=cli-agent,cloud-agent
+```
+
+### What Attribution Gets You
+
+| Feature | Description |
+|---------|-------------|
+| **App Rankings** | Your app appears on [openrouter.ai/rankings](https://openrouter.ai/rankings) |
+| **Model Apps Tabs** | Featured on individual model pages |
+| **Analytics Dashboard** | Track usage, tokens, and costs at `openrouter.ai/apps?url=<your-url>` |
+
+### Attribution Headers
+
+| Header | Purpose |
+|--------|---------|
+| `HTTP-Referer` | Your app's URL (primary identifier) |
+| `X-OpenRouter-Title` | Display name in rankings |
+| `X-OpenRouter-Categories` | Marketplace categories (max 2) |
+
+### ClawdRouter (Standalone LLM Router)
+
+`clawdrouter/` is a standalone proxy with 55+ models, 15-dimension request scoring, and $CLAWD token gating:
+
+```bash
+cd clawdrouter
+npm run build
+clawdrouter
+```
+
+```bash
+# ClawdRouter env vars
+CLAWDROUTER_OPENROUTER_API_KEY=sk-or-v1-...
+CLAWDROUTER_OPENROUTER_SITE_URL=https://github.com/x402agent/solana-clawd
+CLAWDROUTER_OPENROUTER_SITE_TITLE=ClawdRouter
+CLAWDROUTER_OPENROUTER_CATEGORIES=cli-agent,cloud-agent
+```
+
+### Available Categories
+
+**Coding:** `cli-agent`, `ide-extension`, `cloud-agent`, `programming-app`, `native-app-builder`
+**Creative:** `creative-writing`, `video-gen`, `image-gen`
+**Productivity:** `writing-assistant`, `general-chat`, `personal-agent`
+**Entertainment:** `roleplay`, `game`
+
+See [`docs/OPENROUTER-APP-LISTING.md`](docs/OPENROUTER-APP-LISTING.md) for full documentation.
+
+---
+
 ## npm Package
 
 Install from npm and import exactly what you need:
@@ -2062,7 +2123,7 @@ The agent only loads full skill content when it actually needs it. Every skill i
 | -------- | ----- | ------- |
 | Pump.fun / Token Launch | 22 | pump-sdk-core, pumpfun-trading, pump-bonding-curve, pump-fee-sharing |
 | Solana / Blockchain | 7 | solanaos, solana-dev, solana-formal-verification, solana-research-brief |
-| AI / Agents | 11 | coding-agent, swarm-orchestrator, skill-creator, e2b, cua |
+| AI / Agents | 12 | coding-agent, swarm-orchestrator, skill-creator, e2b, cua, solana-trader |
 | Communication | 6 | discord, slack, imsg, bluebubbles, himalaya, voice-call |
 | Productivity | 8 | apple-notes, apple-reminders, notion, obsidian, 1password, trello |
 | Web / Research | 9 | browse, blogwatcher, weather, pdf-to-markdown, summarize, xurl |
