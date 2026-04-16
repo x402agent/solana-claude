@@ -3,13 +3,15 @@
 <div align="center">
 
 
-<h1>solana-clawd Plugins Gateway - Plugin Delivery</h1>
+<h1>@solana-clawd/chat-plugins-gateway</h1>
 
-Plugin Gateway Service for solana-clawd
+Edge-runtime plugin gateway for the **solana-clawd** ecosystem.
 
+Fetches the plugin index from [plugin.delivery](https://plugin.delivery), validates requests against each plugin's manifest + JSON schema, forwards to the plugin runtime, and streams the response back through the CLAWD permission engine.
 
 **English** · [简体中文](./README.zh-CN.md) ·
 
+[🏠 Ecosystem](https://solanaclawd.com/agents) · [💻 Terminal](https://solanaclawd.com/terminal) · [🎨 Studio](https://vibe.solanaclawd.com) · [💱 DEX](https://dex.solanaclawd.com) · [📲 Telegram](https://t.me/clawdtoken) · [📱 Mobile](https://seeker.solanaos.net)
 
 </div>
 
@@ -35,9 +37,17 @@ Plugin Gateway Service for solana-clawd
 
 ## 👋 Intro
 
-solana-clawd Plugins Gateway is a backend service that provides a gateway for solana-clawd plugins. We use [vercel](https://vercel.com/) to deploy this service. The main API `POST /api/v1/runner` is deployed as an [Edge Function](https://vercel.com/docs/functions/edge-functions).
+The gateway is the execution bridge between a CLAWD agent and a plugin listed in [plugin.delivery](https://plugin.delivery). Agents never call plugin URLs directly — the gateway:
 
-The gateway service fetches Plugin Delivery index from the [solana-clawd Plugins](https://github.com/x402agent/solana-clawd), if you want to add your plugin to the index, please [submit a PR](https://github.com/x402agent/solana-clawd/pulls) to the solana-clawd Plugins repository.
+1. Resolves the plugin manifest by identifier from the index
+2. Validates arguments against the plugin's JSON schema (AJV or `@cfworker/json-schema`)
+3. Applies deny-first permission gating (trades, signatures, wallet spends, CLAWD burns)
+4. Forwards the request to the plugin's OpenAPI endpoint via [swagger-client](https://www.npmjs.com/package/swagger-client)
+5. Returns a structured `GatewaySuccessResponse | GatewayErrorResponse` to the agent
+
+We ship it as a [Vercel Edge Function](https://vercel.com/docs/functions/edge-functions) (`POST /api/v1/runner`) and a `node` variant for local daemons.
+
+To add a plugin to the index, submit a PR to the [solana-clawd repo](https://github.com/x402agent/solana-clawd).
 
 <div align="right">
 
