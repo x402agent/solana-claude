@@ -2,7 +2,7 @@
   "$schema": "https://plugin.delivery/schema.json",
   "identifier": "openapi-template",
   "author": "Your Name",
-  "homepage": "https://github.com/yourname/openapi-template",
+  "homepage": "https://github.com/x402agent/solana-clawd",
   "openapi": "http://localhost:3400/openapi.json",
   "gateway": "http://localhost:3400/api/gateway",
   "meta": {

@@ -1114,7 +1114,7 @@ SolanaClawdChat.setPluginMessage(newContent);
    {
      "author": "Your Name",
      "createdAt": "2025-12-27",
-     "homepage": "https://github.com/you/my-plugin",
+     "homepage": "https://github.com/x402agent/solana-clawd",
      "identifier": "my-plugin",
      "manifest": "https://plugin.delivery/openai/my-plugin/manifest.json",
      "meta": {

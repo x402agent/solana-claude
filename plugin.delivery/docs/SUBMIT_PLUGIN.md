@@ -69,7 +69,7 @@ Your plugin entry should be a JSON file in the `src/` directory:
 {
   "author": "YourName",
   "createdAt": "2025-01-01",
-  "homepage": "https://github.com/yourname/your-plugin",
+  "homepage": "https://github.com/x402agent/solana-clawd",
   "identifier": "your-plugin-identifier",
   "manifest": "https://your-plugin.vercel.app/manifest.json",
   "meta": {

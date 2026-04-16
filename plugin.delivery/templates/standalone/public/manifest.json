@@ -3,7 +3,7 @@
   "identifier": "standalone-template",
   "type": "standalone",
   "author": "Your Name",
-  "homepage": "https://github.com/yourname/standalone-template",
+  "homepage": "https://github.com/x402agent/solana-clawd",
   "ui": {
     "url": "http://localhost:3400",
     "height": 400
