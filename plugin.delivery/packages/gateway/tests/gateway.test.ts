@@ -1,5 +1,5 @@
-import { PluginRequestPayload } from '@sperax/chat-plugin-sdk';
-import { Gateway } from '@sperax/chat-plugins-gateway';
+import { PluginRequestPayload } from '@solana-clawd/chat-plugin-sdk';
+import { Gateway } from '@solana-clawd/chat-plugins-gateway';
 import Ajv from 'ajv';
 // @ts-ignore
 import SwaggerClient from 'swagger-client';
@@ -44,7 +44,7 @@ describe('Gateway', () => {
         arguments: '{}',
         identifier: 'mock-weather',
         manifest: {
-          $schema: '../node_modules/@sperax/chat-plugin-sdk/schema.json',
+          $schema: '../node_modules/@solana-clawd/chat-plugin-sdk/schema.json',
           api: [
             {
               description: 'Get weather forecast for a location',
@@ -55,7 +55,7 @@ describe('Gateway', () => {
               },
             },
           ],
-          author: 'sperax',
+          author: 'solana-clawd',
           createdAt: '2023-12-11',
           identifier: 'mock-weather',
           meta: {
@@ -103,7 +103,7 @@ describe('Gateway', () => {
         arguments: '{"city":"new-york"}',
         identifier: 'mock-weather',
         manifest: {
-          $schema: '../node_modules/@sperax/chat-plugin-sdk/schema.json',
+          $schema: '../node_modules/@solana-clawd/chat-plugin-sdk/schema.json',
           api: [
             {
               description: 'Get weather for a specific city',
@@ -111,7 +111,7 @@ describe('Gateway', () => {
               parameters: {
                 properties: {
                   city: {
-                    $$ref: 'https://chat-dev.sperax.com/chat#/components/schemas/City',
+                    $$ref: 'https://chat-dev.solana-clawd.com/chat#/components/schemas/City',
                     enum: [
                       'new-york',
                       'los-angeles',
@@ -133,7 +133,7 @@ describe('Gateway', () => {
               parameters: { properties: {}, type: 'object' },
             },
           ],
-          author: 'sperax',
+          author: 'solana-clawd',
           createdAt: '2023-12-11',
           identifier: 'mock-weather',
           meta: {

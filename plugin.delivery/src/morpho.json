@@ -1,20 +1,21 @@
 {
-  "author": "SperaxOS",
+  "author": "solana-clawd",
   "createdAt": "2025-01-01",
-  "homepage": "https://github.com/nirholas/plugin.delivery",
+  "homepage": "https://github.com/x402agent/solana-clawd",
   "identifier": "morpho",
   "manifest": "https://plugin.delivery/morpho/manifest.json",
   "meta": {
     "avatar": "🦋",
-    "description": "Morpho optimized lending rates and vault data",
+    "description": "[solana-clawd] Morpho optimized lending rates and vault data — consumed by CLAWD agents (Scanner/OODA/Analyst) and gated by the CLAWD permission engine.",
     "tags": [
       "morpho",
       "lending",
-      "optimization"
+      "optimization",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "Morpho",
     "category": "stocks-finance"
   },
   "schemaVersion": 1
 }
-

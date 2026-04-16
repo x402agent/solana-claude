@@ -2,7 +2,7 @@ import {
   PluginErrorType,
   createErrorResponse,
   getPluginSettingsFromRequest,
-} from '@sperax/plugin-sdk';
+} from '@solana-clawd/plugin-sdk';
 
 export const config = {
   runtime: 'edge',
@@ -33,7 +33,7 @@ export default async function handler(req: Request) {
   }
 
   // Retrieve settings from request headers
-  // Settings are passed by the gateway in the X-Sperax-Plugin-Settings header
+  // Settings are passed by the gateway in the X-solana-clawd-Plugin-Settings header
   const settings = getPluginSettingsFromRequest<PluginSettings>(req);
 
   // Validate required settings

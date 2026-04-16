@@ -1,20 +1,21 @@
 {
-  "author": "SperaxOS",
+  "author": "solana-clawd",
   "createdAt": "2025-01-01",
-  "homepage": "https://github.com/nirholas/plugin.delivery",
+  "homepage": "https://github.com/x402agent/solana-clawd",
   "identifier": "ordinals",
   "manifest": "https://plugin.delivery/ordinals/manifest.json",
   "meta": {
     "avatar": "🔶",
-    "description": "Bitcoin ordinals inscriptions and collection data",
+    "description": "[solana-clawd] Bitcoin ordinals inscriptions and collection data — consumed by CLAWD agents (Scanner/OODA/Analyst) and gated by the CLAWD permission engine.",
     "tags": [
       "ordinals",
       "bitcoin",
-      "inscription"
+      "inscription",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "Ordinals",
     "category": "gaming-entertainment"
   },
   "schemaVersion": 1
 }
-

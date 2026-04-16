@@ -1,20 +1,21 @@
 {
-  "author": "SperaxOS",
+  "author": "solana-clawd",
   "createdAt": "2025-01-01",
-  "homepage": "https://github.com/nirholas/plugin.delivery",
+  "homepage": "https://github.com/x402agent/solana-clawd",
   "identifier": "opensea",
   "manifest": "https://plugin.delivery/opensea/manifest.json",
   "meta": {
     "avatar": "🌊",
-    "description": "NFT collection data, floor prices, and listings",
+    "description": "[solana-clawd] NFT collection data, floor prices, and listings — consumed by CLAWD agents (Scanner/OODA/Analyst) and gated by the CLAWD permission engine.",
     "tags": [
       "opensea",
       "nft",
-      "floor"
+      "floor",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "OpenSea",
     "category": "gaming-entertainment"
   },
   "schemaVersion": 1
 }
-

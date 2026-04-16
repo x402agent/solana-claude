@@ -9,8 +9,8 @@
     "deploy": "vercel --prod"
   },
   "dependencies": {
-    "@sperax/plugin-sdk": "^1.0.0",
-    "@sperax/chat-plugins-gateway": "^1.0.0"
+    "@solana-clawd/plugin-sdk": "^1.0.0",
+    "@solana-clawd/chat-plugins-gateway": "^1.0.0"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",

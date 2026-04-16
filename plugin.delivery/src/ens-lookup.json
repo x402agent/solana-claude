@@ -1,20 +1,21 @@
 {
-  "author": "SperaxOS",
+  "author": "solana-clawd",
   "createdAt": "2025-01-01",
-  "homepage": "https://github.com/nirholas/plugin.delivery",
+  "homepage": "https://github.com/x402agent/solana-clawd",
   "identifier": "ens-lookup",
   "manifest": "https://plugin.delivery/ens-lookup/manifest.json",
   "meta": {
     "avatar": "🏷️",
-    "description": "ENS name resolution and availability checker",
+    "description": "[solana-clawd] ENS name resolution and availability checker — consumed by CLAWD agents (Scanner/OODA/Analyst) and gated by the CLAWD permission engine.",
     "tags": [
       "ens",
       "domains",
-      "ethereum"
+      "ethereum",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "ENS Lookup",
     "category": "tools"
   },
   "schemaVersion": 1
 }
-

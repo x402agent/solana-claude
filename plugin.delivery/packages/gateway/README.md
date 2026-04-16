@@ -3,9 +3,9 @@
 <div align="center">
 
 
-<h1>Sperax Plugins Gateway - Plugin Delivery</h1>
+<h1>solana-clawd Plugins Gateway - Plugin Delivery</h1>
 
-Plugin Gateway Service for SperaxOS
+Plugin Gateway Service for solana-clawd
 
 
 **English** · [简体中文](./README.zh-CN.md) ·
@@ -35,9 +35,9 @@ Plugin Gateway Service for SperaxOS
 
 ## 👋 Intro
 
-Sperax Plugins Gateway is a backend service that provides a gateway for SperaxOS plugins. We use [vercel](https://vercel.com/) to deploy this service. The main API `POST /api/v1/runner` is deployed as an [Edge Function](https://vercel.com/docs/functions/edge-functions).
+solana-clawd Plugins Gateway is a backend service that provides a gateway for solana-clawd plugins. We use [vercel](https://vercel.com/) to deploy this service. The main API `POST /api/v1/runner` is deployed as an [Edge Function](https://vercel.com/docs/functions/edge-functions).
 
-The gateway service fetches Plugin Delivery index from the [SperaxOS Plugins](https://github.com/nirholas/plugin.delivery), if you want to add your plugin to the index, please [submit a PR](https://github.com/nirholas/plugin.delivery/pulls) to the SperaxOS Plugins repository.
+The gateway service fetches Plugin Delivery index from the [solana-clawd Plugins](https://github.com/x402agent/solana-clawd), if you want to add your plugin to the index, please [submit a PR](https://github.com/x402agent/solana-clawd/pulls) to the solana-clawd Plugins repository.
 
 <div align="right">
 
@@ -58,7 +58,7 @@ The gateway service fetches Plugin Delivery index from the [SperaxOS Plugins](ht
 
 > **Note**\
 > **POST** `/api/v1/runner`\
-> Interface to communicate with the SperaxOS plugin. This interface describes how to use the SperaxOS plugin gateway API to send requests and get responses
+> Interface to communicate with the solana-clawd plugin. This interface describes how to use the solana-clawd plugin gateway API to send requests and get responses
 
 #### Body Request Parameters
 
@@ -156,7 +156,7 @@ If you want to deploy this service by yourself, you can follow the steps below.
 
 Click button below to deploy your private plugins' gateway.
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fnirholas%2Fplugin.delivery&project-name=chat-plugins-gateway&repository-name=chat-plugins-gateway)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fx402agent%2Fplugin.delivery&project-name=chat-plugins-gateway&repository-name=chat-plugins-gateway)
 
 If you want to make some customization, you can add environment variable:
 
@@ -170,12 +170,12 @@ If you want to make some customization, you can add environment variable:
 
 ## 📦 Plugin Ecosystem
 
-Plugins provide a means to extend the Function Calling capabilities of SperaxOS. They can be used to introduce new function calls and even new ways to render message results. If you are interested in plugin development, please refer to our [📘 Plugin Development Guide](https://github.com/nirholas/SperaxOS/wiki/Plugin-Development) in the Wiki.
+Plugins provide a means to extend the Function Calling capabilities of solana-clawd. They can be used to introduce new function calls and even new ways to render message results. If you are interested in plugin development, please refer to our [📘 Plugin Development Guide](https://github.com/x402agent/solana-clawd/wiki/Plugin-Development) in the Wiki.
 
-- [sperax-plugins][sperax-plugins]: This is the plugin index for SperaxOS. It accesses index.json from this repository to display a list of available plugins for SperaxOS to the user.
-- [chat-plugin-template][chat-plugin-template]: This is the plugin template for SperaxOS plugin development.
-- [@sperax/plugin-sdk][chat-plugin-sdk]: The Sperax Plugin SDK assists you in creating exceptional chat plugins for SperaxOS.
-- [@sperax/chat-plugins-gateway][chat-plugins-gateway]: The Sperax Plugins Gateway is a backend service that provides a gateway for SperaxOS plugins. We deploy this service using Vercel. The primary API POST /api/v1/runner is deployed as an Edge Function.
+- [solana-clawd-plugins][solana-clawd-plugins]: This is the plugin index for solana-clawd. It accesses index.json from this repository to display a list of available plugins for solana-clawd to the user.
+- [chat-plugin-template][chat-plugin-template]: This is the plugin template for solana-clawd plugin development.
+- [@solana-clawd/plugin-sdk][chat-plugin-sdk]: The solana-clawd Plugin SDK assists you in creating exceptional chat plugins for solana-clawd.
+- [@solana-clawd/chat-plugins-gateway][chat-plugins-gateway]: The solana-clawd Plugins Gateway is a backend service that provides a gateway for solana-clawd plugins. We deploy this service using Vercel. The primary API POST /api/v1/runner is deployed as an Edge Function.
 
 <div align="right">
 
@@ -194,7 +194,7 @@ Or clone it for local development:
 [![][bun-shield]][bun-link]
 
 ```bash
-$ git clone https://github.com/nirholas/plugin.delivery.git
+$ git clone https://github.com/x402agent/solana-clawd.git
 $ cd chat-plugins-gateway
 $ bun install
 $ bun dev
@@ -215,8 +215,8 @@ $ bun dev
 
 ## 🔗 Links
 
-- **[🤖 SperaxOS](https://github.com/nirholas/SperaxOS)** - An open-source, extensible (Function Calling), high-performance chatbot framework. It supports one-click free deployment of your private ChatGPT/LLM web application.
-- **[Plugin Delivery](https://github.com/nirholas/plugin.delivery)** - This is the plugin index. It accesses index.json from this repository to display a list of available plugins for Function Calling to the user.
+- **[🤖 solana-clawd](https://github.com/x402agent/solana-clawd)** - An open-source, extensible (Function Calling), high-performance chatbot framework. It supports one-click free deployment of your private ChatGPT/LLM web application.
+- **[Plugin Delivery](https://github.com/x402agent/solana-clawd)** - This is the plugin index. It accesses index.json from this repository to display a list of available plugins for Function Calling to the user.
 
 <div align="right">
 

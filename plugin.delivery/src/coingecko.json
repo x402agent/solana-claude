@@ -1,21 +1,22 @@
 {
-  "author": "SperaxOS",
+  "author": "solana-clawd",
   "createdAt": "2025-01-01",
-  "homepage": "https://github.com/nirholas/plugin.delivery",
+  "homepage": "https://github.com/x402agent/solana-clawd",
   "identifier": "coingecko",
   "manifest": "https://plugin.delivery/coingecko/manifest.json",
   "meta": {
     "avatar": "🦎",
-    "description": "Real-time crypto prices, market data, trending tokens for 1M+ cryptocurrencies",
+    "description": "[solana-clawd] Real-time crypto prices, market data, trending tokens for 1M+ cryptocurrencies — consumed by CLAWD agents (Scanner/OODA/Analyst) and gated by the CLAWD permission engine.",
     "tags": [
       "crypto",
       "prices",
       "market-data",
-      "trending"
+      "trending",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "CoinGecko",
     "category": "stocks-finance"
   },
   "schemaVersion": 1
 }
-

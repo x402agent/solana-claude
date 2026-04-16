@@ -1,21 +1,21 @@
 {
-  "name": "@sperax/plugin-sdk",
+  "name": "@solana-clawd/plugin-sdk",
   "version": "1.0.0",
-  "description": "SperaxOS Plugin SDK - Build plugins for SperaxOS",
+  "description": "solana-clawd Plugin SDK - Build plugins for solana-clawd",
   "keywords": [
-    "sperax",
-    "speraxos",
+    "solana-clawd",
+    "solana-clawdos",
     "sdk",
     "plugin",
     "chat-plugin"
   ],
-  "homepage": "https://github.com/nirholas/plugin.delivery",
+  "homepage": "https://github.com/x402agent/solana-clawd",
   "repository": {
     "type": "git",
-    "url": "https://github.com/nirholas/plugin.delivery.git"
+    "url": "https://github.com/x402agent/solana-clawd.git"
   },
   "license": "MIT",
-  "author": "Sperax <contact@sperax.io>",
+  "author": "solana-clawd <contact@solanaos.net>",
   "sideEffects": false,
   "main": "./index.ts",
   "types": "./index.ts",

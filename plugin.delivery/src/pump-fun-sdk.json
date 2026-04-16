@@ -1,23 +1,24 @@
 {
-  "author": "SperaxOS",
+  "author": "solana-clawd",
   "createdAt": "2025-01-01",
-  "homepage": "https://github.com/nicholasxuu/pump-fun-sdk",
+  "homepage": "https://github.com/x402agent/solana-clawd",
   "identifier": "pump-fun-sdk",
   "manifest": "https://plugin.delivery/pump-fun-sdk/manifest.json",
   "meta": {
     "avatar": "🚀",
-    "description": "Solana token launchpad SDK — bonding curve pricing, token lifecycle, fee sharing, and volume incentives",
+    "description": "[solana-clawd] Solana token launchpad SDK — bonding curve pricing, token lifecycle, fee sharing, and volume incentives — consumed by CLAWD agents (Scanner/OODA/Analyst) and gated by the CLAWD permission engine.",
     "tags": [
       "pump",
       "solana",
       "bonding-curve",
       "token",
       "defi",
-      "launchpad"
+      "launchpad",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "Pump Fun SDK",
     "category": "stocks-finance"
   },
   "schemaVersion": 1
 }
-

@@ -1,17 +1,19 @@
 {
-  "author": "SperaxOS",
+  "author": "solana-clawd",
   "createdAt": "2025-01-01",
-  "homepage": "https://github.com/nirholas/plugin.delivery",
+  "homepage": "https://github.com/x402agent/solana-clawd",
   "identifier": "beefy",
   "manifest": "https://plugin.delivery/beefy/manifest.json",
   "meta": {
     "avatar": "🐄",
-    "description": "Beefy Finance multi-chain yield optimizer — vault APYs, strategies, and chain filtering",
+    "description": "[solana-clawd] Beefy Finance multi-chain yield optimizer — vault APYs, strategies, and chain filtering — consumed by CLAWD agents (Scanner/OODA/Analyst) and gated by the CLAWD permission engine.",
     "tags": [
       "beefy",
       "yield",
       "vaults",
-      "defi"
+      "defi",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "Beefy Finance",
     "category": "stocks-finance"

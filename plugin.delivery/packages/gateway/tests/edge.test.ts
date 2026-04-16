@@ -1,11 +1,11 @@
 import {
-  SperaxOSPluginManifest,
+  solana-clawdPluginManifest,
   PluginErrorType,
   PluginRequestPayload,
   createHeadersWithPluginSettings,
-} from '@sperax/chat-plugin-sdk';
-import { SPERAXOS_PLUGIN_SETTINGS } from '@sperax/chat-plugin-sdk/lib/request';
-import { createGatewayOnEdgeRuntime } from '@sperax/chat-plugins-gateway';
+} from '@solana-clawd/chat-plugin-sdk';
+import { SPERAXOS_PLUGIN_SETTINGS } from '@solana-clawd/chat-plugin-sdk/lib/request';
+import { createGatewayOnEdgeRuntime } from '@solana-clawd/chat-plugins-gateway';
 // @ts-ignore
 import SwaggerClient from 'swagger-client';
 import { Mock, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -38,7 +38,7 @@ const mockManifest = {
   ],
   identifier: 'abc',
   meta: {},
-} as SperaxOSPluginManifest;
+} as solana-clawdPluginManifest;
 
 const mockManifestWithOpenAPI = {
   ...mockManifest,
@@ -209,7 +209,7 @@ describe('createGatewayOnEdgeRuntime', () => {
         body: {
           identifier: 'unknown-plugin',
           message:
-            "[gateway] plugin 'unknown-plugin' is not found，please check the plugin list in https://test-market-index-url.com, or create an issue to [sperax-os-plugins](https://github.com/sperax/sperax-os-plugins/issues)",
+            "[gateway] plugin 'unknown-plugin' is not found，please check the plugin list in https://test-market-index-url.com, or create an issue to [solana-clawd-os-plugins](https://github.com/solana-clawd/solana-clawd-os-plugins/issues)",
         },
         errorType: 'PluginMetaNotFound',
       });
@@ -242,7 +242,7 @@ describe('createGatewayOnEdgeRuntime', () => {
                 {
                   author: 'test-plugin',
                   createdAt: '2023-08-12',
-                  homepage: 'https://github.com/sperax/chat-plugin-real-time-weather',
+                  homepage: 'https://github.com/solana-clawd/chat-plugin-real-time-weather',
                   identifier: 'test-plugin',
                   manifest: 'https://test-plugin-url.com/manifest.json',
                   meta: {
@@ -288,7 +288,7 @@ describe('createGatewayOnEdgeRuntime', () => {
                 {
                   author: 'test-plugin',
                   createdAt: '2023-08-12',
-                  homepage: 'https://github.com/sperax/chat-plugin-real-time-weather',
+                  homepage: 'https://github.com/solana-clawd/chat-plugin-real-time-weather',
                   identifier: 'test-plugin',
                   manifest: 'https://test-plugin-url.com/manifest.json',
                   meta: {
@@ -329,7 +329,7 @@ describe('createGatewayOnEdgeRuntime', () => {
         manifest: {
           ...mockManifest,
           settings: { properties: { abc: { type: 'string' } }, required: ['abc'], type: 'object' },
-        } as SperaxOSPluginManifest,
+        } as solana-clawdPluginManifest,
       };
       const mockRequest: Request = new Request('https://test-url.com', {
         body: JSON.stringify(payload),
@@ -348,7 +348,7 @@ describe('createGatewayOnEdgeRuntime', () => {
         manifest: {
           ...mockManifest,
           settings: { properties: { abc: { type: 'string' } }, required: ['abc'], type: 'object' },
-        } as SperaxOSPluginManifest,
+        } as solana-clawdPluginManifest,
       };
 
       const mockRequest: Request = new Request('https://test-url.com', {
@@ -390,7 +390,7 @@ describe('createGatewayOnEdgeRuntime', () => {
               url: 'https://test-api-url.com',
             },
           ],
-        } as SperaxOSPluginManifest,
+        } as solana-clawdPluginManifest,
       };
       const mockRequest: Request = new Request('https://test-url.com', {
         body: JSON.stringify(payload),

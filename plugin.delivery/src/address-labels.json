@@ -1,20 +1,21 @@
 {
-  "author": "SperaxOS",
+  "author": "solana-clawd",
   "createdAt": "2025-01-01",
-  "homepage": "https://github.com/nirholas/plugin.delivery",
+  "homepage": "https://github.com/x402agent/solana-clawd",
   "identifier": "address-labels",
   "manifest": "https://plugin.delivery/address-labels/manifest.json",
   "meta": {
     "avatar": "🏷️",
-    "description": "Identify wallet owners using Arkham and other sources",
+    "description": "[solana-clawd] Identify wallet owners using Arkham and other sources — consumed by CLAWD agents (Scanner/OODA/Analyst) and gated by the CLAWD permission engine.",
     "tags": [
       "labels",
       "identity",
-      "arkham"
+      "arkham",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "Address Labels",
     "category": "tools"
   },
   "schemaVersion": 1
 }
-

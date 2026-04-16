@@ -1,17 +1,19 @@
 {
-  "author": "SperaxOS",
+  "author": "solana-clawd",
   "createdAt": "2025-01-01",
-  "homepage": "https://github.com/nirholas/plugin.delivery",
+  "homepage": "https://github.com/x402agent/solana-clawd",
   "identifier": "sanctions-check",
   "manifest": "https://plugin.delivery/sanctions-check/manifest.json",
   "meta": {
     "avatar": "🛡️",
-    "description": "Screen wallet addresses against OFAC SDN and EU sanctions lists for compliance",
+    "description": "[solana-clawd] Screen wallet addresses against OFAC SDN and EU sanctions lists for compliance — consumed by CLAWD agents (Scanner/OODA/Analyst) and gated by the CLAWD permission engine.",
     "tags": [
       "sanctions",
       "compliance",
       "ofac",
-      "aml"
+      "aml",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "Sanctions Check",
     "category": "tools"

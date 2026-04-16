@@ -14,9 +14,9 @@
     "skipLibCheck": true,
     "strict": true,
     "paths": {
-      "@sperax/chat-plugin-sdk": ["./src"],
-      "@sperax/chat-plugin-sdk/client": ["./src/client"],
-      "@sperax/chat-plugin-sdk/openapi": ["./src/openapi"]
+      "@solana-clawd/chat-plugin-sdk": ["./src"],
+      "@solana-clawd/chat-plugin-sdk/client": ["./src/client"],
+      "@solana-clawd/chat-plugin-sdk/openapi": ["./src/openapi"]
     }
   },
   "include": ["./client", "./test-setup.ts"]

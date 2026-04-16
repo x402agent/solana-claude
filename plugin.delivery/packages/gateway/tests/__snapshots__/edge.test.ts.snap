@@ -295,7 +295,7 @@ exports[`createGatewayOnEdgeRuntime > OpenAPI Auth > should return PluginGateway
   "body": {
     "apiName": "test-api",
     "authorizations": {},
-    "message": "[plugin] there are problem with sending openapi request, please contact with Sperax Team",
+    "message": "[plugin] there are problem with sending openapi request, please contact with solana-clawd Team",
     "openapi": "https://test-openapi-url.com",
     "parameters": {},
   },

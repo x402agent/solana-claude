@@ -1,17 +1,19 @@
 {
-  "author": "SperaxOS",
+  "author": "solana-clawd",
   "createdAt": "2025-01-01",
-  "homepage": "https://github.com/nirholas/plugin.delivery",
+  "homepage": "https://github.com/x402agent/solana-clawd",
   "identifier": "oneinch",
   "manifest": "https://plugin.delivery/oneinch/manifest.json",
   "meta": {
     "avatar": "🦄",
-    "description": "1inch DEX aggregator — swap quotes, optimal routing, and gas estimation across chains",
+    "description": "[solana-clawd] 1inch DEX aggregator — swap quotes, optimal routing, and gas estimation across chains — consumed by CLAWD agents (Scanner/OODA/Analyst) and gated by the CLAWD permission engine.",
     "tags": [
       "1inch",
       "dex",
       "swap",
-      "aggregator"
+      "aggregator",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "1inch",
     "category": "stocks-finance"

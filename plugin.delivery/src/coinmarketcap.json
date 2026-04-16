@@ -1,21 +1,22 @@
 {
-  "author": "SperaxOS",
+  "author": "solana-clawd",
   "createdAt": "2025-01-01",
-  "homepage": "https://github.com/nirholas/plugin.delivery",
+  "homepage": "https://github.com/x402agent/solana-clawd",
   "identifier": "coinmarketcap",
   "manifest": "https://plugin.delivery/coinmarketcap/manifest.json",
   "meta": {
     "avatar": "📊",
-    "description": "Cryptocurrency rankings, market cap data, and trending coins",
+    "description": "[solana-clawd] Cryptocurrency rankings, market cap data, and trending coins — consumed by CLAWD agents (Scanner/OODA/Analyst) and gated by the CLAWD permission engine.",
     "tags": [
       "crypto",
       "prices",
       "rankings",
-      "marketcap"
+      "marketcap",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "CoinMarketCap",
     "category": "stocks-finance"
   },
   "schemaVersion": 1
 }
-

@@ -1,20 +1,21 @@
 {
-  "author": "SperaxOS",
+  "author": "solana-clawd",
   "createdAt": "2025-01-01",
-  "homepage": "https://github.com/nirholas/plugin.delivery",
+  "homepage": "https://github.com/x402agent/solana-clawd",
   "identifier": "fear-greed-index",
   "manifest": "https://plugin.delivery/fear-greed-index/manifest.json",
   "meta": {
     "avatar": "😱",
-    "description": "Crypto market sentiment indicator from 0 (Extreme Fear) to 100 (Extreme Greed)",
+    "description": "[solana-clawd] Crypto market sentiment indicator from 0 (Extreme Fear) to 100 (Extreme Greed) — consumed by CLAWD agents (Scanner/OODA/Analyst) and gated by the CLAWD permission engine.",
     "tags": [
       "sentiment",
       "market",
-      "indicator"
+      "indicator",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "Fear & Greed Index",
     "category": "stocks-finance"
   },
   "schemaVersion": 1
 }
-

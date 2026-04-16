@@ -1,20 +1,21 @@
 {
-  "author": "SperaxOS",
+  "author": "solana-clawd",
   "createdAt": "2025-01-01",
-  "homepage": "https://github.com/nirholas/plugin.delivery",
+  "homepage": "https://github.com/x402agent/solana-clawd",
   "identifier": "gas-estimator",
   "manifest": "https://plugin.delivery/gas-estimator/manifest.json",
   "meta": {
     "avatar": "⛽",
-    "description": "Transaction gas estimation using Tenderly simulation",
+    "description": "[solana-clawd] Transaction gas estimation using Tenderly simulation — consumed by CLAWD agents (Scanner/OODA/Analyst) and gated by the CLAWD permission engine.",
     "tags": [
       "gas",
       "estimation",
-      "tenderly"
+      "tenderly",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "Gas Estimator",
     "category": "tools"
   },
   "schemaVersion": 1
 }
-

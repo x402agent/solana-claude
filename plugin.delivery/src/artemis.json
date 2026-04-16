@@ -1,20 +1,21 @@
 {
-  "author": "SperaxOS",
+  "author": "solana-clawd",
   "createdAt": "2025-01-01",
-  "homepage": "https://github.com/nirholas/plugin.delivery",
+  "homepage": "https://github.com/x402agent/solana-clawd",
   "identifier": "artemis",
   "manifest": "https://plugin.delivery/artemis/manifest.json",
   "meta": {
     "avatar": "🏹",
-    "description": "Developer activity and ecosystem metrics",
+    "description": "[solana-clawd] Developer activity and ecosystem metrics — consumed by CLAWD agents (Scanner/OODA/Analyst) and gated by the CLAWD permission engine.",
     "tags": [
       "artemis",
       "developers",
-      "activity"
+      "activity",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "Artemis",
     "category": "science-education"
   },
   "schemaVersion": 1
 }
-

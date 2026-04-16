@@ -15,7 +15,7 @@
         },
         {
           "key": "Access-Control-Allow-Headers",
-          "value": "Content-Type, Authorization, X-Sperax-Plugin-Settings"
+          "value": "Content-Type, Authorization, X-solana-clawd-Plugin-Settings"
         }
       ]
     }

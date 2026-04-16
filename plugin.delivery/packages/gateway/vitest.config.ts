@@ -4,7 +4,7 @@ export default defineConfig({
   test: {
     alias: {
       '@': 'src',
-      '@sperax/chat-plugins-gateway': 'src',
+      '@solana-clawd/chat-plugins-gateway': 'src',
     },
     coverage: {
       provider: 'v8',

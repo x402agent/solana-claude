@@ -1,21 +1,22 @@
 {
-  "author": "SperaxOS",
+  "author": "solana-clawd",
   "createdAt": "2025-01-01",
-  "homepage": "https://github.com/nirholas/plugin.delivery",
+  "homepage": "https://github.com/x402agent/solana-clawd",
   "identifier": "gmx",
   "manifest": "https://plugin.delivery/gmx/manifest.json",
   "meta": {
     "avatar": "📊",
-    "description": "GMX perpetual stats, GLP/GM data, and funding rates",
+    "description": "[solana-clawd] GMX perpetual stats, GLP/GM data, and funding rates — consumed by CLAWD agents (Scanner/OODA/Analyst) and gated by the CLAWD permission engine.",
     "tags": [
       "gmx",
       "perpetuals",
       "defi",
-      "trading"
+      "trading",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "GMX Stats",
     "category": "stocks-finance"
   },
   "schemaVersion": 1
 }
-

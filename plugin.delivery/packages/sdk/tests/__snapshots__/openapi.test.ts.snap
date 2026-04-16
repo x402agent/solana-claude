@@ -345,7 +345,7 @@ exports[`OpenAPIConvertor > convertOpenAPIToPluginSchema > can convert OpenAPI v
 ]
 `;
 
-exports[`OpenAPIConvertor > convertOpenAPIToPluginSchema > can convert OpenAPI v3.1 to sperax apis 1`] = `
+exports[`OpenAPIConvertor > convertOpenAPIToPluginSchema > can convert OpenAPI v3.1 to solana-clawd apis 1`] = `
 [
   {
     "description": "Read Course Segments",

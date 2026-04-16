@@ -1,11 +1,11 @@
-# SperaxOS Plugin Development Guide
+# solana-clawd Plugin Development Guide
 
 > **Version:** 2.0.0  
 > **Last Updated:** December 27, 2025  
 > **Domain:** `plugin.delivery`  
-> **Repository:** `nirholas/plugins`
+> **Repository:** `x402agent/plugins`
 
-This comprehensive guide covers everything you need to know about developing, deploying, and maintaining plugins for SperaxOS.
+This comprehensive guide covers everything you need to know about developing, deploying, and maintaining plugins for solana-clawd.
 
 ---
 
@@ -63,7 +63,7 @@ Initialize your project:
 ```bash
 mkdir my-plugin && cd my-plugin
 pnpm init
-pnpm add @sperax/plugin-sdk @sperax/chat-plugins-gateway
+pnpm add @solana-clawd/plugin-sdk @solana-clawd/chat-plugins-gateway
 pnpm add -D typescript @types/node
 ```
 
@@ -71,7 +71,7 @@ Create `public/manifest.json`:
 
 ```json
 {
-  "$schema": "https://unpkg.com/@sperax/plugin-sdk/schema.json",
+  "$schema": "https://unpkg.com/@solana-clawd/plugin-sdk/schema.json",
   "identifier": "my-plugin",
   "api": [
     {
@@ -102,7 +102,7 @@ Create `public/manifest.json`:
 Create `api/hello.ts`:
 
 ```typescript
-import { PluginErrorType, createErrorResponse } from '@sperax/plugin-sdk';
+import { PluginErrorType, createErrorResponse } from '@solana-clawd/plugin-sdk';
 
 export const config = { runtime: 'edge' };
 
@@ -133,11 +133,11 @@ export default async (req: Request) => {
 Create `api/gateway.ts`:
 
 ```typescript
-import { createSperaxChatPluginGateway } from '@sperax/chat-plugins-gateway';
+import { createsolana-clawdChatPluginGateway } from '@solana-clawd/chat-plugins-gateway';
 
 export const config = { runtime: 'edge' };
 
-export default createSperaxChatPluginGateway();
+export default createsolana-clawdChatPluginGateway();
 ```
 
 ### Testing Locally
@@ -156,7 +156,7 @@ curl -X POST http://localhost:3400/api/hello \
   -d '{"name": "Test"}'
 ```
 
-Add to SperaxOS:
+Add to solana-clawd:
 1. Go to Settings → Plugins
 2. Click "Add Custom Plugin"
 3. Enter: `http://localhost:3400/manifest.json`
@@ -212,9 +212,9 @@ Continue reading for detailed documentation on [Architecture Overview](#2-archit
 
 | Component | Repository | Purpose |
 |-----------|------------|---------|
-| **Plugin Index** | `nirholas/plugins` | Plugin marketplace registry |
-| **Plugin SDK** | `@sperax/plugin-sdk` | Development toolkit |
-| **Plugin Gateway** | `@sperax/chat-plugins-gateway` | Request proxy service |
+| **Plugin Index** | `x402agent/plugins` | Plugin marketplace registry |
+| **Plugin SDK** | `@solana-clawd/plugin-sdk` | Development toolkit |
+| **Plugin Gateway** | `@solana-clawd/chat-plugins-gateway` | Request proxy service |
 | **Plugin Templates** | `templates/` | Starter project templates |
 
 ### Data Flow: Function Call Mechanism
@@ -251,7 +251,7 @@ User: "Bitcoin is currently $96,500 USD, up 2.3% in the last 24h"
 
 ## 2. Plugin Types
 
-SperaxOS supports three distinct plugin types, each suited for different use cases:
+solana-clawd supports three distinct plugin types, each suited for different use cases:
 
 ### 2.1 Default Plugin
 
@@ -444,18 +444,18 @@ For plugins using OpenAPI specification:
 
 ## 4. Plugin Index
 
-The plugin index (`public/index.json`) is the registry that SperaxOS uses to discover and display plugins.
+The plugin index (`public/index.json`) is the registry that solana-clawd uses to discover and display plugins.
 
 ### Index Structure
 
 ```json
 {
   "schemaVersion": 1,
-  "name": "SperaxOS Plugins",
-  "description": "The official plugin marketplace for SperaxOS",
-  "author": "Sperax",
-  "homepage": "https://sperax.io",
-  "repository": "https://github.com/nirholas/plugin.delivery",
+  "name": "solana-clawd Plugins",
+  "description": "The official plugin marketplace for solana-clawd",
+  "author": "solana-clawd",
+  "homepage": "https://solanaos.net",
+  "repository": "https://github.com/x402agent/solana-clawd",
   "plugins": [
     {
       "author": "CoinGecko",
@@ -576,7 +576,7 @@ cd my-plugin
 Or clone the repository and start from there:
 
 ```bash
-git clone https://github.com/nirholas/plugin.delivery.git
+git clone https://github.com/x402agent/solana-clawd.git
 cd plugin.delivery
 cp -r templates/openapi ../my-plugin
 cd ../my-plugin
@@ -674,7 +674,7 @@ For local development, use a manifest with the gateway field:
 ### Local Testing Steps
 
 1. Start your plugin: `npm run dev`
-2. Open SperaxOS → Agent Settings → Plugins
+2. Open solana-clawd → Agent Settings → Plugins
 3. Click "Add Custom Plugin"
 4. Enter: `http://localhost:3400/manifest-dev.json`
 5. Save and test in chat
@@ -687,7 +687,7 @@ For local development, use a manifest with the gateway field:
 
 ```typescript
 // src/pages/api/your-endpoint.ts
-import { PluginErrorType, createErrorResponse } from '@sperax/plugin-sdk';
+import { PluginErrorType, createErrorResponse } from '@solana-clawd/plugin-sdk';
 
 export const config = {
   runtime: 'edge',
@@ -734,19 +734,19 @@ async function fetchExternalData(query: string) {
 
 ```typescript
 // src/pages/api/gateway.ts
-import { createSperaxChatPluginGateway } from '@sperax/chat-plugins-gateway';
+import { createsolana-clawdChatPluginGateway } from '@solana-clawd/chat-plugins-gateway';
 
 export const config = {
   runtime: 'edge',
 };
 
-export default createSperaxChatPluginGateway();
+export default createsolana-clawdChatPluginGateway();
 ```
 
 ### Accessing Plugin Settings
 
 ```typescript
-import { getPluginSettingsFromRequest } from '@sperax/plugin-sdk';
+import { getPluginSettingsFromRequest } from '@solana-clawd/plugin-sdk';
 
 export default async (req: Request) => {
   // Get user-configured settings
@@ -782,7 +782,7 @@ export default async (req: Request) => {
 
 ```tsx
 // src/pages/index.tsx
-import { fetchPluginMessage } from '@sperax/plugin-sdk';
+import { fetchPluginMessage } from '@solana-clawd/plugin-sdk';
 import { memo, useEffect, useState } from 'react';
 
 interface PluginData {
@@ -820,37 +820,37 @@ export default PluginUI;
 ### SDK Communication Methods
 
 ```typescript
-import { speraxChat } from '@sperax/plugin-sdk';
+import { solana-clawdChat } from '@solana-clawd/plugin-sdk';
 
 // Get plugin payload (initialization data)
-const payload = await speraxChat.getPluginPayload();
+const payload = await solana-clawdChat.getPluginPayload();
 
 // Get current message content
-const message = await speraxChat.getPluginMessage();
+const message = await solana-clawdChat.getPluginMessage();
 
 // Update message content
-speraxChat.setPluginMessage(newContent);
+solana-clawdChat.setPluginMessage(newContent);
 
 // Get/set plugin state
-const state = await speraxChat.getPluginState('myKey');
-speraxChat.setPluginState('myKey', newValue);
+const state = await solana-clawdChat.getPluginState('myKey');
+solana-clawdChat.setPluginState('myKey', newValue);
 
 // Get/set settings
-const settings = await speraxChat.getPluginSettings();
-speraxChat.setPluginSettings(newSettings);
+const settings = await solana-clawdChat.getPluginSettings();
+solana-clawdChat.setPluginSettings(newSettings);
 
 // Trigger AI response (standalone plugins)
-speraxChat.triggerAIMessage(messageId);
+solana-clawdChat.triggerAIMessage(messageId);
 
 // Create assistant message (standalone plugins)
-speraxChat.createAssistantMessage('Response content');
+solana-clawdChat.createAssistantMessage('Response content');
 ```
 
 ---
 
 ## 8. OpenAPI Integration
 
-SperaxOS fully supports the OpenAPI specification, allowing you to convert existing APIs into plugins.
+solana-clawd fully supports the OpenAPI specification, allowing you to convert existing APIs into plugins.
 
 ### OpenAPI Plugin Structure
 
@@ -991,7 +991,7 @@ See `public/openai/coingecko/` for a complete working example:
 ### Server Communication Flow
 
 ```
-SperaxOS Core
+solana-clawd Core
      │
      │ HTTP POST with PluginRequestPayload
      ▼
@@ -1011,7 +1011,7 @@ Plugin Gateway
      │
      │ Formats response
      ▼
-SperaxOS Core
+solana-clawd Core
      │
      │ Passes to LLM for processing
      ▼
@@ -1023,14 +1023,14 @@ User sees formatted response
 Plugins use `window.postMessage` for secure cross-origin communication:
 
 ```typescript
-// Plugin → SperaxOS
+// Plugin → solana-clawd
 window.parent.postMessage({
   type: 'plugin-action',
   action: 'setMessage',
   data: { content: 'Updated content' }
 }, '*');
 
-// SperaxOS → Plugin
+// solana-clawd → Plugin
 window.addEventListener('message', (event) => {
   if (event.data.type === 'plugin-init') {
     const { payload, settings, state } = event.data;
@@ -1042,11 +1042,11 @@ window.addEventListener('message', (event) => {
 The SDK abstracts this complexity:
 
 ```typescript
-import { speraxChat } from '@sperax/plugin-sdk';
+import { solana-clawdChat } from '@solana-clawd/plugin-sdk';
 
 // Simplified API
-const payload = await speraxChat.getPluginPayload();
-speraxChat.setPluginMessage(newContent);
+const payload = await solana-clawdChat.getPluginPayload();
+solana-clawdChat.setPluginMessage(newContent);
 ```
 
 ---
@@ -1213,8 +1213,8 @@ console.log('[Plugin] Response:', result);
 
 - **Documentation:** This guide
 - **SDK Docs:** https://plugin.delivery/docs
-- **GitHub Issues:** https://github.com/nirholas/plugin.delivery/issues
-- **Discord:** [SperaxOS Discord Server]
+- **GitHub Issues:** https://github.com/x402agent/solana-clawd/issues
+- **Discord:** [solana-clawd Discord Server]
 
 ---
 
@@ -1301,11 +1301,11 @@ Translations generated for: `en-US`, `zh-CN`, `zh-TW`, `ja-JP`, `ko-KR`, `de-DE`
 
 | Resource | URL |
 |----------|-----|
-| Plugin SDK | `@sperax/plugin-sdk` |
-| Plugin Gateway | `@sperax/chat-plugins-gateway` |
+| Plugin SDK | `@solana-clawd/plugin-sdk` |
+| Plugin Gateway | `@solana-clawd/chat-plugins-gateway` |
 | Plugin Templates | `./templates/` (included in this repo) |
 | OpenAPI Spec | https://swagger.io/specification/ |
-| SperaxOS Docs | https://sperax.io/docs |
+| solana-clawd Docs | https://solanaos.net/docs |
 | Plugin Delivery | https://plugin.delivery |
 
 ### Cheat Sheet
@@ -1315,10 +1315,10 @@ Translations generated for: `en-US`, `zh-CN`, `zh-TW`, `ja-JP`, `ko-KR`, `de-DE`
 cp -r templates/openapi my-plugin
 
 # Install SDK
-npm install @sperax/plugin-sdk
+npm install @solana-clawd/plugin-sdk
 
 # Install Gateway (for local dev)
-npm install @sperax/chat-plugins-gateway
+npm install @solana-clawd/chat-plugins-gateway
 
 # Run locally
 npm run dev
@@ -1332,5 +1332,5 @@ vercel --prod
 
 ---
 
-*For MCP (Model Context Protocol) plugins, see the [MCP vs Plugins Guide](../SperaxOS/docs/MCP_VS_PLUGINS.md).*
+*For MCP (Model Context Protocol) plugins, see the [MCP vs Plugins Guide](../solana-clawd/docs/MCP_VS_PLUGINS.md).*
 

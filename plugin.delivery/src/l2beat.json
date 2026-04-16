@@ -1,21 +1,22 @@
 {
-  "author": "SperaxOS",
+  "author": "solana-clawd",
   "createdAt": "2025-01-01",
-  "homepage": "https://github.com/nirholas/plugin.delivery",
+  "homepage": "https://github.com/x402agent/solana-clawd",
   "identifier": "l2beat",
   "manifest": "https://plugin.delivery/l2beat/manifest.json",
   "meta": {
     "avatar": "📊",
-    "description": "Layer 2 TVL rankings and risk analysis",
+    "description": "[solana-clawd] Layer 2 TVL rankings and risk analysis — consumed by CLAWD agents (Scanner/OODA/Analyst) and gated by the CLAWD permission engine.",
     "tags": [
       "l-2",
       "tvl",
       "risk",
-      "analysis"
+      "analysis",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "L2Beat",
     "category": "tools"
   },
   "schemaVersion": 1
 }
-

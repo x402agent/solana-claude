@@ -1,20 +1,21 @@
 {
-  "author": "SperaxOS",
+  "author": "solana-clawd",
   "createdAt": "2025-01-01",
-  "homepage": "https://github.com/nirholas/plugin.delivery",
+  "homepage": "https://github.com/x402agent/solana-clawd",
   "identifier": "token-unlocks",
   "manifest": "https://plugin.delivery/token-unlocks/manifest.json",
   "meta": {
     "avatar": "🔓",
-    "description": "Track vesting schedules and upcoming token unlock events",
+    "description": "[solana-clawd] Track vesting schedules and upcoming token unlock events — consumed by CLAWD agents (Scanner/OODA/Analyst) and gated by the CLAWD permission engine.",
     "tags": [
       "vesting",
       "unlocks",
-      "tokenomics"
+      "tokenomics",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "Token Unlocks",
     "category": "stocks-finance"
   },
   "schemaVersion": 1
 }
-

@@ -1,4 +1,4 @@
-import { speraxOS, usePluginState } from '@sperax/chat-plugin-sdk/client';
+import { solana-clawdOS, usePluginState } from '@solana-clawd/chat-plugin-sdk/client';
 import { act, renderHook } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -10,9 +10,9 @@ describe('usePluginState', () => {
   let setPluginStateSpy: any;
 
   beforeEach(() => {
-    // Mock speraxOS methods before each test
-    getPluginStateSpy = vi.spyOn(speraxOS, 'getPluginState').mockResolvedValue(undefined);
-    setPluginStateSpy = vi.spyOn(speraxOS, 'setPluginState').mockResolvedValue();
+    // Mock solana-clawdOS methods before each test
+    getPluginStateSpy = vi.spyOn(solana-clawdOS, 'getPluginState').mockResolvedValue(undefined);
+    setPluginStateSpy = vi.spyOn(solana-clawdOS, 'setPluginState').mockResolvedValue();
   });
 
   afterEach(() => {

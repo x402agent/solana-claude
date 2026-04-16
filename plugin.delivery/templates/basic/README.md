@@ -2,15 +2,15 @@
 
 <div align="center">
 
-<img height="120" src="https://registry.npmmirror.com/@sperax/assets-emoji/1.3.0/files/assets/puzzle-piece.webp">
+<img height="120" src="https://registry.npmmirror.com/@solana-clawd/assets-emoji/1.3.0/files/assets/puzzle-piece.webp">
 <img height="120" src="https://gw.alipayobjects.com/zos/kitchen/qJ3l3EPsdW/split.svg">
-<img height="120" src="https://registry.npmmirror.com/@sperax/assets-emoji-anim/1.0.0/files/assets/rocket.webp">
+<img height="120" src="https://registry.npmmirror.com/@solana-clawd/assets-emoji-anim/1.0.0/files/assets/rocket.webp">
 
-<h1>Plugin Template<br/><sup>SperaxOS Plugin</sup></h1>
+<h1>Plugin Template<br/><sup>solana-clawd Plugin</sup></h1>
 
-This is the plugin template for SperaxOS plugin development
+This is the plugin template for solana-clawd plugin development
 
-[![][🤯-🧩-sperax-shield]][🤯-🧩-sperax-link]
+[![][🤯-🧩-solana-clawd-shield]][🤯-🧩-solana-clawd-link]
 [![][github-release-shield]][github-release-link]
 [![][github-releasedate-shield]][github-releasedate-link]
 [![][github-action-test-shield]][github-action-test-link]
@@ -58,14 +58,14 @@ This is the plugin template for SperaxOS plugin development
 ## 🤯 Usage
 
 > [!IMPORTANT]\
-> See detail on [📘 Template usage](https://chat-plugin-sdk.sperax.com/guides/template)
+> See detail on [📘 Template usage](https://chat-plugin-sdk.solana-clawd.com/guides/template)
 
 > [!Note]\
-> Plugins provide a means to extend the [Function Calling][fc-link] capabilities of SperaxOS. They can be used to introduce new function calls, and even new ways to render message results. If you are interested in plugin development, please refer to our [📘 Plugin Development Guide](https://github.com/nirholas/plugin.delivery/wiki/Plugin-Development) in the Wiki.
+> Plugins provide a means to extend the [Function Calling][fc-link] capabilities of solana-clawd. They can be used to introduce new function calls, and even new ways to render message results. If you are interested in plugin development, please refer to our [📘 Plugin Development Guide](https://github.com/x402agent/solana-clawd/wiki/Plugin-Development) in the Wiki.
 >
-> - [@sperax/speraxos-plugins][speraxos-plugins]: This is the plugin index for SperaxOS. It accesses index.json from this repository to display a list of available plugins for SperaxOS to the user.
-> - [@sperax/plugin-sdk][chat-plugin-sdk]: The SperaxOS Plugin SDK assists you in creating exceptional chat plugins for SperaxOS.
-> - [@sperax/chat-plugins-gateway][chat-plugins-gateway]: The SperaxOS Plugins Gateway is a backend service that serves as a gateway for SperaxOS plugins. We deploy this service using Vercel. The primary API POST /api/v1/runner is deployed as an Edge Function.
+> - [@solana-clawd/solana-clawdos-plugins][solana-clawdos-plugins]: This is the plugin index for solana-clawd. It accesses index.json from this repository to display a list of available plugins for solana-clawd to the user.
+> - [@solana-clawd/plugin-sdk][chat-plugin-sdk]: The solana-clawd Plugin SDK assists you in creating exceptional chat plugins for solana-clawd.
+> - [@solana-clawd/chat-plugins-gateway][chat-plugins-gateway]: The solana-clawd Plugins Gateway is a backend service that serves as a gateway for solana-clawd plugins. We deploy this service using Vercel. The primary API POST /api/v1/runner is deployed as an Edge Function.
 
 | Official Plugin                                 | Description                                                                                                                                       |
 | ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -90,7 +90,7 @@ Or clone it for local development:
 [![][bun-shield]][bun-link]
 
 ```bash
-$ git clone https://github.com/sperax/chat-plugin-template.git
+$ git clone https://github.com/solana-clawd/chat-plugin-template.git
 $ cd chat-plugin-template
 $ bun install
 $ bun dev
@@ -118,8 +118,8 @@ Contributions of all types are more than welcome, if you are interested in contr
 
 ## 🔗 Links
 
-- **[🤖 SperaxOS](https://github.com/nirholas/plugin.delivery)** - An open-source, extensible (Function Calling), high-performance chatbot framework. It supports one-click free deployment of your private ChatGPT/LLM web application.
-- **[🧩 / 🏪 Plugin Index](https://github.com/nirholas/plugin.delivery-plugins)** - This is the plugin index for SperaxOS. It accesses index.json from this repository to display a list of available plugins for Function Calling to the user.
+- **[🤖 solana-clawd](https://github.com/x402agent/solana-clawd)** - An open-source, extensible (Function Calling), high-performance chatbot framework. It supports one-click free deployment of your private ChatGPT/LLM web application.
+- **[🧩 / 🏪 Plugin Index](https://github.com/x402agent/solana-clawd-plugins)** - This is the plugin index for solana-clawd. It accesses index.json from this repository to display a list of available plugins for Function Calling to the user.
 
 <div align="right">
 
@@ -131,46 +131,46 @@ Contributions of all types are more than welcome, if you are interested in contr
 
 #### 📝 License
 
-Copyright © 2023 [Sperax][profile-url]. <br />
+Copyright © 2023 [solana-clawd][profile-url]. <br />
 This project is [MIT](./LICENSE) licensed.
 
 <!-- LINK GROUP -->
 
-[🤯-🧩-sperax-link]: https://github.com/nirholas/plugin.delivery-plugins
-[🤯-🧩-sperax-shield]: https://img.shields.io/badge/%F0%9F%A4%AF%20%26%20%F0%9F%A7%A9%20Sperax-Plugin-95f3d9?labelColor=black&style=flat-square
+[🤯-🧩-solana-clawd-link]: https://github.com/x402agent/solana-clawd-plugins
+[🤯-🧩-solana-clawd-shield]: https://img.shields.io/badge/%F0%9F%A4%AF%20%26%20%F0%9F%A7%A9%20solana-clawd-Plugin-95f3d9?labelColor=black&style=flat-square
 [back-to-top]: https://img.shields.io/badge/-BACK_TO_TOP-151515?style=flat-square
 [bun-link]: https://bun.sh
 [bun-shield]: https://img.shields.io/badge/-speedup%20with%20bun-black?logo=bun&style=for-the-badge
-[chat-plugin-realtime-weather]: https://github.com/sperax/chat-plugin-realtime-weather
-[chat-plugin-sdk]: https://github.com/sperax/chat-plugin-sdk
-[chat-plugin-search-engine]: https://github.com/sperax/chat-plugin-search-engine
-[chat-plugin-web-crawler]: https://github.com/sperax/chat-plugin-web-crawler
-[chat-plugins-gateway]: https://github.com/sperax/chat-plugins-gateway
+[chat-plugin-realtime-weather]: https://github.com/solana-clawd/chat-plugin-realtime-weather
+[chat-plugin-sdk]: https://github.com/solana-clawd/chat-plugin-sdk
+[chat-plugin-search-engine]: https://github.com/solana-clawd/chat-plugin-search-engine
+[chat-plugin-web-crawler]: https://github.com/solana-clawd/chat-plugin-web-crawler
+[chat-plugins-gateway]: https://github.com/solana-clawd/chat-plugins-gateway
 [fc-link]: https://sspai.com/post/81986
-[github-action-release-link]: https://github.com/sperax/chat-plugin-template/actions/workflows/release.yml
-[github-action-release-shield]: https://img.shields.io/github/actions/workflow/status/sperax/chat-plugin-template/release.yml?label=release&labelColor=black&logo=githubactions&logoColor=white&style=flat-square
-[github-action-test-link]: https://github.com/sperax/chat-plugin-template/actions/workflows/test.yml
-[github-action-test-shield]: https://img.shields.io/github/actions/workflow/status/sperax/chat-plugin-template/test.yml?label=test&labelColor=black&logo=githubactions&logoColor=white&style=flat-square
-[github-codespace-link]: https://codespaces.new/sperax/chat-plugin-template
+[github-action-release-link]: https://github.com/solana-clawd/chat-plugin-template/actions/workflows/release.yml
+[github-action-release-shield]: https://img.shields.io/github/actions/workflow/status/solana-clawd/chat-plugin-template/release.yml?label=release&labelColor=black&logo=githubactions&logoColor=white&style=flat-square
+[github-action-test-link]: https://github.com/solana-clawd/chat-plugin-template/actions/workflows/test.yml
+[github-action-test-shield]: https://img.shields.io/github/actions/workflow/status/solana-clawd/chat-plugin-template/test.yml?label=test&labelColor=black&logo=githubactions&logoColor=white&style=flat-square
+[github-codespace-link]: https://codespaces.new/solana-clawd/chat-plugin-template
 [github-codespace-shield]: https://github.com/codespaces/badge.svg
-[github-contrib-link]: https://github.com/sperax/chat-plugin-template/graphs/contributors
-[github-contrib-shield]: https://contrib.rocks/image?repo=sperax%2Fchat-plugin-template
-[github-contributors-link]: https://github.com/sperax/chat-plugin-template/graphs/contributors
-[github-contributors-shield]: https://img.shields.io/github/contributors/sperax/chat-plugin-template?color=c4f042&labelColor=black&style=flat-square
-[github-forks-link]: https://github.com/sperax/chat-plugin-template/network/members
-[github-forks-shield]: https://img.shields.io/github/forks/sperax/chat-plugin-template?color=8ae8ff&labelColor=black&style=flat-square
-[github-issues-link]: https://github.com/sperax/chat-plugin-template/issues
-[github-issues-shield]: https://img.shields.io/github/issues/sperax/chat-plugin-template?color=ff80eb&labelColor=black&style=flat-square
-[github-license-link]: https://github.com/sperax/chat-plugin-template/blob/main/LICENSE
-[github-license-shield]: https://img.shields.io/github/license/sperax/chat-plugin-template?color=white&labelColor=black&style=flat-square
-[github-release-link]: https://github.com/sperax/chat-plugin-template/releases
-[github-release-shield]: https://img.shields.io/github/v/release/sperax/chat-plugin-template?color=369eff&labelColor=black&logo=github&style=flat-square
-[github-releasedate-link]: https://github.com/sperax/chat-plugin-template/releases
-[github-releasedate-shield]: https://img.shields.io/github/release-date/sperax/chat-plugin-template?labelColor=black&style=flat-square
-[github-stars-link]: https://github.com/sperax/chat-plugin-template/network/stargazers
-[github-stars-shield]: https://img.shields.io/github/stars/sperax/chat-plugin-template?color=ffcb47&labelColor=black&style=flat-square
-[speraxos-plugins]: https://github.com/nirholas/plugin.delivery-plugins
-[pr-welcome-link]: https://github.com/sperax/chat-plugin-template/pulls
+[github-contrib-link]: https://github.com/solana-clawd/chat-plugin-template/graphs/contributors
+[github-contrib-shield]: https://contrib.rocks/image?repo=solana-clawd%2Fchat-plugin-template
+[github-contributors-link]: https://github.com/solana-clawd/chat-plugin-template/graphs/contributors
+[github-contributors-shield]: https://img.shields.io/github/contributors/solana-clawd/chat-plugin-template?color=c4f042&labelColor=black&style=flat-square
+[github-forks-link]: https://github.com/solana-clawd/chat-plugin-template/network/members
+[github-forks-shield]: https://img.shields.io/github/forks/solana-clawd/chat-plugin-template?color=8ae8ff&labelColor=black&style=flat-square
+[github-issues-link]: https://github.com/solana-clawd/chat-plugin-template/issues
+[github-issues-shield]: https://img.shields.io/github/issues/solana-clawd/chat-plugin-template?color=ff80eb&labelColor=black&style=flat-square
+[github-license-link]: https://github.com/solana-clawd/chat-plugin-template/blob/main/LICENSE
+[github-license-shield]: https://img.shields.io/github/license/solana-clawd/chat-plugin-template?color=white&labelColor=black&style=flat-square
+[github-release-link]: https://github.com/solana-clawd/chat-plugin-template/releases
+[github-release-shield]: https://img.shields.io/github/v/release/solana-clawd/chat-plugin-template?color=369eff&labelColor=black&logo=github&style=flat-square
+[github-releasedate-link]: https://github.com/solana-clawd/chat-plugin-template/releases
+[github-releasedate-shield]: https://img.shields.io/github/release-date/solana-clawd/chat-plugin-template?labelColor=black&style=flat-square
+[github-stars-link]: https://github.com/solana-clawd/chat-plugin-template/network/stargazers
+[github-stars-shield]: https://img.shields.io/github/stars/solana-clawd/chat-plugin-template?color=ffcb47&labelColor=black&style=flat-square
+[solana-clawdos-plugins]: https://github.com/x402agent/solana-clawd-plugins
+[pr-welcome-link]: https://github.com/solana-clawd/chat-plugin-template/pulls
 [pr-welcome-shield]: https://img.shields.io/badge/%F0%9F%A4%AF%20PR%20WELCOME-%E2%86%92-ffcb47?labelColor=black&style=for-the-badge
-[profile-url]: https://github.com/sperax
+[profile-url]: https://github.com/solana-clawd
 

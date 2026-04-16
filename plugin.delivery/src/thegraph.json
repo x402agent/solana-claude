@@ -1,22 +1,23 @@
 {
-  "author": "The Graph Protocol",
+  "author": "solana-clawd",
   "createdAt": "2025-01-08",
-  "homepage": "https://thegraph.com",
+  "homepage": "https://github.com/x402agent/solana-clawd",
   "identifier": "thegraph",
   "manifest": "https://plugin.delivery/thegraph/manifest.json",
   "meta": {
     "avatar": "📊",
-    "description": "The Graph Protocol indexing layer. Query blockchain data from subgraphs for Uniswap, Aave, Compound, and thousands of protocols.",
+    "description": "[solana-clawd] The Graph Protocol indexing layer. Query blockchain data from subgraphs for Uniswap, Aave, Compound, and thousands of protocols. — consumed by CLAWD agents (Scanner/OODA/Analyst) and gated by the CLAWD permission engine.",
     "tags": [
       "defi",
       "indexing",
       "data",
       "subgraphs",
-      "analytics"
+      "analytics",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "The Graph",
     "category": "stocks-finance"
   },
   "schemaVersion": 1
 }
-

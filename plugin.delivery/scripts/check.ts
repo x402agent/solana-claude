@@ -1,4 +1,4 @@
-import { pluginMetaSchema } from '@sperax/plugin-sdk';
+import { pluginMetaSchema } from '@solana-clawd/plugin-sdk';
 import { consola } from 'consola';
 import dayjs from 'dayjs';
 

@@ -1,22 +1,22 @@
 export enum PluginChannel {
-  createAssistantMessage = 'speraxos:create-assistant-message',
+  createAssistantMessage = 'solana-clawdos:create-assistant-message',
 
-  fetchPluginMessage = 'speraxos:fetch-plugin-message',
-  fetchPluginSettings = 'speraxos:fetch-plugin-settings',
+  fetchPluginMessage = 'solana-clawdos:fetch-plugin-message',
+  fetchPluginSettings = 'solana-clawdos:fetch-plugin-settings',
 
-  fetchPluginState = 'speraxos:fetch-plugin-state',
-  fillStandalonePluginContent = 'speraxos:fill-plugin-content',
-  initStandalonePlugin = 'speraxos:init-standalone-plugin',
+  fetchPluginState = 'solana-clawdos:fetch-plugin-state',
+  fillStandalonePluginContent = 'solana-clawdos:fill-plugin-content',
+  initStandalonePlugin = 'solana-clawdos:init-standalone-plugin',
 
-  pluginReadyForRender = 'speraxos:plugin-ready-for-render',
+  pluginReadyForRender = 'solana-clawdos:plugin-ready-for-render',
 
-  renderPlugin = 'speraxos:render-plugin',
-  renderPluginSettings = 'speraxos:render-plugin-settings',
-  renderPluginState = 'speraxos:render-plugin-state',
+  renderPlugin = 'solana-clawdos:render-plugin',
+  renderPluginSettings = 'solana-clawdos:render-plugin-settings',
+  renderPluginState = 'solana-clawdos:render-plugin-state',
 
-  triggerAIMessage = 'speraxos:trigger-ai-message',
+  triggerAIMessage = 'solana-clawdos:trigger-ai-message',
 
-  updatePluginSettings = 'speraxos:update-plugin-settings',
-  updatePluginState = 'speraxos:update-plugin-state',
+  updatePluginSettings = 'solana-clawdos:update-plugin-settings',
+  updatePluginState = 'solana-clawdos:update-plugin-state',
 }
 

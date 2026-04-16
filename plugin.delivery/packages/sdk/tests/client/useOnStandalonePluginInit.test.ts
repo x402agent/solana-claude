@@ -1,8 +1,8 @@
 import {
   PluginPayload,
-  speraxOS,
+  solana-clawdOS,
   useOnStandalonePluginInit,
-} from '@sperax/chat-plugin-sdk/client';
+} from '@solana-clawd/chat-plugin-sdk/client';
 import { renderHook } from '@testing-library/react';
 import { Mock, beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -17,7 +17,7 @@ describe('useOnStandalonePluginInit', () => {
 
   it('should not call callback if getPluginPayload resolves to undefined', async () => {
     // Mock the getPluginPayload to resolve to undefined
-    vi.spyOn(speraxOS, 'getPluginPayload').mockResolvedValue(undefined as any);
+    vi.spyOn(solana-clawdOS, 'getPluginPayload').mockResolvedValue(undefined as any);
 
     // Render the hook
     renderHook(() => useOnStandalonePluginInit(callback));
@@ -36,7 +36,7 @@ describe('useOnStandalonePluginInit', () => {
     };
 
     // Mock the getPluginPayload to resolve with the mock payload
-    vi.spyOn(speraxOS, 'getPluginPayload').mockResolvedValue(mockPayload);
+    vi.spyOn(solana-clawdOS, 'getPluginPayload').mockResolvedValue(mockPayload);
 
     // Render the hook
     renderHook(() => useOnStandalonePluginInit(callback));

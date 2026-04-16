@@ -1,16 +1,16 @@
-# SperaxOS Plugin & Portfolio Integration Complete Guide
+# solana-clawd Plugin & Portfolio Integration Complete Guide
 
 > **Version:** 1.0.0  
 > **Last Updated:** December 27, 2025  
-> **Author:** SperaxOS Development Team
+> **Author:** solana-clawd Development Team
 
-This guide covers the complete setup, development, and deployment of the SperaxOS plugin ecosystem, with a focus on portfolio integration in chat.
+This guide covers the complete setup, development, and deployment of the solana-clawd plugin ecosystem, with a focus on portfolio integration in chat.
 
 ---
 
 ## Related Documentation
 
-For developing **external plugins** deployed to the SperaxOS Plugin Marketplace (`plugin.delivery`), see the comprehensive guides in the plugins repository:
+For developing **external plugins** deployed to the solana-clawd Plugin Marketplace (`plugin.delivery`), see the comprehensive guides in the plugins repository:
 
 | Document | Description |
 |----------|-------------|
@@ -22,7 +22,7 @@ For developing **external plugins** deployed to the SperaxOS Plugin Marketplace 
 ## Table of Contents
 
 1. [Architecture Overview](#1-architecture-overview)
-2. [SperaxOS Plugin Ecosystem](#2-nirholas-plugin-ecosystem)
+2. [solana-clawd Plugin Ecosystem](#2-x402agent-plugin-ecosystem)
 3. [Portfolio Integration Methods](#3-portfolio-integration-methods)
 4. [Environment Setup](#4-environment-setup)
 5. [Database Configuration](#5-database-configuration)
@@ -98,60 +98,60 @@ User Message: "Show my portfolio"
 
 ---
 
-## 2. SperaxOS Plugin Ecosystem
+## 2. solana-clawd Plugin Ecosystem
 
 ### Core Repositories
 
 | Repository | Purpose | NPM Package | Importance |
 |------------|---------|-------------|------------|
-| **[plugin-sdk](https://github.com/nirholas/plugin-sdk)** | SDK for building plugins | `@nirholas/plugin-sdk` | 🔴 Critical |
-| **[chat-plugins-gateway](https://github.com/nirholas/chat-plugins-gateway)** | Proxy between SperaxOS and plugins | `@nirholas/chat-plugins-gateway` | 🔴 Critical |
-| **[speraxos-plugins](https://github.com/nirholas/speraxos-plugins)** | Plugin marketplace index | - | 🟡 Medium |
-| **[openai-plugins](https://github.com/nirholas/openai-plugins)** | ChatGPT plugin compatibility | - | 🟢 Low |
+| **[plugin-sdk](https://github.com/x402agent/solana-clawd)** | SDK for building plugins | `@x402agent/plugin-sdk` | 🔴 Critical |
+| **[chat-plugins-gateway](https://github.com/x402agent/solana-clawd)** | Proxy between solana-clawd and plugins | `@x402agent/chat-plugins-gateway` | 🔴 Critical |
+| **[solana-clawdos-plugins](https://github.com/x402agent/solana-clawd)** | Plugin marketplace index | - | 🟡 Medium |
+| **[openai-plugins](https://github.com/x402agent/solana-clawd)** | ChatGPT plugin compatibility | - | 🟢 Low |
 
 ### Example Plugin Repositories
 
 | Repository | Type | Has Backend | Has Frontend | Deployment |
 |------------|------|-------------|--------------|------------|
-| **[chat-plugin-template](https://github.com/nirholas/chat-plugin-template)** | Template | ✅ | ✅ | Vercel |
-| **[chat-plugin-web-crawler](https://github.com/nirholas/chat-plugin-web-crawler)** | Default | ✅ | ❌ | Vercel |
-| **[chat-plugin-search-engine](https://github.com/nirholas/chat-plugin-search-engine)** | Default | ✅ | ❌ | Vercel |
-| **[chat-plugin-clock-time](https://github.com/nirholas/chat-plugin-clock-time)** | Standalone | ❌ | ✅ | Vercel Static |
-| **[chat-plugin-realtime-weather](https://github.com/nirholas/chat-plugin-realtime-weather)** | Default | ✅ | ✅ | Vercel |
-| **[chat-plugin-bilibili](https://github.com/nirholas/chat-plugin-bilibili)** | Default | ✅ | ❌ | Vercel |
-| **[chat-plugin-steam](https://github.com/nirholas/chat-plugin-steam)** | Default | ✅ | ❌ | Vercel |
-| **[chat-plugin-open-interpreter](https://github.com/nirholas/chat-plugin-open-interpreter)** | Standalone | ✅ | ✅ | 🔴 Local Only |
+| **[chat-plugin-template](https://github.com/x402agent/solana-clawd)** | Template | ✅ | ✅ | Vercel |
+| **[chat-plugin-web-crawler](https://github.com/x402agent/solana-clawd)** | Default | ✅ | ❌ | Vercel |
+| **[chat-plugin-search-engine](https://github.com/x402agent/solana-clawd)** | Default | ✅ | ❌ | Vercel |
+| **[chat-plugin-clock-time](https://github.com/x402agent/solana-clawd)** | Standalone | ❌ | ✅ | Vercel Static |
+| **[chat-plugin-realtime-weather](https://github.com/x402agent/solana-clawd)** | Default | ✅ | ✅ | Vercel |
+| **[chat-plugin-bilibili](https://github.com/x402agent/solana-clawd)** | Default | ✅ | ❌ | Vercel |
+| **[chat-plugin-steam](https://github.com/x402agent/solana-clawd)** | Default | ✅ | ❌ | Vercel |
+| **[chat-plugin-open-interpreter](https://github.com/x402agent/solana-clawd)** | Standalone | ✅ | ✅ | 🔴 Local Only |
 
 ### SDK Installation
 
 ```bash
 # For plugin development
-pnpm add @nirholas/plugin-sdk
+pnpm add @x402agent/plugin-sdk
 
 # For gateway setup
-pnpm add @nirholas/chat-plugins-gateway
+pnpm add @x402agent/chat-plugins-gateway
 ```
 
 ### SDK Client API
 
 ```typescript
-import { speraxOS } from '@nirholas/plugin-sdk/client';
+import { solana-clawdOS } from '@x402agent/plugin-sdk/client';
 
 // Get initialization data
-const payload = await speraxOS.getPluginPayload();
+const payload = await solana-clawdOS.getPluginPayload();
 // { name, arguments, settings, state }
 
 // Update message content
-speraxOS.setPluginMessage('New content');
+solana-clawdOS.setPluginMessage('New content');
 
 // Update plugin state
-speraxOS.setPluginState('key', value);
+solana-clawdOS.setPluginState('key', value);
 
 // Trigger AI response (standalone plugins)
-speraxOS.triggerAIMessage(messageId);
+solana-clawdOS.triggerAIMessage(messageId);
 
 // Create assistant message (standalone plugins)
-speraxOS.createAssistantMessage('AI will process this');
+solana-clawdOS.createAssistantMessage('AI will process this');
 ```
 
 ---
@@ -373,7 +373,7 @@ psql $DATABASE_URL -c "\dt"
 5. **Verify Integration:**
    ```typescript
    // Auth is automatically detected
-   import { getUserAuth } from '@sperax/utils/server';
+   import { getUserAuth } from '@solana-clawd/utils/server';
    
    const { userId } = await getUserAuth();
    // Returns Clerk user ID when enabled
@@ -411,7 +411,7 @@ psql $DATABASE_URL -c "\dt"
 
 ```typescript
 // API Route (Backend)
-import { getUserAuth } from '@sperax/utils/server';
+import { getUserAuth } from '@solana-clawd/utils/server';
 
 export async function GET(request: Request) {
   const { userId } = await getUserAuth();
@@ -489,7 +489,7 @@ const CACHE_TTL = {
 
 ## 8. Builtin Plugin Development
 
-Builtin plugins are part of SperaxOS and don't need external deployment.
+Builtin plugins are part of solana-clawd and don't need external deployment.
 
 ### File Structure
 
@@ -497,7 +497,7 @@ Builtin plugins are part of SperaxOS and don't need external deployment.
 src/tools/
 ├── index.ts                    # Registers all builtin tools
 ├── portals.ts                  # Maps tools to portal components
-├── sperax-portfolio/
+├── solana-clawd-portfolio/
 │   ├── index.ts               # Main export
 │   └── manifest.ts            # Plugin manifest
 ├── artifacts/
@@ -513,7 +513,7 @@ src/tools/
 ```typescript
 // src/tools/my-plugin/manifest.ts
 
-import { BuiltinToolManifest } from '@sperax/types';
+import { BuiltinToolManifest } from '@solana-clawd/types';
 
 export const myPluginManifest: BuiltinToolManifest = {
   identifier: 'my-plugin',
@@ -570,7 +570,7 @@ export { myPluginManifest as default } from './manifest';
 
 import { myPluginManifest } from './my-plugin';
 
-export const builtinTools: SperaxOSBuiltinTool[] = [
+export const builtinTools: solana-clawdBuiltinTool[] = [
   // ... existing tools
   {
     identifier: myPluginManifest.identifier,
@@ -586,7 +586,7 @@ export const builtinTools: SperaxOSBuiltinTool[] = [
 // src/features/Portal/MyPlugin/index.tsx
 
 import { memo, Suspense } from 'react';
-import type { BuiltinPortalProps } from '@sperax/types';
+import type { BuiltinPortalProps } from '@solana-clawd/types';
 
 const MyPluginBody = memo<{ payload?: Record<string, any> }>(({ payload }) => {
   const { param1, param2 } = payload || {};
@@ -628,7 +628,7 @@ External plugins run on separate servers and communicate via Gateway.
 
 ```bash
 # Clone template
-git clone https://github.com/nirholas/chat-plugin-template my-plugin
+git clone https://github.com/x402agent/solana-clawd my-plugin
 cd my-plugin
 
 # Install dependencies
@@ -691,9 +691,9 @@ export default async function handler(req, res) {
 ```typescript
 // pages/api/gateway.ts
 
-import { createSperaxOSPluginGateway } from '@nirholas/chat-plugins-gateway';
+import { createsolana-clawdPluginGateway } from '@x402agent/chat-plugins-gateway';
 
-export default createSperaxOSPluginGateway();
+export default createsolana-clawdPluginGateway();
 ```
 
 ### Plugin Settings
@@ -718,7 +718,7 @@ export default createSperaxOSPluginGateway();
 Access settings in API:
 
 ```typescript
-import { getPluginSettingsFromRequest } from '@nirholas/chat-plugins-gateway';
+import { getPluginSettingsFromRequest } from '@x402agent/chat-plugins-gateway';
 
 export default async function handler(req, res) {
   const settings = getPluginSettingsFromRequest(req);
@@ -742,7 +742,7 @@ Portals render plugin output directly in the chat UI.
 import { memo, Suspense, lazy } from 'react';
 import { createStyles } from 'antd-style';
 import { Spin } from 'antd';
-import type { BuiltinPortalProps } from '@sperax/types';
+import type { BuiltinPortalProps } from '@solana-clawd/types';
 
 const useStyles = createStyles(({ css, token }) => ({
   container: css`
@@ -791,10 +791,10 @@ import { PortfolioAnalyticsPortal } from '@/features/Portal/PortfolioAnalytics';
 
 export const BuiltinToolsPortals: Record<string, BuiltinPortal> = {
   // Format: 'plugin-identifier___functionName'
-  'sperax-portfolio___showPortfolio': PortfolioAnalyticsPortal,
-  'sperax-portfolio___getPortfolioSummary': PortfolioAnalyticsPortal,
-  'sperax-portfolio___searchAssets': PortfolioAnalyticsPortal,
-  'sperax-portfolio___analyzePortfolio': PortfolioAnalyticsPortal,
+  'solana-clawd-portfolio___showPortfolio': PortfolioAnalyticsPortal,
+  'solana-clawd-portfolio___getPortfolioSummary': PortfolioAnalyticsPortal,
+  'solana-clawd-portfolio___searchAssets': PortfolioAnalyticsPortal,
+  'solana-clawd-portfolio___analyzePortfolio': PortfolioAnalyticsPortal,
 };
 ```
 
@@ -880,7 +880,7 @@ export function listenToParent(callback: (message) => void) {
 ### Using Embeds in Artifacts
 
 ```html
-<speraxArtifact identifier="portfolio-embed" type="text/html" title="Portfolio">
+<solana-clawdArtifact identifier="portfolio-embed" type="text/html" title="Portfolio">
 <!DOCTYPE html>
 <html>
 <head>
@@ -893,7 +893,7 @@ export function listenToParent(callback: (message) => void) {
   <iframe src="/embed/dashboard" title="Portfolio"></iframe>
 </body>
 </html>
-</speraxArtifact>
+</solana-clawdArtifact>
 ```
 
 ---
@@ -914,13 +914,13 @@ Artifacts are AI-generated React components rendered in chat.
 ### Artifact Structure
 
 ```jsx
-<speraxThinking>
+<solana-clawdThinking>
 Analyzing user request...
-</speraxThinking>
+</solana-clawdThinking>
 
-<speraxArtifact 
+<solana-clawdArtifact 
   identifier="unique-id" 
-  type="application/sperax.artifacts.react" 
+  type="application/solana-clawd.artifacts.react" 
   title="Display Title"
 >
 import React from 'react';
@@ -942,7 +942,7 @@ export default function App() {
     </Card>
   );
 }
-</speraxArtifact>
+</solana-clawdArtifact>
 ```
 
 ### When to Use Artifacts
@@ -962,7 +962,7 @@ export default function App() {
 ### Local Development
 
 ```bash
-# Start SperaxOS dev server
+# Start solana-clawd dev server
 bun run dev
 
 # For external plugins, start plugin server
@@ -979,7 +979,7 @@ cd my-plugin && pnpm dev
 ### Testing External Plugins
 
 1. Start plugin server locally
-2. In SperaxOS → Settings → Plugins → Custom Plugins
+2. In solana-clawd → Settings → Plugins → Custom Plugins
 3. Add manifest URL: `http://localhost:3400/manifest.json`
 4. Enable and test
 
@@ -987,7 +987,7 @@ cd my-plugin && pnpm dev
 
 ```bash
 # Enable debug logging
-DEBUG=sperax:* bun run dev
+DEBUG=solana-clawd:* bun run dev
 ```
 
 ### Type Checking
@@ -1004,7 +1004,7 @@ bunx vitest run --silent='passed-only' 'src/tools'
 
 ## 14. Deployment
 
-### SperaxOS (Main App)
+### solana-clawd (Main App)
 
 **Platform:** Vercel
 
@@ -1155,7 +1155,7 @@ src/
 ├── tools/
 │   ├── index.ts                 # Builtin tools registry
 │   ├── portals.ts               # Portal component mapping
-│   └── sperax-portfolio/
+│   └── solana-clawd-portfolio/
 │       ├── index.ts
 │       └── manifest.ts
 │

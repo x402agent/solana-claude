@@ -1,4 +1,4 @@
-import { PluginChannel, speraxOS } from '@sperax/chat-plugin-sdk/client';
+import { PluginChannel, solana-clawdOS } from '@solana-clawd/chat-plugin-sdk/client';
 import { Mock, afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 // Mock window and postMessage before each test
@@ -19,13 +19,13 @@ afterEach(() => {
   vi.restoreAllMocks();
 });
 
-describe('speraxOS', () => {
+describe('solana-clawdOS', () => {
   describe('getPluginMessage', () => {
     it('should resolve undefined when window is undefined', async () => {
       const originalWindow = global.window;
       global.window = undefined as any;
 
-      const result = await speraxOS.getPluginMessage();
+      const result = await solana-clawdOS.getPluginMessage();
 
       expect(result).toBeUndefined();
       global.window = originalWindow;
@@ -47,7 +47,7 @@ describe('speraxOS', () => {
         }
       });
 
-      const promise = speraxOS.getPluginMessage<typeof mockContent>();
+      const promise = solana-clawdOS.getPluginMessage<typeof mockContent>();
 
       const result = await promise;
 
@@ -59,7 +59,7 @@ describe('speraxOS', () => {
     });
 
     it('should post message to parent to fetch plugin message', () => {
-      speraxOS.getPluginMessage();
+      solana-clawdOS.getPluginMessage();
 
       expect(global.top?.postMessage).toHaveBeenCalledWith(
         { type: PluginChannel.fetchPluginMessage },
@@ -80,7 +80,7 @@ describe('speraxOS', () => {
           } as MessageEvent);
         }
       });
-      const promise = speraxOS.getPluginMessage();
+      const promise = solana-clawdOS.getPluginMessage();
 
       await promise;
 
@@ -96,7 +96,7 @@ describe('speraxOS', () => {
       const originalWindow = global.window;
       global.window = undefined as any;
 
-      const result = await speraxOS.getPluginPayload();
+      const result = await solana-clawdOS.getPluginPayload();
 
       expect(result).toBeUndefined();
       global.window = originalWindow;
@@ -126,7 +126,7 @@ describe('speraxOS', () => {
         }
       });
 
-      const promise = speraxOS.getPluginPayload<typeof mockPayload.arguments>();
+      const promise = solana-clawdOS.getPluginPayload<typeof mockPayload.arguments>();
 
       const result = await promise;
 
@@ -138,7 +138,7 @@ describe('speraxOS', () => {
     });
 
     it('should post message to parent to signal plugin is ready for render', () => {
-      speraxOS.getPluginPayload();
+      solana-clawdOS.getPluginPayload();
 
       expect(global.top?.postMessage).toHaveBeenCalledWith(
         { type: PluginChannel.pluginReadyForRender },
@@ -163,7 +163,7 @@ describe('speraxOS', () => {
         }
       });
 
-      const promise = speraxOS.getPluginPayload();
+      const promise = solana-clawdOS.getPluginPayload();
 
       await promise;
 
@@ -176,7 +176,7 @@ describe('speraxOS', () => {
     it('should resolve undefined if message is not received within timeout', async () => {
       vi.useFakeTimers();
 
-      const promise = speraxOS.getPluginPayload();
+      const promise = solana-clawdOS.getPluginPayload();
 
       // Fast-forward until all timers have been executed
       vi.runAllTimers();
@@ -198,7 +198,7 @@ describe('speraxOS', () => {
       const originalWindow = global.window;
       global.window = undefined as any;
 
-      const result = await speraxOS.getPluginSettings();
+      const result = await solana-clawdOS.getPluginSettings();
 
       expect(result).toBeUndefined();
       global.window = originalWindow;
@@ -221,7 +221,7 @@ describe('speraxOS', () => {
         }
       });
 
-      const promise = speraxOS.getPluginSettings<typeof mockSettings>();
+      const promise = solana-clawdOS.getPluginSettings<typeof mockSettings>();
 
       const result = await promise;
 
@@ -233,7 +233,7 @@ describe('speraxOS', () => {
     });
 
     it('should post message to parent to fetch plugin settings', () => {
-      speraxOS.getPluginSettings();
+      solana-clawdOS.getPluginSettings();
 
       expect(global.top?.postMessage).toHaveBeenCalledWith(
         { type: PluginChannel.fetchPluginSettings },
@@ -253,7 +253,7 @@ describe('speraxOS', () => {
         }
       });
 
-      const promise = speraxOS.getPluginSettings();
+      const promise = solana-clawdOS.getPluginSettings();
 
       await promise;
 
@@ -272,7 +272,7 @@ describe('speraxOS', () => {
       const originalWindow = global.window;
       global.window = undefined as any;
 
-      const result = await speraxOS.getPluginState(testKey);
+      const result = await solana-clawdOS.getPluginState(testKey);
 
       expect(result).toBeUndefined();
       global.window = originalWindow;
@@ -291,7 +291,7 @@ describe('speraxOS', () => {
         }
       });
 
-      const result = await speraxOS.getPluginState(testKey);
+      const result = await solana-clawdOS.getPluginState(testKey);
 
       expect(result).toEqual(mockStateValue);
       expect(global.window.removeEventListener).toHaveBeenCalledWith(
@@ -301,7 +301,7 @@ describe('speraxOS', () => {
     });
 
     it('should post message to parent to fetch plugin state for a given key', () => {
-      speraxOS.getPluginState(testKey);
+      solana-clawdOS.getPluginState(testKey);
 
       expect(global.top?.postMessage).toHaveBeenCalledWith(
         { key: testKey, type: PluginChannel.fetchPluginState },
@@ -322,7 +322,7 @@ describe('speraxOS', () => {
         }
       });
 
-      await speraxOS.getPluginState(testKey);
+      await solana-clawdOS.getPluginState(testKey);
 
       expect(global.window.removeEventListener).toHaveBeenCalledWith(
         'message',
@@ -334,7 +334,7 @@ describe('speraxOS', () => {
   describe('setPluginMessage', () => {
     it('should post message to parent with content to fill plugin', () => {
       const content = { text: 'Hello, world!' };
-      speraxOS.setPluginMessage(content);
+      solana-clawdOS.setPluginMessage(content);
 
       expect(global.top?.postMessage).toHaveBeenCalledWith(
         { content, type: PluginChannel.fillStandalonePluginContent },
@@ -348,7 +348,7 @@ describe('speraxOS', () => {
       const stateKey = 'theme';
       const stateValue = 'dark';
 
-      speraxOS.setPluginState(stateKey, stateValue);
+      solana-clawdOS.setPluginState(stateKey, stateValue);
 
       expect(global.top?.postMessage).toHaveBeenCalledWith(
         { key: stateKey, type: PluginChannel.updatePluginState, value: stateValue },
@@ -361,7 +361,7 @@ describe('speraxOS', () => {
     it('should post message to parent with settings to update plugin settings', () => {
       const settings = { notifications: true };
 
-      speraxOS.setPluginSettings(settings);
+      solana-clawdOS.setPluginSettings(settings);
 
       expect(global.top?.postMessage).toHaveBeenCalledWith(
         { type: PluginChannel.updatePluginSettings, value: settings },
@@ -374,7 +374,7 @@ describe('speraxOS', () => {
     it('should post message to parent with id to trigger AI message', () => {
       const id = 'unique-id-123';
 
-      speraxOS.triggerAIMessage(id);
+      solana-clawdOS.triggerAIMessage(id);
 
       expect(global.top?.postMessage).toHaveBeenCalledWith(
         { id, type: PluginChannel.triggerAIMessage },
@@ -387,7 +387,7 @@ describe('speraxOS', () => {
     it('should post message to parent with content to create assistant message', () => {
       const content = 'This is an AI-generated message';
 
-      speraxOS.createAssistantMessage(content);
+      solana-clawdOS.createAssistantMessage(content);
 
       expect(global.top?.postMessage).toHaveBeenCalledWith(
         { content, type: PluginChannel.createAssistantMessage },

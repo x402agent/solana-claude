@@ -1,22 +1,23 @@
 {
-  "author": "Sperax",
+  "author": "solana-clawd",
   "createdAt": "2026-01-02",
-  "homepage": "https://sperax.io",
+  "homepage": "https://github.com/x402agent/solana-clawd",
   "identifier": "crypto-news",
   "manifest": "https://plugin.delivery/crypto-news/manifest.json",
   "meta": {
     "avatar": "📰",
-    "description": "Aggregated crypto news from CoinDesk, The Block, Decrypt, CoinTelegraph, Bitcoin Magazine, Blockworks, and The Defiant. Search, filter by source, and get breaking news. 100% free, no API keys required.",
+    "description": "[solana-clawd] Aggregated crypto news from CoinDesk, The Block, Decrypt, CoinTelegraph, Bitcoin Magazine, Blockworks, and The Defiant. Search, filter by source, and get breaking news. 100% free, no API keys required. — consumed by CLAWD agents (Scanner/OODA/Analyst) and gated by the CLAWD permission engine.",
     "tags": [
       "crypto",
       "news",
       "defi",
       "bitcoin",
-      "market"
+      "market",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "Crypto News",
     "category": "stocks-finance"
   },
   "schemaVersion": 1
 }
-

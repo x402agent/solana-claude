@@ -16,7 +16,7 @@
     "skipLibCheck": true,
     "strict": true,
     "paths": {
-      "@sperax/chat-plugins-gateway": ["src"]
+      "@solana-clawd/chat-plugins-gateway": ["src"]
     }
   },
   "include": ["types", "api", "src", "*.ts", "tests"]

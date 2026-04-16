@@ -54,11 +54,11 @@ Artifacts enable AI assistants to create and display substantial, self-contained
 
 | Type | MIME Type | Use Case | Rendering |
 |------|-----------|----------|-----------|
-| **Code** | `application/sperax.artifacts.code` | Code snippets (any language) | Syntax highlighter |
+| **Code** | `application/solana-clawd.artifacts.code` | Code snippets (any language) | Syntax highlighter |
 | **HTML** | `text/html` | Interactive web pages | iframe sandbox |
 | **SVG** | `image/svg+xml` | Vector graphics | Sanitized SVG |
-| **React** | `application/sperax.artifacts.react` | React components | Live preview |
-| **Mermaid** | `application/sperax.artifacts.mermaid` | Diagrams and flowcharts | Mermaid renderer |
+| **React** | `application/solana-clawd.artifacts.react` | React components | Live preview |
+| **Mermaid** | `application/solana-clawd.artifacts.mermaid` | Diagrams and flowcharts | Mermaid renderer |
 | **Markdown** | `text/markdown` | Formatted documents | Markdown renderer |
 
 ---
@@ -68,13 +68,13 @@ Artifacts enable AI assistants to create and display substantial, self-contained
 ### Basic Syntax
 
 ```xml
-<speraxArtifact 
+<solana-clawdArtifact 
   identifier="unique-kebab-case-id"
-  type="application/sperax.artifacts.react"
+  type="application/solana-clawd.artifacts.react"
   title="Human Readable Title"
   language="typescript">
   [CONTENT]
-</speraxArtifact>
+</solana-clawdArtifact>
 ```
 
 ### Attributes
@@ -86,18 +86,18 @@ Artifacts enable AI assistants to create and display substantial, self-contained
 | `title` | Yes | Human-readable title | `"Temperature Converter"` |
 | `language` | Conditional | For code artifacts only | `"python"`, `"javascript"` |
 
-### Optional Tag: speraxThinking
+### Optional Tag: solana-clawdThinking
 
 AI can include its reasoning process (hidden from user):
 
 ```xml
-<speraxThinking>
+<solana-clawdThinking>
 User needs a responsive dashboard with charts. I'll use React with Recharts library for data visualization. Using Tailwind for styling.
-</speraxThinking>
+</solana-clawdThinking>
 
-<speraxArtifact identifier="dashboard" type="application/sperax.artifacts.react" title="Sales Dashboard">
+<solana-clawdArtifact identifier="dashboard" type="application/solana-clawd.artifacts.react" title="Sales Dashboard">
 [React component code]
-</speraxArtifact>
+</solana-clawdArtifact>
 ```
 
 ---
@@ -109,7 +109,7 @@ User needs a responsive dashboard with charts. I'll use React with Recharts libr
 Generic code snippets that don't need execution.
 
 ```xml
-<speraxArtifact identifier="factorial-algo" type="application/sperax.artifacts.code" language="python" title="Factorial Calculator">
+<solana-clawdArtifact identifier="factorial-algo" type="application/solana-clawd.artifacts.code" language="python" title="Factorial Calculator">
 def factorial(n):
     """Calculate factorial recursively"""
     if n == 0:
@@ -118,7 +118,7 @@ def factorial(n):
 
 # Example usage
 print(factorial(5))  # Output: 120
-</speraxArtifact>
+</solana-clawdArtifact>
 ```
 
 **Supported Languages:** Any language with syntax highlighting (python, javascript, typescript, rust, go, java, etc.)
@@ -135,7 +135,7 @@ Single-file interactive web pages.
 - Use placeholder images: `<img src="/api/placeholder/400/320" alt="..." />`
 
 ```xml
-<speraxArtifact identifier="temp-converter" type="text/html" title="Temperature Converter">
+<solana-clawdArtifact identifier="temp-converter" type="text/html" title="Temperature Converter">
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -166,7 +166,7 @@ Single-file interactive web pages.
   </script>
 </body>
 </html>
-</speraxArtifact>
+</solana-clawdArtifact>
 ```
 
 ---
@@ -181,7 +181,7 @@ Scalable vector graphics for diagrams, illustrations, charts.
 - Supports download as PNG or SVG
 
 ```xml
-<speraxArtifact identifier="process-flow" type="image/svg+xml" title="User Authentication Flow">
+<solana-clawdArtifact identifier="process-flow" type="image/svg+xml" title="User Authentication Flow">
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
   <defs>
     <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
@@ -207,7 +207,7 @@ Scalable vector graphics for diagrams, illustrations, charts.
   <rect x="150" y="220" width="100" height="50" fill="#F59E0B" stroke="#92400E" stroke-width="2" rx="5"/>
   <text x="200" y="250" text-anchor="middle" fill="white" font-size="14">Dashboard</text>
 </svg>
-</speraxArtifact>
+</solana-clawdArtifact>
 ```
 
 ---
@@ -230,7 +230,7 @@ Interactive React components with full ecosystem support.
 - Use Tailwind for styling
 
 ```xml
-<speraxArtifact identifier="crypto-dashboard" type="application/sperax.artifacts.react" title="Crypto Portfolio">
+<solana-clawdArtifact identifier="crypto-dashboard" type="application/solana-clawd.artifacts.react" title="Crypto Portfolio">
 import React, { useState } from 'react';
 import { TrendingUp, TrendingDown, DollarSign } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
@@ -301,7 +301,7 @@ const CryptoDashboard = () => {
 };
 
 export default CryptoDashboard;
-</speraxArtifact>
+</solana-clawdArtifact>
 ```
 
 ---
@@ -311,7 +311,7 @@ export default CryptoDashboard;
 Diagrams and flowcharts using Mermaid syntax.
 
 ```xml
-<speraxArtifact identifier="deployment-flow" type="application/sperax.artifacts.mermaid" title="CI/CD Pipeline">
+<solana-clawdArtifact identifier="deployment-flow" type="application/solana-clawd.artifacts.mermaid" title="CI/CD Pipeline">
 graph LR
     A[Code Push] --> B{Tests Pass?}
     B -->|Yes| C[Build]
@@ -321,7 +321,7 @@ graph LR
     F -->|Approved| G[Deploy to Production]
     F -->|Rejected| D
     G --> H[Monitor]
-</speraxArtifact>
+</solana-clawdArtifact>
 ```
 
 **Mermaid Types Supported:**
@@ -385,7 +385,7 @@ When configuring AI assistants to use artifacts, include these guidelines:
 ```markdown
 ## Artifact Creation Guidelines
 
-Use `<speraxArtifact>` tags to create substantial, reusable content that benefits from:
+Use `<solana-clawdArtifact>` tags to create substantial, reusable content that benefits from:
 - Visual separation from conversation
 - Interactive preview capabilities
 - Persistent access for users
@@ -409,17 +409,17 @@ DO NOT create artifacts for:
 
 ### Artifact Structure
 
-<speraxArtifact identifier="unique-id" type="MIME-TYPE" title="Title" language="LANGUAGE">
+<solana-clawdArtifact identifier="unique-id" type="MIME-TYPE" title="Title" language="LANGUAGE">
 [CONTENT]
-</speraxArtifact>
+</solana-clawdArtifact>
 
 ### Available Types
 
-- application/sperax.artifacts.code (with language attribute)
+- application/solana-clawd.artifacts.code (with language attribute)
 - text/html
 - image/svg+xml
-- application/sperax.artifacts.react
-- application/sperax.artifacts.mermaid
+- application/solana-clawd.artifacts.react
+- application/solana-clawd.artifacts.mermaid
 - text/markdown
 
 ### React Components
@@ -432,7 +432,7 @@ When creating React artifacts:
 - Make responsive with proper breakpoints
 
 Example:
-<speraxArtifact identifier="example-component" type="application/sperax.artifacts.react" title="Example">
+<solana-clawdArtifact identifier="example-component" type="application/solana-clawd.artifacts.react" title="Example">
 import React from 'react';
 
 const Component = () => {
@@ -440,14 +440,14 @@ const Component = () => {
 };
 
 export default Component;
-</speraxArtifact>
+</solana-clawdArtifact>
 ```
 
 ### Model-Specific Considerations
 
 **Claude (Anthropic):**
 - Native artifact support
-- Use `<speraxThinking>` for reasoning
+- Use `<solana-clawdThinking>` for reasoning
 - Excellent at complex React components
 
 **ChatGPT (OpenAI):**
@@ -477,7 +477,7 @@ export default async function handler(req, res) {
   const result = await someDataFetch();
   
   const artifact = `
-<speraxArtifact identifier="plugin-result" type="application/sperax.artifacts.react" title="Search Results">
+<solana-clawdArtifact identifier="plugin-result" type="application/solana-clawd.artifacts.react" title="Search Results">
 import React from 'react';
 
 const Results = () => {
@@ -496,7 +496,7 @@ const Results = () => {
 };
 
 export default Results;
-</speraxArtifact>
+</solana-clawdArtifact>
   `;
   
   res.status(200).send(artifact);
@@ -509,7 +509,7 @@ This enables plugins to create rich, interactive displays in the chat interface.
 
 ## Resources
 
-- **Plugin SDK**: [@sperax/plugin-sdk](https://www.npmjs.com/package/@sperax/plugin-sdk)
+- **Plugin SDK**: [@solana-clawd/plugin-sdk](https://www.npmjs.com/package/@solana-clawd/plugin-sdk)
 - **Plugin Marketplace**: [plugin.delivery](https://plugin.delivery)
 - **Mermaid Docs**: [mermaid.js.org](https://mermaid.js.org)
 - **Tailwind CSS**: [tailwindcss.com](https://tailwindcss.com)

@@ -1,4 +1,4 @@
-import { PluginErrorType, createErrorResponse } from '@sperax/plugin-sdk';
+import { PluginErrorType, createErrorResponse } from '@solana-clawd/plugin-sdk';
 
 import { manClothes, womanClothes } from '@/data';
 import { RequestData, ResponseData } from '@/type';

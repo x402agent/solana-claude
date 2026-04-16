@@ -1,17 +1,19 @@
 {
-  "author": "SperaxOS",
+  "author": "solana-clawd",
   "createdAt": "2025-01-01",
-  "homepage": "https://github.com/nirholas/plugin.delivery",
+  "homepage": "https://github.com/x402agent/solana-clawd",
   "identifier": "phishing-detector",
   "manifest": "https://plugin.delivery/phishing-detector/manifest.json",
   "meta": {
     "avatar": "🎣",
-    "description": "Detect phishing URLs, typosquatting domains, and malicious smart contracts targeting DeFi users",
+    "description": "[solana-clawd] Detect phishing URLs, typosquatting domains, and malicious smart contracts targeting DeFi users — consumed by CLAWD agents (Scanner/OODA/Analyst) and gated by the CLAWD permission engine.",
     "tags": [
       "phishing",
       "security",
       "scam-detection",
-      "typosquatting"
+      "typosquatting",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "Phishing Detector",
     "category": "tools"

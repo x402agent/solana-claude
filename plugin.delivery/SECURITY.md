@@ -9,7 +9,7 @@
 
 ## Reporting a Vulnerability
 
-We take security seriously. If you discover a security vulnerability in Plugin Delivery or any SperaxOS component:
+We take security seriously. If you discover a security vulnerability in Plugin Delivery or any solana-clawd component:
 
 ### Do NOT
 
@@ -19,7 +19,7 @@ We take security seriously. If you discover a security vulnerability in Plugin D
 
 ### Do
 
-1. **Email:** Send details to security@sperax.io
+1. **Email:** Send details to security@solanaos.net
 2. **Include:**
    - Description of the vulnerability
    - Steps to reproduce
@@ -37,10 +37,10 @@ We take security seriously. If you discover a security vulnerability in Plugin D
 
 This policy covers:
 
-- `@sperax/plugin-sdk`
-- `@sperax/chat-plugins-gateway`
+- `@solana-clawd/plugin-sdk`
+- `@solana-clawd/chat-plugins-gateway`
 - plugin.delivery website
-- Official SperaxOS plugins
+- Official solana-clawd plugins
 
 ### Out of Scope
 
@@ -78,7 +78,7 @@ This policy covers:
 
 ---
 
-Thank you for helping keep SperaxOS secure! 🛡️
+Thank you for helping keep solana-clawd secure! 🛡️
 
 ## Reporting a Vulnerability
 

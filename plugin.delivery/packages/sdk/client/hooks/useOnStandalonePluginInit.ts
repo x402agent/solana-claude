@@ -1,12 +1,12 @@
 import { useEffect } from 'react';
 
-import { PluginPayload, speraxOS } from '@/client';
+import { PluginPayload, solana-clawdOS } from '@/client';
 
 export const useOnStandalonePluginInit = <T = any>(
   callback: (payload: PluginPayload<T>) => void,
 ) => {
   useEffect(() => {
-    speraxOS.getPluginPayload().then((e) => {
+    solana-clawdOS.getPluginPayload().then((e) => {
       if (!e) return;
 
       callback(e);

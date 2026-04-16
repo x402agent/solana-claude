@@ -2,9 +2,9 @@
 import { Schema } from '@cfworker/json-schema';
 import {
   IPluginErrorType,
-  SperaxOSPluginApi,
-  SperaxOSPluginManifest,
-  SperaxOSPluginsMarketIndex,
+  solana-clawdPluginApi,
+  solana-clawdPluginManifest,
+  solana-clawdPluginsMarketIndex,
   PluginErrorType,
   PluginRequestPayload,
   createHeadersWithPluginSettings,
@@ -12,8 +12,8 @@ import {
   pluginManifestSchema,
   pluginMetaSchema,
   pluginRequestPayloadSchema,
-} from '@sperax/plugin-sdk';
-import { OPENAPI_REQUEST_BODY_KEY } from '@sperax/plugin-sdk/openapi';
+} from '@solana-clawd/plugin-sdk';
+import { OPENAPI_REQUEST_BODY_KEY } from '@solana-clawd/plugin-sdk/openapi';
 // @ts-ignore
 import SwaggerClient from 'swagger-client';
 
@@ -90,7 +90,7 @@ export class Gateway {
 
     const { identifier, arguments: args, indexUrl, apiName } = payload;
 
-    let manifest = payload.manifest as SperaxOSPluginManifest | undefined;
+    let manifest = payload.manifest as solana-clawdPluginManifest | undefined;
     console.info(`[${identifier}] - ${apiName} `);
 
     // 入参中如果没有 manifest，则从插件市场索引中获取
@@ -98,7 +98,7 @@ export class Gateway {
       const marketIndexUrl = indexUrl ?? this.pluginIndexUrl;
       // ==========  3. 获取插件市场索引 ========== //
 
-      let marketIndex: SperaxOSPluginsMarketIndex | undefined;
+      let marketIndex: solana-clawdPluginsMarketIndex | undefined;
       try {
         const indexRes = await fetch(marketIndexUrl);
         marketIndex = await indexRes.json();
@@ -136,8 +136,8 @@ export class Gateway {
       // 一个不规范的插件示例
       // const pluginMeta = {
       //   createAt: '2023-08-12',
-      //   homepage: 'https://github.com/nirholas/plugin.delivery-real-time-weather',
-      //   manifest: 'https://registry.npmmirror.com/@sperax/sperax-plugins/latest/files',
+      //   homepage: 'https://github.com/x402agent/solana-clawd-real-time-weather',
+      //   manifest: 'https://registry.npmmirror.com/@solana-clawd/solana-clawd-plugins/latest/files',
       //   meta: {
       //     avatar: '☂️',
       //     tags: ['weather', 'realtime'],
@@ -150,7 +150,7 @@ export class Gateway {
       if (!pluginMeta)
         return this.createErrorResponse(PluginErrorType.PluginMetaNotFound, {
           identifier,
-          message: `[gateway] plugin '${identifier}' is not found，please check the plugin list in ${marketIndexUrl}, or create an issue to [sperax-plugins](https://github.com/nirholas/plugin.delivery/issues)`,
+          message: `[gateway] plugin '${identifier}' is not found，please check the plugin list in ${marketIndexUrl}, or create an issue to [solana-clawd-plugins](https://github.com/x402agent/solana-clawd/issues)`,
         });
 
       const metaParseResult = pluginMetaSchema.safeParse(pluginMeta);
@@ -166,7 +166,7 @@ export class Gateway {
       // 获取插件的 manifest
       try {
         const pluginRes = await fetch(pluginMeta.manifest);
-        manifest = (await pluginRes.json()) as SperaxOSPluginManifest;
+        manifest = (await pluginRes.json()) as solana-clawdPluginManifest;
       } catch (error) {
         console.error(error);
         manifest = undefined;
@@ -240,7 +240,7 @@ export class Gateway {
   };
 
   private async callApi(
-    api: SperaxOSPluginApi,
+    api: solana-clawdPluginApi,
     args: string | undefined,
     settings: any,
   ): Promise<GatewaySuccessResponse> {
@@ -272,7 +272,7 @@ export class Gateway {
   private async callOpenAPI(
     payload: PluginRequestPayload,
     settings: any = {},
-    manifest: SperaxOSPluginManifest,
+    manifest: solana-clawdPluginManifest,
   ): Promise<GatewaySuccessResponse> {
     const { arguments: args, apiName } = payload;
 
@@ -346,7 +346,7 @@ export class Gateway {
           authorizations,
           error: (error as Error).message,
           message:
-            '[plugin] there are problem with sending openapi request, please contact with Sperax Team',
+            '[plugin] there are problem with sending openapi request, please contact with solana-clawd Team',
           openapi: manifest.openapi,
           parameters,
           requestBody,

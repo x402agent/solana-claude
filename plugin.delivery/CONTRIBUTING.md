@@ -1,6 +1,6 @@
 # Contributing to Plugin Delivery
 
-Thank you for your interest in contributing to the SperaxOS Plugin Delivery ecosystem! This guide will help you get started.
+Thank you for your interest in contributing to the solana-clawd Plugin Delivery ecosystem! This guide will help you get started.
 
 ---
 
@@ -52,7 +52,7 @@ Be respectful, inclusive, and constructive. We're building tools for the crypto/
 ### Clone the Repository
 
 ```bash
-git clone https://github.com/nirholas/plugin.delivery.git
+git clone https://github.com/x402agent/solana-clawd.git
 cd plugins
 bun install
 ```
@@ -62,8 +62,8 @@ bun install
 ```
 plugins/
 ├── packages/
-│   ├── sdk/          # @sperax/plugin-sdk
-│   └── gateway/      # @sperax/chat-plugins-gateway
+│   ├── sdk/          # @solana-clawd/plugin-sdk
+│   └── gateway/      # @solana-clawd/chat-plugins-gateway
 ├── templates/        # Plugin starter templates
 ├── docs/             # Documentation
 ├── public/           # Plugin index files
@@ -101,7 +101,7 @@ This starts a local Vercel dev server at `http://localhost:3000`.
 
 ### Option 1: Via GitHub Issue
 
-1. Create a [Plugin Submission](https://github.com/nirholas/plugin.delivery/issues/new?template=plugin_submission.md) issue
+1. Create a [Plugin Submission](https://github.com/x402agent/solana-clawd/issues/new?template=plugin_submission.md) issue
 2. Provide your manifest URL and details
 3. We'll review and add it to the index
 
@@ -132,7 +132,7 @@ This starts a local Vercel dev server at `http://localhost:3000`.
 
 - ✅ Valid JSON manifest
 - ✅ Working API endpoints
-- ✅ Tested in SperaxOS
+- ✅ Tested in solana-clawd
 - ✅ Clear documentation
 - ✅ No malicious code
 
@@ -193,7 +193,7 @@ plugin: add dexscreener integration
 
 ## Questions?
 
-- GitHub Issues: [github.com/nirholas/plugins/issues](https://github.com/nirholas/plugin.delivery/issues)
+- GitHub Issues: [github.com/x402agent/solana-clawd/issues](https://github.com/x402agent/solana-clawd/issues)
 - Twitter/X: [@nichxbt](https://x.com/nichxbt)
 
 ---

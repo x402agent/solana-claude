@@ -1,6 +1,6 @@
 # Submitting Your Plugin to the Marketplace
 
-This guide explains how to list your plugin in the SperaxOS Plugin Marketplace so it can be discovered and used by the community.
+This guide explains how to list your plugin in the solana-clawd Plugin Marketplace so it can be discovered and used by the community.
 
 ---
 
@@ -31,9 +31,9 @@ This guide explains how to list your plugin in the SperaxOS Plugin Marketplace s
 
 ## Overview
 
-The SperaxOS Plugin Marketplace is a curated registry of plugins available to all SperaxOS users. Submitting your plugin makes it discoverable in the plugin store and allows users to install it with one click.
+The solana-clawd Plugin Marketplace is a curated registry of plugins available to all solana-clawd users. Submitting your plugin makes it discoverable in the plugin store and allows users to install it with one click.
 
-**Repository:** [github.com/nirholas/plugin.delivery](https://github.com/nirholas/plugin.delivery)
+**Repository:** [github.com/x402agent/solana-clawd](https://github.com/x402agent/solana-clawd)
 
 ---
 
@@ -45,7 +45,7 @@ Before submitting, ensure:
 2. ✅ Your plugin server is **deployed and accessible** (e.g., on Vercel)
 3. ✅ Your `manifest.json` is **publicly accessible** via HTTPS
 4. ✅ Your plugin has a **unique identifier** (not already in use)
-5. ✅ You have **tested with SperaxOS** by adding as a custom plugin
+5. ✅ You have **tested with solana-clawd** by adding as a custom plugin
 
 ---
 
@@ -238,7 +238,7 @@ git push origin main
 
 ### Step 7: Open Pull Request
 
-1. Go to [github.com/nirholas/plugin.delivery](https://github.com/nirholas/plugin.delivery)
+1. Go to [github.com/x402agent/solana-clawd](https://github.com/x402agent/solana-clawd)
 2. Click "Compare & pull request"
 3. Fill in the PR template with:
    - Plugin name and description
@@ -310,7 +310,7 @@ Once your plugin is merged:
 
 1. **Build runs automatically** - The CI/CD pipeline builds the index
 2. **Plugin appears in store** - Usually within minutes of deployment
-3. **Users can install** - Via the SperaxOS Plugin Store
+3. **Users can install** - Via the solana-clawd Plugin Store
 4. **Analytics** - Track usage through your own analytics (if implemented)
 
 ### Updating Your Plugin
@@ -341,7 +341,7 @@ Learn from these official reference implementations:
 ## Getting Help
 
 - **Documentation:** This guide and related docs
-- **GitHub Issues:** [github.com/nirholas/plugin.delivery/issues](https://github.com/nirholas/plugin.delivery/issues)
+- **GitHub Issues:** [github.com/x402agent/solana-clawd/issues](https://github.com/x402agent/solana-clawd/issues)
 - **Twitter/X:** [@nichxbt](https://x.com/nichxbt)
 
 ---

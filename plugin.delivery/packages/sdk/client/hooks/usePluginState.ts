@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useState } from 'react';
 
-import { speraxOS } from '@/client';
+import { solana-clawdOS } from '@/client';
 
 export const usePluginState = <T>(key: string, initialValue: T) => {
   const [value, setValue] = useState(initialValue);
 
   useEffect(() => {
-    speraxOS.getPluginState(key).then((e) => {
+    solana-clawdOS.getPluginState(key).then((e) => {
       if (!e) return;
 
       setValue(e);
@@ -16,7 +16,7 @@ export const usePluginState = <T>(key: string, initialValue: T) => {
   const updateValue = useCallback(
     (value: T) => {
       setValue(value);
-      speraxOS.setPluginState(key, value);
+      solana-clawdOS.setPluginState(key, value);
     },
     [key],
   );

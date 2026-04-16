@@ -1,20 +1,21 @@
 {
-  "author": "SperaxOS",
+  "author": "solana-clawd",
   "createdAt": "2025-01-01",
-  "homepage": "https://github.com/nirholas/plugin.delivery",
+  "homepage": "https://github.com/x402agent/solana-clawd",
   "identifier": "token-terminal",
   "manifest": "https://plugin.delivery/token-terminal/manifest.json",
   "meta": {
     "avatar": "📊",
-    "description": "Protocol fundamentals, revenue, and financial metrics",
+    "description": "[solana-clawd] Protocol fundamentals, revenue, and financial metrics — consumed by CLAWD agents (Scanner/OODA/Analyst) and gated by the CLAWD permission engine.",
     "tags": [
       "fundamentals",
       "revenue",
-      "metrics"
+      "metrics",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "Token Terminal",
     "category": "science-education"
   },
   "schemaVersion": 1
 }
-

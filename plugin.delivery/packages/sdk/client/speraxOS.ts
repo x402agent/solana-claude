@@ -18,7 +18,7 @@ export interface PluginPayload<T = any> {
   state?: any;
 }
 
-class SperaxOS {
+class solana-clawd {
   getPluginPayload = <T = any>() =>
     new Promise<PluginPayload<T>>((resolve) => {
       if (typeof window === 'undefined') {
@@ -37,7 +37,7 @@ class SperaxOS {
           // DEPRECATED: e.data.props support will be removed in v2
           const payload: PluginRequestPayload = e.data.payload || e.data.props;
           if (e.data.props && !e.data.payload) {
-            console.warn('[SperaxOS] e.data.props is deprecated. Use e.data.payload instead. Will be removed in v2.');
+            console.warn('[solana-clawd] e.data.props is deprecated. Use e.data.payload instead. Will be removed in v2.');
           }
           const func = payload.apiName;
           const args = JSON.parse(payload.arguments || '{}');
@@ -142,5 +142,5 @@ class SperaxOS {
   };
 }
 
-export const speraxOS = new SperaxOS();
+export const solana-clawdOS = new solana-clawd();
 

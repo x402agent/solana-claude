@@ -1,4 +1,4 @@
-import { speraxOS } from '@sperax/plugin-sdk/client';
+import { solana-clawdOS } from '@solana-clawd/plugin-sdk/client';
 import { memo, useEffect, useState } from 'react';
 
 import Data from '@/components/Render';
@@ -8,7 +8,7 @@ const Render = memo(() => {
   const [data, setData] = useState<ResponseData>();
 
   useEffect(() => {
-    speraxOS.getPluginMessage().then((e: ResponseData) => {
+    solana-clawdOS.getPluginMessage().then((e: ResponseData) => {
       setData(e);
     });
   }, []);

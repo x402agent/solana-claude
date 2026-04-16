@@ -1,20 +1,21 @@
 {
-  "author": "SperaxOS",
+  "author": "solana-clawd",
   "createdAt": "2025-01-01",
-  "homepage": "https://github.com/nirholas/plugin.delivery",
+  "homepage": "https://github.com/x402agent/solana-clawd",
   "identifier": "arbitrum-stats",
   "manifest": "https://plugin.delivery/arbitrum-stats/manifest.json",
   "meta": {
     "avatar": "🔷",
-    "description": "Arbitrum network metrics and activity",
+    "description": "[solana-clawd] Arbitrum network metrics and activity — consumed by CLAWD agents (Scanner/OODA/Analyst) and gated by the CLAWD permission engine.",
     "tags": [
       "arbitrum",
       "l-2",
-      "network"
+      "network",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "Arbitrum Stats",
     "category": "tools"
   },
   "schemaVersion": 1
 }
-

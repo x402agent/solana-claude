@@ -1,11 +1,11 @@
 # Plugin SDK Documentation
 
-Complete API reference for the Plugin SDK (`@sperax/plugin-sdk`) from **nirholas/plugin.delivery**.
+Complete API reference for the Plugin SDK (`@solana-clawd/plugin-sdk`) from **x402agent/plugin.delivery**.
 
 ## Table of Contents
 
 - [Installation](#installation)
-- [Client SDK (speraxOS)](#client-sdk-speraxchat)
+- [Client SDK (solana-clawdOS)](#client-sdk-solana-clawdchat)
 - [React Hooks](#react-hooks)
 - [Schema Validation](#schema-validation)
 - [Error Types](#error-types)
@@ -17,23 +17,23 @@ Complete API reference for the Plugin SDK (`@sperax/plugin-sdk`) from **nirholas
 ## Installation
 
 ```bash
-# Install the SDK from nirholas/plugin.delivery
-pnpm add @sperax/plugin-sdk
+# Install the SDK from x402agent/plugin.delivery
+pnpm add @solana-clawd/plugin-sdk
 
 # Or with npm/yarn/bun
-npm install @sperax/plugin-sdk
-yarn add @sperax/plugin-sdk
-bun add @sperax/plugin-sdk
+npm install @solana-clawd/plugin-sdk
+yarn add @solana-clawd/plugin-sdk
+bun add @solana-clawd/plugin-sdk
 ```
 
 ---
 
-## Client SDK (speraxOS)
+## Client SDK (solana-clawdOS)
 
-The `speraxOS` object provides methods for plugin-to-host communication from the **nirholas/plugin.delivery** SDK. Import from the client subpath:
+The `solana-clawdOS` object provides methods for plugin-to-host communication from the **x402agent/plugin.delivery** SDK. Import from the client subpath:
 
 ```typescript
-import { speraxOS } from '@sperax/plugin-sdk/client';
+import { solana-clawdOS } from '@solana-clawd/plugin-sdk/client';
 ```
 
 ### getPluginPayload
@@ -48,7 +48,7 @@ interface PluginPayload<T = any> {
   state?: Record<string, any>;
 }
 
-const payload = await speraxOS.getPluginPayload<MyArgs>();
+const payload = await solana-clawdOS.getPluginPayload<MyArgs>();
 console.log(payload.name);       // API name that was called
 console.log(payload.arguments);  // Arguments passed to the function
 console.log(payload.settings);   // Plugin settings from user config
@@ -59,7 +59,7 @@ console.log(payload.settings);   // Plugin settings from user config
 Retrieve the current plugin message content (the `content` field deserialized as JSON).
 
 ```typescript
-const message = await speraxOS.getPluginMessage<MyMessageType>();
+const message = await solana-clawdOS.getPluginMessage<MyMessageType>();
 console.log(message);
 ```
 
@@ -68,7 +68,7 @@ console.log(message);
 Update the plugin message content. This serializes the content and triggers conversation flow.
 
 ```typescript
-await speraxOS.setPluginMessage({ 
+await solana-clawdOS.setPluginMessage({ 
   title: 'Result', 
   data: myData 
 });
@@ -80,10 +80,10 @@ Manage runtime state stored in the message.
 
 ```typescript
 // Get state
-const counter = await speraxOS.getPluginState<number>('counter');
+const counter = await solana-clawdOS.getPluginState<number>('counter');
 
 // Set state
-await speraxOS.setPluginState('counter', counter + 1);
+await solana-clawdOS.setPluginState('counter', counter + 1);
 ```
 
 ### getPluginSettings / setPluginSettings
@@ -92,10 +92,10 @@ Manage plugin configuration stored in the host application.
 
 ```typescript
 // Get all settings
-const settings = await speraxOS.getPluginSettings<MySettings>();
+const settings = await solana-clawdOS.getPluginSettings<MySettings>();
 
 // Update settings (partial update)
-await speraxOS.setPluginSettings({ theme: 'dark' });
+await solana-clawdOS.setPluginSettings({ theme: 'dark' });
 ```
 
 ### triggerAIMessage
@@ -103,7 +103,7 @@ await speraxOS.setPluginSettings({ theme: 'dark' });
 Trigger the AI to generate a response (for standalone plugins).
 
 ```typescript
-await speraxOS.triggerAIMessage(messageId);
+await solana-clawdOS.triggerAIMessage(messageId);
 ```
 
 ### createAssistantMessage
@@ -111,7 +111,7 @@ await speraxOS.triggerAIMessage(messageId);
 Create a new assistant message programmatically (for standalone plugins).
 
 ```typescript
-await speraxOS.createAssistantMessage('Here is the analysis...');
+await solana-clawdOS.createAssistantMessage('Here is the analysis...');
 ```
 
 ---
@@ -120,7 +120,7 @@ await speraxOS.createAssistantMessage('Here is the analysis...');
 
 ### useWatchPluginMessage
 
-This is a React Hook encapsulating the Chat Plugin SDK, used to listen for plugin messages sent from SperaxOS.
+This is a React Hook encapsulating the Chat Plugin SDK, used to listen for plugin messages sent from solana-clawd.
 
 **Syntax:**
 
@@ -138,7 +138,7 @@ const { data, loading } = useWatchPluginMessage<T>();
 **Example:**
 
 ```tsx
-import { useWatchPluginMessage } from '@sperax/plugin-sdk/client';
+import { useWatchPluginMessage } from '@solana-clawd/plugin-sdk/client';
 
 const MyPlugin = () => {
   const { data, loading } = useWatchPluginMessage<MyDataType>();
@@ -196,7 +196,7 @@ interface PluginPayload<T = any> {
 **Example:**
 
 ```tsx
-import { useOnStandalonePluginInit } from '@sperax/plugin-sdk/client';
+import { useOnStandalonePluginInit } from '@solana-clawd/plugin-sdk/client';
 
 const StandalonePlugin = () => {
   useOnStandalonePluginInit((payload) => {
@@ -247,7 +247,7 @@ const [value, updateValue] = usePluginState<T>(key: string, initialValue: T);
 **Example:**
 
 ```tsx
-import { usePluginState } from '@sperax/plugin-sdk/client';
+import { usePluginState } from '@solana-clawd/plugin-sdk/client';
 
 const Counter = () => {
   const [count, setCount] = usePluginState('count', 0);
@@ -272,7 +272,7 @@ export default Counter;
 - Ensure usage within a React function component.
 - The `key` parameter must be a string used to uniquely identify the plugin state.
 - The `initialValue` parameter is the initial value of the state.
-- State is automatically synchronized with SperaxOS.
+- State is automatically synchronized with solana-clawd.
 
 ---
 
@@ -299,7 +299,7 @@ Returns an array containing two elements: the current plugin settings value and 
 **Example:**
 
 ```tsx
-import { usePluginSettings } from '@sperax/plugin-sdk/client';
+import { usePluginSettings } from '@solana-clawd/plugin-sdk/client';
 
 const SettingsPanel = () => {
   const [settings, updateSettings] = usePluginSettings({ 
@@ -329,7 +329,7 @@ export default SettingsPanel;
 
 - Please ensure to use `usePluginSettings` inside a React function component.
 - Initial value `initialValue` can be of any type.
-- When updating plugin settings, the SDK automatically sends update messages to SperaxOS via `postMessage`.
+- When updating plugin settings, the SDK automatically sends update messages to solana-clawd via `postMessage`.
 
 ---
 
@@ -346,7 +346,7 @@ const data = await fetchPluginMessage<T>();
 **Example:**
 
 ```tsx
-import { fetchPluginMessage } from '@sperax/plugin-sdk/client';
+import { fetchPluginMessage } from '@solana-clawd/plugin-sdk/client';
 import { memo, useEffect, useState } from 'react';
 
 interface ResponseData {
@@ -358,7 +358,7 @@ const PluginDisplay = memo(() => {
   const [data, setData] = useState<ResponseData>();
 
   useEffect(() => {
-    // Get the current message of the plugin from SperaxOS
+    // Get the current message of the plugin from solana-clawd
     fetchPluginMessage<ResponseData>().then((response) => {
       setData(response);
     });
@@ -397,7 +397,7 @@ The SDK provides Zod schemas for validating plugin configurations.
 Validate plugin manifest files.
 
 ```typescript
-import { pluginManifestSchema } from '@sperax/plugin-sdk';
+import { pluginManifestSchema } from '@solana-clawd/plugin-sdk';
 
 const manifest = {
   identifier: 'my-plugin',
@@ -427,7 +427,7 @@ const result = pluginManifestSchema.parse(manifest);
 Validate plugin metadata for the index.
 
 ```typescript
-import { pluginMetaSchema } from '@sperax/plugin-sdk';
+import { pluginMetaSchema } from '@solana-clawd/plugin-sdk';
 
 const meta = {
   author: 'MyCompany',
@@ -451,7 +451,7 @@ const result = pluginMetaSchema.parse(meta);
 Validate individual API definitions.
 
 ```typescript
-import { pluginApiSchema } from '@sperax/plugin-sdk';
+import { pluginApiSchema } from '@solana-clawd/plugin-sdk';
 
 const api = {
   url: 'https://api.example.com/search',
@@ -475,7 +475,7 @@ const result = pluginApiSchema.parse(api);
 Use `PluginErrorType` for standardized error responses.
 
 ```typescript
-import { PluginErrorType, createErrorResponse } from '@sperax/plugin-sdk';
+import { PluginErrorType, createErrorResponse } from '@solana-clawd/plugin-sdk';
 
 export default async (req: Request) => {
   // Method validation
@@ -539,7 +539,7 @@ export default async (req: Request) => {
 Extract plugin settings from the request headers.
 
 ```typescript
-import { getPluginSettingsFromRequest } from '@sperax/plugin-sdk';
+import { getPluginSettingsFromRequest } from '@solana-clawd/plugin-sdk';
 
 interface MySettings {
   apiKey: string;
@@ -562,7 +562,7 @@ export default async (req: Request) => {
 Create headers with plugin settings (useful for testing).
 
 ```typescript
-import { createHeadersWithPluginSettings } from '@sperax/plugin-sdk';
+import { createHeadersWithPluginSettings } from '@solana-clawd/plugin-sdk';
 
 const headers = createHeadersWithPluginSettings({ apiKey: 'test-key' });
 const req = new Request('https://api.example.com', { headers });
@@ -575,39 +575,39 @@ const req = new Request('https://api.example.com', { headers });
 For advanced use cases, you can use the low-level `PluginChannel` constants.
 
 ```typescript
-import { PluginChannel } from '@sperax/plugin-sdk';
+import { PluginChannel } from '@solana-clawd/plugin-sdk';
 ```
 
 ### Initialization
 
 | Channel | Literal | Description |
 |---------|---------|-------------|
-| `pluginReadyForRender` | `speraxos:plugin-ready-for-render` | Plugin is ready for rendering |
-| `initStandalonePlugin` | `speraxos:init-standalone-plugin` | Initialize standalone plugin |
+| `pluginReadyForRender` | `solana-clawdos:plugin-ready-for-render` | Plugin is ready for rendering |
+| `initStandalonePlugin` | `solana-clawdos:init-standalone-plugin` | Initialize standalone plugin |
 
 ### Messages
 
 | Channel | Literal | Description |
 |---------|---------|-------------|
-| `fetchPluginMessage` | `speraxos:fetch-plugin-message` | Request message content |
-| `renderPlugin` | `speraxos:render-plugin` | Render plugin instruction |
-| `fillStandalonePluginContent` | `speraxos:fill-plugin-content` | Fill standalone plugin content |
+| `fetchPluginMessage` | `solana-clawdos:fetch-plugin-message` | Request message content |
+| `renderPlugin` | `solana-clawdos:render-plugin` | Render plugin instruction |
+| `fillStandalonePluginContent` | `solana-clawdos:fill-plugin-content` | Fill standalone plugin content |
 
 ### State
 
 | Channel | Literal | Description |
 |---------|---------|-------------|
-| `fetchPluginState` | `speraxos:fetch-plugin-state` | Request plugin state |
-| `renderPluginState` | `speraxos:render-plugin-state` | Render plugin state |
-| `updatePluginState` | `speraxos:update-plugin-state` | Update plugin state |
+| `fetchPluginState` | `solana-clawdos:fetch-plugin-state` | Request plugin state |
+| `renderPluginState` | `solana-clawdos:render-plugin-state` | Render plugin state |
+| `updatePluginState` | `solana-clawdos:update-plugin-state` | Update plugin state |
 
 ### Settings
 
 | Channel | Literal | Description |
 |---------|---------|-------------|
-| `fetchPluginSettings` | `speraxos:fetch-plugin-settings` | Request plugin settings |
-| `renderPluginSettings` | `speraxos:render-plugin-settings` | Render plugin settings |
-| `updatePluginSettings` | `speraxos:update-plugin-settings` | Update plugin settings |
+| `fetchPluginSettings` | `solana-clawdos:fetch-plugin-settings` | Request plugin settings |
+| `renderPluginSettings` | `solana-clawdos:render-plugin-settings` | Render plugin settings |
+| `updatePluginSettings` | `solana-clawdos:update-plugin-settings` | Update plugin settings |
 
 ---
 
@@ -622,7 +622,7 @@ import type {
   PluginApi,
   PluginPayload,
   PluginErrorType,
-} from '@sperax/plugin-sdk';
+} from '@solana-clawd/plugin-sdk';
 ```
 
 ---

@@ -1,6 +1,6 @@
 'use client';
 
-import { speraxOS, useOnStandalonePluginInit, usePluginState } from '@sperax/plugin-sdk/client';
+import { solana-clawdOS, useOnStandalonePluginInit, usePluginState } from '@solana-clawd/plugin-sdk/client';
 import { Button, Card, InputNumber, Space, Typography } from 'antd';
 import { useCallback, useState } from 'react';
 
@@ -38,19 +38,19 @@ export default function StandalonePlugin() {
 
   const sendToAI = useCallback(async () => {
     // Update the plugin message with current state
-    await speraxOS.setPluginMessage({
+    await solana-clawdOS.setPluginMessage({
       action: 'counter_update',
       value: count,
       message: `The counter is now at ${count}`,
     });
 
     // Trigger AI to respond to the update
-    await speraxOS.triggerAIMessage();
+    await solana-clawdOS.triggerAIMessage();
   }, [count]);
 
   const askAIToAnalyze = useCallback(async () => {
     // Create an assistant message directly
-    await speraxOS.createAssistantMessage(
+    await solana-clawdOS.createAssistantMessage(
       `Based on the counter plugin, the current value is **${count}**. ` +
       `${count > 0 ? 'The value is positive.' : count < 0 ? 'The value is negative.' : 'The value is zero.'}`
     );

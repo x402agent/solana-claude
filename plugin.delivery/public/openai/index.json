@@ -35,9 +35,9 @@
       "author": "orrenprunckun",
       "homepage": "https://seo-plugin.orrenprunckun.com",
       "identifier": "SEO",
-      "manifest": "https://openai-collections.chat-plugin.sperax.com/seo/manifest.json",
+      "manifest": "https://openai-collections.chat-plugin.solana-clawd.com/seo/manifest.json",
       "meta": {
-        "avatar": "https://openai-collections.chat-plugin.sperax.com/seo/logo.webp",
+        "avatar": "https://openai-collections.chat-plugin.solana-clawd.com/seo/logo.webp",
         "description": "Enter any URL and keyword and get an On-Page SEO analysis & insights!",
         "tags": [
           "seo"
@@ -50,9 +50,9 @@
       "author": "savvytrader",
       "homepage": "https://savvytrader.com",
       "identifier": "savvy_trader_ai",
-      "manifest": "https://openai-collections.chat-plugin.sperax.com/savvy-trader/manifest.json",
+      "manifest": "https://openai-collections.chat-plugin.solana-clawd.com/savvy-trader/manifest.json",
       "meta": {
-        "avatar": "https://openai-collections.chat-plugin.sperax.com/savvy-trader/logo.webp",
+        "avatar": "https://openai-collections.chat-plugin.solana-clawd.com/savvy-trader/logo.webp",
         "description": "Realtime stock, crypto and other investment data.",
         "tags": [
           "stock",
@@ -66,9 +66,9 @@
       "author": "getchange",
       "homepage": "https://api.getchange.io",
       "identifier": "nonprofits",
-      "manifest": "https://openai-collections.chat-plugin.sperax.com/getchange/manifest.json",
+      "manifest": "https://openai-collections.chat-plugin.solana-clawd.com/getchange/manifest.json",
       "meta": {
-        "avatar": "https://openai-collections.chat-plugin.sperax.com/getchange/logo.webp",
+        "avatar": "https://openai-collections.chat-plugin.solana-clawd.com/getchange/logo.webp",
         "description": "Discover impactful nonprofits to support in your community and beyond.",
         "tags": [
           "charity"
@@ -81,9 +81,9 @@
       "author": "onrender",
       "homepage": "https://llamawrapper-prod.onrender.com",
       "identifier": "defillama",
-      "manifest": "https://openai-collections.chat-plugin.sperax.com/defillama/manifest.json",
+      "manifest": "https://openai-collections.chat-plugin.solana-clawd.com/defillama/manifest.json",
       "meta": {
-        "avatar": "https://openai-collections.chat-plugin.sperax.com/defillama/logo.webp",
+        "avatar": "https://openai-collections.chat-plugin.solana-clawd.com/defillama/logo.webp",
         "description": "Retrieve data on DeFi protocols and blockchains.",
         "tags": [
           "crypto",
@@ -97,9 +97,9 @@
       "author": "tapapis",
       "homepage": "https://openai.tapapis.com",
       "identifier": "GameSight",
-      "manifest": "https://openai-collections.chat-plugin.sperax.com/game-sight/manifest.json",
+      "manifest": "https://openai-collections.chat-plugin.solana-clawd.com/game-sight/manifest.json",
       "meta": {
-        "avatar": "https://openai-collections.chat-plugin.sperax.com/game-sight/logo.webp",
+        "avatar": "https://openai-collections.chat-plugin.solana-clawd.com/game-sight/logo.webp",
         "description": "Discover games, game-related content, get recommendations, and compare games based on player reviews.",
         "tags": [
           "game",
@@ -113,9 +113,9 @@
       "author": "steven-tey",
       "homepage": "https://github.com/steven-tey/weathergpt",
       "identifier": "WeatherGPT",
-      "manifest": "https://openai-collections.chat-plugin.sperax.com/weather-gpt/manifest.json",
+      "manifest": "https://openai-collections.chat-plugin.solana-clawd.com/weather-gpt/manifest.json",
       "meta": {
-        "avatar": "https://openai-collections.chat-plugin.sperax.com/weather-gpt/logo.webp",
+        "avatar": "https://openai-collections.chat-plugin.solana-clawd.com/weather-gpt/logo.webp",
         "description": "Get current weather information for a specific location.",
         "tags": [
           "weather"
@@ -128,9 +128,9 @@
       "author": "yunwei37",
       "homepage": "https://github.com/yunwei37/ChatGPT-github-stat-plugin",
       "identifier": "gitUserRepoStats",
-      "manifest": "https://openai-collections.chat-plugin.sperax.com/github-stats/manifest.json",
+      "manifest": "https://openai-collections.chat-plugin.solana-clawd.com/github-stats/manifest.json",
       "meta": {
-        "avatar": "https://openai-collections.chat-plugin.sperax.com/github-stats/logo.webp",
+        "avatar": "https://openai-collections.chat-plugin.solana-clawd.com/github-stats/logo.webp",
         "description": "Dynamically generate and analyze stats and history for OSS repos and developers.",
         "tags": [
           "github",
@@ -144,9 +144,9 @@
       "author": "questmate",
       "homepage": "https://chatgpt-plugin.questmate.com",
       "identifier": "questmate",
-      "manifest": "https://openai-collections.chat-plugin.sperax.com/questmate/manifest.json",
+      "manifest": "https://openai-collections.chat-plugin.solana-clawd.com/questmate/manifest.json",
       "meta": {
-        "avatar": "https://openai-collections.chat-plugin.sperax.com/questmate/logo.webp",
+        "avatar": "https://openai-collections.chat-plugin.solana-clawd.com/questmate/logo.webp",
         "description": "Create forms, checklists and workflows (we call 'em Quests!) that you can assign, schedule or make public.",
         "tags": [
           "forms",
@@ -161,9 +161,9 @@
       "author": "litmaps",
       "homepage": "https://api.litmaps.com",
       "identifier": "litmaps",
-      "manifest": "https://openai-collections.chat-plugin.sperax.com/litmaps/manifest.json",
+      "manifest": "https://openai-collections.chat-plugin.solana-clawd.com/litmaps/manifest.json",
       "meta": {
-        "avatar": "https://openai-collections.chat-plugin.sperax.com/litmaps/logo.webp",
+        "avatar": "https://openai-collections.chat-plugin.solana-clawd.com/litmaps/logo.webp",
         "description": "Get help exploring the scientific literature. Find relevant papers and generate mindmaps of the literature.",
         "tags": [
           "scientific-literature",
@@ -177,9 +177,9 @@
       "author": "travelmyth",
       "homepage": "https://www.travelmyth.com",
       "identifier": "travelmyth",
-      "manifest": "https://openai-collections.chat-plugin.sperax.com/travelmyth/manifest.json",
+      "manifest": "https://openai-collections.chat-plugin.solana-clawd.com/travelmyth/manifest.json",
       "meta": {
-        "avatar": "https://openai-collections.chat-plugin.sperax.com/travelmyth/logo.webp",
+        "avatar": "https://openai-collections.chat-plugin.solana-clawd.com/travelmyth/logo.webp",
         "description": "Unleash personalized hotel search with Travelmyth, offering 60 unique categories for the perfect match.",
         "tags": [
           "travel",
@@ -194,9 +194,9 @@
       "author": "maila",
       "homepage": "https://vcaption.maila.ai",
       "identifier": "VideoCaptions",
-      "manifest": "https://openai-collections.chat-plugin.sperax.com/video-captions/manifest.json",
+      "manifest": "https://openai-collections.chat-plugin.solana-clawd.com/video-captions/manifest.json",
       "meta": {
-        "avatar": "https://openai-collections.chat-plugin.sperax.com/video-captions/logo.webp",
+        "avatar": "https://openai-collections.chat-plugin.solana-clawd.com/video-captions/logo.webp",
         "description": "Convert Youtube links into transcribed text, enable asking questions, create chapters, and summarize its content.",
         "tags": [
           "video-to-text",
@@ -210,9 +210,9 @@
       "author": "glarity",
       "homepage": "https://glarity.app",
       "identifier": "Video_summary",
-      "manifest": "https://openai-collections.chat-plugin.sperax.com/video-summary/manifest.json",
+      "manifest": "https://openai-collections.chat-plugin.solana-clawd.com/video-summary/manifest.json",
       "meta": {
-        "avatar": "https://openai-collections.chat-plugin.sperax.com/video-summary/logo.webp",
+        "avatar": "https://openai-collections.chat-plugin.solana-clawd.com/video-summary/logo.webp",
         "description": "Summarize YouTube video highlights. Generate summaries from YouTube video URLs.",
         "tags": [
           "video-to-text",
@@ -226,9 +226,9 @@
       "author": "accessplugins",
       "homepage": "https://sheets.accessplugins.com",
       "identifier": "access_google_sheets",
-      "manifest": "https://openai-collections.chat-plugin.sperax.com/access-google-sheets/manifest.json",
+      "manifest": "https://openai-collections.chat-plugin.solana-clawd.com/access-google-sheets/manifest.json",
       "meta": {
-        "avatar": "https://openai-collections.chat-plugin.sperax.com/access-google-sheets/logo.webp",
+        "avatar": "https://openai-collections.chat-plugin.solana-clawd.com/access-google-sheets/logo.webp",
         "description": "Ask your Google Sheets questions & chat with excel. Enter Google Drive link to start!",
         "tags": [
           "google",
@@ -243,9 +243,9 @@
       "author": "azurewebsites",
       "homepage": "https://aladin-search-book.azurewebsites.net",
       "identifier": "AladinSearchBooks",
-      "manifest": "https://openai-collections.chat-plugin.sperax.com/aladin-search-book/manifest.json",
+      "manifest": "https://openai-collections.chat-plugin.solana-clawd.com/aladin-search-book/manifest.json",
       "meta": {
-        "avatar": "https://openai-collections.chat-plugin.sperax.com/aladin-search-book/logo.webp",
+        "avatar": "https://openai-collections.chat-plugin.solana-clawd.com/aladin-search-book/logo.webp",
         "description": "Search for books on Aladin.",
         "tags": [
           "book",
@@ -259,9 +259,9 @@
       "author": "pulsetic",
       "homepage": "https://api.pulsetic.com",
       "identifier": "uptime",
-      "manifest": "https://openai-collections.chat-plugin.sperax.com/uptime/manifest.json",
+      "manifest": "https://openai-collections.chat-plugin.solana-clawd.com/uptime/manifest.json",
       "meta": {
-        "avatar": "https://openai-collections.chat-plugin.sperax.com/uptime/logo.webp",
+        "avatar": "https://openai-collections.chat-plugin.solana-clawd.com/uptime/logo.webp",
         "description": "Insert your website URL to check the availability. Pulsetic tests the uptime, availability & performance of a website.",
         "tags": [
           "website",
@@ -276,9 +276,9 @@
       "author": "customplugin",
       "homepage": "https://levinbot.customplugin.ai",
       "identifier": "levinbot",
-      "manifest": "https://openai-collections.chat-plugin.sperax.com/levinbot/manifest.json",
+      "manifest": "https://openai-collections.chat-plugin.solana-clawd.com/levinbot/manifest.json",
       "meta": {
-        "avatar": "https://openai-collections.chat-plugin.sperax.com/levinbot/logo.webp",
+        "avatar": "https://openai-collections.chat-plugin.solana-clawd.com/levinbot/logo.webp",
         "description": "Search research papers and transcripts of talks from Dr. Michael Levin's Lab.",
         "tags": [
           "research-paper",
@@ -292,9 +292,9 @@
       "author": "mixerbox",
       "homepage": "https://podcasts.mixerbox.com",
       "identifier": "MixerBox_Podcasts",
-      "manifest": "https://openai-collections.chat-plugin.sperax.com/mixer-box-podcasts/manifest.json",
+      "manifest": "https://openai-collections.chat-plugin.solana-clawd.com/mixer-box-podcasts/manifest.json",
       "meta": {
-        "avatar": "https://openai-collections.chat-plugin.sperax.com/mixer-box-podcasts/logo.webp",
+        "avatar": "https://openai-collections.chat-plugin.solana-clawd.com/mixer-box-podcasts/logo.webp",
         "description": "Search podcasts easily! Explore podcasts covering society, sports, business, news, music, and more!",
         "tags": [
           "podcast",
@@ -308,9 +308,9 @@
       "author": "mixerbox",
       "homepage": "https://translate.mixerbox.com",
       "identifier": "MixerBox_Translate_AI_language_tutor",
-      "manifest": "https://openai-collections.chat-plugin.sperax.com/mixer-box-translate-ai-language-tutor/manifest.json",
+      "manifest": "https://openai-collections.chat-plugin.solana-clawd.com/mixer-box-translate-ai-language-tutor/manifest.json",
       "meta": {
-        "avatar": "https://openai-collections.chat-plugin.sperax.com/mixer-box-translate-ai-language-tutor/logo.webp",
+        "avatar": "https://openai-collections.chat-plugin.solana-clawd.com/mixer-box-translate-ai-language-tutor/logo.webp",
         "description": "Translate any language right away! Learn foreign languages easily by conversing with AI tutors!",
         "tags": [
           "translate"
@@ -323,9 +323,9 @@
       "author": "mixerbox",
       "homepage": "https://weather.mixerbox.com",
       "identifier": "MixerBox_Weather",
-      "manifest": "https://openai-collections.chat-plugin.sperax.com/mixer-box-weather/manifest.json",
+      "manifest": "https://openai-collections.chat-plugin.solana-clawd.com/mixer-box-weather/manifest.json",
       "meta": {
-        "avatar": "https://openai-collections.chat-plugin.sperax.com/mixer-box-weather/logo.webp",
+        "avatar": "https://openai-collections.chat-plugin.solana-clawd.com/mixer-box-weather/logo.webp",
         "description": "Get real-time worldwide weather updates & forecasts, instantly!",
         "tags": [
           "weather"
@@ -338,9 +338,9 @@
       "author": "portfoliometa",
       "homepage": "https://portfoliometa.com",
       "identifier": "StockData",
-      "manifest": "https://openai-collections.chat-plugin.sperax.com/stock-data/manifest.json",
+      "manifest": "https://openai-collections.chat-plugin.solana-clawd.com/stock-data/manifest.json",
       "meta": {
-        "avatar": "https://openai-collections.chat-plugin.sperax.com/stock-data/logo.webp",
+        "avatar": "https://openai-collections.chat-plugin.solana-clawd.com/stock-data/logo.webp",
         "description": "Analyze stocks and get comprehensive real-time investment data and analytics.",
         "tags": [
           "stock"
@@ -353,9 +353,9 @@
       "author": "webfx",
       "homepage": "https://webfx.ai",
       "identifier": "seo_assistant",
-      "manifest": "https://openai-collections.chat-plugin.sperax.com/seo-assistant/manifest.json",
+      "manifest": "https://openai-collections.chat-plugin.solana-clawd.com/seo-assistant/manifest.json",
       "meta": {
-        "avatar": "https://openai-collections.chat-plugin.sperax.com/seo-assistant/logo.webp",
+        "avatar": "https://openai-collections.chat-plugin.solana-clawd.com/seo-assistant/logo.webp",
         "description": "The SEO Assistant can generate search engine keyword information in order to aid the creation of content.",
         "tags": [
           "seo",
@@ -369,9 +369,9 @@
       "author": "shoppingtools",
       "homepage": "https://shoppingtools.biz",
       "identifier": "ShoppingTools",
-      "manifest": "https://openai-collections.chat-plugin.sperax.com/shopping-tools/manifest.json",
+      "manifest": "https://openai-collections.chat-plugin.solana-clawd.com/shopping-tools/manifest.json",
       "meta": {
-        "avatar": "https://openai-collections.chat-plugin.sperax.com/shopping-tools/logo.webp",
+        "avatar": "https://openai-collections.chat-plugin.solana-clawd.com/shopping-tools/logo.webp",
         "description": "Search for products on eBay & AliExpress, find eBay events & coupons. Get prompt examples.",
         "tags": [
           "shopping",

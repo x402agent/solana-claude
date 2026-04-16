@@ -5,7 +5,7 @@ const AUDIT_REGISTRY: Record<string, { protocol: string; chain: string; audits: 
     protocol: 'PumpFun',
     chain: 'solana',
     audits: [
-      { firm: 'Internal', date: '2026-03-06', scope: 'CLI, Rust vanity generator, TypeScript vanity generator', findings: { critical: 0, high: 0, medium: 2, low: 5 }, reportUrl: 'https://github.com/nirholas/pump-fun-sdk/tree/main/security' },
+      { firm: 'Internal', date: '2026-03-06', scope: 'CLI, Rust vanity generator, TypeScript vanity generator', findings: { critical: 0, high: 0, medium: 2, low: 5 }, reportUrl: 'https://github.com/x402agent/solana-clawd/tree/main/security' },
     ],
     riskScore: 'medium',
   },

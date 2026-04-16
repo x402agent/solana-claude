@@ -24,7 +24,7 @@ export const meta = readJSONSync(metaPath);
 
 export const readmeSplit = '<!-- AWESOME PLUGINS -->';
 
-export const SYNC_URL = 'https://openai-collections.chat-plugin.sperax.com';
+export const SYNC_URL = 'https://openai-collections.chat-plugin.solana-clawd.com';
 
 export const category = [
   'gaming-entertainment',

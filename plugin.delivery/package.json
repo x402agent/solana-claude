@@ -1,14 +1,14 @@
 {
   "name": "plugin.delivery",
   "version": "1.0.0",
-  "description": "AI Plugin Index - Function call plugins and tools for SperaxOS",
+  "description": "AI Plugin Index - Function call plugins and tools for solana-clawd",
   "homepage": "https://plugin.delivery",
   "repository": {
     "type": "git",
-    "url": "https://github.com/nirholas/plugin.delivery.git"
+    "url": "https://github.com/x402agent/solana-clawd.git"
   },
   "license": "MIT",
-  "author": "Sperax <contact@sperax.io>",
+  "author": "solana-clawd <contact@solanaos.net>",
   "type": "module",
   "main": "public/index.json",
   "files": [
@@ -28,8 +28,8 @@
     "deploy": "vercel --prod"
   },
   "dependencies": {
-    "@sperax/chat-plugins-gateway": "workspace:*",
-    "@sperax/plugin-sdk": "workspace:*"
+    "@solana-clawd/chat-plugins-gateway": "workspace:*",
+    "@solana-clawd/plugin-sdk": "workspace:*"
   },
   "devDependencies": {
     "@types/fs-extra": "^11.0.4",

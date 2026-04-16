@@ -1,5 +1,5 @@
 {
-  "$schema": "../node_modules/@sperax/plugin-sdk/schema.json",
+  "$schema": "../node_modules/@solana-clawd/plugin-sdk/schema.json",
   "api": [
     {
       "url": "http://localhost:3400/api/clothes",
@@ -23,14 +23,14 @@
       }
     }
   ],
-  "author": "Sperax",
+  "author": "solana-clawd",
   "createdAt": "2023-09-03",
   "identifier": "plugin-identifier-standalone",
   "meta": {
     "avatar": "🚀",
     "tags": ["template"],
     "title": "Chat Plugin Template",
-    "description": "This is the plugin template for SperaxOS plugin development"
+    "description": "This is the plugin template for solana-clawd plugin development"
   },
   "type": "standalone",
   "ui": {

@@ -1,20 +1,21 @@
 {
-  "author": "SperaxOS",
+  "author": "solana-clawd",
   "createdAt": "2025-01-01",
-  "homepage": "https://github.com/nirholas/plugin.delivery",
+  "homepage": "https://github.com/x402agent/solana-clawd",
   "identifier": "bitcoin-stats",
   "manifest": "https://plugin.delivery/bitcoin-stats/manifest.json",
   "meta": {
     "avatar": "₿",
-    "description": "Bitcoin network stats, mempool, and fee estimates",
+    "description": "[solana-clawd] Bitcoin network stats, mempool, and fee estimates — consumed by CLAWD agents (Scanner/OODA/Analyst) and gated by the CLAWD permission engine.",
     "tags": [
       "bitcoin",
       "mempool",
-      "fees"
+      "fees",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "Bitcoin Stats",
     "category": "tools"
   },
   "schemaVersion": 1
 }
-

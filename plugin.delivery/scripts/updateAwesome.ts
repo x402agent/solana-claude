@@ -8,7 +8,7 @@ const updateAwesome = (filePath: string, md: string, plugins) => {
   const data: string[] = [];
 
   for (const [i, { identifier, author, createdAt, homepage, meta }] of plugins.entries()) {
-    const header = `### [${meta.title.replaceAll('[', '').replaceAll(']', '')}](https://sperax.fun/discover/plugin/${identifier})`;
+    const header = `### [${meta.title.replaceAll('[', '').replaceAll(']', '')}](https://solana-clawd.fun/discover/plugin/${identifier})`;
     const subHeader = `<sup>By **[@${author}](${homepage})** on **${createdAt}**</sup>`;
     const desc = [
       `${meta.description}`,

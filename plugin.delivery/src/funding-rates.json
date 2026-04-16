@@ -1,20 +1,21 @@
 {
-  "author": "SperaxOS",
+  "author": "solana-clawd",
   "createdAt": "2025-01-01",
-  "homepage": "https://github.com/nirholas/plugin.delivery",
+  "homepage": "https://github.com/x402agent/solana-clawd",
   "identifier": "funding-rates",
   "manifest": "https://plugin.delivery/funding-rates/manifest.json",
   "meta": {
     "avatar": "📊",
-    "description": "Perpetual futures funding rates from Coinglass across exchanges",
+    "description": "[solana-clawd] Perpetual futures funding rates from Coinglass across exchanges — consumed by CLAWD agents (Scanner/OODA/Analyst) and gated by the CLAWD permission engine.",
     "tags": [
       "funding",
       "futures",
-      "perpetuals"
+      "perpetuals",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "Funding Rates",
     "category": "stocks-finance"
   },
   "schemaVersion": 1
 }
-

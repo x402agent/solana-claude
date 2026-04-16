@@ -4,7 +4,7 @@
 
 ## Links
 
-- Repository: https://github.com/nirholas/plugin.delivery
-- Author: https://github.com/nirholas
-- Full documentation: https://raw.githubusercontent.com/nirholas/plugin.delivery/main/llms-full.txt
+- Repository: https://github.com/x402agent/solana-clawd
+- Author: https://github.com/x402agent
+- Full documentation: https://raw.githubusercontent.com/x402agent/plugin.delivery/main/llms-full.txt
 

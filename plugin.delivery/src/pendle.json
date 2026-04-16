@@ -1,21 +1,22 @@
 {
-  "author": "SperaxOS",
+  "author": "solana-clawd",
   "createdAt": "2025-01-01",
-  "homepage": "https://github.com/nirholas/plugin.delivery",
+  "homepage": "https://github.com/x402agent/solana-clawd",
   "identifier": "pendle",
   "manifest": "https://plugin.delivery/pendle/manifest.json",
   "meta": {
     "avatar": "⏳",
-    "description": "Pendle yield markets, PT/YT rates, and fixed yields",
+    "description": "[solana-clawd] Pendle yield markets, PT/YT rates, and fixed yields — consumed by CLAWD agents (Scanner/OODA/Analyst) and gated by the CLAWD permission engine.",
     "tags": [
       "pendle",
       "yield",
       "defi",
-      "fixed-rate"
+      "fixed-rate",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "Pendle Finance",
     "category": "stocks-finance"
   },
   "schemaVersion": 1
 }
-

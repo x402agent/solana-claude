@@ -1,6 +1,6 @@
 # Plugin Templates
 
-Official starter templates for building SperaxOS plugins.
+Official starter templates for building solana-clawd plugins.
 
 ## Available Templates
 
@@ -58,9 +58,9 @@ pnpm dev
 
 Server runs at http://localhost:3400
 
-### 5. Test in SperaxOS
+### 5. Test in solana-clawd
 
-1. Open SperaxOS
+1. Open solana-clawd
 2. Go to Plugin Settings
 3. Add custom plugin: `http://localhost:3400/manifest-dev.json`
 4. Start chatting!
@@ -154,8 +154,8 @@ Then update `public/manifest.json`:
 
 ## External Resources
 
-- [@sperax/plugin-sdk](https://www.npmjs.com/package/@sperax/plugin-sdk) - Plugin SDK
-- [@sperax/chat-plugins-gateway](https://www.npmjs.com/package/@sperax/chat-plugins-gateway) - Gateway package
+- [@solana-clawd/plugin-sdk](https://www.npmjs.com/package/@solana-clawd/plugin-sdk) - Plugin SDK
+- [@solana-clawd/chat-plugins-gateway](https://www.npmjs.com/package/@solana-clawd/chat-plugins-gateway) - Gateway package
 - [CoinGecko Plugin](../src/coingecko.json) - Real-world example
 - [Plugin Development Guide](../docs/PLUGIN_DEVELOPMENT_GUIDE.md) - Full documentation
 

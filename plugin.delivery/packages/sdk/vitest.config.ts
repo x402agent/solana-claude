@@ -5,9 +5,9 @@ export default defineConfig({
   test: {
     alias: {
       '@': path.join(__dirname, './src'),
-      '@sperax/plugin-sdk': path.join(__dirname, './src'),
-      '@sperax/plugin-sdk/client': path.join(__dirname, './src/client'),
-      '@sperax/plugin-sdk/openapi': path.join(__dirname, './src/openapi'),
+      '@solana-clawd/plugin-sdk': path.join(__dirname, './src'),
+      '@solana-clawd/plugin-sdk/client': path.join(__dirname, './src/client'),
+      '@solana-clawd/plugin-sdk/openapi': path.join(__dirname, './src/openapi'),
     },
     coverage: {
       include: ['src'],

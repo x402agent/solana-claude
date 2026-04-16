@@ -2,11 +2,11 @@
 
 # 🔌 Plugin Delivery
 
-**AI Function Call Plugins & Tools for SperaxOS**
+**AI Function Call Plugins & Tools for solana-clawd**
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/nirholas/plugin.delivery)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/x402agent/solana-clawd)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![npm](https://img.shields.io/npm/v/@sperax/plugin-sdk)](https://www.npmjs.com/package/@sperax/plugin-sdk)
+[![npm](https://img.shields.io/npm/v/@solana-clawd/plugin-sdk)](https://www.npmjs.com/package/@solana-clawd/plugin-sdk)
 
 **Live:** [`plugin.delivery`](https://plugin.delivery)
 
@@ -18,7 +18,7 @@
 
 ## What Is Plugin Delivery?
 
-The **official plugin marketplace and SDK** for SperaxOS — a crypto/DeFi-focused AI assistant platform.
+The **official plugin marketplace and SDK** for solana-clawd — a crypto/DeFi-focused AI assistant platform.
 
 | Feature | Description |
 |---------|-------------|
@@ -35,7 +35,7 @@ User: "What's the price of ETH?"
          │
          ▼
 ┌─────────────────────────────────────────────────────────┐
-│  SperaxOS discovers plugin from plugin.delivery index   │
+│  solana-clawd discovers plugin from plugin.delivery index   │
 │  AI generates function call: getPrice(coin: "ethereum") │
 │  Gateway routes request to CoinGecko API                │
 │  Response rendered in chat (JSON, Markdown, or UI)      │
@@ -49,7 +49,7 @@ AI: "ETH is currently trading at $3,450..."
 
 ## Plugin Types
 
-SperaxOS supports **4 distinct plugin types**, each optimized for different use cases:
+solana-clawd supports **4 distinct plugin types**, each optimized for different use cases:
 
 | Type | Rendering | Best For | Complexity |
 |------|-----------|----------|------------|
@@ -102,7 +102,7 @@ Embeds a full React/HTML application in an iframe within the chat.
 
 **Use when:** You need rich interactivity — charts, forms, dashboards, embedded apps.
 
-> 💡 **Standalone plugins are SperaxOS's superpower** — they enable experiences beyond what ChatGPT plugins can do.
+> 💡 **Standalone plugins are solana-clawd's superpower** — they enable experiences beyond what ChatGPT plugins can do.
 
 ### OpenAPI Plugins
 
@@ -182,10 +182,10 @@ Embed external content:
 Standalone plugins can trigger additional function calls:
 
 ```typescript
-import { speraxOS } from '@sperax/plugin-sdk/client';
+import { solana-clawdOS } from '@solana-clawd/plugin-sdk/client';
 
 // Trigger a new function call from your UI
-speraxOS.triggerFunctionCall({
+solana-clawdOS.triggerFunctionCall({
   name: 'getTokenDetails',
   arguments: { token: 'ETH' }
 });
@@ -242,9 +242,9 @@ templates/standalone/
 ### 1. Install the SDK
 
 ```bash
-bun add @sperax/plugin-sdk
+bun add @solana-clawd/plugin-sdk
 # or
-npm install @sperax/plugin-sdk
+npm install @solana-clawd/plugin-sdk
 ```
 
 ### 2. Create manifest.json
@@ -321,7 +321,7 @@ vercel --prod
 | [🌐 OpenAPI Integration](./docs/OPENAPI_INTEGRATION.md) | Using OpenAPI specs |
 | [💬 Communication Guide](./docs/COMMUNICATION_GUIDE.md) | Plugin ↔ Host messaging |
 | [🎭 Artifacts Guide](./docs/ARTIFACTS_GUIDE.md) | Rich UI components |
-| [⚡ Complete Guide](./docs/SPERAXOS_PLUGIN_COMPLETE_GUIDE.md) | Everything in one doc |
+| [⚡ Complete Guide](./docs/SOLANA_CLAWD_PLUGIN_COMPLETE_GUIDE.md) | Everything in one doc |
 
 ---
 
@@ -355,7 +355,7 @@ vercel --prod
 
 ```bash
 # Clone
-git clone https://github.com/nirholas/plugin.delivery.git
+git clone https://github.com/x402agent/solana-clawd.git
 cd plugins
 
 # Install
@@ -380,8 +380,8 @@ bun dev
 ```
 plugins/
 ├── packages/
-│   ├── sdk/              # @sperax/plugin-sdk
-│   └── gateway/          # @sperax/chat-plugins-gateway
+│   ├── sdk/              # @solana-clawd/plugin-sdk
+│   └── gateway/          # @solana-clawd/chat-plugins-gateway
 ├── templates/            # Starter templates
 │   ├── basic/
 │   ├── default/
@@ -404,8 +404,8 @@ plugins/
 
 | Package | Description | npm |
 |---------|-------------|-----|
-| `@sperax/plugin-sdk` | Plugin SDK for building SperaxOS plugins | [![npm](https://img.shields.io/npm/v/@sperax/plugin-sdk)](https://www.npmjs.com/package/@sperax/plugin-sdk) |
-| `@sperax/chat-plugins-gateway` | Gateway service for routing plugin calls | [![npm](https://img.shields.io/npm/v/@sperax/chat-plugins-gateway)](https://www.npmjs.com/package/@sperax/chat-plugins-gateway) |
+| `@solana-clawd/plugin-sdk` | Plugin SDK for building solana-clawd plugins | [![npm](https://img.shields.io/npm/v/@solana-clawd/plugin-sdk)](https://www.npmjs.com/package/@solana-clawd/plugin-sdk) |
+| `@solana-clawd/chat-plugins-gateway` | Gateway service for routing plugin calls | [![npm](https://img.shields.io/npm/v/@solana-clawd/chat-plugins-gateway)](https://www.npmjs.com/package/@solana-clawd/chat-plugins-gateway) |
 
 ### SDK Usage
 
@@ -414,20 +414,20 @@ import {
   pluginManifestSchema,
   createPluginResponse,
   PluginError 
-} from '@sperax/plugin-sdk';
+} from '@solana-clawd/plugin-sdk';
 
 // Client-side (in standalone UI)
-import { speraxOS } from '@sperax/plugin-sdk/client';
+import { solana-clawdOS } from '@solana-clawd/plugin-sdk/client';
 ```
 
 ---
 
 ## Gateway
 
-The Plugin Gateway securely routes function calls from SperaxOS to plugin APIs:
+The Plugin Gateway securely routes function calls from solana-clawd to plugin APIs:
 
 ```
-SperaxOS → Gateway → Plugin API
+solana-clawd → Gateway → Plugin API
               │
               ├── Auth injection
               ├── Rate limiting
@@ -444,7 +444,7 @@ cd packages/gateway
 # Deploy
 vercel --prod
 
-# Set in SperaxOS
+# Set in solana-clawd
 PLUGINS_GATEWAY_URL=https://your-gateway.vercel.app
 ```
 
@@ -456,13 +456,13 @@ We welcome contributions! See [CONTRIBUTING.md](./CONTRIBUTING.md).
 
 ### Submit a Plugin
 
-1. **Option A:** Open a [Plugin Submission](https://github.com/nirholas/plugin.delivery/issues/new?template=plugin_submission.md) issue
+1. **Option A:** Open a [Plugin Submission](https://github.com/x402agent/solana-clawd/issues/new?template=plugin_submission.md) issue
 2. **Option B:** Submit a PR adding your plugin to `src/`
 
 ### Requirements
 
 - ✅ Valid manifest with working endpoints
-- ✅ Tested in SperaxOS
+- ✅ Tested in solana-clawd
 - ✅ No API key required (or documented)
 - ✅ en-US locale at minimum
 
@@ -473,15 +473,15 @@ We welcome contributions! See [CONTRIBUTING.md](./CONTRIBUTING.md).
 | Resource | URL |
 |----------|-----|
 | 🌐 **Plugin Index** | [plugin.delivery](https://plugin.delivery) |
-| 📦 **SDK on npm** | [@sperax/plugin-sdk](https://www.npmjs.com/package/@sperax/plugin-sdk) |
-| 🐙 **GitHub** | [github.com/nirholas/plugins](https://github.com/nirholas/plugin.delivery) |
+| 📦 **SDK on npm** | [@solana-clawd/plugin-sdk](https://www.npmjs.com/package/@solana-clawd/plugin-sdk) |
+| 🐙 **GitHub** | [github.com/x402agent/solana-clawd](https://github.com/x402agent/solana-clawd) |
 | 🐦 **Twitter/X** | [@nichxbt](https://x.com/nichxbt) |
 
 ---
 
 ## License
 
-MIT © [Sperax](https://sperax.io)
+MIT © [solana-clawd](https://solanaos.net)
 
 ---
 

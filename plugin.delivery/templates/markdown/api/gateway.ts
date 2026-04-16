@@ -1,8 +1,8 @@
-import { createSperaxPluginGateway } from '@sperax/chat-plugins-gateway';
+import { createsolana-clawdPluginGateway } from '@solana-clawd/chat-plugins-gateway';
 
 export const config = {
   runtime: 'edge',
 };
 
-export default createSperaxPluginGateway();
+export default createsolana-clawdPluginGateway();
 

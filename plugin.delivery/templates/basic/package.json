@@ -2,9 +2,9 @@
   "name": "plugin-identifier",
   "version": "1.5.1",
   "private": true,
-  "description": "This is the plugin template for SperaxOS plugin development",
-  "homepage": "https://github.com/sperax/chat-plugin-template",
-  "repository": "https://github.com/sperax/chat-plugin-template.git",
+  "description": "This is the plugin template for solana-clawd plugin development",
+  "homepage": "https://github.com/solana-clawd/chat-plugin-template",
+  "repository": "https://github.com/solana-clawd/chat-plugin-template.git",
   "workspaces": [
     "docs/*",
     "./*"
@@ -51,9 +51,9 @@
     "not ie <= 10"
   ],
   "dependencies": {
-    "@sperax/plugin-sdk": "workspace:*",
-    "@sperax/chat-plugins-gateway": "workspace:*",
-    "@sperax/ui": "latest",
+    "@solana-clawd/plugin-sdk": "workspace:*",
+    "@solana-clawd/chat-plugins-gateway": "workspace:*",
+    "@solana-clawd/ui": "latest",
     "antd": "^5",
     "antd-style": "^3",
     "dayjs": "^1",

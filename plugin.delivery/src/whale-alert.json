@@ -1,20 +1,21 @@
 {
-  "author": "SperaxOS",
+  "author": "solana-clawd",
   "createdAt": "2025-01-01",
-  "homepage": "https://github.com/nirholas/plugin.delivery",
+  "homepage": "https://github.com/x402agent/solana-clawd",
   "identifier": "whale-alert",
   "manifest": "https://plugin.delivery/whale-alert/manifest.json",
   "meta": {
     "avatar": "🐋",
-    "description": "Track large cryptocurrency transactions over $1M across blockchains",
+    "description": "[solana-clawd] Track large cryptocurrency transactions over $1M across blockchains — consumed by CLAWD agents (Scanner/OODA/Analyst) and gated by the CLAWD permission engine.",
     "tags": [
       "whale",
       "transactions",
-      "alerts"
+      "alerts",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "Whale Alert",
     "category": "stocks-finance"
   },
   "schemaVersion": 1
 }
-

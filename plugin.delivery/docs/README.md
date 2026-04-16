@@ -1,8 +1,8 @@
-# SperaxOS Plugin Documentation
+# solana-clawd Plugin Documentation
 
-> **Live:** [plugin.delivery](https://plugin.delivery) • **SDK:** `@sperax/plugin-sdk`
+> **Live:** [plugin.delivery](https://plugin.delivery) • **SDK:** `@solana-clawd/plugin-sdk`
 
-Build AI-powered plugins for SperaxOS. Extend chat capabilities with custom APIs, OpenAPI integrations, and interactive UIs.
+Build AI-powered plugins for solana-clawd. Extend chat capabilities with custom APIs, OpenAPI integrations, and interactive UIs.
 
 ---
 
@@ -37,7 +37,7 @@ Build AI-powered plugins for SperaxOS. Extend chat capabilities with custom APIs
 |----------|-------------|
 | **[🎭 Artifacts Guide](./ARTIFACTS_GUIDE.md)** | Rich interactive content |
 | **[🔄 MCP Comparison](./MCP_COMPARISON.md)** | Model Context Protocol vs Plugins |
-| **[⚡ Complete Guide](./SPERAXOS_PLUGIN_COMPLETE_GUIDE.md)** | Everything in one doc |
+| **[⚡ Complete Guide](./SOLANA_CLAWD_PLUGIN_COMPLETE_GUIDE.md)** | Everything in one doc |
 
 ---
 
@@ -64,7 +64,7 @@ User: "What's the price of ETH?"
            │
            ▼
     ┌──────────────┐
-    │   SperaxOS   │ ←── Discovers plugin from index
+    │   solana-clawd   │ ←── Discovers plugin from index
     │   AI Model   │
     └──────┬───────┘
            │
@@ -98,7 +98,7 @@ User: "What's the price of ETH?"
 
 ```bash
 # 1. Clone template
-git clone https://github.com/nirholas/plugin.delivery.git
+git clone https://github.com/x402agent/solana-clawd.git
 cd plugins
 cp -r templates/default my-plugin
 cd my-plugin
@@ -107,7 +107,7 @@ cd my-plugin
 bun install
 bun dev
 
-# 3. Test in SperaxOS
+# 3. Test in solana-clawd
 # Add custom plugin: http://localhost:3400/manifest.json
 ```
 
@@ -134,15 +134,15 @@ bun dev
 
 | Package | npm |
 |---------|-----|
-| `@sperax/plugin-sdk` | [![npm](https://img.shields.io/npm/v/@sperax/plugin-sdk)](https://www.npmjs.com/package/@sperax/plugin-sdk) |
-| `@sperax/chat-plugins-gateway` | [![npm](https://img.shields.io/npm/v/@sperax/chat-plugins-gateway)](https://www.npmjs.com/package/@sperax/chat-plugins-gateway) |
+| `@solana-clawd/plugin-sdk` | [![npm](https://img.shields.io/npm/v/@solana-clawd/plugin-sdk)](https://www.npmjs.com/package/@solana-clawd/plugin-sdk) |
+| `@solana-clawd/chat-plugins-gateway` | [![npm](https://img.shields.io/npm/v/@solana-clawd/chat-plugins-gateway)](https://www.npmjs.com/package/@solana-clawd/chat-plugins-gateway) |
 
 ### Links
 
 | Resource | URL |
 |----------|-----|
 | Plugin Index | [plugin.delivery](https://plugin.delivery) |
-| GitHub | [github.com/nirholas/plugins](https://github.com/nirholas/plugin.delivery) |
+| GitHub | [github.com/x402agent/solana-clawd](https://github.com/x402agent/solana-clawd) |
 | Twitter/X | [@nichxbt](https://x.com/nichxbt) |
 
 ---
@@ -163,7 +163,7 @@ bun dev
 
 ## ❓ Need Help?
 
-- **GitHub Issues:** [github.com/nirholas/plugins/issues](https://github.com/nirholas/plugin.delivery/issues)
+- **GitHub Issues:** [github.com/x402agent/solana-clawd/issues](https://github.com/x402agent/solana-clawd/issues)
 - **Twitter/X:** [@nichxbt](https://x.com/nichxbt)
 - **Example Plugin:** [CoinGecko](../src/coingecko.json)
 

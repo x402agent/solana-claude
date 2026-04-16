@@ -1,4 +1,4 @@
-import { PluginErrorType, createErrorResponse } from '@sperax/plugin-sdk';
+import { PluginErrorType, createErrorResponse } from '@solana-clawd/plugin-sdk';
 
 export const config = {
   runtime: 'edge',

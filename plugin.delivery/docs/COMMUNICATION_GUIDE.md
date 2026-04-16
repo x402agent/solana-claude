@@ -30,7 +30,7 @@ Plugin communication happens at two levels:
 │  │   Engine     │         │  ┌──────────────────────────────┐ │  │
 │  │              │         │  │      Plugin Frontend         │ │  │
 │  │              │◄───────►│  │                              │ │  │
-│  │              │ postMsg │  │  Uses: speraxOS.* methods    │ │  │
+│  │              │ postMsg │  │  Uses: solana-clawdOS.* methods    │ │  │
 │  └──────────────┘         │  └──────────────────────────────┘ │  │
 │         │                 └──────────────────────────────────┘  │
 │         │                                                        │
@@ -66,7 +66,7 @@ Plugin communication happens at two levels:
 ### Response Flow for UI Plugins
 
 1. **Server response received** → Stored as message content
-2. **Plugin iframe loads** → Calls `speraxOS.getPluginMessage()`
+2. **Plugin iframe loads** → Calls `solana-clawdOS.getPluginMessage()`
 3. **Host sends message data** → Via postMessage
 4. **Plugin renders UI** → Displays data to user
 
@@ -248,7 +248,7 @@ The gateway sends POST requests to your plugin API:
 ```http
 POST /api/your-endpoint HTTP/1.1
 Content-Type: application/json
-Sperax-Plugin-Settings: {"apiKey": "user-configured-key"}
+solana-clawd-Plugin-Settings: {"apiKey": "user-configured-key"}
 
 {
   "param1": "value1",
@@ -263,7 +263,7 @@ import {
   PluginErrorType, 
   createErrorResponse,
   getPluginSettingsFromRequest 
-} from '@sperax/plugin-sdk';
+} from '@solana-clawd/plugin-sdk';
 
 interface MySettings {
   apiKey: string;
@@ -335,7 +335,7 @@ Frontend communication uses the `postMessage` API, abstracted by the SDK.
 When your plugin UI loads, retrieve the message data:
 
 ```tsx
-import { speraxOS } from '@sperax/plugin-sdk/client';
+import { solana-clawdOS } from '@solana-clawd/plugin-sdk/client';
 import { useEffect, useState } from 'react';
 
 function PluginUI() {
@@ -343,7 +343,7 @@ function PluginUI() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    speraxOS.getPluginMessage()
+    solana-clawdOS.getPluginMessage()
       .then(setData)
       .finally(() => setLoading(false));
   }, []);
@@ -359,7 +359,7 @@ function PluginUI() {
 The SDK provides hooks for easier state management:
 
 ```tsx
-import { useWatchPluginMessage } from '@sperax/plugin-sdk/client';
+import { useWatchPluginMessage } from '@solana-clawd/plugin-sdk/client';
 
 function PluginUI() {
   const { data, loading } = useWatchPluginMessage<MyDataType>();
@@ -375,10 +375,10 @@ function PluginUI() {
 Access the original Function Call arguments:
 
 ```tsx
-import { speraxOS } from '@sperax/plugin-sdk/client';
+import { solana-clawdOS } from '@solana-clawd/plugin-sdk/client';
 
 async function init() {
-  const payload = await speraxOS.getPluginPayload();
+  const payload = await solana-clawdOS.getPluginPayload();
   
   console.log(payload.name);       // Function name called
   console.log(payload.arguments);  // Arguments passed
@@ -396,7 +396,7 @@ Standalone plugins have full control over the communication flow.
 ### Initialization
 
 ```tsx
-import { useOnStandalonePluginInit } from '@sperax/plugin-sdk/client';
+import { useOnStandalonePluginInit } from '@solana-clawd/plugin-sdk/client';
 
 function StandalonePlugin() {
   useOnStandalonePluginInit((payload) => {
@@ -413,7 +413,7 @@ function StandalonePlugin() {
 State persists across re-renders:
 
 ```tsx
-import { usePluginState } from '@sperax/plugin-sdk/client';
+import { usePluginState } from '@solana-clawd/plugin-sdk/client';
 
 function Counter() {
   const [count, setCount] = usePluginState('count', 0);
@@ -432,10 +432,10 @@ function Counter() {
 Send data back to be stored in the message:
 
 ```tsx
-import { speraxOS } from '@sperax/plugin-sdk/client';
+import { solana-clawdOS } from '@solana-clawd/plugin-sdk/client';
 
 async function saveResult(data) {
-  await speraxOS.setPluginMessage(data);
+  await solana-clawdOS.setPluginMessage(data);
 }
 ```
 
@@ -444,17 +444,17 @@ async function saveResult(data) {
 Make the AI respond based on plugin output:
 
 ```tsx
-import { speraxOS } from '@sperax/plugin-sdk/client';
+import { solana-clawdOS } from '@solana-clawd/plugin-sdk/client';
 
 async function askAI() {
   // First update the message content
-  await speraxOS.setPluginMessage({
+  await solana-clawdOS.setPluginMessage({
     result: 'User completed the form',
     data: { name: 'Alice', age: 25 }
   });
 
   // Then trigger AI to process it
-  await speraxOS.triggerAIMessage();
+  await solana-clawdOS.triggerAIMessage();
 }
 ```
 
@@ -463,10 +463,10 @@ async function askAI() {
 Directly create an assistant response:
 
 ```tsx
-import { speraxOS } from '@sperax/plugin-sdk/client';
+import { solana-clawdOS } from '@solana-clawd/plugin-sdk/client';
 
 async function sendMessage() {
-  await speraxOS.createAssistantMessage(
+  await solana-clawdOS.createAssistantMessage(
     'Based on my analysis, here are the results...'
   );
 }
@@ -482,32 +482,32 @@ For advanced use cases, here are the raw postMessage channels:
 
 | Channel | Direction | Description |
 |---------|-----------|-------------|
-| `speraxos:plugin-ready-for-render` | Plugin → Host | Plugin is ready |
-| `speraxos:init-standalone-plugin` | Plugin → Host | Standalone initialized |
-| `speraxos:render-plugin` | Host → Plugin | Send render data |
+| `solana-clawdos:plugin-ready-for-render` | Plugin → Host | Plugin is ready |
+| `solana-clawdos:init-standalone-plugin` | Plugin → Host | Standalone initialized |
+| `solana-clawdos:render-plugin` | Host → Plugin | Send render data |
 
 ### Message Channels
 
 | Channel | Direction | Description |
 |---------|-----------|-------------|
-| `speraxos:fetch-plugin-message` | Plugin → Host | Request message |
-| `speraxos:fill-plugin-content` | Plugin → Host | Update message |
+| `solana-clawdos:fetch-plugin-message` | Plugin → Host | Request message |
+| `solana-clawdos:fill-plugin-content` | Plugin → Host | Update message |
 
 ### State Channels
 
 | Channel | Direction | Description |
 |---------|-----------|-------------|
-| `speraxos:fetch-plugin-state` | Plugin → Host | Request state |
-| `speraxos:render-plugin-state` | Host → Plugin | Send state |
-| `speraxos:update-plugin-state` | Plugin → Host | Update state |
+| `solana-clawdos:fetch-plugin-state` | Plugin → Host | Request state |
+| `solana-clawdos:render-plugin-state` | Host → Plugin | Send state |
+| `solana-clawdos:update-plugin-state` | Plugin → Host | Update state |
 
 ### Settings Channels
 
 | Channel | Direction | Description |
 |---------|-----------|-------------|
-| `speraxos:fetch-plugin-settings` | Plugin → Host | Request settings |
-| `speraxos:render-plugin-settings` | Host → Plugin | Send settings |
-| `speraxos:update-plugin-settings` | Plugin → Host | Update settings |
+| `solana-clawdos:fetch-plugin-settings` | Plugin → Host | Request settings |
+| `solana-clawdos:render-plugin-settings` | Host → Plugin | Send settings |
+| `solana-clawdos:update-plugin-settings` | Plugin → Host | Update settings |
 
 ### Example: Raw postMessage
 
@@ -515,13 +515,13 @@ For advanced use cases, here are the raw postMessage channels:
 // Usually you don't need this - use the SDK instead
 window.parent.postMessage(
   {
-    type: 'speraxos:plugin-ready-for-render',
+    type: 'solana-clawdos:plugin-ready-for-render',
   },
   '*'
 );
 
 window.addEventListener('message', (event) => {
-  if (event.data.type === 'speraxos:render-plugin') {
+  if (event.data.type === 'solana-clawdos:render-plugin') {
     const pluginData = event.data.payload;
     // Handle the data
   }
@@ -567,9 +567,9 @@ window.addEventListener('message', (event) => {
 
 ### Gateway Processing Flow
 
-The gateway serves as middleware between SperaxOS and plugin servers, ensuring secure and flexible communication.
+The gateway serves as middleware between solana-clawd and plugin servers, ensuring secure and flexible communication.
 
-**Request Initialization**: SperaxOS sends a request to the Gateway via HTTP POST, carrying a `PluginRequestPayload` containing:
+**Request Initialization**: solana-clawd sends a request to the Gateway via HTTP POST, carrying a `PluginRequestPayload` containing:
 - Plugin identifier
 - API name
 - Parameters
@@ -581,11 +581,11 @@ The gateway serves as middleware between SperaxOS and plugin servers, ensuring s
 3. Retrieve plugin manifest if not provided
 4. Add user settings to request headers
 5. Route request to appropriate plugin server
-6. Return response to SperaxOS
+6. Return response to solana-clawd
 
 **Parameter Validation**: The Gateway validates parameters based on the API parameter pattern defined in the plugin manifest to ensure validity and security.
 
-**Setting Handling**: The Gateway adds the plugin's requested settings to the `Sperax-Plugin-Settings` header, allowing the plugin to retrieve settings like API keys.
+**Setting Handling**: The Gateway adds the plugin's requested settings to the `solana-clawd-Plugin-Settings` header, allowing the plugin to retrieve settings like API keys.
 
 **OpenAPI Support**: If the plugin manifest specifies an OpenAPI manifest, the Gateway utilizes SwaggerClient to interact with third-party services.
 
@@ -609,23 +609,23 @@ For detailed error types, see the [Plugin Error Types](#plugin-error-types) sect
 
 ### Communication via postMessage API
 
-The frontend communication between SperaxOS and plugins is based on the HTML5 `window.postMessage` API, which allows secure communication between pages from different origins.
+The frontend communication between solana-clawd and plugins is based on the HTML5 `window.postMessage` API, which allows secure communication between pages from different origins.
 
 ### Frontend Communication Flow
 
 **1. Initialization of Communication**
 
-When the plugin is loaded and ready to interact with SperaxOS, it uses the `speraxOS.getPluginPayload()` method to obtain initialization data:
+When the plugin is loaded and ready to interact with solana-clawd, it uses the `solana-clawdOS.getPluginPayload()` method to obtain initialization data:
 
 ```typescript
-import { speraxOS } from '@sperax/plugin-sdk/client';
+import { solana-clawdOS } from '@solana-clawd/plugin-sdk/client';
 
 // Plugin waits for initialization
-const payload = await speraxOS.getPluginPayload();
+const payload = await solana-clawdOS.getPluginPayload();
 console.log('Plugin initialized:', payload);
 ```
 
-Behind the scenes, the plugin listens for the `message` event, waiting for the initialization message from SperaxOS.
+Behind the scenes, the plugin listens for the `message` event, waiting for the initialization message from solana-clawd.
 
 **2. Receiving Plugin Payload**
 
@@ -650,21 +650,21 @@ The plugin can call various methods to interact with the host:
 
 ```typescript
 // Get current message content
-const message = await speraxOS.getPluginMessage();
+const message = await solana-clawdOS.getPluginMessage();
 
 // Update message content (triggers re-render)
-await speraxOS.setPluginMessage({ 
+await solana-clawdOS.setPluginMessage({ 
   title: 'Updated Result', 
   data: newData 
 });
 
 // Get/set plugin state
-const counter = await speraxOS.getPluginState<number>('counter');
-await speraxOS.setPluginState('counter', counter + 1);
+const counter = await solana-clawdOS.getPluginState<number>('counter');
+await solana-clawdOS.setPluginState('counter', counter + 1);
 
 // Get/set user settings
-const settings = await speraxOS.getPluginSettings();
-await speraxOS.setPluginSettings({ theme: 'dark' });
+const settings = await solana-clawdOS.getPluginSettings();
+await solana-clawdOS.setPluginSettings({ theme: 'dark' });
 ```
 
 **4. Custom Trigger Actions (Standalone Plugins)**
@@ -673,24 +673,24 @@ For standalone plugins, custom control of AI message triggering is available:
 
 ```typescript
 // Trigger AI to process a message
-await speraxOS.triggerAIMessage(messageId);
+await solana-clawdOS.triggerAIMessage(messageId);
 
 // Create new assistant message
-await speraxOS.createAssistantMessage('Custom content');
+await solana-clawdOS.createAssistantMessage('Custom content');
 ```
 
 ### Communication Summary
 
-Communication between SperaxOS and plugins is achieved through asynchronous message exchange using the postMessage API. The plugin can:
+Communication between solana-clawd and plugins is achieved through asynchronous message exchange using the postMessage API. The plugin can:
 - Request data from the host
 - Receive initialization data
 - Update its own state
 - Trigger AI messages
 - Create new messages
 
-The SperaxOS host is responsible for responding to these requests and providing the required data. This mechanism allows plugins to operate independently while effectively communicating with the host application.
+The solana-clawd host is responsible for responding to these requests and providing the required data. This mechanism allows plugins to operate independently while effectively communicating with the host application.
 
-The SDK's `speraxOS` methods abstract communication details, enabling plugins to interact using a concise API.
+The SDK's `solana-clawdOS` methods abstract communication details, enabling plugins to interact using a concise API.
 
 ---
 
@@ -733,7 +733,7 @@ Add a `settings` field in your `manifest.json`:
 
 ### How Settings Appear to Users
 
-When users enable your plugin, SperaxOS will:
+When users enable your plugin, solana-clawd will:
 1. Display a settings form based on your schema
 2. Show input fields with appropriate types (text, password, number, etc.)
 3. Validate inputs according to your constraints
@@ -748,7 +748,7 @@ import {
   getPluginSettingsFromRequest,
   createErrorResponse,
   PluginErrorType
-} from '@sperax/plugin-sdk';
+} from '@solana-clawd/plugin-sdk';
 
 interface MySettings {
   apiKey: string;
@@ -777,14 +777,14 @@ export default async (req: Request) => {
 **Client-Side (Standalone Plugin UI):**
 
 ```typescript
-import { speraxOS } from '@sperax/plugin-sdk/client';
+import { solana-clawdOS } from '@solana-clawd/plugin-sdk/client';
 
 // Get settings
-const settings = await speraxOS.getPluginSettings<MySettings>();
+const settings = await solana-clawdOS.getPluginSettings<MySettings>();
 console.log('API Key:', settings.apiKey);
 
 // Update settings (if needed)
-await speraxOS.setPluginSettings({ 
+await solana-clawdOS.setPluginSettings({ 
   endpoint: 'https://custom-api.example.com' 
 });
 ```
@@ -837,7 +837,7 @@ if (loading) {
 ### 2. Validate Data
 
 ```typescript
-const data = await speraxOS.getPluginMessage<MyType>();
+const data = await solana-clawdOS.getPluginMessage<MyType>();
 if (!data || !data.requiredField) {
   return <Error message="Invalid data" />;
 }
@@ -847,7 +847,7 @@ if (!data || !data.requiredField) {
 
 ```typescript
 try {
-  const payload = await speraxOS.getPluginPayload();
+  const payload = await solana-clawdOS.getPluginPayload();
 } catch (error) {
   console.error('Failed to get payload:', error);
   // Show fallback UI
@@ -872,7 +872,7 @@ const { data } = useWatchPluginMessage<WeatherData>();
 import { useDebouncedCallback } from 'use-debounce';
 
 const debouncedUpdate = useDebouncedCallback(
-  (value) => speraxOS.setPluginState('key', value),
+  (value) => solana-clawdOS.setPluginState('key', value),
   300
 );
 ```
@@ -920,7 +920,7 @@ For local development, specify a gateway in your manifest:
 Install the gateway package:
 
 ```bash
-pnpm add @sperax/chat-plugins-gateway
+pnpm add @solana-clawd/chat-plugins-gateway
 ```
 
 #### Next.js (Edge Runtime)
@@ -928,13 +928,13 @@ pnpm add @sperax/chat-plugins-gateway
 Create `pages/api/gateway.ts`:
 
 ```typescript
-import { createSperaxChatPluginGateway } from '@sperax/chat-plugins-gateway';
+import { createsolana-clawdChatPluginGateway } from '@solana-clawd/chat-plugins-gateway';
 
 export const config = {
   runtime: 'edge',
 };
 
-export default createSperaxChatPluginGateway();
+export default createsolana-clawdChatPluginGateway();
 ```
 
 #### Next.js App Router
@@ -942,11 +942,11 @@ export default createSperaxChatPluginGateway();
 Create `app/api/gateway/route.ts`:
 
 ```typescript
-import { createSperaxChatPluginGateway } from '@sperax/chat-plugins-gateway';
+import { createsolana-clawdChatPluginGateway } from '@solana-clawd/chat-plugins-gateway';
 
 export const runtime = 'edge';
 
-const handler = createSperaxChatPluginGateway();
+const handler = createsolana-clawdChatPluginGateway();
 
 export { handler as GET, handler as POST };
 ```
@@ -956,7 +956,7 @@ export { handler as GET, handler as POST };
 Create `api/gateway.ts`:
 
 ```typescript
-import { createGatewayOnNodeRuntime } from '@sperax/chat-plugins-gateway';
+import { createGatewayOnNodeRuntime } from '@solana-clawd/chat-plugins-gateway';
 
 export default createGatewayOnNodeRuntime();
 ```
@@ -990,7 +990,7 @@ return new Response(data, {
   headers: {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type, SperaxOS-Plugin-Settings',
+    'Access-Control-Allow-Headers': 'Content-Type, solana-clawd-Plugin-Settings',
   },
 });
 ```
@@ -1008,7 +1008,7 @@ return new Response(data, {
 Check if header exists:
 
 ```typescript
-const settingsHeader = req.headers.get('SperaxOS-Plugin-Settings');
+const settingsHeader = req.headers.get('solana-clawd-Plugin-Settings');
 console.log('Settings header:', settingsHeader);
 ```
 

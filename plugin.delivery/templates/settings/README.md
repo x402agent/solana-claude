@@ -69,7 +69,7 @@ settings/
 ### 2. Retrieve Settings on Server
 
 ```typescript
-import { getPluginSettingsFromRequest, createErrorResponse, PluginErrorType } from '@sperax/plugin-sdk';
+import { getPluginSettingsFromRequest, createErrorResponse, PluginErrorType } from '@solana-clawd/plugin-sdk';
 
 export default async (req: Request) => {
   const settings = getPluginSettingsFromRequest<Settings>(req);
@@ -87,7 +87,7 @@ export default async (req: Request) => {
 
 ### 3. User Configures Settings
 
-When the user installs the plugin, SperaxOS shows a settings form based on your schema.
+When the user installs the plugin, solana-clawd shows a settings form based on your schema.
 
 ## Settings Schema Properties
 
@@ -124,7 +124,7 @@ This displays an error card prompting the user to configure settings.
 
 ## Security Notes
 
-- Settings are passed via HTTP headers (`X-Sperax-Plugin-Settings`)
+- Settings are passed via HTTP headers (`X-solana-clawd-Plugin-Settings`)
 - Use `format: "password"` for sensitive values
 - Never log or expose settings in responses
 - Validate settings server-side before use

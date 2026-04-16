@@ -1,34 +1,34 @@
-import { speraxOS } from './speraxOS';
+import { solana-clawdOS } from './solana-clawdOS';
 
 /**
  * @deprecated
  */
-export const postToFillPluginContent = speraxOS.setPluginMessage;
+export const postToFillPluginContent = solana-clawdOS.setPluginMessage;
 
 /**
  * @deprecated
  */
-export const postToUpdatePluginState = speraxOS.setPluginState;
+export const postToUpdatePluginState = solana-clawdOS.setPluginState;
 
 /**
  * @deprecated
  */
-export const postToUpdatePluginSettings = speraxOS.setPluginSettings;
+export const postToUpdatePluginSettings = solana-clawdOS.setPluginSettings;
 
 /**
  * @deprecated
  */
-export const fetchPluginState = speraxOS.getPluginState;
+export const fetchPluginState = solana-clawdOS.getPluginState;
 /**
  * @deprecated
  */
-export const fetchPluginMessage = speraxOS.getPluginMessage;
+export const fetchPluginMessage = solana-clawdOS.getPluginMessage;
 /**
  * @deprecated
  */
-export const fetchPluginPayload = speraxOS.getPluginPayload;
+export const fetchPluginPayload = solana-clawdOS.getPluginPayload;
 /**
  * @deprecated
  */
-export const fetchPluginSettings = speraxOS.getPluginSettings;
+export const fetchPluginSettings = solana-clawdOS.getPluginSettings;
 

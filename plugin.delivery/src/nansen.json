@@ -1,20 +1,21 @@
 {
-  "author": "SperaxOS",
+  "author": "solana-clawd",
   "createdAt": "2025-01-01",
-  "homepage": "https://github.com/nirholas/plugin.delivery",
+  "homepage": "https://github.com/x402agent/solana-clawd",
   "identifier": "nansen",
   "manifest": "https://plugin.delivery/nansen/manifest.json",
   "meta": {
     "avatar": "🔬",
-    "description": "Smart money analytics and wallet labels",
+    "description": "[solana-clawd] Smart money analytics and wallet labels — consumed by CLAWD agents (Scanner/OODA/Analyst) and gated by the CLAWD permission engine.",
     "tags": [
       "nansen",
       "smart-money",
-      "labels"
+      "labels",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "Nansen Lite",
     "category": "science-education"
   },
   "schemaVersion": 1
 }
-

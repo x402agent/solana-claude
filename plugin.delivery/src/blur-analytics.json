@@ -1,20 +1,21 @@
 {
-  "author": "SperaxOS",
+  "author": "solana-clawd",
   "createdAt": "2025-01-01",
-  "homepage": "https://github.com/nirholas/plugin.delivery",
+  "homepage": "https://github.com/x402agent/solana-clawd",
   "identifier": "blur-analytics",
   "manifest": "https://plugin.delivery/blur-analytics/manifest.json",
   "meta": {
     "avatar": "🟣",
-    "description": "Blur NFT marketplace stats and bids",
+    "description": "[solana-clawd] Blur NFT marketplace stats and bids — consumed by CLAWD agents (Scanner/OODA/Analyst) and gated by the CLAWD permission engine.",
     "tags": [
       "blur",
       "nft",
-      "trading"
+      "trading",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "Blur Analytics",
     "category": "gaming-entertainment"
   },
   "schemaVersion": 1
 }
-

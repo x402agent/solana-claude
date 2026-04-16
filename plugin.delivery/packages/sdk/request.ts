@@ -1,7 +1,7 @@
 /**
  * The HTTP header name for passing plugin settings.
  */
-export const SPERAX_PLUGIN_SETTINGS = 'X-Sperax-Plugin-Settings';
+export const SPERAX_PLUGIN_SETTINGS = 'X-solana-clawd-Plugin-Settings';
 
 export const getPluginSettingsFromRequest = <T = any>(req: Request): T | undefined => {
   const settings = req.headers.get(SPERAX_PLUGIN_SETTINGS);

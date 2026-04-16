@@ -1,4 +1,4 @@
-import { speraxOS } from '@sperax/plugin-sdk/client';
+import { solana-clawdOS } from '@solana-clawd/plugin-sdk/client';
 import { Button } from 'antd';
 import { memo, useEffect, useState } from 'react';
 import { Center } from 'react-layout-kit';
@@ -13,14 +13,14 @@ const Render = memo(() => {
 
   // 初始化时从主应用同步状态
   useEffect(() => {
-    speraxOS.getPluginMessage().then(setData);
+    solana-clawdOS.getPluginMessage().then(setData);
   }, []);
 
   // 记录请求参数
   const [payload, setPayload] = useState<any>();
 
   useEffect(() => {
-    speraxOS.getPluginPayload().then((payload) => {
+    solana-clawdOS.getPluginPayload().then((payload) => {
       if (payload.name === 'recommendClothes') {
         setPayload(payload.arguments);
       }
@@ -30,7 +30,7 @@ const Render = memo(() => {
   const fetchData = async () => {
     const data = await fetchClothes(payload);
     setData(data);
-    speraxOS.setPluginMessage(data);
+    solana-clawdOS.setPluginMessage(data);
   };
 
   return data ? (

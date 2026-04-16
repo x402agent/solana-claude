@@ -1,20 +1,21 @@
 {
-  "author": "SperaxOS",
+  "author": "solana-clawd",
   "createdAt": "2025-01-01",
-  "homepage": "https://github.com/nirholas/plugin.delivery",
+  "homepage": "https://github.com/x402agent/solana-clawd",
   "identifier": "audit-checker",
   "manifest": "https://plugin.delivery/audit-checker/manifest.json",
   "meta": {
     "avatar": "📋",
-    "description": "Aggregates audit reports from multiple databases",
+    "description": "[solana-clawd] Aggregates audit reports from multiple databases — consumed by CLAWD agents (Scanner/OODA/Analyst) and gated by the CLAWD permission engine.",
     "tags": [
       "audit",
       "security",
-      "reports"
+      "reports",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "Audit Checker",
     "category": "tools"
   },
   "schemaVersion": 1
 }
-

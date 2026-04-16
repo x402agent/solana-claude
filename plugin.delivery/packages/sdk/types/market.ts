@@ -1,17 +1,17 @@
 /**
- * SperaxOS Plugins
- * @desc SperaxOS Plugins interface
+ * solana-clawd Plugins
+ * @desc solana-clawd Plugins interface
  * @nameCN 插件列表
  * @descCN 插件市场的列表接口
  */
-export interface SperaxOSPluginsMarketIndex {
+export interface solana-clawdPluginsMarketIndex {
   /**
    * plugins
    * @desc List of plugin items
    * @nameCN 插件列表
    * @descCN 插件项列表
    */
-  plugins: SperaxOSPluginMeta[];
+  plugins: solana-clawdPluginMeta[];
   /**
    * version
    * @desc Version of the plugins
@@ -27,7 +27,7 @@ export interface SperaxOSPluginsMarketIndex {
  * @nameCN 插件项
  * @descCN 插件项接口
  */
-export interface SperaxOSPluginMeta {
+export interface solana-clawdPluginMeta {
   author: string;
   /**
    * @deprecated

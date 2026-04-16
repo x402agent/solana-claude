@@ -1,4 +1,4 @@
-# SperaxOS Plugin System
+# solana-clawd Plugin System
 
 > A comprehensive plugin ecosystem enabling AI agents to interact with external services through a unified gateway architecture
 
@@ -8,7 +8,7 @@
 
 ## Overview
 
-SperaxOS Plugin System is a modular architecture that extends AI agent capabilities through standardized plugin interfaces. It provides authentication management, function calling integration, and a gateway API for routing plugin requests. Built on Next.js with TypeScript, it supports both standalone plugins and integrated marketplace deployments.
+solana-clawd Plugin System is a modular architecture that extends AI agent capabilities through standardized plugin interfaces. It provides authentication management, function calling integration, and a gateway API for routing plugin requests. Built on Next.js with TypeScript, it supports both standalone plugins and integrated marketplace deployments.
 
 ## Quick Start
 
@@ -20,8 +20,8 @@ SperaxOS Plugin System is a modular architecture that extends AI agent capabilit
 
 ```bash
 # Clone the repository
-git clone https://github.com/nirholas/SperaxOS.git
-cd SperaxOS
+git clone https://github.com/x402agent/solana-clawd
+cd solana-clawd
 
 # Install dependencies
 pnpm install
@@ -46,8 +46,8 @@ Expected output: The AI agent will automatically detect relevant tools and call 
 - **Authentication Management**: Supports multiple auth methods (API keys, OAuth, Bearer tokens, custom headers)
 - **Multi-Provider Support**: 40+ AI model providers including OpenAI, Anthropic, Google, and custom adapters
 - **Plugin Marketplace**: Discover and install community plugins via the Agents Market
-- **Artifacts System**: Display portfolio data, charts, and interactive components within chat via `<speraxArtifact>` tags
-- **Internationalization**: Built-in i18n with automatic translation pipeline using sperax-i18n
+- **Artifacts System**: Display portfolio data, charts, and interactive components within chat via `<solana-clawdArtifact>` tags
+- **Internationalization**: Built-in i18n with automatic translation pipeline using solana-clawd-i18n
 
 ## Architecture
 
@@ -56,7 +56,7 @@ Expected output: The AI agent will automatically detect relevant tools and call 
 **Frontend:**
 - Next.js 15 (App Router with Route Groups)
 - React 19, TypeScript
-- Ant Design, @sperax/ui, antd-style
+- Ant Design, @solana-clawd/ui, antd-style
 - Zustand (state management), SWR (data fetching)
 
 **Backend:**
@@ -117,9 +117,9 @@ src/
 
 ```typescript
 // Agent Configuration
-interface SperaxAgentConfig {
+interface solana-clawdAgentConfig {
   model: string;                    // Model identifier
-  chatConfig: SperaxAgentChatConfig;  // Chat settings
+  chatConfig: solana-clawdAgentChatConfig;  // Chat settings
   openingMessage?: string;          // Welcome message
   openingQuestions?: string[];      // Suggested prompts
   params: {
@@ -130,7 +130,7 @@ interface SperaxAgentConfig {
   };
   plugins?: string[];               // Enabled plugin identifiers
   systemRole?: string;              // System prompt
-  tts: SperaxAgentTTSConfig;         // Text-to-speech config
+  tts: solana-clawdAgentTTSConfig;         // Text-to-speech config
 }
 
 // Plugin Authentication
@@ -149,10 +149,10 @@ interface ComfyUIKeyVault {
 ### Basic Plugin Integration
 
 ```typescript
-import { SperaxComfyUI } from '@/libs/model-runtime/comfyui';
+import { solana-clawdComfyUI } from '@/libs/model-runtime/comfyui';
 
 // Initialize plugin client
-const comfyUI = new SperaxComfyUI({
+const comfyUI = new solana-clawdComfyUI({
   baseURL: 'http://localhost:8000',
   authType: 'none'
 });
@@ -221,7 +221,7 @@ const pluginResult = await chatService.runPluginApi({
 ```typescript
 // AI returns artifact in response
 const artifactResponse = `
-<speraxArtifact identifier="portfolio-assets" title="My Portfolio" type="application/sperax.artifacts.react">
+<solana-clawdArtifact identifier="portfolio-assets" title="My Portfolio" type="application/solana-clawd.artifacts.react">
 import { Card, Statistic, Row, Col } from 'antd';
 
 export default function PortfolioDisplay() {
@@ -247,7 +247,7 @@ export default function PortfolioDisplay() {
     </div>
   );
 }
-</speraxArtifact>
+</solana-clawdArtifact>
 `;
 
 // Artifacts panel automatically opens and renders the React component
@@ -262,7 +262,7 @@ export default function PortfolioDisplay() {
 pnpm install
 
 # Start development server with debug mode
-DEBUG=speraxos:* bun run dev
+DEBUG=solana-clawdos:* bun run dev
 
 # Run type checking
 bun run type-check
@@ -313,12 +313,12 @@ bunx vitest -u 'path/to/test.ts'
 
 **1. No Authentication**
 ```typescript
-const client = new SperaxComfyUI({ baseURL: 'http://localhost:8000', authType: 'none' });
+const client = new solana-clawdComfyUI({ baseURL: 'http://localhost:8000', authType: 'none' });
 ```
 
 **2. Basic Authentication**
 ```typescript
-const client = new SperaxComfyUI({
+const client = new solana-clawdComfyUI({
   baseURL: 'https://api.example.com',
   authType: 'basic',
   username: 'user',
@@ -328,7 +328,7 @@ const client = new SperaxComfyUI({
 
 **3. Bearer Token**
 ```typescript
-const client = new SperaxComfyUI({
+const client = new solana-clawdComfyUI({
   baseURL: 'https://api.example.com',
   authType: 'bearer',
   apiKey: 'your-token'
@@ -337,7 +337,7 @@ const client = new SperaxComfyUI({
 
 **4. Custom Headers**
 ```typescript
-const client = new SperaxComfyUI({
+const client = new solana-clawdComfyUI({
   baseURL: 'https://api.example.com',
   authType: 'custom',
   customHeaders: {
@@ -373,9 +373,9 @@ const nextAuth = NextAuth({
 1. **Create Provider Implementation**
 ```typescript
 // src/libs/agent-runtime/myprovider/index.ts
-import { SperaxRuntimeAI } from '../BaseAI';
+import { solana-clawdRuntimeAI } from '../BaseAI';
 
-export class SperaxMyProviderAI implements SperaxRuntimeAI {
+export class solana-clawdMyProviderAI implements solana-clawdRuntimeAI {
   async chat(payload, options) {
     // Implement chat method
   }
@@ -386,7 +386,7 @@ export class SperaxMyProviderAI implements SperaxRuntimeAI {
 ```typescript
 // src/libs/agent-runtime/runtimeMap.ts
 export const providerRuntimeMap = {
-  myprovider: SperaxMyProviderAI,
+  myprovider: solana-clawdMyProviderAI,
   // ... other providers
 };
 ```
@@ -418,7 +418,7 @@ npm run db:generate
 3. **Update Type Definitions**
 ```typescript
 // src/types/agent/index.ts
-export interface SperaxAgentConfig {
+export interface solana-clawdAgentConfig {
   newFeature?: string;
 }
 ```
@@ -514,9 +514,9 @@ console.log('Resolved filename:', fileName);
 - [Plugin Development Guide](docs/PLUGIN_DEVELOPMENT_GUIDE.md)
 - [Testing Guide](testing-guide/testing-guide.mdc)
 - [Contributing Guide](CONTRIBUTING.md)
-- [SperaxOS GitHub](https://github.com/nirholas/SperaxOS)
+- [solana-clawd GitHub](https://github.com/x402agent/solana-clawd)
 
 ## License
 
-MIT © Sperax
+MIT © solana-clawd
 

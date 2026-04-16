@@ -1,20 +1,21 @@
 {
-  "author": "SperaxOS",
+  "author": "solana-clawd",
   "createdAt": "2025-01-01",
-  "homepage": "https://github.com/nirholas/plugin.delivery",
+  "homepage": "https://github.com/x402agent/solana-clawd",
   "identifier": "tally",
   "manifest": "https://plugin.delivery/tally/manifest.json",
   "meta": {
     "avatar": "🗳️",
-    "description": "On-chain governance tracking and proposal data",
+    "description": "[solana-clawd] On-chain governance tracking and proposal data — consumed by CLAWD agents (Scanner/OODA/Analyst) and gated by the CLAWD permission engine.",
     "tags": [
       "tally",
       "governance",
-      "onchain"
+      "onchain",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "Tally",
     "category": "social"
   },
   "schemaVersion": 1
 }
-

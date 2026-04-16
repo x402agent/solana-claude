@@ -1,21 +1,22 @@
 {
-  "author": "SperaxOS",
+  "author": "solana-clawd",
   "createdAt": "2025-01-01",
-  "homepage": "https://github.com/nirholas/plugin.delivery",
+  "homepage": "https://github.com/x402agent/solana-clawd",
   "identifier": "defillama",
   "manifest": "https://plugin.delivery/defillama/manifest.json",
   "meta": {
     "avatar": "🦙",
-    "description": "DeFi analytics with TVL, yields, stablecoins across 3000+ protocols",
+    "description": "[solana-clawd] DeFi analytics with TVL, yields, stablecoins across 3000+ protocols — consumed by CLAWD agents (Scanner/OODA/Analyst) and gated by the CLAWD permission engine.",
     "tags": [
       "defi",
       "tvl",
       "yields",
-      "protocols"
+      "protocols",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "DeFiLlama",
     "category": "stocks-finance"
   },
   "schemaVersion": 1
 }
-

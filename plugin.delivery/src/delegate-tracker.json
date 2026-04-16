@@ -1,20 +1,21 @@
 {
-  "author": "SperaxOS",
+  "author": "solana-clawd",
   "createdAt": "2025-01-01",
-  "homepage": "https://github.com/nirholas/plugin.delivery",
+  "homepage": "https://github.com/x402agent/solana-clawd",
   "identifier": "delegate-tracker",
   "manifest": "https://plugin.delivery/delegate-tracker/manifest.json",
   "meta": {
     "avatar": "👥",
-    "description": "Track DAO delegates and voting power via Karma",
+    "description": "[solana-clawd] Track DAO delegates and voting power via Karma — consumed by CLAWD agents (Scanner/OODA/Analyst) and gated by the CLAWD permission engine.",
     "tags": [
       "delegates",
       "voting",
-      "karma"
+      "karma",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "Delegate Tracker",
     "category": "social"
   },
   "schemaVersion": 1
 }
-

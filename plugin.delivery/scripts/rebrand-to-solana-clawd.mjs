@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Rebrands plugin.delivery from SperaxOS/nirholas/nicholasxuu to solana-clawd.
+// Rebrands plugin.delivery from solana-clawd/x402agent/x402agent to solana-clawd.
 // - Applies CLAWD theming to every src/*.json plugin entry
 // - Sweeps all text files replacing legacy brand strings
 // Idempotent: safe to re-run.
@@ -25,20 +25,20 @@ const SKIP_DIR_PARTS = new Set(['node_modules', '.git', 'dist', 'build', '.verce
 
 // Replacement pairs — ordered: most specific first, then generic.
 const TEXT_REPLACEMENTS = [
-  [/SPERAXOS_PLUGIN_COMPLETE_GUIDE/g, 'SOLANA_CLAWD_PLUGIN_COMPLETE_GUIDE'],
-  [/https:\/\/github\.com\/nirholas\/plugin\.delivery(\.git)?/g, 'https://github.com/x402agent/solana-clawd$1'],
-  [/https:\/\/github\.com\/nicholasxuu\/pump-fun-sdk(\.git)?/g, 'https://github.com/x402agent/solana-clawd$1'],
-  [/github\.com\/nirholas\/[a-zA-Z0-9_.-]+/g, 'github.com/x402agent/solana-clawd'],
-  [/github\.com\/nicholasxuu\/[a-zA-Z0-9_.-]+/g, 'github.com/x402agent/solana-clawd'],
-  [/nicholasxuu/g, 'x402agent'],
-  [/nirholas/g, 'x402agent'],
-  [/SperaxOS/g, 'solana-clawd'],
-  [/Sperax\s*<contact@sperax\.io>/g, 'solana-clawd <contact@solanaos.net>'],
-  [/contact@sperax\.io/g, 'contact@solanaos.net'],
-  [/sperax\.io/g, 'solanaos.net'],
-  [/@sperax\//g, '@solana-clawd/'],
-  [/Sperax/g, 'solana-clawd'],
-  [/sperax/g, 'solana-clawd'],
+  [/SOLANA_CLAWD_PLUGIN_COMPLETE_GUIDE/g, 'SOLANA_CLAWD_PLUGIN_COMPLETE_GUIDE'],
+  [/https:\/\/github\.com\/x402agent\/plugin\.delivery(\.git)?/g, 'https://github.com/x402agent/solana-clawd$1'],
+  [/https:\/\/github\.com\/x402agent\/pump-fun-sdk(\.git)?/g, 'https://github.com/x402agent/solana-clawd$1'],
+  [/github\.com\/x402agent\/[a-zA-Z0-9_.-]+/g, 'github.com/x402agent/solana-clawd'],
+  [/github\.com\/x402agent\/[a-zA-Z0-9_.-]+/g, 'github.com/x402agent/solana-clawd'],
+  [/x402agent/g, 'x402agent'],
+  [/x402agent/g, 'x402agent'],
+  [/solana-clawd/g, 'solana-clawd'],
+  [/solana-clawd\s*<contact@solana-clawd\.io>/g, 'solana-clawd <contact@solanaos.net>'],
+  [/contact@solana-clawd\.io/g, 'contact@solanaos.net'],
+  [/solana-clawd\.io/g, 'solanaos.net'],
+  [/@solana-clawd\//g, '@solana-clawd/'],
+  [/solana-clawd/g, 'solana-clawd'],
+  [/solana-clawd/g, 'solana-clawd'],
 ];
 
 // ---------- Phase 1: plugin JSON theming ----------

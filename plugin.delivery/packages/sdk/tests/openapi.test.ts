@@ -1,4 +1,4 @@
-import { OpenAPIConvertor } from '@sperax/chat-plugin-sdk/openapi';
+import { OpenAPIConvertor } from '@solana-clawd/chat-plugin-sdk/openapi';
 import { describe, expect, it } from 'vitest';
 
 import ChatWithPDF from './fixtures/ChatWithPDF.json';
@@ -9,7 +9,7 @@ import OpenAPI_V3_0_2 from './fixtures/OpenAPI_V3_0_2.json';
 
 describe('OpenAPIConvertor', () => {
   describe('convertOpenAPIToPluginSchema', () => {
-    it('can convert OpenAPI v3.1 to sperax apis', async () => {
+    it('can convert OpenAPI v3.1 to solana-clawd apis', async () => {
       const convertor = new OpenAPIConvertor(openAPIV3);
       const plugins = await convertor.convertOpenAPIToPluginSchema();
 

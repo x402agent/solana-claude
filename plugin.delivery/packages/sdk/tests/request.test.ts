@@ -3,7 +3,7 @@ import {
   createHeadersWithPluginSettings,
   getPluginSettingsFromHeaders,
   getPluginSettingsFromRequest,
-} from '@sperax/chat-plugin-sdk';
+} from '@solana-clawd/chat-plugin-sdk';
 import { describe, expect, it } from 'vitest';
 
 describe('getPluginSettingsFromRequest', () => {
@@ -13,7 +13,7 @@ describe('getPluginSettingsFromRequest', () => {
     expect(settings).toBeUndefined();
   });
 
-  it('should parse settings from Sperax header', () => {
+  it('should parse settings from solana-clawd header', () => {
     const mockRequest = new Request('https://example.com', {
       headers: { [SPERAX_PLUGIN_SETTINGS]: JSON.stringify({ key: 'value' }) },
     });
@@ -36,7 +36,7 @@ describe('getPluginSettingsFromHeaders', () => {
     expect(settings).toBeUndefined();
   });
 
-  it('should parse settings from Sperax header', () => {
+  it('should parse settings from solana-clawd header', () => {
     const settings = getPluginSettingsFromHeaders({
       [SPERAX_PLUGIN_SETTINGS]: JSON.stringify({ key: 'value' }),
     });
