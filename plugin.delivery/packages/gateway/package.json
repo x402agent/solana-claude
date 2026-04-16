@@ -2,7 +2,7 @@
   "name": "@solana-clawd/chat-plugins-gateway",
   "version": "1.9.0",
   "description": "solana-clawd Plugin Market",
-  "repository": "https://github.com/solana-clawd/chat-plugins-gateway.git",
+  "repository": "https://github.com/x402agent/solana-clawd",
   "author": "solana-clawd <i@solana-clawd.com>",
   "sideEffects": false,
   "main": "src/index.ts",

@@ -209,7 +209,7 @@ describe('createGatewayOnEdgeRuntime', () => {
         body: {
           identifier: 'unknown-plugin',
           message:
-            "[gateway] plugin 'unknown-plugin' is not found，please check the plugin list in https://test-market-index-url.com, or create an issue to [solana-clawd-os-plugins](https://github.com/solana-clawd/solana-clawd-os-plugins/issues)",
+            "[gateway] plugin 'unknown-plugin' is not found，please check the plugin list in https://test-market-index-url.com, or create an issue to [solana-clawd-os-plugins](https://github.com/x402agent/solana-clawd)",
         },
         errorType: 'PluginMetaNotFound',
       });
@@ -242,7 +242,7 @@ describe('createGatewayOnEdgeRuntime', () => {
                 {
                   author: 'test-plugin',
                   createdAt: '2023-08-12',
-                  homepage: 'https://github.com/solana-clawd/chat-plugin-real-time-weather',
+                  homepage: 'https://github.com/x402agent/solana-clawd',
                   identifier: 'test-plugin',
                   manifest: 'https://test-plugin-url.com/manifest.json',
                   meta: {
@@ -288,7 +288,7 @@ describe('createGatewayOnEdgeRuntime', () => {
                 {
                   author: 'test-plugin',
                   createdAt: '2023-08-12',
-                  homepage: 'https://github.com/solana-clawd/chat-plugin-real-time-weather',
+                  homepage: 'https://github.com/x402agent/solana-clawd',
                   identifier: 'test-plugin',
                   manifest: 'https://test-plugin-url.com/manifest.json',
                   meta: {

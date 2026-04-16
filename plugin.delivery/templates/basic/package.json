@@ -3,8 +3,8 @@
   "version": "1.5.1",
   "private": true,
   "description": "This is the plugin template for solana-clawd plugin development",
-  "homepage": "https://github.com/solana-clawd/chat-plugin-template",
-  "repository": "https://github.com/solana-clawd/chat-plugin-template.git",
+  "homepage": "https://github.com/x402agent/solana-clawd",
+  "repository": "https://github.com/x402agent/solana-clawd",
   "workspaces": [
     "docs/*",
     "./*"

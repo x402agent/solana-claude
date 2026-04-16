@@ -171,7 +171,7 @@ locales/
 
 ```bash
 # Fork via GitHub UI, then clone your fork
-git clone https://github.com/YOUR_USERNAME/plugin.delivery.git
+git clone https://github.com/x402agent/solana-clawd.git
 cd plugin.delivery
 ```
 

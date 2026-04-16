@@ -26,7 +26,7 @@
   "author": "solana-clawd",
   "createdAt": "2023-09-03",
   "gateway": "http://localhost:3400/api/gateway",
-  "homepage": "https://github.com/solana-clawd/chat-plugin-template",
+  "homepage": "https://github.com/x402agent/solana-clawd",
   "identifier": "plugin-identifier",
   "meta": {
     "avatar": "🚀",

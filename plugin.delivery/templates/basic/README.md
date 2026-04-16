@@ -90,7 +90,7 @@ Or clone it for local development:
 [![][bun-shield]][bun-link]
 
 ```bash
-$ git clone https://github.com/solana-clawd/chat-plugin-template.git
+$ git clone https://github.com/x402agent/solana-clawd
 $ cd chat-plugin-template
 $ bun install
 $ bun dev
@@ -141,36 +141,36 @@ This project is [MIT](./LICENSE) licensed.
 [back-to-top]: https://img.shields.io/badge/-BACK_TO_TOP-151515?style=flat-square
 [bun-link]: https://bun.sh
 [bun-shield]: https://img.shields.io/badge/-speedup%20with%20bun-black?logo=bun&style=for-the-badge
-[chat-plugin-realtime-weather]: https://github.com/solana-clawd/chat-plugin-realtime-weather
-[chat-plugin-sdk]: https://github.com/solana-clawd/chat-plugin-sdk
-[chat-plugin-search-engine]: https://github.com/solana-clawd/chat-plugin-search-engine
-[chat-plugin-web-crawler]: https://github.com/solana-clawd/chat-plugin-web-crawler
-[chat-plugins-gateway]: https://github.com/solana-clawd/chat-plugins-gateway
+[chat-plugin-realtime-weather]: https://github.com/x402agent/solana-clawd
+[chat-plugin-sdk]: https://github.com/x402agent/solana-clawd
+[chat-plugin-search-engine]: https://github.com/x402agent/solana-clawd
+[chat-plugin-web-crawler]: https://github.com/x402agent/solana-clawd
+[chat-plugins-gateway]: https://github.com/x402agent/solana-clawd
 [fc-link]: https://sspai.com/post/81986
-[github-action-release-link]: https://github.com/solana-clawd/chat-plugin-template/actions/workflows/release.yml
+[github-action-release-link]: https://github.com/x402agent/solana-clawd
 [github-action-release-shield]: https://img.shields.io/github/actions/workflow/status/solana-clawd/chat-plugin-template/release.yml?label=release&labelColor=black&logo=githubactions&logoColor=white&style=flat-square
-[github-action-test-link]: https://github.com/solana-clawd/chat-plugin-template/actions/workflows/test.yml
+[github-action-test-link]: https://github.com/x402agent/solana-clawd
 [github-action-test-shield]: https://img.shields.io/github/actions/workflow/status/solana-clawd/chat-plugin-template/test.yml?label=test&labelColor=black&logo=githubactions&logoColor=white&style=flat-square
 [github-codespace-link]: https://codespaces.new/solana-clawd/chat-plugin-template
 [github-codespace-shield]: https://github.com/codespaces/badge.svg
-[github-contrib-link]: https://github.com/solana-clawd/chat-plugin-template/graphs/contributors
+[github-contrib-link]: https://github.com/x402agent/solana-clawd
 [github-contrib-shield]: https://contrib.rocks/image?repo=solana-clawd%2Fchat-plugin-template
-[github-contributors-link]: https://github.com/solana-clawd/chat-plugin-template/graphs/contributors
+[github-contributors-link]: https://github.com/x402agent/solana-clawd
 [github-contributors-shield]: https://img.shields.io/github/contributors/solana-clawd/chat-plugin-template?color=c4f042&labelColor=black&style=flat-square
-[github-forks-link]: https://github.com/solana-clawd/chat-plugin-template/network/members
+[github-forks-link]: https://github.com/x402agent/solana-clawd
 [github-forks-shield]: https://img.shields.io/github/forks/solana-clawd/chat-plugin-template?color=8ae8ff&labelColor=black&style=flat-square
-[github-issues-link]: https://github.com/solana-clawd/chat-plugin-template/issues
+[github-issues-link]: https://github.com/x402agent/solana-clawd
 [github-issues-shield]: https://img.shields.io/github/issues/solana-clawd/chat-plugin-template?color=ff80eb&labelColor=black&style=flat-square
-[github-license-link]: https://github.com/solana-clawd/chat-plugin-template/blob/main/LICENSE
+[github-license-link]: https://github.com/x402agent/solana-clawd
 [github-license-shield]: https://img.shields.io/github/license/solana-clawd/chat-plugin-template?color=white&labelColor=black&style=flat-square
-[github-release-link]: https://github.com/solana-clawd/chat-plugin-template/releases
+[github-release-link]: https://github.com/x402agent/solana-clawd
 [github-release-shield]: https://img.shields.io/github/v/release/solana-clawd/chat-plugin-template?color=369eff&labelColor=black&logo=github&style=flat-square
-[github-releasedate-link]: https://github.com/solana-clawd/chat-plugin-template/releases
+[github-releasedate-link]: https://github.com/x402agent/solana-clawd
 [github-releasedate-shield]: https://img.shields.io/github/release-date/solana-clawd/chat-plugin-template?labelColor=black&style=flat-square
-[github-stars-link]: https://github.com/solana-clawd/chat-plugin-template/network/stargazers
+[github-stars-link]: https://github.com/x402agent/solana-clawd
 [github-stars-shield]: https://img.shields.io/github/stars/solana-clawd/chat-plugin-template?color=ffcb47&labelColor=black&style=flat-square
 [solana-clawd-plugins]: https://github.com/x402agent/solana-clawd
-[pr-welcome-link]: https://github.com/solana-clawd/chat-plugin-template/pulls
+[pr-welcome-link]: https://github.com/x402agent/solana-clawd
 [pr-welcome-shield]: https://img.shields.io/badge/%F0%9F%A4%AF%20PR%20WELCOME-%E2%86%92-ffcb47?labelColor=black&style=for-the-badge
-[profile-url]: https://github.com/solana-clawd
+[profile-url]: https://github.com/x402agent/solana-clawd
 
