@@ -370,13 +370,13 @@ return new Response(markdown, {
 2. Plugin UI renders in chat
 3. User interacts with the calculator UI
 4. User clicks "Send to AI" button
-5. Plugin calls `solana-clawdChat.triggerAIMessage()` with result
+5. Plugin calls `SolanaClawdChat.triggerAIMessage()` with result
 6. AI receives result and responds
 
 ### Frontend Implementation
 
 ```tsx
-import { useOnStandalonePluginInit, solana-clawdChat } from '@solana-clawd/plugin-sdk/client';
+import { useOnStandalonePluginInit, SolanaClawdChat } from '@solana-clawd/plugin-sdk/client';
 import { useState } from 'react';
 
 export default function Calculator() {
@@ -393,10 +393,10 @@ export default function Calculator() {
   
   const sendToAI = async () => {
     // Update plugin message
-    await solana-clawdChat.setPluginMessage({ result });
+    await SolanaClawdChat.setPluginMessage({ result });
     
     // Trigger AI to respond
-    await solana-clawdChat.triggerAIMessage();
+    await SolanaClawdChat.triggerAIMessage();
   };
   
   return (
@@ -414,23 +414,23 @@ export default function Calculator() {
 Standalone plugins use the full client SDK:
 
 ```typescript
-import { solana-clawdChat } from '@solana-clawd/plugin-sdk/client';
+import { SolanaClawdChat } from '@solana-clawd/plugin-sdk/client';
 
 // Get initialization payload
-const payload = await solana-clawdChat.getPluginPayload();
+const payload = await SolanaClawdChat.getPluginPayload();
 
 // Update plugin message content
-await solana-clawdChat.setPluginMessage(data);
+await SolanaClawdChat.setPluginMessage(data);
 
 // Get/set plugin state
-const state = await solana-clawdChat.getPluginState('key');
-await solana-clawdChat.setPluginState('key', value);
+const state = await SolanaClawdChat.getPluginState('key');
+await SolanaClawdChat.setPluginState('key', value);
 
 // Trigger AI response
-await solana-clawdChat.triggerAIMessage(messageId);
+await SolanaClawdChat.triggerAIMessage(messageId);
 
 // Create assistant message
-await solana-clawdChat.createAssistantMessage('Analysis complete...');
+await SolanaClawdChat.createAssistantMessage('Analysis complete...');
 ```
 
 ---

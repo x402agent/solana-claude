@@ -68,13 +68,13 @@ Artifacts enable AI assistants to create and display substantial, self-contained
 ### Basic Syntax
 
 ```xml
-<solana-clawdArtifact 
+<SolanaClawdArtifact 
   identifier="unique-kebab-case-id"
   type="application/solana-clawd.artifacts.react"
   title="Human Readable Title"
   language="typescript">
   [CONTENT]
-</solana-clawdArtifact>
+</SolanaClawdArtifact>
 ```
 
 ### Attributes
@@ -86,18 +86,18 @@ Artifacts enable AI assistants to create and display substantial, self-contained
 | `title` | Yes | Human-readable title | `"Temperature Converter"` |
 | `language` | Conditional | For code artifacts only | `"python"`, `"javascript"` |
 
-### Optional Tag: solana-clawdThinking
+### Optional Tag: SolanaClawdThinking
 
 AI can include its reasoning process (hidden from user):
 
 ```xml
-<solana-clawdThinking>
+<SolanaClawdThinking>
 User needs a responsive dashboard with charts. I'll use React with Recharts library for data visualization. Using Tailwind for styling.
-</solana-clawdThinking>
+</SolanaClawdThinking>
 
-<solana-clawdArtifact identifier="dashboard" type="application/solana-clawd.artifacts.react" title="Sales Dashboard">
+<SolanaClawdArtifact identifier="dashboard" type="application/solana-clawd.artifacts.react" title="Sales Dashboard">
 [React component code]
-</solana-clawdArtifact>
+</SolanaClawdArtifact>
 ```
 
 ---
@@ -109,7 +109,7 @@ User needs a responsive dashboard with charts. I'll use React with Recharts libr
 Generic code snippets that don't need execution.
 
 ```xml
-<solana-clawdArtifact identifier="factorial-algo" type="application/solana-clawd.artifacts.code" language="python" title="Factorial Calculator">
+<SolanaClawdArtifact identifier="factorial-algo" type="application/solana-clawd.artifacts.code" language="python" title="Factorial Calculator">
 def factorial(n):
     """Calculate factorial recursively"""
     if n == 0:
@@ -118,7 +118,7 @@ def factorial(n):
 
 # Example usage
 print(factorial(5))  # Output: 120
-</solana-clawdArtifact>
+</SolanaClawdArtifact>
 ```
 
 **Supported Languages:** Any language with syntax highlighting (python, javascript, typescript, rust, go, java, etc.)
@@ -135,7 +135,7 @@ Single-file interactive web pages.
 - Use placeholder images: `<img src="/api/placeholder/400/320" alt="..." />`
 
 ```xml
-<solana-clawdArtifact identifier="temp-converter" type="text/html" title="Temperature Converter">
+<SolanaClawdArtifact identifier="temp-converter" type="text/html" title="Temperature Converter">
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -166,7 +166,7 @@ Single-file interactive web pages.
   </script>
 </body>
 </html>
-</solana-clawdArtifact>
+</SolanaClawdArtifact>
 ```
 
 ---
@@ -181,7 +181,7 @@ Scalable vector graphics for diagrams, illustrations, charts.
 - Supports download as PNG or SVG
 
 ```xml
-<solana-clawdArtifact identifier="process-flow" type="image/svg+xml" title="User Authentication Flow">
+<SolanaClawdArtifact identifier="process-flow" type="image/svg+xml" title="User Authentication Flow">
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
   <defs>
     <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
@@ -207,7 +207,7 @@ Scalable vector graphics for diagrams, illustrations, charts.
   <rect x="150" y="220" width="100" height="50" fill="#F59E0B" stroke="#92400E" stroke-width="2" rx="5"/>
   <text x="200" y="250" text-anchor="middle" fill="white" font-size="14">Dashboard</text>
 </svg>
-</solana-clawdArtifact>
+</SolanaClawdArtifact>
 ```
 
 ---
@@ -230,7 +230,7 @@ Interactive React components with full ecosystem support.
 - Use Tailwind for styling
 
 ```xml
-<solana-clawdArtifact identifier="crypto-dashboard" type="application/solana-clawd.artifacts.react" title="Crypto Portfolio">
+<SolanaClawdArtifact identifier="crypto-dashboard" type="application/solana-clawd.artifacts.react" title="Crypto Portfolio">
 import React, { useState } from 'react';
 import { TrendingUp, TrendingDown, DollarSign } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
@@ -301,7 +301,7 @@ const CryptoDashboard = () => {
 };
 
 export default CryptoDashboard;
-</solana-clawdArtifact>
+</SolanaClawdArtifact>
 ```
 
 ---
@@ -311,7 +311,7 @@ export default CryptoDashboard;
 Diagrams and flowcharts using Mermaid syntax.
 
 ```xml
-<solana-clawdArtifact identifier="deployment-flow" type="application/solana-clawd.artifacts.mermaid" title="CI/CD Pipeline">
+<SolanaClawdArtifact identifier="deployment-flow" type="application/solana-clawd.artifacts.mermaid" title="CI/CD Pipeline">
 graph LR
     A[Code Push] --> B{Tests Pass?}
     B -->|Yes| C[Build]
@@ -321,7 +321,7 @@ graph LR
     F -->|Approved| G[Deploy to Production]
     F -->|Rejected| D
     G --> H[Monitor]
-</solana-clawdArtifact>
+</SolanaClawdArtifact>
 ```
 
 **Mermaid Types Supported:**
@@ -385,7 +385,7 @@ When configuring AI assistants to use artifacts, include these guidelines:
 ```markdown
 ## Artifact Creation Guidelines
 
-Use `<solana-clawdArtifact>` tags to create substantial, reusable content that benefits from:
+Use `<SolanaClawdArtifact>` tags to create substantial, reusable content that benefits from:
 - Visual separation from conversation
 - Interactive preview capabilities
 - Persistent access for users
@@ -409,9 +409,9 @@ DO NOT create artifacts for:
 
 ### Artifact Structure
 
-<solana-clawdArtifact identifier="unique-id" type="MIME-TYPE" title="Title" language="LANGUAGE">
+<SolanaClawdArtifact identifier="unique-id" type="MIME-TYPE" title="Title" language="LANGUAGE">
 [CONTENT]
-</solana-clawdArtifact>
+</SolanaClawdArtifact>
 
 ### Available Types
 
@@ -432,7 +432,7 @@ When creating React artifacts:
 - Make responsive with proper breakpoints
 
 Example:
-<solana-clawdArtifact identifier="example-component" type="application/solana-clawd.artifacts.react" title="Example">
+<SolanaClawdArtifact identifier="example-component" type="application/solana-clawd.artifacts.react" title="Example">
 import React from 'react';
 
 const Component = () => {
@@ -440,14 +440,14 @@ const Component = () => {
 };
 
 export default Component;
-</solana-clawdArtifact>
+</SolanaClawdArtifact>
 ```
 
 ### Model-Specific Considerations
 
 **Claude (Anthropic):**
 - Native artifact support
-- Use `<solana-clawdThinking>` for reasoning
+- Use `<SolanaClawdThinking>` for reasoning
 - Excellent at complex React components
 
 **ChatGPT (OpenAI):**
@@ -477,7 +477,7 @@ export default async function handler(req, res) {
   const result = await someDataFetch();
   
   const artifact = `
-<solana-clawdArtifact identifier="plugin-result" type="application/solana-clawd.artifacts.react" title="Search Results">
+<SolanaClawdArtifact identifier="plugin-result" type="application/solana-clawd.artifacts.react" title="Search Results">
 import React from 'react';
 
 const Results = () => {
@@ -496,7 +496,7 @@ const Results = () => {
 };
 
 export default Results;
-</solana-clawdArtifact>
+</SolanaClawdArtifact>
   `;
   
   res.status(200).send(artifact);

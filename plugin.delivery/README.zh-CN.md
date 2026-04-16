@@ -182,10 +182,10 @@ Embed external content:
 Standalone plugins can trigger additional function calls:
 
 ```typescript
-import { solana-clawdOS } from '@solana-clawd/plugin-sdk/client';
+import { SolanaClawdOS } from '@solana-clawd/plugin-sdk/client';
 
 // Trigger a new function call from your UI
-solana-clawdOS.triggerFunctionCall({
+SolanaClawdOS.triggerFunctionCall({
   name: 'getTokenDetails',
   arguments: { token: 'ETH' }
 });
@@ -355,7 +355,7 @@ vercel --prod
 
 ```bash
 # Clone
-git clone https://github.com/x402agent/solana-clawd.git
+git clone https://github.com/x402agent/solana-clawd
 cd plugins
 
 # Install
@@ -417,7 +417,7 @@ import {
 } from '@solana-clawd/plugin-sdk';
 
 // Client-side (in standalone UI)
-import { solana-clawdOS } from '@solana-clawd/plugin-sdk/client';
+import { SolanaClawdOS } from '@solana-clawd/plugin-sdk/client';
 ```
 
 ---

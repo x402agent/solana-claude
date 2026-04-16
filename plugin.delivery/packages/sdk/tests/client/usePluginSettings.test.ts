@@ -1,4 +1,4 @@
-import { solana-clawdOS, usePluginSettings } from '@solana-clawd/chat-plugin-sdk/client';
+import { SolanaClawdOS, usePluginSettings } from '@solana-clawd/chat-plugin-sdk/client';
 import { act, renderHook } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -9,9 +9,9 @@ describe('usePluginSettings', () => {
   const initialValue = { theme: 'dark' };
 
   beforeEach(() => {
-    // Spy on solana-clawdOS methods and reset mocks before each test
-    getPluginSettingsSpy = vi.spyOn(solana-clawdOS, 'getPluginSettings').mockResolvedValue(undefined);
-    setPluginSettingsSpy = vi.spyOn(solana-clawdOS, 'setPluginSettings').mockResolvedValue();
+    // Spy on SolanaClawdOS methods and reset mocks before each test
+    getPluginSettingsSpy = vi.spyOn(SolanaClawdOS, 'getPluginSettings').mockResolvedValue(undefined);
+    setPluginSettingsSpy = vi.spyOn(SolanaClawdOS, 'setPluginSettings').mockResolvedValue();
   });
 
   afterEach(() => {

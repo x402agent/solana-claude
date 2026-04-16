@@ -453,13 +453,13 @@ interface PluginRequestPayload {
 
 ```typescript
 // Using the official gateway package
-import { createsolana-clawdChatPluginGateway } from '@solana-clawd/chat-plugins-gateway';
+import { createSolanaClawdChatPluginGateway } from '@solana-clawd/chat-plugins-gateway';
 
 export const config = {
   runtime: 'edge',
 };
 
-export default createsolana-clawdChatPluginGateway();
+export default createSolanaClawdChatPluginGateway();
 ```
 
 ### Gateway Processing Steps

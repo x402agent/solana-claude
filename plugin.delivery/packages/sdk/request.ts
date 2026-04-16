@@ -1,10 +1,10 @@
 /**
  * The HTTP header name for passing plugin settings.
  */
-export const SPERAX_PLUGIN_SETTINGS = 'X-solana-clawd-Plugin-Settings';
+export const SOLANA_CLAWD_PLUGIN_SETTINGS = 'X-Solana-Clawd-Plugin-Settings';
 
 export const getPluginSettingsFromRequest = <T = any>(req: Request): T | undefined => {
-  const settings = req.headers.get(SPERAX_PLUGIN_SETTINGS);
+  const settings = req.headers.get(SOLANA_CLAWD_PLUGIN_SETTINGS);
   if (!settings) return;
 
   try {
@@ -17,7 +17,7 @@ export const getPluginSettingsFromRequest = <T = any>(req: Request): T | undefin
 export const getPluginSettingsFromHeaders = <T = any>(headers: HeadersInit): T | undefined => {
   const header = new Headers(headers as any);
 
-  const settings = header.get(SPERAX_PLUGIN_SETTINGS);
+  const settings = header.get(SOLANA_CLAWD_PLUGIN_SETTINGS);
   if (!settings) return;
 
   try {
@@ -32,6 +32,6 @@ export const createHeadersWithPluginSettings = (
   header?: HeadersInit,
 ): HeadersInit => ({
   ...header,
-  [SPERAX_PLUGIN_SETTINGS]: typeof settings === 'string' ? settings : JSON.stringify(settings),
+  [SOLANA_CLAWD_PLUGIN_SETTINGS]: typeof settings === 'string' ? settings : JSON.stringify(settings),
 });
 

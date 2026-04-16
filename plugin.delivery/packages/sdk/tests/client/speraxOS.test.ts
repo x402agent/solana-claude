@@ -1,4 +1,4 @@
-import { PluginChannel, solana-clawdOS } from '@solana-clawd/chat-plugin-sdk/client';
+import { PluginChannel, SolanaClawdOS } from '@solana-clawd/chat-plugin-sdk/client';
 import { Mock, afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 // Mock window and postMessage before each test
@@ -19,13 +19,13 @@ afterEach(() => {
   vi.restoreAllMocks();
 });
 
-describe('solana-clawdOS', () => {
+describe('SolanaClawdOS', () => {
   describe('getPluginMessage', () => {
     it('should resolve undefined when window is undefined', async () => {
       const originalWindow = global.window;
       global.window = undefined as any;
 
-      const result = await solana-clawdOS.getPluginMessage();
+      const result = await SolanaClawdOS.getPluginMessage();
 
       expect(result).toBeUndefined();
       global.window = originalWindow;
@@ -47,7 +47,7 @@ describe('solana-clawdOS', () => {
         }
       });
 
-      const promise = solana-clawdOS.getPluginMessage<typeof mockContent>();
+      const promise = SolanaClawdOS.getPluginMessage<typeof mockContent>();
 
       const result = await promise;
 
@@ -59,7 +59,7 @@ describe('solana-clawdOS', () => {
     });
 
     it('should post message to parent to fetch plugin message', () => {
-      solana-clawdOS.getPluginMessage();
+      SolanaClawdOS.getPluginMessage();
 
       expect(global.top?.postMessage).toHaveBeenCalledWith(
         { type: PluginChannel.fetchPluginMessage },
@@ -80,7 +80,7 @@ describe('solana-clawdOS', () => {
           } as MessageEvent);
         }
       });
-      const promise = solana-clawdOS.getPluginMessage();
+      const promise = SolanaClawdOS.getPluginMessage();
 
       await promise;
 
@@ -96,7 +96,7 @@ describe('solana-clawdOS', () => {
       const originalWindow = global.window;
       global.window = undefined as any;
 
-      const result = await solana-clawdOS.getPluginPayload();
+      const result = await SolanaClawdOS.getPluginPayload();
 
       expect(result).toBeUndefined();
       global.window = originalWindow;
@@ -126,7 +126,7 @@ describe('solana-clawdOS', () => {
         }
       });
 
-      const promise = solana-clawdOS.getPluginPayload<typeof mockPayload.arguments>();
+      const promise = SolanaClawdOS.getPluginPayload<typeof mockPayload.arguments>();
 
       const result = await promise;
 
@@ -138,7 +138,7 @@ describe('solana-clawdOS', () => {
     });
 
     it('should post message to parent to signal plugin is ready for render', () => {
-      solana-clawdOS.getPluginPayload();
+      SolanaClawdOS.getPluginPayload();
 
       expect(global.top?.postMessage).toHaveBeenCalledWith(
         { type: PluginChannel.pluginReadyForRender },
@@ -163,7 +163,7 @@ describe('solana-clawdOS', () => {
         }
       });
 
-      const promise = solana-clawdOS.getPluginPayload();
+      const promise = SolanaClawdOS.getPluginPayload();
 
       await promise;
 
@@ -176,7 +176,7 @@ describe('solana-clawdOS', () => {
     it('should resolve undefined if message is not received within timeout', async () => {
       vi.useFakeTimers();
 
-      const promise = solana-clawdOS.getPluginPayload();
+      const promise = SolanaClawdOS.getPluginPayload();
 
       // Fast-forward until all timers have been executed
       vi.runAllTimers();
@@ -198,7 +198,7 @@ describe('solana-clawdOS', () => {
       const originalWindow = global.window;
       global.window = undefined as any;
 
-      const result = await solana-clawdOS.getPluginSettings();
+      const result = await SolanaClawdOS.getPluginSettings();
 
       expect(result).toBeUndefined();
       global.window = originalWindow;
@@ -221,7 +221,7 @@ describe('solana-clawdOS', () => {
         }
       });
 
-      const promise = solana-clawdOS.getPluginSettings<typeof mockSettings>();
+      const promise = SolanaClawdOS.getPluginSettings<typeof mockSettings>();
 
       const result = await promise;
 
@@ -233,7 +233,7 @@ describe('solana-clawdOS', () => {
     });
 
     it('should post message to parent to fetch plugin settings', () => {
-      solana-clawdOS.getPluginSettings();
+      SolanaClawdOS.getPluginSettings();
 
       expect(global.top?.postMessage).toHaveBeenCalledWith(
         { type: PluginChannel.fetchPluginSettings },
@@ -253,7 +253,7 @@ describe('solana-clawdOS', () => {
         }
       });
 
-      const promise = solana-clawdOS.getPluginSettings();
+      const promise = SolanaClawdOS.getPluginSettings();
 
       await promise;
 
@@ -272,7 +272,7 @@ describe('solana-clawdOS', () => {
       const originalWindow = global.window;
       global.window = undefined as any;
 
-      const result = await solana-clawdOS.getPluginState(testKey);
+      const result = await SolanaClawdOS.getPluginState(testKey);
 
       expect(result).toBeUndefined();
       global.window = originalWindow;
@@ -291,7 +291,7 @@ describe('solana-clawdOS', () => {
         }
       });
 
-      const result = await solana-clawdOS.getPluginState(testKey);
+      const result = await SolanaClawdOS.getPluginState(testKey);
 
       expect(result).toEqual(mockStateValue);
       expect(global.window.removeEventListener).toHaveBeenCalledWith(
@@ -301,7 +301,7 @@ describe('solana-clawdOS', () => {
     });
 
     it('should post message to parent to fetch plugin state for a given key', () => {
-      solana-clawdOS.getPluginState(testKey);
+      SolanaClawdOS.getPluginState(testKey);
 
       expect(global.top?.postMessage).toHaveBeenCalledWith(
         { key: testKey, type: PluginChannel.fetchPluginState },
@@ -322,7 +322,7 @@ describe('solana-clawdOS', () => {
         }
       });
 
-      await solana-clawdOS.getPluginState(testKey);
+      await SolanaClawdOS.getPluginState(testKey);
 
       expect(global.window.removeEventListener).toHaveBeenCalledWith(
         'message',
@@ -334,7 +334,7 @@ describe('solana-clawdOS', () => {
   describe('setPluginMessage', () => {
     it('should post message to parent with content to fill plugin', () => {
       const content = { text: 'Hello, world!' };
-      solana-clawdOS.setPluginMessage(content);
+      SolanaClawdOS.setPluginMessage(content);
 
       expect(global.top?.postMessage).toHaveBeenCalledWith(
         { content, type: PluginChannel.fillStandalonePluginContent },
@@ -348,7 +348,7 @@ describe('solana-clawdOS', () => {
       const stateKey = 'theme';
       const stateValue = 'dark';
 
-      solana-clawdOS.setPluginState(stateKey, stateValue);
+      SolanaClawdOS.setPluginState(stateKey, stateValue);
 
       expect(global.top?.postMessage).toHaveBeenCalledWith(
         { key: stateKey, type: PluginChannel.updatePluginState, value: stateValue },
@@ -361,7 +361,7 @@ describe('solana-clawdOS', () => {
     it('should post message to parent with settings to update plugin settings', () => {
       const settings = { notifications: true };
 
-      solana-clawdOS.setPluginSettings(settings);
+      SolanaClawdOS.setPluginSettings(settings);
 
       expect(global.top?.postMessage).toHaveBeenCalledWith(
         { type: PluginChannel.updatePluginSettings, value: settings },
@@ -374,7 +374,7 @@ describe('solana-clawdOS', () => {
     it('should post message to parent with id to trigger AI message', () => {
       const id = 'unique-id-123';
 
-      solana-clawdOS.triggerAIMessage(id);
+      SolanaClawdOS.triggerAIMessage(id);
 
       expect(global.top?.postMessage).toHaveBeenCalledWith(
         { id, type: PluginChannel.triggerAIMessage },
@@ -387,7 +387,7 @@ describe('solana-clawdOS', () => {
     it('should post message to parent with content to create assistant message', () => {
       const content = 'This is an AI-generated message';
 
-      solana-clawdOS.createAssistantMessage(content);
+      SolanaClawdOS.createAssistantMessage(content);
 
       expect(global.top?.postMessage).toHaveBeenCalledWith(
         { content, type: PluginChannel.createAssistantMessage },

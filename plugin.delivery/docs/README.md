@@ -98,7 +98,7 @@ User: "What's the price of ETH?"
 
 ```bash
 # 1. Clone template
-git clone https://github.com/x402agent/solana-clawd.git
+git clone https://github.com/x402agent/solana-clawd
 cd plugins
 cp -r templates/default my-plugin
 cd my-plugin

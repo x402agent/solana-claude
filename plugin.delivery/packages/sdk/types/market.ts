@@ -4,14 +4,14 @@
  * @nameCN 插件列表
  * @descCN 插件市场的列表接口
  */
-export interface solana-clawdPluginsMarketIndex {
+export interface SolanaClawdPluginsMarketIndex {
   /**
    * plugins
    * @desc List of plugin items
    * @nameCN 插件列表
    * @descCN 插件项列表
    */
-  plugins: solana-clawdPluginMeta[];
+  plugins: SolanaClawdPluginMeta[];
   /**
    * version
    * @desc Version of the plugins
@@ -27,7 +27,7 @@ export interface solana-clawdPluginsMarketIndex {
  * @nameCN 插件项
  * @descCN 插件项接口
  */
-export interface solana-clawdPluginMeta {
+export interface SolanaClawdPluginMeta {
   author: string;
   /**
    * @deprecated

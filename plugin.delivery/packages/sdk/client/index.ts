@@ -1,6 +1,6 @@
 export * from './const';
 export * from './deprecatedOnV2';
 export * from './hooks';
-export * from './solana-clawdOS';
+export * from './SolanaClawdOS';
 export * from './type';
 

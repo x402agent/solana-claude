@@ -1,5 +1,5 @@
 import {
-  SPERAX_PLUGIN_SETTINGS,
+  SOLANA_CLAWD_PLUGIN_SETTINGS,
   createHeadersWithPluginSettings,
   getPluginSettingsFromHeaders,
   getPluginSettingsFromRequest,
@@ -15,7 +15,7 @@ describe('getPluginSettingsFromRequest', () => {
 
   it('should parse settings from solana-clawd header', () => {
     const mockRequest = new Request('https://example.com', {
-      headers: { [SPERAX_PLUGIN_SETTINGS]: JSON.stringify({ key: 'value' }) },
+      headers: { [SOLANA_CLAWD_PLUGIN_SETTINGS]: JSON.stringify({ key: 'value' }) },
     });
     const settings = getPluginSettingsFromRequest<{ key: string }>(mockRequest);
     expect(settings).toEqual({ key: 'value' });
@@ -23,7 +23,7 @@ describe('getPluginSettingsFromRequest', () => {
 
   it('should return raw string if header is not valid JSON', () => {
     const mockRequest = new Request('https://example.com', {
-      headers: { [SPERAX_PLUGIN_SETTINGS]: 'not json' },
+      headers: { [SOLANA_CLAWD_PLUGIN_SETTINGS]: 'not json' },
     });
     const settings = getPluginSettingsFromRequest(mockRequest);
     expect(settings).toBe('not json');
@@ -38,14 +38,14 @@ describe('getPluginSettingsFromHeaders', () => {
 
   it('should parse settings from solana-clawd header', () => {
     const settings = getPluginSettingsFromHeaders({
-      [SPERAX_PLUGIN_SETTINGS]: JSON.stringify({ key: 'value' }),
+      [SOLANA_CLAWD_PLUGIN_SETTINGS]: JSON.stringify({ key: 'value' }),
     });
     expect(settings).toEqual({ key: 'value' });
   });
 
   it('should return raw string if header is not valid JSON', () => {
     const settings = getPluginSettingsFromHeaders({
-      [SPERAX_PLUGIN_SETTINGS]: 'not json',
+      [SOLANA_CLAWD_PLUGIN_SETTINGS]: 'not json',
     });
     expect(settings).toBe('not json');
   });
@@ -55,13 +55,13 @@ describe('createHeadersWithPluginSettings', () => {
   it('should create headers with JSON stringified settings', () => {
     const settings = { key: 'value' };
     const headers = createHeadersWithPluginSettings(settings);
-    expect(headers[SPERAX_PLUGIN_SETTINGS]).toBe(JSON.stringify(settings));
+    expect(headers[SOLANA_CLAWD_PLUGIN_SETTINGS]).toBe(JSON.stringify(settings));
   });
 
   it('should create headers with string settings', () => {
     const settings = 'string setting';
     const headers = createHeadersWithPluginSettings(settings);
-    expect(headers[SPERAX_PLUGIN_SETTINGS]).toBe(settings);
+    expect(headers[SOLANA_CLAWD_PLUGIN_SETTINGS]).toBe(settings);
   });
 
   it('should merge provided headers with settings', () => {
@@ -70,7 +70,7 @@ describe('createHeadersWithPluginSettings', () => {
     const headers = createHeadersWithPluginSettings(settings, customHeaders);
     expect(headers).toEqual({
       'Custom-Header': 'custom',
-      [SPERAX_PLUGIN_SETTINGS]: JSON.stringify(settings),
+      [SOLANA_CLAWD_PLUGIN_SETTINGS]: JSON.stringify(settings),
     });
   });
 });

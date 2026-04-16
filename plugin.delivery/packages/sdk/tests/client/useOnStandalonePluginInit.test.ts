@@ -1,6 +1,6 @@
 import {
   PluginPayload,
-  solana-clawdOS,
+  SolanaClawdOS,
   useOnStandalonePluginInit,
 } from '@solana-clawd/chat-plugin-sdk/client';
 import { renderHook } from '@testing-library/react';
@@ -17,7 +17,7 @@ describe('useOnStandalonePluginInit', () => {
 
   it('should not call callback if getPluginPayload resolves to undefined', async () => {
     // Mock the getPluginPayload to resolve to undefined
-    vi.spyOn(solana-clawdOS, 'getPluginPayload').mockResolvedValue(undefined as any);
+    vi.spyOn(SolanaClawdOS, 'getPluginPayload').mockResolvedValue(undefined as any);
 
     // Render the hook
     renderHook(() => useOnStandalonePluginInit(callback));
@@ -36,7 +36,7 @@ describe('useOnStandalonePluginInit', () => {
     };
 
     // Mock the getPluginPayload to resolve with the mock payload
-    vi.spyOn(solana-clawdOS, 'getPluginPayload').mockResolvedValue(mockPayload);
+    vi.spyOn(SolanaClawdOS, 'getPluginPayload').mockResolvedValue(mockPayload);
 
     // Render the hook
     renderHook(() => useOnStandalonePluginInit(callback));

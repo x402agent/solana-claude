@@ -27,7 +27,7 @@ Build and deploy your first solana-clawd plugin in under 10 minutes.
 
 ```bash
 # Clone the plugins repo
-git clone https://github.com/x402agent/solana-clawd.git
+git clone https://github.com/x402agent/solana-clawd
 cd plugins
 
 # Copy a template

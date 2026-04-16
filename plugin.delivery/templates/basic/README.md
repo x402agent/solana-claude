@@ -119,7 +119,7 @@ Contributions of all types are more than welcome, if you are interested in contr
 ## 🔗 Links
 
 - **[🤖 solana-clawd](https://github.com/x402agent/solana-clawd)** - An open-source, extensible (Function Calling), high-performance chatbot framework. It supports one-click free deployment of your private ChatGPT/LLM web application.
-- **[🧩 / 🏪 Plugin Index](https://github.com/x402agent/solana-clawd-plugins)** - This is the plugin index for solana-clawd. It accesses index.json from this repository to display a list of available plugins for Function Calling to the user.
+- **[🧩 / 🏪 Plugin Index](https://github.com/x402agent/solana-clawd)** - This is the plugin index for solana-clawd. It accesses index.json from this repository to display a list of available plugins for Function Calling to the user.
 
 <div align="right">
 
@@ -136,7 +136,7 @@ This project is [MIT](./LICENSE) licensed.
 
 <!-- LINK GROUP -->
 
-[🤯-🧩-solana-clawd-link]: https://github.com/x402agent/solana-clawd-plugins
+[🤯-🧩-solana-clawd-link]: https://github.com/x402agent/solana-clawd
 [🤯-🧩-solana-clawd-shield]: https://img.shields.io/badge/%F0%9F%A4%AF%20%26%20%F0%9F%A7%A9%20solana-clawd-Plugin-95f3d9?labelColor=black&style=flat-square
 [back-to-top]: https://img.shields.io/badge/-BACK_TO_TOP-151515?style=flat-square
 [bun-link]: https://bun.sh
@@ -169,7 +169,7 @@ This project is [MIT](./LICENSE) licensed.
 [github-releasedate-shield]: https://img.shields.io/github/release-date/solana-clawd/chat-plugin-template?labelColor=black&style=flat-square
 [github-stars-link]: https://github.com/solana-clawd/chat-plugin-template/network/stargazers
 [github-stars-shield]: https://img.shields.io/github/stars/solana-clawd/chat-plugin-template?color=ffcb47&labelColor=black&style=flat-square
-[solana-clawdos-plugins]: https://github.com/x402agent/solana-clawd-plugins
+[solana-clawdos-plugins]: https://github.com/x402agent/solana-clawd
 [pr-welcome-link]: https://github.com/solana-clawd/chat-plugin-template/pulls
 [pr-welcome-shield]: https://img.shields.io/badge/%F0%9F%A4%AF%20PR%20WELCOME-%E2%86%92-ffcb47?labelColor=black&style=for-the-badge
 [profile-url]: https://github.com/solana-clawd

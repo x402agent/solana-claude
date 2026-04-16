@@ -1,5 +1,5 @@
 {
-  "$ref": "#/definitions/solana-clawdPluginManifest",
+  "$ref": "#/definitions/SolanaClawdPluginManifest",
   "$schema": "http://json-schema.org/draft-07/schema#",
   "definitions": {
     "JSONSchema7": {
@@ -272,7 +272,7 @@
       "description": "Meta schema\n\nRecommended values:\n- 'http://json-schema.org/schema#'\n- 'http://json-schema.org/hyper-schema#'\n- 'http://json-schema.org/draft-07/schema#'\n- 'http://json-schema.org/draft-07/hyper-schema#'",
       "type": "string"
     },
-    "solana-clawdPluginApi": {
+    "SolanaClawdPluginApi": {
       "additionalProperties": false,
       "properties": {
         "description": {
@@ -296,7 +296,7 @@
       ],
       "type": "object"
     },
-    "solana-clawdPluginManifest": {
+    "SolanaClawdPluginManifest": {
       "additionalProperties": false,
       "description": "Plugin manifest",
       "properties": {
@@ -305,7 +305,7 @@
         },
         "api": {
           "items": {
-            "$ref": "#/definitions/solana-clawdPluginApi"
+            "$ref": "#/definitions/SolanaClawdPluginApi"
           },
           "type": "array"
         },
@@ -342,7 +342,7 @@
           "type": "string"
         },
         "type": {
-          "$ref": "#/definitions/solana-clawdPluginType",
+          "$ref": "#/definitions/SolanaClawdPluginType",
           "default": "default",
           "description": "plugin runtime type"
         },
@@ -385,7 +385,7 @@
       ],
       "type": "object"
     },
-    "solana-clawdPluginType": {
+    "SolanaClawdPluginType": {
       "enum": [
         "default",
         "standalone",

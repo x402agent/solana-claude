@@ -52,7 +52,7 @@ Be respectful, inclusive, and constructive. We're building tools for the crypto/
 ### Clone the Repository
 
 ```bash
-git clone https://github.com/x402agent/solana-clawd.git
+git clone https://github.com/x402agent/solana-clawd
 cd plugins
 bun install
 ```

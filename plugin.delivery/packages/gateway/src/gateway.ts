@@ -2,9 +2,9 @@
 import { Schema } from '@cfworker/json-schema';
 import {
   IPluginErrorType,
-  solana-clawdPluginApi,
-  solana-clawdPluginManifest,
-  solana-clawdPluginsMarketIndex,
+  SolanaClawdPluginApi,
+  SolanaClawdPluginManifest,
+  SolanaClawdPluginsMarketIndex,
   PluginErrorType,
   PluginRequestPayload,
   createHeadersWithPluginSettings,
@@ -90,7 +90,7 @@ export class Gateway {
 
     const { identifier, arguments: args, indexUrl, apiName } = payload;
 
-    let manifest = payload.manifest as solana-clawdPluginManifest | undefined;
+    let manifest = payload.manifest as SolanaClawdPluginManifest | undefined;
     console.info(`[${identifier}] - ${apiName} `);
 
     // 入参中如果没有 manifest，则从插件市场索引中获取
@@ -98,7 +98,7 @@ export class Gateway {
       const marketIndexUrl = indexUrl ?? this.pluginIndexUrl;
       // ==========  3. 获取插件市场索引 ========== //
 
-      let marketIndex: solana-clawdPluginsMarketIndex | undefined;
+      let marketIndex: SolanaClawdPluginsMarketIndex | undefined;
       try {
         const indexRes = await fetch(marketIndexUrl);
         marketIndex = await indexRes.json();
@@ -136,7 +136,7 @@ export class Gateway {
       // 一个不规范的插件示例
       // const pluginMeta = {
       //   createAt: '2023-08-12',
-      //   homepage: 'https://github.com/x402agent/solana-clawd-real-time-weather',
+      //   homepage: 'https://github.com/x402agent/solana-clawd',
       //   manifest: 'https://registry.npmmirror.com/@solana-clawd/solana-clawd-plugins/latest/files',
       //   meta: {
       //     avatar: '☂️',
@@ -166,7 +166,7 @@ export class Gateway {
       // 获取插件的 manifest
       try {
         const pluginRes = await fetch(pluginMeta.manifest);
-        manifest = (await pluginRes.json()) as solana-clawdPluginManifest;
+        manifest = (await pluginRes.json()) as SolanaClawdPluginManifest;
       } catch (error) {
         console.error(error);
         manifest = undefined;
@@ -240,7 +240,7 @@ export class Gateway {
   };
 
   private async callApi(
-    api: solana-clawdPluginApi,
+    api: SolanaClawdPluginApi,
     args: string | undefined,
     settings: any,
   ): Promise<GatewaySuccessResponse> {
@@ -272,7 +272,7 @@ export class Gateway {
   private async callOpenAPI(
     payload: PluginRequestPayload,
     settings: any = {},
-    manifest: solana-clawdPluginManifest,
+    manifest: SolanaClawdPluginManifest,
   ): Promise<GatewaySuccessResponse> {
     const { arguments: args, apiName } = payload;
 

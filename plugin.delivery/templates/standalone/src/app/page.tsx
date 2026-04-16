@@ -1,6 +1,6 @@
 'use client';
 
-import { solana-clawdOS, useOnStandalonePluginInit, usePluginState } from '@solana-clawd/plugin-sdk/client';
+import { SolanaClawdOS, useOnStandalonePluginInit, usePluginState } from '@solana-clawd/plugin-sdk/client';
 import { Button, Card, InputNumber, Space, Typography } from 'antd';
 import { useCallback, useState } from 'react';
 
@@ -38,19 +38,19 @@ export default function StandalonePlugin() {
 
   const sendToAI = useCallback(async () => {
     // Update the plugin message with current state
-    await solana-clawdOS.setPluginMessage({
+    await SolanaClawdOS.setPluginMessage({
       action: 'counter_update',
       value: count,
       message: `The counter is now at ${count}`,
     });
 
     // Trigger AI to respond to the update
-    await solana-clawdOS.triggerAIMessage();
+    await SolanaClawdOS.triggerAIMessage();
   }, [count]);
 
   const askAIToAnalyze = useCallback(async () => {
     // Create an assistant message directly
-    await solana-clawdOS.createAssistantMessage(
+    await SolanaClawdOS.createAssistantMessage(
       `Based on the counter plugin, the current value is **${count}**. ` +
       `${count > 0 ? 'The value is positive.' : count < 0 ? 'The value is negative.' : 'The value is zero.'}`
     );

@@ -1,4 +1,4 @@
-import { solana-clawdOS } from '@solana-clawd/plugin-sdk/client';
+import { SolanaClawdOS } from '@solana-clawd/plugin-sdk/client';
 import { Button } from 'antd';
 import { memo, useEffect, useState } from 'react';
 import { Center } from 'react-layout-kit';
@@ -13,14 +13,14 @@ const Render = memo(() => {
 
   // 初始化时从主应用同步状态
   useEffect(() => {
-    solana-clawdOS.getPluginMessage().then(setData);
+    SolanaClawdOS.getPluginMessage().then(setData);
   }, []);
 
   // 记录请求参数
   const [payload, setPayload] = useState<any>();
 
   useEffect(() => {
-    solana-clawdOS.getPluginPayload().then((payload) => {
+    SolanaClawdOS.getPluginPayload().then((payload) => {
       if (payload.name === 'recommendClothes') {
         setPayload(payload.arguments);
       }
@@ -30,7 +30,7 @@ const Render = memo(() => {
   const fetchData = async () => {
     const data = await fetchClothes(payload);
     setData(data);
-    solana-clawdOS.setPluginMessage(data);
+    SolanaClawdOS.setPluginMessage(data);
   };
 
   return data ? (

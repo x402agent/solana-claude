@@ -30,7 +30,7 @@ Plugin communication happens at two levels:
 │  │   Engine     │         │  ┌──────────────────────────────┐ │  │
 │  │              │         │  │      Plugin Frontend         │ │  │
 │  │              │◄───────►│  │                              │ │  │
-│  │              │ postMsg │  │  Uses: solana-clawdOS.* methods    │ │  │
+│  │              │ postMsg │  │  Uses: SolanaClawdOS.* methods    │ │  │
 │  └──────────────┘         │  └──────────────────────────────┘ │  │
 │         │                 └──────────────────────────────────┘  │
 │         │                                                        │
@@ -66,7 +66,7 @@ Plugin communication happens at two levels:
 ### Response Flow for UI Plugins
 
 1. **Server response received** → Stored as message content
-2. **Plugin iframe loads** → Calls `solana-clawdOS.getPluginMessage()`
+2. **Plugin iframe loads** → Calls `SolanaClawdOS.getPluginMessage()`
 3. **Host sends message data** → Via postMessage
 4. **Plugin renders UI** → Displays data to user
 
@@ -335,7 +335,7 @@ Frontend communication uses the `postMessage` API, abstracted by the SDK.
 When your plugin UI loads, retrieve the message data:
 
 ```tsx
-import { solana-clawdOS } from '@solana-clawd/plugin-sdk/client';
+import { SolanaClawdOS } from '@solana-clawd/plugin-sdk/client';
 import { useEffect, useState } from 'react';
 
 function PluginUI() {
@@ -343,7 +343,7 @@ function PluginUI() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    solana-clawdOS.getPluginMessage()
+    SolanaClawdOS.getPluginMessage()
       .then(setData)
       .finally(() => setLoading(false));
   }, []);
@@ -375,10 +375,10 @@ function PluginUI() {
 Access the original Function Call arguments:
 
 ```tsx
-import { solana-clawdOS } from '@solana-clawd/plugin-sdk/client';
+import { SolanaClawdOS } from '@solana-clawd/plugin-sdk/client';
 
 async function init() {
-  const payload = await solana-clawdOS.getPluginPayload();
+  const payload = await SolanaClawdOS.getPluginPayload();
   
   console.log(payload.name);       // Function name called
   console.log(payload.arguments);  // Arguments passed
@@ -432,10 +432,10 @@ function Counter() {
 Send data back to be stored in the message:
 
 ```tsx
-import { solana-clawdOS } from '@solana-clawd/plugin-sdk/client';
+import { SolanaClawdOS } from '@solana-clawd/plugin-sdk/client';
 
 async function saveResult(data) {
-  await solana-clawdOS.setPluginMessage(data);
+  await SolanaClawdOS.setPluginMessage(data);
 }
 ```
 
@@ -444,17 +444,17 @@ async function saveResult(data) {
 Make the AI respond based on plugin output:
 
 ```tsx
-import { solana-clawdOS } from '@solana-clawd/plugin-sdk/client';
+import { SolanaClawdOS } from '@solana-clawd/plugin-sdk/client';
 
 async function askAI() {
   // First update the message content
-  await solana-clawdOS.setPluginMessage({
+  await SolanaClawdOS.setPluginMessage({
     result: 'User completed the form',
     data: { name: 'Alice', age: 25 }
   });
 
   // Then trigger AI to process it
-  await solana-clawdOS.triggerAIMessage();
+  await SolanaClawdOS.triggerAIMessage();
 }
 ```
 
@@ -463,10 +463,10 @@ async function askAI() {
 Directly create an assistant response:
 
 ```tsx
-import { solana-clawdOS } from '@solana-clawd/plugin-sdk/client';
+import { SolanaClawdOS } from '@solana-clawd/plugin-sdk/client';
 
 async function sendMessage() {
-  await solana-clawdOS.createAssistantMessage(
+  await SolanaClawdOS.createAssistantMessage(
     'Based on my analysis, here are the results...'
   );
 }
@@ -615,13 +615,13 @@ The frontend communication between solana-clawd and plugins is based on the HTML
 
 **1. Initialization of Communication**
 
-When the plugin is loaded and ready to interact with solana-clawd, it uses the `solana-clawdOS.getPluginPayload()` method to obtain initialization data:
+When the plugin is loaded and ready to interact with solana-clawd, it uses the `SolanaClawdOS.getPluginPayload()` method to obtain initialization data:
 
 ```typescript
-import { solana-clawdOS } from '@solana-clawd/plugin-sdk/client';
+import { SolanaClawdOS } from '@solana-clawd/plugin-sdk/client';
 
 // Plugin waits for initialization
-const payload = await solana-clawdOS.getPluginPayload();
+const payload = await SolanaClawdOS.getPluginPayload();
 console.log('Plugin initialized:', payload);
 ```
 
@@ -650,21 +650,21 @@ The plugin can call various methods to interact with the host:
 
 ```typescript
 // Get current message content
-const message = await solana-clawdOS.getPluginMessage();
+const message = await SolanaClawdOS.getPluginMessage();
 
 // Update message content (triggers re-render)
-await solana-clawdOS.setPluginMessage({ 
+await SolanaClawdOS.setPluginMessage({ 
   title: 'Updated Result', 
   data: newData 
 });
 
 // Get/set plugin state
-const counter = await solana-clawdOS.getPluginState<number>('counter');
-await solana-clawdOS.setPluginState('counter', counter + 1);
+const counter = await SolanaClawdOS.getPluginState<number>('counter');
+await SolanaClawdOS.setPluginState('counter', counter + 1);
 
 // Get/set user settings
-const settings = await solana-clawdOS.getPluginSettings();
-await solana-clawdOS.setPluginSettings({ theme: 'dark' });
+const settings = await SolanaClawdOS.getPluginSettings();
+await SolanaClawdOS.setPluginSettings({ theme: 'dark' });
 ```
 
 **4. Custom Trigger Actions (Standalone Plugins)**
@@ -673,10 +673,10 @@ For standalone plugins, custom control of AI message triggering is available:
 
 ```typescript
 // Trigger AI to process a message
-await solana-clawdOS.triggerAIMessage(messageId);
+await SolanaClawdOS.triggerAIMessage(messageId);
 
 // Create new assistant message
-await solana-clawdOS.createAssistantMessage('Custom content');
+await SolanaClawdOS.createAssistantMessage('Custom content');
 ```
 
 ### Communication Summary
@@ -690,7 +690,7 @@ Communication between solana-clawd and plugins is achieved through asynchronous 
 
 The solana-clawd host is responsible for responding to these requests and providing the required data. This mechanism allows plugins to operate independently while effectively communicating with the host application.
 
-The SDK's `solana-clawdOS` methods abstract communication details, enabling plugins to interact using a concise API.
+The SDK's `SolanaClawdOS` methods abstract communication details, enabling plugins to interact using a concise API.
 
 ---
 
@@ -777,14 +777,14 @@ export default async (req: Request) => {
 **Client-Side (Standalone Plugin UI):**
 
 ```typescript
-import { solana-clawdOS } from '@solana-clawd/plugin-sdk/client';
+import { SolanaClawdOS } from '@solana-clawd/plugin-sdk/client';
 
 // Get settings
-const settings = await solana-clawdOS.getPluginSettings<MySettings>();
+const settings = await SolanaClawdOS.getPluginSettings<MySettings>();
 console.log('API Key:', settings.apiKey);
 
 // Update settings (if needed)
-await solana-clawdOS.setPluginSettings({ 
+await SolanaClawdOS.setPluginSettings({ 
   endpoint: 'https://custom-api.example.com' 
 });
 ```
@@ -837,7 +837,7 @@ if (loading) {
 ### 2. Validate Data
 
 ```typescript
-const data = await solana-clawdOS.getPluginMessage<MyType>();
+const data = await SolanaClawdOS.getPluginMessage<MyType>();
 if (!data || !data.requiredField) {
   return <Error message="Invalid data" />;
 }
@@ -847,7 +847,7 @@ if (!data || !data.requiredField) {
 
 ```typescript
 try {
-  const payload = await solana-clawdOS.getPluginPayload();
+  const payload = await SolanaClawdOS.getPluginPayload();
 } catch (error) {
   console.error('Failed to get payload:', error);
   // Show fallback UI
@@ -872,7 +872,7 @@ const { data } = useWatchPluginMessage<WeatherData>();
 import { useDebouncedCallback } from 'use-debounce';
 
 const debouncedUpdate = useDebouncedCallback(
-  (value) => solana-clawdOS.setPluginState('key', value),
+  (value) => SolanaClawdOS.setPluginState('key', value),
   300
 );
 ```
@@ -928,13 +928,13 @@ pnpm add @solana-clawd/chat-plugins-gateway
 Create `pages/api/gateway.ts`:
 
 ```typescript
-import { createsolana-clawdChatPluginGateway } from '@solana-clawd/chat-plugins-gateway';
+import { createSolanaClawdChatPluginGateway } from '@solana-clawd/chat-plugins-gateway';
 
 export const config = {
   runtime: 'edge',
 };
 
-export default createsolana-clawdChatPluginGateway();
+export default createSolanaClawdChatPluginGateway();
 ```
 
 #### Next.js App Router
@@ -942,11 +942,11 @@ export default createsolana-clawdChatPluginGateway();
 Create `app/api/gateway/route.ts`:
 
 ```typescript
-import { createsolana-clawdChatPluginGateway } from '@solana-clawd/chat-plugins-gateway';
+import { createSolanaClawdChatPluginGateway } from '@solana-clawd/chat-plugins-gateway';
 
 export const runtime = 'edge';
 
-const handler = createsolana-clawdChatPluginGateway();
+const handler = createSolanaClawdChatPluginGateway();
 
 export { handler as GET, handler as POST };
 ```

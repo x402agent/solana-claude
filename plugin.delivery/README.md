@@ -180,10 +180,10 @@ Embed external content:
 Standalone plugins can trigger additional function calls:
 
 ```typescript
-import { solana-clawdOS } from '@solana-clawd/plugin-sdk/client';
+import { SolanaClawdOS } from '@solana-clawd/plugin-sdk/client';
 
 // Trigger a new function call from your UI
-solana-clawdOS.triggerFunctionCall({
+SolanaClawdOS.triggerFunctionCall({
   name: 'getTokenDetails',
   arguments: { token: 'ETH' }
 });
@@ -353,7 +353,7 @@ vercel --prod
 
 ```bash
 # Clone
-git clone https://github.com/x402agent/solana-clawd.git
+git clone https://github.com/x402agent/solana-clawd
 cd plugins
 
 # Install
@@ -528,7 +528,7 @@ import {
 } from '@solana-clawd/plugin-sdk';
 
 // Client-side (in standalone UI)
-import { solana-clawdOS } from '@solana-clawd/plugin-sdk/client';
+import { SolanaClawdOS } from '@solana-clawd/plugin-sdk/client';
 ```
 
 ---
@@ -895,7 +895,7 @@ curl -X POST https://modelcontextprotocol.name/mcp/plugin-delivery \
 
 ### Also Available On
 
-- **[solana-clawd](https://solana-clawdos.vercel.app)** — Browse and install from the [MCP marketplace](https://solana-clawdos.vercel.app/community/mcp)
+- **[solana-clawd](https://solana-clawd.vercel.app)** — Browse and install from the [MCP marketplace](https://solana-clawd.vercel.app/community/mcp)
 - **All 27 MCP servers** — See the full catalog at [modelcontextprotocol.name](https://modelcontextprotocol.name)
 
 > Powered by [modelcontextprotocol.name](https://modelcontextprotocol.name) — the open MCP HTTP gateway

@@ -2,7 +2,7 @@ import { JSONSchema7 } from 'json-schema';
 
 import { Meta } from './market';
 
-export type solana-clawdPluginType = 'default' | 'standalone' | 'markdown';
+export type SolanaClawdPluginType = 'default' | 'standalone' | 'markdown';
 
 /**
  * Plugin Schema
@@ -18,7 +18,7 @@ export interface PluginSchema extends Omit<JSONSchema7, 'type'> {
   type: 'object';
 }
 
-export interface solana-clawdPluginApi {
+export interface SolanaClawdPluginApi {
   description: string;
   name: string;
   parameters: PluginSchema;
@@ -37,9 +37,9 @@ export interface solana-clawdPluginApi {
  * @nameCN 插件清单
  * @descCN 描述一个插件的构成要素
  */
-export interface solana-clawdPluginManifest {
+export interface SolanaClawdPluginManifest {
   $schema?: string;
-  api: solana-clawdPluginApi[];
+  api: SolanaClawdPluginApi[];
   author?: string;
   /**
    * createAt
@@ -83,7 +83,7 @@ export interface solana-clawdPluginManifest {
    * plugin runtime type
    * @default default
    */
-  type?: solana-clawdPluginType;
+  type?: SolanaClawdPluginType;
   /**
    * plugin ui on user side
    * @desc The type of rendering for the plugin

@@ -133,11 +133,11 @@ export default async (req: Request) => {
 Create `api/gateway.ts`:
 
 ```typescript
-import { createsolana-clawdChatPluginGateway } from '@solana-clawd/chat-plugins-gateway';
+import { createSolanaClawdChatPluginGateway } from '@solana-clawd/chat-plugins-gateway';
 
 export const config = { runtime: 'edge' };
 
-export default createsolana-clawdChatPluginGateway();
+export default createSolanaClawdChatPluginGateway();
 ```
 
 ### Testing Locally
@@ -576,7 +576,7 @@ cd my-plugin
 Or clone the repository and start from there:
 
 ```bash
-git clone https://github.com/x402agent/solana-clawd.git
+git clone https://github.com/x402agent/solana-clawd
 cd plugin.delivery
 cp -r templates/openapi ../my-plugin
 cd ../my-plugin
@@ -734,13 +734,13 @@ async function fetchExternalData(query: string) {
 
 ```typescript
 // src/pages/api/gateway.ts
-import { createsolana-clawdChatPluginGateway } from '@solana-clawd/chat-plugins-gateway';
+import { createSolanaClawdChatPluginGateway } from '@solana-clawd/chat-plugins-gateway';
 
 export const config = {
   runtime: 'edge',
 };
 
-export default createsolana-clawdChatPluginGateway();
+export default createSolanaClawdChatPluginGateway();
 ```
 
 ### Accessing Plugin Settings
@@ -820,30 +820,30 @@ export default PluginUI;
 ### SDK Communication Methods
 
 ```typescript
-import { solana-clawdChat } from '@solana-clawd/plugin-sdk';
+import { SolanaClawdChat } from '@solana-clawd/plugin-sdk';
 
 // Get plugin payload (initialization data)
-const payload = await solana-clawdChat.getPluginPayload();
+const payload = await SolanaClawdChat.getPluginPayload();
 
 // Get current message content
-const message = await solana-clawdChat.getPluginMessage();
+const message = await SolanaClawdChat.getPluginMessage();
 
 // Update message content
-solana-clawdChat.setPluginMessage(newContent);
+SolanaClawdChat.setPluginMessage(newContent);
 
 // Get/set plugin state
-const state = await solana-clawdChat.getPluginState('myKey');
-solana-clawdChat.setPluginState('myKey', newValue);
+const state = await SolanaClawdChat.getPluginState('myKey');
+SolanaClawdChat.setPluginState('myKey', newValue);
 
 // Get/set settings
-const settings = await solana-clawdChat.getPluginSettings();
-solana-clawdChat.setPluginSettings(newSettings);
+const settings = await SolanaClawdChat.getPluginSettings();
+SolanaClawdChat.setPluginSettings(newSettings);
 
 // Trigger AI response (standalone plugins)
-solana-clawdChat.triggerAIMessage(messageId);
+SolanaClawdChat.triggerAIMessage(messageId);
 
 // Create assistant message (standalone plugins)
-solana-clawdChat.createAssistantMessage('Response content');
+SolanaClawdChat.createAssistantMessage('Response content');
 ```
 
 ---
@@ -1042,11 +1042,11 @@ window.addEventListener('message', (event) => {
 The SDK abstracts this complexity:
 
 ```typescript
-import { solana-clawdChat } from '@solana-clawd/plugin-sdk';
+import { SolanaClawdChat } from '@solana-clawd/plugin-sdk';
 
 // Simplified API
-const payload = await solana-clawdChat.getPluginPayload();
-solana-clawdChat.setPluginMessage(newContent);
+const payload = await SolanaClawdChat.getPluginPayload();
+SolanaClawdChat.setPluginMessage(newContent);
 ```
 
 ---

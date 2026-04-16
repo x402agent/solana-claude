@@ -194,7 +194,7 @@ Or clone it for local development:
 [![][bun-shield]][bun-link]
 
 ```bash
-$ git clone https://github.com/x402agent/solana-clawd.git
+$ git clone https://github.com/x402agent/solana-clawd
 $ cd chat-plugins-gateway
 $ bun install
 $ bun dev

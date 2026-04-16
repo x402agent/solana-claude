@@ -257,13 +257,13 @@ The frontend communication between the solana-clawd core and plugins is based on
 Frontend Communication Process
 The following is an overview of the communication process:
 
-Initialization of Communication: When the plugin is loaded and ready to interact with the solana-clawd core, it can use the solana-clawdOS.getPluginPayload() method to obtain initialization data. Behind the scenes, the plugin listens for the message event, waiting for the initialization message from the solana-clawd core, and upon receiving it, returns the parsed plugin parameters, name, settings, and status.
-Receiving Plugin Payload: The plugin receives initialization data from the solana-clawd core by calling the solana-clawdOS.getPluginPayload() method. This method internally listens for the message event, waiting for and processing the message containing the required plugin data sent by the solana-clawd core.
-Retrieving and Updating Basic Information: The plugin can call methods such as solana-clawdOS.setPluginSettings(settings), solana-clawdOS.setPluginMessage(content), solana-clawdOS.setPluginState(key, value) to update settings, message content, and plugin state.
-Custom Trigger Actions: For standalone plugins, custom control of AI message triggering and assistant message creation can be achieved using methods like solana-clawdOS.triggerAIMessage(id) and `solana-clawdOS.createAssistantMessage(content), providing a richer product experience.
+Initialization of Communication: When the plugin is loaded and ready to interact with the solana-clawd core, it can use the SolanaClawdOS.getPluginPayload() method to obtain initialization data. Behind the scenes, the plugin listens for the message event, waiting for the initialization message from the solana-clawd core, and upon receiving it, returns the parsed plugin parameters, name, settings, and status.
+Receiving Plugin Payload: The plugin receives initialization data from the solana-clawd core by calling the SolanaClawdOS.getPluginPayload() method. This method internally listens for the message event, waiting for and processing the message containing the required plugin data sent by the solana-clawd core.
+Retrieving and Updating Basic Information: The plugin can call methods such as SolanaClawdOS.setPluginSettings(settings), SolanaClawdOS.setPluginMessage(content), SolanaClawdOS.setPluginState(key, value) to update settings, message content, and plugin state.
+Custom Trigger Actions: For standalone plugins, custom control of AI message triggering and assistant message creation can be achieved using methods like SolanaClawdOS.triggerAIMessage(id) and `SolanaClawdOS.createAssistantMessage(content), providing a richer product experience.
 In summary, communication between solana-clawd and plugins is achieved through asynchronous message exchange using the postMessage API. The plugin can request data, receive data, update state, trigger messages, etc., while the solana-clawd core is responsible for responding to these requests and providing the required data. This mechanism allows plugins to operate independently and effectively communicate with the solana-clawd core.
 
-Additionally, we provide the solana-clawdOS method in the SDK to simplify plugin frontend communication. Through the series of methods provided by solana-clawdOS, communication details are abstracted, enabling plugins to interact with the solana-clawd core using a concise API.
+Additionally, we provide the SolanaClawdOS method in the SDK to simplify plugin frontend communication. Through the series of methods provided by SolanaClawdOS, communication details are abstracted, enabling plugins to interact with the solana-clawd core using a concise API.
 
 OpenAPI
 solana-clawd's plugin mechanism supports the OpenAPI specification, which is a standard for defining and describing RESTful APIs. By using OpenAPI, developers can create a clear, language-agnostic API description to facilitate the correct implementation and usage of the API. Here is an overview of solana-clawd's support for OpenAPI:
@@ -381,20 +381,20 @@ As a Standalone plugin, you need to pay special attention to the communication m
 The communication between Standalone plugins and solana-clawd is achieved through a carefully designed API and event listening mechanism. These API methods encapsulate the internal communication details, providing a concise and powerful way to exchange data and trigger behavior. The following is a detailed explanation of the Standalone plugin communication mechanism:
 
 Initializing Communication
-When a Standalone plugin loads and is ready to interact with solana-clawd, it first needs to obtain initialization data. This can be achieved through the solana-clawdOS.getPluginPayload() method. This method internally listens for the message event, waiting for the initialization message sent by solana-clawd, and returns the parsed data upon receiving the message, including plugin parameters, name, settings, and status.
+When a Standalone plugin loads and is ready to interact with solana-clawd, it first needs to obtain initialization data. This can be achieved through the SolanaClawdOS.getPluginPayload() method. This method internally listens for the message event, waiting for the initialization message sent by solana-clawd, and returns the parsed data upon receiving the message, including plugin parameters, name, settings, and status.
 
 Getting and Setting Plugin Messages
-Using the solana-clawdOS.getPluginMessage() method, the plugin can request the current message content. This method also relies on the message event listener and returns the message content upon receiving the message sent by solana-clawd.
-To update the plugin message content, the plugin can call the solana-clawdOS.setPluginMessage(content) method. The content parameter is the new message content the plugin wishes to set.
+Using the SolanaClawdOS.getPluginMessage() method, the plugin can request the current message content. This method also relies on the message event listener and returns the message content upon receiving the message sent by solana-clawd.
+To update the plugin message content, the plugin can call the SolanaClawdOS.setPluginMessage(content) method. The content parameter is the new message content the plugin wishes to set.
 
 Getting and Setting Plugin State
-Getting and setting plugin state can be done through the solana-clawdOS.getPluginState(key) and solana-clawdOS.setPluginState(key, value) methods. This allows the plugin to maintain and manage its own state information.
+Getting and setting plugin state can be done through the SolanaClawdOS.getPluginState(key) and SolanaClawdOS.setPluginState(key, value) methods. This allows the plugin to maintain and manage its own state information.
 
 Getting and Updating Plugin Settings
-The plugin can request its settings by calling the solana-clawdOS.getPluginSettings() method. If the plugin needs to update its settings, it can use the solana-clawdOS.setPluginSettings(settings) method to send the new settings data to solana-clawd. The settings parameter contains the information to be updated.
+The plugin can request its settings by calling the SolanaClawdOS.getPluginSettings() method. If the plugin needs to update its settings, it can use the SolanaClawdOS.setPluginSettings(settings) method to send the new settings data to solana-clawd. The settings parameter contains the information to be updated.
 
 Triggering AI Messages and Creating Assistant Messages
-The plugin can use the solana-clawdOS.triggerAIMessage(id) and solana-clawdOS.createAssistantMessage(content) methods to trigger AI messages or create new assistant messages, thereby interacting with AI.
+The plugin can use the SolanaClawdOS.triggerAIMessage(id) and SolanaClawdOS.createAssistantMessage(content) methods to trigger AI messages or create new assistant messages, thereby interacting with AI.
 
 Configuring as a Standalone Plugin
 Configuring the Manifest
@@ -406,7 +406,7 @@ json5
   type: 'standalone',
 }
 Modifying Plugin Rendering Implementation
-Since the communication mechanism of Standalone plugins is different from other types of plugins, you need to modify the frontend implementation of the plugin. Use the solana-clawdOS instance object to communicate with the solana-clawd core. Also, the entire lifecycle of the plugin application needs to be managed by you.
+Since the communication mechanism of Standalone plugins is different from other types of plugins, you need to modify the frontend implementation of the plugin. Use the SolanaClawdOS instance object to communicate with the solana-clawd core. Also, the entire lifecycle of the plugin application needs to be managed by you.
 
 Plugin Examples and Templates
 To help you better understand and develop Standalone plugins, you can refer to the following resources:
@@ -474,10 +474,10 @@ pnpm install @solana-clawd/chat-plugins-gateway
 Then, in your local Next.js project, create a new TypeScript file in the api directory, for example, pages/api/gateway.ts, and add the following code:
 
 ts
-import { createsolana-clawdPluginGateway } from '@solana-clawd/chat-plugins-gateway';
+import { createSolanaClawdPluginGateway } from '@solana-clawd/chat-plugins-gateway';
 
-export default createsolana-clawdPluginGateway();
-This code will create a gateway route to handle solana-clawd requests. The createsolana-clawdPluginGateway function will automatically handle tasks such as request forwarding, response aggregation, and security validation.
+export default createSolanaClawdPluginGateway();
+This code will create a gateway route to handle solana-clawd requests. The createSolanaClawdPluginGateway function will automatically handle tasks such as request forwarding, response aggregation, and security validation.
 
 If you are not using Next.js but instead using Vercel API service, you can create a NodeJS serverless API in the api directory:
 
@@ -721,10 +721,10 @@ Obtaining Plugin Initialization Information
 When the plugin is loaded, developers may need to obtain the initialization parameters and configuration passed by solana-clawd. Using the solana-clawd Client SDK, this can be easily accomplished with the following lines of code:
 
 javascript
-import { solana-clawdOS } from '@solana-clawd/plugin-sdk/client';
+import { SolanaClawdOS } from '@solana-clawd/plugin-sdk/client';
 
 // Obtain initialization information
-solana-clawdOS.getPluginPayload().then((payload) => {
+SolanaClawdOS.getPluginPayload().then((payload) => {
   console.log('Plugin Name:', payload.name);
   console.log('Plugin Arguments:', payload.arguments);
   console.log('Plugin Settings:', payload.settings);
@@ -733,10 +733,10 @@ Updating Plugin Message Content
 If the plugin needs to send messages during interaction with the user, it can use the methods provided by the SDK to update the message content:
 
 javascript
-import { solana-clawdOS } from '@solana-clawd/plugin-sdk/client';
+import { SolanaClawdOS } from '@solana-clawd/plugin-sdk/client';
 
 // Send message content
-solana-clawdOS.setPluginMessage('Welcome to using our plugin!');
+SolanaClawdOS.setPluginMessage('Welcome to using our plugin!');
 The solana-clawd Client SDK is a powerful assistant for plugin developers, providing a complete, concise, and powerful set of tools to implement various interactive features of solana-clawd plugins. With these tools, developers can focus more on innovation and enhancing user experience without worrying about the implementation details of communication mechanisms.
 
 API
@@ -978,9 +978,9 @@ ServiceUnavailable  503 Service Unavailable
 GatewayTimeout  504 Gateway Timeout
 
 
-solana-clawdOS
+SolanaClawdOS
 solana-clawd Client SDK
-import { solana-clawdOS } from '@solana-clawd/plugin-sdk/client';
+import { SolanaClawdOS } from '@solana-clawd/plugin-sdk/client';
 NPM
 UNPKG
 BundlePhobia
@@ -1007,9 +1007,9 @@ state: if exist the plugin message have state, you can get it from thi
 settings: the plugin settings
 Example
 ts
-import { solana-clawdOS } from '@solana-clawd/plugin-sdk/client';
+import { SolanaClawdOS } from '@solana-clawd/plugin-sdk/client';
 
-solana-clawdOS.getPluginPayload().then((payload) => {
+SolanaClawdOS.getPluginPayload().then((payload) => {
   console.log(payload);
 });
 
@@ -1029,9 +1029,9 @@ ts
 type GetPluginMessage = <T = object>() => Promise<T>;
 Example
 ts
-import { solana-clawdOS } from '@solana-clawd/plugin-sdk/client';
+import { SolanaClawdOS } from '@solana-clawd/plugin-sdk/client';
 
-solana-clawdOS.getPluginMessage().then((message) => {
+SolanaClawdOS.getPluginMessage().then((message) => {
   console.log(message);
 });
 setPluginMessage
@@ -1043,9 +1043,9 @@ Parameter
 content: the plugin content to be filled in.
 Example
 ts
-import { solana-clawdOS } from '@solana-clawd/plugin-sdk/client';
+import { SolanaClawdOS } from '@solana-clawd/plugin-sdk/client';
 
-solana-clawdOS.setPluginMessage({ title: 'Hello', message: 'Welcome to my plugin' });
+SolanaClawdOS.setPluginMessage({ title: 'Hello', message: 'Welcome to my plugin' });
 getPluginState
 Used to retrieve the runtime state stored in the message.
 
@@ -1055,9 +1055,9 @@ Input parameter
 key: the key value of the state information to be retrieved.
 Example
 ts
-import { solana-clawdOS } from '@solana-clawd/plugin-sdk/client';
+import { SolanaClawdOS } from '@solana-clawd/plugin-sdk/client';
 
-solana-clawdOS.getPluginState('counter').then((state) => {
+SolanaClawdOS.getPluginState('counter').then((state) => {
   console.log(state);
 });
 setPluginState
@@ -1070,9 +1070,9 @@ key: the key value of the state information to be updated.
 value: the value of the state information to be updated.
 Example
 ts
-import { solana-clawdOS } from '@solana-clawd/plugin-sdk/client';
+import { SolanaClawdOS } from '@solana-clawd/plugin-sdk/client';
 
-solana-clawdOS.setPluginState('counter', 5);
+SolanaClawdOS.setPluginState('counter', 5);
 getPluginSettings
 Used to retrieve the configuration information stored by the plugin in solana-clawd.
 
@@ -1080,9 +1080,9 @@ ts
 type GetPluginSettings = <T = any>() => Promise<T>;
 Example
 ts
-import { solana-clawdOS } from '@solana-clawd/plugin-sdk/client';
+import { SolanaClawdOS } from '@solana-clawd/plugin-sdk/client';
 
-solana-clawdOS.getPluginSettings().then((state) => {
+SolanaClawdOS.getPluginSettings().then((state) => {
   console.log(state);
 });
 setPluginSettings
@@ -1094,9 +1094,9 @@ Input parameter
 settings: the plugin configuration information to be updated, default is partial update.
 Example
 ts
-import { solana-clawdOS } from '@solana-clawd/plugin-sdk/client';
+import { SolanaClawdOS } from '@solana-clawd/plugin-sdk/client';
 
-solana-clawdOS.setPluginSettings({ theme: 'dark', fontSize: 12 });
+SolanaClawdOS.setPluginSettings({ theme: 'dark', fontSize: 12 });
 
 useWatchPluginMessage
 used to listen for plugin messages sent from solana-clawd

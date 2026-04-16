@@ -5,7 +5,7 @@
   "homepage": "https://plugin.delivery",
   "repository": {
     "type": "git",
-    "url": "https://github.com/x402agent/solana-clawd.git"
+    "url": "https://github.com/x402agent/solana-clawd"
   },
   "license": "MIT",
   "author": "solana-clawd <contact@solanaos.net>",

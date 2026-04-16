@@ -5,7 +5,7 @@ Complete API reference for the Plugin SDK (`@solana-clawd/plugin-sdk`) from **x4
 ## Table of Contents
 
 - [Installation](#installation)
-- [Client SDK (solana-clawdOS)](#client-sdk-solana-clawdchat)
+- [Client SDK (SolanaClawdOS)](#client-sdk-solana-clawdchat)
 - [React Hooks](#react-hooks)
 - [Schema Validation](#schema-validation)
 - [Error Types](#error-types)
@@ -28,12 +28,12 @@ bun add @solana-clawd/plugin-sdk
 
 ---
 
-## Client SDK (solana-clawdOS)
+## Client SDK (SolanaClawdOS)
 
-The `solana-clawdOS` object provides methods for plugin-to-host communication from the **x402agent/plugin.delivery** SDK. Import from the client subpath:
+The `SolanaClawdOS` object provides methods for plugin-to-host communication from the **x402agent/plugin.delivery** SDK. Import from the client subpath:
 
 ```typescript
-import { solana-clawdOS } from '@solana-clawd/plugin-sdk/client';
+import { SolanaClawdOS } from '@solana-clawd/plugin-sdk/client';
 ```
 
 ### getPluginPayload
@@ -48,7 +48,7 @@ interface PluginPayload<T = any> {
   state?: Record<string, any>;
 }
 
-const payload = await solana-clawdOS.getPluginPayload<MyArgs>();
+const payload = await SolanaClawdOS.getPluginPayload<MyArgs>();
 console.log(payload.name);       // API name that was called
 console.log(payload.arguments);  // Arguments passed to the function
 console.log(payload.settings);   // Plugin settings from user config
@@ -59,7 +59,7 @@ console.log(payload.settings);   // Plugin settings from user config
 Retrieve the current plugin message content (the `content` field deserialized as JSON).
 
 ```typescript
-const message = await solana-clawdOS.getPluginMessage<MyMessageType>();
+const message = await SolanaClawdOS.getPluginMessage<MyMessageType>();
 console.log(message);
 ```
 
@@ -68,7 +68,7 @@ console.log(message);
 Update the plugin message content. This serializes the content and triggers conversation flow.
 
 ```typescript
-await solana-clawdOS.setPluginMessage({ 
+await SolanaClawdOS.setPluginMessage({ 
   title: 'Result', 
   data: myData 
 });
@@ -80,10 +80,10 @@ Manage runtime state stored in the message.
 
 ```typescript
 // Get state
-const counter = await solana-clawdOS.getPluginState<number>('counter');
+const counter = await SolanaClawdOS.getPluginState<number>('counter');
 
 // Set state
-await solana-clawdOS.setPluginState('counter', counter + 1);
+await SolanaClawdOS.setPluginState('counter', counter + 1);
 ```
 
 ### getPluginSettings / setPluginSettings
@@ -92,10 +92,10 @@ Manage plugin configuration stored in the host application.
 
 ```typescript
 // Get all settings
-const settings = await solana-clawdOS.getPluginSettings<MySettings>();
+const settings = await SolanaClawdOS.getPluginSettings<MySettings>();
 
 // Update settings (partial update)
-await solana-clawdOS.setPluginSettings({ theme: 'dark' });
+await SolanaClawdOS.setPluginSettings({ theme: 'dark' });
 ```
 
 ### triggerAIMessage
@@ -103,7 +103,7 @@ await solana-clawdOS.setPluginSettings({ theme: 'dark' });
 Trigger the AI to generate a response (for standalone plugins).
 
 ```typescript
-await solana-clawdOS.triggerAIMessage(messageId);
+await SolanaClawdOS.triggerAIMessage(messageId);
 ```
 
 ### createAssistantMessage
@@ -111,7 +111,7 @@ await solana-clawdOS.triggerAIMessage(messageId);
 Create a new assistant message programmatically (for standalone plugins).
 
 ```typescript
-await solana-clawdOS.createAssistantMessage('Here is the analysis...');
+await SolanaClawdOS.createAssistantMessage('Here is the analysis...');
 ```
 
 ---

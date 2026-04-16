@@ -46,7 +46,7 @@ Expected output: The AI agent will automatically detect relevant tools and call 
 - **Authentication Management**: Supports multiple auth methods (API keys, OAuth, Bearer tokens, custom headers)
 - **Multi-Provider Support**: 40+ AI model providers including OpenAI, Anthropic, Google, and custom adapters
 - **Plugin Marketplace**: Discover and install community plugins via the Agents Market
-- **Artifacts System**: Display portfolio data, charts, and interactive components within chat via `<solana-clawdArtifact>` tags
+- **Artifacts System**: Display portfolio data, charts, and interactive components within chat via `<SolanaClawdArtifact>` tags
 - **Internationalization**: Built-in i18n with automatic translation pipeline using solana-clawd-i18n
 
 ## Architecture
@@ -117,9 +117,9 @@ src/
 
 ```typescript
 // Agent Configuration
-interface solana-clawdAgentConfig {
+interface SolanaClawdAgentConfig {
   model: string;                    // Model identifier
-  chatConfig: solana-clawdAgentChatConfig;  // Chat settings
+  chatConfig: SolanaClawdAgentChatConfig;  // Chat settings
   openingMessage?: string;          // Welcome message
   openingQuestions?: string[];      // Suggested prompts
   params: {
@@ -130,7 +130,7 @@ interface solana-clawdAgentConfig {
   };
   plugins?: string[];               // Enabled plugin identifiers
   systemRole?: string;              // System prompt
-  tts: solana-clawdAgentTTSConfig;         // Text-to-speech config
+  tts: SolanaClawdAgentTTSConfig;         // Text-to-speech config
 }
 
 // Plugin Authentication
@@ -149,10 +149,10 @@ interface ComfyUIKeyVault {
 ### Basic Plugin Integration
 
 ```typescript
-import { solana-clawdComfyUI } from '@/libs/model-runtime/comfyui';
+import { SolanaClawdComfyUI } from '@/libs/model-runtime/comfyui';
 
 // Initialize plugin client
-const comfyUI = new solana-clawdComfyUI({
+const comfyUI = new SolanaClawdComfyUI({
   baseURL: 'http://localhost:8000',
   authType: 'none'
 });
@@ -221,7 +221,7 @@ const pluginResult = await chatService.runPluginApi({
 ```typescript
 // AI returns artifact in response
 const artifactResponse = `
-<solana-clawdArtifact identifier="portfolio-assets" title="My Portfolio" type="application/solana-clawd.artifacts.react">
+<SolanaClawdArtifact identifier="portfolio-assets" title="My Portfolio" type="application/solana-clawd.artifacts.react">
 import { Card, Statistic, Row, Col } from 'antd';
 
 export default function PortfolioDisplay() {
@@ -247,7 +247,7 @@ export default function PortfolioDisplay() {
     </div>
   );
 }
-</solana-clawdArtifact>
+</SolanaClawdArtifact>
 `;
 
 // Artifacts panel automatically opens and renders the React component
@@ -313,12 +313,12 @@ bunx vitest -u 'path/to/test.ts'
 
 **1. No Authentication**
 ```typescript
-const client = new solana-clawdComfyUI({ baseURL: 'http://localhost:8000', authType: 'none' });
+const client = new SolanaClawdComfyUI({ baseURL: 'http://localhost:8000', authType: 'none' });
 ```
 
 **2. Basic Authentication**
 ```typescript
-const client = new solana-clawdComfyUI({
+const client = new SolanaClawdComfyUI({
   baseURL: 'https://api.example.com',
   authType: 'basic',
   username: 'user',
@@ -328,7 +328,7 @@ const client = new solana-clawdComfyUI({
 
 **3. Bearer Token**
 ```typescript
-const client = new solana-clawdComfyUI({
+const client = new SolanaClawdComfyUI({
   baseURL: 'https://api.example.com',
   authType: 'bearer',
   apiKey: 'your-token'
@@ -337,7 +337,7 @@ const client = new solana-clawdComfyUI({
 
 **4. Custom Headers**
 ```typescript
-const client = new solana-clawdComfyUI({
+const client = new SolanaClawdComfyUI({
   baseURL: 'https://api.example.com',
   authType: 'custom',
   customHeaders: {
@@ -373,9 +373,9 @@ const nextAuth = NextAuth({
 1. **Create Provider Implementation**
 ```typescript
 // src/libs/agent-runtime/myprovider/index.ts
-import { solana-clawdRuntimeAI } from '../BaseAI';
+import { SolanaClawdRuntimeAI } from '../BaseAI';
 
-export class solana-clawdMyProviderAI implements solana-clawdRuntimeAI {
+export class SolanaClawdMyProviderAI implements SolanaClawdRuntimeAI {
   async chat(payload, options) {
     // Implement chat method
   }
@@ -386,7 +386,7 @@ export class solana-clawdMyProviderAI implements solana-clawdRuntimeAI {
 ```typescript
 // src/libs/agent-runtime/runtimeMap.ts
 export const providerRuntimeMap = {
-  myprovider: solana-clawdMyProviderAI,
+  myprovider: SolanaClawdMyProviderAI,
   // ... other providers
 };
 ```
@@ -418,7 +418,7 @@ npm run db:generate
 3. **Update Type Definitions**
 ```typescript
 // src/types/agent/index.ts
-export interface solana-clawdAgentConfig {
+export interface SolanaClawdAgentConfig {
   newFeature?: string;
 }
 ```

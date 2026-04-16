@@ -190,7 +190,7 @@ solana-clawd 插件网关是一个后端服务，为 solana-clawd 插件提供�
 
 
 ```bash
-$ git clone https://github.com/x402agent/solana-clawd.git
+$ git clone https://github.com/x402agent/solana-clawd
 $ cd chat-plugins-gateway
 $ bun install
 $ bun dev

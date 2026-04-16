@@ -4,7 +4,7 @@ export {
    * please use `createGatewayOnEdgeRuntime` instead
    * @deprecated
    */
-  createGatewayOnEdgeRuntime as createsolana-clawdPluginGateway,
+  createGatewayOnEdgeRuntime as createSolanaClawdPluginGateway,
 } from './edge';
 export * from './gateway';
 export * from './node';

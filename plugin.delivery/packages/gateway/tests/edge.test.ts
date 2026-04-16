@@ -1,5 +1,5 @@
 import {
-  solana-clawdPluginManifest,
+  SolanaClawdPluginManifest,
   PluginErrorType,
   PluginRequestPayload,
   createHeadersWithPluginSettings,
@@ -38,7 +38,7 @@ const mockManifest = {
   ],
   identifier: 'abc',
   meta: {},
-} as solana-clawdPluginManifest;
+} as SolanaClawdPluginManifest;
 
 const mockManifestWithOpenAPI = {
   ...mockManifest,
@@ -329,7 +329,7 @@ describe('createGatewayOnEdgeRuntime', () => {
         manifest: {
           ...mockManifest,
           settings: { properties: { abc: { type: 'string' } }, required: ['abc'], type: 'object' },
-        } as solana-clawdPluginManifest,
+        } as SolanaClawdPluginManifest,
       };
       const mockRequest: Request = new Request('https://test-url.com', {
         body: JSON.stringify(payload),
@@ -348,7 +348,7 @@ describe('createGatewayOnEdgeRuntime', () => {
         manifest: {
           ...mockManifest,
           settings: { properties: { abc: { type: 'string' } }, required: ['abc'], type: 'object' },
-        } as solana-clawdPluginManifest,
+        } as SolanaClawdPluginManifest,
       };
 
       const mockRequest: Request = new Request('https://test-url.com', {
@@ -390,7 +390,7 @@ describe('createGatewayOnEdgeRuntime', () => {
               url: 'https://test-api-url.com',
             },
           ],
-        } as solana-clawdPluginManifest,
+        } as SolanaClawdPluginManifest,
       };
       const mockRequest: Request = new Request('https://test-url.com', {
         body: JSON.stringify(payload),

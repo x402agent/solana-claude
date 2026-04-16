@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useState } from 'react';
 
-import { solana-clawdOS } from '@/client';
+import { SolanaClawdOS } from '@/client';
 
 export const usePluginState = <T>(key: string, initialValue: T) => {
   const [value, setValue] = useState(initialValue);
 
   useEffect(() => {
-    solana-clawdOS.getPluginState(key).then((e) => {
+    SolanaClawdOS.getPluginState(key).then((e) => {
       if (!e) return;
 
       setValue(e);
@@ -16,7 +16,7 @@ export const usePluginState = <T>(key: string, initialValue: T) => {
   const updateValue = useCallback(
     (value: T) => {
       setValue(value);
-      solana-clawdOS.setPluginState(key, value);
+      SolanaClawdOS.setPluginState(key, value);
     },
     [key],
   );

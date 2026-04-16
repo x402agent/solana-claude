@@ -142,5 +142,5 @@ class solana-clawd {
   };
 }
 
-export const solana-clawdOS = new solana-clawd();
+export const SolanaClawdOS = new solana-clawd();
 

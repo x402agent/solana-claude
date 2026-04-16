@@ -135,23 +135,23 @@ pnpm add @x402agent/chat-plugins-gateway
 ### SDK Client API
 
 ```typescript
-import { solana-clawdOS } from '@x402agent/plugin-sdk/client';
+import { SolanaClawdOS } from '@x402agent/plugin-sdk/client';
 
 // Get initialization data
-const payload = await solana-clawdOS.getPluginPayload();
+const payload = await SolanaClawdOS.getPluginPayload();
 // { name, arguments, settings, state }
 
 // Update message content
-solana-clawdOS.setPluginMessage('New content');
+SolanaClawdOS.setPluginMessage('New content');
 
 // Update plugin state
-solana-clawdOS.setPluginState('key', value);
+SolanaClawdOS.setPluginState('key', value);
 
 // Trigger AI response (standalone plugins)
-solana-clawdOS.triggerAIMessage(messageId);
+SolanaClawdOS.triggerAIMessage(messageId);
 
 // Create assistant message (standalone plugins)
-solana-clawdOS.createAssistantMessage('AI will process this');
+SolanaClawdOS.createAssistantMessage('AI will process this');
 ```
 
 ---
@@ -570,7 +570,7 @@ export { myPluginManifest as default } from './manifest';
 
 import { myPluginManifest } from './my-plugin';
 
-export const builtinTools: solana-clawdBuiltinTool[] = [
+export const builtinTools: SolanaClawdBuiltinTool[] = [
   // ... existing tools
   {
     identifier: myPluginManifest.identifier,
@@ -691,9 +691,9 @@ export default async function handler(req, res) {
 ```typescript
 // pages/api/gateway.ts
 
-import { createsolana-clawdPluginGateway } from '@x402agent/chat-plugins-gateway';
+import { createSolanaClawdPluginGateway } from '@x402agent/chat-plugins-gateway';
 
-export default createsolana-clawdPluginGateway();
+export default createSolanaClawdPluginGateway();
 ```
 
 ### Plugin Settings
@@ -880,7 +880,7 @@ export function listenToParent(callback: (message) => void) {
 ### Using Embeds in Artifacts
 
 ```html
-<solana-clawdArtifact identifier="portfolio-embed" type="text/html" title="Portfolio">
+<SolanaClawdArtifact identifier="portfolio-embed" type="text/html" title="Portfolio">
 <!DOCTYPE html>
 <html>
 <head>
@@ -893,7 +893,7 @@ export function listenToParent(callback: (message) => void) {
   <iframe src="/embed/dashboard" title="Portfolio"></iframe>
 </body>
 </html>
-</solana-clawdArtifact>
+</SolanaClawdArtifact>
 ```
 
 ---
@@ -914,11 +914,11 @@ Artifacts are AI-generated React components rendered in chat.
 ### Artifact Structure
 
 ```jsx
-<solana-clawdThinking>
+<SolanaClawdThinking>
 Analyzing user request...
-</solana-clawdThinking>
+</SolanaClawdThinking>
 
-<solana-clawdArtifact 
+<SolanaClawdArtifact 
   identifier="unique-id" 
   type="application/solana-clawd.artifacts.react" 
   title="Display Title"
@@ -942,7 +942,7 @@ export default function App() {
     </Card>
   );
 }
-</solana-clawdArtifact>
+</SolanaClawdArtifact>
 ```
 
 ### When to Use Artifacts

@@ -1,34 +1,34 @@
-import { solana-clawdOS } from './solana-clawdOS';
+import { SolanaClawdOS } from './SolanaClawdOS';
 
 /**
  * @deprecated
  */
-export const postToFillPluginContent = solana-clawdOS.setPluginMessage;
+export const postToFillPluginContent = SolanaClawdOS.setPluginMessage;
 
 /**
  * @deprecated
  */
-export const postToUpdatePluginState = solana-clawdOS.setPluginState;
+export const postToUpdatePluginState = SolanaClawdOS.setPluginState;
 
 /**
  * @deprecated
  */
-export const postToUpdatePluginSettings = solana-clawdOS.setPluginSettings;
+export const postToUpdatePluginSettings = SolanaClawdOS.setPluginSettings;
 
 /**
  * @deprecated
  */
-export const fetchPluginState = solana-clawdOS.getPluginState;
+export const fetchPluginState = SolanaClawdOS.getPluginState;
 /**
  * @deprecated
  */
-export const fetchPluginMessage = solana-clawdOS.getPluginMessage;
+export const fetchPluginMessage = SolanaClawdOS.getPluginMessage;
 /**
  * @deprecated
  */
-export const fetchPluginPayload = solana-clawdOS.getPluginPayload;
+export const fetchPluginPayload = SolanaClawdOS.getPluginPayload;
 /**
  * @deprecated
  */
-export const fetchPluginSettings = solana-clawdOS.getPluginSettings;
+export const fetchPluginSettings = SolanaClawdOS.getPluginSettings;
 
