@@ -1,6 +1,6 @@
 {
   "author": "your name or org name",
-  "homepage": "https://github.com/OWNER/REPO",
+  "homepage": "https://github.com/x402agent/solana-clawd",
   "identifier": "plugin-template",
   "locale": "en-US",
   "manifest": "https://url.to/manifest.json",
