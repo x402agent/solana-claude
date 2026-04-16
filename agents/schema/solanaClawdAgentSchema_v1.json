@@ -1,0 +1,187 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/x402agent/solana-clawd/agents/schema/solanaClawdAgentSchema_v1.json",
+  "title": "solana-clawd Agent Schema v1",
+  "description": "CLAWD-themed agent definition. Extends the base agent shape with SOUL memory tiers, skill references, deny-first permissions, and CLAWD versioning.",
+  "type": "object",
+  "properties": {
+    "author": { "type": "string" },
+    "homepage": { "type": "string", "format": "uri" },
+    "identifier": { "type": "string" },
+    "createdAt": { "type": "string" },
+    "schemaVersion": { "type": "number", "const": 1 },
+    "clawdVersion": {
+      "type": "string",
+      "description": "Version of the CLAWD SOUL + skill preamble applied to this agent.",
+      "default": "1.0"
+    },
+    "knowledgeCount": { "type": "number" },
+    "pluginCount": { "type": "number" },
+    "tokenUsage": { "type": "number" },
+    "summary": { "type": "string" },
+    "openingMessage": { "type": "string" },
+    "openingQuestions": { "type": "array", "items": { "type": "string" } },
+    "examples": { "$ref": "#/properties/config/properties/fewShots" },
+    "meta": {
+      "type": "object",
+      "properties": {
+        "avatar": { "type": "string" },
+        "backgroundColor": { "type": "string" },
+        "category": { "type": "string" },
+        "description": { "type": "string" },
+        "tags": { "type": "array", "items": { "type": "string" } },
+        "title": { "type": "string" }
+      },
+      "required": ["avatar", "description", "tags", "title"],
+      "additionalProperties": false
+    },
+    "soul": {
+      "type": "object",
+      "description": "CLAWD identity and epistemology (SOUL.md).",
+      "properties": {
+        "memoryTiers": {
+          "type": "array",
+          "description": "Confidence tiers this agent uses to label data points.",
+          "items": {
+            "type": "string",
+            "enum": ["KNOWN", "LEARNED", "INFERRED"]
+          },
+          "default": ["KNOWN", "LEARNED", "INFERRED"]
+        },
+        "principles": {
+          "type": "array",
+          "description": "Operating principles the agent must uphold.",
+          "items": { "type": "string" },
+          "default": [
+            "KNOWN before INFERRED",
+            "Preserve capital first",
+            "Deny-first permissions",
+            "Transparency over conviction",
+            "Local-first"
+          ]
+        },
+        "canon": {
+          "type": "object",
+          "properties": {
+            "repo": { "type": "string", "format": "uri" },
+            "runtime": { "type": "string", "format": "uri" },
+            "hub": { "type": "string", "format": "uri" }
+          },
+          "required": ["repo"],
+          "additionalProperties": false
+        }
+      },
+      "required": ["memoryTiers", "principles"],
+      "additionalProperties": false
+    },
+    "skills": {
+      "type": "array",
+      "description": "Skill files this agent defers to. Paths are relative to the repo root.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "path": { "type": "string" },
+          "scope": {
+            "type": "string",
+            "enum": ["strategy", "tactic", "identity", "reference"]
+          }
+        },
+        "required": ["name", "path", "scope"],
+        "additionalProperties": false
+      },
+      "default": [
+        { "name": "SOUL", "path": "SOUL.md", "scope": "identity" },
+        { "name": "STRATEGY", "path": "STRATEGY.md", "scope": "strategy" },
+        { "name": "TRADE", "path": "TRADE.md", "scope": "tactic" }
+      ]
+    },
+    "permissions": {
+      "type": "object",
+      "description": "Deny-first permission gates. Actions default to deny unless explicitly granted.",
+      "properties": {
+        "executeTrade": { "type": "string", "enum": ["allow", "deny", "ask"], "default": "ask" },
+        "signTransaction": { "type": "string", "enum": ["allow", "deny", "ask"], "default": "ask" },
+        "spendFromWallet": { "type": "string", "enum": ["allow", "deny", "ask"], "default": "ask" },
+        "accessPrivateKey": { "type": "string", "enum": ["allow", "deny", "ask"], "default": "deny" },
+        "readOnChainData": { "type": "string", "enum": ["allow", "deny", "ask"], "default": "allow" }
+      },
+      "additionalProperties": false
+    },
+    "config": {
+      "type": "object",
+      "properties": {
+        "compressThreshold": { "type": "number" },
+        "displayMode": { "type": "string", "enum": ["chat", "docs"] },
+        "enableCompressThreshold": { "type": "boolean" },
+        "enableHistoryCount": { "type": "boolean" },
+        "enableMaxTokens": { "type": "boolean" },
+        "fewShots": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "content": { "type": "string" },
+              "role": { "type": "string", "enum": ["user", "system", "assistant", "function"] }
+            },
+            "required": ["content", "role"],
+            "additionalProperties": false
+          }
+        },
+        "historyCount": { "type": "number" },
+        "inputTemplate": { "type": "string" },
+        "knowledgeBases": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "avatar": { "type": ["string", "null"] },
+              "createdAt": { "type": "string", "format": "date-time" },
+              "description": { "type": ["string", "null"] },
+              "enabled": { "type": "boolean" },
+              "id": { "type": "string" },
+              "isPublic": { "type": ["boolean", "null"] },
+              "name": { "type": "string" },
+              "settings": {},
+              "type": { "type": ["string", "null"] },
+              "updatedAt": { "type": "string", "format": "date-time" }
+            },
+            "required": ["avatar", "createdAt", "id", "isPublic", "name", "type", "updatedAt"],
+            "additionalProperties": false
+          }
+        },
+        "model": { "type": "string" },
+        "openingMessage": { "type": "string" },
+        "openingQuestions": { "type": "array", "items": { "type": "string" } },
+        "params": {
+          "type": "object",
+          "properties": {
+            "frequency_penalty": { "type": "number", "default": 0 },
+            "max_tokens": { "type": "number" },
+            "presence_penalty": { "type": "number", "default": 0 },
+            "temperature": { "type": "number", "default": 0 },
+            "top_p": { "type": "number", "default": 1 }
+          },
+          "additionalProperties": false
+        },
+        "plugins": { "type": "array", "items": { "type": "string" } },
+        "systemRole": { "type": "string" }
+      },
+      "required": ["systemRole"],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "author",
+    "config",
+    "createdAt",
+    "homepage",
+    "identifier",
+    "knowledgeCount",
+    "meta",
+    "pluginCount",
+    "schemaVersion",
+    "tokenUsage"
+  ],
+  "additionalProperties": false
+}
