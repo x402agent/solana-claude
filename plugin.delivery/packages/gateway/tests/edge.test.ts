@@ -4,7 +4,7 @@ import {
   PluginRequestPayload,
   createHeadersWithPluginSettings,
 } from '@solana-clawd/chat-plugin-sdk';
-import { SPERAXOS_PLUGIN_SETTINGS } from '@solana-clawd/chat-plugin-sdk/lib/request';
+import { SOLANA-CLAWD_PLUGIN_SETTINGS } from '@solana-clawd/chat-plugin-sdk/lib/request';
 import { createGatewayOnEdgeRuntime } from '@solana-clawd/chat-plugins-gateway';
 // @ts-ignore
 import SwaggerClient from 'swagger-client';
@@ -133,7 +133,7 @@ describe('createGatewayOnEdgeRuntime', () => {
       const data = await response.json();
       expect(response.status).toBe(200);
       expect(data).toEqual({
-        headers: { [SPERAXOS_PLUGIN_SETTINGS]: JSON.stringify(config) },
+        headers: { [SOLANA-CLAWD_PLUGIN_SETTINGS]: JSON.stringify(config) },
       });
     });
   });

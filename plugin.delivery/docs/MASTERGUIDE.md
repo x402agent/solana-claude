@@ -1285,7 +1285,7 @@ You may not need to use PluginChannel , but if you want to use the underlying me
 
 Initialization
 pluginReadyForRender
-Literal:solana-clawdos:plugin-ready-for-render
+Literal:solana-clawd:plugin-ready-for-render
 Used to notify the solana-clawd host that the plugin is ready for rendering
 
 ts
@@ -1296,7 +1296,7 @@ INFO
 The main program will send information about the plugin through the renderPlugin channel after receiving this message
 
 initStandalonePlugin
-Literal:solana-clawdos:init-standalone-plugin
+Literal:solana-clawd:init-standalone-plugin
 For plugins of type standalone, notifies solana-clawd that the plugin has been initialized
 
 ts
@@ -1305,7 +1305,7 @@ import { PluginChannel } from '@solana-clawd/plugin-sdk';
 const channel = PluginChannel.initStandalonePlugin;
 Message Content Related
 fetchPluginMessage
-Literal:solana-clawdos:fetch-plugin-messag
+Literal:solana-clawd:fetch-plugin-messag
 Used for the plugin to initiate a message request to solana-clawd
 
 ts
@@ -1313,7 +1313,7 @@ import { PluginChannel } from '@solana-clawd/plugin-sdk';
 
 const channel = PluginChannel.fetchPluginMessage;
 renderPlugin
-Literal:solana-clawdos:render-plugin
+Literal:solana-clawd:render-plugin
 Used for the main program to send rendering instructions to the plugin.
 
 ts
@@ -1321,7 +1321,7 @@ import { PluginChannel } from '@solana-clawd/plugin-sdk';
 
 const channel = PluginChannel.pluginReadyForRender;
 fillStandalonePluginContent
-Literal:solana-clawdos:fill-plugin-content
+Literal:solana-clawd:fill-plugin-content
 Used to send plugin content to solana-clawd when the plugin is running independently
 
 ts
@@ -1330,7 +1330,7 @@ import { PluginChannel } from '@solana-clawd/plugin-sdk';
 const channel = PluginChannel.fillStandalonePluginContent;
 Plugin Runtime Related
 fetchPluginState
-Literal:solana-clawdos:fetch-plugin-state
+Literal:solana-clawd:fetch-plugin-state
 Used for the plugin to actively request plugin state information from solana-clawd
 
 ts
@@ -1338,7 +1338,7 @@ import { PluginChannel } from '@solana-clawd/plugin-sdk';
 
 const channel = PluginChannel.fetchPluginState;
 renderPluginState
-Literal:solana-clawdos:render-plugin-state
+Literal:solana-clawd:render-plugin-state
 Used for the main program to render plugin state to the plugin
 
 ts
@@ -1346,7 +1346,7 @@ import { PluginChannel } from '@solana-clawd/plugin-sdk';
 
 const channel = PluginChannel.renderPluginState;
 updatePluginState
-Literal:solana-clawdos:update-plugin-state
+Literal:solana-clawd:update-plugin-state
 Used for the plugin to send updated plugin state to solana-clawd
 
 ts
@@ -1355,7 +1355,7 @@ import { PluginChannel } from '@solana-clawd/plugin-sdk';
 const channel = PluginChannel.updatePluginState;
 Settings Related
 fetchPluginSettings
-Literal:solana-clawdos:fetch-plugin-settings
+Literal:solana-clawd:fetch-plugin-settings
 Used for the plugin to actively request plugin settings information from solana-clawd
 
 ts
@@ -1363,7 +1363,7 @@ import { PluginChannel } from '@solana-clawd/plugin-sdk';
 
 const channel = PluginChannel.fetchPluginSettings;
 renderPluginSettings
-Literal:solana-clawdos:render-plugin-settings
+Literal:solana-clawd:render-plugin-settings
 Used for the main program to render plugin settings to the plugin
 
 ts
@@ -1371,7 +1371,7 @@ import { PluginChannel } from '@solana-clawd/plugin-sdk';
 
 const channel = PluginChannel.renderPluginSettings;
 updatePluginSettings
-Literal:solana-clawdos:update-plugin-settings
+Literal:solana-clawd:update-plugin-settings
 Used for the plugin to send updated plugin settings to solana-clawd
 
 ts

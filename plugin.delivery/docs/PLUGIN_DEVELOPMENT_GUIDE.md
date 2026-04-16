@@ -177,7 +177,7 @@ Continue reading for detailed documentation on [Architecture Overview](#2-archit
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                              SPERAXOS CLIENT                                 │
+│                              SOLANA-CLAWD CLIENT                                 │
 │                                                                              │
 │  ┌────────────────┐    ┌────────────────┐    ┌────────────────┐            │
 │  │    Chat UI     │    │  Plugin Store  │    │  Agent Config  │            │

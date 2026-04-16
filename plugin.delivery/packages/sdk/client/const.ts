@@ -1,22 +1,22 @@
 export enum PluginChannel {
-  createAssistantMessage = 'solana-clawdos:create-assistant-message',
+  createAssistantMessage = 'solana-clawd:create-assistant-message',
 
-  fetchPluginMessage = 'solana-clawdos:fetch-plugin-message',
-  fetchPluginSettings = 'solana-clawdos:fetch-plugin-settings',
+  fetchPluginMessage = 'solana-clawd:fetch-plugin-message',
+  fetchPluginSettings = 'solana-clawd:fetch-plugin-settings',
 
-  fetchPluginState = 'solana-clawdos:fetch-plugin-state',
-  fillStandalonePluginContent = 'solana-clawdos:fill-plugin-content',
-  initStandalonePlugin = 'solana-clawdos:init-standalone-plugin',
+  fetchPluginState = 'solana-clawd:fetch-plugin-state',
+  fillStandalonePluginContent = 'solana-clawd:fill-plugin-content',
+  initStandalonePlugin = 'solana-clawd:init-standalone-plugin',
 
-  pluginReadyForRender = 'solana-clawdos:plugin-ready-for-render',
+  pluginReadyForRender = 'solana-clawd:plugin-ready-for-render',
 
-  renderPlugin = 'solana-clawdos:render-plugin',
-  renderPluginSettings = 'solana-clawdos:render-plugin-settings',
-  renderPluginState = 'solana-clawdos:render-plugin-state',
+  renderPlugin = 'solana-clawd:render-plugin',
+  renderPluginSettings = 'solana-clawd:render-plugin-settings',
+  renderPluginState = 'solana-clawd:render-plugin-state',
 
-  triggerAIMessage = 'solana-clawdos:trigger-ai-message',
+  triggerAIMessage = 'solana-clawd:trigger-ai-message',
 
-  updatePluginSettings = 'solana-clawdos:update-plugin-settings',
-  updatePluginState = 'solana-clawdos:update-plugin-state',
+  updatePluginSettings = 'solana-clawd:update-plugin-settings',
+  updatePluginState = 'solana-clawd:update-plugin-state',
 }
 

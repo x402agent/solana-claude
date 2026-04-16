@@ -482,32 +482,32 @@ For advanced use cases, here are the raw postMessage channels:
 
 | Channel | Direction | Description |
 |---------|-----------|-------------|
-| `solana-clawdos:plugin-ready-for-render` | Plugin → Host | Plugin is ready |
-| `solana-clawdos:init-standalone-plugin` | Plugin → Host | Standalone initialized |
-| `solana-clawdos:render-plugin` | Host → Plugin | Send render data |
+| `solana-clawd:plugin-ready-for-render` | Plugin → Host | Plugin is ready |
+| `solana-clawd:init-standalone-plugin` | Plugin → Host | Standalone initialized |
+| `solana-clawd:render-plugin` | Host → Plugin | Send render data |
 
 ### Message Channels
 
 | Channel | Direction | Description |
 |---------|-----------|-------------|
-| `solana-clawdos:fetch-plugin-message` | Plugin → Host | Request message |
-| `solana-clawdos:fill-plugin-content` | Plugin → Host | Update message |
+| `solana-clawd:fetch-plugin-message` | Plugin → Host | Request message |
+| `solana-clawd:fill-plugin-content` | Plugin → Host | Update message |
 
 ### State Channels
 
 | Channel | Direction | Description |
 |---------|-----------|-------------|
-| `solana-clawdos:fetch-plugin-state` | Plugin → Host | Request state |
-| `solana-clawdos:render-plugin-state` | Host → Plugin | Send state |
-| `solana-clawdos:update-plugin-state` | Plugin → Host | Update state |
+| `solana-clawd:fetch-plugin-state` | Plugin → Host | Request state |
+| `solana-clawd:render-plugin-state` | Host → Plugin | Send state |
+| `solana-clawd:update-plugin-state` | Plugin → Host | Update state |
 
 ### Settings Channels
 
 | Channel | Direction | Description |
 |---------|-----------|-------------|
-| `solana-clawdos:fetch-plugin-settings` | Plugin → Host | Request settings |
-| `solana-clawdos:render-plugin-settings` | Host → Plugin | Send settings |
-| `solana-clawdos:update-plugin-settings` | Plugin → Host | Update settings |
+| `solana-clawd:fetch-plugin-settings` | Plugin → Host | Request settings |
+| `solana-clawd:render-plugin-settings` | Host → Plugin | Send settings |
+| `solana-clawd:update-plugin-settings` | Plugin → Host | Update settings |
 
 ### Example: Raw postMessage
 
@@ -515,13 +515,13 @@ For advanced use cases, here are the raw postMessage channels:
 // Usually you don't need this - use the SDK instead
 window.parent.postMessage(
   {
-    type: 'solana-clawdos:plugin-ready-for-render',
+    type: 'solana-clawd:plugin-ready-for-render',
   },
   '*'
 );
 
 window.addEventListener('message', (event) => {
-  if (event.data.type === 'solana-clawdos:render-plugin') {
+  if (event.data.type === 'solana-clawd:render-plugin') {
     const pluginData = event.data.payload;
     // Handle the data
   }

@@ -262,7 +262,7 @@ export default function PortfolioDisplay() {
 pnpm install
 
 # Start development server with debug mode
-DEBUG=solana-clawdos:* bun run dev
+DEBUG=solana-clawd:* bun run dev
 
 # Run type checking
 bun run type-check

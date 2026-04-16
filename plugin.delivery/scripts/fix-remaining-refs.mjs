@@ -1,11 +1,10 @@
 #!/usr/bin/env node
-// Second-pass fix for camelCase identifiers that were mangled by the initial
-// `Sperax` → `solana-clawd` rebrand. Converts `solana-clawd<Suffix>` tokens
-// (and similar) back into valid PascalCase identifiers `SolanaClawd<Suffix>`.
+// Final-pass cleanup: fix uppercase SOLANA-CLAWD and lingering `solana-clawd`
+// fragments left by prior passes.
 //
-// Run: node scripts/fix-camelcase-identifiers.mjs
+// Run: node scripts/fix-remaining-refs.mjs
 
-import { readdir, readFile, writeFile } from 'node:fs/promises';
+import { readdir, readFile, writeFile, stat } from 'node:fs/promises';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -18,24 +17,17 @@ const SWEEP_FILES = ['README.md', 'README.zh-CN.md', 'package.json', 'AGENTS.md'
 const SKIP_EXT = new Set(['.png', '.jpg', '.jpeg', '.gif', '.svg', '.ico', '.webp', '.pdf', '.lock', '.woff', '.woff2', '.ttf', '.eot']);
 const SKIP_DIR_PARTS = new Set(['node_modules', '.git', 'dist', 'build', '.vercel', '.next', '.turbo']);
 
-// Fix `solana-clawd<Word>` (camelCase junction) → `SolanaClawd<Word>`
-// We only match when followed by an uppercase letter or digit so we do not
-// accidentally rewrite ordinary prose or valid hyphenated names like
-// `solana-clawd-terminal`.
-const CAMEL_JUNCTION = /solana-clawd(?=[A-Z0-9])/g;
-
-// Fix the leading-lowercase camelCase compounds:
-//   `createSolanaClawdXxx` → `createSolanaClawdXxx`
-// These come from `createSperaxXxx`. We match common prefixes.
-const LOWER_JUNCTION = /\b(create|get|set|use|new|init|make|build|is|has)solana-clawd(?=[A-Z0-9])/g;
-
-// Known Sperax-derived host/URL fragments that became invalid after replacement.
-// e.g. `solana-clawd.vercel.app` (from SperaxOS.vercel.app) → pick a canonical
-// solana-clawd host. We target the lowercase compound explicitly.
-const HOST_FIXES = [
-  [/solana-clawd\.vercel\.app/g, 'solana-clawd.vercel.app'],
-  [/SolanaClawdOs/g, 'SolanaClawdOs'],
-  [/SolanaClawdOS/g, 'SolanaClawdOS'],
+const REPLACEMENTS = [
+  // uppercase literal in ASCII art / headers
+  [/SOLANA-CLAWD/g, 'SOLANA-CLAWD'],
+  // URL schemes and event-type prefixes
+  [/solana-clawd:\/\//g, 'solana-clawd://'],
+  [/solana-clawd:([a-z])/g, 'solana-clawd:$1'],
+  // plugin index package name
+  [/solana-clawd-plugins/g, 'solana-clawd-plugins'],
+  [/solana-clawd-plugin/g, 'solana-clawd-plugin'],
+  // standalone lowercase "os" fragments (anchor refs, prose)
+  [/solana-clawd/g, 'solana-clawd'],
 ];
 
 async function walk(dir, out) {
@@ -59,22 +51,12 @@ async function walk(dir, out) {
   }
 }
 
-function fixContent(content) {
-  let next = content;
-  for (const [pattern, replacement] of HOST_FIXES) {
-    next = next.replace(pattern, replacement);
-  }
-  next = next.replace(LOWER_JUNCTION, (_, verb) => `${verb}SolanaClawd`);
-  next = next.replace(CAMEL_JUNCTION, 'SolanaClawd');
-  return next;
-}
-
 async function main() {
   const files = [];
   for (const d of SWEEP_DIRS) await walk(join(ROOT, d), files);
   for (const f of SWEEP_FILES) {
     try {
-      await (await import('node:fs/promises')).stat(join(ROOT, f));
+      await stat(join(ROOT, f));
       files.push(join(ROOT, f));
     } catch {}
   }
@@ -87,13 +69,16 @@ async function main() {
     } catch {
       continue;
     }
-    const next = fixContent(content);
+    let next = content;
+    for (const [pattern, replacement] of REPLACEMENTS) {
+      next = next.replace(pattern, replacement);
+    }
     if (next !== content) {
       await writeFile(file, next, 'utf8');
       changed += 1;
     }
   }
-  console.log(`Fixed camelCase identifiers in ${changed} files (scanned ${files.length})`);
+  console.log(`Final pass: fixed ${changed} files (scanned ${files.length})`);
 }
 
 main().catch((err) => {

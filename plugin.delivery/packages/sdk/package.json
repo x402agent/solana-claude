@@ -4,7 +4,7 @@
   "description": "solana-clawd Plugin SDK - Build plugins for solana-clawd",
   "keywords": [
     "solana-clawd",
-    "solana-clawdos",
+    "solana-clawd",
     "sdk",
     "plugin",
     "chat-plugin"

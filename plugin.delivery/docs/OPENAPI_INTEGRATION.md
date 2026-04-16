@@ -5,12 +5,12 @@ Use OpenAPI specifications to define your plugin's API without writing manual de
 ## Table of Contents
 
 - [Overview](#overview)
-- [solana-clawd Plugin Compatibility](#solana-clawdos-plugin-compatibility)
+- [solana-clawd Plugin Compatibility](#solana-clawd-plugin-compatibility)
 - [OpenAPI Specification](#openapi-specification)
 - [Creating an OpenAPI Spec](#creating-an-openapi-spec)
 - [Manifest Configuration](#manifest-configuration)
 - [OpenAPI Requirements](#openapi-requirements)
-- [Integrating OpenAPI with solana-clawd](#integrating-openapi-with-solana-clawdos)
+- [Integrating OpenAPI with solana-clawd](#integrating-openapi-with-solana-clawd)
 - [Examples](#examples)
 - [Converting Existing APIs](#converting-existing-apis)
 - [Troubleshooting](#troubleshooting)

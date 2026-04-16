@@ -582,32 +582,32 @@ import { PluginChannel } from '@solana-clawd/plugin-sdk';
 
 | Channel | Literal | Description |
 |---------|---------|-------------|
-| `pluginReadyForRender` | `solana-clawdos:plugin-ready-for-render` | Plugin is ready for rendering |
-| `initStandalonePlugin` | `solana-clawdos:init-standalone-plugin` | Initialize standalone plugin |
+| `pluginReadyForRender` | `solana-clawd:plugin-ready-for-render` | Plugin is ready for rendering |
+| `initStandalonePlugin` | `solana-clawd:init-standalone-plugin` | Initialize standalone plugin |
 
 ### Messages
 
 | Channel | Literal | Description |
 |---------|---------|-------------|
-| `fetchPluginMessage` | `solana-clawdos:fetch-plugin-message` | Request message content |
-| `renderPlugin` | `solana-clawdos:render-plugin` | Render plugin instruction |
-| `fillStandalonePluginContent` | `solana-clawdos:fill-plugin-content` | Fill standalone plugin content |
+| `fetchPluginMessage` | `solana-clawd:fetch-plugin-message` | Request message content |
+| `renderPlugin` | `solana-clawd:render-plugin` | Render plugin instruction |
+| `fillStandalonePluginContent` | `solana-clawd:fill-plugin-content` | Fill standalone plugin content |
 
 ### State
 
 | Channel | Literal | Description |
 |---------|---------|-------------|
-| `fetchPluginState` | `solana-clawdos:fetch-plugin-state` | Request plugin state |
-| `renderPluginState` | `solana-clawdos:render-plugin-state` | Render plugin state |
-| `updatePluginState` | `solana-clawdos:update-plugin-state` | Update plugin state |
+| `fetchPluginState` | `solana-clawd:fetch-plugin-state` | Request plugin state |
+| `renderPluginState` | `solana-clawd:render-plugin-state` | Render plugin state |
+| `updatePluginState` | `solana-clawd:update-plugin-state` | Update plugin state |
 
 ### Settings
 
 | Channel | Literal | Description |
 |---------|---------|-------------|
-| `fetchPluginSettings` | `solana-clawdos:fetch-plugin-settings` | Request plugin settings |
-| `renderPluginSettings` | `solana-clawdos:render-plugin-settings` | Render plugin settings |
-| `updatePluginSettings` | `solana-clawdos:update-plugin-settings` | Update plugin settings |
+| `fetchPluginSettings` | `solana-clawd:fetch-plugin-settings` | Request plugin settings |
+| `renderPluginSettings` | `solana-clawd:render-plugin-settings` | Render plugin settings |
+| `updatePluginSettings` | `solana-clawd:update-plugin-settings` | Update plugin settings |
 
 ---
 

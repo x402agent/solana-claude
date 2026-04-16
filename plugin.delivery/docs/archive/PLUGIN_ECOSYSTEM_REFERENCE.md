@@ -191,12 +191,12 @@ User Request → LLM → Tool Call → MCP Client → MCP Server (STDIO/HTTP) �
 
 **Legacy Plugin:**
 ```
-solana-clawdos://plugin/install?type=plugin&manifest=https://...
+solana-clawd://plugin/install?type=plugin&manifest=https://...
 ```
 
 **MCP Plugin:**
 ```
-solana-clawdos://plugin/install?type=mcp&id=brave-search&schema=<base64>
+solana-clawd://plugin/install?type=mcp&id=brave-search&schema=<base64>
 ```
 
 ---

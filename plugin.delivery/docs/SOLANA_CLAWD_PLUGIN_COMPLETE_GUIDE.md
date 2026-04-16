@@ -45,7 +45,7 @@ For developing **external plugins** deployed to the solana-clawd Plugin Marketpl
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
-│                            SPERAXOS                                      │
+│                            SOLANA-CLAWD                                      │
 │                                                                          │
 │  ┌────────────┐  ┌────────────┐  ┌────────────┐  ┌────────────┐        │
 │  │   /chat    │  │ /portfolio │  │   /embed   │  │    /api    │        │
@@ -106,7 +106,7 @@ User Message: "Show my portfolio"
 |------------|---------|-------------|------------|
 | **[plugin-sdk](https://github.com/x402agent/solana-clawd)** | SDK for building plugins | `@x402agent/plugin-sdk` | 🔴 Critical |
 | **[chat-plugins-gateway](https://github.com/x402agent/solana-clawd)** | Proxy between solana-clawd and plugins | `@x402agent/chat-plugins-gateway` | 🔴 Critical |
-| **[solana-clawdos-plugins](https://github.com/x402agent/solana-clawd)** | Plugin marketplace index | - | 🟡 Medium |
+| **[solana-clawd-plugins](https://github.com/x402agent/solana-clawd)** | Plugin marketplace index | - | 🟡 Medium |
 | **[openai-plugins](https://github.com/x402agent/solana-clawd)** | ChatGPT plugin compatibility | - | 🟢 Low |
 
 ### Example Plugin Repositories

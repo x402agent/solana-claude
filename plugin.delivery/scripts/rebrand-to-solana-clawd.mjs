@@ -26,8 +26,11 @@ const SKIP_DIR_PARTS = new Set(['node_modules', '.git', 'dist', 'build', '.verce
 // Replacement pairs — ordered: most specific first, then generic.
 const TEXT_REPLACEMENTS = [
   [/SOLANA_CLAWD_PLUGIN_COMPLETE_GUIDE/g, 'SOLANA_CLAWD_PLUGIN_COMPLETE_GUIDE'],
+  [/https:\/\/github\.com\/solana-clawd\/[a-zA-Z0-9_.\/-]+/g, 'https://github.com/x402agent/solana-clawd'],
+  [/https:\/\/github\.com\/solana-clawd/g, 'https://github.com/x402agent/solana-clawd'],
   [/https:\/\/github\.com\/x402agent\/plugin\.delivery(\.git)?/g, 'https://github.com/x402agent/solana-clawd$1'],
   [/https:\/\/github\.com\/x402agent\/pump-fun-sdk(\.git)?/g, 'https://github.com/x402agent/solana-clawd$1'],
+  [/https:\/\/github\.com\/YOUR_USERNAME\/plugin\.delivery\.git/g, 'https://github.com/x402agent/solana-clawd.git'],
   [/github\.com\/x402agent\/[a-zA-Z0-9_.-]+/g, 'github.com/x402agent/solana-clawd'],
   [/github\.com\/x402agent\/[a-zA-Z0-9_.-]+/g, 'github.com/x402agent/solana-clawd'],
   [/x402agent/g, 'x402agent'],
@@ -150,7 +153,7 @@ async function phaseTwoTextSweep() {
   console.log(`Phase 2: scanned ${scanned} files, rewrote ${changed}`);
 }
 
-// ---------- Phase 3: rename SPERAXOS_* docs ----------
+// ---------- Phase 3: rename SOLANA-CLAWD_* docs ----------
 
 async function phaseThreeRenames() {
   const docs = join(ROOT, 'docs');
@@ -158,8 +161,8 @@ async function phaseThreeRenames() {
   try {
     const entries = await readdir(docs);
     for (const name of entries) {
-      if (name.includes('SPERAXOS')) {
-        const next = name.replace(/SPERAXOS/g, 'SOLANA_CLAWD');
+      if (name.includes('SOLANA-CLAWD')) {
+        const next = name.replace(/SOLANA-CLAWD/g, 'SOLANA_CLAWD');
         await rename(join(docs, name), join(docs, next));
         renamed += 1;
       }
