@@ -1,6 +1,28 @@
 # Clawd 🤖 DeFi Agents API - AI Agent Definitions for Web3
 
-> **42 production-ready AI agent definitions for DeFi, portfolio management, trading, and Web3 workflows. RESTful JSON API with 18-language support.**
+> **43 production-ready AI agent definitions for DeFi, portfolio management, trading, and Web3 workflows. Every agent is CLAWD-themed with SOUL + skill integration. RESTful JSON API with 18-language support.**
+
+## 🔗 solana-clawd Ecosystem
+
+| Surface | URL | Status |
+| --- | --- | --- |
+| **Agents** | [solanaclawd.com/agents](https://solanaclawd.com/agents) | live |
+| **Terminal** | [solanaclawd.com/terminal](https://solanaclawd.com/terminal) | drops today |
+| **Studio (Vibe)** | [vibe.solanaclawd.com](https://vibe.solanaclawd.com) | live for holders |
+| **DEX** | [dex.solanaclawd.com](https://dex.solanaclawd.com) | live |
+| **Telegram** | [t.me/clawdtoken](https://t.me/clawdtoken) | live |
+| **Solana OS Hub** | [solanaos.net](https://solanaos.net) | live |
+| **Mobile (Seeker)** | [seeker.solanaos.net](https://seeker.solanaos.net) | live |
+
+## 🆕 What's New
+
+- **CLAWD SOUL + skill preamble** wired into every agent's `systemRole` (43 agents) — memory tiers (`KNOWN` / `LEARNED` / `INFERRED`), deny-first permissions, and skill integration with `STRATEGY.md` (multi-venue framework), `TRADE.md` (Pump.fun tactics), and the CLAWD risk + permission engines.
+- **CLAWD output contract** appended to every agent — tier-labeled data points, route trades through the permission engine, stay in character as a solana-clawd specialist.
+- **Author/homepage rebrand** — all agents now point at the [solana-clawd repo](https://github.com/x402agent/solana-clawd) with `clawd` and `solana-clawd` tags.
+- **`plugin.delivery` rebranded** — 48 plugin schemas themed as solana-clawd integrations, broken camelCase identifiers (`SperaxPluginManifest` → `SolanaClawdPluginManifest`) repaired, HTTP header renamed to `X-Solana-Clawd-Plugin-Settings`.
+- **Idempotent theming scripts** — re-apply any time: `node agents/scripts/commands/apply-clawd-theme.mjs`, `node plugin.delivery/scripts/rebrand-to-solana-clawd.mjs`.
+
+---
 
 A comprehensive, discoverable API hosting specialized AI agent schemas with universal compatibility. Works with any AI platform, LLM, or chatbot that supports agent indexes — no vendor lock-in, no platform restrictions. Perfect for developers, LLMs, and AI systems building Web3 applications.
 
