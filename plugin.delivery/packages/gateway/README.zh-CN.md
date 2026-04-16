@@ -3,12 +3,14 @@
 <div align="center">
 
 
-<h1>solana-clawd 插件网关</h1>
+<h1>@solana-clawd/chat-plugins-gateway</h1>
 
-solana-clawd Plugin Delivery 是一个为 solana-clawd 和 solana-clawd 提供 Chat 插件网关的后端服务。
-
+solana-clawd 生态的边缘运行时插件网关 —— 解析 [plugin.delivery](https://plugin.delivery) 清单、按 JSON Schema 校验参数、执行 CLAWD 拒绝优先的权限控制，再转发到插件 OpenAPI 并把结果流式返回给 CLAWD 智能体。
 
 [English](./README.md) · **简体中文** ·
+
+[🏠 生态](https://solanaclawd.com/agents) · [💻 终端](https://solanaclawd.com/terminal) · [🎨 Studio](https://vibe.solanaclawd.com) · [💱 DEX](https://dex.solanaclawd.com) · [📲 Telegram](https://t.me/clawdtoken) · [📱 移动端](https://seeker.solanaos.net)
+
 </div>
 
 <details>
