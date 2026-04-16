@@ -61,3 +61,16 @@ beepboop
 tailclaude-ui/
 tailclaude-main/
 web
+web/
+**/web/
+
+# Source — do not publish
+src/
+**/src/
+
+# Explicit env template exclusion
+.env.example
+**/.env.example
+
+# Ignore the gitignore itself
+.gitignore
