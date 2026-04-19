@@ -62,7 +62,7 @@
   "dependencies": {
     "@ai-sdk/xai": "^1.2.0",
     "@anthropic-ai/sdk": "^0.39.0",
-    "ai": "^4.3.0",
+    "ai": "^5.0.52",
     "openai": "^4.80.0",
     "@cloudflare/sandbox": "^0.8.4",
     "@commander-js/extra-typings": "^13.1.0",
@@ -94,7 +94,7 @@
     "chokidar": "^4.0.0",
     "cli-boxes": "^3.0.0",
     "code-excerpt": "^4.0.0",
-    "diff": "^7.0.0",
+    "diff": "^8.0.3",
     "ethers": "^6.13.0",
     "execa": "^9.5.0",
     "express": "^4.21.0",
@@ -154,7 +154,7 @@
     "@types/semver": "^7.5.8",
     "@types/stack-utils": "^2.0.3",
     "@types/ws": "^8.5.0",
-    "esbuild": "^0.25.0",
+    "esbuild": "^0.26.0",
     "https-proxy-agent": "^9.0.0",
     "lru-cache": "^11.3.2",
     "typescript": "^5.8.3"
