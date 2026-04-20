@@ -49,7 +49,7 @@
   },
   "optionalDependencies": {
     "e2b": "^1.0.0",
-    "wrangler": "^3.80.0"
+    "wrangler": "^4.83.0"
   },
   "devDependencies": {
     "@types/express": "^5.0.0",
