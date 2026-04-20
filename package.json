@@ -154,7 +154,7 @@
     "@types/semver": "^7.5.8",
     "@types/stack-utils": "^2.0.3",
     "@types/ws": "^8.5.0",
-    "esbuild": "^0.26.0",
+    "esbuild": "^0.27.0",
     "https-proxy-agent": "^9.0.0",
     "lru-cache": "^11.3.2",
     "typescript": "^5.8.3"
