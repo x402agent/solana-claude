@@ -1,0 +1,12 @@
+torch>=2.1.0
+transformers>=4.40.0
+peft>=0.10.0
+datasets>=2.18.0
+bitsandbytes>=0.43.0
+accelerate>=0.28.0
+trl>=0.8.0
+sentencepiece>=0.2.0
+protobuf>=4.25.0
+scipy>=1.12.0
+llama-cpp-python>=0.2.0
+huggingface-hub>=0.22.0

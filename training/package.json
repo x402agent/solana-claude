@@ -1,0 +1,20 @@
+{
+  "name": "solana-clawd-training",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "GGUF training data extraction and model pipeline for Solana CLAWD trading agents",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "extract": "node dist/extract-dataset.js",
+    "extract:all": "node dist/extract-dataset.js --all",
+    "validate": "node dist/validate-dataset.js"
+  },
+  "dependencies": {
+    "zod": "^3.24.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3",
+    "@types/node": "^22.14.0"
+  }
+}

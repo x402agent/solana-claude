@@ -48,6 +48,7 @@ ${BANNER}
     ${c.cyan}wallet${c.reset}             Show buddy wallet & PnL
     ${c.cyan}species${c.reset}            List all available species
     ${c.cyan}start${c.reset}              Launch the full agentic engine
+    ${c.cyan}train${c.reset}  [subcmd]     GGUF training pipeline (extract/finetune/export/serve)
 
   ${c.bold}Flags:${c.reset}
 
@@ -112,6 +113,179 @@ async function runBirth(species?: string): Promise<void> {
   await birthCeremony(validSpecies as any)
 }
 
+async function runTrain(args: string[]): Promise<void> {
+  const { execSync, spawn } = await import('node:child_process')
+  const { resolve, dirname } = await import('node:path')
+  const { fileURLToPath } = await import('node:url')
+
+  const __fn = fileURLToPath(import.meta.url)
+  const trainingDir = resolve(dirname(__fn), '..', '..', 'training')
+
+  const subcmd = args[0] ?? 'help'
+
+  const TRAIN_HELP = `
+${BANNER}
+  ${c.bold}Training Pipeline — GGUF Model Training for Solana AI Agents${c.reset}
+
+  ${c.bold}Subcommands:${c.reset}
+
+    ${c.cyan}extract${c.reset}              Extract training data from codebase → JSONL
+    ${c.cyan}extract --validate${c.reset}   Dry-run: show stats without writing files
+    ${c.cyan}extract --all${c.reset}        Include synthetic multi-turn scenarios
+    ${c.cyan}validate${c.reset}             Validate extracted dataset files
+    ${c.cyan}finetune${c.reset}             Fine-tune base model with LoRA
+    ${c.cyan}merge${c.reset}                Merge LoRA adapters into base model
+    ${c.cyan}export${c.reset}               Convert merged model to GGUF format
+    ${c.cyan}serve${c.reset}                Start OpenRouter-compatible inference server
+    ${c.cyan}status${c.reset}               Show pipeline status
+
+  ${c.bold}Full pipeline:${c.reset}
+
+    ${c.green}npx solana-clawd train extract --all${c.reset}
+    ${c.green}npx solana-clawd train finetune --preset llama3${c.reset}
+    ${c.green}npx solana-clawd train merge${c.reset}
+    ${c.green}npx solana-clawd train export --quantize Q4_K_M${c.reset}
+    ${c.green}npx solana-clawd train serve${c.reset}
+
+  ${c.dim}See training/README.md for full documentation${c.reset}
+`
+
+  switch (subcmd) {
+    case 'help':
+    case '--help':
+    case '-h':
+      console.log(TRAIN_HELP)
+      break
+
+    case 'extract': {
+      console.log(`\n  ${c.cyan}Building extraction pipeline...${c.reset}\n`)
+      try {
+        execSync('npx tsc -p tsconfig.json', { cwd: resolve(trainingDir), stdio: 'inherit' })
+      } catch { /* type errors are non-fatal, tsc still emits */ }
+      const extractArgs = args.slice(1).join(' ')
+      const child = spawn('node', [`dist/extract-dataset.js`, ...args.slice(1)], {
+        cwd: trainingDir,
+        stdio: 'inherit',
+      })
+      child.on('close', code => process.exit(code ?? 0))
+      break
+    }
+
+    case 'validate': {
+      try {
+        execSync('npx tsc -p tsconfig.json', { cwd: resolve(trainingDir), stdio: 'ignore' })
+      } catch { /* non-fatal */ }
+      const child = spawn('node', ['dist/validate-dataset.js'], {
+        cwd: trainingDir,
+        stdio: 'inherit',
+      })
+      child.on('close', code => process.exit(code ?? 0))
+      break
+    }
+
+    case 'finetune':
+    case 'ft': {
+      const scriptPath = resolve(trainingDir, 'scripts', 'train.py')
+      const pyArgs = args.slice(1)
+      if (pyArgs.length === 0) pyArgs.push('--preset', 'llama3')
+      const child = spawn('python3', [scriptPath, ...pyArgs], {
+        cwd: trainingDir,
+        stdio: 'inherit',
+      })
+      child.on('close', code => process.exit(code ?? 0))
+      break
+    }
+
+    case 'merge': {
+      const scriptPath = resolve(trainingDir, 'scripts', 'merge_lora.py')
+      const child = spawn('python3', [scriptPath, ...args.slice(1)], {
+        cwd: trainingDir,
+        stdio: 'inherit',
+      })
+      child.on('close', code => process.exit(code ?? 0))
+      break
+    }
+
+    case 'export':
+    case 'gguf': {
+      const scriptPath = resolve(trainingDir, 'scripts', 'to_gguf.py')
+      const child = spawn('python3', [scriptPath, ...args.slice(1)], {
+        cwd: trainingDir,
+        stdio: 'inherit',
+      })
+      child.on('close', code => process.exit(code ?? 0))
+      break
+    }
+
+    case 'serve': {
+      const serverDir = resolve(trainingDir, 'openrouter')
+      console.log(`\n  ${c.cyan}Starting OpenRouter provider server...${c.reset}\n`)
+      const child = spawn('node', ['--loader', 'ts-node/esm', 'server.ts'], {
+        cwd: serverDir,
+        stdio: 'inherit',
+        env: { ...process.env },
+      })
+      child.on('close', code => process.exit(code ?? 0))
+      break
+    }
+
+    case 'status': {
+      const { existsSync, readdirSync, statSync } = await import('node:fs')
+      console.log(`\n  ${c.bold}$CLAWD Training Pipeline Status${c.reset}\n`)
+
+      // Check datasets
+      const dataDir = resolve(trainingDir, 'data')
+      if (existsSync(resolve(dataDir, 'train.jsonl'))) {
+        const stat = statSync(resolve(dataDir, 'train.jsonl'))
+        console.log(`  ${c.green}✔${c.reset} Dataset extracted (${(stat.size / 1024).toFixed(0)} KB)`)
+        for (const f of ['train.jsonl', 'val.jsonl', 'test.jsonl']) {
+          if (existsSync(resolve(dataDir, f))) {
+            const s = statSync(resolve(dataDir, f))
+            console.log(`    ${f.padEnd(16)} ${(s.size / 1024).toFixed(0)} KB`)
+          }
+        }
+      } else {
+        console.log(`  ${c.yellow}○${c.reset} Dataset not yet extracted`)
+        console.log(`    Run: ${c.cyan}npx solana-clawd train extract --all${c.reset}`)
+      }
+
+      // Check checkpoints
+      const cpDir = resolve(trainingDir, 'checkpoints')
+      if (existsSync(cpDir) && readdirSync(cpDir).length > 0) {
+        console.log(`  ${c.green}✔${c.reset} Checkpoints found`)
+      } else {
+        console.log(`  ${c.yellow}○${c.reset} No training checkpoints`)
+      }
+
+      // Check models
+      const modelsDir = resolve(trainingDir, 'models')
+      if (existsSync(modelsDir)) {
+        const ggufFiles = existsSync(resolve(modelsDir, 'gguf'))
+          ? readdirSync(resolve(modelsDir, 'gguf')).filter(f => f.endsWith('.gguf'))
+          : []
+        if (ggufFiles.length > 0) {
+          console.log(`  ${c.green}✔${c.reset} GGUF models exported:`)
+          for (const f of ggufFiles) {
+            const s = statSync(resolve(modelsDir, 'gguf', f))
+            console.log(`    ${f.padEnd(30)} ${(s.size / (1024 * 1024)).toFixed(0)} MB`)
+          }
+        } else {
+          console.log(`  ${c.yellow}○${c.reset} No GGUF models exported`)
+        }
+      } else {
+        console.log(`  ${c.yellow}○${c.reset} No models directory`)
+      }
+      console.log()
+      break
+    }
+
+    default:
+      console.log(`  ${c.red}Unknown train subcommand: ${subcmd}${c.reset}`)
+      console.log(TRAIN_HELP)
+      process.exit(1)
+  }
+}
+
 async function runDemo(): Promise<void> {
   const { createClawdSpinner } = await import('../animations/spinner.js')
 
@@ -171,6 +345,10 @@ async function main(): Promise<void> {
       break
     case 'demo':
       await runDemo()
+      break
+    case 'train':
+    case 'finetune':
+      await runTrain(args.slice(1))
       break
     case 'start':
     case 'run':

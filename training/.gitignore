@@ -1,0 +1,9 @@
+data/
+checkpoints/
+models/
+dist/
+node_modules/
+*.gguf
+__pycache__/
+*.pyc
+.venv/

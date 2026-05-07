@@ -1,0 +1,28 @@
+{
+  "name": "solana-clawd-provider",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "OpenRouter-compatible inference server for Solana CLAWD GGUF models",
+  "main": "dist/server.js",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/server.js",
+    "dev": "node --loader ts-node/esm server.ts"
+  },
+  "dependencies": {
+    "express": "^4.21.0",
+    "cors": "^2.8.5",
+    "node-llama-cpp": "^3.0.0",
+    "zod": "^3.24.0",
+    "uuid": "^10.0.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/cors": "^2.8.17",
+    "@types/uuid": "^10.0.0",
+    "@types/node": "^22.14.0",
+    "typescript": "^5.8.3",
+    "ts-node": "^10.9.0"
+  }
+}
