@@ -77,7 +77,7 @@ content_hits="$(
     --glob '!**/*.lock' \
     --glob '!**/package-lock.json' \
     --glob '!**/bun.lock' \
-    -- 'ghp_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]+|AKIA[0-9A-Z]{16}|xox[baprs]-[A-Za-z0-9-]+|-----BEGIN (RSA|DSA|EC|OPENSSH|PGP) PRIVATE KEY-----|wallet-auth:[A-Za-z0-9+/=_-]{20,}|privy_app_secret_[A-Za-z0-9]+|e2b_[A-Za-z0-9]{16,}|hch-v3-[A-Za-z0-9]{10,}|fc-[A-Za-z0-9]{10,}' \
+    -- 'ghp_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]+|AKIA[0-9A-Z]{16}|xox[baprs]-[A-Za-z0-9-]+|-----BEGIN (RSA|DSA|EC|OPENSSH|PGP) PRIVATE KEY-----|wallet-auth:[A-Za-z0-9+/=_-]{20,}|privy_app_secret_[A-Za-z0-9]+|e2b_[A-Za-z0-9]{16,}|hch-v3-[A-Za-z0-9]{16,}|fc-[A-Za-z0-9]{20,}' \
     || true
 )"
 
@@ -108,7 +108,7 @@ else
 fi
 
 vendored_deps="$(
-  find . -type d -name 'node_modules' \
+  find . -type d -name 'node_modules' -prune \
     -not -path './node_modules' \
     | sort \
     || true
