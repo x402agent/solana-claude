@@ -52,7 +52,7 @@
         "release": "npm run clean && npm run build"
     },
     "dependencies": {
-        "@solana/plugin-interfaces": "^6.5.0",
+        "@solana/plugin-interfaces": "^6.9.0",
         "@solana/qr-code-styling": "^1.6.0"
     },
     "peerDependencies": {
