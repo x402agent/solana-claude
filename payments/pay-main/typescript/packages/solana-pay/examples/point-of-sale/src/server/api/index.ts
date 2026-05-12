@@ -12,6 +12,7 @@ import {
 } from '@solana/kit';
 import { NextApiHandler } from 'next';
 import { rpc } from '../core';
+import { getMerchantCatalog, getMerchantProduct } from '../core/catalog';
 import { cors, rateLimit } from '../middleware';
 
 interface GetResponse {
@@ -20,9 +21,13 @@ interface GetResponse {
 }
 
 const get: NextApiHandler<GetResponse> = async (request, response) => {
-    const label = request.query.label;
-    if (!label) throw new Error('missing label');
-    if (typeof label !== 'string') throw new Error('invalid label');
+    const itemField = request.query.item;
+    if (itemField && typeof itemField !== 'string') throw new Error('invalid item');
+
+    const product = getMerchantProduct(itemField);
+    const labelField = request.query.label;
+    const fallbackLabel = product ? `${product.title} · OpenClawd` : getMerchantCatalog().merchant.name;
+    const label = typeof labelField === 'string' ? labelField : fallbackLabel;
 
     const icon = `https://${request.headers.host}/solana-pay-logo.svg`;
 
@@ -38,19 +43,32 @@ interface PostResponse {
 }
 
 const post: NextApiHandler<PostResponse> = async (request, response) => {
-    const recipientField = request.query.recipient;
+    const catalog = getMerchantCatalog();
+    const recipientField =
+        typeof request.query.recipient === 'string'
+            ? request.query.recipient
+            : process.env.POS_RECIPIENT || process.env.MERCHANT_RECIPIENT;
     if (!recipientField) throw new Error('missing recipient');
-    if (typeof recipientField !== 'string') throw new Error('invalid recipient');
     const recipient = address(recipientField);
 
-    const amountField = request.query.amount;
+    const itemField = request.query.item;
+    if (itemField && typeof itemField !== 'string') throw new Error('invalid item');
+    const product = getMerchantProduct(itemField);
+
+    const amountField =
+        typeof request.query.amount === 'string'
+            ? request.query.amount
+            : product?.price.amount;
     if (!amountField) throw new Error('missing amount');
-    if (typeof amountField !== 'string') throw new Error('invalid amount');
     const amount = parseFloat(amountField);
 
     const splTokenField = request.query['spl-token'];
     if (splTokenField && typeof splTokenField !== 'string') throw new Error('invalid spl-token');
-    const splToken: Address | undefined = splTokenField ? address(splTokenField) : undefined;
+    const splToken: Address | undefined = splTokenField
+        ? address(splTokenField)
+        : catalog.products[0]
+            ? address('EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v')
+            : undefined;
 
     const referenceField = request.query.reference;
     if (!referenceField) throw new Error('missing reference');
@@ -59,11 +77,13 @@ const post: NextApiHandler<PostResponse> = async (request, response) => {
 
     const memoParam = request.query.memo;
     if (memoParam && typeof memoParam !== 'string') throw new Error('invalid memo');
-    const memo = memoParam || undefined;
+    const memo = memoParam || (product ? `openclawd:${product.id}` : undefined);
 
     const messageParam = request.query.message;
     if (messageParam && typeof messageParam !== 'string') throw new Error('invalid message');
-    const message = messageParam || undefined;
+    const message =
+        messageParam ||
+        (product ? `OpenClawd checkout for ${product.title}` : 'OpenClawd agentic commerce settlement');
 
     const accountField = request.body?.account;
     if (!accountField) throw new Error('missing account');

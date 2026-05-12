@@ -27,7 +27,7 @@ import { useConfig } from '../../hooks/useConfig';
 import { useNavigateWithQuery } from '../../hooks/useNavigateWithQuery';
 import { PaymentContext, PaymentStatus } from '../../hooks/usePayment';
 import { Confirmations } from '../../types';
-import { DEVNET_ENDPOINT } from '../../utils/constants';
+import { MAINNET_ENDPOINT } from '../../utils/constants';
 
 export interface PaymentProviderProps {
     children: ReactNode;
@@ -39,7 +39,7 @@ export const PaymentProvider: FC<PaymentProviderProps> = ({ children }) => {
     const { signer: txSigner } = useKitTransactionSigner();
 
     // Create a direct RPC client for @solana/pay functions
-    const rpc = useMemo(() => createSolanaRpc(DEVNET_ENDPOINT), []);
+    const rpc = useMemo(() => createSolanaRpc(MAINNET_ENDPOINT), []);
 
     const router = useRouter();
 

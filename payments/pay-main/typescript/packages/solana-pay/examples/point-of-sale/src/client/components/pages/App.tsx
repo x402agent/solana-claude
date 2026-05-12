@@ -5,14 +5,14 @@ import { address } from '@solana/kit';
 import { AppContext, AppProps as NextAppProps, default as NextApp } from 'next/app';
 import { AppInitialProps } from 'next/dist/shared/lib/utils';
 import { FC, useMemo } from 'react';
-import { DEVNET_ENDPOINT } from '../../utils/constants';
+import { MAINNET_ENDPOINT, MAINNET_USDC_MINT } from '../../utils/constants';
 import { ConfigProvider } from '../contexts/ConfigProvider';
 import { FullscreenProvider } from '../contexts/FullscreenProvider';
 import { PaymentProvider } from '../contexts/PaymentProvider';
 import { ThemeProvider } from '../contexts/ThemeProvider';
 import { TransactionsProvider } from '../contexts/TransactionsProvider';
 import { SolanaPayLogo } from '../images/SolanaPayLogo';
-import { SOLIcon } from '../images/SOLIcon';
+import { USDCIcon } from '../images/USDCIcon';
 import css from './App.module.css';
 
 interface AppProps extends NextAppProps {
@@ -21,13 +21,15 @@ interface AppProps extends NextAppProps {
         recipient?: string;
         label?: string;
         message?: string;
+        amount?: string;
+        item?: string;
     };
 }
 
 const connectorConfig = getDefaultConfig({
-    appName: 'Solana Pay Point of Sale',
+    appName: 'OpenClawd Agentic POS',
     autoConnect: true,
-    network: 'devnet',
+    network: 'mainnet',
 });
 
 const App: FC<AppProps> & { getInitialProps(appContext: AppContext): Promise<AppInitialProps> } = ({
@@ -41,9 +43,7 @@ const App: FC<AppProps> & { getInitialProps(appContext: AppContext): Promise<App
     // If you're testing without a mobile wallet, set this to true to allow a browser wallet to be used.
     const connectWallet = false;
 
-    // Toggle comments on these lines to use transaction requests instead of transfer requests.
-    const link = undefined;
-    // const link = useMemo(() => new URL(`${baseURL}/api/`), [baseURL]);
+    const link = useMemo(() => new URL(`${baseURL}/api/`), [baseURL]);
 
     let recipient: Address | undefined = undefined;
     const { recipient: recipientParam, label, message } = query;
@@ -60,18 +60,19 @@ const App: FC<AppProps> & { getInitialProps(appContext: AppContext): Promise<App
             <FullscreenProvider>
                 {recipient && label ? (
                     <AppProvider connectorConfig={connectorConfig}>
-                        <ConfigProvider
-                            baseURL={baseURL}
-                            link={link}
-                            recipient={recipient}
-                            label={label}
-                            message={message}
-                            symbol="SOL"
-                            icon={<SOLIcon />}
-                            decimals={9}
-                            minDecimals={1}
-                            connectWallet={connectWallet}
-                        >
+                            <ConfigProvider
+                                baseURL={baseURL}
+                                link={link}
+                                recipient={recipient}
+                                label={label}
+                                message={message}
+                                splToken={MAINNET_USDC_MINT}
+                                symbol="USDC"
+                                icon={<USDCIcon />}
+                                decimals={6}
+                                minDecimals={2}
+                                connectWallet={connectWallet}
+                            >
                             <TransactionsProvider>
                                 <PaymentProvider>
                                     <Component {...pageProps} />
@@ -96,11 +97,13 @@ App.getInitialProps = async (appContext) => {
     const recipient = query.recipient as string;
     const label = query.label as string;
     const message = query.message || undefined;
+    const amount = query.amount as string | undefined;
+    const item = query.item as string | undefined;
     const host = req?.headers.host || 'localhost:3001';
 
     return {
         ...props,
-        query: { recipient, label, message },
+        query: { recipient, label, message, amount, item },
         host,
     };
 };
