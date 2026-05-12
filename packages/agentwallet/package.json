@@ -44,7 +44,7 @@
     "express": "^4.21.0",
     "tweetnacl": "^1.0.3",
     "bs58": "^6.0.0",
-    "commander": "^12.1.0",
+    "commander": "^14.0.3",
     "dotenv": "^16.4.0"
   },
   "optionalDependencies": {
