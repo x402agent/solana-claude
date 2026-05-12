@@ -4,6 +4,7 @@ import type { Address } from '@solana/kit';
 import { address } from '@solana/kit';
 import { AppContext, AppProps as NextAppProps, default as NextApp } from 'next/app';
 import { AppInitialProps } from 'next/dist/shared/lib/utils';
+import { useRouter } from 'next/router';
 import { FC, useMemo } from 'react';
 import { MAINNET_ENDPOINT, MAINNET_USDC_MINT } from '../../utils/constants';
 import { ConfigProvider } from '../contexts/ConfigProvider';
@@ -39,6 +40,7 @@ const App: FC<AppProps> & { getInitialProps(appContext: AppContext): Promise<App
     pageProps,
 }) => {
     const baseURL = `https://${host}`;
+    const router = useRouter();
 
     // If you're testing without a mobile wallet, set this to true to allow a browser wallet to be used.
     const connectWallet = false;
@@ -55,13 +57,17 @@ const App: FC<AppProps> & { getInitialProps(appContext: AppContext): Promise<App
         }
     }
 
+    const isLandingRoute = router.pathname === '/';
+
     return (
         <ThemeProvider>
             <FullscreenProvider>
-                {recipient && label ? (
+                {isLandingRoute ? (
+                    <Component {...pageProps} />
+                ) : recipient && label ? (
                     <AppProvider connectorConfig={connectorConfig}>
-                            <ConfigProvider
-                                baseURL={baseURL}
+                        <ConfigProvider
+                            baseURL={baseURL}
                                 link={link}
                                 recipient={recipient}
                                 label={label}
