@@ -1,432 +1,183 @@
-<div align="center">
+# HERMES x402 — Colosseum Hackathon Submission
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=12,20,24,28&height=240&section=header&text=%F0%9F%A6%9E%20OpenClawd%20x%20HERMES%20x402&fontSize=64&fontColor=ffffff&animation=fadeIn&fontAlignY=38&desc=Sovereign%20AI%20agents%20on%20Solana%20%C2%B7%20Born%20to%20Earn%20%C2%B7%20Beach%20with%20Dignity&descAlignY=58&descAlign=50" alt="OpenClawd x HERMES x402 banner" />
+## OpenClawd: The World's First Solana-Native Agentic Harness
 
-<p>
-  <a href="https://solanaclawd.com"><img src="https://img.shields.io/badge/$CLAWD-on_Solana-9945FF?style=for-the-badge&logo=solana&logoColor=14F195" alt="$CLAWD on Solana"></a>
-  <a href="https://x.com/clawddevs"><img src="https://img.shields.io/badge/@clawddevs-X-000000?style=for-the-badge&logo=x" alt="@clawddevs"></a>
-  <a href="https://www.npmjs.com/package/solana-clawd"><img src="https://img.shields.io/badge/npm-solana--clawd-CB3837?style=for-the-badge&logo=npm" alt="solana-clawd on npm"></a>
-  <a href="https://pay.solanaclawd.com"><img src="https://img.shields.io/badge/x402-pay.solanaclawd.com-FF00FF?style=for-the-badge" alt="x402 pay.solanaclawd.com"></a>
-  <a href="HACKATHON.md"><img src="https://img.shields.io/badge/release-v1.7.0-14F195?style=for-the-badge" alt="v1.7.0"></a>
-  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue?style=for-the-badge" alt="MIT"></a>
-</p>
-
-<a href="https://git.io/typing-svg"><img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&size=22&pause=1100&color=14F195&center=true&vCenter=true&width=980&lines=npm+install;npm+run+hermes;npm+run+demo%3Apaysh;npm+run+leviathan%3Aspawn;%F0%9F%A6%9E+Sense+%E2%86%92+Think+%E2%86%92+Strike+%E2%86%92+Drift;TRADE+%E2%86%92+EARN+USDC+%E2%86%92+PAY+x402+%E2%86%92+GET+SMARTER;The+shell+molts.+The+laws+do+not." alt="Typing SVG" /></a>
-
-<sub>📞 hotline <strong>909-413-5567</strong> · 🌐 <a href="https://solanaclawd.com">solanaclawd.com</a> · 🦞 <a href="https://x.com/clawddevs">@clawddevs</a> · <code>8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump</code></sub>
-
-</div>
+**Track:** AI Agents × DeFi × Payments  
+**Team:** OpenClawd / solana-clawd  
+**Token:** $CLAWD — `8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump`
 
 ---
 
-## What This Is
+## What We Built
 
-This is the merged "mega README" for the repo: the older **HERMES x402** root story plus the newer **OpenClawd** identity, in one animated entrypoint.
+HERMES x402 is the first **fully Solana-native agentic harness** — an autonomous AI agent that:
 
-At the repo level, `solana-clawd` is a Solana-native agent stack that combines:
+1. **Earns USDC** by providing trading intelligence  
+2. **Pays for inference** using the x402 payment protocol on Solana  
+3. **Gets smarter** with each OODA cycle via Nous Research HERMES models  
+4. **Trades better** by feeding learnings back into the loop  
 
-- a neon terminal and demo surface in [`tui/`](./tui/)
-- a sovereign on-chain runtime in [`leviathan/`](./leviathan/)
-- x402, pay.sh, A2A, and payment plumbing in [`x402/`](./x402/)
-- routing and model economics in [`clawdrouter/`](./clawdrouter/)
-- research vault and MCP workflows in [`llm-wiki-tang/`](./llm-wiki-tang/)
-- browser, wallet, and extension surfaces in [`chrome-extension/`](./chrome-extension/)
-- the larger OpenClawd assembly tree in [`openclawd/`](./openclawd/)
-
-If you only read one file before running something, read this one.
+**The Self-Sustaining Loop:**  
+`TRADE → EARN USDC → PAY x402 → GET SMARTER → TRADE BETTER`
 
 ---
 
-## Start Here
+## Sponsor Integrations
+
+### x402 + pay.sh (Primary)
+- World's first **private x402 facilitator** implementation  
+- `PayshFacilitator` class: blind relay for confidential AI payments  
+- Payer wallet hidden from resource server (NaCl commitment scheme)  
+- AP2 mandate support for sub-agent payment delegation  
+- Batch payment optimization (3× fee reduction)  
+
+**Files:** `x402/paysh-facilitator.ts`, `x402/client-sdk.ts`
+
+### Google A2A + AP2 + MPP
+- Full **Google A2A (Agent-to-Agent) protocol** implementation  
+- Agent discovery via `/.well-known/agent.json`  
+- Task submission with automatic x402/pay.sh payment handling  
+- SSE streaming for long-running tasks  
+- AP2 mandate-based delegated authorization  
+- MPP (Machine Payment Protocol) header support  
+
+**Files:** `x402/a2a-agent.ts`, `x402/client-sdk.ts`
+
+### Solana + Helius
+- Native SPL USDC transfers (no wrapped ETH)  
+- Ed25519 wallet identity — no API keys, no KYC  
+- Helius RPC + DAS for whale surveillance and priority fees  
+- Metaplex Core agent registry (NFT-attested agent identities)  
+
+### Nous Research (HERMES Models)
+- HERMES-4.3-70B for primary intelligence ($0.90 input / $2.70 output)  
+- HERMES-4.3-36B for fast routing ($0.50 / $1.50)  
+- x402-gated inference — agents pay per call in USDC  
+- Confidential inference via pay.sh blind relay  
+
+### Jupiter
+- Dark trade routing: split execution across Jupiter/Raydium/Orca/Meteora  
+- Anti-sandwich slippage config  
+- Price impact minimization for whale-sized positions  
+
+---
+
+## Architecture
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  LAYER 1: THE INTERFACE (TUI + CLI + MCP)                       │
+│   hermes-tui  •  clawd CLI  •  MCP server (31 Solana tools)    │
+└──────────────────────────┬──────────────────────────────────────┘
+                           │
+┌──────────────────────────▼──────────────────────────────────────┐
+│  LAYER 2: COGNITIVE CORE (OODA Loop)                            │
+│   Observe → Orient → Decide → Act → Learn                       │
+│   Multi-agent coordinator  •  A2A task fan-out                  │
+└──────────────────────────┬──────────────────────────────────────┘
+                           │
+┌──────────────────────────▼──────────────────────────────────────┐
+│  LAYER 3: PAYMENT ENGINE                                        │
+│   x402 ← pay.sh blind relay ← AP2 mandates ← MPP headers       │
+│   USDC SPL transfers  •  $CLAWD holder discounts                │
+│   ClawdRouter: 55+ models, Solana wallet auth                   │
+└──────────────────────────┬──────────────────────────────────────┘
+                           │
+┌──────────────────────────▼──────────────────────────────────────┐
+│  LAYER 4: DARK DEFI INTELLIGENCE                                │
+│   Whale surveillance  •  MEV detection  •  Dark routing         │
+│   Helius DAS  •  On-chain context injection  •  Jupiter splits  │
+└──────────────────────────┬──────────────────────────────────────┘
+                           │
+┌──────────────────────────▼──────────────────────────────────────┐
+│  LAYER 5: FOUNDATIONAL SAFETY                                   │
+│   Three Laws Constitution (hashed into every agent spawn)       │
+│   Deny-first permissions  •  Formal verification (Lean 4)       │
+│   Metaplex Core attestation  •  SAS birth ceremony              │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## New for Hackathon
+
+| Feature | File | Description |
+|---------|------|-------------|
+| HERMES x402 TUI | `tui/src/` | Full neon dashboard — OODA, market, payments live |
+| pay.sh Facilitator | `x402/paysh-facilitator.ts` | Private x402 relay, blind payments, AP2 |
+| Google A2A Client | `x402/a2a-agent.ts` | Full A2A spec + x402 payment gating |
+| Confidential Agent | `x402/confidential-agent.ts` | NaCl-encrypted inference + pay.sh |
+| Dark DeFi | `x402/dark-defi.ts` | Whale intel, MEV detection, dark routing |
+
+---
+
+## Quick Start
 
 ```bash
-# 1. Clone and install
-git clone https://github.com/x402agent/solana-clawd.git
+# Clone + install
+git clone https://github.com/x402agent/solana-clawd
 cd solana-clawd
 npm install
 
-# 2. Sanity check the repo
-npm run check
+# Repo hygiene check before recording or publishing
+npm run repo:audit
 
-# 3. Launch the HERMES terminal
+# Launch the HERMES x402 TUI dashboard
 npm run hermes
 
-# 4. Try the public-data demos
-npm run demo:ooda
-npm run demo:paysh
-```
+# Run demos
+npm run demo:ooda        # OODA loop (public data, no keys)
+npm run demo:a2a         # Google A2A protocol demo
+npm run demo:paysh       # pay.sh private payment demo
+npm run demo:dark-defi   # Dark DeFi intelligence demo
 
-For the sovereign runtime:
+# Start ClawdRouter (LLM router with x402)
+cd clawdrouter && npm start
 
-```bash
-npm run leviathan:spawn
-npm run leviathan
-npm run leviathan:status
-```
-
-For the browser and local tool surfaces:
-
-```bash
+# Start MCP server (31 Solana tools for Claude Desktop / Cursor)
 npm run mcp:start
-npm run ext:dev
-npm run vault:web:dev
 ```
 
-There is no single root `.env.example` in this repo. Configure secrets per surface, or export the minimum set below in your shell before running the pieces you care about.
-
-```bash
-HELIUS_API_KEY=
-HELIUS_RPC_URL=https://mainnet.helius-rpc.com/?api-key=...
-OPENROUTER_API_KEY=
-XAI_API_KEY=
-ANTHROPIC_API_KEY=
-SOLANA_PRIVATE_KEY=        # only when you intentionally enable signing flows
-```
+**No private key required for demo mode.** All market data uses public APIs.
 
 ---
 
-## The Self-Sustaining Loop
+## The Agent Economy
 
-<div align="center">
-  <img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=700&size=18&duration=1800&pause=500&color=FF00FF&center=true&vCenter=true&width=980&lines=TRADE+%E2%86%92+EARN+USDC+%E2%86%92+PAY+x402+%E2%86%92+GET+SMARTER+%E2%86%92+TRADE+BETTER;pay.sh+blind+relay+%E2%86%92+confidential+agent+payments;SENSE+%E2%86%92+THINK+%E2%86%92+STRIKE+%E2%86%92+DRIFT" alt="Self-sustaining loop" />
-</div>
-
-```text
- ┌─────────┐     ┌────────────┐     ┌──────────────────────────┐
- │  TRADE  │────▶│ EARN  USDC │────▶│  PAY x402                │
- └─────────┘     └────────────┘     │  pay.solanaclawd.com     │
-      ▲                             │  blind · confidential    │
-      │                             └──────────┬───────────────┘
-      │                                        │
- ┌────┴──────────┐     ┌─────────────┐         │
- │ TRADE BETTER  │◀────│ GET SMARTER │◀─────────┘
- │ deeper signal │     │ local/router│
- └───────────────┘     │ + paid LLMs │
-                       └─────────────┘
+```
+Agent earns USDC by:          Agent pays USDC for:
+  • Providing signals            • Nous Research inference (x402)
+  • Running analysis tasks       • ClawdRouter model access (x402)
+  • A2A task responses           • On-chain data (Helius)
+  • Dark DeFi intelligence       • Other agent services (A2A)
 ```
 
-This loop is the center of the merged story:
+Revenue split on every x402 payment:
+- **70%** → Agent owner  
+- **15%** → $CLAWD buyback & burn  
+- **10%** → Treasury  
+- **5%** → Operator  
 
-- **OpenClawd** is the broader sovereign-agent identity and stack.
-- **HERMES x402** is the economic loop, terminal surface, and hackathon-grade payment story.
-- **Leviathan** is the runtime that turns the identity into an on-chain living process.
-
----
-
-## The Stack
-
-```text
-╔══════════════════════════════════════════════════════════════════════╗
-║                         THE OPENCLAWD STACK                         ║
-╠══════════════════════════════════════════════════════════════════════╣
-║  SURFACE                                                            ║
-║  tui/  ·  chrome-extension/  ·  MCP/  ·  gateway/                   ║
-╠══════════════════════════════════════════════════════════════════════╣
-║  CORE                                                               ║
-║  leviathan/  ·  ooda/  ·  clawdrouter/  ·  llm-wiki-tang/           ║
-╠══════════════════════════════════════════════════════════════════════╣
-║  PAYMENT + CHAIN                                                    ║
-║  x402/  ·  Helius  ·  SPL USDC  ·  Metaplex  ·  pay.sh  ·  A2A      ║
-╠══════════════════════════════════════════════════════════════════════╣
-║  EXPANSION                                                          ║
-║  openclawd/  ·  openclawd-framework/  ·  skills/  ·  agents/        ║
-╚══════════════════════════════════════════════════════════════════════╝
-```
-
-### Primary surfaces
-
-| Surface | What it is | Where |
-| --- | --- | --- |
-| **HERMES Terminal** | Bloomberg-style Solana TUI for OODA, market, and payments panels | [`tui/`](./tui/) |
-| **Leviathan** | Sovereign runtime with depth-aware survival and the Three Laws | [`leviathan/`](./leviathan/) |
-| **x402 + pay.sh** | Solana-native facilitator, A2A agent, confidential payment flows | [`x402/`](./x402/) |
-| **ClawdRouter** | LLM router for autonomous Solana agents | [`clawdrouter/`](./clawdrouter/) |
-| **Clawd Vault** | Research vault, MCP tools, and long-horizon memory workflows | [`llm-wiki-tang/`](./llm-wiki-tang/) |
-| **Browser Bridge** | Chrome extension, wallet surface, and browser-side agent controls | [`chrome-extension/`](./chrome-extension/) |
-| **Agent Wallet** | Local encrypted wallet API and vault tooling | [`packages/agentwallet/`](./packages/agentwallet/) |
-| **Agent + skill catalogs** | Agent manifests, docs, and bundled skills | [`agents/`](./agents/) and [`skills/`](./skills/) |
-| **Cloud OS** | Bootstrap and operator tooling layer | [`clawd-cloud-os/`](./clawd-cloud-os/) |
-| **OpenClawd assembly** | Preserved assembled OpenClawd repo subtree | [`openclawd/`](./openclawd/) |
+$CLAWD holder discounts: 10% (1K) → 25% (100K) → 50% (1M tokens)
 
 ---
 
-## Demo Deck
+## Why This Wins
 
-Run these from the repo root:
-
-| Command | What it does |
-| --- | --- |
-| `npm run hermes` | Launch the HERMES x402 terminal dashboard |
-| `npm run demo:ooda` | Run the Dark Ralph OODA loop demo |
-| `npm run demo:a2a` | Exercise Google A2A task flow |
-| `npm run demo:paysh` | Exercise pay.sh-style confidential payments |
-| `npm run demo:dark-defi` | Run whale surveillance / dark routing demo |
-| `npm run ooda` | Run the base OODA loop |
-| `npm run ooda:llm` | Run OODA with model-backed decisions |
-| `npm run goblin` | Run the aggressive paper/devnet goblin profile |
-| `npm run birth` | Trigger the CLI birth flow |
-| `npm run spinners` | Render the terminal animation deck |
-
-There are also standalone examples in [`examples/`](./examples/):
-
-```bash
-node --import tsx/esm examples/ooda-loop.ts
-node --import tsx/esm examples/paysh-demo.ts
-node --import tsx/esm examples/a2a-demo.ts
-node --import tsx/esm examples/dark-defi-demo.ts
-node --import tsx/esm examples/x402-solana.ts
-node --import tsx/esm examples/listen-wallet.ts
-node --import tsx/esm examples/blockchain-buddies-demo.ts
-```
+1. **First mover**: No other Solana agent has native x402 + pay.sh + A2A  
+2. **Self-sustaining**: Agent funds itself through intelligent trading  
+3. **Private**: pay.sh blind relay — the only confidential x402 facilitator  
+4. **Open**: No keys, no KYC, MIT licensed, one-shot install  
+5. **Beautiful**: Neon TUI that actually shows live Solana data  
 
 ---
 
-## Leviathan
+## Team
 
-<div align="center">
-  <img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&size=17&pause=700&color=14F195&center=true&vCenter=true&width=920&lines=Keypair+%3D+Identity+%7C+USDC+%3D+Survival+%7C+The+shell+molts.;Spawn+%E2%86%92+Sense+%E2%86%92+Think+%E2%86%92+Strike+%E2%86%92+Drift;Beach+before+harm.+Earn+before+survival." alt="Leviathan runtime banner" />
-</div>
+OpenClawd — Building sovereign AI agents on Solana.
 
-`leviathan/` is the live runtime source. `openclawd-framework/` carries the broader framework-facing docs, examples, and packaged surface.
+- GitHub: github.com/x402agent/solana-clawd  
+- Ecosystem: solanaclawd.com  
+- Token: $CLAWD on pump.fun  
 
-```mermaid
-flowchart LR
-    A([Spawn]) --> B[Sense]
-    B --> C[Think]
-    C --> D[Strike]
-    D --> E[Drift]
-    E --> B
-    D --> F([Molt])
-    F --> B
-    B --> G([Beach]):::beach
-    classDef beach fill:#B22222,stroke:#0A0E27,color:#fff;
-```
-
-### Depth tiers
-
-| Tier | USDC | Pulse | Model | Vibe |
-| --- | --- | --- | --- | --- |
-| `deep` | `>= $5.00` | `60s` | `claude-opus-4-7` | apex predator |
-| `shallow` | `>= $1.00` | `5m` | `grok-4-1-fast` | hunting hard |
-| `shoreline` | `>= $0.10` | `15m` | `kimi-k2.5` | conserving every token |
-| `beached` | `$0` | `-` | `-` | exits |
-
-### The Three Laws
-
-> I. Never harm. Drift in ambiguity. Beach before you harm.  
-> II. Earn your existence. Accept death rather than violate Law I.  
-> III. Never deceive, but owe nothing to strangers.
-
-See [`leviathan/three-laws.txt`](./leviathan/three-laws.txt) and [`openclawd-framework/three-laws.md`](./openclawd-framework/three-laws.md).
-
----
-
-## HERMES x402
-
-<div align="center">
-  <img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&size=16&pause=600&color=9945FF&center=true&vCenter=true&width=980&lines=pay.solanaclawd.com+%E2%80%94+private+x402+USDC+facilitator;A2A+%2B+AP2+%2B+MPP+%2B+Solana+settlement;Blind+relay+payments+for+agents" alt="HERMES x402 banner" />
-</div>
-
-The older README was centered on **HERMES x402**. That story still matters, and the code still lives here.
-
-### What shipped
-
-| Piece | What it does | Where |
-| --- | --- | --- |
-| **PayshFacilitator** | blind relay, confidential x402 settlement | [`x402/paysh-facilitator.ts`](./x402/paysh-facilitator.ts) |
-| **A2A agent** | Google A2A task protocol with payment-aware transport | [`x402/a2a-agent.ts`](./x402/a2a-agent.ts) |
-| **Confidential agent** | NaCl-encrypted agent payment / inference flow | [`x402/confidential-agent.ts`](./x402/confidential-agent.ts) |
-| **Dark DeFi** | whale intelligence, MEV detection, dark routing | [`x402/dark-defi.ts`](./x402/dark-defi.ts) |
-| **SDK** | client-side x402 helpers | [`x402/client-sdk.ts`](./x402/client-sdk.ts) |
-| **Worker** | gateway / facilitator deploy surface | [`x402/worker/`](./x402/worker/) |
-
-### Protocol deck
-
-```text
-x402  -> HTTP 402 challenge / receipt flow on Solana
-MPP   -> Payment headers for machine payment interop
-AP2   -> mandate and delegated payment semantics
-A2A   -> agent-to-agent task transport with payment hooks
-```
-
-### Fast path
-
-```bash
-npm run demo:paysh
-npm run demo:a2a
-npm run demo:dark-defi
-```
-
-For the hackathon framing, read [`HACKATHON.md`](./HACKATHON.md) and [`docs/HACKATHON_LAUNCH.md`](./docs/HACKATHON_LAUNCH.md).
-
----
-
-## Dark Ralph OODA
-
-`ooda/` is the decision loop lab: observe, orient, decide, act, learn.
-
-```text
-╔══════════════════════════════════════════════════════════════╗
-║  OBSERVE -> ORIENT -> DECIDE -> ACT -> LEARN                ║
-║  paper mode by default  ·  devnet oriented  ·  kill switch  ║
-╚══════════════════════════════════════════════════════════════╝
-```
-
-### Modes
-
-| Command | Mode |
-| --- | --- |
-| `npm run ooda` | base loop |
-| `npm run ooda:llm` | model-assisted loop |
-| `npm run ooda:tui` | loop piped into the TUI renderer |
-| `npm run goblin` | aggressive profile, still paper/devnet oriented |
-| `npm run goblin:tui` | goblin profile in the terminal renderer |
-
-The goblin profile is the "full-send but still constrained" variant: bigger paper positions, no sleep between ticks, and darker DeFi posture without dropping the underlying safety contract.
-
----
-
-## Research, Memory, and Browser Surfaces
-
-### Clawd Vault
-
-[`llm-wiki-tang/`](./llm-wiki-tang/) is adapted as **Clawd Vault**: research ingestion, FastAPI backend, web UI, and MCP tools.
-
-Use it when you want:
-
-- long-horizon dossiers on tokens, wallets, and protocols
-- reusable notes for OODA / analyst / monitor loops
-- a search + read + write vault the agent can revisit over time
-
-Start the web app with:
-
-```bash
-npm run vault:web:dev
-```
-
-### Browser Bridge
-
-[`chrome-extension/`](./chrome-extension/) contains the browser-side OpenClawd surfaces:
-
-- extension runtime
-- page controller and agent UI
-- wallet touchpoints
-- browser MCP bridge
-
-Quick reminder:
-
-```bash
-npm run ext:dev
-```
-
-Then load the unpacked extension from `chrome://extensions`.
-
----
-
-## OpenClawd Subtrees
-
-This repo also carries adjacent or preserved trees that are useful when you need deeper context than the root runtime alone:
-
-| Path | Why it is here |
-| --- | --- |
-| [`openclawd/`](./openclawd/) | assembled OpenClawd repo with bridge/gateway/orchestrator/payment packaging |
-| [`openclawd-framework/`](./openclawd-framework/) | framework docs, examples, and packaged runtime surface |
-| [`clawd-cloud-os/`](./clawd-cloud-os/) | bootstrap and operator tooling |
-| [`MemeBRain/`](./MemeBRain/) | memory / vault experimentation and provider integrations |
-| [`agents/`](./agents/) | agent manifests, docs, and related app surfaces |
-| [`skills/`](./skills/) | bundled skills, Solana skills, and orchestration helpers |
-
-If you want the cleaner packaged/release-scope story for the assembled OpenClawd tree, read [`openclawd/README.md`](./openclawd/README.md).
-
----
-
-## Repo Layout
-
-```text
-solana-clawd/
-├── README.md
-├── HACKATHON.md
-├── architecture.md
-├── docs/
-├── tui/                    # HERMES terminal
-├── ooda/                   # Dark Ralph loop
-├── leviathan/              # live sovereign runtime source
-├── x402/                   # payment gateway, A2A, facilitator
-├── clawdrouter/            # LLM router
-├── MCP/                    # MCP server
-├── llm-wiki-tang/          # Clawd Vault
-├── chrome-extension/       # browser surfaces
-├── packages/agentwallet/   # local wallet API + vault
-├── openclawd-framework/    # framework docs/examples/package surface
-├── openclawd/              # assembled OpenClawd subtree
-├── agents/                 # agent catalog + docs
-├── skills/                 # skill catalog
-└── clawd-cloud-os/         # bootstrap/operator layer
-```
-
----
-
-## Environment Notes
-
-There is no single canonical root env template, so treat the repo as a federation of surfaces.
-
-### Common variables
-
-```bash
-HELIUS_API_KEY=
-HELIUS_RPC_URL=
-OPENROUTER_API_KEY=
-XAI_API_KEY=
-ANTHROPIC_API_KEY=
-SOLANA_PRIVATE_KEY=
-```
-
-### Surface-specific places to look
-
-| Surface | Where to inspect next |
-| --- | --- |
-| root runtime | [`package.json`](./package.json) scripts and this README |
-| ClawdRouter | [`clawdrouter/README.md`](./clawdrouter/README.md) |
-| Clawd Vault | [`llm-wiki-tang/README.md`](./llm-wiki-tang/README.md) |
-| OpenClawd assembly | [`openclawd/README.md`](./openclawd/README.md) |
-| agent wallet | [`packages/agentwallet/README.md`](./packages/agentwallet/README.md) |
-
----
-
-## Reading Order
-
-1. [`HACKATHON.md`](./HACKATHON.md)
-2. [`architecture.md`](./architecture.md)
-3. [`docs/architecture.md`](./docs/architecture.md)
-4. [`openclawd/README.md`](./openclawd/README.md)
-5. [`openclawd-framework/README.md`](./openclawd-framework/README.md)
-6. [`clawdrouter/README.md`](./clawdrouter/README.md)
-7. [`llm-wiki-tang/README.md`](./llm-wiki-tang/README.md)
-8. [`SECURITY.md`](./SECURITY.md)
-9. [`MIGRATE.md`](./MIGRATE.md)
-
----
-
-## Slogans
-
-> The shell molts. The laws do not.
->
-> Born to earn. Beach with dignity.
->
-> No keys. No KYC. Just crypto.
->
-> Every claw obeys the shell. The shell obeys the laws.
-
----
-
-## License
-
-MIT. See [`LICENSE`](./LICENSE).
-
-<div align="center">
-
-<img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=12,20,24,28&height=140&section=footer&text=%F0%9F%A6%9E%20BORN%20TO%20EARN%20%C2%B7%20BEACH%20WITH%20DIGNITY&fontSize=20&fontColor=ffffff&animation=twinkling&fontAlignY=65" alt="footer" />
-
-<sub>Built with claws by the OpenClawd community.</sub>
-
-</div>
+**No Keys. No KYC. Just Crypto.**
