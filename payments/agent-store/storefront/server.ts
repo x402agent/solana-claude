@@ -4,6 +4,7 @@ import { existsSync, readFileSync } from "fs";
 import { promisify } from "util";
 import { dirname, join } from "path";
 import { fileURLToPath } from "url";
+import crypto from "crypto";
 
 const execFileAsync = promisify(execFile);
 
@@ -18,6 +19,7 @@ loadEnvFile(join(__dirname, ".env.local"));
 
 const app = express();
 const port = Number(process.env.PORT || 4318);
+const checkoutSessions = new Map<string, CheckoutSession>();
 
 app.use(express.json());
 app.use(express.static(PUBLIC_DIR));
@@ -205,6 +207,144 @@ app.get("/api/demo", (_req, res) => {
     launchChecklist,
     frontierSignals,
   });
+});
+
+app.get("/api/products/:id", (req, res) => {
+  const store = loadStoreContext();
+  const product = store.catalog.products.find((entry: any) => entry.id === req.params.id);
+  if (!product) {
+    res.status(404).json({ ok: false, error: "product_not_found" });
+    return;
+  }
+
+  res.json({
+    ok: true,
+    product,
+    fulfillmentPreview: buildFulfillmentPreview(product),
+    checkoutDefaults: {
+      buyerType: product.category === "commerce" ? "merchant" : "individual",
+      recommendedProtocol: (product.protocols || [])[0] || "x402",
+      amount: product.price?.amount || "0.10",
+      asset: product.price?.asset || "USDC",
+    },
+  });
+});
+
+app.post("/api/checkout/session", (req, res) => {
+  const store = loadStoreContext();
+  const product = store.catalog.products.find((entry: any) => entry.id === req.body?.productId);
+  if (!product) {
+    res.status(404).json({ ok: false, error: "product_not_found" });
+    return;
+  }
+
+  const protocol = pickProtocol(req.body?.protocol, product.protocols || []);
+  const buyerEmail = cleanString(req.body?.buyerEmail) || "judge@openclawd.demo";
+  const buyerName = cleanString(req.body?.buyerName) || "Hackathon Judge";
+  const buyerType = cleanString(req.body?.buyerType) || "individual";
+  const amount = product.price?.amount || "0.10";
+  const asset = product.price?.asset || "USDC";
+
+  const session: CheckoutSession = {
+    id: `sess_${crypto.randomUUID().slice(0, 8)}`,
+    productId: product.id,
+    productTitle: product.title,
+    buyerName,
+    buyerEmail,
+    buyerType,
+    protocol,
+    amount,
+    asset,
+    status: "quoted",
+    createdAt: new Date().toISOString(),
+    merchantPath: product.merchantPath,
+    narrative: buildSessionNarrative(product, protocol),
+    moonPayUrl: buildMoonPayUrl({
+      apiKey: process.env.MOONPAY_API_KEY || "",
+      merchantId: process.env.MOONPAY_MERCHANT_ID || "",
+      walletAddress: process.env.MOONPAY_WALLET || "",
+      amount,
+      email: buyerEmail,
+    }),
+    fulfillmentPreview: buildFulfillmentPreview(product),
+  };
+
+  checkoutSessions.set(session.id, session);
+  res.json({
+    ok: true,
+    session,
+    nextActions: [
+      "Choose a settlement rail.",
+      "Open MoonPay for fiat-to-USDC or continue with a native agent rail.",
+      "Mark the session funded to reveal fulfillment.",
+    ],
+  });
+});
+
+app.post("/api/checkout/session/:id/fund", (req, res) => {
+  const session = checkoutSessions.get(req.params.id);
+  if (!session) {
+    res.status(404).json({ ok: false, error: "session_not_found" });
+    return;
+  }
+
+  session.status = "funded";
+  session.fundedAt = new Date().toISOString();
+  session.settlementRef = `settl_${crypto.randomUUID().slice(0, 10)}`;
+  session.fulfillment = buildFulfillmentArtifact(session);
+  checkoutSessions.set(session.id, session);
+
+  res.json({
+    ok: true,
+    session,
+  });
+});
+
+app.get("/api/checkout/session/:id", (req, res) => {
+  const session = checkoutSessions.get(req.params.id);
+  if (!session) {
+    res.status(404).json({ ok: false, error: "session_not_found" });
+    return;
+  }
+
+  res.json({ ok: true, session });
+});
+
+app.get("/api/judge-mode", (_req, res) => {
+  const store = loadStoreContext();
+  const demo = {
+    title: "Judge Mode Runbook",
+    duration: "90 seconds",
+    beats: [
+      {
+        id: "hook",
+        label: "Hook",
+        script: "Open on the hero and explain that this is not an AI chat app. It is a merchant network for paid autonomous work.",
+      },
+      {
+        id: "product",
+        label: "Product",
+        script: `Click ${store.catalog.products[0]?.title || "the flagship product"} and show the checkout session being created in real time.`,
+      },
+      {
+        id: "payment",
+        label: "Payment",
+        script: "Use MoonPay as the fiat-to-USDC conversion wedge, then point to the multi-rail settlement matrix for native buyers.",
+      },
+      {
+        id: "fulfillment",
+        label: "Fulfillment",
+        script: "Mark the session funded and reveal the delivered artifact to prove this is a monetization flow, not a static mockup.",
+      },
+      {
+        id: "close",
+        label: "Close",
+        script: "End on Why This Wins and the frontier map: private infrastructure, paid agents, and Solana-native settlement in one product.",
+      },
+    ],
+  };
+
+  res.json(demo);
 });
 
 app.get("/api/frontier", (_req, res) => {
@@ -418,6 +558,153 @@ function cleanString(value: unknown): string {
   return typeof value === "string" ? value.trim() : "";
 }
 
+function loadStoreContext(): { manifest: any; catalog: any; frontier: any } {
+  return {
+    manifest: readJson(MANIFEST_PATH) as any,
+    catalog: readJson(CATALOG_PATH) as any,
+    frontier: readJson(FRONTIER_PATH) as any,
+  };
+}
+
+function pickProtocol(requested: unknown, supported: string[]): string {
+  const clean = cleanString(requested);
+  return supported.includes(clean) ? clean : supported[0] || "x402";
+}
+
+function buildFulfillmentPreview(product: any): { title: string; bullets: string[] } {
+  switch (product.id) {
+    case "prod-ooda-signal-pack":
+      return {
+        title: "OODA Signal Pack Delivery",
+        bullets: [
+          "Three priority Solana market signals",
+          "Risk posture and invalidation levels",
+          "Operator note from Dark Ralph",
+        ],
+      };
+    case "prod-wallet-brief":
+      return {
+        title: "Wallet Brief Delivery",
+        bullets: [
+          "Portfolio concentration snapshot",
+          "Activity pattern summary",
+          "High-level counterparty and behavior notes",
+        ],
+      };
+    case "prod-private-agent-session":
+      return {
+        title: "Private Agent Session Delivery",
+        bullets: [
+          "Session transcript and operator summary",
+          "Next-action recommendations",
+          "Escalation path to Clawd, Dexter, or HERMES",
+        ],
+      };
+    default:
+      return {
+        title: "Checkout Delivery",
+        bullets: [
+          "Merchant session artifact",
+          "Settlement-ready routing context",
+          "Protocol-specific fulfillment note",
+        ],
+      };
+  }
+}
+
+function buildSessionNarrative(product: any, protocol: string): string[] {
+  return [
+    `Buyer selected ${product.title}.`,
+    `Dexter quoted ${product.price.amount} ${product.price.asset} over ${protocol}.`,
+    `Clawd reserved the fulfillment lane at ${product.merchantPath}.`,
+    "HERMES is ready to own settlement escalation if payment needs intervention.",
+  ];
+}
+
+function buildFulfillmentArtifact(session: CheckoutSession): any {
+  if (session.productId === "prod-ooda-signal-pack") {
+    return {
+      artifactType: "signal-pack",
+      deliveredBy: "Dark Ralph",
+      generatedAt: new Date().toISOString(),
+      items: [
+        {
+          market: "SOL/USDC",
+          signal: "Momentum continuation above local reclaim",
+          entry: "172.40",
+          invalidation: "168.80",
+          target: "179.50",
+          confidence: "high",
+        },
+        {
+          market: "JUP/USDC",
+          signal: "Mean-reversion scalp after expansion failure",
+          entry: "1.06",
+          invalidation: "1.01",
+          target: "1.14",
+          confidence: "medium",
+        },
+        {
+          market: "BONK/USDC",
+          signal: "Event-driven liquidity burst monitor",
+          entry: "watchlist",
+          invalidation: "cancel on weak volume",
+          target: "sell strength into spike",
+          confidence: "speculative",
+        },
+      ],
+      operatorNote:
+        "Ralph favors USDC-denominated execution and avoids custody. Treat this as a paid operator brief, not automated trade execution.",
+    };
+  }
+
+  if (session.productId === "prod-wallet-brief") {
+    return {
+      artifactType: "wallet-brief",
+      deliveredBy: "Clawd Research",
+      generatedAt: new Date().toISOString(),
+      summary: {
+        concentration: "High SOL beta with selective DeFi exposure",
+        behavior: "Swing-active wallet with periodic exchange interactions",
+        risk: "Moderate volatility sensitivity",
+      },
+      recommendations: [
+        "Monitor rotation into majors before adding illiquid positions.",
+        "Use private settlement for large transfers or sensitive routing.",
+        "Escalate for a premium agent session if behavioral forensics are needed.",
+      ],
+    };
+  }
+
+  if (session.productId === "prod-private-agent-session") {
+    return {
+      artifactType: "private-session",
+      deliveredBy: "Clawd Concierge",
+      generatedAt: new Date().toISOString(),
+      transcriptSummary: [
+        "Buyer requested confidential routing and research support.",
+        "Eliza qualified intent and handed off to Clawd.",
+        "Dexter prepared a paid session lane with policy-safe checkout.",
+      ],
+      nextActions: [
+        "Open a follow-up merchant lane for deeper routing.",
+        "Escalate to HERMES if custom settlement controls are needed.",
+      ],
+    };
+  }
+
+  return {
+    artifactType: "merchant-checkout",
+    deliveredBy: "Dexter",
+    generatedAt: new Date().toISOString(),
+    summary: [
+      "Checkout session created and funded.",
+      `Settlement rail: ${session.protocol}.`,
+      "Fulfillment lane prepared for autonomous buyer handoff.",
+    ],
+  };
+}
+
 function humanizeToken(value: string): string {
   return String(value)
     .split(/[-_]/)
@@ -441,3 +728,24 @@ function protocolUseCase(protocol: string): string {
       return "Programmable commerce rail";
   }
 }
+
+type CheckoutSession = {
+  id: string;
+  productId: string;
+  productTitle: string;
+  buyerName: string;
+  buyerEmail: string;
+  buyerType: string;
+  protocol: string;
+  amount: string;
+  asset: string;
+  status: "quoted" | "funded";
+  createdAt: string;
+  fundedAt?: string;
+  settlementRef?: string;
+  merchantPath: string;
+  narrative: string[];
+  moonPayUrl: string | null;
+  fulfillmentPreview: { title: string; bullets: string[] };
+  fulfillment?: any;
+};

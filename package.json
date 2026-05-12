@@ -1,6 +1,6 @@
 {
   "name": "solana-clawd",
-  "version": "1.7.0",
+  "version": "1.8.2",
   "description": "HERMES x402 — Solana-Native Agentic Harness. First private x402 AI agent with OODA loop, pay.sh confidential payments, Google A2A protocol, dark DeFi intelligence, and Nous Research model routing.",
   "type": "module",
   "main": "dist/index.js",
@@ -9,34 +9,29 @@
     ".": {
       "import": "./dist/index.js",
       "types": "./dist/index.d.ts"
-    },
-    "./animations": {
-      "import": "./dist/animations/index.js",
-      "types": "./dist/animations/index.d.ts"
-    },
-    "./buddy": {
-      "import": "./dist/buddy/index.js",
-      "types": "./dist/buddy/index.d.ts"
-    },
-    "./metaplex": {
-      "import": "./dist/metaplex/index.js",
-      "types": "./dist/metaplex/index.d.ts"
     }
   },
   "bin": {
     "solana-clawd": "dist/entrypoints/clawd.js",
     "clawd": "dist/entrypoints/clawd.js"
   },
+  "files": [
+    "dist/**/*",
+    "tui/dist/**/*",
+    "mcp/dist/**/*",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
-    "build": "node -e \"require('fs').rmSync('dist', { recursive: true, force: true })\" && tsc -p tsconfig.build.json && node -e \"require('fs').chmodSync('dist/entrypoints/clawd.js', 0o755)\"",
+    "build": "node -e \"require('fs').rmSync('dist', { recursive: true, force: true })\" && tsc -p tsconfig.build.json && npm --prefix tui install && npm --prefix tui run build && npm --prefix mcp install && npm --prefix mcp run build && node -e \"require('fs').chmodSync('dist/entrypoints/clawd.js', 0o755)\"",
     "build:watch": "tsc -p tsconfig.build.json --watch",
     "dev": "tsc -p tsconfig.build.json --watch",
     "typecheck": "tsc -p tsconfig.build.json --noEmit",
     "prebuild": "node -e \"console.log('Building solana-clawd v' + require('./package.json').version)\"",
-    "prepublishOnly": "node -e \"require('fs').rmSync('dist', { recursive: true, force: true })\" && tsc -p tsconfig.build.json --noCheck && node -e \"require('fs').chmodSync('dist/entrypoints/clawd.js', 0o755)\"",
-    "mcp:build": "cd MCP && npm ci && npm run build",
-    "mcp:start": "cd MCP && npm start",
-    "mcp:http": "cd MCP && npm run start:http",
+    "prepack": "npm run build",
+    "mcp:build": "npm --prefix mcp run build",
+    "mcp:start": "npm --prefix mcp start",
+    "mcp:http": "npm --prefix mcp run start:http",
     "agentwallet:build": "npm --prefix packages/agentwallet ci && npm --prefix packages/agentwallet run build",
     "agentwallet:start": "npm --prefix packages/agentwallet start",
     "vault:web:build": "npm --prefix llm-wiki-tang/web run build",
@@ -67,13 +62,15 @@
     "agent-store:truand:manifest": "npm --prefix payments/agent-store/truand run manifest",
     "agent-store:truand:provision": "npm --prefix payments/agent-store/truand run provision",
     "setup": "bash scripts/setup.sh",
+    "install:curl": "bash scripts/install.sh",
     "lint": "biome check src/",
     "lint:fix": "biome check --write src/",
     "format": "biome format --write src/",
     "format:check": "biome format src/",
     "check": "npm run typecheck && npm run lint",
-    "ci": "npm run check && npm run build",
+    "ci": "npm run typecheck && npm run build",
     "clean": "node -e \"require('fs').rmSync('dist', { recursive: true, force: true })\"",
+    "publish:npm": "bash scripts/publish-package.sh",
     "adaptation:report": "node scripts/generate-claude-adaptation-report.mjs",
     "skill:sync": "node scripts/sync-solana-clawd-skill.mjs",
     "skills:catalog": "node scripts/generate-skills-catalog.js",
@@ -234,16 +231,6 @@
   "bugs": {
     "url": "https://github.com/x402agent/solana-clawd/issues"
   },
-  "files": [
-    "dist",
-    "clawd-cloud-os/scripts/bootstrap.sh",
-    "clawd-cloud-os/scripts/install-go.sh",
-    "clawd-cloud-os/tools/clawd-cli.sh",
-    "clawd-cloud-os/README.md",
-    "README.md",
-    "LICENSE",
-    "CHANGELOG.md"
-  ],
   "publishConfig": {
     "access": "public"
   },

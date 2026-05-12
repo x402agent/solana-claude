@@ -72,6 +72,48 @@
         <div class="products" id="products"></div>
       </section>
 
+      <section class="panel checkout-lab" id="checkout-lab">
+        <div class="section-head">
+          <div>
+            <p class="section-label">Flagship Flow</p>
+            <h2>Create a session, fund it, and reveal fulfillment.</h2>
+          </div>
+          <div class="status-pill">Live Demo Ready</div>
+        </div>
+        <div class="checkout-grid">
+          <article class="panel checkout-form-panel">
+            <div class="field-grid">
+              <label class="field">
+                <span>Product</span>
+                <select id="checkout-product"></select>
+              </label>
+              <label class="field">
+                <span>Protocol</span>
+                <select id="checkout-protocol"></select>
+              </label>
+              <label class="field">
+                <span>Buyer Name</span>
+                <input id="checkout-buyer-name" type="text" value="Hackathon Judge" />
+              </label>
+              <label class="field">
+                <span>Buyer Email</span>
+                <input id="checkout-buyer-email" type="email" value="judge@openclawd.demo" />
+              </label>
+            </div>
+            <div class="hero-actions">
+              <button class="button button-primary" id="checkout-create">Create Session</button>
+              <button class="button button-secondary" id="checkout-fund">Mark Funded</button>
+            </div>
+          </article>
+          <article class="panel checkout-state-panel">
+            <p class="section-label">Session State</p>
+            <div class="terminal" id="checkout-session">No session created yet.</div>
+            <p class="section-label">Fulfillment</p>
+            <pre class="artifact-view" id="checkout-fulfillment">Fund a session to reveal the artifact.</pre>
+          </article>
+        </div>
+      </section>
+
       <section class="grid">
         <article class="panel moonpay">
           <p class="section-label">Onramp</p>
@@ -138,6 +180,17 @@
           </div>
         </div>
         <div class="differentiators" id="differentiators"></div>
+      </section>
+
+      <section class="panel judge-mode">
+        <div class="section-head">
+          <div>
+            <p class="section-label">Judge Mode</p>
+            <h2>90-second talk track for the live demo.</h2>
+          </div>
+          <button class="button button-ghost" id="judge-mode-play">Load Judge Sequence</button>
+        </div>
+        <div class="journey" id="judge-mode"></div>
       </section>
 
       <section class="panel frontier">

@@ -3,6 +3,8 @@ const state = {
   store: null,
   demo: null,
   frontier: null,
+  currentSession: null,
+  judgeMode: null,
   moonpayCapabilities: null,
   moonpayWorkbench: null,
   placesService: null,
@@ -26,6 +28,8 @@ async function init() {
   state.demo = await demoRes.json();
   const frontierRes = await fetch("/api/frontier");
   state.frontier = await frontierRes.json();
+  const judgeModeRes = await fetch("/api/judge-mode");
+  state.judgeMode = await judgeModeRes.json();
 
   const [capabilitiesRes, workbenchRes] = await Promise.all([
     fetch("/api/moonpay/capabilities"),
@@ -48,8 +52,12 @@ async function init() {
   renderFleet();
   renderDifferentiators();
   renderFrontier();
+  renderCheckoutLab();
+  renderJudgeMode();
   bindPlaces();
   bindMoonPay();
+  bindCheckoutLab();
+  bindJudgeMode();
 
   if (state.config.public.googleApiKey) {
     await loadGooglePlaces(state.config.public.googleApiKey);
@@ -172,10 +180,22 @@ function renderProducts() {
             <span class="chip">${escapeHtml(humanize(product.category))}</span>
             ${product.protocols.map((protocol) => `<span class="chip">${escapeHtml(protocol)}</span>`).join("")}
           </div>
+          <div class="meta-line">
+            <a class="button button-secondary button-small" href="#checkout-lab" data-buy-product="${escapeHtml(product.id)}">Buy In Demo</a>
+          </div>
         </article>
       `,
     )
     .join("");
+
+  document.querySelectorAll("[data-buy-product]").forEach((node) => {
+    node.addEventListener("click", () => {
+      const productId = node.getAttribute("data-buy-product");
+      const select = document.getElementById("checkout-product");
+      select.value = productId;
+      updateCheckoutProtocols();
+    });
+  });
 }
 
 function renderProtocolMatrix() {
@@ -290,6 +310,27 @@ function renderDifferentiators() {
     .join("");
 }
 
+function renderCheckoutLab() {
+  const productSelect = document.getElementById("checkout-product");
+  productSelect.innerHTML = state.store.catalog.products
+    .map((product) => `<option value="${escapeHtml(product.id)}">${escapeHtml(product.title)}</option>`)
+    .join("");
+  updateCheckoutProtocols();
+}
+
+function renderJudgeMode() {
+  document.getElementById("judge-mode").innerHTML = state.judgeMode.beats
+    .map(
+      (beat) => `
+        <article class="journey-card">
+          <span class="journey-stage">${escapeHtml(beat.label)}</span>
+          <p>${escapeHtml(beat.script)}</p>
+        </article>
+      `,
+    )
+    .join("");
+}
+
 function renderFrontier() {
   const metricsBox = document.getElementById("frontier-metrics");
   const groupsBox = document.getElementById("frontier-groups");
@@ -346,6 +387,27 @@ function bindPlaces() {
 
 function bindMoonPay() {
   document.getElementById("moonpay-refresh").addEventListener("click", refreshMoonPayLink);
+}
+
+function bindCheckoutLab() {
+  document.getElementById("checkout-product").addEventListener("change", updateCheckoutProtocols);
+  document.getElementById("checkout-create").addEventListener("click", createCheckoutSession);
+  document.getElementById("checkout-fund").addEventListener("click", fundCheckoutSession);
+}
+
+function bindJudgeMode() {
+  document.getElementById("judge-mode-play").addEventListener("click", () => {
+    const firstProduct = state.store.catalog.products[0];
+    document.getElementById("checkout-product").value = firstProduct.id;
+    updateCheckoutProtocols();
+    document.getElementById("checkout-buyer-name").value = "Hackathon Judge";
+    document.getElementById("checkout-buyer-email").value = "judge@openclawd.demo";
+    document.getElementById("checkout-session").innerHTML =
+      `<div class="terminal-row"><span>Judge Mode</span><strong>${escapeHtml(state.judgeMode.duration)}</strong></div>`;
+    document.getElementById("checkout-fulfillment").textContent =
+      "1. Create session\n2. Open MoonPay if needed\n3. Mark funded\n4. Read the artifact out loud";
+    document.getElementById("checkout-lab").scrollIntoView({ behavior: "smooth", block: "start" });
+  });
 }
 
 async function loadGooglePlaces(apiKey) {
@@ -416,6 +478,79 @@ async function refreshMoonPayLink() {
     link.href = payload.url;
     link.textContent = `Fund ${payload.amountUsd} USD With MoonPay`;
   }
+}
+
+function updateCheckoutProtocols() {
+  const productId = document.getElementById("checkout-product").value;
+  const product = state.store.catalog.products.find((entry) => entry.id === productId);
+  const protocolSelect = document.getElementById("checkout-protocol");
+  protocolSelect.innerHTML = (product?.protocols || [])
+    .map((protocol) => `<option value="${escapeHtml(protocol)}">${escapeHtml(protocol)}</option>`)
+    .join("");
+}
+
+async function createCheckoutSession() {
+  const payload = {
+    productId: document.getElementById("checkout-product").value,
+    protocol: document.getElementById("checkout-protocol").value,
+    buyerName: document.getElementById("checkout-buyer-name").value,
+    buyerEmail: document.getElementById("checkout-buyer-email").value,
+  };
+
+  const response = await fetch("/api/checkout/session", {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+  const data = await response.json();
+  if (!data?.session) return;
+  state.currentSession = data.session;
+  renderCheckoutSession();
+}
+
+async function fundCheckoutSession() {
+  if (!state.currentSession?.id) return;
+  const response = await fetch(`/api/checkout/session/${encodeURIComponent(state.currentSession.id)}/fund`, {
+    method: "POST",
+  });
+  const data = await response.json();
+  if (!data?.session) return;
+  state.currentSession = data.session;
+  renderCheckoutSession();
+}
+
+function renderCheckoutSession() {
+  const sessionBox = document.getElementById("checkout-session");
+  const fulfillmentBox = document.getElementById("checkout-fulfillment");
+  const session = state.currentSession;
+  if (!session) {
+    sessionBox.textContent = "No session created yet.";
+    fulfillmentBox.textContent = "Fund a session to reveal the artifact.";
+    return;
+  }
+
+  sessionBox.innerHTML = [
+    ["Session", session.id],
+    ["Product", session.productTitle],
+    ["Status", session.status],
+    ["Protocol", session.protocol],
+    ["Buyer", `${session.buyerName} <${session.buyerEmail}>`],
+    ["MoonPay", session.moonPayUrl ? "ready" : "not configured"],
+    ...(session.narrative || []).map((line, index) => [`Step ${index + 1}`, line]),
+  ]
+    .map(([label, value]) => `<div class="terminal-row"><span>${escapeHtml(label)}</span><strong>${escapeHtml(value)}</strong></div>`)
+    .join("");
+
+  if (session.moonPayUrl) {
+    document.getElementById("moonpay-link").href = session.moonPayUrl;
+    document.getElementById("moonpay-link").textContent = `Fund ${escapeHtml(session.amount)} ${escapeHtml(session.asset)} With MoonPay`;
+  }
+
+  fulfillmentBox.textContent = JSON.stringify(
+    session.fulfillment || { preview: session.fulfillmentPreview },
+    null,
+    2,
+  );
 }
 
 function escapeHtml(value) {

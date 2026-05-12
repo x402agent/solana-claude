@@ -9,5 +9,9 @@
             "postcss": "8.5.14",
             "vite": "8.0.10"
         }
+    },
+    "dependencies": {
+        "@solana/codecs-numbers": "^6.9.0",
+        "rpc-websockets": "^9.3.9"
     }
 }
