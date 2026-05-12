@@ -108,7 +108,7 @@
         "@solana/eslint-config-solana": "^6.0.0",
         "@solana/keys": "^6.5.0",
         "@solana/kit": "^6.5.0",
-        "@solana/kit-client-litesvm": "^0.8.0",
+        "@solana/kit-client-litesvm": "^0.10.0",
         "@solana/kit-plugin-instruction-plan": "^0.8.0",
         "@solana/kit-plugin-payer": "^0.8.0",
         "@solana/kit-plugin-rpc": "^0.8.0",
