@@ -13,6 +13,7 @@ import {
 import { NextApiHandler } from 'next';
 import { rpc } from '../core';
 import { getMerchantCatalog, getMerchantProduct } from '../core/catalog';
+import { getPosRecipient } from '../core/runtime';
 import { cors, rateLimit } from '../middleware';
 
 interface GetResponse {
@@ -47,7 +48,7 @@ const post: NextApiHandler<PostResponse> = async (request, response) => {
     const recipientField =
         typeof request.query.recipient === 'string'
             ? request.query.recipient
-            : process.env.POS_RECIPIENT || process.env.MERCHANT_RECIPIENT;
+            : getPosRecipient();
     if (!recipientField) throw new Error('missing recipient');
     const recipient = address(recipientField);
 

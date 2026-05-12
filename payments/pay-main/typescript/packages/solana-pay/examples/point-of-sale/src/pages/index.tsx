@@ -2,6 +2,7 @@ import type { GetServerSideProps, NextPage } from 'next';
 import Link from 'next/link';
 import React from 'react';
 import { getMerchantCatalog, type MerchantProduct } from '../server/core/catalog';
+import { getPosRecipient } from '../server/core/runtime';
 
 interface LandingProps {
     recipient: string;
@@ -131,7 +132,7 @@ export const getServerSideProps: GetServerSideProps<LandingProps> = async () => 
     const catalog = getMerchantCatalog();
     return {
         props: {
-            recipient: process.env.POS_RECIPIENT || process.env.MERCHANT_RECIPIENT || '',
+            recipient: getPosRecipient(),
             label: catalog.merchant.name,
             products: catalog.products,
             domain: catalog.merchant.domain,
