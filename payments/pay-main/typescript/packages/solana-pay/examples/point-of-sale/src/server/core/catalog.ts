@@ -1,5 +1,4 @@
-import { readFileSync } from 'fs';
-import { join } from 'path';
+import catalogJson from '../../../../../../../../../agent-store/catalog.json';
 
 export interface MerchantProduct {
     id: string;
@@ -26,13 +25,8 @@ export interface MerchantCatalog {
     products: MerchantProduct[];
 }
 
-let cachedCatalog: MerchantCatalog | null = null;
-
 export function getMerchantCatalog(): MerchantCatalog {
-    if (cachedCatalog) return cachedCatalog;
-    const path = join(process.cwd(), '../../../../../../agent-store/catalog.json');
-    cachedCatalog = JSON.parse(readFileSync(path, 'utf8')) as MerchantCatalog;
-    return cachedCatalog;
+    return catalogJson as MerchantCatalog;
 }
 
 export function getMerchantProduct(productId: string | undefined): MerchantProduct | undefined {
