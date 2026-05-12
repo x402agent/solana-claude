@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ProxyEndpoint name="default">
+  <Description>Private ingress proxy for the OpenClawd autonomous merchant fleet.</Description>
+  <PreFlow name="PreFlow">
+    <Request>
+      <Step>
+        <Name>AM-PrivateDefaults</Name>
+      </Step>
+      <Step>
+        <Name>EV-VerifyApiKey</Name>
+      </Step>
+      <Step>
+        <Name>JWT-ExtractAgentAssertion</Name>
+      </Step>
+      <Step>
+        <Name>SA-StoreBurstControl</Name>
+      </Step>
+      <Step>
+        <Name>Q-StorePerAppMinute</Name>
+      </Step>
+    </Request>
+    <Response>
+      <Step>
+        <Name>AM-SanitizeResponse</Name>
+      </Step>
+    </Response>
+  </PreFlow>
+  <Flows>
+    <Flow name="Health">
+      <Condition>(proxy.pathsuffix MatchesPath "/health") and (request.verb = "GET")</Condition>
+    </Flow>
+    <Flow name="Registry">
+      <Condition>(proxy.pathsuffix MatchesPath "/registry/**")</Condition>
+    </Flow>
+    <Flow name="Agents">
+      <Condition>(proxy.pathsuffix MatchesPath "/agents/**")</Condition>
+    </Flow>
+    <Flow name="A2A">
+      <Condition>(proxy.pathsuffix MatchesPath "/a2a/**")</Condition>
+    </Flow>
+    <Flow name="Facilitator">
+      <Condition>(proxy.pathsuffix MatchesPath "/facilitator/**")</Condition>
+    </Flow>
+  </Flows>
+  <HTTPProxyConnection>
+    <BasePath>/openclawd/private-store</BasePath>
+  </HTTPProxyConnection>
+  <RouteRule name="route-default">
+    <TargetEndpoint>default</TargetEndpoint>
+  </RouteRule>
+  <FaultRules>
+    <FaultRule name="unauthorized">
+      <Step>
+        <Name>RF-Unauthorized</Name>
+      </Step>
+      <Condition>(fault.name = "FailedToResolveAPIKey") or (fault.name = "ExecutionFailed")</Condition>
+    </FaultRule>
+  </FaultRules>
+</ProxyEndpoint>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<APIProxy name="openclawd-private-store">
+  <Description>Private and confidential Apigee edge for the OpenClawd autonomous merchant store.</Description>
+  <DisplayName>OpenClawd Private Store</DisplayName>
+  <Policies>
+    <Policy>AM-PrivateDefaults</Policy>
+    <Policy>EV-VerifyApiKey</Policy>
+    <Policy>JWT-ExtractAgentAssertion</Policy>
+    <Policy>SA-StoreBurstControl</Policy>
+    <Policy>Q-StorePerAppMinute</Policy>
+    <Policy>AM-SanitizeResponse</Policy>
+    <Policy>RF-Unauthorized</Policy>
+  </Policies>
+  <ProxyEndpoints>
+    <ProxyEndpoint>default</ProxyEndpoint>
+  </ProxyEndpoints>
+  <TargetEndpoints>
+    <TargetEndpoint>default</TargetEndpoint>
+  </TargetEndpoints>
+  <BasePaths>/openclawd/private-store</BasePaths>
+</APIProxy>

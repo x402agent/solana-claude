@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<TargetEndpoint name="default">
+  <Description>Target endpoint for the OpenClawd x402 worker gateway behind private networking.</Description>
+  <HTTPTargetConnection>
+    <URL>https://REPLACE_WITH_PRIVATE_OPENCLAWD_GATEWAY</URL>
+  </HTTPTargetConnection>
+</TargetEndpoint>

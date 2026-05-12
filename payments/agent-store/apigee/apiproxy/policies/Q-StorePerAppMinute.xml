@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Quota async="false" continueOnError="false" enabled="true" name="Q-StorePerAppMinute" type="calendar">
+  <DisplayName>Q-StorePerAppMinute</DisplayName>
+  <Allow count="600"/>
+  <Interval>1</Interval>
+  <TimeUnit>minute</TimeUnit>
+  <Identifier ref="verifyapikey.EV-VerifyApiKey.client_id"/>
+</Quota>

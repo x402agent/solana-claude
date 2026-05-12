@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<SpikeArrest async="false" continueOnError="false" enabled="true" name="SA-StoreBurstControl">
+  <DisplayName>SA-StoreBurstControl</DisplayName>
+  <Rate>30ps</Rate>
+  <UseEffectiveCount>true</UseEffectiveCount>
+</SpikeArrest>

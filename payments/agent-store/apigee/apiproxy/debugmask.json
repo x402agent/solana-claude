@@ -1,0 +1,29 @@
+{
+  "requestJSONPaths": [
+    "$.payment",
+    "$.paymentReceipt",
+    "$.receipt",
+    "$.wallet",
+    "$.signature",
+    "$.mandate",
+    "$.authorization"
+  ],
+  "responseJSONPaths": [
+    "$.payment",
+    "$.paymentReceipt",
+    "$.receipt",
+    "$.wallet",
+    "$.signature",
+    "$.mandate",
+    "$.authorization"
+  ],
+  "variables": [
+    "request.content",
+    "response.content",
+    "private.auth.header",
+    "private.agent.assertion",
+    "private.payment.signature",
+    "private.payment.header",
+    "private.agent.jwt"
+  ]
+}

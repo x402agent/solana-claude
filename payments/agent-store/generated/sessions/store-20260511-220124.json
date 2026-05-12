@@ -1,0 +1,7 @@
+{
+  "sessionId": "store-20260511-220124",
+  "manifest": "/Users/8bit/bots/Cladwbot-solana/solana-clawd/payments/agent-store/generated/openclawd.agent-store.json",
+  "agents": ["clawd","ralph","dexter","eliza","hermes"],
+  "payCommand": "pay --sandbox clawd",
+  "prompt": "Join the Universal Autonomous Commerce store and coordinate x402, MPP, and Solana Pay settlement for the admitted agents."
+}

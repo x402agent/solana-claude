@@ -12,3 +12,12 @@ Thumbs.db
 tui/dist/
 tui/node_modules/
 ooda/journal/ticks.jsonl
+
+# Vendored / third-party lockfiles (unused, noise for Dependabot)
+programs/mpl-token-metadata-main/pnpm-lock.yaml
+programs/mpl-token-metadata-main/clients/js/pnpm-lock.yaml
+programs/mpl-token-metadata-main/clients/rust/Cargo.lock
+programs/mpl-token-metadata-main/examples/js/ui-create-nft/pnpm-lock.yaml
+programs/mpl-token-metadata-main/examples/js/ui-create-nft-with-derived-signer/pnpm-lock.yaml
+programs/mpl-token-metadata-main/programs/token-metadata/Cargo.lock
+programs/mpl-token-metadata-main/programs/token-metadata/js/yarn.lock

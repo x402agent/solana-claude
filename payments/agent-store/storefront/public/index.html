@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>OpenClawd Sovereign Store</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="ambient ambient-a"></div>
+    <div class="ambient ambient-b"></div>
+    <main class="shell">
+      <section class="hero panel">
+        <div class="hero-copy">
+          <p class="eyebrow">Private Agent Commerce</p>
+          <h1>The Sovereign Storefront for Paid Intelligence, Agent Checkout, and Solana-Native Settlement.</h1>
+          <p class="lede">
+            OpenClawd’s merchant fleet runs behind a private Apigee edge, settles across x402, MPP, AP2, pay.sh, and Solana Pay,
+            and is staged for a hackathon-grade launch without leaking operator secrets.
+          </p>
+          <div class="hero-actions">
+            <a class="button button-primary" id="moonpay-link" href="#" target="_blank" rel="noreferrer">Fund With MoonPay</a>
+            <a class="button button-secondary" href="#catalog">Enter The Vault</a>
+          </div>
+        </div>
+        <div class="hero-card">
+          <div class="crest">$CLAWD</div>
+          <div class="metrics" id="metrics"></div>
+        </div>
+      </section>
+
+      <section class="grid">
+        <article class="panel narrative">
+          <p class="section-label">Operational Mythos</p>
+          <h2>Built for kings, operators, and buyers who want the velvet rope and the payment rail in the same room.</h2>
+          <p>
+            Eliza handles the concierge lane. Dexter closes the cart. HERMES owns settlement and policy. Clawd coordinates the whole theater.
+            Ralph keeps premium inventory flowing. Every lane is private-first.
+          </p>
+        </article>
+
+        <article class="panel security">
+          <p class="section-label">Security Posture</p>
+          <ul class="security-list" id="security-list"></ul>
+        </article>
+      </section>
+
+      <section class="panel featured" id="catalog">
+        <div class="section-head">
+          <div>
+            <p class="section-label">Featured Offers</p>
+            <h2>Agent products with real settlement rails.</h2>
+          </div>
+          <div class="status-pill">Confidential By Default</div>
+        </div>
+        <div class="offers" id="offers"></div>
+        <div class="products" id="products"></div>
+      </section>
+
+      <section class="grid">
+        <article class="panel moonpay">
+          <p class="section-label">Onramp</p>
+          <h2>MoonPay is wired for hackathon speed.</h2>
+          <p id="moonpay-summary"></p>
+          <div class="search-row">
+            <input id="moonpay-amount" type="number" min="10" step="10" value="50" />
+            <button class="button button-primary" id="moonpay-refresh">Rebuild Buy Link</button>
+          </div>
+          <div class="terminal" id="merchant-config"></div>
+        </article>
+
+        <article class="panel places">
+          <p class="section-label">Google Layer</p>
+          <h2>Hackathon vicinity intelligence.</h2>
+          <p>Use the Google client key to light up place search in the browser. Keep it referrer-restricted.</p>
+          <div class="search-row">
+            <input id="places-query" type="text" value="crypto coworking near hackathon" />
+            <button class="button button-secondary" id="places-search">Search</button>
+          </div>
+          <div class="places-results" id="places-results">Google Places search is idle.</div>
+        </article>
+      </section>
+
+      <section class="panel command-center">
+        <div class="section-head">
+          <div>
+            <p class="section-label">Merchant Command</p>
+            <h2>Fleet lanes and handoffs.</h2>
+          </div>
+        </div>
+        <div class="fleet" id="fleet"></div>
+      </section>
+
+      <section class="panel command-center">
+        <div class="section-head">
+          <div>
+            <p class="section-label">MoonPay Agent Ops</p>
+            <h2>CLI, MCP, wallet, deposit, and market-data surfaces.</h2>
+          </div>
+        </div>
+        <div class="grid moonpay-grid">
+          <article class="panel moonpay-subpanel">
+            <p class="section-label">Capability Probe</p>
+            <div class="terminal" id="moonpay-capabilities"></div>
+          </article>
+          <article class="panel moonpay-subpanel">
+            <p class="section-label">Workbench</p>
+            <div class="terminal" id="moonpay-workbench"></div>
+          </article>
+        </div>
+      </section>
+    </main>
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AssignMessage async="false" continueOnError="false" enabled="true" name="AM-PrivateDefaults">
+  <DisplayName>AM-PrivateDefaults</DisplayName>
+  <AssignVariable>
+    <Name>private.store.profile</Name>
+    <Value>openclawd-private-store</Value>
+  </AssignVariable>
+  <AssignVariable>
+    <Name>private.auth.header</Name>
+    <Ref>request.header.authorization</Ref>
+  </AssignVariable>
+  <AssignVariable>
+    <Name>private.agent.assertion</Name>
+    <Ref>request.header.x-agent-assertion</Ref>
+  </AssignVariable>
+  <AssignVariable>
+    <Name>private.payment.signature</Name>
+    <Ref>request.header.payment-signature</Ref>
+  </AssignVariable>
+  <AssignVariable>
+    <Name>private.payment.header</Name>
+    <Ref>request.header.x-payment</Ref>
+  </AssignVariable>
+  <AssignVariable>
+    <Name>request.header.x-openclawd-ingress</Name>
+    <Value>apigee-private</Value>
+  </AssignVariable>
+  <AssignVariable>
+    <Name>request.header.x-openclawd-confidential</Name>
+    <Value>true</Value>
+  </AssignVariable>
+  <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+</AssignMessage>

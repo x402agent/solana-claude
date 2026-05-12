@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<RaiseFault async="false" continueOnError="false" enabled="true" name="RF-Unauthorized">
+  <DisplayName>RF-Unauthorized</DisplayName>
+  <FaultResponse>
+    <Set>
+      <StatusCode>401</StatusCode>
+      <ReasonPhrase>Unauthorized</ReasonPhrase>
+      <Payload contentType="application/json">
+        {"error":"unauthorized","message":"private merchant ingress requires approved credentials"}
+      </Payload>
+      <Headers>
+        <Header name="x-openclawd-private-edge">apigee</Header>
+      </Headers>
+    </Set>
+  </FaultResponse>
+</RaiseFault>

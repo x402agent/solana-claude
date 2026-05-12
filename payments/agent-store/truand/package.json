@@ -1,0 +1,20 @@
+{
+  "name": "openclawd-truand-fleet",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "plan": "tsx src/index.ts plan",
+    "manifest": "tsx src/index.ts manifest",
+    "provision": "tsx src/index.ts provision"
+  },
+  "dependencies": {
+    "@upstash/box": "^0.4.1",
+    "zod": "^3.24.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "tsx": "^4.0.0",
+    "typescript": "^5.8.0"
+  }
+}

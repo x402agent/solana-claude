@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AssignMessage async="false" continueOnError="false" enabled="true" name="AM-SanitizeResponse">
+  <DisplayName>AM-SanitizeResponse</DisplayName>
+  <Set>
+    <Headers>
+      <Header name="x-openclawd-private-edge">apigee</Header>
+      <Header name="x-openclawd-data-classification">confidential</Header>
+      <Header name="x-openclawd-debug">masked</Header>
+    </Headers>
+  </Set>
+  <Remove>
+    <Headers>
+      <Header name="server"/>
+      <Header name="x-powered-by"/>
+      <Header name="x-payment"/>
+      <Header name="payment-signature"/>
+      <Header name="x-clawd-signature"/>
+    </Headers>
+  </Remove>
+  <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+  <AssignTo createNew="false" transport="http" type="response"/>
+</AssignMessage>

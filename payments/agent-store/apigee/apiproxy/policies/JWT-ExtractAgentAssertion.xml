@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ExtractVariables async="false" continueOnError="true" enabled="true" name="JWT-ExtractAgentAssertion">
+  <DisplayName>JWT-ExtractAgentAssertion</DisplayName>
+  <Source>request.header.x-agent-assertion</Source>
+  <Header name="x-agent-assertion">
+    <Pattern ignoreCase="true">Bearer {private.agent.jwt}</Pattern>
+  </Header>
+  <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+</ExtractVariables>
