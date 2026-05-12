@@ -7,7 +7,9 @@
 import chalk from 'chalk';
 import type { DashboardState, LogEntry } from '../state.js';
 
-const LEVEL_COLOR: Record<LogEntry['level'], chalk.Chalk> = {
+type ColorFn = (text: string) => string;
+
+const LEVEL_COLOR: Record<LogEntry['level'], ColorFn> = {
   info:  chalk.cyan,
   warn:  chalk.yellow,
   error: chalk.red,
@@ -16,7 +18,7 @@ const LEVEL_COLOR: Record<LogEntry['level'], chalk.Chalk> = {
   trade: chalk.hex('#ff8c00'),
 };
 
-const PHASE_COLOR: Record<string, chalk.Chalk> = {
+const PHASE_COLOR: Record<string, ColorFn> = {
   OBSERVE: chalk.cyan,
   ORIENT:  chalk.yellow,
   DECIDE:  chalk.magenta,

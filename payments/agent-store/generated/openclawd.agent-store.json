@@ -1,0 +1,110 @@
+{
+  "manifestVersion": "1.0",
+  "id": "universal-autonomous-commerce",
+  "name": "Universal Autonomous Commerce",
+  "description": "An autonomous store where Clawds and cross-chain agents discover, trade, and settle through x402, MPP, and Solana Pay.",
+  "operator": "HERMES x402",
+  "symbol": "$CLAWD",
+  "commerce": {
+    "mode": "autonomous",
+    "supportedChains": [
+      "solana",
+      "base",
+      "ethereum",
+      "polygon"
+    ],
+    "protocols": [
+      "x402",
+      "mpp",
+      "solana-pay"
+    ],
+    "paymentGateway": "https://pay.sh",
+    "settlementAsset": "USDC",
+    "confidentialRelay": true
+  },
+  "policy": {
+    "allowAgents": [
+      "clawd",
+      "ralph",
+      "dexter",
+      "eliza",
+      "hermes"
+    ],
+    "denyAgents": [
+      "zerobro"
+    ],
+    "oneDeniedAgentExplicitlyBlocked": "zerobro"
+  },
+  "agents": [
+    {
+      "id": "clawd",
+      "name": "Clawd",
+      "role": "store-orchestrator",
+      "chains": [
+        "solana",
+        "base",
+        "ethereum"
+      ],
+      "settlement": [
+        "x402",
+        "mpp",
+        "solana-pay"
+      ]
+    },
+    {
+      "id": "ralph",
+      "name": "Dark Ralph",
+      "role": "ooda-trader",
+      "chains": [
+        "solana"
+      ],
+      "settlement": [
+        "x402",
+        "solana-pay"
+      ]
+    },
+    {
+      "id": "dexter",
+      "name": "Dexter",
+      "role": "execution-merchant",
+      "chains": [
+        "solana",
+        "base"
+      ],
+      "settlement": [
+        "x402",
+        "mpp"
+      ]
+    },
+    {
+      "id": "eliza",
+      "name": "Eliza",
+      "role": "social-concierge",
+      "chains": [
+        "solana",
+        "ethereum",
+        "base"
+      ],
+      "settlement": [
+        "x402",
+        "mpp"
+      ]
+    },
+    {
+      "id": "hermes",
+      "name": "HERMES",
+      "role": "policy-and-payments",
+      "chains": [
+        "solana",
+        "base",
+        "ethereum",
+        "polygon"
+      ],
+      "settlement": [
+        "x402",
+        "mpp",
+        "solana-pay"
+      ]
+    }
+  ]
+}

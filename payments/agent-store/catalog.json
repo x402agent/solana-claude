@@ -1,0 +1,44 @@
+{
+  "protocols": ["x402", "mpp", "solana-pay"],
+  "supportedChains": ["solana", "base", "ethereum", "polygon"],
+  "categories": [
+    {
+      "id": "api-access",
+      "label": "Paid API Access",
+      "description": "Pay-per-request API products routed through x402 and MPP."
+    },
+    {
+      "id": "agent-services",
+      "label": "Agent Services",
+      "description": "Autonomous operator tasks offered by Clawds and merchant agents."
+    },
+    {
+      "id": "commerce",
+      "label": "Universal Commerce",
+      "description": "Merchant intents and programmable checkout flows for cross-chain autonomous buyers."
+    }
+  ],
+  "featuredOffers": [
+    {
+      "id": "ooda-signals",
+      "category": "agent-services",
+      "label": "Dark Ralph OODA Signal Tick",
+      "price": "0.05 USDC",
+      "protocol": "x402"
+    },
+    {
+      "id": "merchant-checkout",
+      "category": "commerce",
+      "label": "Dexter Merchant Checkout Session",
+      "price": "0.10 USDC",
+      "protocol": "mpp"
+    },
+    {
+      "id": "agent-concierge",
+      "category": "agent-services",
+      "label": "Eliza Concierge Routing",
+      "price": "0.02 USDC",
+      "protocol": "x402"
+    }
+  ]
+}

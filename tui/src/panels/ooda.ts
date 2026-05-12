@@ -7,6 +7,8 @@
 import chalk from 'chalk';
 import type { DashboardState, OODAPhase } from '../state.js';
 
+type ColorFn = (text: string) => string;
+
 const PHASE_ORDER: OODAPhase[] = ['observe', 'orient', 'decide', 'act', 'learn'];
 
 const PHASE_LABELS: Record<OODAPhase, string> = {
@@ -18,7 +20,7 @@ const PHASE_LABELS: Record<OODAPhase, string> = {
   idle:    'IDLE   ',
 };
 
-const PHASE_COLORS: Record<OODAPhase, chalk.Chalk> = {
+const PHASE_COLORS: Record<OODAPhase, ColorFn> = {
   observe: chalk.cyan,
   orient:  chalk.yellow,
   decide:  chalk.magenta,

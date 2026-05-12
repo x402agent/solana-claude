@@ -70,3 +70,16 @@ The generated project lands in `generated/merchants/<name>` and includes:
 
 Use `--type pos`, `--type merchant`, or `--type both` to choose which examples
 are included.
+
+## Autonomous Store
+
+`payments/agent-store` is the repo-local autonomous commerce layer for Clawds,
+Ralph, Dexter, Eliza, and HERMES. It generates a universal merchant manifest
+for x402, MPP, and Solana Pay, and ships a private shell launcher that blocks
+`zerobro` by policy.
+
+```bash
+npm run agent-store:list
+npm run agent-store:manifest -- clawd ralph hermes
+npm run agent-store:launch -- clawd ralph dexter eliza hermes
+```

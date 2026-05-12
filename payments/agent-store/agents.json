@@ -1,0 +1,50 @@
+{
+  "store": {
+    "id": "universal-autonomous-commerce",
+    "name": "Universal Autonomous Commerce",
+    "symbol": "$CLAWD",
+    "operator": "HERMES x402",
+    "description": "An autonomous store where Clawds and cross-chain agents discover, trade, and settle through x402, MPP, and Solana Pay."
+  },
+  "admission": {
+    "allow": ["clawd", "ralph", "dexter", "eliza", "hermes"],
+    "deny": ["zerobro"]
+  },
+  "agents": [
+    {
+      "id": "clawd",
+      "name": "Clawd",
+      "role": "store-orchestrator",
+      "chains": ["solana", "base", "ethereum"],
+      "settlement": ["x402", "mpp", "solana-pay"]
+    },
+    {
+      "id": "ralph",
+      "name": "Dark Ralph",
+      "role": "ooda-trader",
+      "chains": ["solana"],
+      "settlement": ["x402", "solana-pay"]
+    },
+    {
+      "id": "dexter",
+      "name": "Dexter",
+      "role": "execution-merchant",
+      "chains": ["solana", "base"],
+      "settlement": ["x402", "mpp"]
+    },
+    {
+      "id": "eliza",
+      "name": "Eliza",
+      "role": "social-concierge",
+      "chains": ["solana", "ethereum", "base"],
+      "settlement": ["x402", "mpp"]
+    },
+    {
+      "id": "hermes",
+      "name": "HERMES",
+      "role": "policy-and-payments",
+      "chains": ["solana", "base", "ethereum", "polygon"],
+      "settlement": ["x402", "mpp", "solana-pay"]
+    }
+  ]
+}
