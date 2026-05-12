@@ -14,6 +14,14 @@ const CLEAR_SCREEN = '\x1b[2J\x1b[H';
 const HIDE_CURSOR = '\x1b[?25l';
 const SHOW_CURSOR = '\x1b[?25h';
 const SPARK = '▁▂▃▄▅▆▇█';
+const LOBSTER = chalk.hex('#ff3e3e');
+const CYAN = chalk.hex('#00e5ff');
+const MAGENTA = chalk.hex('#ff00ff');
+const GREEN = chalk.hex('#00ffaa');
+const VIOLET = chalk.hex('#a040ff');
+const DIM = chalk.hex('#8a8a8a');
+const PANEL = chalk.hex('#5e1d1d');
+const WHITE = chalk.hex('#f5f5f5');
 
 export function enableRawMode(): void {
   process.stdout.write(HIDE_CURSOR);
@@ -40,13 +48,12 @@ function truncate(s: string, width: number): string {
 function box(title: string, width: number, body: string[]): string[] {
   const top = `┌${'─'.repeat(Math.max(0, width - 2))}┐`;
   const bottom = `└${'─'.repeat(Math.max(0, width - 2))}┘`;
-  const lines = [chalk.gray(top)];
-  const heading = `│ ${chalk.white.bold(title)}`;
-  lines.push(chalk.gray('│') + padRight(` ${chalk.white.bold(title)}`, width - 2) + chalk.gray('│'));
+  const lines = [PANEL(top)];
+  lines.push(PANEL('│') + padRight(` ${LOBSTER.bold(title)}`, width - 2) + PANEL('│'));
   for (const row of body) {
-    lines.push(chalk.gray('│') + padRight(` ${row}`, width - 2) + chalk.gray('│'));
+    lines.push(PANEL('│') + padRight(` ${row}`, width - 2) + PANEL('│'));
   }
-  lines.push(chalk.gray(bottom));
+  lines.push(PANEL(bottom));
   return lines;
 }
 
@@ -65,12 +72,12 @@ function joinHorizontal(columns: { width: number; lines: string[] }[], gap = 2):
 
 function sectionHeader(left: string, width: number, right = ''): string {
   const available = Math.max(0, width - 4 - visLen(left) - visLen(right));
-  return `${chalk.gray('└─')}${left}${'─'.repeat(available)}${right}${chalk.gray('─┘')}`;
+  return `${PANEL('└─')}${left}${LOBSTER('─'.repeat(available))}${right}${PANEL('─┘')}`;
 }
 
 function pct(n: number): string {
   const value = `${n >= 0 ? '+' : ''}${n.toFixed(2)}%`;
-  return n >= 0 ? chalk.green(value) : chalk.red(value);
+  return n >= 0 ? GREEN(value) : LOBSTER(value);
 }
 
 function sparkline(values: number[], width: number): string {
@@ -93,9 +100,9 @@ function renderTickerTape(state: DashboardState, width: number): string {
   const items = state.tickerTape.length > 0 ? state.tickerTape : state.trending.slice(0, 4);
   const text = items.map((item) => {
     const price = item.price ? `$${item.price.toFixed(item.price < 1 ? 6 : 2)}` : '';
-    return `${chalk.white.bold(item.symbol)} ${chalk.yellow(price)} ${pct(item.change)}`;
-  }).join(chalk.gray(' │ '));
-  return `${chalk.gray('└─')}${padRight(text, Math.max(0, width - 4))}${chalk.gray('─┘')}`;
+    return `${WHITE.bold(item.symbol)} ${CYAN(price)} ${pct(item.change)}`;
+  }).join(DIM(' │ '));
+  return `${PANEL('└─')}${padRight(text, Math.max(0, width - 4))}${PANEL('─┘')}`;
 }
 
 function renderPriceChart(state: DashboardState, width: number): string[] {
@@ -103,14 +110,14 @@ function renderPriceChart(state: DashboardState, width: number): string[] {
   const closes = candles.map((c) => c.c);
   const vols = candles.map((c) => c.v);
   const last = candles[candles.length - 1];
-  const header = `${chalk.white.bold('SOL/USDC')} ${chalk.gray('│ 1H')} ${chalk.yellow(`$${state.solPrice.toFixed(2)}`)} ${pct(state.solChange24h)}`;
+  const header = `${WHITE.bold('SOL/USDC')} ${DIM('│ 1H')} ${CYAN(`$${state.solPrice.toFixed(2)}`)} ${pct(state.solChange24h)}`;
   const body = [
     header,
-    chalk.cyan(sparkline(closes, Math.max(24, width - 8))),
-    `${chalk.gray('VOL')} ${chalk.magenta(volumeLine(vols, Math.max(24, width - 12)))}`,
+    `${LOBSTER('▒')} ${CYAN(sparkline(closes, Math.max(24, width - 10)))}`,
+    `${DIM('VOL')} ${MAGENTA(volumeLine(vols, Math.max(24, width - 12)))}`,
     last
-      ? `${chalk.gray('O:')} ${last.o.toFixed(2)}   ${chalk.gray('H:')} ${last.h.toFixed(2)}   ${chalk.gray('L:')} ${last.l.toFixed(2)}`
-      : chalk.gray('No candles'),
+      ? `${DIM('O:')} ${WHITE(last.o.toFixed(2))}   ${DIM('H:')} ${WHITE(last.h.toFixed(2))}   ${DIM('L:')} ${WHITE(last.l.toFixed(2))}`
+      : DIM('No candles'),
   ];
   return box('PRICE CHART', width, body);
 }
@@ -123,11 +130,11 @@ function renderOrderBook(levels: OrderBookLevel[], width: number): string[] {
     : '0.0000';
   const rows = ['DEPTH      PRICE      SIZE'];
   for (const ask of asks) {
-    rows.push(`${chalk.red('██████')}  ${ask.price.toFixed(3).padStart(7)}  ${ask.size.toFixed(2).padStart(7)}`);
+    rows.push(`${LOBSTER('██████')}  ${WHITE(ask.price.toFixed(3).padStart(7))}  ${DIM(ask.size.toFixed(2).padStart(7))}`);
   }
-  rows.push(chalk.gray(`─── SPREAD: ${spread} ───`));
+  rows.push(DIM(`─── SPREAD: ${spread} ───`));
   for (const bid of bids) {
-    rows.push(`${chalk.green('██████')}  ${bid.price.toFixed(3).padStart(7)}  ${bid.size.toFixed(2).padStart(7)}`);
+    rows.push(`${GREEN('██████')}  ${WHITE(bid.price.toFixed(3).padStart(7))}  ${DIM(bid.size.toFixed(2).padStart(7))}`);
   }
   return box('ORDER BOOK', width, rows);
 }
@@ -136,7 +143,7 @@ function renderHeatmap(cells: HeatCell[], width: number): string[] {
   const rows: string[] = [];
   const line = cells.map((cell) => {
     const label = `${cell.label} ${cell.change >= 0 ? '+' : ''}${cell.change.toFixed(1)}`;
-    const tone = cell.change >= 0 ? chalk.bgGreen.black : chalk.bgRed.white;
+    const tone = cell.change >= 0 ? chalk.bgHex('#00ffaa').black : chalk.bgHex('#ff3e3e').white;
     return tone(` ${label} `);
   }).join(' ');
   rows.push(line);
@@ -145,22 +152,25 @@ function renderHeatmap(cells: HeatCell[], width: number): string[] {
 
 function renderMovers(tokens: TrendingToken[], width: number): string[] {
   const rows = tokens.slice(0, 5).map((token) => {
-    const arrow = token.change >= 0 ? chalk.green('▲') : chalk.red('▼');
+    const arrow = token.change >= 0 ? GREEN('▲') : LOBSTER('▼');
     return `${arrow} ${token.symbol.padEnd(6)} ${pct(token.change)}`;
   });
   return box('TOP MOVERS', width, rows);
 }
 
 function renderFeed(feed: FeedItem[], width: number): string[] {
-  const rows = feed.slice(0, 5).map((item) => `${item.icon} ${truncate(item.text, width - 8)}`);
+  const rows = feed.slice(0, 5).map((item) => {
+    const color = item.tone === 'bull' ? GREEN : item.tone === 'bear' ? LOBSTER : item.tone === 'whale' ? MAGENTA : CYAN;
+    return `${color(item.icon)} ${truncate(item.text, width - 8)}`;
+  });
   return box('LIVE FEED          ● LIVE', width, rows);
 }
 
 function renderNetwork(state: DashboardState, width: number): string[] {
   const rows = [
-    `TPS ${chalk.cyan(state.network.tps.toFixed(0))}  slot ${chalk.yellow(state.network.slot.toLocaleString())}`,
-    `ping ${chalk.green(state.network.pingMs.toFixed(0) + 'ms')}  validators ${chalk.magenta(String(state.network.validators))}`,
-    `OODA ${chalk.white.bold(state.oodaPhase.toUpperCase())}  cycles ${chalk.cyan(String(state.cycleCount))}`,
+    `TPS ${CYAN(state.network.tps.toFixed(0))}  slot ${WHITE(state.network.slot.toLocaleString())}`,
+    `ping ${GREEN(state.network.pingMs.toFixed(0) + 'ms')}  validators ${VIOLET(String(state.network.validators))}`,
+    `OODA ${LOBSTER.bold(state.oodaPhase.toUpperCase())}  cycles ${CYAN(String(state.cycleCount))}`,
   ];
   return box('NETWORK STATS', width, rows);
 }
@@ -168,7 +178,7 @@ function renderNetwork(state: DashboardState, width: number): string[] {
 function renderActivity(log: LogEntry[], width: number): string[] {
   const rows = log.slice(0, 6).map((entry) => {
     const ts = new Date(entry.ts).toTimeString().slice(0, 8);
-    return `${chalk.gray(ts)} ${chalk.white(entry.phase.padEnd(7))} ${truncate(entry.msg, width - 22)}`;
+    return `${DIM(ts)} ${LOBSTER(entry.phase.padEnd(7))} ${truncate(entry.msg, width - 22)}`;
   });
   return box('ACTIVITY', width, rows);
 }
@@ -176,14 +186,14 @@ function renderActivity(log: LogEntry[], width: number): string[] {
 function renderTradingView(state: DashboardState, width: number): string[] {
   const signal = state.lastSignal;
   const rows = [
-    `Mode        ${state.autoMode ? chalk.green('AUTO') : chalk.yellow('INTERACTIVE')}`,
-    `Confidential ${state.confidentialMode ? chalk.green('ON') : chalk.red('OFF')}`,
-    `Dark DeFi   ${state.darkDefiArmed ? chalk.green('ARMED') : chalk.yellow('DISARMED')}`,
-    `pay.sh      ${state.payshStatus === 'online' ? chalk.green('READY') : chalk.red(state.payshStatus.toUpperCase())}`,
+    `Mode        ${state.autoMode ? GREEN('AUTO') : CYAN('INTERACTIVE')}`,
+    `Confidential ${state.confidentialMode ? GREEN('ON') : LOBSTER('OFF')}`,
+    `Dark DeFi   ${state.darkDefiArmed ? LOBSTER('ARMED') : DIM('DISARMED')}`,
+    `pay.sh      ${state.payshStatus === 'online' ? GREEN('READY') : LOBSTER(state.payshStatus.toUpperCase())}`,
     signal
       ? `Signal      ${signal.symbol} ${signal.side.toUpperCase()} ${signal.score}/100 ${signal.size}`
       : 'Signal      PASS',
-    `Paper PnL   ${state.paperPnl >= 0 ? chalk.green(`+$${state.paperPnl.toFixed(2)}`) : chalk.red(`-$${Math.abs(state.paperPnl).toFixed(2)}`)}`,
+    `Paper PnL   ${state.paperPnl >= 0 ? GREEN(`+$${state.paperPnl.toFixed(2)}`) : LOBSTER(`-$${Math.abs(state.paperPnl).toFixed(2)}`)}`,
     `Last pay    ${state.lastPayment ? `${state.lastPayment.amount.toFixed(2)} ${state.lastPayment.asset}` : 'none'}`,
   ];
   return box('TRADING PANEL', width, rows);
@@ -194,7 +204,7 @@ function renderPortfolioView(state: DashboardState, width: number): string[] {
     `Wallet      ${state.wallet.address}`,
     `SOL         ${state.wallet.solBalance.toFixed(2)}`,
     `Value       $${state.wallet.totalValueUsd.toFixed(2)}`,
-    `Daily PnL   ${state.wallet.dailyPnlUsd >= 0 ? chalk.green(`+$${state.wallet.dailyPnlUsd.toFixed(2)}`) : chalk.red(`-$${Math.abs(state.wallet.dailyPnlUsd).toFixed(2)}`)}`,
+    `Daily PnL   ${state.wallet.dailyPnlUsd >= 0 ? GREEN(`+$${state.wallet.dailyPnlUsd.toFixed(2)}`) : LOBSTER(`-$${Math.abs(state.wallet.dailyPnlUsd).toFixed(2)}`)}`,
     ...state.wallet.positions.slice(0, 4).map((position) =>
       `${position.symbol.padEnd(8)} $${position.valueUsd.toFixed(0).padStart(6)}  ${pct(position.change24h).padStart(8)}`),
   ];
@@ -208,7 +218,7 @@ function renderAnalyticsView(state: DashboardState, width: number): string[] {
     `Win rate    ${(state.winRate * 100).toFixed(1)}%`,
     `Trades      ${state.totalTrades}`,
     `A2A peers   ${state.a2aConnections.filter((peer) => peer.status === 'connected').length}/${state.a2aConnections.length}`,
-    `Research    ${state.nousOnline ? chalk.green('online') : chalk.red('offline')}`,
+    `Research    ${state.nousOnline ? GREEN('online') : LOBSTER('offline')}`,
   ];
   return box('ANALYTICS', width, rows);
 }
@@ -216,10 +226,10 @@ function renderAnalyticsView(state: DashboardState, width: number): string[] {
 function renderAgentView(messages: AgentMessage[], width: number): string[] {
   const rows = messages.slice(0, 6).map((message) => {
     const who = message.role === 'agent'
-      ? chalk.cyan('agent')
+      ? CYAN('agent')
       : message.role === 'user'
-        ? chalk.yellow('user ')
-        : chalk.gray('system');
+        ? MAGENTA('user ')
+        : DIM('system');
     return `${who} ${truncate(message.text, width - 10)}`;
   });
   return box('AGENT CONSOLE', width, rows);
@@ -245,8 +255,8 @@ function navigation(state: DashboardState, width: number): string {
   ];
   const text = tabs.map((tab) => {
     const body = `[${tab.key}] ${tab.label}`;
-    return tab.view === state.view ? chalk.bgCyan.black(` ${body} `) : chalk.gray(body);
-  }).join(chalk.gray(' │ '));
+    return tab.view === state.view ? chalk.bgHex('#ff3e3e').black(` ${body} `) : DIM(body);
+  }).join(DIM(' │ '));
   return sectionHeader(text, width, '');
 }
 
@@ -297,14 +307,15 @@ export function renderFrame(state: DashboardState): void {
   const modeLabel = state.autoMode ? 'AUTO' : 'INTERACTIVE';
 
   const topBorder = chalk.gray(`┌${'─'.repeat(termWidth - 2)}┐`);
-  const title = `${chalk.cyan('🦞 CLAWD')} ${chalk.white.bold('MARKET VIEW')} ${chalk.gray(`mode:${modeLabel}`)}`;
-  const topStatus = `${chalk.gray('Uptime:')} ${hh}:${mm}:${ss} ${chalk.gray('│')} ${clock}`;
+  const title = `${LOBSTER.bold('🦞 CLAWD')} ${WHITE.bold('MARKET VIEW')} ${DIM(`mode:${modeLabel}`)}`;
+  const topStatus = `${DIM('Uptime:')} ${hh}:${mm}:${ss} ${DIM('│')} ${clock}`;
 
   const lines = [
-    topBorder,
+    PANEL(topBorder),
     sectionHeader(title, termWidth, topStatus),
-    chalk.gray(`┌${'─'.repeat(termWidth - 2)}┐`),
+    PANEL(`┌${'─'.repeat(termWidth - 2)}┐`),
     renderTickerTape(state, termWidth),
+    `${DIM('░'.repeat(Math.max(40, termWidth - 2)))}`,
     '',
     ...renderMainView(state, termWidth),
     '',
@@ -312,10 +323,10 @@ export function renderFrame(state: DashboardState): void {
   ];
 
   if (state.commandBuffer) {
-    lines.push(chalk.gray('> ') + chalk.yellow(state.commandBuffer));
+    lines.push(`${LOBSTER('>')} ${MAGENTA(state.commandBuffer)}`);
   }
   if (state.error) {
-    lines.push(chalk.red(`error: ${state.error}`));
+    lines.push(LOBSTER(`error: ${state.error}`));
   }
 
   process.stdout.write(CLEAR_SCREEN + `${lines.join('\n')}\n`);

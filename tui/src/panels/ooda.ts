@@ -69,7 +69,7 @@ export function renderOODA(state: DashboardState, height: number): string[] {
   // Status rows
   const phaseColor = PHASE_COLORS[oodaPhase] ?? chalk.gray;
   const phaseLabel = oodaPhase.toUpperCase().padEnd(7);
-  lines.push(`  Phase : ${phaseColor.bold(phaseLabel)}`);
+  lines.push(`  Phase : ${chalk.bold(phaseColor(phaseLabel))}`);
   lines.push(`  Pulse : ${chalk.yellow(pulseIntervalSec + 's')}`);
   lines.push(`  Cycles: ${chalk.cyan(String(cycleCount))}`);
   lines.push(`  Mem   : ${chalk.green('K:' + memory.known)} ${chalk.yellow('L:' + memory.learned)} ${chalk.magenta('I:' + memory.inferred)}`);
