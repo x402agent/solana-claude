@@ -48,7 +48,7 @@
     "dotenv": "^16.4.0"
   },
   "optionalDependencies": {
-    "e2b": "^1.0.0",
+    "e2b": "^2.20.0",
     "wrangler": "^4.83.0"
   },
   "devDependencies": {
