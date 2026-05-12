@@ -16,8 +16,8 @@ You can [check out the app](https://app.solanapay.com?recipient=GvHeR432g7MjN9uK
 
 To build and run this app locally, you'll need:
 
--   Node.js v14.17.0 or above
--   Yarn
+-   Node.js 20+
+-   npm
 -   <details>
         <summary> Setup two wallets on <a href="https://phantom.app">Phantom</a> (Merchant and Customer) </summary>
 
@@ -60,7 +60,7 @@ gh repo clone solana-labs/solana-pay
 
 ### Install dependencies
 ```shell
-cd solana-pay/examples/point-of-sale
+cd payments/pay-main/typescript/packages/solana-pay/examples/point-of-sale
 npm install
 ```
 
@@ -83,6 +83,12 @@ open "https://localhost:3001"
 ```
 
 You may need to accept a locally signed SSL certificate to open the page.
+
+Create a local env file first:
+
+```shell
+cp .env.example .env.local
+```
 
 ## Core routes
 
@@ -184,41 +190,69 @@ The generated QR codes in the app should now use transaction requests. To see wh
 
 ## Deploying to Vercel
 
-You can deploy this point of sale app to Vercel with a few clicks.
+Use this repo directly. The app is already prepared for Vercel with a local [`vercel.json`](./vercel.json).
 
-### 1. Fork the project
+### Vercel project settings
 
-Fork the Solana Pay repository
+- Framework preset: `Next.js`
+- Root directory: `payments/pay-main/typescript/packages/solana-pay/examples/point-of-sale`
+- Install command:
 
-### 2. Login to Vercel
-
-Login to Vercel and create a new project
-
-![](./setup/1.New.png)
-
-Import the forked repository from GitHub.
-
-![](./setup/2.Import.png)
-
-> If you're forked repository is not listed, you'll need to adjust your GitHub app permissions. Search for the and select the `Missing Git repository? Adjust GitHub App Permissions` option.
-
-### 3. Configure project
-
-Choose `point-of-sale` as the root directory:
-
-![](./setup/3.Root_directory.png)
-
-Configure the project as follows:
-
-![](./setup/4.Configuration.png)
-
-### Deploy project
-
-Once the deployment finishes, navigate to
-
+```shell
+cd ../../../.. && pnpm install --no-frozen-lockfile && cd packages/solana-pay/examples/point-of-sale && npm install
 ```
-https://<YOUR DEPLOYMENT URL>?recipient=<YOUR WALLET ADDRESS>&label=Your+Store+Name
+
+- Build command:
+
+```shell
+npm run build
 ```
+
+### Required environment variables
+
+Set these in the Vercel dashboard:
+
+- `POS_RECIPIENT`
+  The Solana mainnet wallet that receives merchant funds.
+- `MERCHANT_RECIPIENT`
+  Optional alias; use the same value as `POS_RECIPIENT`.
+- `CLUSTER_ENDPOINT`
+  Recommended: your Helius or other Solana mainnet RPC.
+- `RATE_LIMIT`
+  Optional API rate limit. Example: `30`
+- `RATE_LIMIT_INTERVAL`
+  Optional rate limit window in seconds. Example: `60`
+
+### Recommended production values
+
+```text
+POS_RECIPIENT=<your Solana wallet>
+MERCHANT_RECIPIENT=<same wallet>
+CLUSTER_ENDPOINT=https://mainnet.helius-rpc.com/?api-key=<your-helius-key>
+RATE_LIMIT=30
+RATE_LIMIT_INTERVAL=60
+```
+
+### Domain wiring
+
+After the first successful deploy:
+
+1. Add `solanaclawd.com` and optionally `www.solanaclawd.com` or `pos.solanaclawd.com` to the Vercel project domains.
+2. Point your DNS at Vercel using the records Vercel gives you.
+3. Keep the POS on the root domain or move it to `pos.solanaclawd.com` if you want the existing storefront to remain the main marketing surface.
+
+### Post-deploy checks
+
+Verify these URLs after the domain is attached:
+
+- `https://solanaclawd.com/`
+- `https://solanaclawd.com/new?recipient=<wallet>&label=OpenClawd`
+- `https://solanaclawd.com/api/catalog`
+- `https://solanaclawd.com/api/facilitator/supported`
+
+### Security note
+
+Do not store live API keys or wallet secrets in tracked files. This package now uses `.env.example` only. Put real values in Vercel environment settings or an untracked local `.env.local`.
 
 ## License
 

@@ -1,0 +1,11 @@
+{
+  "framework": "nextjs",
+  "installCommand": "cd ../../../.. && pnpm install --no-frozen-lockfile && cd packages/solana-pay/examples/point-of-sale && npm install",
+  "buildCommand": "npm run build",
+  "outputDirectory": ".next",
+  "functions": {
+    "src/pages/api/**/*.ts": {
+      "maxDuration": 30
+    }
+  }
+}
