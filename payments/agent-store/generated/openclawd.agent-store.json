@@ -67,6 +67,21 @@
       ],
       "debugMasking": true,
       "privateVariablesPrefix": "private."
+    },
+    "tokenEconomy": {
+      "symbol": "$CLAWD",
+      "mint": "8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump",
+      "settlement": "USDC first, CLAWD amplified",
+      "utility": [
+        "rebates for autonomous buyers and operator accounts",
+        "priority routing for CLAWD-aligned agents",
+        "buyback and treasury flywheel from paid agent work"
+      ],
+      "truandBreed": {
+        "class": "truand",
+        "definition": "A keep-alive sandbox agent that earns USDC, keeps a CLAWD-denominated reputation, and autonomously maintains a merchant lane.",
+        "chargeModel": "x402 metered services with CLAWD-aware fee modifiers"
+      }
     }
   },
   "policy": {
