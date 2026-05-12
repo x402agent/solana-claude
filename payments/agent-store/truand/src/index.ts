@@ -143,7 +143,10 @@ async function cmdManifest(): Promise<number> {
 }
 
 async function cmdProvision(): Promise<number> {
-  requireEnv("UPSTASH_BOX_API_KEY");
+  const boxApiKey = process.env.BOX_API_KEY || process.env.UPSTASH_BOX_API_KEY;
+  if (!boxApiKey) {
+    throw new Error("Missing required environment variable: BOX_API_KEY or UPSTASH_BOX_API_KEY");
+  }
   requireEnv("OPENAI_API_KEY");
   requireEnv("NEON_API_KEY");
   requireEnv("NEON_PROJECT_ID");
@@ -164,7 +167,7 @@ async function cmdProvision(): Promise<number> {
         model: blueprint.box.model,
         apiKey: process.env.OPENAI_API_KEY!,
       },
-      apiKey: process.env.UPSTASH_BOX_API_KEY!,
+      apiKey: boxApiKey,
     });
 
     await box.files.write({

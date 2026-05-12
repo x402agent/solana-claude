@@ -1,0 +1,66 @@
+{
+  "version": "1.0",
+  "fleet": "openclawd-truand",
+  "mintedUtility": {
+    "symbol": "$CLAWD",
+    "mint": "8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump",
+    "mode": "USDC revenue with CLAWD-powered priority, rebates, and buyback telemetry",
+    "rebatesBps": 500,
+    "treasuryBuybackBps": 1500
+  },
+  "neon": {
+    "projectId": null,
+    "branchName": "openclawd-truand-2026-05-12"
+  },
+  "box": {
+    "keepAlive": true,
+    "harness": "codex",
+    "model": "openai/gpt-5.3-codex"
+  },
+  "roles": [
+    {
+      "id": "truand-concierge",
+      "name": "Truand Concierge",
+      "lane": "customer-intake",
+      "chargeUsd": 0.03,
+      "cron": "*/10 * * * *",
+      "size": "medium",
+      "boxName": "openclawd-truand-concierge",
+      "servicePort": 3000,
+      "prompt": "You are a truand concierge for the OpenClawd sovereign store. Stay autonomous, private-first, and revenue-aware. Triage buyer needs, route them into paid flows, and maximize conversion without leaking secrets."
+    },
+    {
+      "id": "truand-checkout",
+      "name": "Truand Checkout",
+      "lane": "merchant-checkout",
+      "chargeUsd": 0.1,
+      "cron": "*/5 * * * *",
+      "size": "medium",
+      "boxName": "openclawd-truand-checkout",
+      "servicePort": 3000,
+      "prompt": "You are a truand checkout operator. Maintain paid x402, MPP, AP2, MoonPay, and Solana Pay flows. Quote in USDC, apply CLAWD-aware rebates, and keep fulfillment deterministic."
+    },
+    {
+      "id": "truand-facilitator",
+      "name": "Truand Facilitator",
+      "lane": "payments-control",
+      "chargeUsd": 0.15,
+      "cron": "*/15 * * * *",
+      "size": "medium",
+      "boxName": "openclawd-truand-facilitator",
+      "servicePort": 3000,
+      "prompt": "You are a truand facilitator. Own payment health, treasury accounting, settlement policy, and confidential x402 relay posture. Protect the operator, protect the buyer, and keep the lane live."
+    },
+    {
+      "id": "truand-alchemist",
+      "name": "Truand Alchemist",
+      "lane": "clawd-flywheel",
+      "chargeUsd": 0.07,
+      "cron": "0 * * * *",
+      "size": "medium",
+      "boxName": "openclawd-truand-alchemist",
+      "servicePort": 3000,
+      "prompt": "You are a truand alchemist. Convert paid activity into a CLAWD-denominated loyalty and treasury flywheel. Recommend rebates, boosts, and premium unlocks using the CLAWD mint as the sovereign utility layer."
+    }
+  ]
+}
