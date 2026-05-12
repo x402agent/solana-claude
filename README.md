@@ -43,13 +43,35 @@ same staking console.
 
 ---
 
+## Colosseum Hackathon
+
+This repo now includes the OpenClawd Colosseum submission: a Solana-native agentic harness with a private x402 payment path, a CLAWD terminal, Dark Ralph OODA loop, Google A2A tasking, and confidential inference primitives.
+
+- Submission summary: [HACKATHON.md](/Users/8bit/bots/Cladwbot-solana/solana-clawd/HACKATHON.md)
+- CLAWD terminal: `npm run hermes`
+- OODA loop: `npm run ooda`
+- OODA terminal: `npm run ooda:tui`
+- A2A demo: `npm run demo:a2a`
+- pay.sh demo: `npm run demo:paysh`
+- Dark DeFi demo: `npm run demo:dark-defi`
+
+Key hackathon additions:
+
+- `x402/paysh-facilitator.ts` — private x402 facilitator with blind relay, retries, idempotency, and cache-key propagation
+- `x402/confidential-agent.ts` — confidential inference with private content cache and replay-safe payment metadata
+- `x402/a2a-agent.ts` — A2A task transport with cache-aware discovery/task execution
+- `x402/private-content-cache.ts` — blinded content-addressed cache
+- `tui/src/` — CLAWD terminal with market, trading, portfolio, analytics, and agent views
+
+---
+
 # Dark Ralph TUI
 
-Dark Ralph is a Bun + Ink terminal app for Solana market surveillance, wallet context, and autonomous AI analysis. The default experience is the **MAWD Market View**: a Bloomberg-style terminal surface with live tickers, a candlestick chart, order book, heatmap, top movers, network stats, activity, and agent controls.
+Dark Ralph is the CLAWD terminal app for Solana market surveillance, wallet context, and autonomous AI analysis. The default experience is the **CLAWD Market View**: a Bloomberg-style terminal surface with live tickers, a candlestick chart, order book, heatmap, top movers, network stats, activity, and agent controls.
 
 ```text
 ┌──────────────────────────────────────────────────────────────────────────────┐
-└─🦞 MAWD │ MARKET VIEW────────────────────────────Uptime: 00:04:35 │ 8:36 AM─┘
+└─🦞 CLAWD │ MARKET VIEW───────────────────────────Uptime: 00:04:35 │ 8:36 AM─┘
 ┌──────────────────────────────────────────────────────────────────────────────┐
 └─SOL $150.25 +2.34% │ BONK $0.00002345 +5.67% │ WIF $2.85 -1.20% │ JUP +3.80%┘
 
@@ -75,7 +97,7 @@ Dark Ralph is a Bun + Ink terminal app for Solana market surveillance, wallet co
 
 ## Features
 
-- **MAWD market dashboard** with ticker tape, SOL/USDC chart, order book, spread, volume bars, heatmap, top movers, live feed, network stats, and activity stream.
+- **CLAWD market dashboard** with ticker tape, SOL/USDC chart, order book, spread, volume bars, heatmap, top movers, live feed, network stats, and activity stream.
 - **Five terminal views**: Market, Trading, Portfolio, Analytics, and Agent.
 - **Autonomous agent loop** through `RalphAgent`, with configurable auto/interactive mode and recursive market thoughts.
 - **Provider integrations** for Helius, Birdeye, xAI Grok, Perplexity, OpenRouter, News API, SERP API, and Financial Datasets.
@@ -102,10 +124,7 @@ gacha fee share.
 ## Quick Start
 
 ```bash
-cd dark-ralph
-bun install
-cp .env.example .env
-bun run run
+npm run hermes
 ```
 
 The TUI can boot without every key configured. Missing providers are shown as disconnected and their dependent commands fail closed.
@@ -113,17 +132,10 @@ The TUI can boot without every key configured. Missing providers are shown as di
 ## Commands
 
 ```bash
-bun run run                         # Start MAWD TUI
-bun run src/cli.tsx run --auto      # Autonomous mode
-bun run src/cli.tsx run --interactive
-bun run src/cli.tsx run --wallet <address>
-bun run src/cli.tsx run --headless  # Daemon mode
-
-bun run status                      # API configuration status
-bun run setup                       # Setup instructions
-bun run wallet -- --create          # Create local wallet
-bun run wallet -- --balance         # Show wallet balance
-bun run wallet -- --address         # Show wallet address
+npm run hermes                      # Start CLAWD terminal
+node --import tsx/esm tui/src/index.ts
+npm run ooda                        # Run OODA loop
+npm run ooda:tui                    # Run OODA loop + terminal stream
 ```
 
 When installed from a built package, the binaries are:

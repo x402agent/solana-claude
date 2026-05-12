@@ -30,6 +30,8 @@ HERMES x402 is the first **fully Solana-native agentic harness** — an autonomo
 - Payer wallet hidden from resource server (NaCl commitment scheme)  
 - AP2 mandate support for sub-agent payment delegation  
 - Batch payment optimization (3× fee reduction)  
+- Idempotency keys + transient-failure retry hardening on the pay.sh relay
+- Private content-cache keys for replay-safe, lower-cost confidential inference
 
 **Files:** `x402/paysh-facilitator.ts`, `x402/client-sdk.ts`
 
@@ -107,6 +109,7 @@ HERMES x402 is the first **fully Solana-native agentic harness** — an autonomo
 | pay.sh Facilitator | `x402/paysh-facilitator.ts` | Private x402 relay, blind payments, AP2 |
 | Google A2A Client | `x402/a2a-agent.ts` | Full A2A spec + x402 payment gating |
 | Confidential Agent | `x402/confidential-agent.ts` | NaCl-encrypted inference + pay.sh |
+| Private Content Cache | `x402/private-content-cache.ts` | Blinded prompt hashing + TTL cache |
 | Dark DeFi | `x402/dark-defi.ts` | Whale intel, MEV detection, dark routing |
 
 ---

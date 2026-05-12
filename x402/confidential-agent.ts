@@ -23,6 +23,7 @@ import bs58 from 'bs58';
 import type { Connection, Keypair } from '@solana/web3.js';
 import { PayshFacilitator } from './paysh-facilitator.js';
 import { A2AClient } from './a2a-agent.js';
+import { PrivateContentCache } from './private-content-cache.js';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -43,6 +44,12 @@ export interface ConfidentialAgentConfig {
   peerPublicKey?: Uint8Array;
   /** Max USDC per inference call */
   maxCostUsdc?: number;
+  /** Enable local private cache for repeated prompts */
+  contentCache?: boolean;
+  /** Cache TTL for successful confidential responses */
+  contentCacheTtlMs?: number;
+  /** Retry budget for transient failures */
+  maxRetries?: number;
 }
 
 export interface ConfidentialInferenceRequest {
@@ -67,6 +74,8 @@ export interface ConfidentialInferenceResult {
   /** Total cost in USDC */
   costUsdc?: number;
   usage?: { promptTokens: number; completionTokens: number; totalTokens: number };
+  cacheHit?: boolean;
+  cacheKey?: string;
 }
 
 // ─── Confidential Agent ───────────────────────────────────────────────────────
@@ -75,6 +84,7 @@ export class ConfidentialAgent {
   private readonly config: Required<ConfidentialAgentConfig>;
   private readonly paysh: PayshFacilitator;
   private readonly naclKeypair: nacl.BoxKeyPair;
+  private readonly cache: PrivateContentCache<ConfidentialInferenceResult> | null;
 
   constructor(config: ConfidentialAgentConfig) {
     this.config = {
@@ -86,13 +96,24 @@ export class ConfidentialAgent {
       encryptRequests: config.encryptRequests ?? false,
       peerPublicKey: config.peerPublicKey ?? new Uint8Array(32),
       maxCostUsdc: config.maxCostUsdc ?? 2.0,
+      contentCache: config.contentCache ?? true,
+      contentCacheTtlMs: config.contentCacheTtlMs ?? 5 * 60_000,
+      maxRetries: config.maxRetries ?? 2,
     };
 
     this.paysh = new PayshFacilitator({
       connection: this.config.connection,
       signer: this.config.signer,
       useBlinding: true,
+      maxRetries: this.config.maxRetries,
     });
+    this.cache = this.config.contentCache
+      ? new PrivateContentCache<ConfidentialInferenceResult>({
+          namespace: this.config.signer.publicKey.toBase58(),
+          ttlMs: this.config.contentCacheTtlMs,
+          maxEntries: 256,
+        })
+      : null;
 
     // Derive NaCl X25519 keypair from Ed25519 secret for encryption
     // Note: converting Ed25519 to X25519 for box encryption
@@ -103,9 +124,26 @@ export class ConfidentialAgent {
 
   /** Run a confidential inference call, paying automatically via pay.sh/x402 */
   async infer(request: ConfidentialInferenceRequest): Promise<ConfidentialInferenceResult> {
+    const payload = this.buildPayload(request);
+    const payloadJson = JSON.stringify(payload);
+    const cacheKey = this.cache?.deriveKey([
+      this.config.inferenceEndpoint,
+      request.model,
+      payload,
+      this.config.encryptRequests,
+    ]);
+    const cached = cacheKey ? this.cache?.get(cacheKey) : undefined;
+    if (cached) {
+      return {
+        ...cached,
+        cacheHit: true,
+        cacheKey,
+      };
+    }
+
     const body = this.config.encryptRequests && this.config.peerPublicKey.some(b => b !== 0)
-      ? this.encryptBody(JSON.stringify(this.buildPayload(request)))
-      : JSON.stringify(this.buildPayload(request));
+      ? this.encryptBody(payloadJson)
+      : payloadJson;
 
     const encrypted = this.config.encryptRequests && this.config.peerPublicKey.some(b => b !== 0);
 
@@ -121,6 +159,8 @@ export class ConfidentialAgent {
         { method: 'POST', body, headers: { 'content-type': contentType } },
         {
           ap2Mandate: this.config.ap2Mandate || undefined,
+          idempotencyKey: cacheKey,
+          cacheKey,
           onPaymentRequired: async (req) => {
             const cost = Number(req.maxAmountRequired) / 1e6;
             if (cost > this.config.maxCostUsdc) {
@@ -139,6 +179,7 @@ export class ConfidentialAgent {
         paymentSignature: payshResult.signature,
         blindReceipt: payshResult.blindReceipt,
         encrypted,
+        cacheKey,
       });
     } else {
       // x402 transparent path
@@ -161,7 +202,12 @@ export class ConfidentialAgent {
       result = this.parseResponse(responseBody, {
         paymentSignature: res.signature,
         encrypted,
+        cacheKey,
       });
+    }
+
+    if (cacheKey && result.content) {
+      this.cache?.set(cacheKey, { ...result, cacheHit: false, cacheKey });
     }
 
     return result;
@@ -257,7 +303,7 @@ export class ConfidentialAgent {
 
   private parseResponse(
     body: unknown,
-    meta: { paymentSignature?: string; blindReceipt?: string; encrypted: boolean },
+    meta: { paymentSignature?: string; blindReceipt?: string; encrypted: boolean; cacheKey?: string },
   ): ConfidentialInferenceResult {
     const b = body as Record<string, unknown>;
     const choices = b['choices'] as Array<{ message?: { content?: string }; text?: string }> | undefined;
@@ -271,6 +317,8 @@ export class ConfidentialAgent {
       paymentSignature: meta.paymentSignature,
       blindReceipt: meta.blindReceipt,
       encrypted: meta.encrypted,
+      cacheHit: false,
+      cacheKey: meta.cacheKey,
       usage: usage
         ? {
           promptTokens: usage.prompt_tokens ?? 0,

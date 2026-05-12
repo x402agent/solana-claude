@@ -21,6 +21,8 @@ import type { Connection, Keypair } from '@solana/web3.js';
 import type { ClawdFetchOptions } from './client-sdk.js';
 import { clawdFetch } from './client-sdk.js';
 import { PayshFacilitator } from './paysh-facilitator.js';
+import { withRetries } from './hardening.js';
+import { PrivateContentCache } from './private-content-cache.js';
 
 // ─── A2A Types (Google A2A spec) ──────────────────────────────────────────────
 
@@ -108,6 +110,12 @@ export interface A2AClientConfig {
   maxAmountUsdc?: number;
   /** Request timeout ms */
   timeoutMs?: number;
+  /** Enable private cache for discovery/task results */
+  contentCache?: boolean;
+  /** Cache TTL in ms */
+  contentCacheTtlMs?: number;
+  /** Retry budget for transient failures */
+  maxRetries?: number;
 }
 
 // ─── A2A Client ───────────────────────────────────────────────────────────────
@@ -116,6 +124,7 @@ export class A2AClient {
   private readonly config: Required<A2AClientConfig>;
   private agentCard: A2AAgentCard | null = null;
   private paysh: PayshFacilitator | null = null;
+  private readonly cache: PrivateContentCache<A2AAgentCard | A2ATask> | null;
 
   constructor(config: A2AClientConfig) {
     this.config = {
@@ -127,6 +136,9 @@ export class A2AClient {
       autoPay: config.autoPay ?? false,
       maxAmountUsdc: config.maxAmountUsdc ?? 1.0,
       timeoutMs: config.timeoutMs ?? 30_000,
+      contentCache: config.contentCache ?? true,
+      contentCacheTtlMs: config.contentCacheTtlMs ?? 60_000,
+      maxRetries: config.maxRetries ?? 2,
     };
 
     if (this.config.confidential && this.config.signer && this.config.connection) {
@@ -134,8 +146,16 @@ export class A2AClient {
         connection: this.config.connection,
         signer: this.config.signer,
         useBlinding: true,
+        maxRetries: this.config.maxRetries,
       });
     }
+    this.cache = this.config.contentCache
+      ? new PrivateContentCache<A2AAgentCard | A2ATask>({
+          namespace: `${this.config.agentUrl}:${this.config.paymentProtocol}`,
+          ttlMs: this.config.contentCacheTtlMs,
+          maxEntries: 256,
+        })
+      : null;
   }
 
   /** Fetch and cache the peer's A2A agent card */
@@ -143,16 +163,27 @@ export class A2AClient {
     if (this.agentCard) return this.agentCard;
 
     const url = `${this.config.agentUrl}/.well-known/agent.json`;
-    const res = await fetch(url, {
-      signal: AbortSignal.timeout(this.config.timeoutMs),
-      headers: {
-        accept: 'application/json',
-        'x-a2a-client': 'solana-clawd/1.7.0',
-      },
-    });
+    const cacheKey = this.cache?.deriveKey(['discover', url]);
+    const cached = cacheKey ? this.cache?.get(cacheKey) : undefined;
+    if (cached) {
+      this.agentCard = cached as A2AAgentCard;
+      return this.agentCard;
+    }
+
+    const res = await withRetries(
+      () => fetch(url, {
+        signal: AbortSignal.timeout(this.config.timeoutMs),
+        headers: {
+          accept: 'application/json',
+          'x-a2a-client': 'solana-clawd/1.7.0',
+        },
+      }),
+      { retries: this.config.maxRetries, backoffMs: 250, shouldRetry: (r) => r.status === 429 || r.status >= 500 },
+    );
 
     if (!res.ok) throw new Error(`A2A discover failed: ${res.status} ${url}`);
     this.agentCard = (await res.json()) as A2AAgentCard;
+    if (cacheKey) this.cache?.set(cacheKey, this.agentCard);
     return this.agentCard;
   }
 
@@ -160,6 +191,15 @@ export class A2AClient {
   async sendTask(input: A2ATaskInput): Promise<A2ATask> {
     const taskId = input.id ?? `clawd-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
     const payload: A2ATaskInput = { ...input, id: taskId };
+    const cacheKey = this.cache?.deriveKey([
+      'task',
+      this.config.agentUrl,
+      payload.skill,
+      payload.message,
+      payload.metadata ?? {},
+    ]);
+    const cached = cacheKey ? this.cache?.get(cacheKey) : undefined;
+    if (cached) return cached as A2ATask;
 
     const tasksUrl = `${this.config.agentUrl}/tasks`;
     const body = JSON.stringify(payload);
@@ -171,6 +211,8 @@ export class A2AClient {
         body,
         headers: { 'content-type': 'application/json' },
       }, {
+        idempotencyKey: cacheKey,
+        cacheKey,
         onPaymentRequired: this.config.autoPay
           ? undefined
           : async (req) => {
@@ -192,20 +234,26 @@ export class A2AClient {
           timestamp: Date.now(),
         };
       }
+      if (cacheKey && task.status.state === 'completed') this.cache?.set(cacheKey, task);
       return task;
     }
 
     // Standard x402 / AP2 / MPP path via clawdFetch
     if (!this.config.signer || !this.config.connection) {
       // No-payment path (public agent)
-      const res = await fetch(tasksUrl, {
-        method: 'POST',
-        body,
-        headers: { 'content-type': 'application/json' },
-        signal: AbortSignal.timeout(this.config.timeoutMs),
-      });
+      const res = await withRetries(
+        () => fetch(tasksUrl, {
+          method: 'POST',
+          body,
+          headers: { 'content-type': 'application/json' },
+          signal: AbortSignal.timeout(this.config.timeoutMs),
+        }),
+        { retries: this.config.maxRetries, backoffMs: 250, shouldRetry: (r) => r.status === 429 || r.status >= 500 },
+      );
       if (!res.ok && res.status !== 402) throw new Error(`A2A task failed: ${res.status}`);
-      return (await res.json()) as A2ATask;
+      const task = (await res.json()) as A2ATask;
+      if (cacheKey && task.status.state === 'completed') this.cache?.set(cacheKey, task);
+      return task;
     }
 
     const fetchOpts: ClawdFetchOptions = {
@@ -240,6 +288,7 @@ export class A2AClient {
       };
     }
 
+    if (cacheKey && task.status.state === 'completed') this.cache?.set(cacheKey, task);
     return task;
   }
 

@@ -31,6 +31,7 @@ import {
   createAssociatedTokenAccountIdempotentInstruction,
 } from '@solana/spl-token';
 import bs58 from 'bs58';
+import { isTransientStatus, withRetries } from './hardening.js';
 
 // pay.sh relay endpoint (testnet-compatible)
 const PAYSH_RELAY = 'https://pay.sh/relay/v1';
@@ -51,6 +52,10 @@ export interface PayshConfig {
   signer: Keypair;
   /** USDC mint address */
   usdcMint?: string;
+  /** Retry budget for transient network or relay errors */
+  maxRetries?: number;
+  /** Initial retry backoff in ms */
+  retryBackoffMs?: number;
 }
 
 export interface PayshPaymentRequirement {
@@ -101,6 +106,8 @@ export class PayshFacilitator {
       connection: config.connection,
       signer: config.signer,
       usdcMint: config.usdcMint ?? 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v',
+      maxRetries: config.maxRetries ?? 2,
+      retryBackoffMs: config.retryBackoffMs ?? 250,
     };
   }
 
@@ -111,7 +118,12 @@ export class PayshFacilitator {
   async fetch(
     url: string,
     init: RequestInit = {},
-    opts: { ap2Mandate?: string; onPaymentRequired?: (req: PayshPaymentRequirement) => Promise<boolean> } = {},
+    opts: {
+      ap2Mandate?: string;
+      onPaymentRequired?: (req: PayshPaymentRequirement) => Promise<boolean>;
+      idempotencyKey?: string;
+      cacheKey?: string;
+    } = {},
   ): Promise<PayshResult> {
     const headers = new Headers(init.headers ?? {});
 
@@ -126,9 +138,23 @@ export class PayshFacilitator {
     if (opts.ap2Mandate) {
       headers.set('x-ap2-mandate', opts.ap2Mandate);
     }
+    if (opts.idempotencyKey) {
+      headers.set('x-idempotency-key', opts.idempotencyKey);
+    }
+    if (opts.cacheKey) {
+      headers.set('x-content-cache-key', opts.cacheKey);
+      headers.set('x-content-cache-scope', 'private');
+    }
 
     // First attempt — no payment
-    const first = await fetch(url, { ...init, headers });
+    const first = await withRetries(
+      () => fetch(url, { ...init, headers }),
+      {
+        retries: this.config.maxRetries,
+        backoffMs: this.config.retryBackoffMs,
+        shouldRetry: (res) => isTransientStatus(res.status),
+      },
+    );
     if (first.status !== 402) {
       return this.decorate(first);
     }
@@ -180,12 +206,19 @@ export class PayshFacilitator {
       ? '' // blinded — don't reveal payer
       : this.config.signer.publicKey.toBase58());
 
-    const relayRes = await fetch(`${this.config.relayUrl}/forward`, {
-      method: 'POST',
-      headers: relayHeaders,
-      body: JSON.stringify(relayPayload),
-      signal: AbortSignal.timeout(30_000),
-    });
+    const relayRes = await withRetries(
+      () => fetch(`${this.config.relayUrl}/forward`, {
+        method: 'POST',
+        headers: relayHeaders,
+        body: JSON.stringify(relayPayload),
+        signal: AbortSignal.timeout(30_000),
+      }),
+      {
+        retries: this.config.maxRetries,
+        backoffMs: this.config.retryBackoffMs,
+        shouldRetry: (res) => isTransientStatus(res.status),
+      },
+    );
 
     return this.decorate(relayRes);
   }
