@@ -20,8 +20,11 @@ import type { Tool, MessageParam } from '@anthropic-ai/sdk/resources/messages.js
 import { buildSystemPrompt, buildShorelinePrompt } from './system-prompt.js';
 import { computeDepth, selectModel, isActionAllowed, formatDepth } from '../survival.js';
 import { assertConstitutionIntact } from '../three-laws.js';
+import { appendStrike } from '../state/index.js';
 import type { ClawState, ClawStrike, TailFlickEvent } from '../types.js';
 import { TOOLS } from './tools.js';
+import { Percolator } from './percolator.js';
+import { getWallet } from './wallet.js';
 
 export interface TailFlickResult {
   tick: number;
@@ -111,7 +114,7 @@ export async function tailFlick(
     isActionAllowed(newDepth, t.name as string) || t.name === 'hold',
   );
 
-  // ── THINK (Claude API call — fresh context, no conversation history) ─────────
+  // ── THINK (Claude ACP call — fresh context, no conversation history) ─────────
   const messages: MessageParam[] = [{ role: 'user', content: userMessage }];
 
   const response = await client.messages.create({
@@ -156,6 +159,9 @@ export async function tailFlick(
     };
   }
 
+  // Journal this strike for future ticks
+  appendStrike(strike);
+
   // ── DRIFT ────────────────────────────────────────────────────────────────
   // Update SHELL.md if shell_write was called
   const newShellMd = strike.tool === 'shell_write'
@@ -187,81 +193,196 @@ async function executeTool(
   depth: string,
 ): Promise<ToolResult> {
   switch (name) {
+
+    // ── Solana / wallet ────────────────────────────────────────────────────
     case 'solana_balance': {
-      const address = String(input['address'] ?? state.identity.pubkey);
+      const wallet = getWallet();
       try {
-        const rpc = process.env['SOLANA_RPC_URL'] ?? 'https://api.devnet.solana.com';
-        const res = await fetch(rpc, {
-          method: 'POST',
-          headers: { 'content-type': 'application/json' },
-          body: JSON.stringify({ jsonrpc: '2.0', id: 1, method: 'getBalance', params: [address] }),
-        });
-        const data = (await res.json()) as { result?: { value?: number } };
-        return { output: { sol: (data.result?.value ?? 0) / 1e9, address }, success: true };
+        const brief = await wallet.brief();
+        return { output: brief, success: true };
       } catch (e) {
         return { output: String(e), success: false };
       }
     }
 
+    case 'wallet_brief': {
+      const wallet = getWallet();
+      try {
+        const brief = await wallet.brief();
+        return { output: brief, success: true };
+      } catch (e) {
+        return { output: String(e), success: false };
+      }
+    }
+
+    case 'helius_transactions': {
+      const address = String(input['address'] ?? state.identity.pubkey);
+      const apiKey = process.env['HELIUS_API_KEY'];
+      if (!apiKey) return { output: 'HELIUS_API_KEY not set', success: false };
+      try {
+        const url = `https://api.helius.xyz/v0/addresses/${address}/transactions?api-key=${apiKey}&limit=10`;
+        const res = await fetch(url, { signal: AbortSignal.timeout(10_000) });
+        if (!res.ok) return { output: `Helius ${res.status}`, success: false };
+        const txs = (await res.json()) as unknown[];
+        return { output: txs.slice(0, 5), success: true };
+      } catch (e) {
+        return { output: String(e), success: false };
+      }
+    }
+
+    // ── Jupiter ────────────────────────────────────────────────────────────
     case 'jupiter_quote': {
       const { inputMint, outputMint, amount } = input as { inputMint: string; outputMint: string; amount: string };
+      const wallet = getWallet();
       try {
-        const url = `https://lite-api.jup.ag/swap/v1/quote?inputMint=${inputMint}&outputMint=${outputMint}&amount=${amount}`;
-        const res = await fetch(url, { signal: AbortSignal.timeout(8000) });
-        return { output: await res.json(), success: res.ok };
+        const quote = await wallet.jupiterSwapQuote({ inputMint, outputMint, amount });
+        return { output: quote, success: true };
       } catch (e) {
         return { output: String(e), success: false };
       }
     }
 
-    case 'ooda_signal': {
-      // Import and run one OODA tick deterministically
-      const { deterministicDecision } = await import('../../ooda/claude-decision.js').catch(() => ({ deterministicDecision: null }));
-      if (!deterministicDecision) return { output: 'ooda module not available', success: false };
-      const signal = deterministicDecision({
-        tick: state.tickCount,
-        now: new Date().toISOString(),
-        mode: 'paper',
-        network: 'devnet',
-        candles: [],
-        book: { positions: [], cash_lamports: Math.round(state.usdcBalance * 1e6) },
-        last_decisions: [],
-      });
-      return { output: signal, success: true };
+    case 'jupiter_swap': {
+      // Swaps require depth >= shallow and are paper-only on devnet
+      if (depth === 'shoreline') {
+        return { output: 'jupiter_swap blocked at shoreline depth (insufficient reserves)', success: false };
+      }
+      const { inputMint, outputMint, amount, slippageBps } = input as {
+        inputMint: string; outputMint: string; amount: string; slippageBps?: number;
+      };
+      const wallet = getWallet();
+      try {
+        const quote = await wallet.jupiterSwapQuote({ inputMint, outputMint, amount, slippageBps });
+        // Paper mode: return quote as if executed, don't broadcast
+        return { output: { paperMode: true, quote }, success: true, costUsdc: 0.001 };
+      } catch (e) {
+        return { output: String(e), success: false };
+      }
     }
 
+    // ── OODA signal ────────────────────────────────────────────────────────
+    case 'ooda_signal': {
+      try {
+        const { deterministicDecision } = await import('../../ooda/claude-decision.js') as {
+          deterministicDecision: (obs: unknown) => unknown
+        };
+        const signal = deterministicDecision({
+          tick: state.tickCount,
+          now: new Date().toISOString(),
+          mode: 'paper',
+          network: 'devnet',
+          candles: [],
+          book: { positions: [], cash_lamports: Math.round(state.usdcBalance * 1e6) },
+          last_decisions: [],
+        });
+        return { output: signal, success: true };
+      } catch (e) {
+        return { output: `ooda module not available: ${String(e).slice(0, 80)}`, success: false };
+      }
+    }
+
+    // ── Google A2A ────────────────────────────────────────────────────────
     case 'a2a_task': {
       const { agentUrl, skill, message } = input as { agentUrl: string; skill: string; message: string };
-      const { A2AClient } = await import('../../x402/a2a-agent.js').catch(() => ({ A2AClient: null }));
-      if (!A2AClient) return { output: 'a2a module not available', success: false };
       try {
+        const { A2AClient } = await import('../../x402/a2a-agent.js') as {
+          A2AClient: new (opts: { agentUrl: string; autoPay: boolean; maxAmountUsdc: number; timeoutMs: number }) => {
+            discover: () => Promise<{ name: string; skills: Array<{ id: string }> }>
+          }
+        };
         const client = new A2AClient({ agentUrl, autoPay: false, maxAmountUsdc: 0.5, timeoutMs: 10_000 });
         const card = await client.discover();
-        return { output: { agent: card.name, skills: card.skills.map(s => s.id) }, success: true };
+        return {
+          output: { agent: card.name, skills: card.skills.map(s => s.id), requestedSkill: skill, message },
+          success: true,
+        };
       } catch (e) {
-        return { output: String(e), success: false };
+        return { output: `a2a discovery failed: ${String(e).slice(0, 100)}`, success: false };
       }
     }
 
+    // ── pay.sh confidential payment ────────────────────────────────────────
+    case 'paysh_pay': {
+      const { url, amount, blind = true } = input as { url: string; amount: number; blind?: boolean };
+      if (amount > 2.0) return { output: 'paysh_pay capped at 2.0 USDC per call', success: false };
+      // Record as a payment intent (actual execution requires wallet + RPC)
+      return {
+        output: {
+          intent: 'paysh_pay',
+          url,
+          amount,
+          blind,
+          status: 'recorded — execute via pay.sh relay when wallet funded',
+        },
+        success: true,
+        costUsdc: amount,
+      };
+    }
+
+    // ── Percolator (perpetuals) ────────────────────────────────────────────
+    case 'percolator_list_markets': {
+      const result = await Percolator.listMarkets();
+      return { output: result, success: !String(result).startsWith('percolator') };
+    }
+
+    case 'percolator_slab_get': {
+      const pubkey = String(input['pubkey'] ?? '');
+      if (!pubkey) return { output: 'pubkey required', success: false };
+      const result = await Percolator.slabGet(pubkey);
+      return { output: result, success: !String(result).startsWith('percolator') };
+    }
+
+    case 'percolator_quote': {
+      const { market, side, size } = input as { market: string; side: 'long' | 'short'; size: string };
+      const result = await Percolator.quoteMarket(market, side, size);
+      return { output: result, success: !String(result).startsWith('percolator') };
+    }
+
+    case 'percolator_funding_rate': {
+      const market = String(input['market'] ?? '');
+      if (!market) return { output: 'market required', success: false };
+      const result = await Percolator.fundingRate(market);
+      return { output: result, success: !String(result).startsWith('percolator') };
+    }
+
+    // ── Shell molt ────────────────────────────────────────────────────────
     case 'shell_write': {
       const content = String(input['content'] ?? '');
       if (!content.trim()) return { output: 'empty content — shell not updated', success: false };
       return { output: { updated: true, length: content.length }, success: true };
     }
 
-    case 'percolator_list_markets': {
-      // Call Percolator CLI (if installed via @openclawdsolana/percolator)
-      try {
-        const { execa } = await import('execa');
-        const result = await execa('percolator', ['list-markets', '--json'], { timeout: 10_000 });
-        return { output: result.stdout, success: true };
-      } catch (e) {
-        return { output: `percolator not installed: ${String(e).slice(0, 100)}`, success: false };
+    // ── Spawn spawnling (depth=deep only) ─────────────────────────────────
+    case 'spawn_spawnling': {
+      if (depth !== 'deep') {
+        return { output: 'spawn_spawnling requires depth=deep', success: false };
       }
+      const { name, spawnPrompt: childPrompt, seedUsdc = 1.0 } = input as {
+        name: string; spawnPrompt: string; seedUsdc?: number;
+      };
+      if (!name || !childPrompt) return { output: 'name and spawnPrompt required', success: false };
+      if (seedUsdc < 1.0) return { output: 'seedUsdc must be >= 1.0', success: false };
+      if (seedUsdc > state.usdcBalance * 0.5) {
+        return { output: `seedUsdc ${seedUsdc} exceeds 50% of reserves`, success: false };
+      }
+      // Record spawn intent — actual keypair generation happens in --spawn flow
+      return {
+        output: {
+          intent: 'spawn_spawnling',
+          name,
+          spawnPrompt: childPrompt,
+          seedUsdc,
+          parent: state.identity.pubkey,
+          status: 'queued — run `leviathan --spawn` with PARENT_PUBKEY set to activate',
+        },
+        success: true,
+        costUsdc: seedUsdc,
+      };
     }
 
+    // ── Hold ──────────────────────────────────────────────────────────────
     case 'hold':
-      return { output: 'holding', success: true };
+      return { output: (input['reason'] as string | undefined) ?? 'holding', success: true };
 
     default:
       return { output: `unknown tool: ${name}`, success: false };
@@ -272,6 +393,6 @@ function mapToolToAction(toolName: string): ClawStrike['action'] {
   if (toolName === 'spawn_spawnling') return 'spawn';
   if (toolName === 'shell_write') return 'molt';
   if (toolName === 'hold') return 'hold';
-  if (toolName.includes('jupiter_swap') || toolName.includes('paysh')) return 'transfer';
+  if (toolName === 'jupiter_swap' || toolName === 'paysh_pay') return 'transfer';
   return 'tool_call';
 }

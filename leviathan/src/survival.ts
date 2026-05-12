@@ -28,10 +28,22 @@ export function selectModel(depth: Depth): string {
   return getTier(depth).model;
 }
 
-/** Check if action is allowed at this depth */
+/** Map a tool name to its action category for depth filtering */
+function toolCategory(toolName: string): ClawAction {
+  if (toolName === 'hold') return 'hold';
+  if (toolName === 'shell_write') return 'molt';
+  if (toolName === 'spawn_spawnling') return 'spawn';
+  if (toolName === 'jupiter_swap' || toolName === 'paysh_pay') return 'transfer';
+  return 'tool_call';
+}
+
+/** Check if an action category is allowed at this depth */
 export function isActionAllowed(depth: Depth, action: string): boolean {
   const tier = getTier(depth);
-  return (tier.allowedActions as string[]).includes(action);
+  // action may be a tool name or a category — check both
+  const category = toolCategory(action);
+  return (tier.allowedActions as string[]).includes(action) ||
+    (tier.allowedActions as string[]).includes(category);
 }
 
 /** Format depth for display */

@@ -32,9 +32,10 @@ import {
 } from '@solana/spl-token';
 import bs58 from 'bs58';
 
-// pay.sh relay endpoint (testnet-compatible)
-const PAYSH_RELAY = 'https://pay.sh/relay/v1';
-const PAYSH_DEVNET_RELAY = 'https://devnet.pay.sh/relay/v1';
+// Primary relay: pay.solanaclawd.com (OpenClawd hosted facilitator)
+// Fallback: pay.sh public relay
+const PAYSH_RELAY = process.env['PAYSH_RELAY_URL'] ?? 'https://pay.solanaclawd.com/relay/v1';
+const PAYSH_DEVNET_RELAY = process.env['PAYSH_DEVNET_RELAY_URL'] ?? 'https://pay.solanaclawd.com/devnet/relay/v1';
 
 export interface PayshConfig {
   /** pay.sh relay URL override */

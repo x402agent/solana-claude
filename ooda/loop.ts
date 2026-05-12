@@ -43,23 +43,27 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const { values: flags } = parseArgs({
   options: {
-    ticks:        { type: 'string',  default: '50' },
-    sleep:        { type: 'string',  default: '0.25' },
-    seed:         { type: 'string',  default: '42' },
-    'commit-every': { type: 'string', default: '0' },
-    tui:          { type: 'boolean', default: false },
-    llm:          { type: 'boolean', default: false },   // use Claude API
-    mode:         { type: 'string',  default: 'paper' },
+    ticks:          { type: 'string',  default: '50' },
+    sleep:          { type: 'string',  default: '0.25' },
+    seed:           { type: 'string',  default: '42' },
+    'commit-every': { type: 'string',  default: '0' },
+    tui:            { type: 'boolean', default: false },
+    llm:            { type: 'boolean', default: false },
+    mode:           { type: 'string',  default: 'paper' },
+    goblin:         { type: 'boolean', default: false },  // 👺 GOBLIN MODE
   },
   strict: false,
 });
 
-const TICKS        = parseInt(flags['ticks'] as string, 10);
-const SLEEP_MS     = Math.round(parseFloat(flags['sleep'] as string) * 1000);
+const GOBLIN_MODE  = flags['goblin'] as boolean;
+// Goblin mode: load goblin.md instead of RALPH.md, use tighter sleep, more ticks default
+const RALPH_FILE   = GOBLIN_MODE ? 'goblin.md' : 'RALPH.md';
+const TICKS        = parseInt(flags['ticks'] as string, 10) || (GOBLIN_MODE ? 100 : 50);
+const SLEEP_MS     = GOBLIN_MODE ? 0 : Math.round(parseFloat(flags['sleep'] as string) * 1000);
 const SEED         = parseInt(flags['seed'] as string, 10);
 const COMMIT_EVERY = parseInt(flags['commit-every'] as string, 10);
 const TUI_MODE     = flags['tui'] as boolean;
-const USE_LLM      = flags['llm'] as boolean;
+const USE_LLM      = flags['llm'] as boolean || GOBLIN_MODE;  // goblin always uses LLM when key available
 
 // ─── Emit helpers ─────────────────────────────────────────────────────────────
 
@@ -95,13 +99,19 @@ async function commitJournal(tick: number): Promise<void> {
 // ─── Main loop ────────────────────────────────────────────────────────────────
 
 async function runLoop(): Promise<void> {
-  // Read + validate RALPH.md config
-  const ralphPath = join(__dirname, 'RALPH.md');
+  // Read + validate RALPH.md (or goblin.md) config
+  const ralphPath = join(__dirname, RALPH_FILE);
   const ralphContent = readFileSync(ralphPath, 'utf8');
   const config: RalphConfig = parseRalphConfig(ralphContent);
 
-  log(`[ralph] mode=${config.mode} network=${config.network}`);
-  log(`[ralph] max_pos=${config.max_position_size_lamports} killswitch=${config.loss_killswitch_consecutive}`);
+  if (GOBLIN_MODE) {
+    log(`\n👺 GOBLIN MODE ACTIVATED — clawd-operator harness`);
+    log(`   https://github.com/x402agent/clawd-operator`);
+    log(`   max_pos=${config.max_position_size_lamports} killswitch=${config.loss_killswitch_consecutive} dark_defi=armed\n`);
+  } else {
+    log(`[ralph] mode=${config.mode} network=${config.network}`);
+    log(`[ralph] max_pos=${config.max_position_size_lamports} killswitch=${config.loss_killswitch_consecutive}`);
+  }
 
   // Reject mainnet
   const rpcUrl = process.env['SOLANA_RPC_URL'] ?? 'https://api.devnet.solana.com';
@@ -110,9 +120,9 @@ async function runLoop(): Promise<void> {
   const state: State = createState();
   const observer = new SynthObserver(SEED, 150_000, 20);
 
-  log(`[ralph] starting ${TICKS} ticks, sleep=${SLEEP_MS}ms, llm=${USE_LLM}`);
+  log(`[ralph] starting ${TICKS} ticks, sleep=${SLEEP_MS}ms, llm=${USE_LLM}, goblin=${GOBLIN_MODE}`);
   if (TUI_MODE) {
-    emit({ event: 'start', ticks: TICKS, config });
+    emit({ event: 'start', ticks: TICKS, config, goblin: GOBLIN_MODE });
   }
 
   for (let tick = 1; tick <= TICKS; tick++) {
@@ -184,8 +194,12 @@ async function runLoop(): Promise<void> {
         consecutive_losses: state.consecutive_losses,
       };
       appendTick(killEntry);
-      emit({ event: 'killswitch', tick, consecutive_losses: state.consecutive_losses });
-      log(`[ralph] KILLSWITCH: ${state.consecutive_losses} consecutive losses — halting`);
+      emit({ event: 'killswitch', tick, consecutive_losses: state.consecutive_losses, goblin: GOBLIN_MODE });
+      if (GOBLIN_MODE) {
+        log(`\n👺 GOBLIN KILLSWITCH: ${state.consecutive_losses} consecutive losses — even goblins respect the laws\n`);
+      } else {
+        log(`[ralph] KILLSWITCH: ${state.consecutive_losses} consecutive losses — halting`);
+      }
       process.exit(1);
     }
 
@@ -240,7 +254,12 @@ async function runLoop(): Promise<void> {
     consecutive_losses: state.consecutive_losses,
   };
   emit(summary);
-  log(`\n[ralph] done. pnl=${state.total_pnl_lamports} trades=${state.total_trades} cash=${state.book.cash_lamports}`);
+  if (GOBLIN_MODE) {
+    log(`\n👺 GOBLIN DONE. pnl=${state.total_pnl_lamports} trades=${state.total_trades} cash=${state.book.cash_lamports}`);
+    log(`   The goblin rests. The laws held. The paper gains are real in spirit.\n`);
+  } else {
+    log(`\n[ralph] done. pnl=${state.total_pnl_lamports} trades=${state.total_trades} cash=${state.book.cash_lamports}`);
+  }
 }
 
 runLoop().catch(err => {

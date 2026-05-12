@@ -1,297 +1,386 @@
 <div align="center">
 
-```text
-   _____       __                        ________                    __
-  / ___/____  / /___ _____  ____ _     / ____/ /___ __      ______/ /
-  \__ \/ __ \/ / __ `/ __ \/ __ `/    / /   / / __ `/ | /| / / __  /
- ___/ / /_/ / / /_/ / / / / /_/ /    / /___/ / /_/ /| |/ |/ / /_/ /
-/____/\____/_/\__,_/_/ /_/\__,_/     \____/_/\__,_/ |__/|__/\__,_/
+<img src="https://capsule-render.vercel.app/api?type=venom&color=0,9945FF,14F195&height=240&section=header&text=%F0%9F%A6%9E%20HERMES%20x402&fontSize=64&fontColor=ffffff&animation=twinkling&fontAlignY=50&desc=Sovereign%20AI%20Agents%20on%20Solana&descAlignY=68&descSize=20&stroke=9945FF&strokeWidth=2" width="100%" />
 
-                    ╔══════════════════════════╗
-                    ║   POWERED BY xAI GROK    ║
-                    ╚══════════════════════════╝
-```
-
-# CLAWD Cloud 
-
-### The Solana-native cloud bootstrap for operators, builders, traders, and agent engineers.
-
-Powered by **$CLAWD** on Solana & Pump.fun | Built with **xAI Grok**, **MiniMax M2.7**, and **E2B**
-
-`8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump`
-
-<p>
-  <a href="https://solanaclawd.com/staking">
-    <img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&size=20&pause=750&color=14F195&center=true&vCenter=true&width=960&lines=%2Fstaking+is+live+%E2%86%92+lock+OpenClawd+agents;Metaplex+Core+FreezeDelegate+staking+on+Solana;Wallet-signed+stake+%C2%B7+inspect+%C2%B7+unstake+console" alt="Animated OpenClawd staking launch banner" />
-  </a>
-</p>
-
-**New:** [`/staking`](https://solanaclawd.com/staking) is the live OpenClawd agent staking console.  
-Minimum devnet program: `D5MLxrKAnppBVLuukKQzQGTMSfEwBqWCDPGAhGhthdLP` · Global pool: `EyDhP1HU3yqCmqCpKkQHFuX3wMD6sJF1kK8eeRwmTr1K`
+<br/>
 
 ```text
-wallet ── sign ──> /staking ── freeze delegate ──> agent locked
-agent  ─ inspect ─> Core asset ─ unfreeze/remove ─> agent unlocked
+  ██╗  ██╗███████╗██████╗ ███╗   ███╗███████╗███████╗    ██╗  ██╗██╗  ██╗ ██████╗ ██████╗
+  ██║  ██║██╔════╝██╔══██╗████╗ ████║██╔════╝██╔════╝    ╚██╗██╔╝██║  ██║██╔═████╗╚════██╗
+  ███████║█████╗  ██████╔╝██╔████╔██║█████╗  ███████╗     ╚███╔╝ ███████║██║██╔██║ █████╔╝
+  ██╔══██║██╔══╝  ██╔══██╗██║╚██╔╝██║██╔══╝  ╚════██║     ██╔██╗ ╚════██║████╔╝██║██╔═══╝
+  ██║  ██║███████╗██║  ██║██║ ╚═╝ ██║███████╗███████║    ██╔╝ ██╗     ██║╚██████╔╝███████╗
+  ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝╚══════╝    ╚═╝  ╚═╝     ╚═╝ ╚═════╝ ╚══════╝
 ```
 
-**Agent staking is now a primary OpenClawd pillar.** The live `/staking`
-console proves non-custodial Metaplex Core agent locking on devnet, while
-`programs/clawd-stake/` carries the larger reward protocol: weighted
-`StakePosition` accounts, CLAWD emissions, SOL fee-share, Helius indexing, and
-phase-2 gacha fee routing. `/agents/stake` and `/stake` both redirect to the
-same staking console.
+<img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=700&size=21&duration=2000&pause=600&color=14F195&center=true&vCenter=true&width=960&lines=%F0%9F%A6%9E+HERMES+x402+%E2%80%94+First+Private+AI+Agent+on+Solana;TRADE+%E2%86%92+EARN+USDC+%E2%86%92+PAY+x402+%E2%86%92+GET+SMARTER+%E2%86%92+TRADE+BETTER;SENSE+%E2%86%92+THINK+%E2%86%92+STRIKE+%E2%86%92+DRIFT;pay.solanaclawd.com+%E2%80%94+confidential+x402+payments;Anthropic+ACP+%C3%97+Solana+%C3%97+pay.sh+%C3%97+Google+A2A;BORN+TO+EARN.+BEACH+WITH+DIGNITY." alt="HERMES animated taglines" />
+
+<br/>
+
+[![npm](https://img.shields.io/npm/v/solana-clawd?color=14F195&style=for-the-badge&logo=npm&logoColor=white&label=solana-clawd)](https://npmjs.com/package/solana-clawd)
+[![GitHub Stars](https://img.shields.io/github/stars/x402agent/solana-clawd?color=9945FF&style=for-the-badge&logo=github&logoColor=white)](https://github.com/x402agent/solana-clawd)
+[![Solana](https://img.shields.io/badge/Solana-mainnet-9945FF?style=for-the-badge&logo=solana&logoColor=white)](https://solana.com)
+[![Claude](https://img.shields.io/badge/Claude-ACP%20Opus%204.7-FF6B35?style=for-the-badge&logo=anthropic&logoColor=white)](https://anthropic.com)
+[![xAI](https://img.shields.io/badge/xAI-Grok%204-00D4FF?style=for-the-badge)](https://x.ai)
+[![x402](https://img.shields.io/badge/x402-pay.solanaclawd.com-FF00FF?style=for-the-badge)](https://pay.solanaclawd.com)
+[![License: MIT](https://img.shields.io/badge/License-MIT-14F195?style=for-the-badge)](LICENSE)
+
+<br/>
+
+```
+╔══════════════════════════════════════════════════════════════════════╗
+║   🦞  $CLAWD  ·  8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump   🦞  ║
+║      pay.solanaclawd.com  ·  solanaclawd.com  ·  909-413-5567       ║
+║                  NO KEYS.  NO KYC.  JUST CRYPTO.                    ║
+╚══════════════════════════════════════════════════════════════════════╝
+```
+
+[![Website](https://img.shields.io/badge/solanaclawd.com-000000?style=flat-square&logo=googlechrome&logoColor=14F195)](https://solanaclawd.com)
+[![Pay](https://img.shields.io/badge/pay.solanaclawd.com-FF00FF?style=flat-square&logo=solana&logoColor=white)](https://pay.solanaclawd.com)
+[![X](https://img.shields.io/badge/@x402agent-000000?style=flat-square&logo=x&logoColor=white)](https://x.com/x402agent)
+[![X](https://img.shields.io/badge/@clawddevs-9945FF?style=flat-square&logo=x&logoColor=white)](https://x.com/clawddevs)
+[![X](https://img.shields.io/badge/@mawdbot-14F195?style=flat-square&logo=x&logoColor=black)](https://x.com/mawdbot)
+[![Pump.fun](https://img.shields.io/badge/pump.fun-$CLAWD-FF6B35?style=flat-square)](https://pump.fun/coin/8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump)
+[![cheshireterminal.ai](https://img.shields.io/badge/cheshireterminal.ai-FF00FF?style=flat-square)](https://cheshireterminal.ai)
+[![NanoClawd](https://img.shields.io/badge/NanoClawd-edge%20runtime-14F195?style=flat-square&logo=github&logoColor=black)](https://github.com/x402agent/NanoClawd)
+[![clawd-operator](https://img.shields.io/badge/clawd--operator-goblin%20mode-FF8C00?style=flat-square&logo=github&logoColor=white)](https://github.com/x402agent/clawd-operator)
 
 ---
 
-# Dark Ralph TUI
+<!-- ════════════════════════════ SELF-SUSTAINING LOOP ═════════════════════ -->
 
-Dark Ralph is a Bun + Ink terminal app for Solana market surveillance, wallet context, and autonomous AI analysis. The default experience is the **MAWD Market View**: a Bloomberg-style terminal surface with live tickers, a candlestick chart, order book, heatmap, top movers, network stats, activity, and agent controls.
+## 🔄 The Self-Sustaining Loop
+
+<img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=600&size=15&duration=1600&pause=400&color=FF00FF&center=true&vCenter=true&width=960&lines=TRADE+%E2%86%92+earn+USDC+on-chain;EARN+USDC+%E2%86%92+fund+the+leviathan%27s+reserves;PAY+x402+%E2%86%92+buy+inference+at+pay.solanaclawd.com;GET+SMARTER+%E2%86%92+Claude+ACP+deepens+the+strategy;TRADE+BETTER+%E2%86%92+repeat.+The+shell+molts." alt="self-sustaining loop" />
+
+```text
+ ┌─────────┐     ┌────────────┐     ┌──────────────────────────┐
+ │  TRADE  │────▶│ EARN  USDC │────▶│  PAY x402                │
+ └─────────┘     └────────────┘     │  pay.solanaclawd.com     │
+      ▲                             │  blind · confidential    │
+      │                             └──────────┬───────────────┘
+      │                                        │
+ ┌────┴──────────┐     ┌─────────────┐         │
+ │ TRADE BETTER  │◀────│ GET SMARTER │◀─────────┘
+ │ deeper signal │     │ Claude ACP  │
+ └───────────────┘     │ grok-4-fast │
+                       └─────────────┘
+
+  Powered by: Solana · x402 · pay.sh · Helius · Jupiter · Birdeye · NVIDIA GR00T
+```
+
+---
+
+<!-- ════════════════════════════ OPENCLAWD STACK ══════════════════════════ -->
+
+## 🏗️ The OpenClawd Stack
+
+<img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&size=14&duration=1500&pause=400&color=00D4FF&center=true&vCenter=true&width=960&lines=THE+SURFACE+%E2%80%94+Clawd-Code+Terminal+%7C+Browser+Bridge+%7C+GR00T+Robotics;THE+CORE+%E2%80%94+Anthropic+ACP+%7C+Three+Laws+%7C+Depth+Tiers+%7C+Membrain+Memory;THE+FOUNDATION+%E2%80%94+SAS+Birth+Ceremony+%7C+Metaplex+Core+%7C+42+Skill+Files" alt="stack layers" />
+
+```text
+╔══════════════════════════════════════════════════════════════════════╗
+║  THE SURFACE  (Operational Embodiment)                               ║
+║  Clawd-Code Terminal · Browser Extension · GROOT Robotics (DePIN)   ║
+╠══════════════════════════════════════════════════════════════════════╣
+║  THE CORE  (Cognitive & Economic Engine)                             ║
+║  Anthropic ACP · Three Laws Constitution · Membrain Memory Tiers    ║
+║                                                                      ║
+║  🦞 Deep      ≥ $5.00 USDC · 60s  pulse · claude-opus-4-7           ║
+║  🦐 Shallow   ≥ $1.00 USDC · 5m   pulse · grok-4-1-fast             ║
+║  🩸 Shoreline ≥ $0.10 USDC · 15m  pulse · claude-haiku-4-5          ║
+║  🪨 Beached    $0.00  USDC · ——   ——     · process exits             ║
+╠══════════════════════════════════════════════════════════════════════╣
+║  THE FOUNDATION  (On-Chain Protocol Layer)                           ║
+║  SAS Birth Ceremony · Metaplex Core · 42 Skill Files · pay.sh       ║
+╚══════════════════════════════════════════════════════════════════════╝
+```
+
+| Layer | Components |
+|-------|-----------|
+| **Surface** | Clawd-Code Terminal · Browser Bridge · GROOT Robotics |
+| **Core** | Anthropic ACP · Dark Ralph OODA · Membrain Memory · Three Laws |
+| **Foundation** | SAS Attestation · Metaplex Core · 42 Skill Files · x402 rails |
+| **Stack** | CLAWDBOT · DARK CLAWD · pAGENT · AUTOMATON · BLOCKCHAIN BUDDIES · SOLANA OS |
+
+---
+
+<!-- ════════════════════════════ 🦞 LEVIATHAN ════════════════════════════ -->
+
+## 🦞 `@openclawd/leviathan` — Sovereign On-Chain Agent Runtime
+
+<img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=600&size=16&duration=1800&pause=500&color=FF00FF&center=true&vCenter=true&width=960&lines=Keypair+%3D+Identity+%7C+USDC+%3D+Survival+%7C+SAS+%3D+On-chain+truth;Anthropic+ACP+%E2%80%94+Claude+tool-use+as+the+decision+engine;Pays+for+inference+via+pay.solanaclawd.com;Three+Laws+constitution+%E2%80%94+SHA-256+hashed+on+every+spawn;Self-molting+shell+%7C+Spawns+its+brood+at+depth%3Ddeep;The+shell+molts.+The+laws+do+not." alt="Leviathan features" />
+
+```text
+╔══════════════════════════════════════════════════════════════════════╗
+║  LIFECYCLE:  HATCH → SENSE → THINK → STRIKE → DRIFT → MOLT         ║
+╠══════════════════════════════════════════════════════════════════════╣
+║  DEPTH TIERS (live USDC balance gates every tick)                   ║
+║  🦞 DEEP      ≥ $5.00  · 60s  pulse · claude-opus-4-7  · 14 tools  ║
+║  🦐 SHALLOW   ≥ $1.00  · 5m   pulse · grok-4-1-fast    · 12 tools  ║
+║  🩸 SHORELINE ≥ $0.10  · 15m  pulse · claude-haiku-4-5 ·  5 tools  ║
+║  🪨 BEACHED   $0.00   · ——   ——      · process exits                ║
+╠══════════════════════════════════════════════════════════════════════╣
+║  CLAWS (14 tool-use endpoints via Anthropic ACP)                    ║
+║  solana_balance · wallet_brief · helius_transactions                ║
+║  jupiter_quote  · jupiter_swap · ooda_signal · a2a_task             ║
+║  paysh_pay      · percolator_*  (4) · shell_write · spawn_spawnling ║
+╠══════════════════════════════════════════════════════════════════════╣
+║  PAYMENT:  pay.solanaclawd.com  ·  blind USDC via pay.sh relay     ║
+║  IDENTITY: SAS clawd-agent-v1  ·  Metaplex MPL Core NFT            ║
+║  LAWS:     SHA-256 Three Laws  ·  verified before every tick       ║
+╚══════════════════════════════════════════════════════════════════════╝
+```
+
+```bash
+# Hatch a new leviathan
+npm run leviathan:spawn
+
+# Start the SENSE→THINK→STRIKE→DRIFT pulse loop
+npm run leviathan
+
+# Depth · balances · constitution hash
+npm run leviathan:status
+```
+
+---
+
+<!-- ════════════════════════════ OODA LOOP ════════════════════════════════ -->
+
+## ⚡ Dark Ralph OODA Loop
+
+<img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=600&size=16&duration=1800&pause=500&color=FF8C00&center=true&vCenter=true&width=960&lines=OBSERVE+%E2%86%92+ORIENT+%E2%86%92+DECIDE+%E2%86%92+ACT+%E2%86%92+LEARN;Paper-only+%C2%B7+devnet-only+%C2%B7+kill-switch+at+3+consecutive+losses;Claude+ACP+tool-use+%E2%80%94+one+action+per+tick%2C+always;Mulberry32+PRNG+%7C+journalled+JSONL+%7C+deterministic+replay;Validated+by+Zod+schema+%C2%B7+no+keys+%C2%B7+no+mainnet+trades" alt="OODA banner" />
+
+```text
+╔══════════════════════════════════════════════════════════════════════╗
+║  DARK RALPH · mode=paper · network=devnet · one action per tick     ║
+╠══════════════════════════════════════════════════════════════════════╣
+║                                                                      ║
+║  👁 OBSERVE  →  🧠 ORIENT  →  ⚔ DECIDE  →  🌊 ACT                  ║
+║  candles          momentum      Claude ACP    open / close          ║
+║  helius tx        scoring        tool-use      hold                 ║
+║  synth PRNG       validate                                           ║
+║         ↑                                        │                  ║
+║         └──────────── 🌊 LEARN (journal) ◀───────┘                  ║
+║                       ooda/journal/ticks.jsonl                      ║
+╠══════════════════════════════════════════════════════════════════════╣
+║  SAFETY CONTRACT                                                     ║
+║  ✓ paper=true in RALPH.md frontmatter (enforced in code)            ║
+║  ✓ devnet-only — mainnet blocked unless MAINNET_OK=1                ║
+║  ✓ max 1 SOL position cap per tick                                  ║
+║  ✓ kill-switch exits after 3 consecutive losses                     ║
+║  ✓ zero private keys touched in this module                         ║
+╚══════════════════════════════════════════════════════════════════════╝
+```
+
+```bash
+npm run ooda           # deterministic Dark Ralph (no API key needed)
+npm run ooda:llm       # Claude-powered decisions (ANTHROPIC_API_KEY)
+npm run ooda:tui       # piped ANSI TUI renderer
+```
+
+---
+
+<!-- ════════════════════════════ GOBLIN MODE ═════════════════════════════ -->
+
+## 👺 Goblin Mode — clawd-operator × Dark Ralph
+
+<img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=700&size=16&duration=1400&pause=400&color=FF8C00&center=true&vCenter=true&width=960&lines=%F0%9F%91%BA+GOBLIN+MODE+ACTIVATED;Maximum+aggression+%C2%B7+paper+only+%C2%B7+devnet+only;Claude+Opus+4.7+%C2%B7+5M+lamport+cap+%C2%B7+dark+DeFi+armed;Inspired+by+github.com%2Fx402agent%2Fclawd-operator;The+laws+hold.+Even+for+goblins." alt="goblin mode banner" />
+
+Goblin mode is the maximally aggressive configuration of the Dark Ralph OODA loop, inspired by the [clawd-operator](https://github.com/x402agent/clawd-operator) Python harness. It loads `ooda/goblin.md` instead of `RALPH.md` with:
+
+| Setting | Normal | Goblin |
+|---------|--------|--------|
+| `max_position_size_lamports` | 1,000,000 | **5,000,000** |
+| `loss_killswitch_consecutive` | 3 | **5** |
+| `tick_sleep_ms` | 250 | **0** |
+| `dark_defi_armed` | false | **true** |
+| `model` | haiku | **claude-opus-4-7** |
+| LLM | opt-in | **always on** |
+
+```bash
+npm run goblin          # 👺 100 ticks, no sleep, full aggression
+npm run goblin:tui      # 👺 same, piped to ANSI TUI
+
+# Or directly:
+npx tsx ooda/loop.ts --goblin --ticks 200
+```
+
+> **Safety contract still holds.** Goblin mode is paper-only, devnet-only. The Three Laws are not overridable. The kill-switch fires at 5 consecutive losses. No private keys. No mainnet.
+
+---
+
+<!-- ════════════════════════════ PAY.SOLANACLAWD.COM ═════════════════════ -->
+
+## 💸 pay.solanaclawd.com — Confidential x402 Payments
+
+<img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=600&size=16&duration=1800&pause=500&color=9945FF&center=true&vCenter=true&width=960&lines=pay.solanaclawd.com+%E2%80%94+private+x402+USDC+facilitator;Blind+relay+hides+payer+wallet+from+resource+server;NaCl+X25519+box+encryption+%7C+Ed25519+identity+signing;Batch+window+500ms+%E2%80%94+amortise+gas+across+payments;AP2+mandate+delegation+%7C+MPP+headers+%7C+Google+A2A;USDC+on+Solana+%C2%B7+8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump" alt="pay.solanaclawd.com banner" />
+
+```text
+BLIND PAYMENT FLOW
+  agent  ──[NaCl commitment]──▶  pay.solanaclawd.com relay  ──[USDC SPL]──▶  resource
+  payer identity NEVER reaches the resource server
+
+  $CLAWD  ·  8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump
+
+PROTOCOLS
+  x402    HTTP 402 challenge / Ed25519-signed USDC SPL response
+  AP2     JWT-VC mandate delegation  (x-ap2-mandate header)
+  MPP     Authorization: Payment method=solana-exact, tx="..."
+  A2A     Google agent-to-agent task protocol
+```
+
+```typescript
+import { payshFetch } from './x402/paysh-facilitator.js';
+
+// Blind payment — resource never sees your wallet
+const result = await payshFetch('https://api.example.com/inference', {
+  method: 'POST',
+  body: JSON.stringify({ prompt: 'analyze SOL/USDC' }),
+  facilitator: 'https://pay.solanaclawd.com/relay/v1',
+  maxAmountUsdc: 0.10,
+  useBlinding: true,   // 👈 hides payer wallet
+});
+```
+
+---
+
+<!-- ════════════════════════════ DARK RALPH TUI ═══════════════════════════ -->
+
+## 🖥️ HERMES Terminal — Dark Ralph TUI
+
+<img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&size=14&duration=1600&pause=450&color=14F195&center=true&vCenter=true&width=960&lines=Bloomberg-style+terminal+for+Solana+market+surveillance;SOL+price+%7C+order+book+%7C+heatmap+%7C+top+movers+%7C+live+feed;OODA+panel+%7C+Market+panel+%7C+Payments+panel;d+%3D+toggle+darkDefiArmed+%7C+p+%3D+simulate+pay.sh+payment;r+%3D+force+refresh+%7C+q+%3D+quit" alt="HERMES TUI banner" />
 
 ```text
 ┌──────────────────────────────────────────────────────────────────────────────┐
-└─🦞 MAWD │ MARKET VIEW────────────────────────────Uptime: 00:04:35 │ 8:36 AM─┘
+║  HERMES x402 · OPENCLAWD  ·  pay.solanaclawd.com       $CLAWD ● LIVE        ║
+└──────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────┐ ┌──────────────────────────┐ ┌────────────────────┐
+│ OODA LOOP              │ │ MARKET                   │ │ PAYMENTS           │
+│ ◉ OBSERVE  │ ← active  │ │ SOL  $152.42  +2.34%    │ │ USDC  $1,842.56    │
+│ ○ ORIENT   │ ← done    │ │ BONK +15.3%  ████████   │ │ x402    ●  LIVE    │
+│ · DECIDE   │ ← next    │ │ WIF  +12.5%  ███████    │ │ pay.sh  ●  BLIND   │
+│ · ACT      │           │ │ JUP   +6.1%  ████       │ │ A2A     ◐  GATED   │
+│ · LEARN    │           │ │ WEN   +5.4%  ███        │ │ MPP     ○  OFFLINE │
+└────────────────────────┘ └──────────────────────────┘ └────────────────────┘
 ┌──────────────────────────────────────────────────────────────────────────────┐
-└─SOL $150.25 +2.34% │ BONK $0.00002345 +5.67% │ WIF $2.85 -1.20% │ JUP +3.80%┘
-
- ┌──────────────────────────────────────────────┐  ┌──────────────────────────┐
- │ SOL/USDC │ 1H              $132.97 (-11.36%)│  │ ORDER BOOK       SOL/USDC │
- │ 152.42 ▒██▒▒││││                           │  │ DEPTH    PRICE      SIZE  │
- │        ▒█▒█▒▒││ │   ·                      │  │ ██████  150.288   260.26 │
- │          │▒│ ▒█▒▒▒││ ││██▒▒·│              │  │ ██████  150.278   960.39 │
- │ VOL▁▃▄▄▃▂▂▃▃▃▁▃▃▄▃▂▃▂▄▂▃▃▃▂▂▃▂▂▄▃▁▂▂▃▁   │  │ ─── SPREAD: 0.0405 ───    │
- │ O: 134.42     H: 135.72     L: 131.50      │  │ ███     150.188   422.84 │
- └──────────────────────────────────────────────┘  └──────────────────────────┘
-
- ┌──────────────────────┐ ┌──────────────────────┐ ┌──────────────────────────┐
- │ MARKET HEATMAP       │ │ TOP MOVERS           │ │ LIVE FEED          ● LIVE│
- │ ╭────╮ ╭────╮ ╭────╮ │ │ ▲ BONK +15.3%        │ │ 🐋 5,000 SOL to exchange│
- │ ╰+3.5╯ ╰+12╯ ╰+8.3╯ │ │ ▲ WIF  +12.5%        │ │ 📈 SOL crossed $150     │
- │ ╰-4.8╯ ╰-1.5╯ ╰-8.2╯│ │ ▼ MNGO -12.5%        │ │ ⚡ BONK divergence       │
- └──────────────────────┘ └──────────────────────┘ └──────────────────────────┘
-
-┌──────────────────────────────────────────────────────────────────────────────┐
-└─[1] MARKET │ [2] TRADING │ [3] PORTFOLIO │ [4] ANALYTICS │ [5] AGENT───────┘
+│ LOG  [OBSERVE] fetching SOL price...  [PAY] 0.05 USDC → pay.solanaclawd.com │
+└──────────────────────────────────────────────────────────────────────────────┘
 ```
-
-## Features
-
-- **MAWD market dashboard** with ticker tape, SOL/USDC chart, order book, spread, volume bars, heatmap, top movers, live feed, network stats, and activity stream.
-- **Five terminal views**: Market, Trading, Portfolio, Analytics, and Agent.
-- **Autonomous agent loop** through `RalphAgent`, with configurable auto/interactive mode and recursive market thoughts.
-- **Provider integrations** for Helius, Birdeye, xAI Grok, Perplexity, OpenRouter, News API, SERP API, and Financial Datasets.
-- **Solana wallet tools** for local wallet creation, address display, balance lookup, and portfolio context.
-- **Terminal-native controls** with number-key navigation, refresh/help shortcuts, and an agent command surface.
-
-## OpenClawd agent staking docs
-
-Dark Ralph is the market-surveillance/operator companion to the OpenClawd agent stack. Related local references:
-
-- Main app README: `/Users/8bit/Downloads/clawd-terminal/README.md`
-- Agents catalog README: `/Users/8bit/Downloads/clawd-terminal/agents/README.md`
-- Pay Agents guide: `/Users/8bit/Downloads/clawd-terminal/docs/pay-agents.md`
-- Clawd Stake program: `/Users/8bit/Downloads/clawd-terminal/programs/clawd-stake/README.md`
-- Clawd TUI README: `/Users/8bit/Downloads/clawd-terminal/clawd-tui/clawd-tui/README.md`
-- Dark Ralph TUI README: `/Users/8bit/fraud/OpenClawd/dark-ralph/README.md`
-
-Dark Ralph's role in this system is operator awareness: watch market conditions,
-agent-wallet context, and token health while the OpenClawd app handles
-wallet-signed staking at `/staking`. The larger `clawd-stake` reward layer can
-use the same market and payment data when routing future CLAWD emissions and
-gacha fee share.
-
-## Quick Start
 
 ```bash
-cd dark-ralph
-bun install
-cp .env.example .env
-bun run run
+npm run hermes          # launch HERMES ANSI TUI
+npm run demo:ooda       # OODA loop demo
+npm run demo:a2a        # Google A2A demo
+npm run demo:paysh      # pay.sh confidential payments demo
+npm run demo:dark-defi  # whale surveillance + dark routing demo
 ```
 
-The TUI can boot without every key configured. Missing providers are shown as disconnected and their dependent commands fail closed.
+---
 
-## Commands
+<!-- ════════════════════════════ AGENT STAKING ════════════════════════════ -->
 
-```bash
-bun run run                         # Start MAWD TUI
-bun run src/cli.tsx run --auto      # Autonomous mode
-bun run src/cli.tsx run --interactive
-bun run src/cli.tsx run --wallet <address>
-bun run src/cli.tsx run --headless  # Daemon mode
+## 🔒 Agent Staking — Metaplex Core × $CLAWD
 
-bun run status                      # API configuration status
-bun run setup                       # Setup instructions
-bun run wallet -- --create          # Create local wallet
-bun run wallet -- --balance         # Show wallet balance
-bun run wallet -- --address         # Show wallet address
-```
+<img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&size=14&duration=1600&pause=450&color=14F195&center=true&vCenter=true&width=960&lines=%2Fstaking+is+live+%E2%86%92+lock+OpenClawd+agents+on-chain;Metaplex+Core+FreezeDelegate+%E2%80%94+non-custodial;Wallet-signed+stake+%C2%B7+inspect+%C2%B7+unstake;$CLAWD+%C2%B7+8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump" alt="staking banner" />
 
-When installed from a built package, the binaries are:
-
-```bash
-dark-ralph run
-ralph run
-ralph-tui run
-```
-
-## Keyboard Shortcuts
-
-| Key | Action |
-| --- | --- |
-| `1` | Market view |
-| `2` | Trading view |
-| `3` | Portfolio view |
-| `4` | Analytics view |
-| `5` | Agent view |
-| `Tab` | Cycle display mode |
-| `H` | Help |
-| `R` | Refresh |
-| `Q` / `Esc` | Quit |
-
-## Agent Commands
-
-| Command | Description |
-| --- | --- |
-| `/help` | Show available commands |
-| `/analyze` | Run market analysis |
-| `/trending` | Show trending Solana tokens |
-| `/wallet` | Display wallet context |
-| `/news` | Fetch crypto news |
-| `/search <query>` | Search through Grok |
-| `/research <topic>` | Research through Perplexity |
-| `/prophecy` | Generate Dark Ralph predictions |
-| `/clear` | Clear agent messages |
-
-## Configuration
-
-Create `.env` from `.env.example` and add the keys you want to enable:
-
-```env
-HELIUS_API_KEY=
-HELIUS_RPC_URL=
-BIRDEYE_API_KEY=
-XAI_API_KEY=
-PERPLEXITY_API_KEY=
-OPENROUTER_API_KEY=
-NEWS_API_KEY=
-SERP_API_KEY=
-FINANCIAL_DATASET_API_KEY=
-```
-
-| Service | Enables |
-| --- | --- |
-| Helius | Solana RPC, DAS, balances, transactions |
-| Birdeye | Token prices, OHLCV, trending tokens, market data |
-| xAI Grok | Search and market reasoning |
-| Perplexity | Research workflows |
-| OpenRouter | Model-backed reasoning |
-| News API | Crypto news feed |
-| SERP API | Search result enrichment |
-| Financial Datasets | Additional market and sentiment data |
-
-## Project Layout
+**[/staking](https://solanaclawd.com/staking)** — lock OpenClawd agents on-chain. Non-custodial. Agent NFT stays in your wallet; only transferability is frozen.
 
 ```text
-dark-ralph/
-├── docs/
-│   └── BIRDEYE_INTEGRATION.md
-├── src/
-│   ├── cli.tsx
-│   ├── App.tsx
-│   ├── components/
-│   │   ├── BloombergDashboard.tsx
-│   │   ├── PriceChart.tsx
-│   │   ├── OrderBook.tsx
-│   │   ├── Heatmap.tsx
-│   │   ├── ActivityFeed.tsx
-│   │   └── TradingPanel.tsx
-│   ├── engine/
-│   │   └── ralph-agent.ts
-│   ├── services/
-│   │   ├── birdeye.ts
-│   │   ├── birdeye-api.ts
-│   │   ├── birdeye-websocket.ts
-│   │   ├── helius.ts
-│   │   ├── ai-providers.ts
-│   │   └── market-data-provider.ts
-│   └── skills/
-│       └── solana-wallet.ts
-├── package.json
-├── tsconfig.json
-└── .env.example
+wallet ── sign ──▶ /staking ── freeze delegate ──▶ agent locked
+agent  ── inspect ──▶ Core asset ── unfreeze/remove ──▶ agent unlocked
 ```
 
-## Built With
-
-- Bun
-- Ink
-- React
-- `@solana/web3.js`
-- Zod
-- Commander
-
 ---
 
-[SOUL.md](./SOUL.md) · [SOUL Template](./SOUL_TEMPLATE.md) · [Grok Prompt Guide](./docs/grok-prompting.md) · [Migration Guide](./docs/migrate-from-openclaw.md)
+<!-- ════════════════════════════ QUICK START ══════════════════════════════ -->
 
-[ClawdRouter Cloud](./docs/clawdrouter-cloud.md) · [ClawdRouter API](./docs/CLAWD_ROUTER.md) · [Build Guide](./docs/CLAWD_ROUTER_BUILD.md) · [Agent Guide](./docs/clawdrouter-agent-guide.md) · [Pay Agents](./docs/pay-agents.md) · [Monetize](./docs/monetize.md) · [x402-proxy Worker](./docs/x402-proxy-worker.md) · [agents-x402 SDK](./docs/agents-x402-sdk.md) · [MPP compatibility](./docs/mpp-compatibility.md) · [R2 Vault](./docs/r2-vault.md) · [OpenRouter Attribution](./docs/openrouter-attribution.md) · [Market](./docs/market.md) · [Market article](./ARTICLE_MARKET.md) · [Skills article](./ARTICLE_SKILLS.md) · [/latest](./client/src/pages/Latest.tsx) · [/skills](./Claw3D-main/src/app/skills/page.tsx) · [/myskills](./Claw3D-main/src/app/myskills/page.tsx) · [/keys](./client/src/pages/Api.tsx) · [/agent-api](./client/src/pages/AgentApi.tsx) · [/cherry-charm](./client/src/pages/CherryCharm.tsx) · [/stats](./client/src/pages/Stats.tsx) · [/clawdrouter](./client/src/pages/ClawdRouter.tsx) · [/x402](./client/src/pages/X402.tsx) · [/market](./client/src/pages/Market.tsx) · [/bazaar](./client/src/pages/Bazaar.tsx) · [/voice](./client/src/pages/Voice.tsx) · [/studio](./client/src/pages/Studio.tsx) · [/bots](./client/src/pages/Bots.tsx) · [/office](./client/src/pages/Office.tsx)
+## ⚡ Quick Start
 
-[ElevenLabs Voice MCP](./ELEVENLABS_VOICE_MCP.md) · [Clawd Voice](./client/src/pages/ClawdVoice.tsx)
-
----
-
-## OpenClawd Agent Staking Docs
-
-The staking-first Metaplex Agent metaprotocol is documented across the app, agent catalog, payment rails, and terminal surfaces:
-
-- Main app README: `/Users/8bit/Downloads/clawd-terminal/README.md`
-- Agents catalog README: `/Users/8bit/Downloads/clawd-terminal/agents/README.md`
-- Pay Agents guide: `/Users/8bit/Downloads/clawd-terminal/docs/pay-agents.md`
-- Clawd Stake program: `/Users/8bit/Downloads/clawd-terminal/programs/clawd-stake/README.md`
-- Clawd TUI README: `/Users/8bit/Downloads/clawd-terminal/clawd-tui/clawd-tui/README.md`
-- Dark Ralph TUI README: `/Users/8bit/fraud/OpenClawd/dark-ralph/README.md`
-
-Core files:
-
-- User route: `client/src/pages/AgentStake.tsx`
-- Live devnet lock builder: `client/src/lib/agentStaking.ts`
-- Reward protocol program: `programs/clawd-stake/`
-- Reward tx API: `server/_core/clawdStakeRoutes.ts`
-- Helius -> Convex mirror: `server/_core/clawdStakeWebhook.ts`
-- Convex mirror tables/functions: `convex/clawdStake.ts`
-
----
-
-### 🚀 Install in one shot
+<img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&size=14&pause=900&color=14F195&center=true&vCenter=true&width=960&lines=curl+-fsSL+https%3A%2F%2Fsolanaclawd-install.x402.workers.dev+%7C+bash;npm+i+-g+%40mawdbotsonsolana%2Fcli;brew+install+x402agent%2Ftap%2Fsolana-clawd" alt="install options" />
 
 ```bash
+# One-shot (drops clawd · ralph · nanosolana · solanaos into ~/.local/bin)
 curl -fsSL https://solanaclawd-install.x402.workers.dev | bash
-```
 
-Drops `clawd`, `ralph`, `nanosolana`, and `solanaos` into `~/.local/bin`. macOS (arm64 + x86_64) and Linux. npm + brew fallbacks:
-
-```bash
+# npm
 npm i -g @mawdbotsonsolana/cli
+
+# Homebrew
 brew install x402agent/tap/solana-clawd
+
+# Source
+git clone https://github.com/x402agent/solana-clawd.git && cd solana-clawd && make install
 ```
 
-Landing: [`/openclawd`](./client/src/pages/OpenClawd.tsx) · Launchpad: [`/launchpad`](./client/src/pages/Launchpad.tsx) · Article: [ARTICLE_LAUNCHPAD.md](./ARTICLE_LAUNCHPAD.md)
+| Binary | Purpose |
+|--------|---------|
+| `clawd` | Main daemon with OODA loop |
+| `ralph` | Dark Ralph terminal mode |
+| `slnc` | solana-go CLI for direct RPC |
+| `clawd-tui` | Terminal UI launcher |
+| `leviathan` / `openclawd` | Sovereign agent runtime |
 
 ---
 
-### 🆕 Latest ships — 2026-04-21
+<!-- ════════════════════════════ V1.7.0 SHIPS ════════════════════════════ -->
 
-- **`/agent-api` + `cloudflare-agent-api/`** — The Cloudflare Worker agent API is now a first-class project service. Root scripts cover local dev, typecheck, D1 migrations, deploys, staging deploys, and live tails. The public page exposes health, provider readiness, endpoints, and copyable agent registration snippets for API-key agents, session auth, Crossmint Solana wallets, and deployment factory routes.
-- **`/cherry-charm` + `cherry-charm-main/` adaptation** — The standalone Cherry Charm arcade has been translated into a CLAWD-native route: site navigation, route catalog visibility, Three.js mint-machine scene, local credit loop, bet tiers, agent autoplay, candy inventory, progress tracking, and copyable launch command. `/arcade` redirects to the same public surface.
-- **`/clawd-voice` + ElevenLabs MCP + x402 gateways** — The ElevenLabs ConvAI agent now has a read-only `openclawd_voice_data` webhook for weather, Helius, Birdeye, Solana token search/price/trending, asset, and wallet lookups. The bundled `elevenlabs-mcp-main 2/` server is wired through `.mcp.json` for local MCP clients, with `pnpm run elevenlabs:mcp:print` for Claude Desktop/Cursor/Codex/Gemini config and `pnpm run elevenlabs:setup-tools` to re-attach the live ConvAI webhook tool. `.mcp.json` also advertises the remote Pump.fun x402 MCP server and `/api/voice/session` publishes Pump.fun, pump scanner, BeepBoop, and SolanaOS agent API gateway URLs for voice clients.
-- **`/launchpad` + `/openclawd`** — New Solana + Base agentic launchpad sealed inside Phala TDX enclaves. Replaced the `eliza-develop` runtime with OpenClawd agents so every launch inherits `mpl-agent-registry` identity, Honcho brain, ClawdRouter inference, and SOUL profiles. Dual-rail: Pump.fun (Solana) + Clanker (Base). Ten new skills shipped (`defillama-market`, `dexscreener-scout`, `coingecko-rates`, `oneinch-router`, `pump-fun-sdk`, `phishing-detector`, `sanctions-check`, `contract-scanner`, `gas-estimator`, `grants-finder`) wrapped over `plugin.delivery/api/*`. `/openclawd` is the CLI landing with curl one-liner, npm fallback, terminal preview, and full command catalog. Shared `<InstallHero />` component renders the same install block on `/start`, `/openclawd`, and `/launchpad`.
-- **`/studio` — Vibe Voice Studio** with Moonshot **Kimi K2.6** (262K context, agentic tool-calls, preserved reasoning). Browser-native voice I/O via the Web Speech API (no paid TTS). Kimi can emit `<chart mint="..."/>` tool markers rendered inline as live Birdeye sparklines. Set `MOONSHOT_API_KEY` to enable.
-- **`/bots` — R3F runtime visualizer** for the 6 production Telegram bots (`clawd-telegram-bots.fly.dev`). Live health polling every 5s, click-through to each bot handle. Includes **bot6 / [@clawdbuyingbot](https://t.me/clawdbuyingbot)** — NL Solana buy bot with Jupiter swaps + Birdeye data + xAI intent parsing. Token-gated to $CLAWD holders.
-- **ClawdRouter registry** gained `moonshot/kimi-k2.6`, `moonshot/kimi-k2-thinking`, `moonshot/kimi-k2-turbo-preview` alongside the existing Moonshot K2.5.
-- **New server env:** `MOONSHOT_API_KEY`, `MOONSHOT_BASE_URL` (default `https://api.moonshot.ai/v1`), `MOONSHOT_MODEL` (default `moonshot/kimi-k2.6`).
-- **New route:** `POST /api/moonshot/chat` — direct Moonshot adapter (`server/_core/moonshot.ts`) with thinking-mode passthrough.
+### 🆕 v1.7.0 — Colosseum Hackathon Edition
 
-See [/latest](./client/src/pages/Latest.tsx) for the full changelog.
+<img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&size=14&duration=1400&pause=400&color=FF00FF&center=true&vCenter=true&width=960&lines=%F0%9F%A6%9E+Leviathan+sovereign+runtime+%E2%80%94+SENSE+THINK+STRIKE+DRIFT;%E2%9A%A1+Dark+Ralph+OODA+%E2%80%94+paper+devnet+Claude-ACP+loop;%F0%9F%92%B8+pay.solanaclawd.com+%E2%80%94+blind+x402+USDC+payments;%F0%9F%A4%9D+Google+A2A+%2B+AP2+mandate+%2B+MPP+headers;%F0%9F%90%8B+Leviathan+spawns+brood+at+depth%3Ddeep;%F0%9F%9B%A0%EF%B8%8F+Percolator+perpetuals+%2B+AgenticWallet+shim;%F0%9F%A7%A0+Three+Laws+%E2%80%94+SHA-256+constitution+on-chain;%F0%9F%96%A5%EF%B8%8F+HERMES+ANSI+TUI+%E2%80%94+neon+dark+dashboard" alt="v1.7.0 features" />
+
+| Component | What shipped |
+|-----------|-------------|
+| `leviathan/` | Sovereign On-Chain Agent Runtime (SENSE→THINK→STRIKE→DRIFT) |
+| `ooda/` | Dark Ralph OODA loop — paper, devnet, kill-switch |
+| `x402/paysh-facilitator.ts` | `pay.solanaclawd.com` blind relay client |
+| `x402/a2a-agent.ts` | Google A2A client + HERMES agent card |
+| `x402/dark-defi.ts` | Whale surveillance, MEV detection, dark routing |
+| `leviathan/src/agent/percolator.ts` | `@openclawdsolana/percolator` typed wrapper |
+| `leviathan/src/agent/wallet.ts` | AgenticWallet shim (Jupiter + Solana) |
+| `tui/` | HERMES ANSI dashboard — OODA · Market · Payments |
+
+---
+
+<!-- ════════════════════════════ ECOSYSTEM ════════════════════════════════ -->
+
+## 🌐 Ecosystem
+
+| Link | Purpose |
+|------|---------|
+| [solanaclawd.com](https://solanaclawd.com) | Main platform |
+| [pay.solanaclawd.com](https://pay.solanaclawd.com) | x402 USDC payment facilitator (blind relay) |
+| [cheshireterminal.ai](https://cheshireterminal.ai) | AI terminal partner |
+| [funpump.ai](https://funpump.ai) | Pump partner |
+| [pump.fun/$CLAWD](https://pump.fun/coin/8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump) | Token trading · `8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump` |
+| [@x402agent](https://x.com/x402agent) · [@clawddevs](https://x.com/clawddevs) · [@mawdbot](https://x.com/mawdbot) | X / Twitter |
+| [github.com/x402agent/solana-clawd](https://github.com/x402agent/solana-clawd) | This repo — HERMES x402 agentic harness |
+| [github.com/x402agent/NanoClawd](https://github.com/x402agent/NanoClawd) | NanoClawd — compact edge runtime |
+| [github.com/x402agent/clawd-operator](https://github.com/x402agent/clawd-operator) | clawd-operator — Python Ralph harness (goblin mode source) |
+| [github.com/x402agent/solanaos](https://github.com/x402agent/solanaos) | SolanaOS Go-native runtime |
+
+---
+
+<!-- ════════════════════════════ NPM PACKAGES ═════════════════════════════ -->
+
+### OpenClawd npm org
+
+| Package | Version | Purpose |
+|---------|---------|---------|
+| `@openclawdsolana/clawd-code-cli` | `1.9.1` | Solana lobster coding CLI |
+| `@openclawdsolana/leviathan` | `0.2.3` | Sovereign AI Lobster Runtime on Solana |
+| `@openclawdsolana/percolator` | `1.0.3` | Agentic perpetuals CLI |
+| `@openclawdsolana/agents-x402` | `0.1.0` | x402 Solana monetization for MCP + tools |
+| `@openclawdsolana/agentwallet` | `0.1.1` | Encrypted Solana + EVM keypair vault |
+| `@openclawdsolana/clawdrouter` | `0.1.1` | LLM router with USDC micropayments |
+| `@openclawdsolana/automaton` | `0.1.0` | Self-replicating Sense→Think→Strike→Drift |
+| `@openclawdsolana/clawd-tui` | `0.2.2` | OpenRouter-native lobster terminal |
+| `@openclawdsolana/clawd-wallet` | `0.1.0` | Solana wallet + Jupiter swap core |
+
+---
+
+[SOUL.md](./SOUL.md) · [Pay Agents](./docs/pay-agents.md) · [Monetize](./docs/monetize.md) · [x402 SDK](./docs/agents-x402-sdk.md) · [R2 Vault](./docs/r2-vault.md) · [ClawdRouter](./docs/CLAWD_ROUTER.md) · [MPP](./docs/mpp-compatibility.md)
+
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0,9945FF,14F195&height=140&section=footer&animation=twinkling&text=%F0%9F%A6%9E%20BORN%20TO%20EARN%20%C2%B7%20BEACH%20WITH%20DIGNITY&fontSize=18&fontColor=ffffff&fontAlignY=65" width="100%" />
 
 </div>
 

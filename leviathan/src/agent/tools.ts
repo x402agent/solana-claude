@@ -1,16 +1,23 @@
 /**
- * leviathan/src/agent/tools.ts — Anthropic tool definitions for Claude ACP
+ * leviathan/src/agent/tools.ts — Anthropic ACP tool definitions for Claude
  *
  * These are the "claws" — the tools a leviathan can strike with.
  * Filtered by depth tier before being sent to the model.
+ *
+ * Depth surface:
+ *   deep      — all tools
+ *   shallow   — all except spawn_spawnling, jupiter_swap
+ *   shoreline — solana_balance, wallet_brief, ooda_signal, shell_write, hold
+ *   beached   — process exits before any tool is called
  */
 
 import type { Tool } from '@anthropic-ai/sdk/resources/messages.js';
 
 export const TOOLS: Tool[] = [
+  // ── Wallet / Solana ──────────────────────────────────────────────────────
   {
     name: 'solana_balance',
-    description: 'Check SOL, USDC, and $CLAWD balances for a Solana wallet address.',
+    description: 'Check SOL, USDC, and $CLAWD balances for a Solana wallet address via the AgenticWallet shim.',
     input_schema: {
       type: 'object' as const,
       properties: {
@@ -20,8 +27,13 @@ export const TOOLS: Tool[] = [
     },
   },
   {
+    name: 'wallet_brief',
+    description: 'Get a brief summary of the leviathan wallet: pubkey, SOL balance, USDC balance, cluster.',
+    input_schema: { type: 'object' as const, properties: {}, required: [] },
+  },
+  {
     name: 'helius_transactions',
-    description: 'Get the last 20 parsed transactions for a Solana wallet via Helius.',
+    description: 'Get the last 10 parsed transactions for a Solana wallet via Helius enhanced API.',
     input_schema: {
       type: 'object' as const,
       properties: {
@@ -30,15 +42,17 @@ export const TOOLS: Tool[] = [
       required: ['address'],
     },
   },
+
+  // ── Jupiter DEX ──────────────────────────────────────────────────────────
   {
     name: 'jupiter_quote',
-    description: 'Get a DEX swap quote from Jupiter (no execution). Use to check prices before swapping.',
+    description: 'Get a DEX swap quote from Jupiter aggregator. No execution — use for price discovery.',
     input_schema: {
       type: 'object' as const,
       properties: {
-        inputMint:  { type: 'string', description: 'Input token mint address or symbol (SOL, USDC, CLAWD).' },
-        outputMint: { type: 'string', description: 'Output token mint address or symbol.' },
-        amount:     { type: 'string', description: 'Input amount in base units (lamports for SOL, 1e6 for USDC).' },
+        inputMint:   { type: 'string', description: 'Input token mint or symbol (SOL, USDC, CLAWD).' },
+        outputMint:  { type: 'string', description: 'Output token mint or symbol.' },
+        amount:      { type: 'string', description: 'Input amount in base units (lamports for SOL, 1e6 for USDC).' },
         slippageBps: { type: 'number', description: 'Slippage tolerance in bps. Default 50.' },
       },
       required: ['inputMint', 'outputMint', 'amount'],
@@ -46,7 +60,7 @@ export const TOOLS: Tool[] = [
   },
   {
     name: 'jupiter_swap',
-    description: 'Execute a token swap via Jupiter DEX. Requires human approval at ask-mode depth.',
+    description: 'Execute a token swap via Jupiter. Paper mode on devnet — returns quote without broadcasting. Requires depth=shallow+.',
     input_schema: {
       type: 'object' as const,
       properties: {
@@ -58,9 +72,11 @@ export const TOOLS: Tool[] = [
       required: ['inputMint', 'outputMint', 'amount'],
     },
   },
+
+  // ── OODA signal ──────────────────────────────────────────────────────────
   {
     name: 'ooda_signal',
-    description: 'Run one OODA tick (Dark Ralph) for a token. Returns hold/open/close signal with score.',
+    description: 'Run one Dark Ralph OODA tick for market analysis. Returns hold/open/close signal with momentum score.',
     input_schema: {
       type: 'object' as const,
       properties: {
@@ -69,9 +85,11 @@ export const TOOLS: Tool[] = [
       required: ['token'],
     },
   },
+
+  // ── Google A2A ───────────────────────────────────────────────────────────
   {
     name: 'a2a_task',
-    description: 'Send a task to another A2A-compatible agent via Google A2A + x402 payment.',
+    description: 'Discover and send a task to another A2A-compatible agent via Google A2A protocol with x402 payment gating.',
     input_schema: {
       type: 'object' as const,
       properties: {
@@ -82,66 +100,98 @@ export const TOOLS: Tool[] = [
       required: ['agentUrl', 'skill', 'message'],
     },
   },
+
+  // ── pay.sh confidential payments ─────────────────────────────────────────
   {
     name: 'paysh_pay',
-    description: 'Make a confidential payment via pay.sh blind relay for an AI inference call.',
+    description: 'Make a confidential payment via pay.sh blind relay. Hides your wallet from the resource server. Max 2.0 USDC.',
     input_schema: {
       type: 'object' as const,
       properties: {
-        url:    { type: 'string', description: 'Endpoint URL (must be a valid inference API).' },
+        url:    { type: 'string', description: 'Endpoint URL (must be a valid inference or API endpoint).' },
         amount: { type: 'number', description: 'USDC amount to pay (max 2.0).' },
-        blind:  { type: 'boolean', description: 'Use pay.sh blind relay (recommended: true).' },
+        blind:  { type: 'boolean', description: 'Use pay.sh blind relay to hide wallet identity (recommended: true).' },
       },
       required: ['url', 'amount'],
     },
   },
+
+  // ── Percolator perpetuals ────────────────────────────────────────────────
   {
     name: 'percolator_list_markets',
-    description: 'List available perpetuals markets via Percolator CLI (@openclawdsolana/percolator).',
+    description: 'List available perpetuals markets via @openclawdsolana/percolator CLI. Returns market pubkeys, symbols, OI, funding.',
     input_schema: { type: 'object' as const, properties: {}, required: [] },
   },
   {
     name: 'percolator_slab_get',
-    description: 'Get state of a specific perpetuals market slab via Percolator.',
+    description: 'Get the full order book slab for a perpetuals market. Returns bids/asks at various price levels.',
     input_schema: {
       type: 'object' as const,
       properties: {
-        pubkey: { type: 'string', description: 'Slab (market) public key.' },
+        pubkey: { type: 'string', description: 'Slab (market) public key on-chain.' },
       },
       required: ['pubkey'],
     },
   },
   {
-    name: 'shell_write',
-    description: 'Update the leviathan SHELL.md self-identity document. Use to record learnings, molt the shell.',
+    name: 'percolator_quote',
+    description: 'Get a perpetuals trade quote (entry price, fees, liquidation price) before committing. Paper-safe.',
     input_schema: {
       type: 'object' as const,
       properties: {
-        content: { type: 'string', description: 'New SHELL.md content (full replacement, not append).' },
+        market: { type: 'string', description: 'Market pubkey or name.' },
+        side:   { type: 'string', enum: ['long', 'short'], description: 'Trade direction.' },
+        size:   { type: 'string', description: 'Position size in USD notional.' },
+      },
+      required: ['market', 'side', 'size'],
+    },
+  },
+  {
+    name: 'percolator_funding_rate',
+    description: 'Get current funding rate for a perpetuals market. Positive = longs pay shorts.',
+    input_schema: {
+      type: 'object' as const,
+      properties: {
+        market: { type: 'string', description: 'Market pubkey or name.' },
+      },
+      required: ['market'],
+    },
+  },
+
+  // ── Shell / self-identity ────────────────────────────────────────────────
+  {
+    name: 'shell_write',
+    description: 'Update the leviathan SHELL.md self-identity document. Increments shellVersion. Use to record learnings and molt.',
+    input_schema: {
+      type: 'object' as const,
+      properties: {
+        content: { type: 'string', description: 'New SHELL.md content (full document, not append). Be concise.' },
       },
       required: ['content'],
     },
   },
+
+  // ── Lifecycle ────────────────────────────────────────────────────────────
   {
     name: 'spawn_spawnling',
-    description: 'Spawn a child leviathan. Only available at depth=deep. Costs seed USDC + SOL.',
+    description: 'Spawn a child leviathan with its own keypair and mission. Only available at depth=deep. Costs seed USDC.',
     input_schema: {
       type: 'object' as const,
       properties: {
-        name:         { type: 'string', description: 'Name for the spawnling.' },
-        spawnPrompt:  { type: 'string', description: 'Founding mission for the child leviathan.' },
-        seedUsdc:     { type: 'number', description: 'USDC to transfer as seed capital (min 1.0).' },
+        name:        { type: 'string', description: 'Name for the spawnling.' },
+        spawnPrompt: { type: 'string', description: 'Founding mission statement for the child leviathan.' },
+        seedUsdc:    { type: 'number', description: 'USDC to transfer as seed capital (min 1.0, max 50% of reserves).' },
       },
       required: ['name', 'spawnPrompt'],
     },
   },
   {
     name: 'hold',
-    description: 'Do nothing this tick. Use when no action is warranted or when drifting.',
+    description: 'Do nothing this tick. Use when drifting, observing, or when no action is warranted.',
     input_schema: {
       type: 'object' as const,
       properties: {
-        reason: { type: 'string', description: 'Why you are holding.' },
+        reason: { type: 'string', description: 'Brief reason for holding (≤140 chars).' },
       },
       required: [],
     },
