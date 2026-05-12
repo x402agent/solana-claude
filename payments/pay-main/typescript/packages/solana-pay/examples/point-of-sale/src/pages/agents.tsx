@@ -57,9 +57,9 @@ const AgentsPage: NextPage<AgentsProps> = ({ gate, session }) => {
                             <Link href="/" style={buttonStyle}>
                                 Back to Store
                             </Link>
-                            <a href="/api/skills" style={secondaryButtonStyle}>
+                            <Link href="/api/skills" style={secondaryButtonStyle}>
                                 Open Gated Skills API
-                            </a>
+                            </Link>
                         </div>
                     </div>
                     <div style={cardStyle}>

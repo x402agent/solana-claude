@@ -2,6 +2,7 @@ import type { GetServerSideProps, NextPage } from 'next';
 import Link from 'next/link';
 import React from 'react';
 import { getMerchantCatalog, type MerchantProduct, type TokenPrice } from '../server/core/catalog';
+import { getGateSession } from '../server/core/gate';
 import { getPosRecipient } from '../server/core/runtime';
 import { getHostedSkillSummary, type HostedSkill } from '../server/core/skills';
 
@@ -265,7 +266,7 @@ const Home: NextPage<LandingProps> = ({
     );
 };
 
-export const getServerSideProps: GetServerSideProps<LandingProps> = async () => {
+export const getServerSideProps: GetServerSideProps<LandingProps> = async (context) => {
     const catalog = getMerchantCatalog();
     const skillSummary = getHostedSkillSummary();
     return {
