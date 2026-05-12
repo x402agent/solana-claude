@@ -1,0 +1,25 @@
+name: mnemosyne
+version: 2.5
+description: Local-first AI memory system with SQLite - entity extraction, temporal recall, memory banks, MCP server
+author: Abdias J
+provides_tools:
+  - mnemosyne_remember
+  - mnemosyne_recall
+  - mnemosyne_stats
+  - mnemosyne_triple_add
+  - mnemosyne_triple_query
+  - mnemosyne_sleep
+  - mnemosyne_scratchpad_write
+  - mnemosyne_scratchpad_read
+  - mnemosyne_scratchpad_clear
+  - mnemosyne_invalidate
+  - mnemosyne_export
+  - mnemosyne_import
+  - mnemosyne_update
+  - mnemosyne_forget
+  - mnemosyne_diagnose
+provides_hooks:
+  - pre_llm_call
+  - on_session_start
+  - post_tool_call
+dependencies: []
