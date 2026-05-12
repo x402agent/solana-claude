@@ -59,7 +59,7 @@
     "@modelcontextprotocol/sdk": "^1.17.0",
     "@openclawdsolana/leviathan": "^0.1.0",
     "@solana/web3.js": "^1.98.0",
-    "axios": "^1.7.0",
+    "axios": "^1.16.0",
     "better-sqlite3": "^11.5.0",
     "bs58": "^6.0.0",
     "cfonts": "^3.3.0",
