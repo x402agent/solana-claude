@@ -32,3 +32,4 @@ programs/mpl-token-metadata-main/examples/js/ui-create-nft/pnpm-lock.yaml
 programs/mpl-token-metadata-main/examples/js/ui-create-nft-with-derived-signer/pnpm-lock.yaml
 programs/mpl-token-metadata-main/programs/token-metadata/Cargo.lock
 programs/mpl-token-metadata-main/programs/token-metadata/js/yarn.lock
+.vercel

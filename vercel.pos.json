@@ -1,0 +1,11 @@
+{
+  "framework": "nextjs",
+  "installCommand": "cd payments/pay-main/typescript && pnpm install --no-frozen-lockfile && cd packages/solana-pay/examples/point-of-sale && npm install",
+  "buildCommand": "cd payments/pay-main/typescript/packages/solana-pay/examples/point-of-sale && npm run build",
+  "outputDirectory": "payments/pay-main/typescript/packages/solana-pay/examples/point-of-sale/.next",
+  "functions": {
+    "payments/pay-main/typescript/packages/solana-pay/examples/point-of-sale/src/pages/api/**/*.ts": {
+      "maxDuration": 30
+    }
+  }
+}
