@@ -8,6 +8,7 @@
 
 import json
 import math
+import os
 import time
 import requests
 
@@ -16,9 +17,9 @@ from eth_account import Account
 from eth_account.messages import encode_defunct
 from web3 import Web3
 
-user = '0x63DD5aCC6b1aa0f563956C0e534DD30B6dcF7C4e'
-signer='0x21cF8Ae13Bb72632562c6Fff438652Ba1a151bb0'
-priKey = "0x4fd0a42218f3eae43a6ce26d22544e986139a01e5b34a62db53757ffca81bae1"
+user = os.environ['ETH_USER_ADDRESS']
+signer = os.environ['ETH_SIGNER_ADDRESS']
+priKey = os.environ['ETH_PRIVATE_KEY']
 
 host = 'https://fapi.asterdex.com'
 
