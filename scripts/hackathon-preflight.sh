@@ -19,6 +19,9 @@ echo "Secret exposure scan"
 patterns=(
   'BCR2DN5TVOLPFQD4'
   '5977-5962-0026'
+  'pay.solanaclawd.com'
+  'solanaclawd-merchant'
+  'merchant@solanaclawd.com'
 )
 
 tracked_files="$(git ls-files)"

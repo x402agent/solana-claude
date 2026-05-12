@@ -2,19 +2,19 @@
   "protocols": ["x402", "mpp", "solana-pay", "ap2", "paysh"],
   "supportedChains": ["solana", "base", "ethereum", "polygon"],
   "merchant": {
-    "id": "solanaclawd-merchant",
-    "name": "OpenClawd Merchant Network",
-    "domain": "pay.solanaclawd.com",
+    "id": "private-merchant",
+    "name": "Private Merchant Network",
+    "domain": "private-gateway.invalid",
     "storefrontPath": "/store",
     "checkoutPath": "/merchant/checkout",
     "brandColor": "#ff3e3e",
-    "contactEmail": "merchant@solanaclawd.com",
+    "contactEmail": "private-merchant@example.invalid",
     "googleMerchant": {
       "enabled": true,
-      "businessName": "OpenClawd",
-      "website": "https://pay.solanaclawd.com",
+      "businessName": "Private Merchant",
+      "website": "https://example.invalid/private-payment-gateway",
       "category": "Software > Business & Productivity > AI Agents",
-      "notes": "Google Merchant metadata for agent services, paid APIs, and Solana-native digital products."
+      "notes": "Public-safe placeholder metadata. Replace privately at deploy time."
     }
   },
   "tokenEconomy": {

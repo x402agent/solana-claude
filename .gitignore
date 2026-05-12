@@ -23,6 +23,7 @@ tui/dist/
 tui/node_modules/
 ooda/journal/ticks.jsonl
 ooda/journal/openai-goblin-session.json
+payments/agent-store/generated/sessions/
 
 # Vendored / third-party lockfiles (unused, noise for Dependabot)
 programs/mpl-token-metadata-main/pnpm-lock.yaml

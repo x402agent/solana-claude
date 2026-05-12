@@ -6,19 +6,19 @@
   "operator": "HERMES x402",
   "symbol": "$CLAWD",
   "merchant": {
-    "id": "solanaclawd-merchant",
-    "name": "OpenClawd Merchant Network",
-    "domain": "solanaclawd.com",
+    "id": "private-merchant",
+    "name": "Private Merchant Network",
+    "domain": "private-gateway.invalid",
     "storefrontPath": "/store",
     "checkoutPath": "/merchant/checkout",
     "brandColor": "#ff3e3e",
-    "contactEmail": "merchant@solanaclawd.com",
+    "contactEmail": "private-merchant@example.invalid",
     "googleMerchant": {
       "enabled": true,
-      "businessName": "OpenClawd",
-      "website": "https://solanaclawd.com",
+      "businessName": "Private Merchant",
+      "website": "https://example.invalid/private-payment-gateway",
       "category": "Software > Business & Productivity > AI Agents",
-      "notes": "Google Merchant metadata for agent services, paid APIs, and Solana-native digital products."
+      "notes": "Public-safe placeholder metadata. Replace privately at deploy time."
     }
   },
   "commerce": {

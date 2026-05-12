@@ -15,3 +15,6 @@ A_33KtGFACRxzi==>YOUR_LIVEKIT_AGENT_ID
 p_3zg9niwzqkd==>YOUR_LIVEKIT_PROJECT_ID
 solanaos-1xlx2a==>YOUR_LIVEKIT_SANDBOX_ID
 aadfe0f9-2e0c-4f7c-aa19-dcf9e860de9c==>YOUR_LOCAL_PROJECT_ID
+pay.solanaclawd.com==>PRIVATE_PAYMENT_GATEWAY_DOMAIN
+solanaclawd-merchant==>PRIVATE_MERCHANT_ID
+merchant@solanaclawd.com==>PRIVATE_MERCHANT_EMAIL

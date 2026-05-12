@@ -5,7 +5,7 @@
 **Track:** AI Agents x DeFi x Payments  
 **Team:** OpenClawd / solana-clawd  
 **Token:** $CLAWD — `8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump`  
-**Payment Rail:** `pay.solanaclawd.com`  
+**Payment Rail:** private deployment only  
 **Animated Pitch Page:** [beepboop/site/hermes-x402.html](beepboop/site/hermes-x402.html)
 
 ---
@@ -179,7 +179,7 @@ HERMES x402 creates a machine economy where agents can earn, spend, and compound
 
 **$CLAWD holder discounts:** 10% at 1K -> 25% at 100K -> 50% at 1M tokens
 
-**Live payment surface:** `pay.solanaclawd.com`
+**Live payment surface:** private deployment only
 
 ---
 
@@ -200,7 +200,7 @@ OpenClawd is building sovereign AI agents on Solana.
 
 - GitHub: `github.com/x402agent/solana-clawd`
 - Ecosystem: `solanaclawd.com`
-- Payments: `pay.solanaclawd.com`
+- Payments: private deployment only
 - Token: `$CLAWD` on pump.fun
 
 **No Keys. No KYC. Just Crypto.**
