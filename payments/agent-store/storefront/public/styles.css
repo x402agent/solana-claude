@@ -240,7 +240,9 @@ body {
 
 .offers,
 .products,
-.fleet {
+.fleet,
+.frontier-groups,
+.frontier-metrics {
   display: grid;
   gap: 16px;
   margin-top: 22px;
@@ -254,9 +256,18 @@ body {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
+.frontier-groups {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.frontier-metrics {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
 .offer,
 .product,
-.fleet-card {
+.fleet-card,
+.frontier-card {
   padding: 18px;
   border-radius: 22px;
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02));
@@ -265,16 +276,31 @@ body {
 
 .offer h3,
 .product h3,
-.fleet-card h3 {
+.fleet-card h3,
+.frontier-card h3 {
   margin: 0 0 10px;
   font-family: "Cinzel", serif;
 }
 
 .offer p,
 .product p,
-.fleet-card p {
+.fleet-card p,
+.frontier-card p,
+.frontier-copy {
   color: var(--muted);
   line-height: 1.55;
+}
+
+.frontier {
+  margin-top: 20px;
+  padding: 28px;
+}
+
+.frontier-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
 }
 
 .meta-line,
@@ -319,7 +345,9 @@ input {
   .hero,
   .grid,
   .offers,
-  .products {
+  .products,
+  .frontier-groups,
+  .frontier-metrics {
     grid-template-columns: 1fr;
   }
 

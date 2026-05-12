@@ -12,6 +12,7 @@ const ROOT = join(__dirname, "..");
 const PUBLIC_DIR = join(__dirname, "public");
 const MANIFEST_PATH = join(ROOT, "generated", "openclawd.agent-store.json");
 const CATALOG_PATH = join(ROOT, "catalog.json");
+const FRONTIER_PATH = join(ROOT, "frontier-inspirations.json");
 
 loadEnvFile(join(__dirname, ".env.local"));
 
@@ -60,6 +61,43 @@ app.get("/api/store", (_req, res) => {
   res.json({
     manifest: readJson(MANIFEST_PATH),
     catalog: readJson(CATALOG_PATH),
+  });
+});
+
+app.get("/api/frontier", (_req, res) => {
+  const frontier = readJson(FRONTIER_PATH) as {
+    themes?: string[];
+    companies?: Array<{
+      name: string;
+      cohort: string;
+      theme: string;
+      signal: string;
+      adaptation: string;
+    }>;
+  };
+  const companies = frontier.companies || [];
+  const groups = Object.entries(
+    companies.reduce<Record<string, typeof companies>>((acc, company) => {
+      if (!acc[company.theme]) acc[company.theme] = [];
+      acc[company.theme].push(company);
+      return acc;
+    }, {}),
+  ).map(([theme, entries]) => ({
+    theme,
+    count: entries.length,
+    companies: entries,
+  }));
+
+  res.json({
+    themes: frontier.themes || [],
+    totalCompanies: companies.length,
+    groups,
+    thesis: [
+      "private-first agent commerce",
+      "stablecoin and USDC-native monetization",
+      "always-on agent infrastructure with sandbox execution",
+      "judge-facing mapping to backed Solana startup patterns",
+    ],
   });
 });
 

@@ -85,7 +85,7 @@ fi
 echo "✓ qedgen binary built successfully"
 
 # ── Set up global validation workspace ──────────────────────────────────────
-# Pre-fetch Mathlib cache so the first `qedgen verify --validate` is fast.
+# Pre-fetch Mathlib cache so the first validated proof build is fast.
 # This runs in the background so it doesn't block npm install.
 
 setup_global_workspace() {
@@ -139,5 +139,5 @@ else
 fi
 echo ""
 echo "  The global Mathlib cache may still be downloading in the background."
-echo "  First run of 'qedgen verify --validate' may be slow if not ready."
+echo "  First validated proof build may be slow if the cache is not ready."
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"

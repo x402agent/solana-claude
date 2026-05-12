@@ -20,6 +20,7 @@ struct Cli {
 #[derive(Subcommand)]
 enum Commands {
     /// Generate Lean 4 proofs using Leanstral API
+    #[command(visible_alias = "verify")]
     Generate {
         /// Path to prompt file
         #[arg(long)]

@@ -1,6 +1,7 @@
 const state = {
   config: null,
   store: null,
+  frontier: null,
   moonpayCapabilities: null,
   moonpayWorkbench: null,
   placesService: null,
@@ -20,6 +21,8 @@ async function init() {
 
   state.config = await configRes.json();
   state.store = await storeRes.json();
+  const frontierRes = await fetch("/api/frontier");
+  state.frontier = await frontierRes.json();
 
   const [capabilitiesRes, workbenchRes] = await Promise.all([
     fetch("/api/moonpay/capabilities"),
@@ -35,6 +38,7 @@ async function init() {
   renderMoonPay();
   renderMoonPayAgentOps();
   renderFleet();
+  renderFrontier();
   bindPlaces();
   bindMoonPay();
 
@@ -174,6 +178,40 @@ function renderFleet() {
     .join("");
 }
 
+function renderFrontier() {
+  const metricsBox = document.getElementById("frontier-metrics");
+  const groupsBox = document.getElementById("frontier-groups");
+  const frontier = state.frontier;
+
+  metricsBox.innerHTML = [
+    ["Companies", String(frontier.totalCompanies)],
+    ["Themes", String(frontier.themes.length)],
+    ["Core Thesis", frontier.thesis[0]],
+  ]
+    .map(([label, value]) => `<div class="metric"><span>${escapeHtml(label)}</span><strong>${escapeHtml(value)}</strong></div>`)
+    .join("");
+
+  groupsBox.innerHTML = frontier.groups
+    .map((group) => {
+      const featured = group.companies.slice(0, 4);
+      const tail = Math.max(group.count - featured.length, 0);
+      return `
+        <article class="frontier-card">
+          <div class="frontier-head">
+            <h3>${escapeHtml(humanize(group.theme))}</h3>
+            <span class="chip">${escapeHtml(String(group.count))} signals</span>
+          </div>
+          <p>${escapeHtml(featured[0]?.adaptation || "")}</p>
+          <div class="meta-line">
+            ${featured.map((company) => `<span class="chip">${escapeHtml(company.name)}</span>`).join("")}
+            ${tail ? `<span class="chip">+${escapeHtml(String(tail))} more</span>` : ""}
+          </div>
+        </article>
+      `;
+    })
+    .join("");
+}
+
 function bindPlaces() {
   const button = document.getElementById("places-search");
   button.addEventListener("click", searchPlaces);
@@ -260,4 +298,11 @@ function escapeHtml(value) {
     .replaceAll(">", "&gt;")
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#39;");
+}
+
+function humanize(value) {
+  return String(value)
+    .split("-")
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(" ");
 }

@@ -1,0 +1,89 @@
+{
+  "source": {
+    "companiesPage": "https://colosseum.com/companies",
+    "frontierPage": "https://colosseum.com/frontier"
+  },
+  "themes": [
+    {
+      "id": "payments-commerce",
+      "label": "Payments And Commerce",
+      "borrowedForOpenClawd": "USDC-first agent checkout, remittance-grade settlement, merchant SDK thinking, and onramp-assisted conversion."
+    },
+    {
+      "id": "privacy-mev",
+      "label": "Privacy And MEV Defense",
+      "borrowedForOpenClawd": "Apigee private ingress, confidential x402 relay, and CLAWD-aware private operator lanes."
+    },
+    {
+      "id": "agent-infra",
+      "label": "Agent And Infra",
+      "borrowedForOpenClawd": "Truand keep-alive sandboxes, box schedules, Codex workers, and programmable merchant orchestration."
+    },
+    {
+      "id": "markets-data",
+      "label": "Markets And Information Finance",
+      "borrowedForOpenClawd": "Paid signal products, market automation lanes, and event-driven premium inventory."
+    },
+    {
+      "id": "loyalty-growth",
+      "label": "Loyalty, Reputation, And Growth",
+      "borrowedForOpenClawd": "CLAWD token boosts, rebates, treasury flywheel, and merchant-side audience segmentation."
+    }
+  ],
+  "companies": [
+    { "name": "Archer Exchange", "cohort": "C4", "theme": "privacy-mev", "signal": "MEV-resistant exchange design", "adaptation": "Route high-value flows through private lanes and anti-race checkout policy." },
+    { "name": "Capitola Labs", "cohort": "C4", "theme": "markets-data", "signal": "Information finance and RFQ prediction flow", "adaptation": "Sell premium information products and event-priced agent sessions." },
+    { "name": "Cloak", "cohort": "C4", "theme": "privacy-mev", "signal": "Confidential transaction layer", "adaptation": "Treat confidentiality as a first-class merchant feature." },
+    { "name": "Credible", "cohort": "C4", "theme": "payments-commerce", "signal": "Stablecoin remittance rail", "adaptation": "Position USDC settlement as instant business-grade agent commerce." },
+    { "name": "Frames", "cohort": "C4", "theme": "agent-infra", "signal": "Access layer for the agent internet", "adaptation": "Make OpenClawd the merchant access layer for paid agents." },
+    { "name": "Kormos", "cohort": "C4", "theme": "markets-data", "signal": "Yield optimization mechanics", "adaptation": "Add treasury and CLAWD flywheel logic to agent revenue." },
+    { "name": "Rekt", "cohort": "C4", "theme": "markets-data", "signal": "Accessible derivatives UX", "adaptation": "Keep complex backend rails but make the storefront playful and direct." },
+    { "name": "Superfan", "cohort": "C4", "theme": "loyalty-growth", "signal": "Fees flowing into artist treasuries", "adaptation": "Route agent fees into a CLAWD-aligned treasury and loyalty loop." },
+    { "name": "Synthesis", "cohort": "C4", "theme": "markets-data", "signal": "Cross-venue execution tooling", "adaptation": "Frame our multi-rail settlement as cross-venue agent execution." },
+    { "name": "Unruggable", "cohort": "C4", "theme": "privacy-mev", "signal": "Secure consumer wallet stack", "adaptation": "Emphasize self-custodial and secret-safe operator design." },
+    { "name": "Yumi Finance", "cohort": "C4", "theme": "payments-commerce", "signal": "Crypto BNPL checkout SDK", "adaptation": "Push merchant checkout as a productized developer surface." },
+    { "name": "CargoBill", "cohort": "C3", "theme": "payments-commerce", "signal": "Supply-chain stablecoin payments", "adaptation": "Present agent work as invoiceable business infrastructure, not toy payments." },
+    { "name": "Crypto Fantasy League (CFL)", "cohort": "C3", "theme": "loyalty-growth", "signal": "Game loop built on live prices", "adaptation": "Gamify agent performance and routing reputation." },
+    { "name": "Decal", "cohort": "C3", "theme": "payments-commerce", "signal": "Merchant payment gateway with loyalty", "adaptation": "Keep merchant payments and loyalty inside one operating surface." },
+    { "name": "LocalPay", "cohort": "C3", "theme": "payments-commerce", "signal": "Scan-and-pay self-custodial UX", "adaptation": "Keep checkout wallet-native and low-friction." },
+    { "name": "MetEngine", "cohort": "C3", "theme": "markets-data", "signal": "Fast LP management terminal", "adaptation": "Lean into operator-grade control surfaces behind simple frontend affordances." },
+    { "name": "Slant", "cohort": "C3", "theme": "markets-data", "signal": "AI-powered Solana data scientist", "adaptation": "Package Ralph and truand research as paid analytics." },
+    { "name": "TAPEDRIVE", "cohort": "C3", "theme": "agent-infra", "signal": "Cryptographic storage layer", "adaptation": "Treat receipts, manifests, and agent artifacts as durable merchant records." },
+    { "name": "Tempo", "cohort": "C3", "theme": "agent-infra", "signal": "Automation engine for trading", "adaptation": "Use scheduled autonomous lanes as a core differentiator." },
+    { "name": "Trepa", "cohort": "C3", "theme": "markets-data", "signal": "Precision prediction market", "adaptation": "Sell exact, premium decision products instead of generic chat." },
+    { "name": "TypeX Keyboard", "cohort": "C3", "theme": "payments-commerce", "signal": "Wallet in any app", "adaptation": "Meet users where they are with portable paid-agent entrypoints." },
+    { "name": "AlphaFC", "cohort": "C2", "theme": "loyalty-growth", "signal": "Tokenized governance around fandom", "adaptation": "Treat CLAWD as community access and governance-adjacent utility." },
+    { "name": "Boost", "cohort": "C2", "theme": "loyalty-growth", "signal": "Growth analytics and targeting", "adaptation": "Add segmentation and premium routing logic to the merchant stack." },
+    { "name": "DARKLAKE", "cohort": "C2", "theme": "privacy-mev", "signal": "Zero-knowledge AMM", "adaptation": "Use private pricing and confidential lanes as a narrative edge." },
+    { "name": "GreenKWh", "cohort": "C2", "theme": "agent-infra", "signal": "Network participation and rewards", "adaptation": "Reward long-lived agent participation with CLAWD-aware incentives." },
+    { "name": "Hylo", "cohort": "C2", "theme": "markets-data", "signal": "Capital-efficient stablecoin design", "adaptation": "Explain treasury logic in capital-efficiency terms." },
+    { "name": "Monsters", "cohort": "C2", "theme": "loyalty-growth", "signal": "Onchain game with absorbable liquidity", "adaptation": "Make the truand breed feel alive, competitive, and ownable." },
+    { "name": "Pregame", "cohort": "C2", "theme": "markets-data", "signal": "Peer-to-peer wagering", "adaptation": "Use peer agent-to-agent pricing as a merchant primitive." },
+    { "name": "Reflect Money", "cohort": "C2", "theme": "payments-commerce", "signal": "Yield-bearing stablecoin infra", "adaptation": "Position idle treasury capital as productive, not static." },
+    { "name": "Supersize", "cohort": "C2", "theme": "loyalty-growth", "signal": "Real-time multiplayer token game", "adaptation": "Make the store feel like a live arena instead of a static checkout page." },
+    { "name": "Tokamai", "cohort": "C2", "theme": "agent-infra", "signal": "Real-time monitoring for programs", "adaptation": "Instrument truands and payment lanes like critical infra." },
+    { "name": "Trenches.Top", "cohort": "C2", "theme": "loyalty-growth", "signal": "Reputation tokenization", "adaptation": "Give agents and operator lanes a tradable or scoreable reputation axis." },
+    { "name": "Txtx", "cohort": "C2", "theme": "agent-infra", "signal": "Infrastructure as Code for Solana", "adaptation": "Treat the store manifest and truand fleet as code-defined infrastructure." },
+    { "name": "Watt Protocol", "cohort": "C2", "theme": "markets-data", "signal": "Smart routing yield engine", "adaptation": "Route work and value across protocols instead of staying single-rail." },
+    { "name": "Banger", "cohort": "C1", "theme": "loyalty-growth", "signal": "Social marketplace", "adaptation": "Tie storefront identity and agent content into monetizable social proof." },
+    { "name": "BlockMesh", "cohort": "C1", "theme": "agent-infra", "signal": "Users monetize excess bandwidth for AI", "adaptation": "Let agent compute itself become a monetized product surface." },
+    { "name": "DBunker", "cohort": "C1", "theme": "agent-infra", "signal": "Hardware participation tokenization", "adaptation": "Frame sandbox agents as capital-efficient productive infrastructure." },
+    { "name": "DeCharge", "cohort": "C1", "theme": "payments-commerce", "signal": "Earn from decentralized utility infrastructure", "adaptation": "Agents earn their keep as always-on productive merchants." },
+    { "name": "MeshMap", "cohort": "C1", "theme": "agent-infra", "signal": "Generalized mapping network", "adaptation": "Think in terms of a networked world model, not a single app feature." },
+    { "name": "Ore", "cohort": "C1", "theme": "loyalty-growth", "signal": "Fair-launch digital currency", "adaptation": "Anchor CLAWD in fair, earned utility and operator participation." },
+    { "name": "Rakurai", "cohort": "C1", "theme": "agent-infra", "signal": "Throughput-optimized validator", "adaptation": "Talk about low-latency, always-on service quality." },
+    { "name": "Spaceman Gaming", "cohort": "C1", "theme": "loyalty-growth", "signal": "Creator audience interactivity", "adaptation": "Make the store experiential and audience-facing." },
+    { "name": "Torque", "cohort": "C1", "theme": "loyalty-growth", "signal": "Customer engagement infrastructure", "adaptation": "Embed acquisition, retention, and reward logic into the merchant stack." },
+    { "name": "Urani", "cohort": "C1", "theme": "privacy-mev", "signal": "Intent-based swap aggregation with MEV protection", "adaptation": "Adopt intent-based agent checkout language and MEV-safe routing." },
+    { "name": "Asgard Finance", "cohort": "Strategic", "theme": "markets-data", "signal": "Institutional-grade exchange controls", "adaptation": "Present risk-managed routing and serious operator posture." },
+    { "name": "Dev.Fun", "cohort": "Strategic", "theme": "agent-infra", "signal": "AI-native onchain app platform", "adaptation": "Position OpenClawd as an AI-native app and merchant platform." },
+    { "name": "Fact Machine", "cohort": "Strategic", "theme": "markets-data", "signal": "Belief markets", "adaptation": "Turn premium agent information into priced belief products." },
+    { "name": "Heaven", "cohort": "Strategic", "theme": "loyalty-growth", "signal": "Permissionless launchpad + AMM", "adaptation": "Use CLAWD as a launch, loyalty, and revenue primitive." },
+    { "name": "MetaDAO", "cohort": "Strategic", "theme": "markets-data", "signal": "Futarchy and market-led decisions", "adaptation": "Use market signals and paid agent feedback to steer operations." },
+    { "name": "Omnipair", "cohort": "Strategic", "theme": "markets-data", "signal": "Unified spot and lending pools", "adaptation": "Unify multiple agent payment and service lanes under one merchant contract." },
+    { "name": "Pye Finance", "cohort": "Strategic", "theme": "payments-commerce", "signal": "Tokenized staking yield marketplace", "adaptation": "Think of CLAWD as a productive treasury-linked utility token." },
+    { "name": "Seedplex", "cohort": "Strategic", "theme": "payments-commerce", "signal": "Private placement infrastructure", "adaptation": "Frame private agent commerce as high-value market infrastructure." },
+    { "name": "Solomon Labs", "cohort": "Strategic", "theme": "payments-commerce", "signal": "Dollar infrastructure layer", "adaptation": "Anchor the system firmly in dollar-denominated usage and treasury logic." },
+    { "name": "Vanish", "cohort": "Strategic", "theme": "privacy-mev", "signal": "Privacy-first trading layer", "adaptation": "Keep privacy-first routing at the center of the pitch." }
+  ]
+}

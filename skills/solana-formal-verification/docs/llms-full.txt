@@ -37,8 +37,14 @@ Works with any coding agent — Cursor, Windsurf, Claude Code, GitHub Copilot, a
 ### Full pipeline (recommended)
 
 ```bash
-qedgen verify \
+qedgen spec \
   --idl target/idl/my_program.json \
+  --output-dir ./formal_verification
+
+qedgen generate \
+  --prompt-file /tmp/analysis/property.prompt.txt \
+  --output-dir /tmp/proof \
+  --passes 4 \
   --validate
 ```
 

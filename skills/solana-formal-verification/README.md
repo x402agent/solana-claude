@@ -83,13 +83,17 @@ skills/solana-formal-verification
 
 ## Usage
 
-### Full pipeline
+### Draft a verification spec from an IDL
 
 ```bash
-qedgen verify \
+qedgen spec \
   --idl target/idl/my_program.json \
-  --validate
+  --output-dir ./formal_verification
 ```
+
+### Generate proofs from a prepared prompt
+
+`qedgen generate` also accepts the alias `qedgen verify`.
 
 ### Generate from an existing prompt
 
