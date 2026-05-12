@@ -1,0 +1,21 @@
+{
+  "author": "solana-clawd",
+  "createdAt": "2025-01-01",
+  "homepage": "https://github.com/x402agent/solana-clawd",
+  "identifier": "odos",
+  "manifest": "https://plugin.delivery/odos/manifest.json",
+  "meta": {
+    "avatar": "🛤️",
+    "description": "[solana-clawd] Multi-path swap router for optimal trades — consumed by CLAWD agents (Scanner/OODA/Analyst) and gated by the CLAWD permission engine.",
+    "tags": [
+      "odos",
+      "swap",
+      "routing",
+      "clawd",
+      "solana-clawd"
+    ],
+    "title": "Odos Router",
+    "category": "stocks-finance"
+  },
+  "schemaVersion": 1
+}

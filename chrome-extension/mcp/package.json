@@ -1,0 +1,38 @@
+{
+    "name": "@solana-clawd/browser-mcp",
+    "private": false,
+    "version": "2.0.0",
+    "type": "module",
+    "bin": {
+        "clawd-browser-mcp": "src/index.js"
+    },
+    "files": [
+        "src/"
+    ],
+    "description": "Solana Clawd pAGENT Browser MCP server — AI-powered browser control via the Clawd pAGENT extension",
+    "keywords": [
+        "solana-clawd",
+        "pagent",
+        "mcp",
+        "browser-automation",
+        "chrome-extension",
+        "solana",
+        "gui-vision"
+    ],
+    "author": "Solana Clawd",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/x402agent/solana-clawd.git",
+        "directory": "chrome-extension/mcp"
+    },
+    "homepage": "https://solanaclawd.com",
+    "engines": {
+        "node": ">=20"
+    },
+    "dependencies": {
+        "@modelcontextprotocol/sdk": "^1.27.1",
+        "ws": "^8.20.0",
+        "zod": "^4.3.5"
+    }
+}

@@ -1,0 +1,26 @@
+{
+  "name": "clawd-gateway",
+  "version": "1.0.0",
+  "description": "Telegram bot + HTTP gateway with Solana/Helius/Birdeye integration",
+  "type": "module",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "tsc --watch & node --watch dist/index.js"
+  },
+  "dependencies": {
+    "@solana/web3.js": "^1.95.0",
+    "@supabase/supabase-js": "^2.102.1",
+    "bs58": "^6.0.0",
+    "dotenv": "^16.4.0",
+    "express": "^4.21.0",
+    "ws": "^8.18.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/node": "^22.14.0",
+    "@types/ws": "^8.5.0",
+    "typescript": "^5.8.3"
+  }
+}

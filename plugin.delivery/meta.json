@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "name": "solana-clawd Plugins",
+  "description": "The official plugin marketplace for solana-clawd",
+  "author": "solana-clawd",
+  "homepage": "https://solanaos.net",
+  "repository": "https://github.com/x402agent/solana-clawd"
+}
+

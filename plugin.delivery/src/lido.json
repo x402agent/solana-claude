@@ -1,0 +1,22 @@
+{
+  "author": "solana-clawd",
+  "createdAt": "2025-01-01",
+  "homepage": "https://github.com/x402agent/solana-clawd",
+  "identifier": "lido",
+  "manifest": "https://plugin.delivery/lido/manifest.json",
+  "meta": {
+    "avatar": "🏝️",
+    "description": "[solana-clawd] Lido stETH staking rates and protocol statistics — consumed by CLAWD agents (Scanner/OODA/Analyst) and gated by the CLAWD permission engine.",
+    "tags": [
+      "lido",
+      "staking",
+      "eth",
+      "liquid-staking",
+      "clawd",
+      "solana-clawd"
+    ],
+    "title": "Lido Staking",
+    "category": "stocks-finance"
+  },
+  "schemaVersion": 1
+}

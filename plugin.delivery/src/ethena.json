@@ -1,0 +1,22 @@
+{
+  "author": "solana-clawd",
+  "createdAt": "2025-01-01",
+  "homepage": "https://github.com/x402agent/solana-clawd",
+  "identifier": "ethena",
+  "manifest": "https://plugin.delivery/ethena/manifest.json",
+  "meta": {
+    "avatar": "💎",
+    "description": "[solana-clawd] Ethena USDe stats, sUSDe yield, and protocol metrics — consumed by CLAWD agents (Scanner/OODA/Analyst) and gated by the CLAWD permission engine.",
+    "tags": [
+      "ethena",
+      "usde",
+      "stablecoin",
+      "yield",
+      "clawd",
+      "solana-clawd"
+    ],
+    "title": "Ethena",
+    "category": "stocks-finance"
+  },
+  "schemaVersion": 1
+}

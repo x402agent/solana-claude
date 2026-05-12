@@ -1,0 +1,21 @@
+{
+  "author": "solana-clawd",
+  "createdAt": "2025-01-01",
+  "homepage": "https://github.com/x402agent/solana-clawd",
+  "identifier": "messari",
+  "manifest": "https://plugin.delivery/messari/manifest.json",
+  "meta": {
+    "avatar": "📑",
+    "description": "[solana-clawd] Crypto research, asset profiles, and metrics — consumed by CLAWD agents (Scanner/OODA/Analyst) and gated by the CLAWD permission engine.",
+    "tags": [
+      "research",
+      "fundamentals",
+      "metrics",
+      "clawd",
+      "solana-clawd"
+    ],
+    "title": "Messari",
+    "category": "science-education"
+  },
+  "schemaVersion": 1
+}

@@ -1,0 +1,12 @@
+{
+  "meta": {
+    "title": "Approvazioni Token",
+    "description": "Gestore interattivo delle approvazioni dei token con funzionalità di revoca",
+    "tags": [
+      "approvazioni",
+      "sicurezza",
+      "revoca"
+    ]
+  }
+}
+

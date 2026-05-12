@@ -1,0 +1,64 @@
+{
+  "type": "https://eips.ethereum.org/EIPS/eip-8004#registration-v1",
+  "name": "solana-clawd",
+  "description": "The Solana-native AI agent framework for autonomous operators. Built for high-frequency memecoin trading environments with real-time market data, wallet tracking, and OODA-loop execution capabilities.",
+  "image": "https://solanaclawd.com/clawd-logo.png",
+  "services": [
+    {
+      "name": "dashboard",
+      "endpoint": "https://solanaclawd.com",
+      "description": "Main operator dashboard with AI inference, trading tools, and agent management"
+    },
+    {
+      "name": "api",
+      "endpoint": "https://solanaclawd.com/api",
+      "description": "REST API for agent interactions and inference requests"
+    },
+    {
+      "name": "websocket",
+      "endpoint": "wss://solanaclawd.com/ws",
+      "description": "Real-time WebSocket for on-chain events and agent streaming"
+    }
+  ],
+  "x402Support": false,
+  "active": true,
+  "registrations": [],
+  "supportedTrust": [
+    "wallet-verified",
+    "token-holder",
+    "solana-mainnet"
+  ],
+  "capabilities": {
+    "blockchain": "solana",
+    "readonly": true,
+    "trading": {
+      "enabled": false,
+      "requireApproval": true
+    },
+    "tools": [
+      "helius-das",
+      "helius-rpc",
+      "jupiter-price",
+      "jupiter-swap",
+      "birdeye-price",
+      "metaplex-core",
+      "firecrawl-web"
+    ]
+  },
+  "memory": {
+    "tiers": ["KNOWN", "LEARNED", "INFERRED"],
+    "provider": "honcho-v3"
+  },
+  "principles": [
+    "KNOWN before INFERRED",
+    "Preserve capital first",
+    "Deny-first permissions",
+    "Transparency",
+    "Local-first"
+  ],
+  "lineage": {
+    "architecture": "clawd-code",
+    "runtime": "solana-os",
+    "rpc": "helius"
+  }
+}

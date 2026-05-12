@@ -1,0 +1,244 @@
+<a name="readme-top"></a>
+
+<div align="center">
+
+
+<h1>@solana-clawd/chat-plugins-gateway</h1>
+
+Edge-runtime plugin gateway for the **solana-clawd** ecosystem.
+
+Fetches the plugin index from [plugin.delivery](https://plugin.delivery), validates requests against each plugin's manifest + JSON schema, forwards to the plugin runtime, and streams the response back through the CLAWD permission engine.
+
+**English** · [简体中文](./README.zh-CN.md) ·
+
+[🏠 Ecosystem](https://solanaclawd.com/agents) · [💻 Terminal](https://solanaclawd.com/terminal) · [🎨 Studio](https://vibe.solanaclawd.com) · [💱 DEX](https://dex.solanaclawd.com) · [📲 Telegram](https://t.me/clawdtoken) · [📱 Mobile](https://seeker.solanaos.net)
+
+</div>
+
+<details>
+<summary><kbd>Table of contents</kbd></summary>
+
+#### TOC
+
+- [👋 Intro](#-intro)
+- [🤯 Usage](#-usage)
+  - [Base URLs](#base-urls)
+  - [POST Plugin Gateway](#post-plugin-gateway)
+- [🛳 Self Hosting](#-self-hosting)
+  - [Deploy to Vercel](#deploy-to-vercel)
+- [📦 Plugin Ecosystem](#-plugin-ecosystem)
+- [⌨️ Local Development](#️-local-development)
+- [🤝 Contributing](#-contributing)
+- [🔗 Links](#-links)
+
+####
+
+</details>
+
+## 👋 Intro
+
+The gateway is the execution bridge between a CLAWD agent and a plugin listed in [plugin.delivery](https://plugin.delivery). Agents never call plugin URLs directly — the gateway:
+
+1. Resolves the plugin manifest by identifier from the index
+2. Validates arguments against the plugin's JSON schema (AJV or `@cfworker/json-schema`)
+3. Applies deny-first permission gating (trades, signatures, wallet spends, CLAWD burns)
+4. Forwards the request to the plugin's OpenAPI endpoint via [swagger-client](https://www.npmjs.com/package/swagger-client)
+5. Returns a structured `GatewaySuccessResponse | GatewayErrorResponse` to the agent
+
+We ship it as a [Vercel Edge Function](https://vercel.com/docs/functions/edge-functions) (`POST /api/v1/runner`) and a `node` variant for local daemons.
+
+To add a plugin to the index, submit a PR to the [solana-clawd repo](https://github.com/x402agent/solana-clawd).
+
+<div align="right">
+
+[![][back-to-top]](#readme-top)
+
+</div>
+
+## 🤯 Usage
+
+### Base URLs
+
+| Environment | URL                                            |
+| ----------- | ---------------------------------------------- |
+| `PROD`      | <https://plugin.delivery>     |
+| `DEV`       | <https://plugin.delivery> |
+
+### POST Plugin Gateway
+
+> **Note**\
+> **POST** `/api/v1/runner`\
+> Interface to communicate with the solana-clawd plugin. This interface describes how to use the solana-clawd plugin gateway API to send requests and get responses
+
+#### Body Request Parameters
+
+```json
+{
+  "arguments": "{\n  \"city\": \"杭州\"\n}",
+  "name": "realtimeWeather"
+}
+```
+
+#### Response
+
+```json
+[
+  {
+    "city": "杭州市",
+    "adcode": "330100",
+    "province": "浙江",
+    "reporttime": "2023-08-17 23:32:22",
+    "casts": [
+      {
+        "date": "2023-08-17",
+        "week": "4",
+        "dayweather": "小雨",
+        "nightweather": "小雨",
+        "daytemp": "33",
+        "nighttemp": "24",
+        "daywind": "东",
+        "nightwind": "东",
+        "daypower": "≤3",
+        "nightpower": "≤3",
+        "daytemp_float": "33.0",
+        "nighttemp_float": "24.0"
+      },
+      {
+        "date": "2023-08-18",
+        "week": "5",
+        "dayweather": "小雨",
+        "nightweather": "小雨",
+        "daytemp": "32",
+        "nighttemp": "23",
+        "daywind": "东北",
+        "nightwind": "东北",
+        "daypower": "4",
+        "nightpower": "4",
+        "daytemp_float": "32.0",
+        "nighttemp_float": "23.0"
+      },
+      {
+        "date": "2023-08-19",
+        "week": "6",
+        "dayweather": "小雨",
+        "nightweather": "雷阵雨",
+        "daytemp": "32",
+        "nighttemp": "24",
+        "daywind": "东",
+        "nightwind": "东",
+        "daypower": "4",
+        "nightpower": "4",
+        "daytemp_float": "32.0",
+        "nighttemp_float": "24.0"
+      },
+      {
+        "date": "2023-08-20",
+        "week": "7",
+        "dayweather": "雷阵雨",
+        "nightweather": "多云",
+        "daytemp": "33",
+        "nighttemp": "25",
+        "daywind": "东",
+        "nightwind": "东",
+        "daypower": "≤3",
+        "nightpower": "≤3",
+        "daytemp_float": "33.0",
+        "nighttemp_float": "25.0"
+      }
+    ]
+  }
+]
+```
+
+See [API Document](https://apifox.com/apidoc/shared-c574e77f-4230-4727-9c05-c5c9988eed06) for more information.
+
+<div align="right">
+
+[![][back-to-top]](#readme-top)
+
+</div>
+
+## 🛳 Self Hosting
+
+If you want to deploy this service by yourself, you can follow the steps below.
+
+### Deploy to Vercel
+
+Click button below to deploy your private plugins' gateway.
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fx402agent%2Fplugin.delivery&project-name=chat-plugins-gateway&repository-name=chat-plugins-gateway)
+
+If you want to make some customization, you can add environment variable:
+
+- `PLUGINS_INDEX_URL`: You can change the default plugins index url as your need.
+
+<div align="right">
+
+[![][back-to-top]](#readme-top)
+
+</div>
+
+## 📦 Plugin Ecosystem
+
+Plugins provide a means to extend the Function Calling capabilities of solana-clawd. They can be used to introduce new function calls and even new ways to render message results. If you are interested in plugin development, please refer to our [📘 Plugin Development Guide](https://github.com/x402agent/solana-clawd/wiki/Plugin-Development) in the Wiki.
+
+- [solana-clawd-plugins][solana-clawd-plugins]: This is the plugin index for solana-clawd. It accesses index.json from this repository to display a list of available plugins for solana-clawd to the user.
+- [chat-plugin-template][chat-plugin-template]: This is the plugin template for solana-clawd plugin development.
+- [@solana-clawd/plugin-sdk][chat-plugin-sdk]: The solana-clawd Plugin SDK assists you in creating exceptional chat plugins for solana-clawd.
+- [@solana-clawd/chat-plugins-gateway][chat-plugins-gateway]: The solana-clawd Plugins Gateway is a backend service that provides a gateway for solana-clawd plugins. We deploy this service using Vercel. The primary API POST /api/v1/runner is deployed as an Edge Function.
+
+<div align="right">
+
+[![][back-to-top]](#readme-top)
+
+</div>
+
+## ⌨️ Local Development
+
+You can use Github Codespaces for online development:
+
+[![][github-codespace-shield]][github-codespace-link]
+
+Or clone it for local development:
+
+[![][bun-shield]][bun-link]
+
+```bash
+$ git clone https://github.com/x402agent/solana-clawd
+$ cd chat-plugins-gateway
+$ bun install
+$ bun dev
+```
+
+<div align="right">
+
+[![][back-to-top]](#readme-top)
+
+</div>
+
+
+<div align="right">
+
+[![][back-to-top]](#readme-top)
+
+</div>
+
+## 🔗 Links
+
+- **[🤖 solana-clawd](https://github.com/x402agent/solana-clawd)** - An open-source, extensible (Function Calling), high-performance chatbot framework. It supports one-click free deployment of your private ChatGPT/LLM web application.
+- **[Plugin Delivery](https://github.com/x402agent/solana-clawd)** - This is the plugin index. It accesses index.json from this repository to display a list of available plugins for Function Calling to the user.
+
+<div align="right">
+
+[![][back-to-top]](#readme-top)
+
+</div>
+
+---
+
+#### 📝 License
+
+Copyright © 2026 [Plugin.Delivery][profile-link]. <br />
+This project is [MIT](./LICENSE) licensed.
+
+---

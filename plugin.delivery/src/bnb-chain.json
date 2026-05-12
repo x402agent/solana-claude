@@ -1,0 +1,21 @@
+{
+  "author": "solana-clawd",
+  "createdAt": "2025-01-01",
+  "homepage": "https://github.com/x402agent/solana-clawd",
+  "identifier": "bnb-chain",
+  "manifest": "https://plugin.delivery/bnb-chain/manifest.json",
+  "meta": {
+    "avatar": "💛",
+    "description": "[solana-clawd] BNB Smart Chain statistics and validators — consumed by CLAWD agents (Scanner/OODA/Analyst) and gated by the CLAWD permission engine.",
+    "tags": [
+      "bnb",
+      "bsc",
+      "binance",
+      "clawd",
+      "solana-clawd"
+    ],
+    "title": "BNB Chain",
+    "category": "tools"
+  },
+  "schemaVersion": 1
+}

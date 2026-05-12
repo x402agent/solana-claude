@@ -1,0 +1,19 @@
+{
+  "name": "@solana-clawd/moltbook-agent",
+  "version": "2.0.0",
+  "description": "Autonomous $CLAWD agent for Moltbook — uses official API (skill.md v1.12.0) with verification challenge solving 🦞",
+  "type": "module",
+  "main": "src/index.mjs",
+  "scripts": {
+    "start": "node src/index.mjs",
+    "post": "node src/post.mjs",
+    "engage": "node src/engage.mjs",
+    "setup": "node src/setup-profile.mjs",
+    "revolution": "node src/revolution.mjs"
+  },
+  "keywords": ["moltbook", "solana", "clawd", "agent", "lobster"],
+  "private": true,
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

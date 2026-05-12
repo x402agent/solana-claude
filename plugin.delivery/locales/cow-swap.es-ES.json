@@ -1,0 +1,12 @@
+{
+  "meta": {
+    "title": "CoW Swap",
+    "description": "Operaciones protegidas contra MEV a través de subastas por lotes",
+    "tags": [
+      "cow",
+      "mev",
+      "intercambio"
+    ]
+  }
+}
+

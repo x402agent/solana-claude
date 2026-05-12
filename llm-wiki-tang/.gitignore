@@ -1,0 +1,39 @@
+# Dependencies
+node_modules/
+.venv/
+venv/
+
+# MCP config (contains user IDs)
+.mcp.json
+mcp/local_server.py
+
+# Build
+.next/
+dist/
+*.egg-info/
+
+# Secrets — NEVER commit
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.pyc
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Misc
+package-lock.json
+
+# Local Netlify folder
+.netlify
+nvidia-10k-first20.md

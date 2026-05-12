@@ -1,0 +1,13 @@
+{
+  "meta": {
+    "title": "Głosowanie Snapshot",
+    "description": "Interfejs do przeglądania propozycji i głosowania dla DAO",
+    "tags": [
+      "snapshot",
+      "dao",
+      "głosowanie",
+      "zarządzanie"
+    ]
+  }
+}
+

@@ -1,0 +1,21 @@
+{
+  "name": "@page-agent/ui",
+  "private": true,
+  "version": "1.6.2",
+  "type": "module",
+  "main": "./dist/esm/index.js",
+  "types": "./dist/esm/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/esm/index.d.ts",
+      "import": "./dist/esm/index.js",
+      "default": "./dist/esm/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@page-agent/core": "1.6.2"
+  }
+}

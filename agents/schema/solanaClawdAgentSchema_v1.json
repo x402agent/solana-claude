@@ -1,0 +1,325 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/x402agent/solana-clawd/agents/schema/solanaClawdAgentSchema_v1.json",
+  "title": "solana-clawd Agent Schema v1",
+  "description": "Agent definition for the solana-clawd ecosystem. Every agent carries CLAWD SOUL (memory tiers + principles), skill references (STRATEGY.md / TRADE.md / SOUL.md), deny-first permissions, Solana wallet gating, and venue / risk envelopes wired to the CLAWD risk and permission engines.",
+  "type": "object",
+  "properties": {
+    "author": {
+      "type": "string",
+      "default": "solana-clawd"
+    },
+    "homepage": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://github.com/x402agent/solana-clawd"
+    },
+    "identifier": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]*$",
+      "description": "kebab-case agent id, unique within the index"
+    },
+    "createdAt": { "type": "string" },
+    "updatedAt": { "type": "string" },
+    "schemaVersion": { "type": "number", "const": 1 },
+    "clawd": {
+      "type": "object",
+      "description": "CLAWD-specific metadata: lineage, version, and canonical links.",
+      "properties": {
+        "clawdVersion": { "type": "string", "default": "1.0" },
+        "lineage": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["clawd-code", "solanaos", "helius", "anchor", "pumpfun"]
+          },
+          "default": ["clawd-code", "solanaos", "helius"]
+        },
+        "canon": {
+          "type": "object",
+          "properties": {
+            "repo": { "type": "string", "format": "uri", "default": "https://github.com/x402agent/solana-clawd" },
+            "runtime": { "type": "string", "format": "uri", "default": "https://github.com/x402agent/SolanaOS" },
+            "hub": { "type": "string", "format": "uri", "default": "https://seeker.solanaos.net" },
+            "agents": { "type": "string", "format": "uri", "default": "https://solanaclawd.com/agents" },
+            "terminal": { "type": "string", "format": "uri", "default": "https://solanaclawd.com/terminal" },
+            "studio": { "type": "string", "format": "uri", "default": "https://vibe.solanaclawd.com" },
+            "dex": { "type": "string", "format": "uri", "default": "https://dex.solanaclawd.com" },
+            "telegram": { "type": "string", "format": "uri", "default": "https://t.me/clawdtoken" }
+          },
+          "additionalProperties": false
+        }
+      },
+      "required": ["clawdVersion"],
+      "additionalProperties": false
+    },
+    "soul": {
+      "type": "object",
+      "description": "CLAWD identity and epistemology (SOUL.md).",
+      "properties": {
+        "memoryTiers": {
+          "type": "array",
+          "description": "Confidence tiers this agent uses to label claims.",
+          "items": { "type": "string", "enum": ["KNOWN", "LEARNED", "INFERRED"] },
+          "default": ["KNOWN", "LEARNED", "INFERRED"],
+          "minItems": 1
+        },
+        "principles": {
+          "type": "array",
+          "items": { "type": "string" },
+          "default": [
+            "KNOWN before INFERRED",
+            "Preserve capital first",
+            "Deny-first permissions",
+            "Transparency over conviction",
+            "Local-first"
+          ],
+          "minItems": 1
+        },
+        "persona": {
+          "type": "string",
+          "description": "One-line self-description surfaced in the agent's opening message.",
+          "default": "I am a specialist inside solana-clawd."
+        }
+      },
+      "required": ["memoryTiers", "principles"],
+      "additionalProperties": false
+    },
+    "skills": {
+      "type": "array",
+      "description": "Skill files this agent defers to. Paths are relative to the repo root.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "path": { "type": "string" },
+          "scope": {
+            "type": "string",
+            "enum": ["identity", "strategy", "tactic", "reference", "runbook"]
+          },
+          "required": { "type": "boolean", "default": false }
+        },
+        "required": ["name", "path", "scope"],
+        "additionalProperties": false
+      },
+      "default": [
+        { "name": "SOUL", "path": "SOUL.md", "scope": "identity", "required": true },
+        { "name": "STRATEGY", "path": "STRATEGY.md", "scope": "strategy", "required": false },
+        { "name": "TRADE", "path": "TRADE.md", "scope": "tactic", "required": false }
+      ]
+    },
+    "permissions": {
+      "type": "object",
+      "description": "Deny-first permission gates. Routed through src/engine/permission-engine.ts.",
+      "properties": {
+        "executeTrade": { "type": "string", "enum": ["allow", "deny", "ask"], "default": "ask" },
+        "signTransaction": { "type": "string", "enum": ["allow", "deny", "ask"], "default": "ask" },
+        "spendFromWallet": { "type": "string", "enum": ["allow", "deny", "ask"], "default": "ask" },
+        "accessPrivateKey": { "type": "string", "enum": ["allow", "deny", "ask"], "default": "deny" },
+        "readOnChainData": { "type": "string", "enum": ["allow", "deny", "ask"], "default": "allow" },
+        "writeMemory": { "type": "string", "enum": ["allow", "deny", "ask"], "default": "allow" },
+        "burnClawd": { "type": "string", "enum": ["allow", "deny", "ask"], "default": "ask" }
+      },
+      "additionalProperties": false
+    },
+    "venues": {
+      "type": "array",
+      "description": "Trading venues this agent is cleared for (STRATEGY.md). Empty means read-only.",
+      "items": {
+        "type": "string",
+        "enum": ["solana-spot", "pump-fun", "hyperliquid", "aster", "none"]
+      },
+      "default": ["none"]
+    },
+    "risk": {
+      "type": "object",
+      "description": "Per-agent risk envelope. Overrides global defaults in src/engine/risk-engine.ts; never exceeds them.",
+      "properties": {
+        "maxPositionSol": { "type": "number", "minimum": 0, "default": 0 },
+        "maxSlippageBps": { "type": "integer", "minimum": 0, "maximum": 10000, "default": 200 },
+        "drawdownPauseBps": { "type": "integer", "minimum": 0, "maximum": 10000, "default": 500 },
+        "drawdownKillBps": { "type": "integer", "minimum": 0, "maximum": 10000, "default": 1200 },
+        "minWalletSol": { "type": "number", "minimum": 0, "default": 0.01 }
+      },
+      "additionalProperties": false
+    },
+    "solana": {
+      "type": "object",
+      "description": "Solana-specific gating and data preferences.",
+      "properties": {
+        "network": {
+          "type": "string",
+          "enum": ["mainnet-beta", "devnet", "testnet"],
+          "default": "mainnet-beta"
+        },
+        "requiresClawdHolder": { "type": "boolean", "default": false },
+        "minClawdBalance": { "type": "number", "minimum": 0, "default": 0 },
+        "clawdMint": {
+          "type": "string",
+          "default": "8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump"
+        },
+        "tokenGate": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "mint": { "type": "string" },
+              "minBalance": { "type": "number", "minimum": 0 }
+            },
+            "required": ["mint", "minBalance"],
+            "additionalProperties": false
+          },
+          "default": []
+        },
+        "rpcPreference": {
+          "type": "string",
+          "enum": ["helius", "triton", "quicknode", "public"],
+          "default": "helius"
+        }
+      },
+      "additionalProperties": false
+    },
+    "data": {
+      "type": "object",
+      "description": "Data sources this agent is allowed to call.",
+      "properties": {
+        "helius": { "type": "boolean", "default": true },
+        "jupiter": { "type": "boolean", "default": true },
+        "pumpFun": { "type": "boolean", "default": false },
+        "dexscreener": { "type": "boolean", "default": true },
+        "birdeye": { "type": "boolean", "default": false },
+        "defiLlama": { "type": "boolean", "default": true },
+        "streamflow": { "type": "boolean", "default": false }
+      },
+      "additionalProperties": false
+    },
+    "meta": {
+      "type": "object",
+      "properties": {
+        "avatar": { "type": "string" },
+        "backgroundColor": { "type": "string" },
+        "category": {
+          "type": "string",
+          "enum": [
+            "trading",
+            "portfolio",
+            "defi",
+            "security",
+            "research",
+            "education",
+            "governance",
+            "analytics",
+            "clawd-ecosystem",
+            "crypto"
+          ]
+        },
+        "description": { "type": "string" },
+        "tags": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 1,
+          "contains": { "const": "clawd" }
+        },
+        "title": { "type": "string" }
+      },
+      "required": ["avatar", "description", "tags", "title"],
+      "additionalProperties": false
+    },
+    "knowledgeCount": { "type": "number", "minimum": 0, "default": 0 },
+    "pluginCount": { "type": "number", "minimum": 0, "default": 0 },
+    "tokenUsage": { "type": "number", "minimum": 0, "default": 0 },
+    "summary": { "type": "string" },
+    "openingMessage": { "type": "string" },
+    "openingQuestions": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "examples": { "$ref": "#/properties/config/properties/fewShots" },
+    "config": {
+      "type": "object",
+      "properties": {
+        "systemRole": {
+          "type": "string",
+          "description": "Full prompt. Must open with the CLAWD IDENTITY preamble and close with the CLAWD OUTPUT CONTRACT (applied by scripts/commands/apply-clawd-theme.mjs)."
+        },
+        "model": { "type": "string", "default": "claudeopus-4-6" },
+        "displayMode": { "type": "string", "enum": ["chat", "docs"], "default": "chat" },
+        "openingMessage": { "type": "string" },
+        "openingQuestions": { "type": "array", "items": { "type": "string" } },
+        "inputTemplate": { "type": "string" },
+        "historyCount": { "type": "number", "minimum": 0 },
+        "enableHistoryCount": { "type": "boolean" },
+        "enableMaxTokens": { "type": "boolean" },
+        "enableCompressThreshold": { "type": "boolean" },
+        "compressThreshold": { "type": "number", "minimum": 0 },
+        "params": {
+          "type": "object",
+          "properties": {
+            "frequency_penalty": { "type": "number", "default": 0 },
+            "presence_penalty": { "type": "number", "default": 0 },
+            "temperature": { "type": "number", "minimum": 0, "maximum": 2, "default": 0.6 },
+            "top_p": { "type": "number", "minimum": 0, "maximum": 1, "default": 1 },
+            "max_tokens": { "type": "number", "minimum": 1 }
+          },
+          "additionalProperties": false
+        },
+        "fewShots": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "content": { "type": "string" },
+              "role": { "type": "string", "enum": ["user", "system", "assistant", "function"] }
+            },
+            "required": ["content", "role"],
+            "additionalProperties": false
+          }
+        },
+        "plugins": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Identifiers from plugin.delivery that this agent may call."
+        },
+        "knowledgeBases": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "avatar": { "type": ["string", "null"] },
+              "createdAt": { "type": "string", "format": "date-time" },
+              "description": { "type": ["string", "null"] },
+              "enabled": { "type": "boolean" },
+              "id": { "type": "string" },
+              "isPublic": { "type": ["boolean", "null"] },
+              "name": { "type": "string" },
+              "settings": {},
+              "type": { "type": ["string", "null"] },
+              "updatedAt": { "type": "string", "format": "date-time" }
+            },
+            "required": ["avatar", "createdAt", "id", "isPublic", "name", "type", "updatedAt"],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": ["systemRole"],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "author",
+    "config",
+    "createdAt",
+    "homepage",
+    "identifier",
+    "knowledgeCount",
+    "meta",
+    "pluginCount",
+    "schemaVersion",
+    "tokenUsage",
+    "clawd",
+    "soul",
+    "skills",
+    "permissions"
+  ],
+  "additionalProperties": false
+}

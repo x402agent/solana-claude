@@ -1,0 +1,22 @@
+{
+  "name": "solana-clawd-mcp",
+  "version": "1.0.0",
+  "description": "solana-clawd MCP server — 15 Solana tools for any Clawd/Cursor/VS Code session",
+  "type": "module",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "start": "node dist/index.js",
+    "start:http": "node dist/http.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.10.2",
+    "express": "^4.21.1"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^22.14.0",
+    "typescript": "^5.8.3"
+  }
+}

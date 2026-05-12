@@ -1,0 +1,39 @@
+{
+  "name": "@openclawd/leviathan",
+  "version": "1.0.0",
+  "description": "Sovereign On-Chain Agent Runtime — Anthropic ACP × Solana × x402. The first AI lobster that earns its own existence, molts into stronger forms, spawns its own brood, and beaches when it can't pay.",
+  "type": "module",
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
+  "bin": {
+    "leviathan": "dist/src/index.js",
+    "openclawd": "dist/src/index.js"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "node --import tsx/esm src/index.ts",
+    "spawn": "node --import tsx/esm src/index.ts --spawn",
+    "run:leviathan": "node --import tsx/esm src/index.ts --run",
+    "status": "node --import tsx/esm src/index.ts --status"
+  },
+  "keywords": [
+    "solana", "leviathan", "openclawd", "autonomous-agent", "anthropic",
+    "acp", "claude", "x402", "defi", "sovereign-ai", "self-replicating"
+  ],
+  "author": "OpenClawd",
+  "license": "MIT",
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.39.0",
+    "@solana/web3.js": "^1.95.0",
+    "tweetnacl": "^1.0.3",
+    "bs58": "^6.0.0",
+    "chalk": "^5.4.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3",
+    "@types/node": "^22.0.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

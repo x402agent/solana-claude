@@ -1,0 +1,12 @@
+{
+  "meta": {
+    "title": "CoW Swap",
+    "description": "Negociações protegidas por MEV via leilões em lote",
+    "tags": [
+      "cow",
+      "mev",
+      "swap"
+    ]
+  }
+}
+

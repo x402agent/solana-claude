@@ -1,0 +1,10 @@
+node_modules/
+dist/
+build/
+.DS_Store
+*.zip
+*.log
+.env
+.env.*
+!.env.example
+New Folder With Items*

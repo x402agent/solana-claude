@@ -1,0 +1,317 @@
+{
+  "accessPatterns": {
+    "getAllAgents": "GET /index.json",
+    "getAgentsByLanguage": "GET /index.{locale}.json",
+    "getSingleAgent": "GET /{agent-id}.json",
+    "getSingleAgentLocalized": "GET /{agent-id}.{locale}.json",
+    "getManifest": "GET /agents-manifest.json"
+  },
+  "agents": {
+    "clawd": {
+      "count": 23,
+      "description": "CLAWD ecosystem agents for portfolio management, trading, analytics, and DeFi",
+      "agents": [
+        {
+          "id": "clawd-dashboard",
+          "name": "CLAWD Portfolio Dashboard",
+          "description": "Portfolio overview dashboard with total value, allocation, and performance metrics",
+          "category": "portfolio",
+          "tags": ["portfolio", "dashboard", "overview"]
+        },
+        {
+          "id": "clawd-assets-tracker",
+          "name": "CLAWD Assets Tracker",
+          "description": "Asset tracking and analytics for portfolio positions and valuations",
+          "category": "portfolio",
+          "tags": ["assets", "tracking", "analytics"]
+        },
+        {
+          "id": "clawd-analytics-expert",
+          "name": "CLAWD Analytics Expert",
+          "description": "Performance analytics and insights for portfolio optimization",
+          "category": "portfolio",
+          "tags": ["analytics", "performance", "insights"]
+        },
+        {
+          "id": "clawd-wallet-manager",
+          "name": "CLAWD Wallet Manager",
+          "description": "Wallet management and configuration assistance",
+          "category": "portfolio",
+          "tags": ["wallet", "management", "security"]
+        },
+        {
+          "id": "clawd-trading-assistant",
+          "name": "CLAWD Trading Assistant",
+          "description": "Trade execution helper with market analysis",
+          "category": "trading",
+          "tags": ["trading", "execution", "assistant"]
+        },
+        {
+          "id": "clawd-ai-trading-bot",
+          "name": "CLAWD AI Trading Bot",
+          "description": "AI-powered trading strategies and automation",
+          "category": "trading",
+          "tags": ["trading", "bot", "ai", "automation"]
+        },
+        {
+          "id": "clawd-signal-bot",
+          "name": "CLAWD Signal Bot",
+          "description": "Trading signals and market alerts",
+          "category": "trading",
+          "tags": ["signals", "alerts", "trading"]
+        },
+        {
+          "id": "clawd-dca-bot",
+          "name": "CLAWD DCA Bot",
+          "description": "Dollar-cost averaging automation and strategies",
+          "category": "trading",
+          "tags": ["dca", "automation", "strategy"]
+        },
+        {
+          "id": "clawd-arbitrage-bot",
+          "name": "CLAWD Arbitrage Bot",
+          "description": "Arbitrage opportunity detection and execution",
+          "category": "trading",
+          "tags": ["arbitrage", "opportunities", "trading"]
+        },
+        {
+          "id": "clawd-pump-screener",
+          "name": "CLAWD Pump Screener",
+          "description": "Momentum screening and trend analysis",
+          "category": "trading",
+          "tags": ["screening", "momentum", "trends"]
+        },
+        {
+          "id": "clawd-defi-center",
+          "name": "CLAWD DeFi Center",
+          "description": "DeFi protocol aggregator and explorer",
+          "category": "defi",
+          "tags": ["defi", "protocols", "aggregator"]
+        },
+        {
+          "id": "clawd-defi-protocols",
+          "name": "CLAWD DeFi Protocols",
+          "description": "DeFi protocol information and comparison",
+          "category": "defi",
+          "tags": ["defi", "protocols", "comparison"]
+        },
+        {
+          "id": "clawd-strategies-marketplace",
+          "name": "CLAWD Strategies Marketplace",
+          "description": "Trading strategy discovery and management",
+          "category": "trading",
+          "tags": ["strategies", "marketplace", "trading"]
+        },
+        {
+          "id": "clawd-bot-templates",
+          "name": "CLAWD Bot Templates",
+          "description": "Bot template library and customization",
+          "category": "trading",
+          "tags": ["templates", "bots", "automation"]
+        },
+        {
+          "id": "clawd-settings-manager",
+          "name": "CLAWD Settings Manager",
+          "description": "Settings and configuration management",
+          "category": "portfolio",
+          "tags": ["settings", "configuration"]
+        },
+        {
+          "id": "clawd-help-center",
+          "name": "CLAWD Help Center",
+          "description": "Help and documentation for CLAWD ecosystem",
+          "category": "education",
+          "tags": ["help", "documentation", "support"]
+        },
+        {
+          "id": "clawd-yield-aggregator",
+          "name": "CLAWD Yield Aggregator",
+          "description": "Yield farming opportunities and strategies",
+          "category": "defi",
+          "tags": ["yield", "farming", "strategies"]
+        },
+        {
+          "id": "clawd-liquidity-strategist",
+          "name": "CLAWD Liquidity Strategist",
+          "description": "Liquidity provision and optimization",
+          "category": "defi",
+          "tags": ["liquidity", "strategies", "optimization"]
+        },
+        {
+          "id": "clawd-portfolio-tracker",
+          "name": "CLAWD Portfolio Tracker",
+          "description": "Advanced portfolio tracking and management",
+          "category": "portfolio",
+          "tags": ["portfolio", "tracking", "management"]
+        },
+        {
+          "id": "clawd-risk-monitor",
+          "name": "CLAWD Risk Monitor",
+          "description": "Risk monitoring and alerts for portfolios",
+          "category": "security",
+          "tags": ["risk", "monitoring", "alerts"]
+        },
+        {
+          "id": "clawd-governance-guide",
+          "name": "CLAWD Governance Guide",
+          "description": "Governance participation and voting guidance",
+          "category": "education",
+          "tags": ["governance", "voting", "guide"]
+        },
+        {
+          "id": "clawd-onboarding-guide",
+          "name": "CLAWD Onboarding Guide",
+          "description": "Getting started guide for new users",
+          "category": "education",
+          "tags": ["onboarding", "guide", "education"]
+        },
+        {
+          "id": "clawd-bridge-assistant",
+          "name": "CLAWD Bridge Assistant",
+          "description": "Cross-chain bridge assistance and guidance",
+          "category": "defi",
+          "tags": ["bridge", "crosschain", "assistance"]
+        }
+      ]
+    },
+    "defi": {
+      "count": 35,
+      "description": "DeFi and crypto analysis agents for yield, risk, security, and trading",
+      "subcategories": {
+        "yield": {
+          "agents": [
+            "defi-yield-farmer",
+            "staking-rewards-calculator",
+            "yield-sustainability-analyst",
+            "yield-dashboard-builder"
+          ]
+        },
+        "risk": {
+          "agents": [
+            "liquidation-risk-manager",
+            "defi-risk-scoring-engine",
+            "defi-insurance-advisor",
+            "impermanent-loss-calculator"
+          ]
+        },
+        "trading": {
+          "agents": [
+            "dex-aggregator-optimizer",
+            "gas-optimization-expert",
+            "mev-protection-advisor",
+            "airdrop-hunter"
+          ]
+        },
+        "security": {
+          "agents": ["smart-contract-auditor", "bridge-security-analyst", "wallet-security-advisor"]
+        },
+        "analysis": {
+          "agents": [
+            "protocol-revenue-analyst",
+            "protocol-treasury-analyst",
+            "governance-proposal-analyst",
+            "narrative-trend-analyst"
+          ]
+        },
+        "education": {
+          "agents": [
+            "defi-onboarding-mentor",
+            "apy-vs-apr-educator",
+            "defi-protocol-comparator",
+            "stablecoin-comparator",
+            "layer2-comparison-guide"
+          ]
+        },
+        "other": {
+          "agents": [
+            "alpha-leak-detector",
+            "crypto-tax-strategist",
+            "liquidity-pool-analyzer",
+            "nft-liquidity-advisor",
+            "portfolio-rebalancing-advisor",
+            "pump-fun-sdk-expert",
+            "spa-tokenomics-analyst",
+            "token-unlock-tracker",
+            "usds-stablecoin-expert",
+            "vespa-optimizer",
+            "whale-watcher"
+          ]
+        },
+        "tokenized-agents": {
+          "agents": [
+            "pump-fun-random-number"
+          ]
+        }
+      }
+    }
+  },
+  "apiVersion": "1.0",
+  "categories": ["trading", "defi", "portfolio", "security", "education"],
+  "description": "Production-ready AI agent definitions API - 59 specialized agents for DeFi, portfolio management, trading, and Web3 workflows",
+  "documentation": "https://clawd.click/docs/API.md",
+  "endpoints": {
+    "allAgentsEnglish": "https://clawd.click/index.json",
+    "allAgentsByLanguage": "https://clawd.click/index.{locale}.json",
+    "singleAgent": "https://clawd.click/{agent-id}.json",
+    "singleAgentByLanguage": "https://clawd.click/{agent-id}.{locale}.json",
+    "manifest": "https://clawd.click/agents-manifest.json",
+    "schema": "https://clawd.click/schema/clawdAgentSchema_v1.json"
+  },
+  "features": [
+    "59 specialized AI agents",
+    "18 language translations",
+    "RESTful JSON API",
+    "No rate limiting",
+    "GitHub Pages CDN",
+    "Open source (MIT)",
+    "Universal compatibility",
+    "No vendor lock-in",
+    "Machine-readable indexes",
+    "Automated i18n workflow"
+  ],
+  "homepage": "https://github.com/nirholas/defi-agents",
+  "license": "MIT",
+  "name": "DeFi Agents API",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nirholas/defi-agents.git"
+  },
+  "schemaVersion": 1,
+  "stats": {
+    "totalAgents": 59,
+    "supportedLanguages": 18,
+    "categories": 5,
+    "clawdAgents": 23,
+    "defiAgents": 36
+  },
+  "supportedLanguages": [
+    "en-US",
+    "ar",
+    "bg-BG",
+    "zh-CN",
+    "zh-TW",
+    "de-DE",
+    "es-ES",
+    "fa-IR",
+    "fr-FR",
+    "it-IT",
+    "ja-JP",
+    "ko-KR",
+    "nl-NL",
+    "pl-PL",
+    "pt-BR",
+    "ru-RU",
+    "tr-TR",
+    "vi-VN"
+  ],
+  "updated": "2025-12-21",
+  "usage": {
+    "curl": "curl https://clawd.click/index.json",
+    "python": "import requests; agents = requests.get('https://clawd.click/index.json').json()",
+    "javascript": "const agents = await fetch('https://clawd.click/index.json').then(r => r.json())",
+    "documentation": "https://github.com/nirholas/defi-agents/blob/main/docs/API.md"
+  },
+  "version": "1.0.0"
+}
+
+
