@@ -1,6 +1,14 @@
-# Point of Sale
+# OpenClawd Agentic Point of Sale
 
-This is an example of how you can use the `@solana/pay` JavaScript library to create a simple point of sale system.
+This app is the OpenClawd hackathon POS surface. It uses the Solana Pay point-of-sale example as a base, but is adapted to:
+
+- sell products from `payments/agent-store/catalog.json`
+- default to **USDC on Solana mainnet**
+- use **transaction requests** through `/api`
+- expose an OpenClawd-branded facilitator surface at `/api/facilitator/*`
+- provide a landing page at `/` for product-driven checkout
+
+The original Solana Pay example remains the underlying reference implementation.
 
 You can [check out the app](https://app.solanapay.com?recipient=GvHeR432g7MjN9uKyX3Dzg66TqwrEWgANLnnFZXMeyyj&label=Solana+Pay), use the code as a reference, or run it yourself to start accepting decentralized payments in-person.
 
@@ -68,13 +76,49 @@ npm run proxy
 
 ### Open the point of sale app
 
-Update `recipient` with your  destination wallet:
+Set `POS_RECIPIENT` or `MERCHANT_RECIPIENT` in your environment, then open:
 
 ```shell
-open "https://localhost:3001/new?recipient=11111111111111111111111111111111&label=Test%20Store"
+open "https://localhost:3001"
 ```
 
 You may need to accept a locally signed SSL certificate to open the page.
+
+## Core routes
+
+- `/` — OpenClawd landing page with merchant products
+- `/new` — amount-entry POS UI
+- `/api` — Solana Pay transaction request endpoint
+- `/api/catalog` — merchant catalog payload
+- `/api/facilitator/supported` — facilitator capabilities
+- `/api/facilitator/verify` — demo verification endpoint
+- `/api/facilitator/settle` — demo settlement acknowledgement endpoint
+
+## Product-driven checkout URLs
+
+The landing page builds these automatically, but you can deep-link directly:
+
+```shell
+https://localhost:3001/new?recipient=<WALLET>&label=Private%20Agent%20Session&amount=1.50&item=prod-private-agent-session
+```
+
+## Domain deployment target
+
+For hackathon deployment, the intended host is:
+
+```text
+https://solanaclawd.com
+```
+
+Recommended layout:
+
+- `solanaclawd.com` or `pos.solanaclawd.com` -> this Next.js POS app
+- `solanaclawd.com/api/facilitator/*` -> same deployment for demo or proxied to the production x402 worker later
+- `solanaclawd.com/store` -> existing merchant storefront, if you want a separate marketing surface
+
+## Production note
+
+The facilitator endpoints in this app are hackathon-ready metadata and settlement stubs. Before public mainnet usage, replace the demo verification and settlement handlers with the production worker under `x402/worker` or the bundled facilitator stack described in `payments/README.md`.
 
 ## Accepting USDC on Mainnet
 Import the Mainnet endpoint, along with USDC's mint address and icon in the [`client/components/pages/App.tsx`](https://github.com/solana-labs/solana-pay/blob/master/examples/point-of-sale/src/client/components/pages/App.tsx) file.

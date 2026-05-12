@@ -62,6 +62,7 @@
     "agent-store:join": "node --import tsx/esm payments/agent-store/index.ts join",
     "agent-store:launch": "bash payments/agent-store/launch.sh",
     "agent-store:storefront": "npm --prefix payments/agent-store/storefront run dev",
+    "agent-store:pos": "npm --prefix payments/pay-main/typescript/packages/solana-pay/examples/point-of-sale run dev",
     "agent-store:truand:plan": "npm --prefix payments/agent-store/truand run plan",
     "agent-store:truand:manifest": "npm --prefix payments/agent-store/truand run manifest",
     "agent-store:truand:provision": "npm --prefix payments/agent-store/truand run provision",

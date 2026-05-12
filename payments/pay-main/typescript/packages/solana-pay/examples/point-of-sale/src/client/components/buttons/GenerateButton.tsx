@@ -12,7 +12,7 @@ export const GenerateButton: FC = () => {
             onClick={generate}
             disabled={!amount || amount <= 0}
         >
-            Generate Payment Code
+            Generate OpenClawd Checkout
         </button>
     );
 };

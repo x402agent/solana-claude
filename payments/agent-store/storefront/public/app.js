@@ -1,6 +1,7 @@
 const state = {
   config: null,
   store: null,
+  demo: null,
   frontier: null,
   moonpayCapabilities: null,
   moonpayWorkbench: null,
@@ -14,13 +15,15 @@ init().catch((error) => {
 });
 
 async function init() {
-  const [configRes, storeRes] = await Promise.all([
+  const [configRes, storeRes, demoRes] = await Promise.all([
     fetch("/api/config"),
     fetch("/api/store"),
+    fetch("/api/demo"),
   ]);
 
   state.config = await configRes.json();
   state.store = await storeRes.json();
+  state.demo = await demoRes.json();
   const frontierRes = await fetch("/api/frontier");
   state.frontier = await frontierRes.json();
 
@@ -32,12 +35,18 @@ async function init() {
   state.moonpayWorkbench = await workbenchRes.json();
 
   renderMetrics();
+  renderHero();
   renderSecurity();
+  renderLaunchChecklist();
   renderOffers();
+  renderCategories();
   renderProducts();
+  renderProtocolMatrix();
+  renderRoadmap();
   renderMoonPay();
   renderMoonPayAgentOps();
   renderFleet();
+  renderDifferentiators();
   renderFrontier();
   bindPlaces();
   bindMoonPay();
@@ -47,13 +56,43 @@ async function init() {
   }
 }
 
+function renderHero() {
+  const { headline, summary } = state.demo;
+  document.getElementById("hero-title").textContent = headline.title;
+  document.getElementById("hero-subtitle").textContent = headline.subtitle;
+  document.getElementById("judge-angle").textContent = headline.judgeAngle;
+  document.getElementById("hero-badges").innerHTML = [
+    `${summary.productCount} products`,
+    `${summary.protocolCount} payment rails`,
+    `${summary.agentCount} specialist agents`,
+    `${summary.revenueRunrateHint} starter GMV`,
+  ]
+    .map((value) => `<span class="chip chip-strong">${escapeHtml(value)}</span>`)
+    .join("");
+
+  document.getElementById("demo-flow").innerHTML = state.demo.demoFlow
+    .map(
+      (item) => `
+        <article class="flow-card">
+          <span class="flow-step">${escapeHtml(item.step)}</span>
+          <div>
+            <h3>${escapeHtml(item.title)}</h3>
+            <p>${escapeHtml(item.detail)}</p>
+          </div>
+        </article>
+      `,
+    )
+    .join("");
+}
+
 function renderMetrics() {
   const { manifest } = state.store;
+  const summary = state.demo.summary;
   const metrics = [
-    ["Fleet Agents", String(manifest.agents.length)],
+    ["Fleet Agents", String(summary.agentCount)],
     ["Protocols", manifest.commerce.protocols.join(" · ")],
-    ["Ingress", "Apigee + PSC"],
     ["Settlement", manifest.commerce.settlementAsset],
+    ["Workflows", String(summary.workflowCount)],
   ];
 
   document.getElementById("metrics").innerHTML = metrics
@@ -75,6 +114,12 @@ function renderSecurity() {
     .join("");
 }
 
+function renderLaunchChecklist() {
+  document.getElementById("launch-checklist").innerHTML = state.demo.launchChecklist
+    .map((item) => `<li>${escapeHtml(item)}</li>`)
+    .join("");
+}
+
 function renderOffers() {
   const offers = state.store.catalog.featuredOffers || [];
   document.getElementById("offers").innerHTML = offers
@@ -82,10 +127,31 @@ function renderOffers() {
       (offer) => `
         <article class="offer">
           <h3>${escapeHtml(offer.label)}</h3>
-          <p>${escapeHtml(offer.category)}</p>
+          <p>${escapeHtml(humanize(offer.category))}</p>
           <div class="meta-line">
             <span class="chip">${escapeHtml(offer.price)}</span>
             <span class="chip">${escapeHtml(offer.protocol)}</span>
+          </div>
+        </article>
+      `,
+    )
+    .join("");
+}
+
+function renderCategories() {
+  const categories = state.demo.categorySummaries || [];
+  document.getElementById("categories").innerHTML = categories
+    .map(
+      (category) => `
+        <article class="category-card">
+          <div class="frontier-head">
+            <h3>${escapeHtml(category.label)}</h3>
+            <span class="chip">${escapeHtml(String(category.productCount))} products</span>
+          </div>
+          <p>${escapeHtml(category.description)}</p>
+          <div class="meta-line">
+            <span class="chip">From ${escapeHtml(category.cheapest)}</span>
+            ${category.protocols.map((protocol) => `<span class="chip">${escapeHtml(protocol)}</span>`).join("")}
           </div>
         </article>
       `,
@@ -103,8 +169,41 @@ function renderProducts() {
           <p>${escapeHtml(product.description)}</p>
           <div class="meta-line">
             <span class="chip">${escapeHtml(product.price.amount)} ${escapeHtml(product.price.asset)}</span>
+            <span class="chip">${escapeHtml(humanize(product.category))}</span>
             ${product.protocols.map((protocol) => `<span class="chip">${escapeHtml(protocol)}</span>`).join("")}
           </div>
+        </article>
+      `,
+    )
+    .join("");
+}
+
+function renderProtocolMatrix() {
+  const protocols = state.demo.protocolMatrix || [];
+  document.getElementById("protocol-matrix").innerHTML = protocols
+    .map(
+      (protocol) => `
+        <article class="rail-card">
+          <h3>${escapeHtml(protocol.title)}</h3>
+          <p>${escapeHtml(protocol.useCase)}</p>
+          <div class="meta-line">
+            <span class="chip">${escapeHtml(String(protocol.coverage))} products wired</span>
+          </div>
+        </article>
+      `,
+    )
+    .join("");
+}
+
+function renderRoadmap() {
+  const items = state.demo.roadmap || [];
+  document.getElementById("roadmap").innerHTML = items
+    .map(
+      (item) => `
+        <article class="journey-card">
+          <span class="journey-stage">${escapeHtml(item.stage)}</span>
+          <h3>${escapeHtml(item.title)}</h3>
+          <p>${escapeHtml(item.proof)}</p>
         </article>
       `,
     )
@@ -178,9 +277,23 @@ function renderFleet() {
     .join("");
 }
 
+function renderDifferentiators() {
+  document.getElementById("differentiators").innerHTML = state.demo.differentiators
+    .map(
+      (item, index) => `
+        <article class="differentiator-card">
+          <span class="flow-step">${escapeHtml(String(index + 1))}</span>
+          <p>${escapeHtml(item)}</p>
+        </article>
+      `,
+    )
+    .join("");
+}
+
 function renderFrontier() {
   const metricsBox = document.getElementById("frontier-metrics");
   const groupsBox = document.getElementById("frontier-groups");
+  const signalsBox = document.getElementById("frontier-signals");
   const frontier = state.frontier;
 
   metricsBox.innerHTML = [
@@ -189,6 +302,20 @@ function renderFrontier() {
     ["Core Thesis", frontier.thesis[0]],
   ]
     .map(([label, value]) => `<div class="metric"><span>${escapeHtml(label)}</span><strong>${escapeHtml(value)}</strong></div>`)
+    .join("");
+
+  signalsBox.innerHTML = state.demo.frontierSignals
+    .map(
+      (signal) => `
+        <article class="signal-card">
+          <h3>${escapeHtml(signal.label)}</h3>
+          <p>${escapeHtml(signal.borrowedForOpenClawd)}</p>
+          <div class="meta-line">
+            ${signal.examples.map((company) => `<span class="chip">${escapeHtml(company.name)}</span>`).join("")}
+          </div>
+        </article>
+      `,
+    )
     .join("");
 
   groupsBox.innerHTML = frontier.groups
@@ -302,7 +429,7 @@ function escapeHtml(value) {
 
 function humanize(value) {
   return String(value)
-    .split("-")
+    .split(/[-_]/)
     .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
     .join(" ");
 }

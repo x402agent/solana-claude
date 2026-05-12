@@ -64,6 +64,149 @@ app.get("/api/store", (_req, res) => {
   });
 });
 
+app.get("/api/demo", (_req, res) => {
+  const manifest = readJson(MANIFEST_PATH) as any;
+  const catalog = readJson(CATALOG_PATH) as any;
+  const frontier = readJson(FRONTIER_PATH) as any;
+
+  const protocols = catalog.protocols || manifest.commerce?.protocols || [];
+  const products = catalog.products || [];
+  const categories = catalog.categories || [];
+  const featuredOffers = catalog.featuredOffers || [];
+  const agents = manifest.agents || [];
+  const workflows = manifest.topology?.workflows || [];
+  const zones = manifest.topology?.zones || [];
+  const runtimeRules = manifest.policy?.runtimeRules || [];
+  const frontierCompanies = frontier.companies || [];
+  const frontierThemes = frontier.themes || [];
+
+  const totalRevenueRunrate = products.reduce((sum: number, product: any) => {
+    const amount = Number(product?.price?.amount || 0);
+    return Number.isFinite(amount) ? sum + amount : sum;
+  }, 0);
+
+  const categorySummaries = categories.map((category: any) => {
+    const inCategory = products.filter((product: any) => product.category === category.id);
+    const cheapest = inCategory.reduce((best: number, product: any) => {
+      const amount = Number(product?.price?.amount || 0);
+      if (!Number.isFinite(amount)) return best;
+      return best === 0 ? amount : Math.min(best, amount);
+    }, 0);
+
+    return {
+      id: category.id,
+      label: category.label,
+      description: category.description,
+      productCount: inCategory.length,
+      cheapest: cheapest ? `${cheapest.toFixed(2).replace(/\.00$/, "")} USDC` : "custom",
+      protocols: Array.from(new Set(inCategory.flatMap((product: any) => product.protocols || []))),
+    };
+  });
+
+  const protocolMatrix = protocols.map((protocol: string) => ({
+    id: protocol,
+    title: humanizeToken(protocol),
+    coverage: products.filter((product: any) => (product.protocols || []).includes(protocol)).length,
+    useCase: protocolUseCase(protocol),
+  }));
+
+  const roadmap = [
+    {
+      stage: "Judge Hook",
+      title: "Show paid agent products, not a generic AI chat app",
+      proof: `${featuredOffers.length} featured offers and ${products.length} purchasable products are already modeled.`,
+    },
+    {
+      stage: "Live Conversion",
+      title: "Onramp a buyer directly into USDC on Solana",
+      proof: "MoonPay checkout link is generated server-side with wallet and merchant context.",
+    },
+    {
+      stage: "Agent Fulfillment",
+      title: "Route demand through specialized agents",
+      proof: `${agents.length} admitted agents span orchestration, checkout, research, and settlement.`,
+    },
+    {
+      stage: "Enterprise Story",
+      title: "Wrap consumer-grade UX around private infrastructure",
+      proof: `${runtimeRules.length} runtime rules and private ingress posture are already encoded in the manifest.`,
+    },
+  ];
+
+  const demoFlow = [
+    {
+      step: "1",
+      title: "Buyer selects a paid agent product",
+      detail: "Start with OODA Signal Pack or Private Agent Session to show monetizable agent inventory immediately.",
+    },
+    {
+      step: "2",
+      title: "Buyer funds via MoonPay or a native wallet rail",
+      detail: "Use MoonPay for fiat-to-USDC onboarding, then position x402, MPP, AP2, or Solana Pay as the programmable settlement layer.",
+    },
+    {
+      step: "3",
+      title: "Clawd routes the request to the right lane",
+      detail: "Eliza handles concierge, Dexter owns checkout, HERMES controls settlement, Ralph refreshes premium inventory.",
+    },
+    {
+      step: "4",
+      title: "Fulfillment is private, logged, and repeatable",
+      detail: "Judge-facing story: this is not a checkout mockup, it is an operator surface for paid autonomous commerce.",
+    },
+  ];
+
+  const differentiators = [
+    "USDC-first agent commerce instead of speculative token-only monetization.",
+    "Private ingress and secret-safe operations designed for serious merchants.",
+    "Multi-rail settlement: x402, MPP, AP2, pay.sh, and Solana Pay.",
+    "Agent specialization instead of one overloaded assistant pretending to do everything.",
+    "A clear path from hackathon demo to merchant infrastructure product.",
+  ];
+
+  const launchChecklist = [
+    "Demo buyer can fund with MoonPay in under two minutes.",
+    "Two flagship offers have a concrete fulfillment artifact or stubbed payload ready.",
+    "Judge can see protocol diversity without reading the repo.",
+    "Security posture is explicit: public keys in browser, secret keys server-side only.",
+    "Narrative maps directly to frontier Solana company patterns instead of generic web3 buzzwords.",
+  ];
+
+  const frontierSignals = frontierThemes.map((theme: any) => ({
+    id: theme.id,
+    label: theme.label,
+    borrowedForOpenClawd: theme.borrowedForOpenClawd,
+    examples: frontierCompanies.filter((company: any) => company.theme === theme.id).slice(0, 3),
+  }));
+
+  res.json({
+    headline: {
+      title: "Universal Autonomous Commerce for Solana-Native Agent Work",
+      subtitle:
+        "A storefront where paid agent services, programmable checkout, and private settlement infrastructure converge in one demo.",
+      judgeAngle:
+        "This wins by showing a real monetization system for agents: discoverable products, funding rails, routing logic, and enterprise posture.",
+    },
+    summary: {
+      productCount: products.length,
+      featuredCount: featuredOffers.length,
+      protocolCount: protocols.length,
+      agentCount: agents.length,
+      workflowCount: workflows.length,
+      zoneCount: zones.length,
+      categoryCount: categories.length,
+      revenueRunrateHint: `${totalRevenueRunrate.toFixed(2).replace(/\.00$/, "")} USDC`,
+    },
+    categorySummaries,
+    protocolMatrix,
+    roadmap,
+    demoFlow,
+    differentiators,
+    launchChecklist,
+    frontierSignals,
+  });
+});
+
 app.get("/api/frontier", (_req, res) => {
   const frontier = readJson(FRONTIER_PATH) as {
     themes?: string[];
@@ -273,4 +416,28 @@ function cleanAmount(value: unknown, fallback: string): string {
 
 function cleanString(value: unknown): string {
   return typeof value === "string" ? value.trim() : "";
+}
+
+function humanizeToken(value: string): string {
+  return String(value)
+    .split(/[-_]/)
+    .map((part) => part.toUpperCase() === part ? part : part.charAt(0).toUpperCase() + part.slice(1))
+    .join(" ");
+}
+
+function protocolUseCase(protocol: string): string {
+  switch (protocol) {
+    case "x402":
+      return "Metered API and agent task payments";
+    case "mpp":
+      return "Merchant checkout orchestration and policy routing";
+    case "solana-pay":
+      return "Wallet-native checkout on Solana";
+    case "ap2":
+      return "Programmable payment handoffs across agents";
+    case "paysh":
+      return "Gateway-grade payment execution and routing";
+    default:
+      return "Programmable commerce rail";
+  }
 }

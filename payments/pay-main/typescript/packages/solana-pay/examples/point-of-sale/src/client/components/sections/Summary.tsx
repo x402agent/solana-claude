@@ -10,7 +10,7 @@ export const Summary: FC = () => {
 
     return (
         <div className={css.root}>
-            <div className={css.title}>Balance Due</div>
+            <div className={css.title}>Agentic Balance Due</div>
             <div className={css.total}>
                 <div className={css.totalLeft}>Total</div>
                 <div className={css.totalRight}>
