@@ -6,6 +6,7 @@ const handler: NextApiHandler = async (_request, response) => {
     response.status(200).json({
         merchant: catalog.merchant,
         protocols: catalog.protocols,
+        tokenEconomy: catalog.tokenEconomy,
         products: catalog.products,
     });
 };

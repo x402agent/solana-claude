@@ -24,6 +24,8 @@ interface AppProps extends NextAppProps {
         message?: string;
         amount?: string;
         item?: string;
+        splToken?: string;
+        symbol?: string;
     };
 }
 
@@ -48,7 +50,7 @@ const App: FC<AppProps> & { getInitialProps(appContext: AppContext): Promise<App
     const link = useMemo(() => new URL(`${baseURL}/api/`), [baseURL]);
 
     let recipient: Address | undefined = undefined;
-    const { recipient: recipientParam, label, message } = query;
+    const { recipient: recipientParam, label, message, splToken: splTokenParam, symbol } = query;
     if (recipientParam && label) {
         try {
             recipient = address(recipientParam);
@@ -56,6 +58,10 @@ const App: FC<AppProps> & { getInitialProps(appContext: AppContext): Promise<App
             console.error(error);
         }
     }
+
+    const paymentMint = splTokenParam ? address(splTokenParam) : MAINNET_USDC_MINT;
+    const paymentSymbol = symbol === 'CLAWD' ? 'CLAWD' : 'USDC';
+    const paymentIcon = paymentSymbol === 'CLAWD' ? <SolanaPayLogo width={36} height={18} /> : <USDCIcon />;
 
     const isLandingRoute = router.pathname === '/';
 
@@ -72,11 +78,11 @@ const App: FC<AppProps> & { getInitialProps(appContext: AppContext): Promise<App
                                 recipient={recipient}
                                 label={label}
                                 message={message}
-                                splToken={MAINNET_USDC_MINT}
-                                symbol="USDC"
-                                icon={<USDCIcon />}
+                                splToken={paymentMint}
+                                symbol={paymentSymbol}
+                                icon={paymentIcon}
                                 decimals={6}
-                                minDecimals={2}
+                                minDecimals={paymentSymbol === 'CLAWD' ? 4 : 2}
                                 connectWallet={connectWallet}
                             >
                             <TransactionsProvider>
@@ -105,11 +111,13 @@ App.getInitialProps = async (appContext) => {
     const message = query.message || undefined;
     const amount = query.amount as string | undefined;
     const item = query.item as string | undefined;
+    const splToken = query['spl-token'] as string | undefined;
+    const symbol = query.symbol as string | undefined;
     const host = req?.headers.host || 'localhost:3001';
 
     return {
         ...props,
-        query: { recipient, label, message, amount, item },
+        query: { recipient, label, message, amount, item, splToken, symbol },
         host,
     };
 };

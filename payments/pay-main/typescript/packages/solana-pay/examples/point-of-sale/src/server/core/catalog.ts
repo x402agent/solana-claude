@@ -1,11 +1,18 @@
 import catalogJson from '../../../../../../../../../agent-store/catalog.json';
 
+export interface TokenPrice {
+    amount: string;
+    asset: string;
+    mint: string;
+}
+
 export interface MerchantProduct {
     id: string;
     title: string;
     category: string;
     description: string;
     price: { amount: string; asset: string };
+    clawdPrice?: TokenPrice;
     protocols: string[];
     merchantPath: string;
     digital?: boolean;
@@ -21,6 +28,22 @@ export interface MerchantCatalog {
         checkoutPath: string;
         brandColor?: string;
         contactEmail?: string;
+    };
+    tokenEconomy?: {
+        token: {
+            symbol: string;
+            mint: string;
+        };
+        entryGate?: {
+            enabled: boolean;
+            amount: string;
+            asset: string;
+            mint: string;
+            rule: string;
+        };
+        pricing?: {
+            specialsEnabled: boolean;
+        };
     };
     products: MerchantProduct[];
 }

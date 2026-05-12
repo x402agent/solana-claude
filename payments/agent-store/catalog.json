@@ -4,7 +4,7 @@
   "merchant": {
     "id": "solanaclawd-merchant",
     "name": "OpenClawd Merchant Network",
-    "domain": "solanaclawd.com",
+    "domain": "pay.solanaclawd.com",
     "storefrontPath": "/store",
     "checkoutPath": "/merchant/checkout",
     "brandColor": "#ff3e3e",
@@ -12,9 +12,24 @@
     "googleMerchant": {
       "enabled": true,
       "businessName": "OpenClawd",
-      "website": "https://solanaclawd.com",
+      "website": "https://pay.solanaclawd.com",
       "category": "Software > Business & Productivity > AI Agents",
       "notes": "Google Merchant metadata for agent services, paid APIs, and Solana-native digital products."
+    }
+  },
+  "tokenEconomy": {
+    "entryGate": {
+      "enabled": true,
+      "token": "CLAWD",
+      "mint": "8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump",
+      "amount": "6.9420",
+      "rule": "Charge 6.9420 CLAWD to enter the site and talk to any CLAWD agents."
+    },
+    "pricing": {
+      "token": "CLAWD",
+      "mint": "8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump",
+      "specialsEnabled": true,
+      "notes": "Pump and CLAWD-native services expose special token-denominated pricing alongside USDC."
     }
   },
   "categories": [
@@ -32,6 +47,11 @@
       "id": "commerce",
       "label": "Universal Commerce",
       "description": "Merchant intents and programmable checkout flows for cross-chain autonomous buyers."
+    },
+    {
+      "id": "pump-skills",
+      "label": "Pump Skill Market",
+      "description": "Token-gated Pump.fun and Pump protocol skills hosted by CLAWD agents."
     }
   ],
   "featuredOffers": [
@@ -99,6 +119,42 @@
       "price": { "amount": "0.30", "asset": "USDC" },
       "protocols": ["mpp", "ap2", "x402"],
       "merchantPath": "/store/a2a-checkout",
+      "digital": true,
+      "googleMerchant": { "condition": "new", "availability": "in_stock" }
+    },
+    {
+      "id": "prod-pumpfun-launcher",
+      "title": "PumpFun Launcher",
+      "category": "pump-skills",
+      "description": "Launch Pump.fun tokens through a CLAWD-hosted workflow with Pump SDK guidance and CLAWD-native pricing.",
+      "price": { "amount": "0.45", "asset": "USDC" },
+      "clawdPrice": { "amount": "42.0", "asset": "CLAWD", "mint": "8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump" },
+      "protocols": ["x402", "solana-pay", "paysh"],
+      "merchantPath": "/skills/pumpfun-launcher",
+      "digital": true,
+      "googleMerchant": { "condition": "new", "availability": "in_stock" }
+    },
+    {
+      "id": "prod-pumpfun-trading",
+      "title": "PumpFun Trading",
+      "category": "pump-skills",
+      "description": "Bonding-curve and AMM execution guidance hosted as a premium CLAWD agent surface.",
+      "price": { "amount": "0.60", "asset": "USDC" },
+      "clawdPrice": { "amount": "69.4200", "asset": "CLAWD", "mint": "8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump" },
+      "protocols": ["x402", "solana-pay", "ap2"],
+      "merchantPath": "/skills/pumpfun-trading",
+      "digital": true,
+      "googleMerchant": { "condition": "new", "availability": "in_stock" }
+    },
+    {
+      "id": "prod-pump-ai-agents",
+      "title": "Pump AI Agents",
+      "category": "pump-skills",
+      "description": "AI-agent scaffolding, discovery manifests, and MCP-facing Pump integrations with special CLAWD pricing.",
+      "price": { "amount": "0.80", "asset": "USDC" },
+      "clawdPrice": { "amount": "88.8000", "asset": "CLAWD", "mint": "8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump" },
+      "protocols": ["x402", "ap2", "paysh"],
+      "merchantPath": "/skills/pump-ai-agents",
       "digital": true,
       "googleMerchant": { "condition": "new", "availability": "in_stock" }
     }
