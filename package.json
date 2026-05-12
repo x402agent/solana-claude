@@ -61,6 +61,7 @@
     "leviathan:spawn": "node --import tsx/esm leviathan/src/index.ts --spawn",
     "leviathan:status": "node --import tsx/esm leviathan/src/index.ts --status",
     "setup": "bash scripts/setup.sh",
+    "repo:audit": "bash scripts/repo-hygiene-audit.sh",
     "lint": "biome check src/",
     "lint:fix": "biome check --write src/",
     "format": "biome format --write src/",
