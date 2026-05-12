@@ -65,6 +65,7 @@
     "agent-store:truand:provision": "npm --prefix payments/agent-store/truand run provision",
     "setup": "bash scripts/setup.sh",
     "install:curl": "bash scripts/install.sh",
+    "hackathon:preflight": "bash scripts/hackathon-preflight.sh",
     "lint": "biome check src/",
     "lint:fix": "biome check --write src/",
     "format": "biome format --write src/",

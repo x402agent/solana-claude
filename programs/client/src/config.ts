@@ -8,8 +8,8 @@
 // RPC ENDPOINTS
 // ============================================================================
 
-export const HELIUS_RPC_URL = 'https://mainnet.helius-rpc.com/?api-key=6b52d42b-5d24-4841-a093-02b0d2cc9fc0';
-export const HELIUS_WSS_URL = 'wss://mainnet.helius-rpc.com/?api-key=6b52d42b-5d24-4841-a093-02b0d2cc9fc0';
+export const HELIUS_RPC_URL = 'https://mainnet.helius-rpc.com/?api-key=YOUR_HELIUS_API_KEY';
+export const HELIUS_WSS_URL = 'wss://mainnet.helius-rpc.com/?api-key=YOUR_HELIUS_API_KEY';
 
 /** Default RPC URL - always Helius mainnet */
 export const DEFAULT_RPC_URL = HELIUS_RPC_URL;
@@ -43,11 +43,11 @@ export const ASSOCIATED_TOKEN_PROGRAM = 'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJ
 // LIVEKIT VOICE AGENT
 // ============================================================================
 
-export const LIVEKIT_AGENT_NAME = 'solanaos-voice-agent';
-export const LIVEKIT_AGENT_ID = 'A_33KtGFACRxzi';
-export const LIVEKIT_PROJECT = 'solanaOS';
-export const LIVEKIT_PROJECT_ID = 'p_3zg9niwzqkd';
-export const LIVEKIT_SANDBOX_ID = 'solanaos-1xlx2a';
+export const LIVEKIT_AGENT_NAME = 'your-livekit-agent-name';
+export const LIVEKIT_AGENT_ID = 'YOUR_LIVEKIT_AGENT_ID';
+export const LIVEKIT_PROJECT = 'your-livekit-project';
+export const LIVEKIT_PROJECT_ID = 'YOUR_LIVEKIT_PROJECT_ID';
+export const LIVEKIT_SANDBOX_ID = 'YOUR_LIVEKIT_SANDBOX_ID';
 
 // ============================================================================
 // API ENDPOINTS

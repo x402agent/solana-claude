@@ -2,16 +2,27 @@ node_modules/
 dist/
 .env
 .env.local
+.env.hackathon
+.env.hackathon.local
 *.env
 *.env.local
+.npmrc.publish
 *.key
 *.pem
 *.log
 .DS_Store
 Thumbs.db
+.agents/
+.augment/
+.claude/
+.codebuddy/
+.commandcode/
+**/xcuserdata/
+**/.iii/
 tui/dist/
 tui/node_modules/
 ooda/journal/ticks.jsonl
+ooda/journal/openai-goblin-session.json
 
 # Vendored / third-party lockfiles (unused, noise for Dependabot)
 programs/mpl-token-metadata-main/pnpm-lock.yaml
