@@ -42,6 +42,12 @@ echo "Ignored file checks"
 git check-ignore -q .env.local && echo ".env.local is ignored" || { echo ".env.local is NOT ignored"; leaks=1; }
 git check-ignore -q .npmrc.publish && echo ".npmrc.publish is ignored" || { echo ".npmrc.publish is NOT ignored"; leaks=1; }
 git check-ignore -q ooda/journal/openai-goblin-session.json && echo "Goblin session state is ignored" || { echo "Goblin session state is NOT ignored"; leaks=1; }
+git check-ignore -q payments/agent-store && echo "payments/agent-store is ignored" || { echo "payments/agent-store is NOT ignored"; leaks=1; }
+
+if git ls-files -- 'payments/agent-store' 'payments/agent-store/**' | rg -q .; then
+  echo "Tracked files remain under payments/agent-store"
+  leaks=1
+fi
 
 echo
 echo "Build checks"

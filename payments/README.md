@@ -71,15 +71,14 @@ The generated project lands in `generated/merchants/<name>` and includes:
 Use `--type pos`, `--type merchant`, or `--type both` to choose which examples
 are included.
 
-## Autonomous Store
+## Private Merchant Runtime
 
-`payments/agent-store` is the repo-local autonomous commerce layer for Clawds,
-Ralph, Dexter, Eliza, and HERMES. It generates a universal merchant manifest
-for x402, MPP, and Solana Pay, and ships a private shell launcher that blocks
-`zerobro` by policy.
+The autonomous merchant hosting layer was split out of this public repo into a
+separate private repository at `/Users/8bit/PAYMENTS`.
+
+This public repo keeps the hackathon-facing docs, demos, and Solana Pay example
+surfaces only. For the local POS demo that remains here, run:
 
 ```bash
-npm run agent-store:list
-npm run agent-store:manifest -- clawd ralph hermes
-npm run agent-store:launch -- clawd ralph dexter eliza hermes
+npm run payments:pos
 ```

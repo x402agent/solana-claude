@@ -2,7 +2,7 @@
 
 This app is the OpenClawd hackathon POS surface. It uses the Solana Pay point-of-sale example as a base, but is adapted to:
 
-- sell products from `payments/agent-store/catalog.json`
+- sell products from a local merchant catalog
 - default to **USDC on Solana mainnet**
 - use **transaction requests** through `/api`
 - expose an OpenClawd-branded facilitator surface at `/api/facilitator/*`

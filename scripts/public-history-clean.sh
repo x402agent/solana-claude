@@ -37,6 +37,7 @@ echo "    --path .augment/ \\"
 echo "    --path .claude/ \\"
 echo "    --path .codebuddy/ \\"
 echo "    --path .commandcode/ \\"
+echo "    --path payments/agent-store/ \\"
 echo "    --path beepboop/leanring-buddy.xcodeproj/xcuserdata/ \\"
 echo "    --path tailclawd/quickstart/.iii/"
 echo
