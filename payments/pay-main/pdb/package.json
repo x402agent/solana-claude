@@ -13,7 +13,7 @@
     "test:proxy": "tsx proxy/e2e.ts"
   },
   "dependencies": {
-    "@solana/kit": "^6.5.0",
+    "@solana/kit": "^6.9.0",
     "@solana/mpp": "^0.5.1",
     "cors": "^2.8.5",
     "express": "^4.21.0",
