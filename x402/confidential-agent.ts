@@ -24,6 +24,7 @@ import type { Connection, Keypair } from '@solana/web3.js';
 import { PayshFacilitator } from './paysh-facilitator.js';
 import { A2AClient } from './a2a-agent.js';
 import { PrivateContentCache } from './private-content-cache.js';
+import { loadTrustBoostConfig, sanitizeMessagesWithTrustBoost } from '../src/privacy/trustboost.ts';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -124,11 +125,19 @@ export class ConfidentialAgent {
 
   /** Run a confidential inference call, paying automatically via pay.sh/x402 */
   async infer(request: ConfidentialInferenceRequest): Promise<ConfidentialInferenceResult> {
-    const payload = this.buildPayload(request);
+    const privacy = await sanitizeMessagesWithTrustBoost(
+      request.messages,
+      loadTrustBoostConfig(),
+      this.config.signer.publicKey.toBase58(),
+    );
+    const sanitizedRequest = privacy.applied
+      ? { ...request, messages: privacy.messages }
+      : request;
+    const payload = this.buildPayload(sanitizedRequest);
     const payloadJson = JSON.stringify(payload);
     const cacheKey = this.cache?.deriveKey([
       this.config.inferenceEndpoint,
-      request.model,
+      sanitizedRequest.model,
       payload,
       this.config.encryptRequests,
     ]);

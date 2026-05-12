@@ -223,6 +223,15 @@ export interface ClawdRouterConfig {
   x402PayTo: string;                // Solana address for x402 payments
   x402Price: string;                // Default price per request
   x402Description: string;          // Payment description
+
+  // ── Privacy / TrustBoost ──────────────────────────────────────
+  trustBoostEnabled: boolean;
+  trustBoostEndpoint: string;
+  trustBoostTxHash: string;
+  trustBoostWalletAddress: string;
+  trustBoostTimeoutMs: number;
+  trustBoostFailOpen: boolean;
+  trustBoostMinTextLength: number;
 }
 
 // ── Usage Stats ─────────────────────────────────────────────────────

@@ -20,6 +20,7 @@ import type {
 import { scoreRequest } from '../router/scorer.js';
 import { routeRequest } from '../router/profiles.js';
 import { getModel, resolveModelAlias, estimateCostPerRequest, MODEL_REGISTRY } from '../models/registry.js';
+import { sanitizeChatMessages } from '../privacy/trustboost.js';
 import { PaymentTracker } from '../x402/payment.js';
 import { proxyToOpenRouter, toOpenRouterModelId } from '../upstream/openrouter.js';
 import {
@@ -176,6 +177,12 @@ export class ClawdRouterProxy {
       openRouter: {
         enabled: this.config.openRouterEnabled,
         configured: !!this.config.openRouterApiKey,
+      },
+      privacy: {
+        sanitizer: 'trustboost',
+        enabled: this.config.trustBoostEnabled,
+        endpoint: this.config.trustBoostEndpoint,
+        failOpen: this.config.trustBoostFailOpen,
       },
     });
   }
@@ -360,31 +367,38 @@ export class ClawdRouterProxy {
 
     // ── Step 2: Forward to OpenRouter ───────────────────────────
     if (this.config.openRouterEnabled && this.config.openRouterApiKey) {
-      return this.forwardToOpenRouter(request, routedModel, routingMeta, res);
+      return this.forwardToOpenRouter(req, request, routedModel, routingMeta, res);
     }
 
     // ── Fallback: Legacy upstream with x402 ─────────────────────
-    return this.forwardToLegacyUpstream(request, routedModel, routingMeta, res);
+    return this.forwardToLegacyUpstream(req, request, routedModel, routingMeta, res);
   }
 
   // ── OpenRouter Forwarding ─────────────────────────────────────────
 
   private async forwardToOpenRouter(
+    req: IncomingMessage,
     request: ChatCompletionRequest,
     routedModel: string,
     routingMeta: RoutingMeta,
     res: ServerResponse,
   ): Promise<void> {
     const openRouterModelId = toOpenRouterModelId(routedModel);
+    const externalWallet = req.headers['x-clawd-wallet'] as string | undefined;
+    const privacy = await sanitizeChatMessages(request.messages, this.config, externalWallet || this.wallet.publicKey);
+    const sanitizedRequest = privacy.applied ? { ...request, messages: privacy.messages } : request;
 
     if (this.config.debug) {
       console.log(`  🔗 OpenRouter: ${routedModel} → ${openRouterModelId}`);
+      if (privacy.applied) {
+        console.log(`  🛡️ TrustBoost sanitized ${privacy.metadata.length} message segment(s)${privacy.modified ? ' [modified]' : ''}`);
+      }
     }
 
     try {
       const upstreamResponse = await proxyToOpenRouter(
         {
-          ...request,
+          ...sanitizedRequest,
           model: openRouterModelId,
         },
         {
@@ -396,7 +410,7 @@ export class ClawdRouterProxy {
       );
 
       // ── Stream or return response ─────────────────────────────
-      if (request.stream) {
+      if (sanitizedRequest.stream) {
         res.writeHead(upstreamResponse.status, {
           'Content-Type': 'text/event-stream',
           'Cache-Control': 'no-cache',
@@ -406,6 +420,8 @@ export class ClawdRouterProxy {
           'X-ClawdRouter-Tier': routingMeta.tier,
           'X-ClawdRouter-Savings': `${(routingMeta.savings * 100).toFixed(0)}%`,
           'X-ClawdRouter-Holder': this.holderStatus?.tier ?? 'FREE',
+          'X-ClawdRouter-PII-Sanitized': privacy.applied ? 'true' : 'false',
+          'X-ClawdRouter-PII-Modified': privacy.modified ? 'true' : 'false',
         });
 
         const reader = upstreamResponse.body?.getReader();
@@ -434,6 +450,12 @@ export class ClawdRouterProxy {
           openRouterModelId,
           holderTier: this.holderStatus?.tier ?? 'FREE',
           clawdBalance: this.holderStatus?.balance ?? 0,
+          privacy: {
+            sanitized: privacy.applied,
+            modified: privacy.modified,
+            segments: privacy.metadata.length,
+            highestRiskCategory: privacy.metadata.map(item => item.riskCategory).find(Boolean) ?? null,
+          },
         };
 
         // Update stats
@@ -446,6 +468,8 @@ export class ClawdRouterProxy {
         res.setHeader('X-ClawdRouter-Savings', `${(routingMeta.savings * 100).toFixed(0)}%`);
         res.setHeader('X-ClawdRouter-Time', `${routingMeta.routingTimeMs.toFixed(2)}ms`);
         res.setHeader('X-ClawdRouter-Holder', this.holderStatus?.tier ?? 'FREE');
+        res.setHeader('X-ClawdRouter-PII-Sanitized', privacy.applied ? 'true' : 'false');
+        res.setHeader('X-ClawdRouter-PII-Modified', privacy.modified ? 'true' : 'false');
 
         sendJSON(res, upstreamResponse.status, parsed);
       }
@@ -464,6 +488,7 @@ export class ClawdRouterProxy {
   // ── Legacy Upstream (x402) ────────────────────────────────────────
 
   private async forwardToLegacyUpstream(
+    req: IncomingMessage,
     request: ChatCompletionRequest,
     routedModel: string,
     routingMeta: RoutingMeta,
@@ -471,6 +496,9 @@ export class ClawdRouterProxy {
   ): Promise<void> {
     const { x402Fetch } = await import('../x402/payment.js');
     const upstreamUrl = `${this.config.upstreamUrl}/v1/chat/completions`;
+    const externalWallet = req.headers['x-clawd-wallet'] as string | undefined;
+    const privacy = await sanitizeChatMessages(request.messages, this.config, externalWallet || this.wallet.publicKey);
+    const sanitizedRequest = privacy.applied ? { ...request, messages: privacy.messages } : request;
 
     try {
       const upstreamResponse = await x402Fetch(
@@ -482,21 +510,24 @@ export class ClawdRouterProxy {
             'Authorization': `Bearer x402:${this.wallet.publicKey}`,
             'X-ClawdRouter-Version': '0.2.0',
             'X-ClawdRouter-Profile': this.config.profile,
+            'X-ClawdRouter-PII-Sanitized': privacy.applied ? 'true' : 'false',
           },
-          body: JSON.stringify({ ...request, model: routedModel }),
+          body: JSON.stringify({ ...sanitizedRequest, model: routedModel }),
         },
         this.wallet,
         this.config,
         this.tracker,
       );
 
-      if (request.stream) {
+      if (sanitizedRequest.stream) {
         res.writeHead(upstreamResponse.status, {
           'Content-Type': 'text/event-stream',
           'Cache-Control': 'no-cache',
           'Connection': 'keep-alive',
           'X-ClawdRouter-Model': routedModel,
           'X-ClawdRouter-Tier': routingMeta.tier,
+          'X-ClawdRouter-PII-Sanitized': privacy.applied ? 'true' : 'false',
+          'X-ClawdRouter-PII-Modified': privacy.modified ? 'true' : 'false',
         });
 
         const reader = upstreamResponse.body?.getReader();
@@ -518,11 +549,21 @@ export class ClawdRouterProxy {
           parsed = { error: { message: 'Invalid upstream response', raw: responseBody } };
         }
 
-        parsed.x_clawdrouter = routingMeta;
+        parsed.x_clawdrouter = {
+          ...routingMeta,
+          privacy: {
+            sanitized: privacy.applied,
+            modified: privacy.modified,
+            segments: privacy.metadata.length,
+            highestRiskCategory: privacy.metadata.map(item => item.riskCategory).find(Boolean) ?? null,
+          },
+        };
         this.updateStats(routingMeta, parsed.usage);
 
         res.setHeader('X-ClawdRouter-Model', routedModel);
         res.setHeader('X-ClawdRouter-Tier', routingMeta.tier);
+        res.setHeader('X-ClawdRouter-PII-Sanitized', privacy.applied ? 'true' : 'false');
+        res.setHeader('X-ClawdRouter-PII-Modified', privacy.modified ? 'true' : 'false');
         sendJSON(res, upstreamResponse.status, parsed);
       }
     } catch (error: any) {
@@ -599,6 +640,12 @@ export class ClawdRouterProxy {
       openRouter: {
         enabled: this.config.openRouterEnabled,
         configured: !!this.config.openRouterApiKey,
+      },
+      privacy: {
+        sanitizer: 'trustboost',
+        enabled: this.config.trustBoostEnabled,
+        endpoint: this.config.trustBoostEndpoint,
+        failOpen: this.config.trustBoostFailOpen,
       },
     });
   }

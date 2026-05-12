@@ -18,6 +18,7 @@ import { join } from "path";
 import { fileURLToPath } from "url";
 import type { Decision } from "./journal.ts";
 import type { LoopState } from "./loop.ts";
+import { loadTrustBoostConfig, sanitizeTextWithTrustBoost } from "../src/privacy/trustboost.ts";
 
 const ROOT = fileURLToPath(new URL("..", import.meta.url));
 const RALPH_MD = join(ROOT, "ooda", "ralph.md");
@@ -161,6 +162,11 @@ export async function claudeDecision(
     /# OBSERVATIONS[\s\S]*/,
     `# OBSERVATIONS\n\n\`\`\`json\n${observationsBlock}\n\`\`\``
   );
+  const sanitizedPrompt = await sanitizeTextWithTrustBoost(
+    fullPrompt,
+    loadTrustBoostConfig(),
+    process.env.TRUSTBOOST_WALLET_ADDRESS ?? "solana-clawd-ooda",
+  );
 
   const client = new Anthropic({ apiKey });
 
@@ -175,7 +181,7 @@ export async function claudeDecision(
         '{"action":"open","side":"long"|"short","size_lamports":<int>,"reason":"..."} | ' +
         '{"action":"close","position_id":"<id>","reason":"..."}. ' +
         "No prose, no markdown — raw JSON only.",
-      messages: [{ role: "user", content: fullPrompt }],
+      messages: [{ role: "user", content: sanitizedPrompt.text }],
     });
 
     const raw = message.content[0].type === "text" ? message.content[0].text.trim() : "";
@@ -300,13 +306,18 @@ export async function openaiDecision(state: LoopState, opts: DecideOptions): Pro
   const model = process.env.OPENAI_MODEL ?? "gpt-5.5";
   const session = loadOpenAISessionState();
   const input = buildOpenAIPrompt(state, opts);
+  const sanitizedInput = await sanitizeTextWithTrustBoost(
+    input,
+    loadTrustBoostConfig(),
+    process.env.TRUSTBOOST_WALLET_ADDRESS ?? "solana-clawd-ooda",
+  );
 
   const payload: Record<string, unknown> = {
     model,
     input: [
       {
         role: "user",
-        content: input,
+        content: sanitizedInput.text,
       },
     ],
     prompt_cache_key: opts.goblinMode ? "solana-clawd-goblin-mode-v1" : "solana-clawd-ooda-v1",

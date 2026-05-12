@@ -46,6 +46,13 @@ function getDefaultConfig(): ClawdRouterConfig {
   const openRouterEnabled =
     process.env['CLAWDROUTER_OPENROUTER_ENABLED'] === 'true' ||
     (process.env['CLAWDROUTER_OPENROUTER_ENABLED'] !== 'false' && openRouterApiKey.length > 0);
+  const trustBoostEnabledRaw =
+    process.env['CLAWDROUTER_TRUSTBOOST_SANITIZER_ENABLED'] ??
+    process.env['TRUSTBOOST_SANITIZER_ENABLED'];
+  const trustBoostTxHash =
+    process.env['CLAWDROUTER_TRUSTBOOST_TX_HASH'] ??
+    process.env['TRUSTBOOST_TX_HASH'] ??
+    'TRIAL';
 
   return {
     port: parseInt(process.env['CLAWDROUTER_PORT'] ?? '8402', 10),
@@ -73,6 +80,34 @@ function getDefaultConfig(): ClawdRouterConfig {
     x402PayTo: process.env['CLAWDROUTER_X402_PAY_TO'] ?? '',
     x402Price: process.env['CLAWDROUTER_X402_PRICE'] ?? '10000',
     x402Description: process.env['CLAWDROUTER_X402_DESCRIPTION'] ?? 'ClawdRouter access',
+    trustBoostEnabled:
+      trustBoostEnabledRaw === 'true' ||
+      (trustBoostEnabledRaw == null && !!(
+        process.env['CLAWDROUTER_TRUSTBOOST_TX_HASH'] ?? process.env['TRUSTBOOST_TX_HASH']
+      )),
+    trustBoostEndpoint:
+      process.env['CLAWDROUTER_TRUSTBOOST_SANITIZER_ENDPOINT'] ??
+      process.env['TRUSTBOOST_SANITIZER_ENDPOINT'] ??
+      'https://trustboost-api.onrender.com/sanitize',
+    trustBoostTxHash,
+    trustBoostWalletAddress:
+      process.env['CLAWDROUTER_TRUSTBOOST_WALLET_ADDRESS'] ??
+      process.env['TRUSTBOOST_WALLET_ADDRESS'] ??
+      '',
+    trustBoostTimeoutMs: parseInt(
+      process.env['CLAWDROUTER_TRUSTBOOST_TIMEOUT_MS'] ??
+        process.env['TRUSTBOOST_TIMEOUT_MS'] ??
+        '2500',
+      10,
+    ),
+    trustBoostFailOpen:
+      (process.env['CLAWDROUTER_TRUSTBOOST_FAIL_OPEN'] ?? process.env['TRUSTBOOST_FAIL_OPEN'] ?? 'true') === 'true',
+    trustBoostMinTextLength: parseInt(
+      process.env['CLAWDROUTER_TRUSTBOOST_MIN_TEXT_LENGTH'] ??
+        process.env['TRUSTBOOST_MIN_TEXT_LENGTH'] ??
+        '8',
+      10,
+    ),
   };
 }
 
@@ -332,6 +367,9 @@ function printHelp(): void {
     CLAWDROUTER_MAX_PER_SESSION Max USDC per session (default: 5.00)
     CLAWDROUTER_DEBUG           Enable debug logging (true/false)
     CLAWDROUTER_UPSTREAM        Upstream API URL
+    CLAWDROUTER_TRUSTBOOST_SANITIZER_ENABLED  Enable TrustBoost PII sanitization
+    CLAWDROUTER_TRUSTBOOST_TX_HASH            TrustBoost tx hash or TRIAL
+    CLAWDROUTER_TRUSTBOOST_WALLET_ADDRESS     Wallet identity for trial quota tracking
 
   EXAMPLES:
     # Start with default settings
