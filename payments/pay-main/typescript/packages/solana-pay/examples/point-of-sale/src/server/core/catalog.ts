@@ -30,18 +30,21 @@ export interface MerchantCatalog {
         contactEmail?: string;
     };
     tokenEconomy?: {
-        token: {
+        token?: {
             symbol: string;
             mint: string;
         };
         entryGate?: {
             enabled: boolean;
             amount: string;
-            asset: string;
+            asset?: string;
+            token?: string;
             mint: string;
             rule: string;
         };
         pricing?: {
+            token?: string;
+            mint?: string;
             specialsEnabled: boolean;
         };
     };

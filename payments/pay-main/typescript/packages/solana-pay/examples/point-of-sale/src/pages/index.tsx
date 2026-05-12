@@ -11,8 +11,8 @@ interface LandingProps {
     products: MerchantProduct[];
     domain: string;
     tokenEconomy?: {
-        token: { symbol: string; mint: string };
-        entryGate?: { enabled: boolean; amount: string; asset: string; mint: string; rule: string };
+        token?: { symbol: string; mint: string };
+        entryGate?: { enabled: boolean; amount: string; asset?: string; token?: string; mint: string; rule: string };
     };
     featuredPumpSkills: HostedSkill[];
     hostedSkillTotal: number;
@@ -106,6 +106,7 @@ const Home: NextPage<LandingProps> = ({
 }) => {
     const gate = tokenEconomy?.entryGate;
     const pumpProducts = products.filter((product) => product.category === 'pump-skills');
+    const gateAsset = gate?.asset ?? gate?.token ?? tokenEconomy?.token?.symbol ?? 'CLAWD';
 
     return (
         <main style={pageStyle}>
@@ -135,10 +136,10 @@ const Home: NextPage<LandingProps> = ({
                                         'CLAWD Agent Entry Gate',
                                     )}&amount=${encodeURIComponent(gate.amount)}&spl-token=${encodeURIComponent(
                                         gate.mint,
-                                    )}&symbol=${encodeURIComponent(gate.asset)}`}
+                                    )}&symbol=${encodeURIComponent(gateAsset)}`}
                                     style={secondaryButtonStyle}
                                 >
-                                    Unlock Agent Access with {gate.amount} {gate.asset}
+                                    Unlock Agent Access with {gate.amount} {gateAsset}
                                 </a>
                             ) : null}
                         </div>
@@ -148,7 +149,7 @@ const Home: NextPage<LandingProps> = ({
                         {gate ? (
                             <>
                                 <p style={{ color: '#cfc1a6', lineHeight: 1.55 }}>
-                                    Entry fee: <strong>{gate.amount} {gate.asset}</strong>
+                                    Entry fee: <strong>{gate.amount} {gateAsset}</strong>
                                 </p>
                                 <p style={{ color: '#cfc1a6', lineHeight: 1.55, wordBreak: 'break-all' }}>
                                     Mint: <code>{gate.mint}</code>
@@ -175,7 +176,7 @@ const Home: NextPage<LandingProps> = ({
                             Settlement path: <strong>Solana Pay + x402 facilitator</strong>
                         </p>
                         <p style={{ color: '#cfc1a6', lineHeight: 1.55 }}>
-                            Default asset: <strong>USDC</strong>. Special token pricing: <strong>{tokenEconomy?.token.symbol ?? 'CLAWD'}</strong>
+                            Default asset: <strong>USDC</strong>. Special token pricing: <strong>{tokenEconomy?.token?.symbol ?? 'CLAWD'}</strong>
                         </p>
                     </article>
                     <article style={cardStyle}>

@@ -11,7 +11,7 @@ const handler: NextApiHandler = async (_request, response) => {
         settlementAsset: 'USDC',
         supportedAssets: [
             { asset: 'USDC', mint: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v' },
-            { asset: 'CLAWD', mint: catalog.tokenEconomy?.token.mint ?? null },
+            { asset: 'CLAWD', mint: catalog.tokenEconomy?.token?.mint ?? catalog.tokenEconomy?.pricing?.mint ?? null },
         ],
         chains: ['solana'],
         features: ['verify', 'settle', 'solana-pay', 'x402', 'mpp', 'ap2', 'token-gated-access', 'pump-skills'],
