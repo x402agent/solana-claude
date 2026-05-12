@@ -6,7 +6,7 @@
  *   - Dark DeFi extras injected into each ORIENT phase
  *   - x402 pay.sh latency monitoring
  *   - A2A peer position broadcasting
- *   - CLI entry point: bun ooda/operator.ts [--ticks N] [--llm] [--tui]
+ *   - CLI entry point: node --import tsx/esm ooda/operator.ts [--ticks N] [--llm] [--tui]
  */
 
 import { parseArgs } from "util";

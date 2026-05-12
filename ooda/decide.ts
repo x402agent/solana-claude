@@ -21,9 +21,6 @@ import type { LoopState } from "./loop.js";
 const ROOT = fileURLToPath(new URL("..", import.meta.url));
 const RALPH_MD = join(ROOT, "ooda", "ralph.md");
 
-// Frontmatter separator pattern
-const FM_END = /^---$/m;
-
 function loadPromptTemplate(): string {
   const raw = readFileSync(RALPH_MD, "utf8");
   // Strip frontmatter

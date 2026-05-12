@@ -154,7 +154,7 @@ function act(decision: Decision, state: LoopState, lastClose: number): Outcome {
 
 // ── Emit ─────────────────────────────────────────────────────────────────────
 
-function emit(payload: Record<string, unknown>, tui: boolean): void {
+function emit(payload: Record<string, unknown>, _tui: boolean): void {
   process.stdout.write(JSON.stringify(payload) + "\n");
 }
 

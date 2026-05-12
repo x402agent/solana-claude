@@ -11,3 +11,4 @@ dist/
 Thumbs.db
 tui/dist/
 tui/node_modules/
+ooda/journal/ticks.jsonl
