@@ -1,0 +1,1315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HERMES x402 | OpenClawd Hackathon Submission</title>
+  <meta
+    name="description"
+    content="OpenClawd presents HERMES x402, a Solana-native agentic harness that earns USDC, pays for inference over x402, and compounds intelligence through a self-sustaining loop."
+  >
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+    :root {
+      --bg: #090a0d;
+      --bg-2: #12131a;
+      --surface: rgba(16, 18, 25, 0.72);
+      --surface-strong: rgba(20, 23, 32, 0.92);
+      --line: rgba(255, 255, 255, 0.1);
+      --line-strong: rgba(255, 255, 255, 0.18);
+      --text: #f5f7fb;
+      --muted: #a7adbb;
+      --clawd: #ff7a18;
+      --clawd-2: #ffb04d;
+      --solana: #14f195;
+      --danger: #ff5d5d;
+      --shadow: 0 30px 90px rgba(0, 0, 0, 0.45);
+      --max: 1180px;
+      --radius: 28px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      color: var(--text);
+      font-family: "Space Grotesk", sans-serif;
+      background:
+        radial-gradient(circle at 20% 10%, rgba(255, 122, 24, 0.24), transparent 28%),
+        radial-gradient(circle at 78% 16%, rgba(20, 241, 149, 0.18), transparent 24%),
+        radial-gradient(circle at 50% 55%, rgba(255, 176, 77, 0.08), transparent 34%),
+        linear-gradient(180deg, #08090d 0%, #0f1117 48%, #090a0d 100%);
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+      background-size: 52px 52px;
+      mask-image: radial-gradient(circle at center, black 30%, transparent 90%);
+      pointer-events: none;
+      opacity: 0.24;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(transparent 0%, rgba(255, 255, 255, 0.025) 48%, transparent 52%, transparent 100%);
+      background-size: 100% 6px;
+      mix-blend-mode: soft-light;
+      opacity: 0.14;
+      animation: scan 10s linear infinite;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .orb {
+      position: fixed;
+      inset: auto;
+      border-radius: 999px;
+      filter: blur(28px);
+      pointer-events: none;
+      opacity: 0.55;
+      z-index: 0;
+    }
+
+    .orb-a {
+      width: 300px;
+      height: 300px;
+      background: rgba(255, 122, 24, 0.22);
+      top: 10%;
+      left: -70px;
+      animation: driftA 16s ease-in-out infinite;
+    }
+
+    .orb-b {
+      width: 240px;
+      height: 240px;
+      background: rgba(20, 241, 149, 0.18);
+      top: 34%;
+      right: -60px;
+      animation: driftB 18s ease-in-out infinite;
+    }
+
+    .orb-c {
+      width: 220px;
+      height: 220px;
+      background: rgba(255, 176, 77, 0.18);
+      bottom: 8%;
+      left: 18%;
+      animation: driftC 20s ease-in-out infinite;
+    }
+
+    .shell {
+      position: relative;
+      z-index: 1;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(20px);
+      background: rgba(7, 8, 11, 0.58);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .topbar-inner,
+    .section,
+    .hero-inner,
+    .footer-inner {
+      width: min(calc(100% - 32px), var(--max));
+      margin: 0 auto;
+    }
+
+    .topbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      min-height: 74px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      color: #120f0a;
+      background: linear-gradient(135deg, var(--clawd), var(--clawd-2));
+      box-shadow: 0 12px 28px rgba(255, 122, 24, 0.32);
+      font-size: 18px;
+    }
+
+    .brand-copy small,
+    .nav a,
+    .eyebrow,
+    .pill,
+    .kicker,
+    .token-meta,
+    .mono,
+    .mini-label {
+      font-family: "IBM Plex Mono", monospace;
+    }
+
+    .brand-copy small {
+      display: block;
+      color: var(--muted);
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-top: 2px;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .nav a {
+      color: var(--muted);
+      font-size: 13px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .nav a:hover {
+      color: var(--text);
+    }
+
+    .hero {
+      position: relative;
+      padding: 56px 0 36px;
+    }
+
+    .hero-inner {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.9fr);
+      gap: 28px;
+      align-items: stretch;
+    }
+
+    .panel {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(18, 20, 28, 0.86), rgba(10, 11, 15, 0.92));
+      box-shadow: var(--shadow);
+    }
+
+    .hero-copy {
+      padding: 36px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 176, 77, 0.28);
+      color: #ffd7a4;
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      background: rgba(255, 122, 24, 0.08);
+      margin-bottom: 18px;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--solana);
+      box-shadow: 0 0 0 6px rgba(20, 241, 149, 0.12);
+      animation: pulse 1.8s ease-in-out infinite;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(3.1rem, 7vw, 6.4rem);
+      line-height: 0.96;
+      letter-spacing: -0.06em;
+    }
+
+    .gradient {
+      background: linear-gradient(135deg, #fff4dd 0%, var(--clawd-2) 28%, var(--clawd) 72%, #ff5d5d 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero-copy p {
+      max-width: 640px;
+      color: var(--muted);
+      font-size: 1.08rem;
+      line-height: 1.75;
+      margin: 20px 0 0;
+    }
+
+    .hero-actions,
+    .hero-chips,
+    .metric-strip,
+    .token-actions,
+    .footer-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    .hero-actions {
+      margin-top: 28px;
+    }
+
+    .button {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 52px;
+      padding: 0 22px;
+      border-radius: 16px;
+      border: 1px solid transparent;
+      font-weight: 700;
+      transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+      overflow: hidden;
+    }
+
+    .button:hover {
+      transform: translateY(-2px);
+    }
+
+    .button-primary {
+      color: #130f0a;
+      background: linear-gradient(135deg, var(--clawd-2), var(--clawd));
+      box-shadow: 0 16px 38px rgba(255, 122, 24, 0.28);
+    }
+
+    .button-primary::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+      transform: translateX(-120%);
+      animation: shine 3.4s ease-in-out infinite;
+    }
+
+    .button-secondary {
+      border-color: rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .hero-chips {
+      margin-top: 26px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.03);
+      color: #d8dde7;
+      font-size: 12px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .pill strong {
+      color: white;
+      letter-spacing: 0;
+      font-size: 13px;
+      text-transform: none;
+    }
+
+    .hero-console {
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 100%;
+    }
+
+    .console-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      padding: 4px 4px 16px;
+      color: var(--muted);
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .lights {
+      display: flex;
+      gap: 8px;
+    }
+
+    .lights span {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      display: block;
+    }
+
+    .lights span:nth-child(1) { background: #ff5d5d; }
+    .lights span:nth-child(2) { background: #ffb04d; }
+    .lights span:nth-child(3) { background: #14f195; }
+
+    .terminal {
+      position: relative;
+      border-radius: 22px;
+      padding: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background:
+        radial-gradient(circle at top right, rgba(20, 241, 149, 0.12), transparent 30%),
+        linear-gradient(180deg, rgba(4, 5, 8, 0.96), rgba(11, 12, 17, 0.94));
+      min-height: 440px;
+      overflow: hidden;
+    }
+
+    .terminal::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.03), transparent);
+      transform: translateY(-100%);
+      animation: sweep 6s linear infinite;
+      pointer-events: none;
+    }
+
+    .metric-strip {
+      margin-bottom: 20px;
+    }
+
+    .metric {
+      flex: 1 1 120px;
+      padding: 14px 14px 12px;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .metric strong {
+      display: block;
+      font-size: 1.7rem;
+      line-height: 1;
+      margin-top: 4px;
+    }
+
+    .metric span {
+      color: var(--muted);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .stream {
+      display: grid;
+      gap: 12px;
+      color: #dce1eb;
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .stream-line {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 12px;
+      padding: 12px 14px;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      background: rgba(255, 255, 255, 0.025);
+      opacity: 0;
+      transform: translateY(16px);
+      animation: lineIn 900ms forwards;
+    }
+
+    .stream-line:nth-child(1) { animation-delay: 0.1s; }
+    .stream-line:nth-child(2) { animation-delay: 0.3s; }
+    .stream-line:nth-child(3) { animation-delay: 0.5s; }
+    .stream-line:nth-child(4) { animation-delay: 0.7s; }
+    .stream-line:nth-child(5) { animation-delay: 0.9s; }
+
+    .stream-line b {
+      color: var(--solana);
+      font-weight: 500;
+    }
+
+    .ticker-wrap {
+      margin-top: 30px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.02);
+      overflow: hidden;
+    }
+
+    .ticker {
+      display: flex;
+      gap: 30px;
+      white-space: nowrap;
+      padding: 14px 0;
+      color: #e8edf8;
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      animation: marquee 24s linear infinite;
+    }
+
+    .ticker span {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .ticker span::after {
+      content: "•";
+      color: var(--clawd-2);
+    }
+
+    .section {
+      padding: 80px 0;
+    }
+
+    .section-head {
+      max-width: 760px;
+      margin-bottom: 30px;
+    }
+
+    .kicker {
+      color: var(--clawd-2);
+      font-size: 12px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+
+    h2 {
+      font-size: clamp(2rem, 5vw, 3.7rem);
+      line-height: 1;
+      margin: 0;
+      letter-spacing: -0.05em;
+    }
+
+    .section-head p {
+      color: var(--muted);
+      font-size: 1.03rem;
+      line-height: 1.75;
+      margin-top: 16px;
+    }
+
+    .grid {
+      display: grid;
+      gap: 18px;
+    }
+
+    .grid-3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .grid-2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .card {
+      position: relative;
+      overflow: hidden;
+      padding: 24px;
+      border-radius: 24px;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(17, 19, 27, 0.92), rgba(10, 11, 15, 0.94));
+      box-shadow: var(--shadow);
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, rgba(255, 122, 24, 0.08), transparent 35%, rgba(20, 241, 149, 0.08));
+      opacity: 0;
+      transition: opacity 220ms ease;
+    }
+
+    .card:hover::before {
+      opacity: 1;
+    }
+
+    .card h3 {
+      margin: 10px 0 10px;
+      font-size: 1.35rem;
+      letter-spacing: -0.03em;
+    }
+
+    .card p,
+    .card li,
+    .stack-text,
+    .token-copy p,
+    .footer-copy p {
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .card ul {
+      margin: 14px 0 0;
+      padding-left: 18px;
+    }
+
+    .mini-label {
+      color: #ffe1bc;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .loop {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 16px;
+      align-items: center;
+    }
+
+    .loop-step {
+      position: relative;
+      padding: 24px 18px;
+      min-height: 164px;
+      border-radius: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02));
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .loop-step::after {
+      content: "";
+      position: absolute;
+      inset: auto -30% -60% auto;
+      width: 130px;
+      height: 130px;
+      border-radius: 999px;
+      background: rgba(255, 122, 24, 0.12);
+      filter: blur(16px);
+    }
+
+    .loop-step strong {
+      display: block;
+      margin-top: 10px;
+      font-size: 1.2rem;
+    }
+
+    .loop-arrow {
+      text-align: center;
+      color: var(--clawd-2);
+      font-size: 2rem;
+      animation: nudge 1.8s ease-in-out infinite;
+    }
+
+    .stack {
+      display: grid;
+      gap: 14px;
+    }
+
+    .stack-row {
+      display: grid;
+      grid-template-columns: 190px 1fr;
+      gap: 16px;
+      align-items: stretch;
+      padding: 18px;
+      border-radius: 22px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.025));
+      transform: translateY(16px);
+      opacity: 0;
+    }
+
+    .stack-row.is-visible,
+    .reveal.is-visible {
+      transform: translateY(0);
+      opacity: 1;
+      transition: transform 640ms cubic-bezier(0.2, 0.65, 0.2, 1), opacity 640ms ease;
+    }
+
+    .stack-tag {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px 16px;
+      border-radius: 18px;
+      border: 1px solid rgba(255, 176, 77, 0.22);
+      background: rgba(255, 122, 24, 0.08);
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 13px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #ffe1bc;
+    }
+
+    .split {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
+      gap: 20px;
+      align-items: stretch;
+    }
+
+    .token-card {
+      display: grid;
+      gap: 18px;
+      padding: 28px;
+    }
+
+    .token-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .token-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, rgba(255, 122, 24, 0.15), rgba(255, 176, 77, 0.08));
+      border: 1px solid rgba(255, 176, 77, 0.22);
+    }
+
+    .token-badge strong {
+      font-size: 1.45rem;
+      letter-spacing: -0.04em;
+    }
+
+    .token-meta {
+      color: var(--muted);
+      font-size: 12px;
+      word-break: break-all;
+      line-height: 1.65;
+    }
+
+    .address {
+      padding: 14px 16px;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.03);
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 13px;
+      line-height: 1.6;
+      word-break: break-all;
+    }
+
+    .copy-button {
+      padding: 0 16px;
+      min-height: 44px;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text);
+      font: inherit;
+      cursor: pointer;
+    }
+
+    .copy-button:hover {
+      border-color: rgba(255, 255, 255, 0.18);
+    }
+
+    .economy-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .economy-item {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 16px;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .economy-item strong {
+      color: white;
+    }
+
+    .cta {
+      padding-bottom: 100px;
+    }
+
+    .cta-panel {
+      padding: 34px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 20px;
+      align-items: center;
+      border-radius: 28px;
+      border: 1px solid rgba(255, 176, 77, 0.18);
+      background:
+        radial-gradient(circle at top left, rgba(255, 122, 24, 0.12), transparent 34%),
+        linear-gradient(180deg, rgba(17, 19, 27, 0.94), rgba(10, 11, 15, 0.96));
+      box-shadow: var(--shadow);
+    }
+
+    .cta-panel h2 {
+      max-width: 720px;
+    }
+
+    .footer {
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 30px 0 44px;
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .footer-copy p {
+      margin: 8px 0 0;
+    }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(20, 241, 149, 0.18);
+      background: rgba(20, 241, 149, 0.08);
+      color: #d8fff0;
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .status::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--solana);
+      box-shadow: 0 0 0 6px rgba(20, 241, 149, 0.12);
+      animation: pulse 1.7s ease-in-out infinite;
+    }
+
+    .reveal {
+      transform: translateY(16px);
+      opacity: 0;
+    }
+
+    .metric strong,
+    .counter {
+      font-variant-numeric: tabular-nums;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(0.88); opacity: 0.56; }
+    }
+
+    @keyframes shine {
+      0%, 24% { transform: translateX(-140%); }
+      44%, 100% { transform: translateX(140%); }
+    }
+
+    @keyframes sweep {
+      0% { transform: translateY(-100%); }
+      100% { transform: translateY(100%); }
+    }
+
+    @keyframes marquee {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    @keyframes lineIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes nudge {
+      0%, 100% { transform: translateX(0); }
+      50% { transform: translateX(5px); }
+    }
+
+    @keyframes driftA {
+      0%, 100% { transform: translate3d(0, 0, 0); }
+      50% { transform: translate3d(60px, 40px, 0); }
+    }
+
+    @keyframes driftB {
+      0%, 100% { transform: translate3d(0, 0, 0); }
+      50% { transform: translate3d(-70px, 60px, 0); }
+    }
+
+    @keyframes driftC {
+      0%, 100% { transform: translate3d(0, 0, 0); }
+      50% { transform: translate3d(30px, -50px, 0); }
+    }
+
+    @keyframes scan {
+      0% { transform: translateY(-8%); }
+      100% { transform: translateY(8%); }
+    }
+
+    @media (max-width: 1100px) {
+      .hero-inner,
+      .split,
+      .cta-panel {
+        grid-template-columns: 1fr;
+      }
+
+      .grid-3 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .loop {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .loop-arrow {
+        display: none;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .topbar {
+        position: static;
+      }
+
+      .nav {
+        display: none;
+      }
+
+      .hero-copy,
+      .hero-console,
+      .cta-panel,
+      .card,
+      .token-card {
+        padding: 22px;
+      }
+
+      .grid-3,
+      .grid-2,
+      .loop {
+        grid-template-columns: 1fr;
+      }
+
+      .stack-row {
+        grid-template-columns: 1fr;
+      }
+
+      .token-header,
+      .footer-inner {
+        align-items: flex-start;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation: none !important;
+        transition: none !important;
+        scroll-behavior: auto !important;
+      }
+
+      .reveal,
+      .stack-row,
+      .stream-line {
+        opacity: 1;
+        transform: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="orb orb-a"></div>
+  <div class="orb orb-b"></div>
+  <div class="orb orb-c"></div>
+
+  <div class="shell">
+    <header class="topbar">
+      <div class="topbar-inner">
+        <a class="brand" href="#top">
+          <span class="brand-mark">C</span>
+          <span class="brand-copy">
+            OpenClawd
+            <small>HERMES x402 hackathon build</small>
+          </span>
+        </a>
+        <nav class="nav">
+          <a href="#loop">Loop</a>
+          <a href="#integrations">Integrations</a>
+          <a href="#architecture">Architecture</a>
+          <a href="#token">CLAWD</a>
+          <a href="#cta">Launch</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="top">
+      <section class="hero">
+        <div class="hero-inner">
+          <div class="panel hero-copy">
+            <div class="eyebrow">Colosseum Hackathon Submission</div>
+            <h1>
+              The <span class="gradient">Solana-native</span><br>
+              agent that earns,<br>
+              pays, and gets smarter.
+            </h1>
+            <p>
+              HERMES x402 is OpenClawd's autonomous harness for machine commerce on Solana:
+              it earns USDC from intelligence, pays for inference over x402, compounds every OODA cycle,
+              and routes value back into the network through <strong>$CLAWD</strong>.
+            </p>
+            <div class="hero-actions">
+              <a class="button button-primary" href="https://pay.solanaclawd.com" target="_blank" rel="noreferrer">Open pay.solanaclawd.com</a>
+              <a class="button button-secondary" href="https://github.com/x402agent/solana-clawd" target="_blank" rel="noreferrer">View GitHub</a>
+            </div>
+            <div class="hero-chips">
+              <div class="pill">Track <strong>AI Agents x DeFi x Payments</strong></div>
+              <div class="pill">Token <strong>$CLAWD</strong></div>
+              <div class="pill">Rail <strong>pay.solanaclawd.com</strong></div>
+            </div>
+          </div>
+
+          <div class="panel hero-console">
+            <div class="console-head">
+              <div class="lights"><span></span><span></span><span></span></div>
+              <div>Live operator surface</div>
+            </div>
+            <div class="terminal">
+              <div class="metric-strip">
+                <div class="metric">
+                  <span>Solana tools</span>
+                  <strong class="counter" data-count="31">0</strong>
+                </div>
+                <div class="metric">
+                  <span>Model routes</span>
+                  <strong class="counter" data-count="55">0</strong>
+                </div>
+                <div class="metric">
+                  <span>Batch fee cut</span>
+                  <strong class="counter" data-count="3">0</strong>x
+                </div>
+              </div>
+              <div class="stream">
+                <div class="stream-line"><b>OBSERVE</b><span>Whale flow detected through Helius DAS + priority fee context.</span></div>
+                <div class="stream-line"><b>ORIENT</b><span>Dark DeFi router evaluates Jupiter, Raydium, Orca, and Meteora.</span></div>
+                <div class="stream-line"><b>DECIDE</b><span>HERMES model call requested over x402 with confidential pay.sh relay.</span></div>
+                <div class="stream-line"><b>ACT</b><span>Agent completes task, settles in SPL USDC, and ships results downstream.</span></div>
+                <div class="stream-line"><b>LEARN</b><span>Feedback folds into the next cycle so the system trades sharper over time.</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="ticker-wrap">
+          <div class="ticker">
+            <span>Trade -&gt; Earn USDC -&gt; Pay x402 -&gt; Get Smarter -&gt; Trade Better</span>
+            <span>Private x402 facilitator</span>
+            <span>Google A2A + AP2 + MPP</span>
+            <span>$CLAWD holder discounts</span>
+            <span>pay.solanaclawd.com</span>
+            <span>Trade -&gt; Earn USDC -&gt; Pay x402 -&gt; Get Smarter -&gt; Trade Better</span>
+            <span>Private x402 facilitator</span>
+            <span>Google A2A + AP2 + MPP</span>
+            <span>$CLAWD holder discounts</span>
+            <span>pay.solanaclawd.com</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="loop">
+        <div class="section-head reveal">
+          <div class="kicker">The Loop Is The Product</div>
+          <h2>Closed-loop agent economics on Solana.</h2>
+          <p>
+            Most agents still depend on API keys, SaaS billing, and off-chain trust.
+            HERMES x402 turns the agent into its own economic actor: it can make money, spend money,
+            buy intelligence, and reinvest the output.
+          </p>
+        </div>
+
+        <div class="loop">
+          <div class="loop-step reveal">
+            <div class="mini-label">01</div>
+            <strong>Trade</strong>
+            <p>Generate intelligence, route execution, and capture market opportunity.</p>
+          </div>
+          <div class="loop-arrow">-&gt;</div>
+          <div class="loop-step reveal">
+            <div class="mini-label">02</div>
+            <strong>Earn USDC</strong>
+            <p>Monetize analysis, signals, and agent-to-agent task responses.</p>
+          </div>
+          <div class="loop-arrow">-&gt;</div>
+          <div class="loop-step reveal">
+            <div class="mini-label">03</div>
+            <strong>Pay x402</strong>
+            <p>Spend Solana-native value through private, delegated machine payments.</p>
+          </div>
+          <div class="loop-arrow">-&gt;</div>
+          <div class="loop-step reveal">
+            <div class="mini-label">04</div>
+            <strong>Get Smarter</strong>
+            <p>Buy HERMES inference and fold the result back into the next OODA pass.</p>
+          </div>
+          <div class="loop-arrow">-&gt;</div>
+          <div class="loop-step reveal">
+            <div class="mini-label">05</div>
+            <strong>Trade Better</strong>
+            <p>Compound the edge and keep the loop running without centralized billing.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="integrations">
+        <div class="section-head reveal">
+          <div class="kicker">Sponsor Integrations</div>
+          <h2>Built for private, paid, interoperable agents.</h2>
+          <p>
+            The stack ties together confidential payments, agent-to-agent tasking, Solana settlement,
+            routing intelligence, and token-aligned incentives in one operator-facing system.
+          </p>
+        </div>
+
+        <div class="grid grid-3">
+          <article class="card reveal">
+            <div class="mini-label">x402 + pay.sh</div>
+            <h3>Private machine payments</h3>
+            <p>Blind relay settlement, AP2 mandates, idempotent retries, and replay-safe confidential caching.</p>
+            <ul>
+              <li>Private x402 facilitator</li>
+              <li>NaCl commitment scheme</li>
+              <li>About 3x batch fee reduction</li>
+            </ul>
+          </article>
+          <article class="card reveal">
+            <div class="mini-label">Google A2A + MPP</div>
+            <h3>Paid agent interoperability</h3>
+            <p>Agents discover each other, submit tasks, stream long jobs, and settle work over Solana-aware payment rails.</p>
+            <ul>
+              <li>`/.well-known/agent.json` discovery</li>
+              <li>SSE task streaming</li>
+              <li>Delegated authorization</li>
+            </ul>
+          </article>
+          <article class="card reveal">
+            <div class="mini-label">Solana + Helius + Jupiter</div>
+            <h3>Execution context that matters</h3>
+            <p>Native SPL USDC, on-chain identity, whale surveillance, and route splitting across live Solana liquidity venues.</p>
+            <ul>
+              <li>Priority fee awareness</li>
+              <li>Dark route selection</li>
+              <li>MEV-sensitive execution</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="architecture">
+        <div class="section-head reveal">
+          <div class="kicker">Architecture</div>
+          <h2>Five layers. One sovereign agent stack.</h2>
+        </div>
+
+        <div class="stack">
+          <div class="stack-row">
+            <div class="stack-tag">Layer 1 / Interface</div>
+            <div class="stack-text">HERMES TUI, clawd CLI, and MCP expose the stack to operators, demos, and external agent tooling.</div>
+          </div>
+          <div class="stack-row">
+            <div class="stack-tag">Layer 2 / Cognitive Core</div>
+            <div class="stack-text">Observe, orient, decide, act, learn. Multi-agent fan-out turns the OODA loop into an operating system for action.</div>
+          </div>
+          <div class="stack-row">
+            <div class="stack-tag">Layer 3 / Payment Engine</div>
+            <div class="stack-text">x402, pay.sh, AP2, MPP, SPL USDC settlement, and ClawdRouter keep intelligence purchaseable by machines.</div>
+          </div>
+          <div class="stack-row">
+            <div class="stack-tag">Layer 4 / Dark DeFi</div>
+            <div class="stack-text">Whale tracking, MEV detection, route splitting, and on-chain context injection sharpen the agent's edge.</div>
+          </div>
+          <div class="stack-row">
+            <div class="stack-tag">Layer 5 / Safety</div>
+            <div class="stack-text">Three Laws Constitution, deny-first permissions, formal reasoning, and attested agent identity define the floor.</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="token">
+        <div class="split">
+          <div class="card token-card reveal">
+            <div class="token-header">
+              <div>
+                <div class="kicker">The Agent Economy</div>
+                <h2>$CLAWD aligns usage with the network.</h2>
+              </div>
+              <div class="token-badge">
+                <span class="mini-label">Token</span>
+                <strong>$CLAWD</strong>
+              </div>
+            </div>
+
+            <div class="token-copy">
+              <p>
+                Every paid call can strengthen the ecosystem. Holders get discounts.
+                Usage feeds buyback and burn. Operators, treasury, and agent owners all participate in the same flywheel.
+              </p>
+            </div>
+
+            <div class="address" id="token-address">8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump</div>
+            <div class="token-actions">
+              <button class="copy-button" id="copy-address" type="button">Copy token address</button>
+              <a class="button button-secondary" href="https://pay.solanaclawd.com" target="_blank" rel="noreferrer">Open payment rail</a>
+            </div>
+
+            <div class="token-meta">
+              Revenue split: 70% agent owner / 15% $CLAWD buyback and burn / 10% treasury / 5% operator.
+              Holder discounts: 10% at 1K / 25% at 100K / 50% at 1M tokens.
+            </div>
+          </div>
+
+          <div class="card reveal">
+            <div class="kicker">Why This Wins</div>
+            <div class="economy-list">
+              <div class="economy-item"><span>Solana-native identity and payments</span><strong>Built in</strong></div>
+              <div class="economy-item"><span>Private x402 facilitator path</span><strong>Confidential</strong></div>
+              <div class="economy-item"><span>Agent funds its own intelligence spend</span><strong>Closed loop</strong></div>
+              <div class="economy-item"><span>Google A2A + AP2 + MPP</span><strong>Interoperable</strong></div>
+              <div class="economy-item"><span>Neon TUI for judges and operators</span><strong>Demoable</strong></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section cta" id="cta">
+        <div class="cta-panel reveal">
+          <div>
+            <div class="kicker">OpenClawd</div>
+            <h2>No keys. No KYC. Just crypto-native machine commerce.</h2>
+            <p>
+              HERMES x402 is the argument: agents should earn, pay, coordinate, and improve natively on Solana.
+            </p>
+          </div>
+          <div class="footer-actions">
+            <a class="button button-primary" href="https://pay.solanaclawd.com" target="_blank" rel="noreferrer">Launch pay.solanaclawd.com</a>
+            <a class="button button-secondary" href="https://github.com/x402agent/solana-clawd" target="_blank" rel="noreferrer">Read the code</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        <div class="footer-copy">
+          <strong>OpenClawd / solana-clawd</strong>
+          <p>Building sovereign AI agents on Solana.</p>
+        </div>
+        <div class="status">HERMES x402 hackathon build</div>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    const revealNodes = document.querySelectorAll(".reveal, .stack-row");
+
+    const observer = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        }
+      }
+    }, { threshold: 0.18 });
+
+    revealNodes.forEach((node) => observer.observe(node));
+
+    const counterNodes = document.querySelectorAll(".counter");
+    const counterObserver = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        const target = entry.target;
+        const end = Number(target.dataset.count || "0");
+        const duration = 1200;
+        const start = performance.now();
+
+        const tick = (now) => {
+          const progress = Math.min((now - start) / duration, 1);
+          const eased = 1 - Math.pow(1 - progress, 3);
+          target.textContent = String(Math.round(end * eased));
+          if (progress < 1) requestAnimationFrame(tick);
+        };
+
+        requestAnimationFrame(tick);
+        counterObserver.unobserve(target);
+      }
+    }, { threshold: 0.6 });
+
+    counterNodes.forEach((node) => counterObserver.observe(node));
+
+    const copyButton = document.getElementById("copy-address");
+    const addressNode = document.getElementById("token-address");
+
+    if (copyButton && addressNode) {
+      copyButton.addEventListener("click", async () => {
+        try {
+          await navigator.clipboard.writeText(addressNode.textContent.trim());
+          copyButton.textContent = "Copied";
+          window.setTimeout(() => {
+            copyButton.textContent = "Copy token address";
+          }, 1400);
+        } catch {
+          copyButton.textContent = "Copy failed";
+          window.setTimeout(() => {
+            copyButton.textContent = "Copy token address";
+          }, 1400);
+        }
+      });
+    }
+  </script>
+</body>
+</html>
