@@ -54,10 +54,12 @@ async function init() {
   renderFrontier();
   renderCheckoutLab();
   renderJudgeMode();
+  renderLiveAgentState();
   bindPlaces();
   bindMoonPay();
   bindCheckoutLab();
   bindJudgeMode();
+  bindLiveAgents();
 
   if (state.config.public.googleApiKey) {
     await loadGooglePlaces(state.config.public.googleApiKey);
@@ -331,6 +333,16 @@ function renderJudgeMode() {
     .join("");
 }
 
+function renderLiveAgentState() {
+  const guards = state.config?.guards || {};
+  document.getElementById("gemini-output").textContent = guards.geminiServerSideEnabled
+    ? "Gemini server-side route is ready."
+    : "GOOGLE_API_KEY is missing or invalid for server-side Gemini requests.";
+  document.getElementById("wallet-brief-output").textContent = guards.heliusServerSideEnabled
+    ? "Helius server-side route is ready."
+    : "HELIUS_RPC_URL is missing for wallet intelligence.";
+}
+
 function renderFrontier() {
   const metricsBox = document.getElementById("frontier-metrics");
   const groupsBox = document.getElementById("frontier-groups");
@@ -408,6 +420,11 @@ function bindJudgeMode() {
       "1. Create session\n2. Open MoonPay if needed\n3. Mark funded\n4. Read the artifact out loud";
     document.getElementById("checkout-lab").scrollIntoView({ behavior: "smooth", block: "start" });
   });
+}
+
+function bindLiveAgents() {
+  document.getElementById("gemini-run").addEventListener("click", runGeminiAgent);
+  document.getElementById("wallet-brief-run").addEventListener("click", runWalletBrief);
 }
 
 async function loadGooglePlaces(apiKey) {
@@ -551,6 +568,34 @@ function renderCheckoutSession() {
     null,
     2,
   );
+}
+
+async function runGeminiAgent() {
+  const output = document.getElementById("gemini-output");
+  output.textContent = "Running Gemini...";
+  const response = await fetch("/api/agents/gemini", {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({
+      prompt: document.getElementById("gemini-prompt").value,
+    }),
+  });
+  const data = await response.json();
+  output.textContent = JSON.stringify(data, null, 2);
+}
+
+async function runWalletBrief() {
+  const output = document.getElementById("wallet-brief-output");
+  output.textContent = "Running Helius wallet brief...";
+  const response = await fetch("/api/agents/wallet-brief", {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({
+      wallet: document.getElementById("wallet-brief-input").value,
+    }),
+  });
+  const data = await response.json();
+  output.textContent = JSON.stringify(data, null, 2);
 }
 
 function escapeHtml(value) {

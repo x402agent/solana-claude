@@ -193,6 +193,39 @@
         <div class="journey" id="judge-mode"></div>
       </section>
 
+      <section class="panel live-agents">
+        <div class="section-head">
+          <div>
+            <p class="section-label">Live Agents</p>
+            <h2>Real Gemini and Helius-backed operator actions.</h2>
+          </div>
+        </div>
+        <div class="checkout-grid">
+          <article class="panel checkout-form-panel">
+            <p class="section-label">Gemini Merchant Agent</p>
+            <label class="field">
+              <span>Prompt</span>
+              <textarea id="gemini-prompt">Write a 5-line merchant pitch for OpenClawd that explains why a buyer should fund a Private Agent Session in USDC on Solana.</textarea>
+            </label>
+            <div class="hero-actions">
+              <button class="button button-primary" id="gemini-run">Run Gemini Agent</button>
+            </div>
+            <pre class="artifact-view" id="gemini-output">Gemini output will appear here.</pre>
+          </article>
+          <article class="panel checkout-state-panel">
+            <p class="section-label">Helius Wallet Brief</p>
+            <label class="field">
+              <span>Wallet</span>
+              <input id="wallet-brief-input" type="text" value="GyZGtA7hEThVHZpj52XC9jX15a8ABtDHTwELjFRWEts4" />
+            </label>
+            <div class="hero-actions">
+              <button class="button button-secondary" id="wallet-brief-run">Run Wallet Brief</button>
+            </div>
+            <pre class="artifact-view" id="wallet-brief-output">Wallet brief will appear here.</pre>
+          </article>
+        </div>
+      </section>
+
       <section class="panel frontier">
         <div class="section-head">
           <div>

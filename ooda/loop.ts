@@ -17,7 +17,7 @@
 import { readFileSync } from "fs";
 import { join } from "path";
 import { fileURLToPath } from "url";
-import { claudeDecision, ruleBasedDecision } from "./decide.ts";
+import { claudeDecision, openaiDecision, ruleBasedDecision } from "./decide.ts";
 import type { BookSnapshot, Decision, JournalEntry, Outcome } from "./journal.ts";
 import { gitCommitJournal, journalAppend } from "./journal.ts";
 import type { Candle } from "./observe.ts";
@@ -57,6 +57,10 @@ export interface LoopOptions {
   commitEvery: number;
   tui: boolean;
   useLlm: boolean;
+  decisionEngine?: "claude" | "openai";
+  goblinMode?: boolean;
+  background?: boolean;
+  computerUse?: boolean;
   extras?: () => Promise<Record<string, unknown>>;
 }
 
@@ -216,7 +220,15 @@ export async function runLoop(opts: LoopOptions): Promise<number> {
     // ── DECIDE ───────────────────────────────────────────────────────────────
     let decision: Decision;
     if (opts.useLlm) {
-      decision = await claudeDecision(state, { caps, extras });
+      decision = opts.decisionEngine === "openai"
+        ? await openaiDecision(state, {
+            caps,
+            extras,
+            goblinMode: opts.goblinMode,
+            background: opts.background,
+            computerUse: opts.computerUse,
+          })
+        : await claudeDecision(state, { caps, extras });
     } else {
       decision = ruleBasedDecision(state, caps);
     }
@@ -239,7 +251,7 @@ export async function runLoop(opts: LoopOptions): Promise<number> {
       outcome,
       book: bookSnapshot(state.book),
       consecutive_losses: state.consecutiveLosses,
-      model: opts.useLlm ? "claude-sonnet-4-6" : "rule-based",
+      model: opts.useLlm ? (opts.decisionEngine === "openai" ? "openai-responses" : "claude-sonnet-4-6") : "rule-based",
     };
     journalAppend(entry);
     state.lastDecisions = [...state.lastDecisions, entry].slice(-3);

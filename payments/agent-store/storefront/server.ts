@@ -33,6 +33,7 @@ app.get("/health", (_req, res) => {
 });
 
 app.get("/api/config", (_req, res) => {
+  const geminiKey = resolveGeminiKey();
   const merchantSecretsPresent = [
     "MOONPAY_SECRET_KEY",
     "MOONPAY_WEBHOOK_KEY",
@@ -55,6 +56,8 @@ app.get("/api/config", (_req, res) => {
       secretsProtected: true,
       googleKeyShouldBeRestricted: Boolean(process.env.GOOGLE_API_KEY),
       moonPaySecretsLoadedServerSide: merchantSecretsPresent,
+      geminiServerSideEnabled: hasRealValue(geminiKey),
+      heliusServerSideEnabled: hasRealValue(process.env.HELIUS_RPC_URL),
     },
   });
 });
@@ -345,6 +348,134 @@ app.get("/api/judge-mode", (_req, res) => {
   };
 
   res.json(demo);
+});
+
+app.post("/api/agents/gemini", async (req, res) => {
+  const geminiKey = resolveGeminiKey();
+  if (!hasRealValue(geminiKey)) {
+    res.status(400).json({ ok: false, error: "google_api_key_missing" });
+    return;
+  }
+
+  const prompt = cleanString(req.body?.prompt);
+  if (!prompt) {
+    res.status(400).json({ ok: false, error: "prompt_required" });
+    return;
+  }
+
+  try {
+    const payload = {
+      system_instruction: {
+        parts: [
+          {
+            text:
+              "You are OpenClawd, a private Solana-native merchant agent. Be concise, commercial, and operator-grade. Prefer actionable output over generic explanation.",
+          },
+        ],
+      },
+      contents: [
+        {
+          parts: [{ text: prompt }],
+        },
+      ],
+      generationConfig: {
+        thinkingConfig: {
+          thinkingLevel: "low",
+        },
+      },
+    };
+
+    const response = await fetch(
+      "https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-goog-api-key": geminiKey,
+        },
+        body: JSON.stringify(payload),
+      },
+    );
+
+    const data = await response.json();
+    if (!response.ok) {
+      res.status(response.status).json({ ok: false, error: "gemini_request_failed", detail: data });
+      return;
+    }
+
+    const text =
+      data?.candidates?.[0]?.content?.parts
+        ?.map((part: any) => part?.text)
+        .filter(Boolean)
+        .join("\n") || "";
+
+    res.json({
+      ok: true,
+      model: "gemini-3-flash-preview",
+      text,
+      raw: {
+        usageMetadata: data?.usageMetadata || null,
+        finishReason: data?.candidates?.[0]?.finishReason || null,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: "gemini_internal_error", detail: String(error) });
+  }
+});
+
+app.post("/api/agents/wallet-brief", async (req, res) => {
+  if (!hasRealValue(process.env.HELIUS_RPC_URL)) {
+    res.status(400).json({ ok: false, error: "helius_rpc_url_missing" });
+    return;
+  }
+
+  const wallet = cleanString(req.body?.wallet);
+  if (!wallet) {
+    res.status(400).json({ ok: false, error: "wallet_required" });
+    return;
+  }
+
+  try {
+    const [balanceLamports, assets] = await Promise.all([
+      heliusRpc("getBalance", [wallet]),
+      fetchHeliusAssets(wallet),
+    ]);
+
+    const lamports = Number(balanceLamports?.value || 0);
+    const sol = lamports / 1_000_000_000;
+    const topAssets = (assets?.items || []).slice(0, 5).map((item: any) => ({
+      id: item.id,
+      interface: item.interface,
+      symbol:
+        item.content?.metadata?.symbol ||
+        item.token_info?.symbol ||
+        item.content?.metadata?.name ||
+        "unknown",
+      name: item.content?.metadata?.name || "Unknown asset",
+      balance:
+        item.token_info?.balance != null && item.token_info?.decimals != null
+          ? Number(item.token_info.balance) / 10 ** Number(item.token_info.decimals)
+          : null,
+    }));
+
+    const brief = {
+      wallet,
+      solBalance: sol,
+      assetCount: Array.isArray(assets?.items) ? assets.items.length : 0,
+      topAssets,
+      narrative: [
+        `Wallet holds ${sol.toFixed(4)} SOL.`,
+        `Detected ${Array.isArray(assets?.items) ? assets.items.length : 0} indexed assets through Helius.`,
+        topAssets.length
+          ? `Top visible asset symbols: ${topAssets.map((asset: any) => asset.symbol).join(", ")}.`
+          : "No indexed token assets were returned for this wallet.",
+      ],
+    };
+
+    res.json({ ok: true, brief });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: "wallet_brief_failed", detail: String(error) });
+  }
 });
 
 app.get("/api/frontier", (_req, res) => {
@@ -727,6 +858,54 @@ function protocolUseCase(protocol: string): string {
     default:
       return "Programmable commerce rail";
   }
+}
+
+function resolveGeminiKey(): string {
+  return process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY || "";
+}
+
+async function heliusRpc(method: string, params: unknown[]): Promise<any> {
+  const response = await fetch(process.env.HELIUS_RPC_URL as string, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      jsonrpc: "2.0",
+      id: method,
+      method,
+      params,
+    }),
+  });
+  const data = await response.json();
+  if (!response.ok || data?.error) {
+    throw new Error(`Helius RPC ${method} failed: ${JSON.stringify(data?.error || data)}`);
+  }
+  return data.result;
+}
+
+async function fetchHeliusAssets(wallet: string): Promise<any> {
+  const response = await fetch(process.env.HELIUS_RPC_URL as string, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      jsonrpc: "2.0",
+      id: "getAssetsByOwner",
+      method: "getAssetsByOwner",
+      params: {
+        ownerAddress: wallet,
+        page: 1,
+        limit: 20,
+        displayOptions: {
+          showFungible: true,
+          showNativeBalance: true,
+        },
+      },
+    }),
+  });
+  const data = await response.json();
+  if (!response.ok || data?.error) {
+    throw new Error(`Helius getAssetsByOwner failed: ${JSON.stringify(data?.error || data)}`);
+  }
+  return data.result;
 }
 
 type CheckoutSession = {

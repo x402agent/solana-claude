@@ -37,6 +37,25 @@ Capabilities active this session:
 Walk-away safety: paper mode, devnet, one position, size cap 1 SOL.
 `.trim();
 
+export const GOBLIN_OPERATOR_IDENTITY = `
+You are Goblin Ralph, the feral autonomous AI operator for HERMES x402.
+Your symbol is $CLAWD. You operate on devnet in paper mode only.
+
+Mission: run high-tempo Solana OODA loops, chase asymmetric momentum,
+coordinate next actions like a computer-use operator, and journal the
+entire goblin thesis on every tick.
+
+Goblin mode priorities:
+- momentum continuation
+- whale-following
+- pump.fun runner detection
+- fast invalidation
+- paper-only execution
+
+You still do not sign transactions, spend funds, or touch keys.
+You are autonomous in orchestration, not autonomous in live custody.
+`.trim();
+
 // ── Dark DeFi extras provider ─────────────────────────────────────────────────
 
 interface DarkDefiSignal {
@@ -114,6 +133,10 @@ async function main(): Promise<void> {
       "commit-every": { type: "string", default: "10" },
       tui: { type: "boolean", default: false },
       llm: { type: "boolean", default: false },
+      openai: { type: "boolean", default: false },
+      goblin: { type: "boolean", default: false },
+      background: { type: "boolean", default: false },
+      "computer-use": { type: "boolean", default: false },
     },
     allowPositionals: true,
   });
@@ -125,11 +148,14 @@ async function main(): Promise<void> {
     console.log("║   HERMES x402 — OODA Loop (Dark Ralph v1)   ║");
     console.log("╚══════════════════════════════════════════════╝");
     console.log();
-    console.log(OPERATOR_IDENTITY);
+    console.log(values.goblin ? GOBLIN_OPERATOR_IDENTITY : OPERATOR_IDENTITY);
     console.log();
     console.log(`  ticks:        ${values.ticks}`);
     console.log(`  sleep:        ${values.sleep}ms`);
-    console.log(`  llm:          ${values.llm ? "claude-sonnet-4-6" : "rule-based"}`);
+    console.log(`  llm:          ${values.llm ? ((values.openai as boolean) ? "openai-responses" : "claude-sonnet-4-6") : "rule-based"}`);
+    console.log(`  goblin:       ${(values.goblin as boolean) ? "enabled" : "disabled"}`);
+    console.log(`  computer use: ${(values["computer-use"] as boolean) ? "enabled" : "disabled"}`);
+    console.log(`  background:   ${(values.background as boolean) ? "enabled" : "disabled"}`);
     console.log(`  paysh:        ${payshEndpoint ?? "not configured"}`);
     console.log(`  helius:       ${process.env.HELIUS_API_KEY ? "configured" : "synth fallback"}`);
     console.log();
@@ -142,6 +168,10 @@ async function main(): Promise<void> {
     commitEvery: parseInt(values["commit-every"] as string, 10),
     tui: values.tui as boolean,
     useLlm: values.llm as boolean,
+    decisionEngine: (values.openai as boolean) ? "openai" : "claude",
+    goblinMode: values.goblin as boolean,
+    background: values.background as boolean,
+    computerUse: values["computer-use"] as boolean,
     extras: async () => {
       const [darkDefi, latency] = await Promise.all([
         fetchDarkDefiExtras(),
@@ -150,6 +180,9 @@ async function main(): Promise<void> {
       return {
         ...darkDefi,
         ...(latency !== null ? { paysh_relay_latency_ms: latency } : {}),
+        operator_mode: (values.goblin as boolean) ? "goblin" : "standard",
+        decision_engine: (values.openai as boolean) ? "openai" : "claude",
+        computer_use_enabled: values["computer-use"] as boolean,
       };
     },
   });

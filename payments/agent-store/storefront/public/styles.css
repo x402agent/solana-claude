@@ -475,6 +475,7 @@ body {
   font-size: 13px;
 }
 
+textarea,
 select,
 input {
   min-height: 48px;
@@ -484,6 +485,12 @@ input {
   color: var(--text);
   padding: 0 16px;
   font: inherit;
+}
+
+textarea {
+  min-height: 150px;
+  padding: 16px;
+  resize: vertical;
 }
 
 .artifact-view {

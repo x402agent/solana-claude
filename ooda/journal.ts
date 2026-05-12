@@ -30,6 +30,11 @@ export interface Decision {
   size_lamports?: number;
   position_id?: string;
   reason: string;
+  confidence?: number;
+  aggression?: "low" | "medium" | "high" | "goblin";
+  goblin_mode?: boolean;
+  thesis?: string;
+  computer_use_plan?: string[];
 }
 
 export interface Outcome {

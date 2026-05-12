@@ -44,6 +44,8 @@
     "tui:start": "node tui/dist/index.js",
     "hermes": "node --import tsx/esm tui/src/index.ts",
     "ooda": "node --import tsx/esm ooda/operator.ts",
+    "goblin": "node --import tsx/esm ooda/operator.ts --llm --openai --goblin --computer-use",
+    "goblin:bg": "node --import tsx/esm ooda/operator.ts --llm --openai --goblin --computer-use --background",
     "ooda:tui": "node --import tsx/esm ooda/operator.ts --tui | node --import tsx/esm ooda/tui.ts",
     "ooda:llm": "node --import tsx/esm ooda/operator.ts --llm",
     "ooda:llm:tui": "node --import tsx/esm ooda/operator.ts --llm --tui | node --import tsx/esm ooda/tui.ts",

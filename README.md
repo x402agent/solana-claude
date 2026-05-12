@@ -38,6 +38,24 @@ npm run setup
 npm run hermes
 ```
 
+## Goblin Mode
+
+Paper-only OpenAI orchestration path:
+
+```bash
+export OPENAI_API_KEY=...
+npm run goblin
+```
+
+Toggles:
+
+- `--goblin` switches the DECIDE phase into aggressive scalp mode.
+- `--openai` uses OpenAI Responses API with `previous_response_id` chaining.
+- `--computer-use` asks the model to emit a short operator action plan per tick.
+- `--background` uses background Responses mode for longer decision turns.
+
+Session continuity is stored in `ooda/journal/openai-goblin-session.json`.
+
 ## Publish flow
 
 ```bash
