@@ -1,6 +1,49 @@
 #!/bin/bash
 set -e
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$SCRIPT_DIR"
+
+SKILL_SLUG="solana-formal-verification"
+PACKAGE_NAME="@x402agent/solana-formal-verification"
+SKILL_BUNDLE_INSTALLED=0
+
+install_skill_bundle() {
+    if [ "${SKIP_QEDGEN_SKILL_INSTALL:-0}" = "1" ]; then
+        echo "Skipping skill bundle install because SKIP_QEDGEN_SKILL_INSTALL=1"
+        return 0
+    fi
+
+    local targets=(
+        "$HOME/.codex/skills/$SKILL_SLUG"
+        "$HOME/.claude/skills/$SKILL_SLUG"
+    )
+
+    for target in "${targets[@]}"; do
+        mkdir -p "$(dirname "$target")"
+        rm -rf "$target"
+        mkdir -p "$target"
+
+        cp -R \
+            SKILL.md \
+            README.md \
+            LICENSE \
+            claude.md \
+            install.sh \
+            Cargo.toml \
+            Cargo.lock \
+            bin \
+            crates \
+            docs \
+            example \
+            "$target/"
+
+        echo "✓ Installed skill bundle to $target"
+    done
+
+    SKILL_BUNDLE_INSTALLED=1
+}
+
 # ── Rust / Cargo ────────────────────────────────────────────────────────────
 if ! command -v cargo &> /dev/null; then
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
@@ -80,13 +123,20 @@ setup_global_workspace() {
 
 setup_global_workspace
 
+install_skill_bundle
+
 echo ""
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo "  qedgen-solana-skills installed successfully!"
+echo "  ${PACKAGE_NAME} installed successfully!"
 echo ""
 echo "  Requirements:"
 echo "    - MISTRAL_API_KEY environment variable must be set"
 echo "    - Lean toolchain (auto-installed via elan)"
+if [ "$SKILL_BUNDLE_INSTALLED" = "1" ]; then
+    echo "    - Skill bundle copied to ~/.codex/skills/${SKILL_SLUG} and ~/.claude/skills/${SKILL_SLUG}"
+else
+    echo "    - Skill bundle install skipped"
+fi
 echo ""
 echo "  The global Mathlib cache may still be downloading in the background."
 echo "  First run of 'qedgen verify --validate' may be slow if not ready."

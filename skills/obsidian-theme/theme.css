@@ -1,0 +1,125 @@
+/*
+OpenClawd Obsidian theme.
+
+Community-theme constraints:
+- no remote imports or network-loaded assets
+- assets embedded as data URLs
+- low-specificity selectors where possible
+- CSS variables first
+*/
+
+:root {
+  --openclawd-lobster-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23091418'/%3E%3Cpath d='M17 28c0-8 6-14 15-14s15 6 15 14v9c0 8-6 13-15 13s-15-5-15-13v-9Z' fill='%23ff4d2e'/%3E%3Cpath d='M22 27c2-5 5-8 10-8s8 3 10 8c-3-2-6-3-10-3s-7 1-10 3Z' fill='%23ff8a3d'/%3E%3Cpath d='M13 28 5 19m46 9 8-9M18 38 8 47m38-9 10 9' stroke='%239945ff' stroke-width='5' stroke-linecap='round'/%3E%3Ccircle cx='26' cy='31' r='2.2' fill='%23091418'/%3E%3Ccircle cx='38' cy='31' r='2.2' fill='%23091418'/%3E%3Cpath d='M28 39h8' stroke='%23091418' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E");
+}
+
+body {
+  --font-interface-theme: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-text-theme: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-monospace-theme: "SF Mono", Menlo, Consolas, monospace;
+
+  --font-text-size: 16px;
+  --line-height-normal: 1.55;
+  --radius-s: 4px;
+  --radius-m: 8px;
+  --radius-l: 10px;
+
+  --input-focus-border-color: var(--interactive-accent);
+  --link-decoration: none;
+  --link-decoration-hover: underline;
+}
+
+.theme-dark {
+  --background-primary: #071016;
+  --background-secondary: #0b1720;
+  --background-secondary-alt: #101f2b;
+  --background-modifier-border: rgba(153, 69, 255, 0.26);
+  --background-modifier-hover: rgba(20, 241, 149, 0.08);
+  --background-modifier-active-hover: rgba(153, 69, 255, 0.18);
+
+  --text-normal: #e8f0f8;
+  --text-muted: #9aa8bb;
+  --text-faint: #66748a;
+  --text-accent: #14f195;
+  --text-accent-hover: #6dffbd;
+
+  --interactive-normal: #10202b;
+  --interactive-hover: #152a38;
+  --interactive-accent: #9945ff;
+  --interactive-accent-hover: #14f195;
+
+  --h1-color: #ff7a3d;
+  --h2-color: #14f195;
+  --h3-color: #c9a3ff;
+  --blockquote-border-color: #ff4d2e;
+  --code-normal: #14f195;
+  --code-background: #0d1d26;
+}
+
+.theme-light {
+  --background-primary: #fbfcfd;
+  --background-secondary: #eef3f7;
+  --background-secondary-alt: #e6edf3;
+  --background-modifier-border: rgba(112, 83, 242, 0.22);
+  --background-modifier-hover: rgba(20, 177, 117, 0.08);
+  --background-modifier-active-hover: rgba(153, 69, 255, 0.12);
+
+  --text-normal: #14202a;
+  --text-muted: #536274;
+  --text-faint: #7b8796;
+  --text-accent: #087d51;
+  --text-accent-hover: #7053f2;
+
+  --interactive-normal: #e9eff5;
+  --interactive-hover: #dce6ef;
+  --interactive-accent: #7053f2;
+  --interactive-accent-hover: #087d51;
+
+  --h1-color: #cf3c20;
+  --h2-color: #087d51;
+  --h3-color: #7053f2;
+  --blockquote-border-color: #ff4d2e;
+  --code-normal: #087d51;
+  --code-background: #eaf2f4;
+}
+
+.workspace-tab-header-container,
+.titlebar,
+.status-bar {
+  border-color: var(--background-modifier-border);
+}
+
+.workspace-ribbon::before {
+  content: "";
+  display: block;
+  width: 28px;
+  height: 28px;
+  margin: 10px auto 6px;
+  background-image: var(--openclawd-lobster-icon);
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.markdown-rendered h1,
+.HyperMD-header-1 {
+  letter-spacing: 0;
+}
+
+.markdown-rendered blockquote {
+  border-inline-start-width: 3px;
+  border-radius: var(--radius-s);
+}
+
+.markdown-rendered code,
+.cm-inline-code {
+  border-radius: var(--radius-s);
+}
+
+.callout {
+  border-radius: var(--radius-m);
+}
+
+.nav-file-title,
+.nav-folder-title,
+.tree-item-self {
+  border-radius: var(--radius-s);
+}

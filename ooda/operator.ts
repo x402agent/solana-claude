@@ -10,7 +10,7 @@
  */
 
 import { parseArgs } from "util";
-import { runLoop } from "./loop.js";
+import { runLoop } from "./loop.ts";
 
 // ── OpenClawd operator identity ───────────────────────────────────────────────
 

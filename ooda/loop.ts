@@ -17,11 +17,11 @@
 import { readFileSync } from "fs";
 import { join } from "path";
 import { fileURLToPath } from "url";
-import { claudeDecision, ruleBasedDecision } from "./decide.js";
-import type { BookSnapshot, Decision, JournalEntry, Outcome } from "./journal.js";
-import { gitCommitJournal, journalAppend } from "./journal.js";
-import type { Candle } from "./observe.js";
-import { initRng, observe, rejectMainnet } from "./observe.js";
+import { claudeDecision, ruleBasedDecision } from "./decide.ts";
+import type { BookSnapshot, Decision, JournalEntry, Outcome } from "./journal.ts";
+import { gitCommitJournal, journalAppend } from "./journal.ts";
+import type { Candle } from "./observe.ts";
+import { initRng, observe, rejectMainnet } from "./observe.ts";
 
 const ROOT = fileURLToPath(new URL("..", import.meta.url));
 const RALPH_MD = join(ROOT, "ooda", "ralph.md");
@@ -243,7 +243,7 @@ export async function runLoop(opts: LoopOptions): Promise<number> {
     };
     journalAppend(entry);
     state.lastDecisions = [...state.lastDecisions, entry].slice(-3);
-    emit({ event: "tick", ...entry }, opts.tui);
+    emit({ event: "tick", ...entry, ...extras }, opts.tui);
 
     // ── KILL-SWITCH ───────────────────────────────────────────────────────────
     if (state.consecutiveLosses >= killThreshold) {

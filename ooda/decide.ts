@@ -15,8 +15,8 @@ import Anthropic from "@anthropic-ai/sdk";
 import { readFileSync } from "fs";
 import { join } from "path";
 import { fileURLToPath } from "url";
-import type { Decision } from "./journal.js";
-import type { LoopState } from "./loop.js";
+import type { Decision } from "./journal.ts";
+import type { LoopState } from "./loop.ts";
 
 const ROOT = fileURLToPath(new URL("..", import.meta.url));
 const RALPH_MD = join(ROOT, "ooda", "ralph.md");

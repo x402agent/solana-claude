@@ -1,0 +1,10 @@
+/Users/8bit/fraud/OpenClawd/programs/target/debug/deps/spl_token_metadata_interface-442b86217618c0a2.d: /Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-token-metadata-interface-0.2.0/src/lib.rs /Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-token-metadata-interface-0.2.0/src/error.rs /Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-token-metadata-interface-0.2.0/src/instruction.rs /Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-token-metadata-interface-0.2.0/src/state.rs
+
+/Users/8bit/fraud/OpenClawd/programs/target/debug/deps/libspl_token_metadata_interface-442b86217618c0a2.dylib: /Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-token-metadata-interface-0.2.0/src/lib.rs /Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-token-metadata-interface-0.2.0/src/error.rs /Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-token-metadata-interface-0.2.0/src/instruction.rs /Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-token-metadata-interface-0.2.0/src/state.rs
+
+/Users/8bit/fraud/OpenClawd/programs/target/debug/deps/libspl_token_metadata_interface-442b86217618c0a2.rlib: /Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-token-metadata-interface-0.2.0/src/lib.rs /Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-token-metadata-interface-0.2.0/src/error.rs /Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-token-metadata-interface-0.2.0/src/instruction.rs /Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-token-metadata-interface-0.2.0/src/state.rs
+
+/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-token-metadata-interface-0.2.0/src/lib.rs:
+/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-token-metadata-interface-0.2.0/src/error.rs:
+/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-token-metadata-interface-0.2.0/src/instruction.rs:
+/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-token-metadata-interface-0.2.0/src/state.rs:

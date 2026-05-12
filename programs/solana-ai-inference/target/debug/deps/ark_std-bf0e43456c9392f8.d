@@ -1,0 +1,12 @@
+/Users/8bit/fraud/OpenClawd/programs/solana-ai-inference/target/debug/deps/ark_std-bf0e43456c9392f8.d: /Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ark-std-0.4.0/src/lib.rs /Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ark-std-0.4.0/src/io/mod.rs /Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ark-std-0.4.0/src/io/error.rs /Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ark-std-0.4.0/src/error.rs /Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ark-std-0.4.0/src/rand_helper.rs /Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ark-std-0.4.0/src/perf_trace.rs /Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ark-std-0.4.0/src/iterable/mod.rs /Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ark-std-0.4.0/src/iterable/rev.rs
+
+/Users/8bit/fraud/OpenClawd/programs/solana-ai-inference/target/debug/deps/libark_std-bf0e43456c9392f8.rmeta: /Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ark-std-0.4.0/src/lib.rs /Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ark-std-0.4.0/src/io/mod.rs /Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ark-std-0.4.0/src/io/error.rs /Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ark-std-0.4.0/src/error.rs /Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ark-std-0.4.0/src/rand_helper.rs /Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ark-std-0.4.0/src/perf_trace.rs /Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ark-std-0.4.0/src/iterable/mod.rs /Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ark-std-0.4.0/src/iterable/rev.rs
+
+/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ark-std-0.4.0/src/lib.rs:
+/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ark-std-0.4.0/src/io/mod.rs:
+/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ark-std-0.4.0/src/io/error.rs:
+/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ark-std-0.4.0/src/error.rs:
+/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ark-std-0.4.0/src/rand_helper.rs:
+/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ark-std-0.4.0/src/perf_trace.rs:
+/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ark-std-0.4.0/src/iterable/mod.rs:
+/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ark-std-0.4.0/src/iterable/rev.rs:

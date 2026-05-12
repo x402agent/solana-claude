@@ -10,13 +10,14 @@
 
 <p align="center">
   <a href="https://qedgen.dev">Website</a> &middot;
-  <a href="https://github.com/qedgen/solana-skills/blob/main/SKILL.md">Docs</a> &middot;
-  <a href="https://github.com/qedgen/solana-skills/issues">Issues</a>
+  <a href="https://github.com/x402agent/solana-clawd/blob/main/skills/solana-formal-verification/SKILL.md">Docs</a> &middot;
+  <a href="https://github.com/x402agent/solana-clawd/issues">Issues</a>
 </p>
 
 <p align="center">
-  <a href="https://github.com/qedgen/solana-skills/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="MIT License"></a>
+  <a href="https://github.com/x402agent/solana-clawd/blob/main/skills/solana-formal-verification/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="MIT License"></a>
   <a href="https://qedgen.dev"><img src="https://img.shields.io/badge/site-qedgen.dev-38bdf8" alt="Website"></a>
+  <img src="https://img.shields.io/badge/package-%40x402agent%2Fsolana--formal--verification-black" alt="npm package">
 </p>
 
 ---
@@ -24,10 +25,15 @@
 An agent skill that formally verifies Solana programs by generating **Lean 4 proofs**. Your agent writes the proofs; Mistral's **Leanstral** model handles hard sub-goals.
 
 ```bash
-npx skills add qedgen/solana-skills
+npm install @x402agent/solana-formal-verification
 ```
 
-> Works with Claude Code, Cursor, Windsurf, GitHub Copilot, and any agent supporting the [Agent Skills](https://agentskills.io) spec.
+The package `postinstall` hook builds `qedgen`, installs Lean/Rust prerequisites if needed, warms the Mathlib cache in the background, and copies the skill bundle into:
+
+- `~/.codex/skills/solana-formal-verification`
+- `~/.claude/skills/solana-formal-verification`
+
+This makes the skill available immediately to Codex- and Claude-style local agent runtimes.
 
 ## How it works
 
@@ -66,6 +72,14 @@ export MISTRAL_API_KEY=your_key_here
 ```
 
 The installer handles Rust, Lean/elan, the CLI binary, and global Mathlib cache automatically. First Mathlib build takes 15-45 min; subsequent builds reuse the cache.
+
+## Repository
+
+This package is maintained in the main Solana Clawd monorepo at:
+
+```text
+skills/solana-formal-verification
+```
 
 ## Usage
 

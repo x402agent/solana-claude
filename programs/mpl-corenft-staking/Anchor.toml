@@ -1,0 +1,19 @@
+[features]
+resolution = true
+skip-lint = false
+
+[programs.localnet]
+mpl_corenft_staking = "XkEyLLCQiweRKpSwda71gYHPwq1KS824RpGxtCGq1Li"
+
+[programs.devnet]
+mpl_corenft_staking = "XkEyLLCQiweRKpSwda71gYHPwq1KS824RpGxtCGq1Li"
+
+[programs.mainnet]
+mpl_corenft_staking = "XkEyLLCQiweRKpSwda71gYHPwq1KS824RpGxtCGq1Li"
+
+[registry]
+url = "https://api.apr.dev"
+
+[provider]
+cluster = "devnet"
+wallet = "~/.config/solana/id.json"

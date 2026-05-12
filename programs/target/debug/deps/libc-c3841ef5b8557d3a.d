@@ -1,0 +1,12 @@
+/Users/8bit/fraud/OpenClawd/programs/target/debug/deps/libc-c3841ef5b8557d3a.d: /Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/libc-0.2.171/src/lib.rs /Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/libc-0.2.171/src/macros.rs /Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/libc-0.2.171/src/primitives.rs /Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/libc-0.2.171/src/unix/mod.rs /Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/libc-0.2.171/src/unix/bsd/mod.rs /Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/libc-0.2.171/src/unix/bsd/apple/mod.rs /Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/libc-0.2.171/src/unix/bsd/apple/b64/mod.rs /Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/libc-0.2.171/src/unix/bsd/apple/b64/aarch64/mod.rs
+
+/Users/8bit/fraud/OpenClawd/programs/target/debug/deps/liblibc-c3841ef5b8557d3a.rmeta: /Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/libc-0.2.171/src/lib.rs /Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/libc-0.2.171/src/macros.rs /Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/libc-0.2.171/src/primitives.rs /Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/libc-0.2.171/src/unix/mod.rs /Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/libc-0.2.171/src/unix/bsd/mod.rs /Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/libc-0.2.171/src/unix/bsd/apple/mod.rs /Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/libc-0.2.171/src/unix/bsd/apple/b64/mod.rs /Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/libc-0.2.171/src/unix/bsd/apple/b64/aarch64/mod.rs
+
+/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/libc-0.2.171/src/lib.rs:
+/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/libc-0.2.171/src/macros.rs:
+/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/libc-0.2.171/src/primitives.rs:
+/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/libc-0.2.171/src/unix/mod.rs:
+/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/libc-0.2.171/src/unix/bsd/mod.rs:
+/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/libc-0.2.171/src/unix/bsd/apple/mod.rs:
+/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/libc-0.2.171/src/unix/bsd/apple/b64/mod.rs:
+/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/libc-0.2.171/src/unix/bsd/apple/b64/aarch64/mod.rs:

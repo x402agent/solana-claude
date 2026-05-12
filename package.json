@@ -69,6 +69,8 @@
     "skill:sync": "node scripts/sync-solana-clawd-skill.mjs",
     "skills:catalog": "node scripts/generate-skills-catalog.js",
     "skills:serve": "node scripts/generate-skills-catalog.js && cp skills/catalog.json web/skills/catalog.json && npx serve web/skills -p 3333",
+    "skill:solana-formal-verification:pack": "npm pack ./skills/solana-formal-verification",
+    "skill:solana-formal-verification:publish": "npm publish ./skills/solana-formal-verification --access public",
     "ext:dev": "echo 'Load chrome-extension/clawd-agent as unpacked extension in chrome://extensions'",
     "ext:vault": "npm --prefix packages/agentwallet start"
   },

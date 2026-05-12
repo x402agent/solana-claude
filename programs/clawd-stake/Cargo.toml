@@ -1,0 +1,24 @@
+[package]
+name = "clawd-stake"
+version = "0.1.0"
+description = "Clawd agent staking program — freeze-in-place staking for Metaplex Agent assets with CLAWD reward emissions and gacha-fee revenue share"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "lib"]
+name = "clawd_stake"
+
+[features]
+no-entrypoint = []
+no-idl = []
+no-log-ix-name = []
+cpi = ["no-entrypoint"]
+default = []
+
+[dependencies]
+anchor-lang = "0.30.1"
+anchor-spl = "0.30.1"
+solana-program = "1.18.17"
+spl-token = { version = "4.0.0", features = ["no-entrypoint"] }
+spl-associated-token-account = { version = "2.0.0", features = ["no-entrypoint"] }
+mpl-core = { version = "0.7.2", features = ["anchor"] }

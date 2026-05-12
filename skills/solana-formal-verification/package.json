@@ -1,7 +1,7 @@
 {
-  "name": "qedgen-solana-skills",
-  "version": "1.0.0",
-  "description": "Agent skill for generating formal Lean 4 proofs using Mistral's Leanstral model. Perfect for verifying Solana programs, Rust code, and smart contracts",
+  "name": "@x402agent/solana-formal-verification",
+  "version": "1.1.0",
+  "description": "First-class Solana Clawd skill and CLI for Lean 4 formal verification of Solana programs, Rust code, and smart contracts",
   "keywords": [
     "agent-skill",
     "lean4",
@@ -19,25 +19,40 @@
   },
   "files": [
     "SKILL.md",
+    "README.md",
+    "LICENSE",
+    "claude.md",
     "bin/",
     "install.sh",
     "Cargo.toml",
     "Cargo.lock",
     "crates/",
-    "tools/"
+    "docs/",
+    "example/"
   ],
   "scripts": {
     "postinstall": "bash install.sh",
     "prepack": "cargo build --release && mkdir -p bin && cp target/release/qedgen bin/ && chmod +x bin/qedgen",
+    "pack:check": "npm pack --dry-run",
     "test": "./bin/qedgen --help"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/qedgen/solana-skills.git"
+    "url": "git+https://github.com/x402agent/solana-clawd.git",
+    "directory": "skills/solana-formal-verification"
   },
-  "author": "abishekk92",
+  "publishConfig": {
+    "access": "public"
+  },
+  "author": "x402agent",
   "license": "MIT",
-  "homepage": "https://github.com/qedgen/solana-skills#readme",
+  "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/solana-formal-verification#readme",
+  "bugs": {
+    "url": "https://github.com/x402agent/solana-clawd/issues"
+  },
+  "engines": {
+    "node": ">=20"
+  },
   "agentSkills": {
     "skills": [
       "SKILL.md"

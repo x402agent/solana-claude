@@ -1,0 +1,115 @@
+[
+  {
+    "name": "defillama-market",
+    "version": "1.0.0",
+    "api": "plugin.delivery/api/defillama",
+    "description": "Sector TVL, protocol revenue, token-vs-fundamentals screener backed by DefiLlama.",
+    "surface": [
+      { "fn": "llama_protocol", "args": { "slug": "string" }, "returns": "TVL + fees + revenue + chains" },
+      { "fn": "llama_sector_tvl", "args": { "category": "string" }, "returns": "timeseries" },
+      { "fn": "llama_screener", "args": { "minTvl": "number?", "minRevenue": "number?" }, "returns": "Protocol[]" }
+    ],
+    "gating": { "holder": true }
+  },
+  {
+    "name": "dexscreener-scout",
+    "version": "1.0.0",
+    "api": "plugin.delivery/api/dexscreener",
+    "description": "New-pair scanning, volume / liquidity deltas, bundler heat for Solana + Base.",
+    "surface": [
+      { "fn": "dex_new_pairs", "args": { "chain": "solana|base" }, "returns": "Pair[]" },
+      { "fn": "dex_pair", "args": { "address": "string" }, "returns": "Pair + stats" },
+      { "fn": "dex_volume_delta", "args": { "address": "string", "window": "5m|1h|24h" }, "returns": "number" }
+    ],
+    "gating": { "holder": true }
+  },
+  {
+    "name": "coingecko-rates",
+    "version": "1.0.0",
+    "api": "plugin.delivery/api/coingecko",
+    "description": "Cross-exchange spot + FDV, historic series, stablecoin depeg alerts.",
+    "surface": [
+      { "fn": "cg_price", "args": { "ids": "string[]", "vs": "string" }, "returns": "{ id: price }" },
+      { "fn": "cg_history", "args": { "id": "string", "days": "number" }, "returns": "ohlcv" },
+      { "fn": "cg_depeg", "args": { "symbol": "string" }, "returns": "deviationBp" }
+    ],
+    "gating": { "holder": false }
+  },
+  {
+    "name": "oneinch-router",
+    "version": "1.0.0",
+    "api": "plugin.delivery/api/oneinch",
+    "description": "Best-of-N DEX routing on Base + optimism fallback via 1inch.",
+    "surface": [
+      { "fn": "oneinch_quote", "args": { "src": "string", "dst": "string", "amount": "string", "chain": "base|op" }, "returns": "Quote" },
+      { "fn": "oneinch_swap_tx", "args": { "quote": "Quote", "from": "string" }, "returns": "tx" }
+    ],
+    "gating": { "holder": true }
+  },
+  {
+    "name": "pump-fun-sdk",
+    "version": "1.0.0",
+    "api": "plugin.delivery/api/pump-fun-sdk",
+    "description": "Bond curves, graduation heuristics, dev-wallet flags for Pump.fun mints.",
+    "surface": [
+      { "fn": "pf_bond", "args": { "mint": "string" }, "returns": "{ sol, tokens, progress }" },
+      { "fn": "pf_grad_score", "args": { "mint": "string" }, "returns": "0..100" },
+      { "fn": "pf_dev_flags", "args": { "mint": "string" }, "returns": "FlagSet" }
+    ],
+    "gating": { "holder": true }
+  },
+  {
+    "name": "phishing-detector",
+    "version": "1.0.0",
+    "api": "plugin.delivery/api/phishing-detector",
+    "description": "URL + contract screener, wallet blocklist, domain spoof scoring.",
+    "surface": [
+      { "fn": "phish_url", "args": { "url": "string" }, "returns": "{ verdict, reasons[] }" },
+      { "fn": "phish_contract", "args": { "address": "string", "chain": "string" }, "returns": "{ verdict }" },
+      { "fn": "phish_spoof_score", "args": { "domain": "string" }, "returns": "0..100" }
+    ],
+    "gating": { "holder": false }
+  },
+  {
+    "name": "sanctions-check",
+    "version": "1.0.0",
+    "api": "plugin.delivery/api/sanctions-check",
+    "description": "OFAC + chainalysis screening. Call before any tx goes out.",
+    "surface": [
+      { "fn": "sanctions_address", "args": { "address": "string" }, "returns": "{ sanctioned: boolean, lists[] }" }
+    ],
+    "gating": { "holder": false, "mandatory": true }
+  },
+  {
+    "name": "contract-scanner",
+    "version": "1.0.0",
+    "api": "plugin.delivery/api/contract-scanner",
+    "description": "Bytecode diffing, proxy pattern detection, mint authority + freeze audit.",
+    "surface": [
+      { "fn": "scan_evm", "args": { "address": "string", "chain": "string" }, "returns": "Report" },
+      { "fn": "scan_spl", "args": { "mint": "string" }, "returns": "{ mintAuthority, freezeAuthority, supply }" }
+    ],
+    "gating": { "holder": true }
+  },
+  {
+    "name": "gas-estimator",
+    "version": "1.0.0",
+    "api": "plugin.delivery/api/gas-estimator",
+    "description": "Live gas oracles across Base, Ethereum, Optimism, Arbitrum.",
+    "surface": [
+      { "fn": "gas_now", "args": { "chain": "base|eth|op|arb" }, "returns": "{ slow, standard, fast, gwei }" }
+    ],
+    "gating": { "holder": false }
+  },
+  {
+    "name": "grants-finder",
+    "version": "1.0.0",
+    "api": "plugin.delivery/api/grants-finder",
+    "description": "Open Solana + Base grant programs with deadlines and scope matching.",
+    "surface": [
+      { "fn": "grants_list", "args": { "chain": "solana|base|all", "tag": "string?" }, "returns": "Grant[]" },
+      { "fn": "grants_match", "args": { "pitch": "string" }, "returns": "ScoredGrant[]" }
+    ],
+    "gating": { "holder": true }
+  }
+]

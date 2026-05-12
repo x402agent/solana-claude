@@ -8,7 +8,7 @@
  * MAINNET_OK=1 is set — but v0 has no signing path regardless.
  */
 
-import type { LoopState } from "./loop.js";
+import type { LoopState } from "./loop.ts";
 
 export interface Candle {
   t: number;  // unix epoch seconds
@@ -74,15 +74,6 @@ function synthCandle(state: LoopState): Candle {
   const low = Math.max(0.5, Math.min(o, c) - Math.abs(uniform(0, 0.25)));
   const vol = uniform(100, 1000);
   return { t: Date.now() / 1000, o, h: high, l: low, c, v: vol };
-}
-
-interface HeliusCandle {
-  time: number;
-  open: number;
-  high: number;
-  low: number;
-  close: number;
-  volume: number;
 }
 
 async function fetchHeliusCandle(apiKey: string): Promise<Candle | null> {
