@@ -13,6 +13,7 @@ It is intentionally opinionated:
 
 - `agents.json` — agent registry and allow/deny admission policy
 - `catalog.json` — featured commerce offers and protocol mix
+- `catalog.json` — merchant profile, featured offers, and actual product catalog
 - `index.ts` — manifest generator and registry CLI
 - `launch.sh` — private shell command to admit agents into the store
 - `generated/openclawd.agent-store.json` — generated universal merchant manifest
@@ -44,10 +45,13 @@ The launcher rejects `zerobro` immediately.
 The generated manifest is a compact store contract for x402-style agent commerce:
 
 - store metadata
+- merchant metadata for `solanaclawd.com`
+- Google Merchant-style business and product metadata
 - allowed and denied agents
 - supported chains
 - settlement protocols
 - pay.sh gateway hint
 - agent roles and capabilities
+- actual digital product records and storefront paths
 
 This manifest is designed to sit beside `payments/pay-main` and feed future POS, merchant, facilitator, or agent-orchestration flows.

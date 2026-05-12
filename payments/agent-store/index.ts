@@ -10,6 +10,36 @@ type AgentRecord = {
   settlement: string[];
 };
 
+type MerchantProduct = {
+  id: string;
+  title: string;
+  category: string;
+  description: string;
+  price: { amount: string; asset: string };
+  protocols: string[];
+  merchantPath: string;
+  digital: boolean;
+  googleMerchant?: Record<string, string | boolean>;
+};
+
+type Catalog = {
+  protocols: string[];
+  supportedChains: string[];
+  merchant: {
+    id: string;
+    name: string;
+    domain: string;
+    storefrontPath: string;
+    checkoutPath: string;
+    brandColor: string;
+    contactEmail: string;
+    googleMerchant?: Record<string, unknown>;
+  };
+  categories: Array<{ id: string; label: string; description: string }>;
+  featuredOffers: Array<{ label: string; protocol: string; price: string }>;
+  products: MerchantProduct[];
+};
+
 type Registry = {
   store: {
     id: string;
@@ -53,7 +83,7 @@ function requireAgent(registry: Registry, id: string): AgentRecord {
   return agent;
 }
 
-function buildManifest(registry: Registry, agents: AgentRecord[]) {
+function buildManifest(registry: Registry, agents: AgentRecord[], catalog: Catalog) {
   const chains = [...new Set(agents.flatMap((agent) => agent.chains))];
   const protocols = [...new Set(agents.flatMap((agent) => agent.settlement))];
 
@@ -64,10 +94,11 @@ function buildManifest(registry: Registry, agents: AgentRecord[]) {
     description: registry.store.description,
     operator: registry.store.operator,
     symbol: registry.store.symbol,
+    merchant: catalog.merchant,
     commerce: {
       mode: "autonomous",
-      supportedChains: chains,
-      protocols,
+      supportedChains: [...new Set([...chains, ...catalog.supportedChains])],
+      protocols: [...new Set([...protocols, ...catalog.protocols])],
       paymentGateway: process.env.PAYSH_ENDPOINT ?? "https://pay.sh",
       settlementAsset: "USDC",
       confidentialRelay: true
@@ -83,7 +114,9 @@ function buildManifest(registry: Registry, agents: AgentRecord[]) {
       role: agent.role,
       chains: agent.chains,
       settlement: agent.settlement
-    }))
+    })),
+    categories: catalog.categories,
+    products: catalog.products
   };
 }
 
@@ -95,10 +128,11 @@ function ensureOutputDir(): string {
 
 function cmdList(): number {
   const registry = loadJson<Registry>(REGISTRY_PATH);
-  const catalog = loadJson<{ featuredOffers: Array<{ label: string; protocol: string; price: string }> }>(CATALOG_PATH);
+  const catalog = loadJson<Catalog>(CATALOG_PATH);
 
   console.log(`${registry.store.name}`);
   console.log(`operator: ${registry.store.operator}`);
+  console.log(`merchant: ${catalog.merchant.name} (${catalog.merchant.domain})`);
   console.log(`allowed agents: ${registry.admission.allow.join(", ")}`);
   console.log(`denied agents: ${registry.admission.deny.join(", ")}`);
   console.log("");
@@ -111,8 +145,9 @@ function cmdList(): number {
 
 function cmdManifest(agentIds: string[]): number {
   const registry = loadJson<Registry>(REGISTRY_PATH);
+  const catalog = loadJson<Catalog>(CATALOG_PATH);
   const selected = agentIds.length > 0 ? agentIds.map((id) => requireAgent(registry, id)) : registry.admission.allow.map((id) => requireAgent(registry, id));
-  const manifest = buildManifest(registry, selected);
+  const manifest = buildManifest(registry, selected, catalog);
   const outputDir = ensureOutputDir();
   const outputPath = join(outputDir, "openclawd.agent-store.json");
   writeFileSync(outputPath, JSON.stringify(manifest, null, 2));
@@ -122,8 +157,9 @@ function cmdManifest(agentIds: string[]): number {
 
 function cmdJoin(agentIds: string[]): number {
   const registry = loadJson<Registry>(REGISTRY_PATH);
+  const catalog = loadJson<Catalog>(CATALOG_PATH);
   const selected = agentIds.map((id) => requireAgent(registry, id));
-  const manifest = buildManifest(registry, selected);
+  const manifest = buildManifest(registry, selected, catalog);
   console.log(JSON.stringify(manifest, null, 2));
   return 0;
 }
