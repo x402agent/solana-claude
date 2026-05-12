@@ -10,6 +10,7 @@ interface LandingProps {
     label: string;
     products: MerchantProduct[];
     domain: string;
+    gateActive: boolean;
     tokenEconomy?: {
         token?: { symbol: string; mint: string };
         entryGate?: { enabled: boolean; amount: string; asset?: string; token?: string; mint: string; rule: string };
@@ -103,6 +104,7 @@ const Home: NextPage<LandingProps> = ({
     featuredPumpSkills,
     hostedSkillTotal,
     pumpSkillTotal,
+    gateActive,
 }) => {
     const gate = tokenEconomy?.entryGate;
     const pumpProducts = products.filter((product) => product.category === 'pump-skills');
@@ -136,11 +138,16 @@ const Home: NextPage<LandingProps> = ({
                                         'CLAWD Agent Entry Gate',
                                     )}&amount=${encodeURIComponent(gate.amount)}&spl-token=${encodeURIComponent(
                                         gate.mint,
-                                    )}&symbol=${encodeURIComponent(gateAsset)}`}
+                                    )}&symbol=${encodeURIComponent(gateAsset)}&gate=1`}
                                     style={secondaryButtonStyle}
                                 >
                                     Unlock Agent Access with {gate.amount} {gateAsset}
                                 </a>
+                            ) : null}
+                            {gateActive ? (
+                                <Link href="/agents" style={secondaryButtonStyle}>
+                                    Enter Agents
+                                </Link>
                             ) : null}
                         </div>
                     </div>
@@ -267,6 +274,7 @@ export const getServerSideProps: GetServerSideProps<LandingProps> = async () => 
             label: catalog.merchant.name,
             products: catalog.products,
             domain: catalog.merchant.domain,
+            gateActive: Boolean(context.req && getGateSession(context.req)),
             tokenEconomy: catalog.tokenEconomy,
             featuredPumpSkills: skillSummary.featured,
             hostedSkillTotal: skillSummary.total,
