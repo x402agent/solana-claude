@@ -297,7 +297,7 @@ export function renderFrame(state: DashboardState): void {
   const modeLabel = state.autoMode ? 'AUTO' : 'INTERACTIVE';
 
   const topBorder = chalk.gray(`┌${'─'.repeat(termWidth - 2)}┐`);
-  const title = `${chalk.cyan('🦞 MAWD')} ${chalk.white.bold('MARKET VIEW')} ${chalk.gray(`mode:${modeLabel}`)}`;
+  const title = `${chalk.cyan('🦞 CLAWD')} ${chalk.white.bold('MARKET VIEW')} ${chalk.gray(`mode:${modeLabel}`)}`;
   const topStatus = `${chalk.gray('Uptime:')} ${hh}:${mm}:${ss} ${chalk.gray('│')} ${clock}`;
 
   const lines = [

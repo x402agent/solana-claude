@@ -189,7 +189,7 @@ function applyFallback(state: DashboardState): void {
 
 export async function fetchMarketData(state: DashboardState): Promise<void> {
   state.oodaPhase = 'observe';
-  addLog(state, 'OBSERVE', 'Refreshing MAWD market surface', 'info');
+  addLog(state, 'OBSERVE', 'Refreshing CLAWD market surface', 'info');
 
   const results = await Promise.allSettled([fetchSolPrice(), fetchTrending()]);
 
@@ -262,7 +262,7 @@ export async function fetchMarketData(state: DashboardState): Promise<void> {
   state.lastRefresh = Date.now();
   addLog(state, 'LEARN', `Cycle ${state.cycleCount} journalled`, 'info');
   if (state.agentMessages.length === 0) {
-    addAgentMessage(state, 'system', 'MAWD online. Use 1-5, Tab, /commands, R, H, Q.');
+    addAgentMessage(state, 'system', 'CLAWD online. Use 1-5, Tab, /commands, R, H, Q.');
   }
   state.oodaPhase = 'idle';
 }

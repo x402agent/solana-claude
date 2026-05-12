@@ -1,0 +1,103 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  pull-requests: write
+
+jobs:
+  # ── TypeScript SDK ──
+  core-test:
+    name: TypeScript tests + coverage
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./typescript
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+      - run: pnpm install
+      - run: cd packages/solana-pay/core && npx vitest run --coverage
+      - name: Upload TS coverage
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ts-coverage
+          path: typescript/packages/solana-pay/core/coverage/coverage-summary.json
+          if-no-files-found: ignore
+
+  # ── Rust lint ──
+  rust-check:
+    name: Rust lint
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./rust
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+      - name: Build PDB frontend
+        run: cd ../pdb && pnpm install --frozen-lockfile && pnpm build
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: rust
+      - run: cargo fmt --check
+      - run: cargo clippy --workspace --all-targets -- -D warnings
+
+  # ── Rust tests + coverage ──
+  rust-test:
+    name: Rust tests + coverage
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./rust
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+      - name: Build PDB frontend
+        run: cd ../pdb && pnpm install --frozen-lockfile && pnpm build
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: llvm-tools-preview
+      - uses: taiki-e/install-action@cargo-llvm-cov
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: rust
+      - name: Run tests with coverage
+        env:
+          SURFPOOL_REPORT: "1"
+        run: cargo llvm-cov --workspace --features server --exclude pay --ignore-filename-regex 'crates/cli/' --json --output-path coverage.json
+      - name: Upload Rust coverage
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rust-coverage
+          path: rust/coverage.json
+      - name: Upload Rust surfpool report data
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: surfpool-reports-rust
+          path: rust/target/surfpool-reports/
+          if-no-files-found: ignore

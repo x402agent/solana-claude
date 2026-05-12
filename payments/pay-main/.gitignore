@@ -1,0 +1,33 @@
+.idea
+.vscode
+.DS_Store
+
+# TypeScript
+node_modules
+build
+.env
+.next
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+!typescript/pnpm-lock.yaml
+!pdb/pnpm-lock.yaml
+bun.lock
+bun.lockb
+tsconfig.tsbuildinfo
+dist/
+.vercel
+
+# CLI binary (downloaded at runtime by run.js)
+typescript/packages/solana-pay/core/bin/
+
+# Rust
+rust/target
+*.swp
+*.swo
+
+# Example
+rust/example/node_modules
+rust/example/pnpm-lock.yaml
+*.log
+coverage*.json
