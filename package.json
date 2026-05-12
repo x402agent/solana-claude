@@ -156,7 +156,7 @@
     "@alcalzone/ansi-tokenize": "^0.3.0",
     "@aws-sdk/credential-provider-node": "^3.972.30",
     "@biomejs/biome": "^1.9.0",
-    "@opentelemetry/exporter-logs-otlp-grpc": "^0.214.0",
+    "@opentelemetry/exporter-logs-otlp-grpc": "^0.217.0",
     "@opentelemetry/exporter-logs-otlp-http": "^0.214.0",
     "@opentelemetry/exporter-logs-otlp-proto": "^0.214.0",
     "@opentelemetry/exporter-metrics-otlp-grpc": "^0.214.0",
