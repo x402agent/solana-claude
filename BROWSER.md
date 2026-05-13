@@ -412,7 +412,7 @@ ClawdBrowser/
 │  ├─ app/
 │  │  ├─ agents/                Agent catalog, detail, deploy, manage pages
 │  │  ├─ agent/                 Worker-agent dashboard
-│  │  ├─ box/                   PenClawd Box sandbox UI (3 tabs: PenClawd Agent, Terminal, Boxes)
+│  │  ├─ box/                   PenClawd Box sandbox UI (PenClawd Agent, Terminal, Files, Boxes)
 │  │  ├─ clawd/                 Headless agent panel
 │  │  ├─ explorer/              Metaplex agent registry and executive explorer
 │  │  ├─ pay/                   Pay CLI (USDC micropayments)
@@ -549,12 +549,7 @@ The deploy path in [src/app/api/agents/deploy/route.ts](src/app/api/agents/deplo
 1. Browse the catalog at `/agents`
 2. Click an agent to view its details
 3. Switch to the **Deploy** tab and click **Deploy Agent**
-4. The platform provisions:
-   the hosted runtime,
-   a runtime wallet if needed,
-   a dedicated box,
-   a box-local wallet,
-   and a shell bundle carrying the Three Laws
+4. The platform provisions the hosted runtime, a runtime wallet if needed, a dedicated box, a box-local wallet, and a shell bundle carrying the Three Laws
 5. Open `/agents/manage` to inspect the deployment
 6. Click **Open Box** to drop directly into that agent’s trench
 
