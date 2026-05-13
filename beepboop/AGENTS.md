@@ -5,7 +5,7 @@
 
 ## Overview
 
-Beep Boop is a Solana blockchain clawd pointer — a lobster claw companion that lives in the macOS menu bar. It follows you during daily tasks: seeing your screen, explaining things, generating code, talking to you with voice, and connecting to Solana blockchain gateways. Push-to-talk (ctrl+option) captures voice, transcribes via AssemblyAI, sends transcript + screenshot to Claude, which responds with streamed text and ElevenLabs TTS voice. A lobster claw overlay flies to and points at UI elements Claude references on any monitor. Claude embeds `[CLAW:x,y:label:screenN]` tags to direct the claw.
+Beep Boop is a Solana blockchain clawd pointer — a lobster claw companion that lives in the macOS menu bar. It follows you during daily tasks: seeing your screen, explaining things, generating code, talking to you with voice, and connecting to Solana blockchain gateways. Push-to-talk (ctrl+option) captures voice, transcribes via AssemblyAI, sends transcript + screenshot to OpenAI by default or Claude as a fallback, and speaks the streamed response with ElevenLabs TTS. A lobster claw overlay flies to and points at UI elements the selected model references on any monitor. The model embeds `[CLAW:x,y:label:screenN]` tags to direct the claw.
 
 All API keys (including Solana RPC) live on a Cloudflare Worker proxy (the "Clawd Gateway") — nothing sensitive ships in the app.
 
@@ -14,12 +14,12 @@ All API keys (including Solana RPC) live on a Cloudflare Worker proxy (the "Claw
 - **App Type**: Menu bar-only (`LSUIElement=true`), no dock icon or main window
 - **Framework**: SwiftUI (macOS native) with AppKit bridging for menu bar panel and claw overlay
 - **Pattern**: MVVM with `@StateObject` / `@Published` state management
-- **AI Chat**: Claude (default) plus OpenAI Responses support via Clawd Gateway
+- **AI Chat**: OpenAI Responses by default, Claude fallback via Clawd Gateway
 - **Speech-to-Text**: AssemblyAI real-time streaming (`u3-rt-pro` model) via websocket, with OpenAI and Apple Speech as fallbacks
 - **Text-to-Speech**: ElevenLabs (`eleven_flash_v2_5` model) via Clawd Gateway
 - **Screen Capture**: ScreenCaptureKit (macOS 14.2+), multi-monitor support
 - **Voice Input**: Push-to-talk via `AVAudioEngine` + pluggable transcription-provider layer. System-wide keyboard shortcut via listen-only CGEvent tap.
-- **Claw Pointing**: Claude embeds `[CLAW:x,y:label:screenN]` tags in responses. The overlay parses these, maps coordinates to the correct monitor, and animates the lobster claw along a bezier arc to the target.
+- **Claw Pointing**: The selected model embeds `[CLAW:x,y:label:screenN]` tags in responses. The overlay parses these, maps coordinates to the correct monitor, and animates the lobster claw along a bezier arc to the target.
 - **Solana Integration**: Clawd Gateway proxies Solana JSON-RPC plus Helius/Birdeye routes. Balance lookups, token account queries, wallet assets, enhanced transactions, price data, and raw RPC pass-through for on-chain operations.
 - **Concurrency**: `@MainActor` isolation, async/await throughout
 - **Analytics**: PostHog via `ClickyAnalytics.swift`
@@ -65,7 +65,7 @@ Worker vars: `ELEVENLABS_VOICE_ID`, `SOLANA_NETWORK`
 | File | Lines | Purpose |
 |------|-------|---------|
 | `leanring_buddyApp.swift` | ~89 | Menu bar app entry point. `@NSApplicationDelegateAdaptor` with `CompanionAppDelegate`. |
-| `CompanionManager.swift` | ~1026 | Central state machine. Coordinates push-to-talk -> screenshot -> Claude -> TTS -> claw pointing pipeline. |
+| `CompanionManager.swift` | ~1160 | Central state machine. Coordinates push-to-talk -> screenshot -> OpenAI/Claude -> optional Solana context -> TTS -> claw pointing pipeline. |
 | `MenuBarPanelManager.swift` | ~243 | NSStatusItem + custom NSPanel lifecycle for the menu bar. |
 | `CompanionPanelView.swift` | ~761 | SwiftUI panel content — status, push-to-talk, model picker, permissions UI. |
 | `OverlayWindow.swift` | ~881 | Full-screen transparent overlay hosting the lobster claw, response text, waveform. |
@@ -79,7 +79,7 @@ Worker vars: `ELEVENLABS_VOICE_ID`, `SOLANA_NETWORK`
 | `BuddyAudioConversionSupport.swift` | ~108 | Audio conversion helpers (PCM16 mono, WAV building). |
 | `GlobalPushToTalkShortcutMonitor.swift` | ~132 | System-wide CGEvent tap for push-to-talk. |
 | `ClaudeAPI.swift` | ~291 | Claude vision API client with SSE streaming. |
-| `OpenAIAPI.swift` | ~142 | OpenAI GPT vision API client. |
+| `OpenAIAPI.swift` | ~285 | OpenAI Responses vision API client with SSE streaming. |
 | `ElevenLabsTTSClient.swift` | ~81 | ElevenLabs TTS client via Clawd Gateway. |
 | `ElementLocationDetector.swift` | ~335 | UI element location detection for claw pointing. |
 | `DesignSystem.swift` | ~880 | Design system — lobster red/orange theme, claw colors, button styles. |

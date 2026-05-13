@@ -11,10 +11,10 @@ Built on Anthropic Claude, OpenAI, AssemblyAI, ElevenLabs, Helius, Birdeye, and 
 1. **Push-to-talk** (Ctrl+Option) captures your voice via `AVAudioEngine`
 2. **AssemblyAI** transcribes speech in real-time via websocket (`u3-rt-pro` model)
 3. **ScreenCaptureKit** takes a screenshot of your current screen (multi-monitor)
-4. Transcript + screenshot are sent to **Claude** (default) or **OpenAI** (alternate clawd brain) for vision + reasoning
-5. Claude responds with text and can embed `[CLAW:x,y:label:screenN]` tags
+4. Transcript + screenshot are sent to **OpenAI** (default) or **Claude** (fallback) for vision + reasoning
+5. The selected model responds with text and can embed `[CLAW:x,y:label:screenN]` tags
 6. **ElevenLabs** converts the response to lobster speech (`eleven_flash_v2_5`)
-7. A lobster claw overlay flies to and points at UI elements Claude references
+7. A lobster claw overlay flies to and points at UI elements the selected model references
 8. **Solana/Helius/Birdeye** calls are proxied through the Clawd Gateway for on-chain lookups, wallet data, and token pricing
 
 All API keys (including Helius, Birdeye, OpenAI, and Solana RPC) are proxied through the **Clawd Gateway** (Cloudflare Worker) -- nothing sensitive ships in the app binary.
@@ -26,7 +26,7 @@ All API keys (including Helius, Birdeye, OpenAI, and Solana RPC) are proxied thr
 | App Type | macOS menu bar (`LSUIElement=true`) | No dock icon, no main window |
 | Framework | SwiftUI + AppKit bridging | `NSPanel` for floating windows, `NSHostingView` bridge |
 | Pattern | MVVM | `@StateObject` / `@Published` state management |
-| AI Chat | Claude by default, OpenAI as alternate | Both proxied through the Clawd Gateway |
+| AI Chat | OpenAI by default, Claude as fallback | Both proxied through the Clawd Gateway |
 | Speech-to-Text | AssemblyAI (`u3-rt-pro`) | Real-time websocket streaming; OpenAI and Apple Speech fallbacks |
 | Text-to-Speech | ElevenLabs (`eleven_flash_v2_5`) | Via Clawd Gateway |
 | Screen Capture | ScreenCaptureKit (macOS 14.2+) | Multi-monitor support |
@@ -86,7 +86,7 @@ beepboop/
     BuddyAudioConversionSupport.swift  # PCM16 mono conversion, WAV builder
     GlobalPushToTalkShortcutMonitor.swift # CGEvent tap for system-wide shortcut
     ClaudeAPI.swift                    # Claude vision client (SSE + non-streaming)
-    OpenAIAPI.swift                    # OpenAI GPT vision client
+    OpenAIAPI.swift                    # OpenAI Responses vision client
     ElevenLabsTTSClient.swift          # ElevenLabs TTS playback
     ElementLocationDetector.swift      # UI element location detection for claw pointing
     DesignSystem.swift                 # Lobster red/orange theme, DS.Colors, DS.CornerRadius
@@ -214,7 +214,7 @@ Update proxy URLs in Swift code to `http://localhost:8787`. Find them with:
 grep -r "beepboop-clawd" leanring-buddy/
 ```
 
-Locations: `CompanionManager.swift` (Claude chat + TTS + Solana), `AssemblyAIStreamingTranscriptionProvider.swift` (token endpoint).
+Locations: `CompanionManager.swift` (OpenAI/Claude chat + TTS + Solana), `AssemblyAIStreamingTranscriptionProvider.swift` (token endpoint).
 
 ### 3. Open in Xcode and Run
 

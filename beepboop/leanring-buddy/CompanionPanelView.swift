@@ -607,6 +607,8 @@ struct CompanionPanelView: View {
             Spacer()
 
             HStack(spacing: 0) {
+                modelOptionButton(label: "GPT 5.5", modelID: "gpt-5.5")
+                modelOptionButton(label: "GPT 5.4", modelID: "gpt-5.4")
                 modelOptionButton(label: "Sonnet", modelID: "claude-sonnet-4-6")
                 modelOptionButton(label: "Opus", modelID: "claude-opus-4-6")
             }
@@ -628,9 +630,9 @@ struct CompanionPanelView: View {
             companionManager.setSelectedModel(modelID)
         }) {
             Text(label)
-                .font(.system(size: 11, weight: .medium))
+                .font(.system(size: 10, weight: .medium))
                 .foregroundColor(isSelected ? DS.Colors.textPrimary : DS.Colors.textTertiary)
-                .padding(.horizontal, 10)
+                .padding(.horizontal, 7)
                 .padding(.vertical, 5)
                 .background(
                     RoundedRectangle(cornerRadius: 5, style: .continuous)

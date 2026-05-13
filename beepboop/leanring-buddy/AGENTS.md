@@ -1,6 +1,6 @@
 # AGENTS.md - leanring-buddy (Beep Boop Clawd -- Main App Target)
 
-macOS menu bar companion app built with SwiftUI. Push-to-talk voice pipeline with Claude vision, multi-screen capture, streaming AI responses, and a lobster claw overlay that points at UI elements.
+macOS menu bar companion app built with SwiftUI. Push-to-talk voice pipeline with OpenAI Responses by default, Claude fallback, multi-screen capture, streaming AI responses, and a lobster claw overlay that points at UI elements.
 
 ## Architecture
 
@@ -19,8 +19,8 @@ leanring_buddyApp (entry)
     |       |       +-- GlobalPushToTalkShortcutMonitor (global hotkey)
     |       |       +-- BuddyPCM16AudioConverter (format conversion)
     |       |
-    |       +-- ClaudeAPI (streaming Claude vision)
-    |       +-- OpenAIAPI (GPT-4o alternative)
+    |       +-- OpenAIAPI (streaming OpenAI Responses vision)
+    |       +-- ClaudeAPI (streaming Claude vision fallback)
     |       +-- ElevenLabsTTSClient (voice output)
     |       +-- CompanionScreenCaptureUtility (multi-display capture)
     |       +-- ElementLocationDetector (UI element parsing from AI response)
@@ -55,12 +55,12 @@ leanring_buddyApp (entry)
 - `@Published lastTranscript` -- most recent voice transcription
 - `@Published currentAudioPowerLevel` -- real-time mic level for UI meters
 - `@Published hasAccessibilityPermission` / `hasScreenRecordingPermission` / `hasMicrophonePermission` / `hasScreenContentPermission` -- permission tracking
-- `@Published detectedElementScreenLocation` -- parsed from Claude response, drives claw flight animation
+- `@Published detectedElementScreenLocation` -- parsed from model response, drives claw flight animation
 - `@Published detectedElementDisplayFrame` -- which display the detected element is on
-- Owns `BuddyDictationManager`, `ClaudeAPI`, `ElevenLabsTTSClient`, `CompanionResponseOverlayManager`
+- Owns `BuddyDictationManager`, `OpenAIAPI`, `ClaudeAPI`, `ElevenLabsTTSClient`, `CompanionResponseOverlayManager`
 - `startListening()` -- begins push-to-talk capture pipeline
-- `stopListening()` -- finalizes transcript, triggers screen capture + Claude call
-- Voice flow: mic capture -> transcription -> screenshot -> Claude vision -> TTS -> overlay
+- `stopListening()` -- finalizes transcript, triggers screen capture + selected model call
+- Voice flow: mic capture -> transcription -> screenshot -> OpenAI/Claude vision -> optional Solana context -> TTS -> overlay
 
 ### CompanionPanelView.swift
 - SwiftUI view hosted inside the menu bar panel (~761 lines)
@@ -136,7 +136,7 @@ leanring_buddyApp (entry)
   - `controlOptionSpace` (ctrl + option + space)
   - `shiftControlSpace` (shift + control + space)
 - Handles audio session lifecycle, mic permissions, and format negotiation
-- Routes final transcript back to CompanionManager for Claude API call
+- Routes final transcript back to CompanionManager for the selected model call
 
 ### BuddyTranscriptionProvider.swift
 - `BuddyStreamingTranscriptionSession` protocol:
@@ -189,9 +189,10 @@ leanring_buddyApp (entry)
 - Streaming SSE parsing for progressive text display
 
 ### OpenAIAPI.swift
-- `OpenAIAPI` -- GPT-4o alternative to Claude (~142 lines)
-- Same proxy architecture and streaming pattern
-- Used when user selects GPT-4o in the model picker
+- `OpenAIAPI` -- default Responses API vision client (~285 lines)
+- Routes through Clawd Gateway `/openai/responses`, so `OPENAI_API_KEY` stays server-side
+- Streams `response.output_text.delta` events for progressive text display
+- Model default: `gpt-5.5`
 
 ### ElevenLabsTTSClient.swift
 - Text-to-speech output via ElevenLabs API (~81 lines)
@@ -213,7 +214,7 @@ leanring_buddyApp (entry)
 - Single source of truth for all visual styling
 
 ### ElementLocationDetector.swift
-- Parses Claude's `[CLAW:x,y:label:screenN]` tags from response text (~335 lines)
+- Parses model `[CLAW:x,y:label:screenN]` tags from response text (~335 lines)
 - Maps coordinates to correct monitor in multi-display setups
 - Feeds `detectedElementScreenLocation` + `detectedElementDisplayFrame` to trigger claw flight animation
 
