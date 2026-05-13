@@ -249,26 +249,26 @@ final class SolanaClawdMenuBarController: NSObject, NSApplicationDelegate {
             let market = self.fetchMarketSnapshot()
 
             DispatchQueue.main.async {
-            let daemon = (status["daemon"] as? String) ?? "offline"
-            let mode = (status["oodaMode"] as? String) ?? "unknown"
-            let watchlist = (status["watchlistCount"] as? Int) ?? 0
-            let honcho = (status["honchoEnabled"] as? Bool) == true ? "on" : "off"
-            let gatewayLine = connectBundle?.gateway.url ?? "not paired"
+                let daemon = (status["daemon"] as? String) ?? "offline"
+                let mode = (status["oodaMode"] as? String) ?? "unknown"
+                let watchlist = (status["watchlistCount"] as? Int) ?? 0
+                let honcho = (status["honchoEnabled"] as? Bool) == true ? "on" : "off"
+                let gatewayLine = connectBundle?.gateway.url ?? "not paired"
 
-            self.statusMenuItem.title = "Runtime: \(daemon) | \(mode) | watchlist \(watchlist) | honcho \(honcho)"
-            self.detailMenuItem.title = "Gateway: \(gatewayLine)"
-            self.marketMenuItem.title = market.title
-            self.marketDetailMenuItem.title = market.detail
-            self.latestChartURL = market.chartURL
+                self.statusMenuItem.title = "Runtime: \(daemon) | \(mode) | watchlist \(watchlist) | honcho \(honcho)"
+                self.detailMenuItem.title = "Gateway: \(gatewayLine)"
+                self.marketMenuItem.title = market.title
+                self.marketDetailMenuItem.title = market.detail
+                self.latestChartURL = market.chartURL
 
-            switch daemon {
-            case "alive", "running":
-                self.statusItem.button?.title = "CLAWD"
-            case "starting":
-                self.statusItem.button?.title = "CLAWD..."
-            default:
-                self.statusItem.button?.title = "$CLAWD"
-            }
+                switch daemon {
+                case "alive", "running":
+                    self.statusItem.button?.title = "CLAWD"
+                case "starting":
+                    self.statusItem.button?.title = "CLAWD..."
+                default:
+                    self.statusItem.button?.title = "$CLAWD"
+                }
             }
         }
     }
