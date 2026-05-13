@@ -45,6 +45,42 @@ Full benchmark report: [docs/beam-benchmark.md](docs/beam-benchmark.md)
 pip install mnemosyne-memory
 ```
 
+## OpenClawd Brain Mode
+
+This repo also ships a Solana-Clawd brain layer on top of Mnemosyne. It keeps
+the fast SQLite memory bank, but adds a persistent Obsidian-style markdown vault
+for durable wiki notes, research queues, OODA journal imports, perp/trade
+signals, wallet dossiers, protocol notes, and agent harness context.
+
+From the `solana-clawd` repo root:
+
+```bash
+npm run brain:init
+npm run brain:status
+npm run brain:ingest-ooda
+```
+
+From inside `MemeBRain`:
+
+```bash
+python3 -m mnemosyne.clawd_brain init
+python3 -m mnemosyne.clawd_brain remember "Jupiter Perps Risk" "Track [[Jupiter]] liquidity, funding, and route quality." --kind perp --tag solana
+python3 -m mnemosyne.clawd_brain research "https://docs.jup.ag/"
+python3 -m mnemosyne.clawd_brain research "BONK perp venue risk"
+python3 -m mnemosyne.clawd_brain recall "BONK perp risk"
+```
+
+The default bank is `clawd`; the default vault is `MemeBRain/vault`. Override it
+with `CLAWD_BRAIN_VAULT=/path/to/vault`. The vault is plain markdown with YAML
+frontmatter and `[[wiki links]]`, so it can be opened directly in Obsidian.
+
+MCP clients get three Clawd-specific tools in addition to the base Mnemosyne
+tools:
+
+- `clawd_brain_remember`
+- `clawd_brain_recall`
+- `clawd_brain_research`
+
 > **Note:** The package name on PyPI is `mnemosyne-memory`.
 
 With all optional features (dense retrieval + local LLM consolidation):

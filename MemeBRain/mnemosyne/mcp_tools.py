@@ -27,6 +27,7 @@ except ImportError:
     ErrorData = None
 
 from mnemosyne.core.memory import Mnemosyne
+from mnemosyne.clawd_brain import BrainConfig, ClawdBrain
 
 # ---------------------------------------------------------------------------
 # Tool Schemas
@@ -197,6 +198,44 @@ _GET_STATS_SCHEMA = {
     }
 }
 
+_CLAWD_REMEMBER_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "title": {"type": "string", "description": "Obsidian note title."},
+        "content": {"type": "string", "description": "Memory/wiki note body."},
+        "kind": {
+            "type": "string",
+            "description": "note, research, signal, trade, agent, protocol, wallet, or perp.",
+            "default": "note",
+        },
+        "source": {"type": "string", "description": "Source label or URL.", "default": "mcp"},
+        "tags": {"type": "array", "items": {"type": "string"}, "default": []},
+        "importance": {"type": "number", "default": 0.65},
+        "bank": {"type": "string", "default": "clawd"},
+    },
+    "required": ["title", "content"],
+}
+
+_CLAWD_RECALL_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "query": {"type": "string", "description": "Search query."},
+        "top_k": {"type": "integer", "default": 8},
+        "bank": {"type": "string", "default": "clawd"},
+    },
+    "required": ["query"],
+}
+
+_CLAWD_RESEARCH_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "target": {"type": "string", "description": "URL to archive or topic to queue."},
+        "tags": {"type": "array", "items": {"type": "string"}, "default": []},
+        "bank": {"type": "string", "default": "clawd"},
+    },
+    "required": ["target"],
+}
+
 # ---------------------------------------------------------------------------
 # Tool Definitions
 # ---------------------------------------------------------------------------
@@ -231,6 +270,21 @@ TOOLS: List[Dict[str, Any]] = [
         "name": "mnemosyne_get_stats",
         "description": "Get memory system statistics (counts, banks, last memory).",
         "inputSchema": _GET_STATS_SCHEMA
+    },
+    {
+        "name": "clawd_brain_remember",
+        "description": "Store a Solana-Clawd memory in the persistent Mnemosyne bank and Obsidian-style wiki vault.",
+        "inputSchema": _CLAWD_REMEMBER_SCHEMA
+    },
+    {
+        "name": "clawd_brain_recall",
+        "description": "Recall Clawd memories and matching wiki notes from the persistent brain.",
+        "inputSchema": _CLAWD_RECALL_SCHEMA
+    },
+    {
+        "name": "clawd_brain_research",
+        "description": "Archive a research URL or queue a Solana/perp/agent research topic in the Clawd brain.",
+        "inputSchema": _CLAWD_RESEARCH_SCHEMA
     }
 ]
 
@@ -413,6 +467,35 @@ def _handle_get_stats(arguments: Dict[str, Any]) -> Dict[str, Any]:
     }
 
 
+def _create_clawd_brain(arguments: Dict[str, Any]) -> ClawdBrain:
+    bank = arguments.get("bank") or "clawd"
+    return ClawdBrain(BrainConfig(bank=bank))
+
+
+def _handle_clawd_remember(arguments: Dict[str, Any]) -> Dict[str, Any]:
+    brain = _create_clawd_brain(arguments)
+    result = brain.remember(
+        arguments["title"],
+        arguments["content"],
+        kind=arguments.get("kind", "note"),
+        source=arguments.get("source", "mcp"),
+        tags=arguments.get("tags", []),
+        importance=arguments.get("importance", 0.65),
+    )
+    return {"status": "stored", "result": result, "bank": brain.config.bank}
+
+
+def _handle_clawd_recall(arguments: Dict[str, Any]) -> Dict[str, Any]:
+    brain = _create_clawd_brain(arguments)
+    return {"status": "ok", "result": brain.recall(arguments["query"], arguments.get("top_k", 8)), "bank": brain.config.bank}
+
+
+def _handle_clawd_research(arguments: Dict[str, Any]) -> Dict[str, Any]:
+    brain = _create_clawd_brain(arguments)
+    result = brain.auto_research(arguments["target"], tags=arguments.get("tags", []))
+    return {"status": "queued" if result else "ok", "result": result, "bank": brain.config.bank}
+
+
 # ---------------------------------------------------------------------------
 # Dispatch
 # ---------------------------------------------------------------------------
@@ -424,6 +507,9 @@ _TOOL_HANDLERS = {
     "mnemosyne_scratchpad_read": _handle_scratchpad_read,
     "mnemosyne_scratchpad_write": _handle_scratchpad_write,
     "mnemosyne_get_stats": _handle_get_stats,
+    "clawd_brain_remember": _handle_clawd_remember,
+    "clawd_brain_recall": _handle_clawd_recall,
+    "clawd_brain_research": _handle_clawd_research,
 }
 
 

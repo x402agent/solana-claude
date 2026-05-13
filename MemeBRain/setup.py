@@ -52,6 +52,10 @@ setup(
         "vector-store",
         "honcho",
         "zep",
+        "solana",
+        "perpetual-trading",
+        "obsidian",
+        "agentic-harness",
     ],
     project_urls={
         "Bug Reports": "https://github.com/AxDSan/mnemosyne/issues",
@@ -70,6 +74,7 @@ setup(
             "mnemosyne-install=mnemosyne.install:install",
             "mnemosyne-uninstall=mnemosyne.install:uninstall",
             "mnemosyne=mnemosyne.cli:run_cli",
+            "clawd-brain=mnemosyne.clawd_brain:run_cli",
         ],
     },
 )

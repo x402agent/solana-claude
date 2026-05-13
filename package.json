@@ -74,7 +74,11 @@
     "skills:catalog": "node scripts/generate-skills-catalog.js",
     "skills:serve": "node scripts/generate-skills-catalog.js && cp skills/catalog.json web/skills/catalog.json && npx serve web/skills -p 3333",
     "ext:dev": "echo 'Load chrome-extension/clawd-agent as unpacked extension in chrome://extensions'",
-    "ext:vault": "npm --prefix packages/agentwallet start"
+    "ext:vault": "npm --prefix packages/agentwallet start",
+    "brain:init": "cd MemeBRain && python3 -m mnemosyne.clawd_brain init",
+    "brain:status": "cd MemeBRain && python3 -m mnemosyne.clawd_brain status",
+    "brain:ingest-ooda": "cd MemeBRain && python3 -m mnemosyne.clawd_brain ingest-ooda",
+    "brain:mcp": "cd MemeBRain && python3 -m mnemosyne.cli mcp --bank clawd"
   },
   "dependencies": {
     "@ai-sdk/xai": "^1.2.0",

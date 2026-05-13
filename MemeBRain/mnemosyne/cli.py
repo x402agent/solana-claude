@@ -233,6 +233,12 @@ def cmd_mcp(args):
         sys.exit(1)
 
 
+def cmd_clawd(args):
+    """Run OpenClawd brain commands."""
+    from mnemosyne.clawd_brain import run_cli as clawd_run_cli
+    clawd_run_cli(args)
+
+
 def cmd_bank(args):
     """Manage memory banks."""
     if not args:
@@ -283,6 +289,8 @@ COMMANDS = {
     "import": cmd_import,
     "import-hindsight": cmd_import_hindsight,
     "mcp": cmd_mcp,
+    "clawd": cmd_clawd,
+    "clawd-brain": cmd_clawd,
     "bank": cmd_bank,
 }
 
@@ -303,6 +311,8 @@ def run_cli():
         print("  export [file.json]                     Export memories")
         print("  import <file.json>                     Import memories")
         print("  import-hindsight <file|url> [bank]      Import Hindsight memories")
+        print("  clawd <init|remember|recall|research|ingest-ooda|status>")
+        print("                                          OpenClawd persistent brain/wiki")
         print("  bank list|create|delete [name]         Manage memory banks")
         print("  mcp [--transport sse] [--port 8080]    Start MCP server")
         return

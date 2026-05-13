@@ -2,6 +2,10 @@ name = "beepboop-clawd-gateway"
 main = "src/index.ts"
 compatibility_date = "2024-01-01"
 
+[assets]
+directory = "../site"
+binding = "ASSETS"
+
 [vars]
 ELEVENLABS_VOICE_ID = "kPzsL2i3teMYv0FxEYQ6"
 SOLANA_NETWORK = "mainnet-beta"

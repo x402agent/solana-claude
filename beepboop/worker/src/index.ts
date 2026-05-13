@@ -22,6 +22,7 @@
  */
 
 interface Env {
+  ASSETS?: Fetcher;
   ANTHROPIC_API_KEY?: string;
   OPENAI_API_KEY?: string;
   ELEVENLABS_API_KEY?: string;
@@ -48,6 +49,10 @@ export default {
     // Handle CORS preflight
     if (request.method === "OPTIONS") {
       return new Response(null, { status: 204, headers: CORS_HEADERS });
+    }
+
+    if (url.pathname === "/site" || url.pathname.startsWith("/site/")) {
+      return handleSiteAsset(request, env);
     }
 
     if (url.pathname === "/" && request.method === "GET") {
@@ -131,6 +136,21 @@ export default {
     return new Response("Not found. The claw doesn't reach there.", { status: 404 });
   },
 };
+
+// ── Static Site ─────────────────────────────────────────────────────
+
+function handleSiteAsset(request: Request, env: Env): Response | Promise<Response> {
+  if (!env.ASSETS) {
+    return new Response("Site assets are not configured for this deployment.", { status: 503 });
+  }
+
+  const assetUrl = new URL(request.url);
+  if (assetUrl.pathname === "/site") {
+    assetUrl.pathname = "/site/";
+  }
+
+  return env.ASSETS.fetch(new Request(assetUrl, request));
+}
 
 // ── Health Check ─────────────────────────────────────────────────────
 

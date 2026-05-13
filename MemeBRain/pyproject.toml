@@ -21,6 +21,10 @@ keywords = [
     "context",
     "embeddings",
     "vector-store",
+    "solana",
+    "perpetual-trading",
+    "obsidian",
+    "agentic-harness",
 ]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
@@ -53,6 +57,7 @@ Documentation = "https://github.com/AxDSan/mnemosyne/blob/main/docs/README.md"
 mnemosyne-install = "mnemosyne.install:install"
 mnemosyne-uninstall = "mnemosyne.install:uninstall"
 mnemosyne = "mnemosyne.cli:run_cli"
+clawd-brain = "mnemosyne.clawd_brain:run_cli"
 
 [tool.setuptools.packages.find]
 exclude = ["tests*", "benchmark*", "scripts*", "docs*", "assets*"]

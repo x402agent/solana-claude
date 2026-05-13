@@ -3,12 +3,12 @@
 // export dynamically through wrangler, or we can potentially let users directly
 // add them as a sort of "plugin" system.
 
-import ENTRY, { __INTERNAL_WRANGLER_MIDDLEWARE__ } from "/Users/8bit/bots/Cladwbot-solana/solana-clawd/beepboop/worker/.wrangler/tmp/bundle-bNGp34/middleware-insertion-facade.js";
+import ENTRY, { __INTERNAL_WRANGLER_MIDDLEWARE__ } from "/Users/8bit/bots/Cladwbot-solana/solana-clawd/beepboop/worker/.wrangler/tmp/bundle-mVPGmP/middleware-insertion-facade.js";
 import { __facade_invoke__, __facade_register__, Dispatcher } from "/opt/homebrew/Cellar/cloudflare-wrangler/4.64.0/libexec/lib/node_modules/wrangler/templates/middleware/common.ts";
-import type { WorkerEntrypointConstructor } from "/Users/8bit/bots/Cladwbot-solana/solana-clawd/beepboop/worker/.wrangler/tmp/bundle-bNGp34/middleware-insertion-facade.js";
+import type { WorkerEntrypointConstructor } from "/Users/8bit/bots/Cladwbot-solana/solana-clawd/beepboop/worker/.wrangler/tmp/bundle-mVPGmP/middleware-insertion-facade.js";
 
 // Preserve all the exports from the worker
-export * from "/Users/8bit/bots/Cladwbot-solana/solana-clawd/beepboop/worker/.wrangler/tmp/bundle-bNGp34/middleware-insertion-facade.js";
+export * from "/Users/8bit/bots/Cladwbot-solana/solana-clawd/beepboop/worker/.wrangler/tmp/bundle-mVPGmP/middleware-insertion-facade.js";
 
 class __Facade_ScheduledController__ implements ScheduledController {
 	readonly #noRetry: ScheduledController["noRetry"];

@@ -1,7 +1,7 @@
 var __defProp = Object.defineProperty;
 var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
 
-// .wrangler/tmp/bundle-bNGp34/checked-fetch.js
+// .wrangler/tmp/bundle-mVPGmP/checked-fetch.js
 var urls = /* @__PURE__ */ new Set();
 function checkURL(request, init) {
   const url = request instanceof URL ? request : new URL(
@@ -38,6 +38,9 @@ var src_default = {
     const url = new URL(request.url);
     if (request.method === "OPTIONS") {
       return new Response(null, { status: 204, headers: CORS_HEADERS });
+    }
+    if (url.pathname === "/site" || url.pathname.startsWith("/site/")) {
+      return handleSiteAsset(request, env);
     }
     if (url.pathname === "/" && request.method === "GET") {
       return handleHealth(env);
@@ -93,6 +96,17 @@ var src_default = {
     return new Response("Not found. The claw doesn't reach there.", { status: 404 });
   }
 };
+function handleSiteAsset(request, env) {
+  if (!env.ASSETS) {
+    return new Response("Site assets are not configured for this deployment.", { status: 503 });
+  }
+  const assetUrl = new URL(request.url);
+  if (assetUrl.pathname === "/site") {
+    assetUrl.pathname = "/site/";
+  }
+  return env.ASSETS.fetch(new Request(assetUrl, request));
+}
+__name(handleSiteAsset, "handleSiteAsset");
 function handleHealth(env) {
   const network = env.SOLANA_NETWORK || "mainnet-beta";
   return new Response(
@@ -537,7 +551,7 @@ var jsonError = /* @__PURE__ */ __name(async (request, env, _ctx, middlewareCtx)
 }, "jsonError");
 var middleware_miniflare3_json_error_default = jsonError;
 
-// .wrangler/tmp/bundle-bNGp34/middleware-insertion-facade.js
+// .wrangler/tmp/bundle-mVPGmP/middleware-insertion-facade.js
 var __INTERNAL_WRANGLER_MIDDLEWARE__ = [
   middleware_ensure_req_body_drained_default,
   middleware_miniflare3_json_error_default
@@ -569,7 +583,7 @@ function __facade_invoke__(request, env, ctx, dispatch, finalMiddleware) {
 }
 __name(__facade_invoke__, "__facade_invoke__");
 
-// .wrangler/tmp/bundle-bNGp34/middleware-loader.entry.ts
+// .wrangler/tmp/bundle-mVPGmP/middleware-loader.entry.ts
 var __Facade_ScheduledController__ = class ___Facade_ScheduledController__ {
   constructor(scheduledTime, cron, noRetry) {
     this.scheduledTime = scheduledTime;
