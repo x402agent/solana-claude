@@ -18,6 +18,7 @@
  *   GET  /solana/address-transactions -> Helius enhanced address history
  *   GET  /solana/price                -> Birdeye token price
  *   GET  /solana/wallet-tokens        -> Birdeye wallet token balances
+ *   GET  /wallet.html                 -> Dynamic Solana wallet page
  *   GET  /health                      -> Clawd health check
  */
 
@@ -34,6 +35,9 @@ interface Env {
   HELIUS_API_KEY?: string;
   HELIUS_WSS_URL?: string;
   BIRDEYE_API_KEY?: string;
+  DYNAMIC_API_KEY?: string;
+  DYNAMIC_ENVIRONMENT_ID?: string;
+  DYNAMIC_ORGANIZATION_ID?: string;
 }
 
 const CORS_HEADERS = {
@@ -51,7 +55,13 @@ export default {
       return new Response(null, { status: 204, headers: CORS_HEADERS });
     }
 
-    if (url.pathname === "/site" || url.pathname.startsWith("/site/")) {
+    if (
+      request.method === "GET" &&
+      (url.pathname === "/site" ||
+        url.pathname.startsWith("/site/") ||
+        url.pathname === "/wallet.html" ||
+        url.pathname.startsWith("/assets/"))
+    ) {
       return handleSiteAsset(request, env);
     }
 
@@ -146,7 +156,9 @@ function handleSiteAsset(request: Request, env: Env): Response | Promise<Respons
 
   const assetUrl = new URL(request.url);
   if (assetUrl.pathname === "/site") {
-    assetUrl.pathname = "/site/";
+    assetUrl.pathname = "/";
+  } else if (assetUrl.pathname.startsWith("/site/")) {
+    assetUrl.pathname = assetUrl.pathname.slice("/site".length) || "/";
   }
 
   return env.ASSETS.fetch(new Request(assetUrl, request));
@@ -173,12 +185,14 @@ function handleHealth(env: Env): Response {
           "/solana/address-transactions",
           "/solana/price",
           "/solana/wallet-tokens",
+          "/wallet.html",
         ],
         providers: {
           anthropic: Boolean(env.ANTHROPIC_API_KEY),
           openai: Boolean(env.OPENAI_API_KEY),
           helius: Boolean(env.HELIUS_RPC_URL || env.HELIUS_API_KEY),
           birdeye: Boolean(env.BIRDEYE_API_KEY),
+          dynamic: Boolean(env.DYNAMIC_ENVIRONMENT_ID),
           solanaWebsocket: Boolean(env.HELIUS_WSS_URL),
         },
         timestamp: new Date().toISOString(),

@@ -31,6 +31,12 @@ struct CompanionPanelView: View {
 
                 modelPickerRow
                     .padding(.horizontal, 16)
+
+                Spacer()
+                    .frame(height: 12)
+
+                tokenPricesSection
+                    .padding(.horizontal, 16)
             }
 
             if !companionManager.allPermissionsGranted {
@@ -49,7 +55,7 @@ struct CompanionPanelView: View {
                     .padding(.horizontal, 16)
             }
 
-            // Show Clicky toggle — hidden for now
+            // Show Clawd toggle — hidden for now
             // if companionManager.hasCompletedOnboarding && companionManager.allPermissionsGranted {
             //     Spacer()
             //         .frame(height: 16)
@@ -62,7 +68,7 @@ struct CompanionPanelView: View {
                 Spacer()
                     .frame(height: 16)
 
-                dmFarzaButton
+                feedbackButton
                     .padding(.horizontal, 16)
             }
 
@@ -92,7 +98,7 @@ struct CompanionPanelView: View {
                     .frame(width: 8, height: 8)
                     .shadow(color: statusDotColor.opacity(0.6), radius: 4)
 
-                Text("Clicky")
+                Text("Clawd")
                     .font(.system(size: 14, weight: .semibold))
                     .foregroundColor(DS.Colors.textPrimary)
             }
@@ -142,7 +148,7 @@ struct CompanionPanelView: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
         } else if companionManager.allPermissionsGranted {
-            Text("You're all set. Hit Start to meet Clicky.")
+            Text("You're all set. Hit Start to meet Clawd.")
                 .font(.system(size: 12, weight: .medium))
                 .foregroundColor(DS.Colors.textSecondary)
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -153,7 +159,7 @@ struct CompanionPanelView: View {
                     .font(.system(size: 12, weight: .bold))
                     .foregroundColor(DS.Colors.textSecondary)
 
-                Text("Some permissions were revoked. Grant all four below to keep using Clicky.")
+                Text("Some permissions were revoked. Grant all four below to keep using Clawd.")
                     .font(.system(size: 11))
                     .foregroundColor(DS.Colors.textTertiary)
                     .fixedSize(horizontal: false, vertical: true)
@@ -161,16 +167,16 @@ struct CompanionPanelView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
         } else {
             VStack(alignment: .leading, spacing: 6) {
-                Text("Hi, I'm Farza. This is Clicky.")
+                Text("Meet Clawd.")
                     .font(.system(size: 12, weight: .bold))
                     .foregroundColor(DS.Colors.textSecondary)
 
-                Text("A side project I made for fun to help me learn stuff as I use my computer.")
+                Text("A lobster-themed screen companion that helps while you work.")
                     .font(.system(size: 11))
                     .foregroundColor(DS.Colors.textTertiary)
                     .fixedSize(horizontal: false, vertical: true)
 
-                Text("Nothing runs in the background. Clicky will only take a screenshot when you press the hot key. So, you can give that permission in peace. If you are still sus, eh, I can't do much there champ.")
+                Text("Clawd only takes a screenshot when you press the hot key. The claw stays tucked away until you ask for help.")
                     .font(.system(size: 11))
                     .foregroundColor(Color(red: 0.9, green: 0.4, blue: 0.4))
                     .fixedSize(horizontal: false, vertical: true)
@@ -545,7 +551,7 @@ struct CompanionPanelView: View {
 
 
 
-    // MARK: - Show Clicky Cursor Toggle
+    // MARK: - Show Clawd Cursor Toggle
 
     private var showClickyCursorToggleRow: some View {
         HStack {
@@ -555,7 +561,7 @@ struct CompanionPanelView: View {
                     .foregroundColor(DS.Colors.textTertiary)
                     .frame(width: 16)
 
-                Text("Show Clicky")
+                Text("Show Clawd")
                     .font(.system(size: 13, weight: .medium))
                     .foregroundColor(DS.Colors.textSecondary)
             }
@@ -643,11 +649,11 @@ struct CompanionPanelView: View {
         .pointerCursor()
     }
 
-    // MARK: - DM Farza Button
+    // MARK: - Feedback Button
 
-    private var dmFarzaButton: some View {
+    private var feedbackButton: some View {
         Button(action: {
-            if let url = URL(string: "https://x.com/farzatv") {
+            if let url = URL(string: "https://x.com/8bit") {
                 NSWorkspace.shared.open(url)
             }
         }) {
@@ -656,9 +662,9 @@ struct CompanionPanelView: View {
                     .font(.system(size: 12, weight: .medium))
 
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("Got feedback? DM me")
+                    Text("Got feedback for Clawd?")
                         .font(.system(size: 12, weight: .semibold))
-                    Text("Bugs, ideas, anything — I read every message.")
+                    Text("Bugs, ideas, claw upgrades.")
                         .font(.system(size: 10))
                         .foregroundColor(DS.Colors.textTertiary)
                 }
@@ -690,7 +696,7 @@ struct CompanionPanelView: View {
                 HStack(spacing: 6) {
                     Image(systemName: "power")
                         .font(.system(size: 11, weight: .medium))
-                    Text("Quit Clicky")
+                    Text("Quit Clawd")
                         .font(.system(size: 12, weight: .medium))
                 }
                 .foregroundColor(DS.Colors.textTertiary)
@@ -705,8 +711,9 @@ struct CompanionPanelView: View {
                     companionManager.replayOnboarding()
                 }) {
                     HStack(spacing: 6) {
-                        Image(systemName: "play.circle")
-                            .font(.system(size: 11, weight: .medium))
+                        LobsterClawMark()
+                            .fill(DS.Colors.textTertiary)
+                            .frame(width: 13, height: 13)
                         Text("Watch Onboarding Again")
                             .font(.system(size: 12, weight: .medium))
                     }
@@ -716,6 +723,102 @@ struct CompanionPanelView: View {
                 .pointerCursor()
             }
         }
+    }
+
+    // MARK: - Token Prices
+
+    private var tokenPricesSection: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack {
+                HStack(spacing: 6) {
+                    LobsterClawMark()
+                        .fill(DS.Colors.accentText)
+                        .frame(width: 14, height: 14)
+                    Text("Solana Prices")
+                        .font(.system(size: 12, weight: .semibold))
+                        .foregroundColor(DS.Colors.textSecondary)
+                }
+
+                Spacer()
+
+                Button(action: {
+                    companionManager.refreshTokenPrices()
+                }) {
+                    Image(systemName: companionManager.isRefreshingTokenPrices ? "arrow.triangle.2.circlepath" : "arrow.clockwise")
+                        .font(.system(size: 10, weight: .semibold))
+                        .foregroundColor(DS.Colors.textTertiary)
+                        .frame(width: 20, height: 20)
+                }
+                .buttonStyle(.plain)
+                .pointerCursor()
+            }
+
+            LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 6), count: 2), spacing: 6) {
+                ForEach(companionManager.solanaTokenPrices) { token in
+                    tokenPriceTile(token)
+                }
+            }
+
+            if let tokenPriceError = companionManager.tokenPriceError {
+                Text(tokenPriceError)
+                    .font(.system(size: 10, weight: .medium))
+                    .foregroundColor(DS.Colors.warning)
+            }
+        }
+        .padding(10)
+        .background(
+            RoundedRectangle(cornerRadius: DS.CornerRadius.medium, style: .continuous)
+                .fill(Color.white.opacity(0.05))
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: DS.CornerRadius.medium, style: .continuous)
+                .stroke(DS.Colors.borderSubtle, lineWidth: 0.5)
+        )
+    }
+
+    private func tokenPriceTile(_ token: SolanaTokenPrice) -> some View {
+        VStack(alignment: .leading, spacing: 3) {
+            HStack {
+                Text(token.symbol)
+                    .font(.system(size: 10, weight: .bold, design: .rounded))
+                    .foregroundColor(DS.Colors.textTertiary)
+                Spacer(minLength: 4)
+                if let change = token.priceChange24h {
+                    Text(formatPercent(change))
+                        .font(.system(size: 10, weight: .semibold))
+                        .foregroundColor(change >= 0 ? DS.Colors.success : DS.Colors.destructiveText)
+                        .lineLimit(1)
+                }
+            }
+
+            Text(formatPrice(token.price))
+                .font(.system(size: 12, weight: .semibold, design: .rounded))
+                .foregroundColor(DS.Colors.textPrimary)
+                .lineLimit(1)
+                .minimumScaleFactor(0.75)
+        }
+        .padding(.horizontal, 8)
+        .padding(.vertical, 7)
+        .background(
+            RoundedRectangle(cornerRadius: 6, style: .continuous)
+                .fill(Color.black.opacity(0.14))
+        )
+    }
+
+    private func formatPrice(_ price: Double?) -> String {
+        guard let price else { return "--" }
+        if price >= 100 {
+            return String(format: "$%.2f", price)
+        }
+        if price >= 1 {
+            return String(format: "$%.4f", price)
+        }
+        return String(format: "$%.6f", price)
+    }
+
+    private func formatPercent(_ value: Double) -> String {
+        let sign = value >= 0 ? "+" : ""
+        return "\(sign)\(String(format: "%.1f", value))%"
     }
 
     // MARK: - Visual Helpers
@@ -738,8 +841,32 @@ struct CompanionPanelView: View {
             return DS.Colors.blue400
         case .processing, .responding:
             return DS.Colors.blue400
-        }
     }
+}
+
+struct LobsterClawMark: Shape {
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+        let w = rect.width
+        let h = rect.height
+
+        path.move(to: CGPoint(x: 0.46 * w, y: 0.95 * h))
+        path.addCurve(to: CGPoint(x: 0.55 * w, y: 0.52 * h), control1: CGPoint(x: 0.50 * w, y: 0.80 * h), control2: CGPoint(x: 0.54 * w, y: 0.66 * h))
+        path.addCurve(to: CGPoint(x: 0.88 * w, y: 0.16 * h), control1: CGPoint(x: 0.66 * w, y: 0.36 * h), control2: CGPoint(x: 0.80 * w, y: 0.20 * h))
+        path.addCurve(to: CGPoint(x: 0.70 * w, y: 0.48 * h), control1: CGPoint(x: 0.91 * w, y: 0.32 * h), control2: CGPoint(x: 0.83 * w, y: 0.44 * h))
+        path.addCurve(to: CGPoint(x: 0.96 * w, y: 0.62 * h), control1: CGPoint(x: 0.81 * w, y: 0.50 * h), control2: CGPoint(x: 0.91 * w, y: 0.54 * h))
+        path.addCurve(to: CGPoint(x: 0.56 * w, y: 0.72 * h), control1: CGPoint(x: 0.84 * w, y: 0.78 * h), control2: CGPoint(x: 0.68 * w, y: 0.77 * h))
+        path.addCurve(to: CGPoint(x: 0.30 * w, y: 0.93 * h), control1: CGPoint(x: 0.48 * w, y: 0.80 * h), control2: CGPoint(x: 0.40 * w, y: 0.88 * h))
+        path.closeSubpath()
+
+        path.move(to: CGPoint(x: 0.49 * w, y: 0.50 * h))
+        path.addCurve(to: CGPoint(x: 0.22 * w, y: 0.10 * h), control1: CGPoint(x: 0.37 * w, y: 0.37 * h), control2: CGPoint(x: 0.25 * w, y: 0.20 * h))
+        path.addCurve(to: CGPoint(x: 0.40 * w, y: 0.53 * h), control1: CGPoint(x: 0.10 * w, y: 0.32 * h), control2: CGPoint(x: 0.20 * w, y: 0.49 * h))
+        path.addCurve(to: CGPoint(x: 0.49 * w, y: 0.50 * h), control1: CGPoint(x: 0.43 * w, y: 0.52 * h), control2: CGPoint(x: 0.46 * w, y: 0.51 * h))
+
+        return path
+    }
+}
 
     private var statusText: String {
         if !companionManager.hasCompletedOnboarding || !companionManager.allPermissionsGranted {

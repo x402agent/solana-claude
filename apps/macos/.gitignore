@@ -1,0 +1,5 @@
+.build/
+SolanaOSMenuBar
+SolanaOS Menu Bar.app/
+Solana Clawd.app/
+*.dmg

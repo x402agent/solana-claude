@@ -1,0 +1,135 @@
+:root {
+  color-scheme: dark;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #05030b;
+  color: #fff7ed;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 78% 16%, rgba(20, 241, 149, 0.18), transparent 28rem),
+    radial-gradient(circle at 20% 10%, rgba(234, 88, 12, 0.28), transparent 24rem),
+    linear-gradient(135deg, #05030b, #160802 58%, #090507);
+}
+
+button {
+  font: inherit;
+}
+
+.wallet-shell {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 28px;
+}
+
+.wallet-panel {
+  width: min(520px, 100%);
+  border: 1px solid rgba(253, 186, 116, 0.28);
+  border-radius: 8px;
+  background: rgba(9, 5, 7, 0.82);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.42);
+  padding: 22px;
+}
+
+.brand-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.claw-mark {
+  width: 42px;
+  height: 42px;
+  background: linear-gradient(135deg, #fb923c, #ea580c 54%, #7f1d1d);
+  clip-path: polygon(45% 100%, 55% 54%, 88% 16%, 70% 48%, 97% 62%, 56% 72%, 30% 94%, 50% 52%, 22% 10%, 40% 53%);
+  filter: drop-shadow(0 0 16px rgba(251, 146, 60, 0.42));
+}
+
+.eyebrow {
+  margin: 0 0 4px;
+  color: #14f195;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+h1 {
+  margin: 0;
+  font-size: 32px;
+  line-height: 1;
+  letter-spacing: 0;
+}
+
+.wallet-action {
+  margin-top: 22px;
+  display: flex;
+}
+
+.wallet-card {
+  margin-top: 18px;
+  display: grid;
+  gap: 5px;
+  padding: 14px;
+  border: 1px solid rgba(255, 237, 213, 0.12);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.wallet-card span {
+  color: #fdba74;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.wallet-card strong {
+  font-size: 18px;
+}
+
+.wallet-card small {
+  color: #fed7aa;
+}
+
+.token-strip {
+  margin-top: 18px;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.token-strip a {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+  color: inherit;
+  text-decoration: none;
+  padding: 10px;
+  border: 1px solid rgba(253, 186, 116, 0.16);
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.22);
+}
+
+.token-strip span {
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.token-strip small {
+  overflow: hidden;
+  color: #b8acd4;
+  font-size: 10px;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 520px) {
+  .token-strip {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

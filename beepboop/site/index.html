@@ -327,6 +327,22 @@
     color: #05030b;
     cursor: pointer;
     font-weight: 900;
+    display: grid;
+    place-items: center;
+  }
+
+  .play-button::before {
+    content: "";
+    width: 24px;
+    height: 24px;
+    background: #05030b;
+    clip-path: polygon(45% 100%, 55% 54%, 88% 16%, 70% 48%, 97% 62%, 56% 72%, 30% 94%, 50% 52%, 22% 10%, 40% 53%);
+  }
+
+  .play-button.is-playing::before {
+    width: 18px;
+    height: 22px;
+    clip-path: polygon(0 0, 35% 0, 35% 100%, 0 100%, 0 0, 65% 0, 100% 0, 100% 100%, 65% 100%, 65% 0);
   }
 
   .player-row {
@@ -613,6 +629,7 @@
       </a>
       <nav class="nav" aria-label="Primary navigation">
         <a href="#use">Use it</a>
+        <a href="/wallet.html">Wallet</a>
         <a href="#gateway">Gateway</a>
         <a href="#architecture">Architecture</a>
         <a href="#grow">Grow</a>
@@ -632,7 +649,7 @@
         </p>
         <div class="hero-actions">
           <a class="button" href="#use">Run the app</a>
-          <a class="button secondary" href="#gateway">Test gateway</a>
+          <a class="button secondary" href="/wallet.html">Open wallet</a>
           <a class="button ghost" href="../README.md">Read docs</a>
         </div>
         <div class="music-player" aria-label="Solana Clawd music player">
@@ -642,7 +659,7 @@
               <strong>Solana Clawd</strong>
               <span>official launch loop</span>
             </div>
-            <button class="play-button" id="play-button" aria-label="Play Solana Clawd track">▶</button>
+            <button class="play-button" id="play-button" aria-label="Play Solana Clawd track"></button>
           </div>
           <div class="player-row">
             <input class="seek" id="seek" type="range" min="0" max="100" value="0" aria-label="Track progress">
@@ -871,12 +888,12 @@ open beepboop/leanring-buddy.xcodeproj</pre>
   });
 
   audio.addEventListener("play", () => {
-    playButton.textContent = "Ⅱ";
+    playButton.classList.add("is-playing");
     playButton.setAttribute("aria-label", "Pause Solana Clawd track");
   });
 
   audio.addEventListener("pause", () => {
-    playButton.textContent = "▶";
+    playButton.classList.remove("is-playing");
     playButton.setAttribute("aria-label", "Play Solana Clawd track");
   });
 

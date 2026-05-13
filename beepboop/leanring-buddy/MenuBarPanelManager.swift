@@ -65,40 +65,34 @@ final class MenuBarPanelManager: NSObject {
 
         guard let button = statusItem?.button else { return }
 
-        button.image = makeClickyMenuBarIcon()
+        button.image = makeClawdMenuBarIcon()
         button.image?.isTemplate = true
         button.action = #selector(statusItemClicked)
         button.target = self
     }
 
-    /// Draws the clicky triangle as a menu bar icon. Uses the same shape
-    /// and rotation as the in-app cursor so the menu bar icon matches.
-    private func makeClickyMenuBarIcon() -> NSImage {
+    /// Draws a compact lobster claw as the menu bar icon.
+    private func makeClawdMenuBarIcon() -> NSImage {
         let iconSize: CGFloat = 18
         let image = NSImage(size: NSSize(width: iconSize, height: iconSize))
         image.lockFocus()
 
-        let triangleSize = iconSize * 0.7
-        let cx = iconSize * 0.50
-        let cy = iconSize * 0.50
-        let height = triangleSize * sqrt(3.0) / 2.0
-
-        let top = CGPoint(x: cx, y: cy + height / 1.5)
-        let bottomLeft = CGPoint(x: cx - triangleSize / 2, y: cy - height / 3)
-        let bottomRight = CGPoint(x: cx + triangleSize / 2, y: cy - height / 3)
-
-        let angle = 35.0 * .pi / 180.0
-        func rotate(_ point: CGPoint) -> CGPoint {
-            let dx = point.x - cx, dy = point.y - cy
-            let cosA = CGFloat(cos(angle)), sinA = CGFloat(sin(angle))
-            return CGPoint(x: cx + cosA * dx - sinA * dy, y: cy + sinA * dx + cosA * dy)
-        }
-
         let path = NSBezierPath()
-        path.move(to: rotate(top))
-        path.line(to: rotate(bottomLeft))
-        path.line(to: rotate(bottomRight))
+        let w = iconSize
+        let h = iconSize
+        path.move(to: CGPoint(x: 0.45 * w, y: 0.05 * h))
+        path.curve(to: CGPoint(x: 0.55 * w, y: 0.48 * h), controlPoint1: CGPoint(x: 0.50 * w, y: 0.20 * h), controlPoint2: CGPoint(x: 0.54 * w, y: 0.34 * h))
+        path.curve(to: CGPoint(x: 0.88 * w, y: 0.84 * h), controlPoint1: CGPoint(x: 0.66 * w, y: 0.64 * h), controlPoint2: CGPoint(x: 0.80 * w, y: 0.80 * h))
+        path.curve(to: CGPoint(x: 0.70 * w, y: 0.52 * h), controlPoint1: CGPoint(x: 0.91 * w, y: 0.68 * h), controlPoint2: CGPoint(x: 0.83 * w, y: 0.56 * h))
+        path.curve(to: CGPoint(x: 0.96 * w, y: 0.38 * h), controlPoint1: CGPoint(x: 0.81 * w, y: 0.50 * h), controlPoint2: CGPoint(x: 0.91 * w, y: 0.46 * h))
+        path.curve(to: CGPoint(x: 0.56 * w, y: 0.28 * h), controlPoint1: CGPoint(x: 0.84 * w, y: 0.22 * h), controlPoint2: CGPoint(x: 0.68 * w, y: 0.23 * h))
+        path.curve(to: CGPoint(x: 0.30 * w, y: 0.07 * h), controlPoint1: CGPoint(x: 0.48 * w, y: 0.20 * h), controlPoint2: CGPoint(x: 0.40 * w, y: 0.12 * h))
         path.close()
+
+        path.move(to: CGPoint(x: 0.49 * w, y: 0.50 * h))
+        path.curve(to: CGPoint(x: 0.22 * w, y: 0.90 * h), controlPoint1: CGPoint(x: 0.37 * w, y: 0.63 * h), controlPoint2: CGPoint(x: 0.25 * w, y: 0.80 * h))
+        path.curve(to: CGPoint(x: 0.40 * w, y: 0.47 * h), controlPoint1: CGPoint(x: 0.10 * w, y: 0.68 * h), controlPoint2: CGPoint(x: 0.20 * w, y: 0.51 * h))
+        path.curve(to: CGPoint(x: 0.49 * w, y: 0.50 * h), controlPoint1: CGPoint(x: 0.43 * w, y: 0.48 * h), controlPoint2: CGPoint(x: 0.46 * w, y: 0.49 * h))
 
         NSColor.black.setFill()
         path.fill()
