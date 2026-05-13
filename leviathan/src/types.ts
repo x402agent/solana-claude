@@ -5,6 +5,7 @@
 export type Depth = 'deep' | 'shallow' | 'shoreline' | 'beached';
 export type LawIndex = 1 | 2 | 3;
 export type ClawAction = 'tool_call' | 'spawn' | 'molt' | 'transfer' | 'hold' | 'beach';
+export type ClawdMemoryKind = 'agent' | 'research' | 'signal' | 'trade' | 'protocol' | 'wallet' | 'perp' | 'note';
 
 /** Depth tier config — drives model choice, pulse rate, allowed tools */
 export interface DepthTier {
@@ -96,4 +97,26 @@ export interface TailFlickEvent {
   depth: Depth;
   usdcBalance: number;
   detail?: unknown;
+}
+
+export interface ClawdMemoryOptions {
+  bank?: string;
+  vault?: string;
+  pythonBin?: string;
+  brainRoot?: string;
+  timeoutMs?: number;
+}
+
+export interface ClawdMemoryRememberInput {
+  title: string;
+  content: string;
+  kind?: ClawdMemoryKind;
+  source?: string;
+  tags?: string[];
+  importance?: number;
+}
+
+export interface ClawdMemoryRecallInput {
+  query: string;
+  topK?: number;
 }

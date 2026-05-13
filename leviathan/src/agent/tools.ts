@@ -7,7 +7,7 @@
  * Depth surface:
  *   deep      — all tools
  *   shallow   — all except spawn_spawnling, jupiter_swap
- *   shoreline — solana_balance, wallet_brief, ooda_signal, shell_write, hold
+ *   shoreline — solana_balance, wallet_brief, ooda_signal, shell_write, Clawd Memory tools, hold
  *   beached   — process exits before any tool is called
  */
 
@@ -40,6 +40,47 @@ export const TOOLS: Tool[] = [
         address: { type: 'string', description: 'Solana base58 pubkey.' },
       },
       required: ['address'],
+    },
+  },
+
+  // ── Clawd Memory ────────────────────────────────────────────────────────
+  {
+    name: 'clawd_memory_recall',
+    description: 'Recall durable Clawd Brain memories before acting. Use for prior decisions, wallet notes, protocol research, preferences, and risk context.',
+    input_schema: {
+      type: 'object' as const,
+      properties: {
+        query: { type: 'string', description: 'Specific memory query.' },
+        topK: { type: 'number', description: 'Maximum results. Default 6.' },
+      },
+      required: ['query'],
+    },
+  },
+  {
+    name: 'clawd_memory_remember',
+    description: 'Write a durable memory into Clawd Brain. Never store secrets. Use for decisions, risk findings, protocol notes, wallet labels, and learnings.',
+    input_schema: {
+      type: 'object' as const,
+      properties: {
+        title: { type: 'string', description: 'Short durable title.' },
+        content: { type: 'string', description: 'Factual content to remember. No secrets.' },
+        kind: { type: 'string', enum: ['agent', 'research', 'signal', 'trade', 'protocol', 'wallet', 'perp', 'note'], description: 'Memory kind.' },
+        tags: { type: 'array', items: { type: 'string' }, description: 'Tags such as clawd, leviathan, solana, wallet, perp.' },
+        importance: { type: 'number', description: '0.0 to 1.0. Default 0.7.' },
+      },
+      required: ['title', 'content'],
+    },
+  },
+  {
+    name: 'clawd_memory_research',
+    description: 'Archive a URL or queue a research topic into the Clawd markdown vault for later recall.',
+    input_schema: {
+      type: 'object' as const,
+      properties: {
+        target: { type: 'string', description: 'URL or research topic.' },
+        tags: { type: 'array', items: { type: 'string' }, description: 'Research tags.' },
+      },
+      required: ['target'],
     },
   },
 

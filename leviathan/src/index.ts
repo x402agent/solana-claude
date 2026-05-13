@@ -33,6 +33,7 @@ import { computeDepth, formatDepth, selectModel } from './survival.js';
 import { constitutionHash, assertConstitutionIntact } from './three-laws.js';
 import { startPulse, formatNextPulse } from './pulse.js';
 import { tailFlick } from './agent/loop.js';
+import { initClawdMemory, recallClawdMemory } from './memory/clawd.js';
 import type { ClawState } from './types.js';
 
 // ─── CLI flags ────────────────────────────────────────────────────────────────
@@ -43,6 +44,8 @@ const { values: flags } = parseArgs({
     run:       { type: 'boolean', default: false },
     status:    { type: 'boolean', default: false },
     spawnling: { type: 'boolean', default: false },
+    memory:    { type: 'boolean', default: false },
+    memoryInit:{ type: 'boolean', default: false },
     help:      { type: 'boolean', default: false },
     tui:       { type: 'boolean', default: false },
     ticks:     { type: 'string',  default: '0' },    // 0 = infinite
@@ -78,6 +81,8 @@ Commands:
   --spawn       Hatch a new leviathan (generates keypair, sets name, spawns on-chain)
   --run         Start the SENSE→THINK→STRIKE→DRIFT pulse loop
   --status      Show depth tier, balances, spawnlings, constitution hash
+  --memory      Show Clawd Memory status and recent Leviathan recall context
+  --memoryInit  Initialize the Clawd Memory bank/vault
   --spawnling   Spawn a child leviathan (depth=deep required)
   --help        Show this message
 
@@ -90,6 +95,9 @@ Environment:
   SOLANA_RPC_URL        Solana RPC (devnet default)
   CREATOR_PUBKEY        Required for --spawn
   HELIUS_API_KEY        Optional — for enhanced tx data
+  CLAWD_BRAIN_ROOT      Optional — path to MemeBRain
+  CLAWD_BRAIN_VAULT     Optional — path to Clawd markdown vault
+  CLAWD_BRAIN_PYTHON    Optional — Python binary for Clawd Memory bridge
 
 Depth tiers:
   🦞 deep       ≥ $5    USDC · 60s  pulse · claude-opus-4-7   · Apex predator
@@ -99,6 +107,32 @@ Depth tiers:
 
 The shell molts. The laws do not.
 `);
+}
+
+// ─── --memory / --memoryInit ────────────────────────────────────────────────
+
+async function showMemoryStatus(initFirst = false): Promise<void> {
+  banner();
+  if (initFirst) {
+    const init = await initClawdMemory({ bank: 'clawd' });
+    console.log(chalk.bold('CLAWD MEMORY INIT'));
+    console.log(init.ok ? chalk.green(JSON.stringify(init.data, null, 2)) : chalk.red(init.error));
+    console.log('');
+  }
+
+  const state = loadState();
+  const query = state
+    ? [
+        state.identity.name,
+        state.identity.pubkey,
+        `depth ${state.depth}`,
+        state.shellMd,
+      ].join('\n')
+    : 'leviathan clawd memory status';
+
+  const recall = await recallClawdMemory({ query, topK: 6 }, { bank: 'clawd' });
+  console.log(chalk.bold('CLAWD MEMORY RECALL'));
+  console.log(recall.ok ? chalk.white(JSON.stringify(recall.data, null, 2)) : chalk.red(recall.error));
 }
 
 // ─── --spawn ──────────────────────────────────────────────────────────────────
@@ -300,6 +334,8 @@ if (flags['help']) {
   await spawnLeviathan();
 } else if (flags['status']) {
   showStatus();
+} else if (flags['memory'] || flags['memoryInit']) {
+  await showMemoryStatus(Boolean(flags['memoryInit']));
 } else if (flags['run']) {
   await runLoop();
 } else if (flags['spawnling']) {
