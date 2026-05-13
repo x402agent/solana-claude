@@ -3,1447 +3,719 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Beep Boop - The Solana Clawd Demo</title>
+<title>Beep Boop - Solana Clawd for macOS</title>
+<meta name="description" content="Beep Boop is a macOS voice and vision companion for OpenAI, Claude, Solana, Helius, Birdeye, AssemblyAI, and ElevenLabs.">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+  * { box-sizing: border-box; }
 
   :root {
-    --bg: #101211;
-    --surface1: #171918;
-    --surface2: #202221;
-    --surface3: #272A29;
-    --border-subtle: #373B39;
-    --border-strong: #444947;
-    --text-primary: #ECEEED;
-    --text-secondary: #ADB5B2;
-    --text-tertiary: #6B736F;
-    --lobster-50: #fff7ed;
-    --lobster-100: #ffedd5;
-    --lobster-200: #fed7aa;
-    --lobster-300: #fdba74;
-    --lobster-400: #fb923c;
-    --lobster-500: #f97316;
-    --lobster-600: #ea580c;
-    --lobster-700: #c2410c;
-    --lobster-800: #9a3412;
-    --lobster-900: #7c2d12;
-    --lobster-950: #431407;
-    --solana-green: #14F195;
-    --solana-purple: #9945FF;
-    --success: #34D399;
+    --ink: #17120f;
+    --paper: #f7f2e8;
+    --paper-strong: #fffaf0;
+    --line: rgba(23, 18, 15, 0.16);
+    --muted: #6d625b;
+    --muted-2: #92877f;
+    --red: #d83a2e;
+    --red-dark: #9f211a;
+    --blue: #1769aa;
+    --green: #16855a;
+    --yellow: #f3bc3f;
+    --black: #100d0b;
+    --panel: rgba(255, 250, 240, 0.86);
+    --shadow: 0 24px 70px rgba(52, 39, 28, 0.18);
   }
 
   html { scroll-behavior: smooth; }
 
   body {
-    background: var(--bg);
-    color: var(--text-primary);
-    font-family: 'Space Grotesk', -apple-system, sans-serif;
-    overflow-x: hidden;
-    cursor: none;
-  }
-
-  /* ── CUSTOM CLAW CURSOR ── */
-  #claw-cursor {
-    position: fixed;
-    pointer-events: none;
-    z-index: 10000;
-    transform: translate(-12px, -4px);
-    transition: transform 0.05s linear;
-    filter: drop-shadow(0 0 8px rgba(234, 88, 12, 0.5));
-  }
-
-  #claw-cursor svg {
-    width: 36px;
-    height: 36px;
-  }
-
-  /* ── LOBSTER CLAW BUDDY ── */
-  #claw-buddy {
-    position: fixed;
-    pointer-events: none;
-    z-index: 9999;
-    transition: left 0.15s cubic-bezier(0.34, 1.56, 0.64, 1), top 0.15s cubic-bezier(0.34, 1.56, 0.64, 1);
-    filter: drop-shadow(0 0 12px rgba(234, 88, 12, 0.4));
-  }
-
-  #claw-buddy svg {
-    width: 44px;
-    height: 44px;
-  }
-
-  /* ── SPEECH BUBBLE ── */
-  #speech-bubble {
-    position: fixed;
-    pointer-events: none;
-    z-index: 9998;
-    background: var(--surface1);
-    border: 1px solid rgba(234, 88, 12, 0.25);
-    border-radius: 10px;
-    padding: 10px 14px;
-    font-size: 13px;
-    color: var(--text-primary);
-    max-width: 300px;
-    line-height: 1.5;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
-    opacity: 0;
-    transform: scale(0.8);
-    transition: opacity 0.3s, transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-  }
-
-  #speech-bubble.visible {
-    opacity: 1;
-    transform: scale(1);
-  }
-
-  /* ── WAVEFORM ── */
-  #waveform {
-    position: fixed;
-    pointer-events: none;
-    z-index: 9997;
-    display: flex;
-    align-items: center;
-    gap: 2px;
-    opacity: 0;
-    transition: opacity 0.3s;
-  }
-
-  #waveform.visible { opacity: 1; }
-
-  .wave-bar {
-    width: 3px;
-    background: var(--lobster-400);
-    border-radius: 2px;
-    animation: waveAnim 0.6s ease-in-out infinite alternate;
-  }
-
-  @keyframes waveAnim {
-    0% { height: 4px; }
-    100% { height: 18px; }
-  }
-
-  /* ── HERO SECTION ── */
-  .hero {
+    margin: 0;
+    color: var(--ink);
+    background:
+      linear-gradient(90deg, rgba(23, 18, 15, 0.045) 1px, transparent 1px) 0 0 / 44px 44px,
+      linear-gradient(0deg, rgba(23, 18, 15, 0.035) 1px, transparent 1px) 0 0 / 44px 44px,
+      radial-gradient(circle at 74% 12%, rgba(216, 58, 46, 0.16), transparent 28rem),
+      radial-gradient(circle at 14% 18%, rgba(243, 188, 63, 0.22), transparent 26rem),
+      var(--paper);
+    font-family: "Instrument Sans", sans-serif;
     min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    padding: 40px 20px;
-    text-align: center;
   }
 
-  .hero-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 6px 14px;
-    background: var(--lobster-950);
-    border: 1px solid var(--lobster-800);
-    border-radius: 20px;
-    font-size: 0.8rem;
-    color: var(--lobster-300);
-    margin-bottom: 24px;
-  }
+  a { color: inherit; text-decoration: none; }
+  button, input { font: inherit; }
 
-  .hero-badge .dot {
-    width: 6px; height: 6px;
-    background: var(--solana-green);
-    border-radius: 50%;
-    animation: dotPulse 2s infinite;
-  }
-
-  @keyframes dotPulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.3; }
-  }
-
-  .hero h1 {
-    font-size: clamp(3rem, 8vw, 5.5rem);
-    font-weight: 700;
-    letter-spacing: -2px;
-    line-height: 1.05;
-    margin-bottom: 20px;
-  }
-
-  .hero h1 .gradient {
-    background: linear-gradient(135deg, var(--lobster-400), var(--lobster-600), var(--lobster-300));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  .hero-sub {
-    font-size: 1.2rem;
-    color: var(--text-secondary);
-    max-width: 560px;
-    line-height: 1.6;
-    margin-bottom: 40px;
-  }
-
-  .hero-cta {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 14px 28px;
-    background: var(--lobster-600);
-    color: white;
-    border: none;
-    border-radius: 12px;
-    font-family: inherit;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: none;
-    transition: background 0.2s, transform 0.2s;
-    text-decoration: none;
-  }
-
-  .hero-cta:hover {
-    background: var(--lobster-700);
-    transform: translateY(-2px);
-  }
-
-  .scroll-hint {
-    position: absolute;
-    bottom: 30px;
-    color: var(--text-tertiary);
-    font-size: 0.8rem;
-    animation: scrollBounce 2s infinite;
-  }
-
-  @keyframes scrollBounce {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(6px); }
-  }
-
-  /* ── DEMO SECTIONS ── */
-  section {
-    padding: 100px 20px;
-    max-width: 1100px;
+  .shell {
+    width: min(1180px, calc(100% - 32px));
     margin: 0 auto;
   }
 
-  .section-label {
-    font-size: 0.75rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    color: var(--lobster-400);
-    margin-bottom: 12px;
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    backdrop-filter: blur(18px);
+    background: rgba(247, 242, 232, 0.78);
+    border-bottom: 1px solid var(--line);
   }
 
-  .section-title {
-    font-size: clamp(2rem, 4vw, 3rem);
-    font-weight: 700;
-    letter-spacing: -1px;
-    margin-bottom: 16px;
+  .topbar-inner {
+    width: min(1180px, calc(100% - 32px));
+    margin: 0 auto;
+    min-height: 66px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
   }
 
-  .section-desc {
-    font-size: 1.05rem;
-    color: var(--text-secondary);
-    max-width: 600px;
-    line-height: 1.6;
-    margin-bottom: 48px;
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 800;
+    letter-spacing: 0;
   }
 
-  /* ── SIMULATED SCREEN ── */
-  .sim-screen {
-    position: relative;
-    background: var(--surface1);
-    border: 1px solid var(--border-subtle);
-    border-radius: 16px;
-    overflow: hidden;
-    box-shadow: 0 24px 80px rgba(0,0,0,0.5);
+  .brand img {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    box-shadow: 0 8px 18px rgba(216, 58, 46, 0.22);
   }
 
-  .sim-titlebar {
+  .nav {
     display: flex;
     align-items: center;
     gap: 8px;
-    padding: 12px 16px;
-    background: var(--surface2);
-    border-bottom: 1px solid var(--border-subtle);
+    color: var(--muted);
+    font-size: 0.94rem;
   }
 
-  .sim-dot { width: 12px; height: 12px; border-radius: 50%; }
-  .sim-dot.red { background: #FF5F57; }
-  .sim-dot.yellow { background: #FEBC2E; }
-  .sim-dot.green { background: #28C840; }
-
-  .sim-titlebar-text {
-    flex: 1;
-    text-align: center;
-    font-size: 0.8rem;
-    color: var(--text-tertiary);
+  .nav a {
+    padding: 9px 11px;
+    border-radius: 6px;
   }
 
-  .sim-body {
-    padding: 32px;
-    min-height: 400px;
-    position: relative;
-  }
+  .nav a:hover { background: rgba(23, 18, 15, 0.06); color: var(--ink); }
 
-  /* ── DEMO: PUSH TO TALK ── */
-  .ptt-demo {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 24px;
-    min-height: 380px;
-  }
-
-  .ptt-keys {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-family: 'JetBrains Mono', monospace;
-  }
-
-  .ptt-key {
+  .button {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 8px 16px;
-    background: var(--surface3);
-    border: 1px solid var(--border-strong);
-    border-radius: 8px;
-    font-size: 0.9rem;
-    color: var(--text-secondary);
-    box-shadow: 0 2px 0 var(--border-subtle);
-    transition: all 0.15s;
-  }
-
-  .ptt-key.active {
-    background: var(--lobster-600);
-    border-color: var(--lobster-500);
-    color: white;
-    box-shadow: 0 0 16px rgba(234, 88, 12, 0.4);
-    transform: translateY(2px);
-  }
-
-  .ptt-plus {
-    color: var(--text-tertiary);
-    font-size: 1.2rem;
-  }
-
-  .ptt-status {
-    font-size: 0.9rem;
-    color: var(--text-tertiary);
-    transition: color 0.3s;
-  }
-
-  .ptt-status.listening {
-    color: var(--lobster-400);
-  }
-
-  .ptt-waveform-display {
-    display: flex;
-    align-items: center;
-    gap: 3px;
-    height: 40px;
-    opacity: 0;
-    transition: opacity 0.3s;
-  }
-
-  .ptt-waveform-display.active { opacity: 1; }
-
-  .ptt-bar {
-    width: 4px;
-    background: var(--lobster-400);
-    border-radius: 2px;
-    transition: height 0.1s;
-  }
-
-  /* ── DEMO: SCREENSHOT + CLAUDE ── */
-  .vision-demo {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 24px;
-    align-items: start;
-  }
-
-  @media (max-width: 768px) {
-    .vision-demo { grid-template-columns: 1fr; }
-  }
-
-  .vision-screenshot {
-    background: var(--surface2);
-    border: 1px solid var(--border-subtle);
-    border-radius: 12px;
-    padding: 20px;
-    position: relative;
-  }
-
-  .vision-screenshot .scan-line {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, var(--lobster-400), transparent);
-    opacity: 0;
-    animation: scanDown 3s ease-in-out infinite;
-    animation-delay: 1s;
-  }
-
-  @keyframes scanDown {
-    0% { top: 0; opacity: 0; }
-    10% { opacity: 1; }
-    90% { opacity: 1; }
-    100% { top: 100%; opacity: 0; }
-  }
-
-  .vision-screenshot-label {
-    font-size: 0.7rem;
-    font-family: 'JetBrains Mono', monospace;
-    color: var(--lobster-400);
-    margin-bottom: 12px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-
-  .vision-mock-ui {
-    display: flex;
-    flex-direction: column;
     gap: 8px;
-  }
-
-  .mock-line {
-    height: 10px;
-    background: var(--surface3);
-    border-radius: 4px;
-  }
-
-  .mock-line.short { width: 60%; }
-  .mock-line.medium { width: 80%; }
-  .mock-line.long { width: 95%; }
-
-  .mock-btn {
-    display: inline-block;
-    width: 80px;
-    height: 28px;
-    background: var(--lobster-600);
-    border-radius: 6px;
-    margin-top: 8px;
-    position: relative;
-  }
-
-  .mock-btn .claw-target {
-    position: absolute;
-    top: -6px;
-    right: -6px;
-    width: 16px;
-    height: 16px;
-    border: 2px solid var(--lobster-400);
-    border-radius: 50%;
-    animation: targetPulse 1.5s infinite;
-  }
-
-  @keyframes targetPulse {
-    0%, 100% { transform: scale(1); opacity: 1; }
-    50% { transform: scale(1.4); opacity: 0.3; }
-  }
-
-  .vision-response {
-    background: var(--surface2);
-    border: 1px solid var(--border-subtle);
-    border-radius: 12px;
-    padding: 20px;
-  }
-
-  .vision-response-label {
-    font-size: 0.7rem;
-    font-family: 'JetBrains Mono', monospace;
-    color: var(--lobster-400);
-    margin-bottom: 12px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-
-  .streaming-text {
-    font-size: 0.9rem;
-    color: var(--text-primary);
-    line-height: 1.7;
-    min-height: 120px;
-  }
-
-  .streaming-text .cursor-blink {
-    display: inline-block;
-    width: 2px;
-    height: 14px;
-    background: var(--lobster-400);
-    margin-left: 2px;
-    animation: blink 0.8s infinite;
-    vertical-align: middle;
-  }
-
-  @keyframes blink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0; }
-  }
-
-  .claw-tag {
-    display: inline;
-    background: var(--lobster-950);
-    border: 1px solid var(--lobster-800);
-    border-radius: 4px;
-    padding: 1px 6px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.75rem;
-    color: var(--lobster-300);
-  }
-
-  /* ── DEMO: SOLANA ── */
-  .solana-demo {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 16px;
-  }
-
-  @media (max-width: 768px) {
-    .solana-demo { grid-template-columns: 1fr; }
-  }
-
-  .sol-card {
-    background: var(--surface2);
-    border: 1px solid var(--border-subtle);
-    border-radius: 12px;
-    padding: 24px;
-    transition: border-color 0.3s, transform 0.3s;
-  }
-
-  .sol-card:hover {
-    border-color: var(--solana-green);
-    transform: translateY(-2px);
-  }
-
-  .sol-card-label {
-    font-size: 0.7rem;
-    font-family: 'JetBrains Mono', monospace;
-    color: var(--text-tertiary);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 8px;
-  }
-
-  .sol-card-value {
-    font-size: 1.8rem;
+    border: 1px solid var(--black);
+    color: var(--paper-strong);
+    background: var(--black);
+    border-radius: 7px;
+    padding: 11px 16px;
     font-weight: 700;
-    font-family: 'JetBrains Mono', monospace;
+    box-shadow: 4px 4px 0 rgba(23, 18, 15, 0.16);
+    cursor: pointer;
+  }
+
+  .button.secondary {
+    background: var(--paper-strong);
+    color: var(--black);
+  }
+
+  .button.ghost {
+    background: transparent;
+    color: var(--black);
+    box-shadow: none;
+  }
+
+  .button:hover { transform: translate(-1px, -1px); box-shadow: 5px 5px 0 rgba(23, 18, 15, 0.2); }
+
+  .hero {
+    min-height: calc(100vh - 66px);
+    display: grid;
+    grid-template-columns: minmax(0, 0.92fr) minmax(360px, 1.08fr);
+    align-items: center;
+    gap: 38px;
+    padding: 54px 0 42px;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 10px;
+    border: 1px solid var(--line);
+    background: rgba(255, 250, 240, 0.68);
+    border-radius: 999px;
+    color: var(--muted);
+    font-size: 0.86rem;
+    font-weight: 700;
+  }
+
+  .pulse {
+    width: 9px;
+    height: 9px;
+    border-radius: 999px;
+    background: var(--green);
+    box-shadow: 0 0 0 6px rgba(22, 133, 90, 0.14);
+  }
+
+  h1 {
+    margin: 22px 0 18px;
+    font-size: clamp(3.2rem, 8vw, 6.7rem);
+    line-height: 0.91;
+    letter-spacing: 0;
+    max-width: 760px;
+  }
+
+  .hero-copy {
+    max-width: 630px;
+    color: var(--muted);
+    font-size: 1.18rem;
+    line-height: 1.55;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 28px;
+  }
+
+  .gateway-strip {
+    margin-top: 30px;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+    max-width: 640px;
+  }
+
+  .status-pill {
+    border: 1px solid var(--line);
+    background: rgba(255, 250, 240, 0.72);
+    border-radius: 7px;
+    padding: 10px;
+    min-height: 58px;
+  }
+
+  .status-pill strong {
+    display: block;
+    font-size: 0.76rem;
+    text-transform: uppercase;
+    color: var(--muted-2);
     margin-bottom: 4px;
   }
 
-  .sol-card-value .sol-symbol {
-    color: var(--solana-green);
+  .status-pill span {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 0.82rem;
+    color: var(--ink);
   }
 
-  .sol-card-sub {
-    font-size: 0.75rem;
-    color: var(--text-tertiary);
-    font-family: 'JetBrains Mono', monospace;
-  }
-
-  .sol-card-network {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    margin-top: 12px;
-    padding: 3px 8px;
-    background: rgba(20, 241, 149, 0.08);
-    border: 1px solid rgba(20, 241, 149, 0.2);
-    border-radius: 4px;
-    font-size: 0.65rem;
-    font-family: 'JetBrains Mono', monospace;
-    color: var(--solana-green);
-  }
-
-  /* ── DEMO: TTS ── */
-  .tts-demo {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 24px;
-  }
-
-  .tts-visualizer {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 3px;
-    height: 80px;
-    width: 100%;
-    max-width: 500px;
-  }
-
-  .tts-vbar {
-    width: 4px;
-    border-radius: 2px;
-    background: var(--lobster-400);
-    transition: height 0.1s;
-  }
-
-  .tts-label {
-    font-size: 0.85rem;
-    color: var(--text-secondary);
-    text-align: center;
-  }
-
-  .tts-voice-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 8px 16px;
-    background: var(--surface2);
-    border: 1px solid var(--border-subtle);
-    border-radius: 8px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.8rem;
-    color: var(--text-secondary);
-  }
-
-  /* ── DEMO: CLAW POINTING ── */
-  .pointing-demo {
+  .hero-card {
     position: relative;
-    min-height: 350px;
-  }
-
-  .point-target {
-    position: absolute;
-    width: 120px;
-    padding: 14px;
-    background: var(--surface3);
-    border: 1px solid var(--border-subtle);
-    border-radius: 10px;
-    font-size: 0.8rem;
-    color: var(--text-secondary);
-    text-align: center;
-    cursor: none;
-    transition: border-color 0.3s, box-shadow 0.3s;
-  }
-
-  .point-target.highlighted {
-    border-color: var(--lobster-400);
-    box-shadow: 0 0 20px rgba(234, 88, 12, 0.2);
-  }
-
-  .point-target-icon {
-    font-size: 1.5rem;
-    margin-bottom: 6px;
-    display: block;
-  }
-
-  /* Bezier flight path SVG */
-  #flight-path-svg {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-  }
-
-  .flight-path {
-    fill: none;
-    stroke: var(--lobster-400);
-    stroke-width: 2;
-    stroke-dasharray: 8 4;
-    opacity: 0.3;
-  }
-
-  .flight-dot {
-    fill: var(--lobster-400);
-    filter: drop-shadow(0 0 4px var(--lobster-400));
-  }
-
-  /* ── GATEWAY LIVE TEST ── */
-  .gateway-live {
-    background: var(--surface1);
-    border: 1px solid var(--border-subtle);
-    border-radius: 16px;
+    border: 1px solid var(--black);
+    background: var(--paper-strong);
+    box-shadow: 12px 12px 0 rgba(23, 18, 15, 0.16);
+    border-radius: 8px;
     overflow: hidden;
   }
 
-  .gateway-terminal-bar {
+  .window-bar {
+    height: 42px;
+    border-bottom: 1px solid var(--black);
     display: flex;
     align-items: center;
-    gap: 8px;
-    padding: 10px 16px;
-    background: var(--surface2);
-    border-bottom: 1px solid var(--border-subtle);
+    justify-content: space-between;
+    padding: 0 14px;
+    background: #f2ddba;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 0.78rem;
   }
 
-  .gateway-terminal-body {
-    padding: 20px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.8rem;
-    line-height: 1.8;
-    color: var(--text-secondary);
-    max-height: 300px;
-    overflow-y: auto;
+  .dots { display: flex; gap: 7px; }
+  .dots i { width: 10px; height: 10px; border-radius: 50%; border: 1px solid var(--black); display: block; }
+  .dots i:nth-child(1) { background: var(--red); }
+  .dots i:nth-child(2) { background: var(--yellow); }
+  .dots i:nth-child(3) { background: var(--green); }
+
+  .demo-image {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    background: #241a17;
   }
 
-  .term-prompt { color: var(--lobster-400); }
-  .term-cmd { color: var(--text-primary); }
-  .term-success { color: var(--success); }
-  .term-key { color: var(--solana-purple); }
-  .term-val { color: var(--lobster-300); }
-  .term-dim { color: var(--text-tertiary); }
-
-  /* ── STACK SECTION ── */
-  .stack-grid {
+  .caption-row {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 16px;
-    margin-top: 48px;
+    grid-template-columns: repeat(3, 1fr);
+    border-top: 1px solid var(--black);
   }
 
-  .stack-item {
+  .caption-row div {
+    padding: 15px;
+    min-height: 86px;
+    border-right: 1px solid var(--black);
+  }
+
+  .caption-row div:last-child { border-right: 0; }
+  .caption-row strong { display: block; margin-bottom: 6px; }
+  .caption-row p { margin: 0; color: var(--muted); font-size: 0.9rem; line-height: 1.35; }
+
+  section {
+    padding: 84px 0;
+    border-top: 1px solid var(--line);
+  }
+
+  .section-head {
     display: flex;
-    align-items: center;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 28px;
+  }
+
+  .section-head h2 {
+    margin: 0;
+    font-size: clamp(2rem, 4vw, 3.6rem);
+    line-height: 0.98;
+    letter-spacing: 0;
+    max-width: 710px;
+  }
+
+  .section-head p {
+    margin: 0;
+    color: var(--muted);
+    line-height: 1.5;
+    max-width: 420px;
+  }
+
+  .grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
     gap: 14px;
-    padding: 18px;
-    background: var(--surface1);
-    border: 1px solid var(--border-subtle);
-    border-radius: 12px;
-    transition: border-color 0.3s;
   }
 
-  .stack-item:hover { border-color: var(--border-strong); }
+  .feature {
+    border: 1px solid var(--black);
+    background: var(--panel);
+    border-radius: 8px;
+    padding: 22px;
+    min-height: 236px;
+    box-shadow: 6px 6px 0 rgba(23, 18, 15, 0.1);
+  }
 
-  .stack-icon {
-    width: 40px;
-    height: 40px;
-    border-radius: 10px;
+  .feature .num {
+    font-family: "JetBrains Mono", monospace;
+    color: var(--red);
+    font-weight: 800;
+    margin-bottom: 22px;
+  }
+
+  .feature h3 { margin: 0 0 10px; font-size: 1.28rem; }
+  .feature p { margin: 0; color: var(--muted); line-height: 1.5; }
+
+  .steps {
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: 18px;
+    align-items: start;
+  }
+
+  .terminal {
+    border: 1px solid var(--black);
+    border-radius: 8px;
+    overflow: hidden;
+    background: #13100f;
+    color: #f8ead6;
+    box-shadow: var(--shadow);
+  }
+
+  .terminal pre {
+    margin: 0;
+    padding: 20px;
+    white-space: pre-wrap;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 0.86rem;
+    line-height: 1.56;
+  }
+
+  .use-list {
+    display: grid;
+    gap: 10px;
+  }
+
+  .use-item {
+    display: grid;
+    grid-template-columns: 44px 1fr;
+    gap: 14px;
+    align-items: start;
+    border: 1px solid var(--line);
+    background: rgba(255, 250, 240, 0.72);
+    border-radius: 8px;
+    padding: 16px;
+  }
+
+  .use-item b {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border: 1px solid var(--black);
+    border-radius: 7px;
+    background: var(--yellow);
+    font-family: "JetBrains Mono", monospace;
+  }
+
+  .use-item h3 { margin: 0 0 5px; }
+  .use-item p { margin: 0; color: var(--muted); line-height: 1.45; }
+
+  .architecture {
+    border: 1px solid var(--black);
+    background: var(--paper-strong);
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 10px 10px 0 rgba(23, 18, 15, 0.12);
+  }
+
+  .flow {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 10px;
+  }
+
+  .flow-card {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 14px;
+    background: rgba(247, 242, 232, 0.76);
+    min-height: 132px;
+  }
+
+  .flow-card small {
+    display: block;
+    font-family: "JetBrains Mono", monospace;
+    color: var(--red);
+    margin-bottom: 14px;
+  }
+
+  .flow-card strong { display: block; margin-bottom: 8px; }
+  .flow-card span { color: var(--muted); font-size: 0.88rem; line-height: 1.35; display: block; }
+
+  .api-console {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+
+  .console-panel {
+    border: 1px solid var(--black);
+    background: var(--paper-strong);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .console-body { padding: 16px; }
+
+  .field {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.3rem;
-    flex-shrink: 0;
+    gap: 8px;
+    margin-top: 12px;
   }
 
-  .stack-item-text h4 {
-    font-size: 0.9rem;
-    font-weight: 600;
-    margin-bottom: 2px;
+  .field input {
+    min-width: 0;
+    flex: 1;
+    border: 1px solid var(--black);
+    border-radius: 7px;
+    background: #fffdf7;
+    padding: 11px 12px;
+    color: var(--ink);
   }
 
-  .stack-item-text p {
-    font-size: 0.75rem;
-    color: var(--text-tertiary);
+  .result {
+    min-height: 148px;
+    margin-top: 12px;
+    border: 1px solid var(--line);
+    background: #17120f;
+    color: #f7f2e8;
+    border-radius: 7px;
+    padding: 14px;
+    overflow: auto;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 0.78rem;
+    line-height: 1.5;
   }
 
-  /* ── FOOTER ── */
+  .growth {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+  }
+
+  .growth-card {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 18px;
+    background: rgba(255, 250, 240, 0.74);
+  }
+
+  .growth-card strong { display: block; margin-bottom: 10px; }
+  .growth-card span { color: var(--muted); line-height: 1.45; display: block; }
+
   .footer {
-    text-align: center;
-    padding: 60px 20px 30px;
-    color: var(--text-tertiary);
-    font-size: 0.8rem;
+    border-top: 1px solid var(--black);
+    background: var(--black);
+    color: var(--paper);
+    padding: 34px 0;
   }
 
-  .footer a { color: var(--lobster-400); text-decoration: none; }
-  .footer a:hover { text-decoration: underline; }
-
-  /* ── FADE-IN ON SCROLL ── */
-  .reveal {
-    opacity: 0;
-    transform: translateY(30px);
-    transition: opacity 0.6s ease, transform 0.6s ease;
+  .footer-inner {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    align-items: center;
   }
 
-  .reveal.visible {
-    opacity: 1;
-    transform: translateY(0);
+  .footer a { color: #f2ddba; text-decoration: underline; text-underline-offset: 3px; }
+
+  @media (max-width: 980px) {
+    .hero, .steps, .api-console { grid-template-columns: 1fr; }
+    .grid-3, .growth { grid-template-columns: repeat(2, 1fr); }
+    .flow { grid-template-columns: repeat(3, 1fr); }
+    .hero { padding-top: 34px; }
+    .section-head { display: block; }
+    .section-head p { margin-top: 12px; }
   }
 
-  /* ── RESPONSIVE ── */
-  @media (max-width: 768px) {
-    section { padding: 60px 16px; }
+  @media (max-width: 680px) {
+    .nav { display: none; }
+    .topbar-inner { min-height: 58px; }
+    .hero { min-height: auto; }
+    h1 { font-size: 3.5rem; }
+    .gateway-strip, .grid-3, .growth, .flow, .caption-row { grid-template-columns: 1fr; }
+    .caption-row div { border-right: 0; border-bottom: 1px solid var(--black); }
+    .caption-row div:last-child { border-bottom: 0; }
+    section { padding: 58px 0; }
+    .footer-inner { display: block; }
+    .footer-inner .button { margin-top: 18px; }
   }
 </style>
 </head>
 <body>
-
-<!-- CLAW CURSOR -->
-<div id="claw-cursor">
-  <svg viewBox="0 0 36 36" fill="none">
-    <path d="M6 4C6 4 3 8 4 12C5 16 8 16 8 16L6 22C6 22 4 26 8 28C12 30 14 27 14 27L16 22L18 27C18 27 20 30 24 28C28 26 26 22 26 22L24 16C24 16 27 16 28 12C29 8 26 4 26 4" stroke="#ea580c" stroke-width="2.5" stroke-linecap="round" fill="#431407"/>
-    <path d="M12 16L16 6L20 16" stroke="#fb923c" stroke-width="1.5" stroke-linecap="round" fill="none"/>
-    <circle cx="13" cy="10" r="1.5" fill="#fb923c"/>
-    <circle cx="19" cy="10" r="1.5" fill="#fb923c"/>
-  </svg>
-</div>
-
-<!-- CLAW BUDDY (follows with spring) -->
-<div id="claw-buddy">
-  <svg viewBox="0 0 44 44" fill="none">
-    <ellipse cx="22" cy="30" rx="10" ry="6" fill="#7c2d12"/>
-    <path d="M8 18C6 12 10 6 16 6L18 14Z" fill="#ea580c" stroke="#fb923c" stroke-width="1"/>
-    <path d="M36 18C38 12 34 6 28 6L26 14Z" fill="#ea580c" stroke="#fb923c" stroke-width="1"/>
-    <ellipse cx="22" cy="22" rx="12" ry="10" fill="#c2410c"/>
-    <ellipse cx="22" cy="22" rx="10" ry="8" fill="#ea580c"/>
-    <circle cx="18" cy="20" r="2.5" fill="#fff7ed"/>
-    <circle cx="26" cy="20" r="2.5" fill="#fff7ed"/>
-    <circle cx="18.5" cy="20.5" r="1.2" fill="#431407"/>
-    <circle cx="26.5" cy="20.5" r="1.2" fill="#431407"/>
-    <path d="M19 26Q22 28 25 26" stroke="#9a3412" stroke-width="1.5" stroke-linecap="round" fill="none"/>
-  </svg>
-</div>
-
-<!-- SPEECH BUBBLE -->
-<div id="speech-bubble"></div>
-
-<!-- WAVEFORM -->
-<div id="waveform"></div>
-
-<!-- ═══════════════════════════════════════ HERO ═══════════════════════════════════════ -->
-
-<div class="hero">
-  <div class="hero-badge"><span class="dot"></span> Built on Solana Mainnet</div>
-  <h1>
-    <span class="gradient">Beep Boop</span><br>
-    The Solana Clawd
-  </h1>
-  <p class="hero-sub">
-    A lobster claw companion that lives in your macOS menu bar. It sees your screen, speaks with a lobster voice, writes code, and connects to Solana.
-  </p>
-  <a href="#demo-ptt" class="hero-cta">
-    See How It Works
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 3v10m0 0l4-4m-4 4L4 9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-  </a>
-  <div class="scroll-hint">Scroll to explore</div>
-</div>
-
-<!-- ═══════════════════════════════════ STEP 1: PUSH TO TALK ═══════════════════════════════════ -->
-
-<section id="demo-ptt">
-  <div class="reveal">
-    <div class="section-label">Step 1</div>
-    <div class="section-title">Push to Talk</div>
-    <p class="section-desc">Hold Ctrl+Option to activate the microphone. Your voice is captured by AVAudioEngine and streamed to AssemblyAI in real-time.</p>
-  </div>
-
-  <div class="sim-screen reveal">
-    <div class="sim-titlebar">
-      <span class="sim-dot red"></span>
-      <span class="sim-dot yellow"></span>
-      <span class="sim-dot green"></span>
-      <span class="sim-titlebar-text">Beep Boop - Push to Talk</span>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="#top" aria-label="Beep Boop home">
+        <img src="assets/app-icon.png" alt="">
+        <span>Beep Boop</span>
+      </a>
+      <nav class="nav" aria-label="Primary navigation">
+        <a href="#use">Use it</a>
+        <a href="#gateway">Gateway</a>
+        <a href="#architecture">Architecture</a>
+        <a href="#grow">Grow</a>
+      </nav>
+      <a class="button" href="#use">Start</a>
     </div>
-    <div class="sim-body">
-      <div class="ptt-demo">
-        <div class="ptt-keys">
-          <span class="ptt-key" id="key-ctrl">Ctrl</span>
-          <span class="ptt-plus">+</span>
-          <span class="ptt-key" id="key-option">Option</span>
+  </header>
+
+  <main id="top" class="shell">
+    <section class="hero" aria-label="Beep Boop overview">
+      <div>
+        <span class="eyebrow"><i class="pulse"></i> live on clawd.x402.wtf</span>
+        <h1>voice, vision, and solana data for your mac.</h1>
+        <p class="hero-copy">
+          Beep Boop is a menu bar companion that sees your screen, listens on push-to-talk, speaks back, points at UI elements, and pulls live Solana context through a Cloudflare gateway.
+        </p>
+        <div class="hero-actions">
+          <a class="button" href="#use">Run the app</a>
+          <a class="button secondary" href="#gateway">Test gateway</a>
+          <a class="button ghost" href="../README.md">Read docs</a>
         </div>
-        <div class="ptt-status" id="ptt-status">Press and hold to talk</div>
-        <div class="ptt-waveform-display" id="ptt-waveform"></div>
-        <div id="ptt-transcript" style="font-size: 0.9rem; color: var(--text-secondary); max-width: 400px; text-align: center; min-height: 24px;"></div>
+        <div class="gateway-strip" id="gateway-strip">
+          <div class="status-pill"><strong>OpenAI</strong><span id="provider-openai">checking</span></div>
+          <div class="status-pill"><strong>Helius</strong><span id="provider-helius">checking</span></div>
+          <div class="status-pill"><strong>Birdeye</strong><span id="provider-birdeye">checking</span></div>
+          <div class="status-pill"><strong>Speech</strong><span id="provider-speech">checking</span></div>
+        </div>
       </div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════════════════════════════ STEP 2: VISION + CLAUDE ═══════════════════════════════════ -->
-
-<section id="demo-vision">
-  <div class="reveal">
-    <div class="section-label">Step 2</div>
-    <div class="section-title">Screenshot + Claude Vision</div>
-    <p class="section-desc">A screenshot is captured via ScreenCaptureKit and sent alongside the transcript to Claude, which sees and understands your screen.</p>
-  </div>
-
-  <div class="vision-demo reveal">
-    <div class="vision-screenshot">
-      <div class="scan-line"></div>
-      <div class="vision-screenshot-label">
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="1" y="1" width="10" height="10" rx="2" stroke="#fb923c" stroke-width="1.5"/><path d="M4 8L6 5L8 8" stroke="#fb923c" stroke-width="1" stroke-linecap="round"/></svg>
-        ScreenCaptureKit Capture
+      <div class="hero-card" aria-label="Beep Boop demo preview">
+        <div class="window-bar">
+          <div class="dots"><i></i><i></i><i></i></div>
+          <span>beepboop.local</span>
+        </div>
+        <img class="demo-image" src="assets/clicky-demo.gif" alt="Beep Boop cursor companion demo">
+        <div class="caption-row">
+          <div><strong>Talk</strong><p>Hold control-option and say what you need.</p></div>
+          <div><strong>See</strong><p>The app sends screen captures through the gateway.</p></div>
+          <div><strong>Point</strong><p>The overlay flies to the relevant UI target.</p></div>
+        </div>
       </div>
-      <div class="vision-mock-ui">
-        <div class="mock-line long"></div>
-        <div class="mock-line medium"></div>
-        <div class="mock-line short"></div>
-        <div class="mock-line long"></div>
-        <div class="mock-line medium"></div>
-        <div style="display: flex; gap: 8px; margin-top: 8px;">
-          <div class="mock-btn">
-            <div class="claw-target"></div>
+    </section>
+
+    <section id="use">
+      <div class="section-head">
+        <h2>how users actually get value in the first minute.</h2>
+        <p>Keep onboarding direct: install, allow permissions, pick GPT 5.5, then ask for screen help or Solana wallet context.</p>
+      </div>
+      <div class="steps">
+        <div class="terminal">
+          <div class="window-bar"><div class="dots"><i></i><i></i><i></i></div><span>local setup</span></div>
+          <pre>cd beepboop/worker
+npx wrangler dev --port 8787
+
+# Xcode app config
+ClawdGatewayBaseURL = https://clawd.x402.wtf
+
+# Run in Xcode
+open beepboop/leanring-buddy.xcodeproj</pre>
+        </div>
+        <div class="use-list">
+          <article class="use-item"><b>01</b><div><h3>Install the macOS app</h3><p>Open the Xcode project, run the app, and grant microphone, accessibility, and screen recording permissions.</p></div></article>
+          <article class="use-item"><b>02</b><div><h3>Choose GPT 5.5</h3><p>The panel now defaults to OpenAI Responses through the deployed gateway, with Claude models still available as fallback.</p></div></article>
+          <article class="use-item"><b>03</b><div><h3>Hold control-option</h3><p>Ask for help with the thing on screen. The assistant can answer, speak, and point at the right place.</p></div></article>
+          <article class="use-item"><b>04</b><div><h3>Ask about a wallet</h3><p>Say a Solana address and the app injects live balance, Helius asset, and Birdeye price context into the model prompt.</p></div></article>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-head">
+        <h2>what it can do for new users.</h2>
+        <p>The product should be sold as a practical assistant, not a novelty. These are the first workflows to show.</p>
+      </div>
+      <div class="grid-3">
+        <article class="feature"><div class="num">screen-01</div><h3>Explain the current app</h3><p>Users can ask what they are looking at, where a control is, or what to do next inside a macOS workflow.</p></article>
+        <article class="feature"><div class="num">code-02</div><h3>Help with build work</h3><p>It can read Xcode, terminal output, docs, and UI state, then speak the next step while pointing at the right target.</p></article>
+        <article class="feature"><div class="num">sol-03</div><h3>Read Solana context</h3><p>Wallet balances, token assets, enhanced transaction history, and token price data are fetched by the gateway.</p></article>
+      </div>
+    </section>
+
+    <section id="gateway">
+      <div class="section-head">
+        <h2>gateway console for demos and support.</h2>
+        <p>Use this to prove the deployed gateway is alive before onboarding a new user or debugging their setup.</p>
+      </div>
+      <div class="api-console">
+        <div class="console-panel">
+          <div class="window-bar"><div class="dots"><i></i><i></i><i></i></div><span>health</span></div>
+          <div class="console-body">
+            <button class="button secondary" id="health-button">Check gateway</button>
+            <div class="result" id="health-result">waiting for check</div>
           </div>
-          <div style="width: 60px; height: 28px; background: var(--surface3); border-radius: 6px;"></div>
         </div>
-        <div class="mock-line short" style="margin-top: 12px;"></div>
-        <div class="mock-line long"></div>
-      </div>
-    </div>
-
-    <div class="vision-response">
-      <div class="vision-response-label">
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="#fb923c" stroke-width="1.5"/><path d="M6 3v3l2 2" stroke="#fb923c" stroke-width="1" stroke-linecap="round"/></svg>
-        Claude SSE Stream
-      </div>
-      <div class="streaming-text" id="stream-text"></div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════════════════════════════ STEP 3: CLAW POINTING ═══════════════════════════════════ -->
-
-<section id="demo-pointing">
-  <div class="reveal">
-    <div class="section-label">Step 3</div>
-    <div class="section-title">Claw Points at UI Elements</div>
-    <p class="section-desc">Claude embeds <code class="claw-tag">[CLAW:x,y:label:screenN]</code> tags in responses. The lobster claw flies along a bezier arc to point at the referenced element.</p>
-  </div>
-
-  <div class="sim-screen reveal">
-    <div class="sim-titlebar">
-      <span class="sim-dot red"></span>
-      <span class="sim-dot yellow"></span>
-      <span class="sim-dot green"></span>
-      <span class="sim-titlebar-text">Claw Overlay - Full Screen NSPanel</span>
-    </div>
-    <div class="sim-body">
-      <div class="pointing-demo" id="pointing-area">
-        <svg id="flight-path-svg"><path class="flight-path" id="flight-path" d=""/></svg>
-
-        <div class="point-target" id="pt-1" style="top: 20px; left: 30px;">
-          <span class="point-target-icon">📝</span>
-          Text Editor
-        </div>
-        <div class="point-target" id="pt-2" style="top: 30px; right: 60px;">
-          <span class="point-target-icon">⚙️</span>
-          Settings
-        </div>
-        <div class="point-target" id="pt-3" style="bottom: 40px; left: 50%; transform: translateX(-50%);">
-          <span class="point-target-icon">🚀</span>
-          Deploy
-        </div>
-        <div class="point-target" id="pt-4" style="bottom: 30px; left: 40px;">
-          <span class="point-target-icon">💰</span>
-          Wallet
-        </div>
-        <div class="point-target" id="pt-5" style="top: 140px; right: 30px;">
-          <span class="point-target-icon">📊</span>
-          Analytics
+        <div class="console-panel">
+          <div class="window-bar"><div class="dots"><i></i><i></i><i></i></div><span>solana lookup</span></div>
+          <div class="console-body">
+            <label for="wallet-input">wallet or mint address</label>
+            <div class="field">
+              <input id="wallet-input" value="vines1vzrYbzLMRdu58ou5XTby4qAqVRLmqo36NKPTg" autocomplete="off">
+              <button class="button secondary" id="wallet-button">Lookup</button>
+            </div>
+            <div class="result" id="wallet-result">waiting for lookup</div>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
-</section>
+    </section>
 
-<!-- ═══════════════════════════════════ STEP 4: SOLANA ═══════════════════════════════════ -->
-
-<section id="demo-solana">
-  <div class="reveal">
-    <div class="section-label">Step 4</div>
-    <div class="section-title">Solana On-Chain Lookups</div>
-    <p class="section-desc">The Clawd Gateway proxies Solana JSON-RPC calls. Balance checks, token accounts, and raw RPC all flow through Cloudflare Workers.</p>
-  </div>
-
-  <div class="solana-demo reveal">
-    <div class="sol-card">
-      <div class="sol-card-label">SOL Balance</div>
-      <div class="sol-card-value"><span class="sol-symbol" id="sol-bal">0.000</span></div>
-      <div class="sol-card-sub">SOL</div>
-      <div class="sol-card-network"><span class="dot" style="width:5px;height:5px;background:var(--solana-green);border-radius:50%;"></span> mainnet-beta</div>
-    </div>
-    <div class="sol-card">
-      <div class="sol-card-label">Lamports</div>
-      <div class="sol-card-value" id="sol-lamports" style="font-size: 1.2rem;">0</div>
-      <div class="sol-card-sub">raw value</div>
-      <div class="sol-card-network"><span class="dot" style="width:5px;height:5px;background:var(--solana-green);border-radius:50%;"></span> JSON-RPC</div>
-    </div>
-    <div class="sol-card">
-      <div class="sol-card-label">Token Accounts</div>
-      <div class="sol-card-value" id="sol-tokens" style="color: var(--solana-purple);">--</div>
-      <div class="sol-card-sub">SPL tokens</div>
-      <div class="sol-card-network"><span class="dot" style="width:5px;height:5px;background:var(--solana-purple);border-radius:50%;"></span> getTokenAccountsByOwner</div>
-    </div>
-  </div>
-
-  <div style="margin-top: 32px;" class="reveal">
-    <div class="gateway-live">
-      <div class="gateway-terminal-bar">
-        <span class="sim-dot red"></span>
-        <span class="sim-dot yellow"></span>
-        <span class="sim-dot green"></span>
-        <span style="flex:1; text-align:center; font-size:0.75rem; color:var(--text-tertiary); font-family:'JetBrains Mono',monospace;">Clawd Gateway - Live</span>
+    <section id="architecture">
+      <div class="section-head">
+        <h2>architecture adapted for the new public launch.</h2>
+        <p>This is the old architecture visualization compressed into a scannable public explanation.</p>
       </div>
-      <div class="gateway-terminal-body" id="gateway-output">
-        <div><span class="term-prompt">$</span> <span class="term-cmd">curl /health</span></div>
-        <div class="term-dim">connecting to beepboop-clawd-gateway...</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════════════════════════════ STEP 5: TTS ═══════════════════════════════════ -->
-
-<section id="demo-tts">
-  <div class="reveal">
-    <div class="section-label">Step 5</div>
-    <div class="section-title">Lobster Voice</div>
-    <p class="section-desc">ElevenLabs converts Claude's response into speech with a custom lobster voice. The audio plays while the claw points at referenced elements.</p>
-  </div>
-
-  <div class="sim-screen reveal">
-    <div class="sim-titlebar">
-      <span class="sim-dot red"></span>
-      <span class="sim-dot yellow"></span>
-      <span class="sim-dot green"></span>
-      <span class="sim-titlebar-text">ElevenLabs TTS - eleven_flash_v2_5</span>
-    </div>
-    <div class="sim-body">
-      <div class="tts-demo">
-        <div class="tts-visualizer" id="tts-visualizer"></div>
-        <div class="tts-label" id="tts-text">"I see you're looking at the deploy button. Click it to ship your changes to mainnet!"</div>
-        <div class="tts-voice-badge">
-          <span style="color: var(--lobster-400);">🦞</span>
-          Voice: Lobster Clawd &bull; kPzsL2i3teMYv0FxEYQ6
+      <div class="architecture">
+        <div class="flow">
+          <div class="flow-card"><small>01</small><strong>Push to talk</strong><span>Control-option starts AVAudioEngine capture in the menu bar app.</span></div>
+          <div class="flow-card"><small>02</small><strong>Transcribe</strong><span>AssemblyAI streams speech through the gateway token route.</span></div>
+          <div class="flow-card"><small>03</small><strong>Capture</strong><span>ScreenCaptureKit captures all displays with pixel dimensions.</span></div>
+          <div class="flow-card"><small>04</small><strong>Reason</strong><span>OpenAI Responses reads transcript, images, and optional Solana context.</span></div>
+          <div class="flow-card"><small>05</small><strong>Speak</strong><span>ElevenLabs returns low-latency voice audio through Cloudflare.</span></div>
+          <div class="flow-card"><small>06</small><strong>Point</strong><span>The overlay parses point tags and animates to the UI target.</span></div>
         </div>
       </div>
-    </div>
-  </div>
-</section>
+    </section>
 
-<!-- ═══════════════════════════════════ TECH STACK ═══════════════════════════════════ -->
+    <section id="grow">
+      <div class="section-head">
+        <h2>how to get new users using it.</h2>
+        <p>Lead with a short proof loop. People should see it point at something useful before they hear a long pitch.</p>
+      </div>
+      <div class="growth">
+        <article class="growth-card"><strong>Demo clip</strong><span>Record a 20 second clip: ask where a button is, show the point animation, then ask about a Solana wallet.</span></article>
+        <article class="growth-card"><strong>Creator install</strong><span>Give early users one command, one Xcode step, and a checklist for permissions.</span></article>
+        <article class="growth-card"><strong>Solana hook</strong><span>Target builders who need wallet and token context while coding or supporting users.</span></article>
+        <article class="growth-card"><strong>Support loop</strong><span>Use the gateway console to debug whether their OpenAI, Helius, Birdeye, speech, and TTS paths are alive.</span></article>
+      </div>
+    </section>
+  </main>
 
-<section id="stack">
-  <div class="reveal">
-    <div class="section-label">Built With</div>
-    <div class="section-title">The Clawd Stack</div>
-  </div>
-
-  <div class="stack-grid reveal">
-    <div class="stack-item">
-      <div class="stack-icon" style="background: rgba(234,88,12,0.1);">🧠</div>
-      <div class="stack-item-text">
-        <h4>Claude</h4>
-        <p>Sonnet & Opus with vision</p>
+  <footer class="footer">
+    <div class="shell footer-inner">
+      <div>
+        <strong>Beep Boop</strong>
+        <p>OpenAI vision, Solana data, voice, and screen pointing for macOS.</p>
       </div>
+      <a class="button secondary" href="https://clawd.x402.wtf/health">Gateway health</a>
     </div>
-    <div class="stack-item">
-      <div class="stack-icon" style="background: rgba(59,130,246,0.1);">🎤</div>
-      <div class="stack-item-text">
-        <h4>AssemblyAI</h4>
-        <p>Real-time websocket STT</p>
-      </div>
-    </div>
-    <div class="stack-item">
-      <div class="stack-icon" style="background: rgba(6,182,212,0.1);">🔊</div>
-      <div class="stack-item-text">
-        <h4>ElevenLabs</h4>
-        <p>Custom lobster TTS voice</p>
-      </div>
-    </div>
-    <div class="stack-item">
-      <div class="stack-icon" style="background: rgba(20,241,149,0.1);">⚡</div>
-      <div class="stack-item-text">
-        <h4>Solana</h4>
-        <p>JSON-RPC via Helius</p>
-      </div>
-    </div>
-    <div class="stack-item">
-      <div class="stack-icon" style="background: rgba(153,69,255,0.1);">☁️</div>
-      <div class="stack-item-text">
-        <h4>Cloudflare Workers</h4>
-        <p>API proxy gateway</p>
-      </div>
-    </div>
-    <div class="stack-item">
-      <div class="stack-icon" style="background: rgba(244,133,95,0.1);">🍎</div>
-      <div class="stack-item-text">
-        <h4>SwiftUI + AppKit</h4>
-        <p>macOS native, menu bar</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<div class="footer">
-  Built with 🦞 &mdash; <a href="https://github.com/julianjear/makesomething-mac-app">GitHub</a> &bull; MIT License
-</div>
+  </footer>
 
 <script>
-// ── CLAW CURSOR ──
-const clawCursor = document.getElementById('claw-cursor');
-const clawBuddy = document.getElementById('claw-buddy');
-const speechBubble = document.getElementById('speech-bubble');
-const waveform = document.getElementById('waveform');
-let mouseX = 0, mouseY = 0;
-let buddyX = 0, buddyY = 0;
+  const GATEWAY = "https://clawd.x402.wtf";
 
-document.addEventListener('mousemove', e => {
-  mouseX = e.clientX;
-  mouseY = e.clientY;
-  clawCursor.style.left = mouseX + 'px';
-  clawCursor.style.top = mouseY + 'px';
-});
-
-// Buddy follows with spring lag
-function updateBuddy() {
-  buddyX += (mouseX + 30 - buddyX) * 0.08;
-  buddyY += (mouseY + 20 - buddyY) * 0.08;
-  clawBuddy.style.left = buddyX + 'px';
-  clawBuddy.style.top = buddyY + 'px';
-
-  speechBubble.style.left = (buddyX + 48) + 'px';
-  speechBubble.style.top = (buddyY - 10) + 'px';
-
-  waveform.style.left = (buddyX + 48) + 'px';
-  waveform.style.top = (buddyY + 12) + 'px';
-
-  requestAnimationFrame(updateBuddy);
-}
-updateBuddy();
-
-// ── SPEECH BUBBLE TRIGGERS ──
-const buddySayings = [
-  "hey! i'm beep boop 🦞",
-  "click that button!",
-  "I see your screen...",
-  "want me to explain this?",
-  "let me check the chain...",
-  "right here!",
-  "deploying to mainnet!",
-];
-
-let sayingIndex = 0;
-function showBuddySpeech(text, duration = 2500) {
-  speechBubble.textContent = text;
-  speechBubble.classList.add('visible');
-  setTimeout(() => speechBubble.classList.remove('visible'), duration);
-}
-
-// Show greeting on load
-setTimeout(() => showBuddySpeech("hey! i'm beep boop 🦞", 3000), 1500);
-
-// ── SCROLL REVEAL ──
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(e => {
-    if (e.isIntersecting) e.target.classList.add('visible');
-  });
-}, { threshold: 0.15 });
-
-document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
-// ── PTT DEMO ──
-const pttObserver = new IntersectionObserver((entries) => {
-  entries.forEach(e => {
-    if (e.isIntersecting) startPTTDemo();
-  });
-}, { threshold: 0.4 });
-
-const pttSection = document.querySelector('#demo-ptt .sim-screen');
-if (pttSection) pttObserver.observe(pttSection);
-
-let pttRunning = false;
-function startPTTDemo() {
-  if (pttRunning) return;
-  pttRunning = true;
-
-  const keyCtrl = document.getElementById('key-ctrl');
-  const keyOption = document.getElementById('key-option');
-  const status = document.getElementById('ptt-status');
-  const waveDiv = document.getElementById('ptt-waveform');
-  const transcript = document.getElementById('ptt-transcript');
-
-  // Create waveform bars
-  waveDiv.innerHTML = '';
-  for (let i = 0; i < 24; i++) {
-    const bar = document.createElement('div');
-    bar.className = 'ptt-bar';
-    bar.style.height = '4px';
-    bar.style.animationDelay = (i * 0.05) + 's';
-    waveDiv.appendChild(bar);
+  function pretty(data) {
+    return JSON.stringify(data, null, 2);
   }
 
-  const transcriptText = "Hey, can you look at this deploy button and tell me what it does?";
-
-  function runCycle() {
-    // Phase 1: Keys press
-    setTimeout(() => {
-      keyCtrl.classList.add('active');
-      keyOption.classList.add('active');
-      status.textContent = 'Listening...';
-      status.classList.add('listening');
-      waveDiv.classList.add('active');
-      transcript.textContent = '';
-
-      // Animate waveform
-      const waveInterval = setInterval(() => {
-        waveDiv.querySelectorAll('.ptt-bar').forEach(bar => {
-          bar.style.height = (4 + Math.random() * 28) + 'px';
-        });
-      }, 100);
-
-      // Stream transcript
-      let charIdx = 0;
-      const typeInterval = setInterval(() => {
-        if (charIdx < transcriptText.length) {
-          transcript.textContent += transcriptText[charIdx];
-          charIdx++;
-        } else {
-          clearInterval(typeInterval);
-        }
-      }, 50);
-
-      // Phase 2: Release keys
-      setTimeout(() => {
-        clearInterval(waveInterval);
-        keyCtrl.classList.remove('active');
-        keyOption.classList.remove('active');
-        status.textContent = 'Processing...';
-        status.classList.remove('listening');
-        waveDiv.classList.remove('active');
-        waveDiv.querySelectorAll('.ptt-bar').forEach(bar => bar.style.height = '4px');
-
-        setTimeout(() => {
-          status.textContent = 'Press and hold to talk';
-          transcript.textContent = '';
-          setTimeout(runCycle, 3000);
-        }, 2000);
-      }, 3500);
-    }, 500);
+  async function fetchJSON(url, options) {
+    const response = await fetch(url, options);
+    const text = await response.text();
+    try {
+      return JSON.parse(text);
+    } catch {
+      return { status: response.status, body: text };
+    }
   }
 
-  runCycle();
-}
-
-// ── STREAMING TEXT DEMO ──
-const streamObserver = new IntersectionObserver((entries) => {
-  entries.forEach(e => {
-    if (e.isIntersecting) startStreamDemo();
-  });
-}, { threshold: 0.3 });
-
-const visionSection = document.querySelector('#demo-vision .vision-demo');
-if (visionSection) streamObserver.observe(visionSection);
-
-let streamRunning = false;
-function startStreamDemo() {
-  if (streamRunning) return;
-  streamRunning = true;
-
-  const el = document.getElementById('stream-text');
-  const fullText = `I can see you have a code editor open with a deploy button in the lower left. That button will push your changes to the Solana mainnet. <span class="claw-tag">[CLAW:120,380:Deploy Button:screen0]</span>\n\nBefore clicking, make sure your program has been built with <code style="background:var(--surface3);padding:2px 6px;border-radius:4px;font-size:0.8rem;">anchor build</code> and the IDL is up to date. I'd also recommend checking your wallet balance first.`;
-
-  function runStream() {
-    el.innerHTML = '<span class="cursor-blink"></span>';
-    let idx = 0;
-    const interval = setInterval(() => {
-      if (idx < fullText.length) {
-        // Handle HTML tags as chunks
-        if (fullText[idx] === '<') {
-          const closeIdx = fullText.indexOf('>', idx);
-          if (closeIdx !== -1) {
-            el.innerHTML = fullText.substring(0, closeIdx + 1) + '<span class="cursor-blink"></span>';
-            idx = closeIdx + 1;
-            return;
-          }
-        }
-        idx++;
-        el.innerHTML = fullText.substring(0, idx) + '<span class="cursor-blink"></span>';
-      } else {
-        clearInterval(interval);
-        setTimeout(() => {
-          streamRunning = false;
-          setTimeout(runStream, 4000);
-        }, 5000);
-      }
-    }, 25);
+  async function checkHealth() {
+    const result = document.getElementById("health-result");
+    result.textContent = "checking gateway...";
+    try {
+      const data = await fetchJSON(`${GATEWAY}/health`);
+      result.textContent = pretty(data);
+      document.getElementById("provider-openai").textContent = data.providers?.openai ? "online" : "missing";
+      document.getElementById("provider-helius").textContent = data.providers?.helius ? "online" : "missing";
+      document.getElementById("provider-birdeye").textContent = data.providers?.birdeye ? "online" : "missing";
+      document.getElementById("provider-speech").textContent = data.providers?.anthropic || data.providers?.openai ? "ready" : "missing";
+    } catch (error) {
+      result.textContent = error.message;
+    }
   }
 
-  runStream();
-}
-
-// ── POINTING DEMO ──
-const pointObserver = new IntersectionObserver((entries) => {
-  entries.forEach(e => {
-    if (e.isIntersecting) startPointingDemo();
-  });
-}, { threshold: 0.3 });
-
-const pointSection = document.querySelector('#demo-pointing .sim-screen');
-if (pointSection) pointObserver.observe(pointSection);
-
-let pointRunning = false;
-function startPointingDemo() {
-  if (pointRunning) return;
-  pointRunning = true;
-
-  const targets = ['pt-1', 'pt-2', 'pt-3', 'pt-4', 'pt-5'];
-  const labels = ['right here!', 'check this!', 'click to deploy!', 'your wallet', 'analytics panel'];
-  let idx = 0;
-
-  function pointAtNext() {
-    const prevIdx = (idx - 1 + targets.length) % targets.length;
-    document.getElementById(targets[prevIdx]).classList.remove('highlighted');
-
-    const target = document.getElementById(targets[idx]);
-    target.classList.add('highlighted');
-
-    // Show buddy speech
-    showBuddySpeech(labels[idx], 2000);
-
-    idx = (idx + 1) % targets.length;
-    setTimeout(pointAtNext, 3000);
-  }
-
-  setTimeout(pointAtNext, 1000);
-}
-
-// ── SOLANA LIVE DATA ──
-const solanaObserver = new IntersectionObserver((entries) => {
-  entries.forEach(e => {
-    if (e.isIntersecting) fetchSolanaData();
-  });
-}, { threshold: 0.3 });
-
-const solSection = document.querySelector('#demo-solana .solana-demo');
-if (solSection) solanaObserver.observe(solSection);
-
-let solFetched = false;
-async function fetchSolanaData() {
-  if (solFetched) return;
-  solFetched = true;
-
-  const gateway = 'https://beepboop-clawd-gateway.x402.workers.dev';
-  const termOut = document.getElementById('gateway-output');
-  const testAddr = 'vines1vzrYbzLMRdu58ou5XTby4qAqVRLmqo36NKPTg';
-
-  function log(html) {
-    const div = document.createElement('div');
-    div.innerHTML = html;
-    termOut.appendChild(div);
-    termOut.scrollTop = termOut.scrollHeight;
-  }
-
-  try {
-    // Health
-    log(`<span class="term-prompt">$</span> <span class="term-cmd">curl ${gateway}/health</span>`);
-    const health = await fetch(gateway + '/health').then(r => r.json());
-    log(`<span class="term-success">✓ status: "${health.status}"</span>`);
-    log(`<span class="term-dim">  network: ${health.network} | routes: ${health.routes.length}</span>`);
-    log('');
-
-    // Balance
-    log(`<span class="term-prompt">$</span> <span class="term-cmd">curl -X POST ${gateway}/solana/balance</span>`);
-    log(`<span class="term-dim">  {"address": "${testAddr.slice(0,12)}..."}</span>`);
-    const bal = await fetch(gateway + '/solana/balance', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ address: testAddr })
-    }).then(r => r.json());
-
-    document.getElementById('sol-bal').textContent = bal.sol.toFixed(6);
-    document.getElementById('sol-lamports').textContent = bal.lamports.toLocaleString();
-    log(`<span class="term-success">✓ ${bal.sol} SOL</span> <span class="term-dim">(${bal.lamports} lamports)</span>`);
-    log('');
-
-    // Tokens
-    log(`<span class="term-prompt">$</span> <span class="term-cmd">curl -X POST ${gateway}/solana/tokens</span>`);
-    const tokens = await fetch(gateway + '/solana/tokens', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ address: testAddr })
-    }).then(r => r.json());
-
-    const tokenCount = tokens?.result?.value?.length || 0;
-    document.getElementById('sol-tokens').textContent = tokenCount;
-    log(`<span class="term-success">✓ ${tokenCount} token accounts found</span>`);
-    log('');
-    log(`<span class="term-dim">All requests proxied through Clawd Gateway — no keys in the app binary.</span>`);
-
-  } catch (err) {
-    log(`<span style="color:#E5484D;">✗ ${err.message}</span>`);
-    // Fallback mock data
-    document.getElementById('sol-bal').textContent = '0.039769';
-    document.getElementById('sol-lamports').textContent = '39,769,364';
-    document.getElementById('sol-tokens').textContent = '0';
-  }
-}
-
-// ── TTS VISUALIZER ──
-const ttsObserver = new IntersectionObserver((entries) => {
-  entries.forEach(e => {
-    if (e.isIntersecting) startTTSDemo();
-  });
-}, { threshold: 0.3 });
-
-const ttsSection = document.querySelector('#demo-tts .sim-screen');
-if (ttsSection) ttsObserver.observe(ttsSection);
-
-let ttsRunning = false;
-function startTTSDemo() {
-  if (ttsRunning) return;
-  ttsRunning = true;
-
-  const container = document.getElementById('tts-visualizer');
-  container.innerHTML = '';
-
-  const barCount = 60;
-  for (let i = 0; i < barCount; i++) {
-    const bar = document.createElement('div');
-    bar.className = 'tts-vbar';
-    bar.style.height = '4px';
-    container.appendChild(bar);
-  }
-
-  const bars = container.querySelectorAll('.tts-vbar');
-  const ttsText = document.getElementById('tts-text');
-  const phrases = [
-    '"I see you\'re looking at the deploy button. Click it to ship your changes to mainnet!"',
-    '"Your wallet has 0.039 SOL. That\'s enough for a few transactions."',
-    '"This code looks good. The function handles errors correctly."',
-    '"Let me point you to the settings panel — you can configure the RPC endpoint there."',
-  ];
-  let phraseIdx = 0;
-
-  function animateTTS() {
-    ttsText.textContent = phrases[phraseIdx];
-    phraseIdx = (phraseIdx + 1) % phrases.length;
-
-    let frame = 0;
-    const totalFrames = 180;
-
-    function tick() {
-      if (frame >= totalFrames) {
-        bars.forEach(b => b.style.height = '4px');
-        setTimeout(animateTTS, 2000);
-        return;
-      }
-
-      const progress = frame / totalFrames;
-      bars.forEach((bar, i) => {
-        const center = barCount * progress;
-        const dist = Math.abs(i - center);
-        const envelope = Math.max(0, 1 - dist / 12);
-        const noise = Math.random() * 0.5 + 0.5;
-        const h = 4 + envelope * noise * 60;
-        bar.style.height = h + 'px';
-        bar.style.background = envelope > 0.3
-          ? `var(--lobster-${envelope > 0.6 ? '400' : '500'})`
-          : 'var(--lobster-800)';
-      });
-
-      frame++;
-      requestAnimationFrame(tick);
+  async function lookupWallet() {
+    const address = document.getElementById("wallet-input").value.trim();
+    const result = document.getElementById("wallet-result");
+    if (!address) {
+      result.textContent = "enter a wallet or mint address";
+      return;
     }
 
-    tick();
+    result.textContent = "checking balance and price...";
+    try {
+      const [balance, price] = await Promise.all([
+        fetchJSON(`${GATEWAY}/solana/balance`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ address })
+        }),
+        fetchJSON(`${GATEWAY}/solana/price?address=${encodeURIComponent(address)}`)
+      ]);
+      result.textContent = pretty({ balance, price_if_token_mint: price });
+    } catch (error) {
+      result.textContent = error.message;
+    }
   }
 
-  animateTTS();
-}
+  document.getElementById("health-button").addEventListener("click", checkHealth);
+  document.getElementById("wallet-button").addEventListener("click", lookupWallet);
+  checkHealth();
 </script>
 </body>
 </html>
