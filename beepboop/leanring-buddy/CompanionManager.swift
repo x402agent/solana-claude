@@ -70,7 +70,7 @@ final class CompanionManager: ObservableObject {
 
     /// Base URL for the Cloudflare Worker proxy. All API requests route
     /// through this so keys never ship in the app binary.
-    private static let workerBaseURL = "https://beepboop-clawd-gateway.x402.workers.dev"
+    private static let workerBaseURL = AppBundleConfiguration.stringValue(forKey: "ClawdGatewayBaseURL") ?? "https://beepboop-clawd-gateway.x402.workers.dev"
 
     private lazy var claudeAPI: ClaudeAPI = {
         return ClaudeAPI(proxyURL: "\(Self.workerBaseURL)/chat", model: selectedModel)
