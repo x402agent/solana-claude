@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Deploy Mnemosyne as a Hermes MemoryProvider via the plugin system.
+# Deploy Clawd Memory as a Hermes MemoryProvider via the plugin system.
 # This creates a symlink in ~/.hermes/plugins/mnemosyne — zero Hermes core changes.
 
 set -euo pipefail
@@ -9,8 +9,8 @@ PROVIDER_DIR="$SCRIPT_DIR/hermes_memory_provider"
 HERMES_HOME="${HERMES_HOME:-$HOME/.hermes}"
 TARGET_DIR="$HERMES_HOME/plugins/mnemosyne"
 
-echo "🚀 Mnemosyne MemoryProvider Deploy"
-echo "=================================="
+echo "🚀 Clawd MemoryProvider Deploy"
+echo "==============================="
 echo ""
 
 if [ ! -d "$PROVIDER_DIR" ]; then

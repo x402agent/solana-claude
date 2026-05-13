@@ -1,311 +1,123 @@
-# Mnemosyne Installation Guide for LLM Agents
+# Clawd Memory Installation Guide For LLM Agents
 
-> **Target audience:** AI agents (LLMs) that need to install, configure, and verify Mnemosyne for a user.
-> **When to use:** A user asks you to install Mnemosyne, set up memory for their AI agent, or integrate Mnemosyne with Hermes.
+> Target audience: AI agents that need to install, configure, and verify Clawd Memory for a user.
+> Use this when the user asks to set up Clawd memory, agent memory, Hermes memory, or local persistent memory.
 
----
+## Decision Path
 
-## Quick Decision: Which Install Path?
-
-| User has... | Use |
+| User has | Use |
 |---|---|
-| Hermes Agent already installed | **Path A: One-liner deploy** (fastest, 1 command) |
-| Hermes Agent + wants PyPI package | **Path B: pip install + register** |
-| No Hermes, just wants the library | **Path C: pip install (standalone)** |
-| Wants to contribute or develop | **Path D: Source install** |
+| This source checkout | Run `python3 -m mnemosyne.clawd_brain ...` directly |
+| Wants editable development install | `python3 -m pip install -e ".[all,dev]"` |
+| Wants package install | `pip install mnemosyne-memory[all]` |
+| Uses Hermes | Register the existing Mnemosyne-compatible provider |
 
----
+The package and module names remain `mnemosyne-memory` and `mnemosyne` for compatibility. The Clawd-facing CLI is `clawd-brain`.
 
-## Path A: One-Liner Deploy (Hermes MemoryProvider)
-
-The fastest way to integrate Mnemosyne as Hermes's memory backend. Creates a symlink — no pip needed, no venv needed.
+## Source Checkout Setup
 
 ```bash
-curl -sSL https://raw.githubusercontent.com/AxDSan/mnemosyne/main/deploy_hermes_provider.sh | bash
+cd /Users/8bit/bots/Cladwbot-solana/solana-clawd/MemeBRain
+python3 -m mnemosyne.clawd_brain init
+python3 -m mnemosyne.clawd_brain status
 ```
 
-**What this does:**
-1. Symlinks `hermes_memory_provider/` → `~/.hermes/plugins/mnemosyne/`
-2. Tells you to set `memory.provider: mnemosyne` in config
+If imports fail, install editable:
 
-**After running, configure Hermes:**
+```bash
+python3 -m pip install -e ".[all,dev]"
+```
+
+## Verify Clawd Memory
+
+Run a write and recall:
+
+```bash
+python3 -m mnemosyne.clawd_brain remember \
+  "Clawd Memory Install Check" \
+  "Clawd Memory was initialized and verified locally." \
+  --kind agent \
+  --tag clawd \
+  --importance 0.8
+
+python3 -m mnemosyne.clawd_brain recall "install check" --top-k 3
+```
+
+Expected result: JSON containing at least one matching memory or vault note.
+
+## Hermes Setup
+
+Install or register the provider:
+
+```bash
+pip install mnemosyne-memory[all]
+python -m mnemosyne.install
+```
+
+Configure Hermes:
 
 ```bash
 hermes config set memory.provider mnemosyne
 ```
 
-**Or edit `~/.hermes/config.yaml` directly:**
+Or edit `~/.hermes/config.yaml`:
 
 ```yaml
 memory:
   provider: mnemosyne
-```
-
-**IMPORTANT:** Also add `mnemosyne` to `plugins.enabled` in `~/.hermes/config.yaml`:
-
-```yaml
 plugins:
   enabled:
     - mnemosyne
 ```
 
-**Verify:**
+Verify:
 
 ```bash
 hermes gateway restart
 hermes memory status
 hermes mnemosyne stats
-```
-
----
-
-## Path B: pip install + Register with Hermes
-
-Install the PyPI package, then register it as Hermes's memory provider.
-
-### Step 1: Install the package
-
-```bash
-pip install mnemosyne-memory
-```
-
-With embeddings (recommended — enables vector search):
-
-```bash
-pip install mnemosyne-memory[embeddings]
-```
-
-With ALL optional features:
-
-```bash
-pip install mnemosyne-memory[all]
-```
-
-**Ubuntu 24.04 / Debian 12 PEP 668 workaround:**
-
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-pip install mnemosyne-memory[all]
-```
-
-### Step 2: Register with Hermes
-
-```bash
-python -m mnemosyne.install
-```
-
-This creates `~/.hermes/plugins/mnemosyne/` and sets `memory.provider: mnemosyne` in config.
-
-### Step 3: Verify
-
-```bash
-hermes gateway restart
-hermes memory status        # Should show: Provider: mnemosyne
-hermes mnemosyne stats      # Working + episodic counts
 hermes tools list | grep mnemosyne
 ```
 
----
+Expected provider/tool names still contain `mnemosyne`. Treat those as compatibility names for Clawd Memory.
 
-## Path C: Standalone (no Hermes)
+## Agent Usage Rules
 
-Just the library, usable from any Python code.
+- Always recall before answering if the task depends on prior Clawd context.
+- Use `remember` for durable facts, preferences, decisions, and risk findings.
+- Use `research` for URLs and investigation topics.
+- Do not store secrets or private keys.
+- Prefer `kind`, `source`, `tag`, and `importance` on every durable memory.
+
+## Environment
+
+| Variable | Use |
+|---|---|
+| `CLAWD_BRAIN_VAULT` | Override the Clawd markdown vault |
+| `MNEMOSYNE_DATA_DIR` | Override the SQLite engine data directory |
+| `MNEMOSYNE_HOST_LLM_ENABLED` | Route consolidation through a host framework LLM |
+| `MNEMOSYNE_LLM_BASE_URL` | Use an OpenAI-compatible consolidation endpoint |
+| `MNEMOSYNE_LLM_API_KEY` | API key for that endpoint |
+| `MNEMOSYNE_LLM_MODEL` | Consolidation model |
+
+## Troubleshooting
+
+### `No module named mnemosyne`
+
+Install from the source directory:
 
 ```bash
-pip install mnemosyne-memory[all]
+python3 -m pip install -e ".[all]"
 ```
 
-**Usage:**
-
-```python
-from mnemosyne import remember, recall, get_stats
-
-remember("User prefers dark mode", importance=0.9, source="preference")
-results = recall("interface preferences")
-print(results)
-```
-
----
-
-## Path D: From Source (Development)
-
-```bash
-git clone https://github.com/AxDSan/mnemosyne.git
-cd mnemosyne
-pip install -e ".[all,dev]"
-```
-
-Then register with Hermes:
+### Hermes provider not found
 
 ```bash
 python -m mnemosyne.install
 hermes gateway restart
-```
-
----
-
-## Post-Install: Verify Everything Works
-
-Run these checks in order. Stop if any fails.
-
-### 1. Provider is registered
-
-```bash
 hermes memory status
 ```
 
-Expected: `Provider: mnemosyne` with `is_available: true`
+### Recall returns nothing
 
-### 2. Tools are loaded
-
-```bash
-hermes tools list | grep mnemosyne
-```
-
-Expected: 15 tools (remember, recall, stats, sleep, triple_add, triple_query, scratchpad_write, scratchpad_read, scratchpad_clear, invalidate, export, update, forget, import, diagnose)
-
-### 3. Memory operations work
-
-```bash
-hermes mnemosyne stats
-```
-
-Expected: Working and episodic memory counts (numbers, even if 0).
-
-### 4. Store and recall a test memory
-
-```bash
-python3 -c "
-from mnemosyne import remember, recall
-mid = remember('TEST: install verification', importance=0.5, source='test')
-print(f'Stored: {mid}')
-results = recall('install verification')
-print(f'Found: {len(results)} results')
-"
-```
-
----
-
-## Configuration Reference
-
-### Required config
-
-In `~/.hermes/config.yaml`:
-
-```yaml
-memory:
-  provider: mnemosyne
-
-plugins:
-  enabled:
-    - mnemosyne
-```
-
-### Optional environment variables
-
-| Variable | Default | Effect |
-|---|---|---|
-| `MNEMOSYNE_VEC_TYPE` | `float32` | Vector compression: `int8` (4x smaller) or `bit` (32x smaller) |
-| `MNEMOSYNE_LOG_TOOLS` | `0` | Set to `1` to auto-log tool calls as memories |
-| `MNEMOSYNE_DATA_DIR` | `~/.hermes/mnemosyne/data/` | Custom data directory |
-
----
-
-## Updating
-
-```bash
-# PyPI users
-pip install --upgrade mnemosyne-memory
-hermes gateway restart
-
-# Source users
-cd mnemosyne && git pull
-hermes gateway restart
-
-# Re-run pip install -e only if setup.py or pyproject.toml changed
-pip install -e ".[all,dev]"
-```
-
----
-
-## Uninstalling
-
-```bash
-python -m mnemosyne.install --uninstall
-hermes config set memory.provider null
-hermes gateway restart
-```
-
-To also remove the plugin from config, delete `mnemosyne` from `plugins.enabled` in `~/.hermes/config.yaml`.
-
----
-
-## Troubleshooting for Agents
-
-### "Provider not found" after install
-
-```bash
-# Check the symlink exists
-ls -la ~/.hermes/plugins/mnemosyne
-
-# If missing, recreate it
-python -m mnemosyne.install
-```
-
-### "No module named mnemosyne"
-
-The package isn't installed in Hermes's Python environment. Either:
-- Activate the correct venv and reinstall
-- Use Path A (symlink deploy) instead — it doesn't need pip
-
-### Tools not showing up
-
-```bash
-# Check plugins are loaded
-hermes plugins list
-
-# If mnemosyne isn't listed, check config.yaml plugins.enabled
-grep -A5 "plugins:" ~/.hermes/config.yaml
-
-# Restart gateway after any config change
-hermes gateway restart
-```
-
-### FTS5 / vector search errors
-
-```bash
-# Install embeddings support
-pip install fastembed>=0.3.0
-
-# Verify
-python3 -c "from fastembed import TextEmbedding; print('OK')"
-
-# Restart
-hermes gateway restart
-```
-
-### Session ID mismatch warning
-
-If the `hermes_plugin` hook uses a different session ID than the MemoryProvider, memories stored in one path won't surface in the other. The fix is in the hook code — ensure `_on_pre_llm_call` uses `f"hermes_{session_id}"` as the session ID, matching the MemoryProvider convention. This is already fixed in the latest source.
-
----
-
-## Agent-Specific Notes
-
-### After installing Mnemosyne for a user
-
-1. Tell the user to restart Hermes: `hermes gateway restart`
-2. Verify with: `hermes memory status`
-3. The user should notice memory persistence across sessions immediately
-4. If the user has existing legacy memory (from the built-in provider), those memories are mirrored to Mnemosyne on write — they won't be lost
-
-### When to use mnemosyne_remember vs the legacy memory tool
-
-- **ALWAYS use `mnemosyne_remember`** for durable facts, preferences, and insights
-- The legacy `memory` tool is deprecated for durable storage
-- Mnemosyne supports importance scoring (0.0-1.0), global scope, expiry dates, and entity extraction — features the legacy tool doesn't have
-
-### Memory survives gateway restarts, machine reboots, and Fly.io VM recycles
-
-By default, the main database lives at `~/.hermes/mnemosyne/data/mnemosyne.db`; named banks live under `~/.hermes/mnemosyne/data/banks/<name>/`. No Docker, no PostgreSQL, no required network calls.
+Write a test memory, confirm `status`, and check that the same `--bank` and `CLAWD_BRAIN_VAULT` are being used.

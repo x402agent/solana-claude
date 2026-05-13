@@ -1,5 +1,7 @@
 """
-Mnemosyne - Setup Configuration
+Clawd Memory setup configuration.
+
+The package distribution remains mnemosyne-memory for compatibility.
 """
 
 from setuptools import setup, find_packages
@@ -22,10 +24,10 @@ setup(
     version=_version,
     author="Abdias J",
     author_email="abdi.moya@gmail.com",
-    description="The Zero-Dependency, Sub-Millisecond AI Memory System",
+    description="Clawd Memory: local-first SQLite memory for agents, backed by the Mnemosyne engine",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/AxDSan/mnemosyne",
+    url="https://clawd.x402.wtf/site/",
     packages=find_packages(),
     classifiers=[
         "Development Status :: 5 - Production/Stable",
@@ -42,6 +44,7 @@ setup(
     ],
     python_requires=">=3.9",
     keywords=[
+        "clawd",
         "ai",
         "memory",
         "sqlite",
@@ -58,9 +61,8 @@ setup(
         "agentic-harness",
     ],
     project_urls={
-        "Bug Reports": "https://github.com/AxDSan/mnemosyne/issues",
-        "Source": "https://github.com/AxDSan/mnemosyne",
-        "Documentation": "https://github.com/AxDSan/mnemosyne/blob/main/docs/README.md",
+        "Homepage": "https://clawd.x402.wtf/site/",
+        "Documentation": "https://clawd.x402.wtf/site/",
     },
     extras_require={
         "llm": ["ctransformers>=0.2.27", "llama-cpp-python>=0.2.0", "huggingface-hub>=0.20"],

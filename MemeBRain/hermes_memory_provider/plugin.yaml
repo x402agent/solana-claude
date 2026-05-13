@@ -1,6 +1,6 @@
 name: mnemosyne
 version: 2.5
-description: "Native local memory for Hermes — SQLite with vector search, FTS5 hybrid ranking, episodic consolidation, and temporal triples. Zero cloud. Zero latency. Deployed via plugin system."
+description: "Clawd Memory compatibility provider for Hermes, backed by the Mnemosyne SQLite engine with vector search, FTS5 hybrid ranking, episodic consolidation, and temporal triples."
 author: Abdias J
 provides_tools:
   - mnemosyne_remember
@@ -23,3 +23,4 @@ provides_hooks:
   - on_session_start
   - post_tool_call
 dependencies: []
+# Provider name stays mnemosyne because Hermes config and plugin discovery use it.

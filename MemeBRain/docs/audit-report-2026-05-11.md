@@ -1,4 +1,6 @@
-# Mnemosyne Documentation Audit — Executive Report
+# Clawd Memory Documentation Audit - Historical Report
+
+This is a historical audit from before the Clawd Memory rebrand. Mentions of Mnemosyne below refer to the underlying engine and prior docs site.
 
 **Date:** May 11, 2026
 **Auditor:** Hermes Agent

@@ -1,12 +1,12 @@
-# Mnemosyne Memory Provider for Hermes
+# Clawd Memory Provider for Hermes
 
-Deploy Mnemosyne as a **first-class MemoryProvider** through Hermes' plugin system.
+Deploy Clawd Memory as a **first-class MemoryProvider** through Hermes' plugin system.
 
 ## What This Gives You
 
-When deployed, Mnemosyne gets the **same integration tier** as Honcho, mem0, and supermemory:
+When deployed, Clawd Memory gets the **same integration tier** as Honcho, mem0, and supermemory:
 
-- **System prompt injection** — `# Mnemosyne Memory` header in every prompt
+- **System prompt injection** — memory context in every prompt
 - **Pre-turn prefetch** — Relevant memories injected via `<memory-context>` fence before each API call
 - **Post-turn sync** — User and assistant messages automatically stored to episodic memory
 - **Tool dispatch** — 15 memory tools auto-injected into the model's tool surface
@@ -55,7 +55,7 @@ hermes mnemosyne stats  # Show memory statistics
 
 The provider is discovered by `plugins.memory.discover_memory_providers()` which scans:
 1. Bundled providers: `hermes-agent/plugins/memory/<name>/`
-2. **User plugins: `$HERMES_HOME/plugins/<name>/`** ← This is where Mnemosyne lives
+2. **User plugins: `$HERMES_HOME/plugins/<name>/`** ← This is where the Clawd Memory compatibility provider lives
 
 User plugins take precedence over bundled plugins on name collision.
 

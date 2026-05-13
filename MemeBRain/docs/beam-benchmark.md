@@ -1,7 +1,9 @@
-# Mnemosyne BEAM Benchmark
+# Clawd Memory BEAM Benchmark
 
 **Evaluated against ICLR 2026 BEAM dataset (Tavakoli et al.)**
 **Date:** 2026-05-06 | **Version:** Mnemosyne 2.5 | **Model:** Gemini 2.5 Flash via OpenRouter
+
+These results measure the underlying Mnemosyne engine used by Clawd Memory. The Clawd layer adds agent workflow, vault indexing, Solana/OODA metadata, and operational memory discipline on top of the engine.
 
 ---
 
@@ -9,7 +11,7 @@
 
 180 questions across 3 scales (48 per scale, 3 conversations each).
 
-| Scale | Mnemosyne | RAG (Llama-4) | LIGHT | Honcho | Hindsight |
+| Scale | Clawd engine | RAG (Llama-4) | LIGHT | Honcho | Hindsight |
 |-------|-----------|---------------|-------|--------|-----------|
 | 100K | **35.4%** | 32.3% | 35.8% | 63.0% | 73.4% |
 | 500K | 19.3% | 33.0% | 35.9% | 64.9% | 71.1% |

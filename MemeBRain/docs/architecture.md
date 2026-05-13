@@ -1,167 +1,164 @@
-# Architecture
+# Clawd Memory Architecture
 
-Mnemosyne is a local-first memory system built entirely on SQLite. No external databases, no network calls, no API keys. Everything runs in-process.
+Clawd Memory is a local-first memory system for agents. It keeps the user-facing workflow Clawd-native while reusing the existing Mnemosyne SQLite engine for persistence, BEAM tiers, search, and integrations.
 
-## BEAM — Bilevel Episodic-Associative Memory
+## Layers
 
-The core storage model is **BEAM**, a three-tier architecture:
-
-```
-┌─────────────────────────────────────────────────┐
-│                  BEAM Tiers                      │
-│                                                  │
-│  ┌─────────────────────────────────────────┐    │
-│  │  Working Memory                         │    │
-│  │  Hot context, auto-injected into prompts│    │
-│  │  TTL-based eviction (default: 24h)      │    │
-│  │  Max items: 10,000                      │    │
-│  └───────────────────┬─────────────────────┘    │
-│                      │ sleep() consolidation     │
-│  ┌───────────────────▼─────────────────────┐    │
-│  │  Episodic Memory                        │    │
-│  │  Long-term storage                      │    │
-│  │  Hybrid search: vector + FTS5           │    │
-│  │  Summaries from consolidation           │    │
-│  └─────────────────────────────────────────┘    │
-│                                                  │
-│  ┌─────────────────────────────────────────┐    │
-│  │  Scratchpad                             │    │
-│  │  Temporary agent reasoning workspace    │    │
-│  │  Max items: 1,000                       │    │
-│  └─────────────────────────────────────────┘    │
-└─────────────────────────────────────────────────┘
+```text
+Clawd agents
+    |
+    | recall / remember / research / ingest-ooda
+    v
+ClawdBrain
+    |
+    | writes markdown notes, metadata, links, and memory entries
+    v
+Clawd vault + index
+    |
+    | note lookup, kind/source/tag filtering
+    v
+Mnemosyne engine
+    |
+    | working memory, episodic memory, scratchpad, triples
+    v
+SQLite files
 ```
 
-### Working Memory
+## Clawd Brain Layer
 
-- Stores recent, high-priority context
-- Auto-injected into LLM prompts via the `pre_llm_call` hook
-- Evicted by TTL (configurable, default 24 hours) or item count limit
-- Supports session-scoped and global-scope memories
-- Uses FTS5 for fast keyword search within the tier
+The Clawd layer lives in `mnemosyne.clawd_brain`.
 
-### Episodic Memory
+Key defaults:
 
-- Long-term storage for consolidated memories
-- Populated by the `sleep()` consolidation process
-- Hybrid search combining three signals:
-  - **50% vector similarity** — semantic relevance via sqlite-vec
-  - **30% FTS5 rank** — keyword/lexical relevance
-  - **20% importance score** — user-assigned weight
-- Vector compression: `int8` (default), `float32`, or `bit` (32x smaller)
-
-### Scratchpad
-
-- Ephemeral workspace for agent reasoning chains
-- Not searchable, not consolidated — cleared explicitly or by item limit
-- Useful for intermediate steps, TODO tracking, and multi-turn reasoning
-
-## Sleep Cycle (Consolidation)
-
-The `sleep()` function moves stale working memories into episodic memory:
-
-1. Fetches working memories past TTL or below importance threshold
-2. Groups them by source
-3. Attempts LLM summarization (local TinyLlama, remote OpenAI-compatible, or AAAK fallback)
-4. Stores the summary in episodic memory with embeddings
-5. Removes the originals from working memory
-6. Logs the consolidation event
-
-```python
-from mnemosyne import sleep
-result = sleep()
-print(f"Consolidated {result['consolidated']} memories")
-```
-
-## SQLite Backend
-
-By default, the main database lives at `~/.hermes/mnemosyne/data/mnemosyne.db`. Named memory banks use separate SQLite files under `~/.hermes/mnemosyne/data/banks/<name>/`, and standalone `TripleStore()` may use `triples.db` in the data directory.
-
-### Tables
-
-| Table | Purpose |
+| Setting | Default |
 |---|---|
-| `working_memory` | Hot tier — recent context |
-| `episodic_memory` | Long-term consolidated memories |
-| `vec_episodes` | sqlite-vec virtual table for episodic embeddings |
-| `scratchpad` | Temporary reasoning entries |
-| `consolidation_log` | History of sleep cycle operations |
-| `triples` | Temporal knowledge graph |
-| `memories` | Legacy table (backward compatibility) |
-| `memory_embeddings` | Legacy embeddings (backward compatibility) |
+| Bank | `clawd` |
+| Session | `clawd-brain` |
+| Vault env var | `CLAWD_BRAIN_VAULT` |
+| Vault path | `MemeBRain/vault` |
+| Index database | `vault/90-indexes/clawd-brain.db` |
 
-### Extensions
+The vault layout is created on `init`:
 
-- **sqlite-vec** — native vector similarity search (HNSW-style) in SQLite
-- **FTS5** — full-text search, built into SQLite 3.35+
-
-Both extensions are optional. Without sqlite-vec, Mnemosyne falls back to keyword-only retrieval. FTS5 is available on any modern SQLite build.
-
-## Hybrid Search Pipeline
-
-```
-Query string
-    │
-    ├─── Vector search (sqlite-vec, top_k × 3)
-    │         Semantic similarity via cosine distance
-    │
-    ├─── FTS5 search (top_k × 3)
-    │         Keyword/lexical matching
-    │
-    └─── Merge + re-rank
-              Score = 0.5 × vec_similarity
-                    + 0.3 × fts_rank
-                    + 0.2 × importance
-              Return top_k results
+```text
+00-inbox/
+10-research/
+20-signals/
+30-trades/
+40-agents/
+50-protocols/
+60-wallets/
+70-perps/
+90-indexes/
 ```
 
-## Temporal Knowledge Graph
+Each Clawd note gets frontmatter, tags, kind, source, timestamps, an optional memory ID, and wiki link extraction. The index database tracks notes and links so recall can return both engine memories and matching vault notes.
 
-The `TripleStore` provides time-aware subject-predicate-object triples:
+## BEAM Engine
 
-```python
-from mnemosyne.core.triples import TripleStore
+The underlying engine uses BEAM: Bilevel Episodic-Associative Memory.
 
-kg = TripleStore()
-kg.add("Maya", "assigned_to", "auth-migration", valid_from="2026-01-15")
+```text
+Working memory
+    hot session/global context, TTL-based eviction, prompt injection
 
-# Query current state
-kg.query("Maya")  # → Maya is assigned to auth-migration
+Episodic memory
+    long-term consolidated memory, hybrid vector/FTS/importance recall
 
-# Query as-of a past date
-kg.query("Maya", as_of="2026-01-10")  # → empty (not yet assigned)
+Scratchpad
+    temporary reasoning workspace, not durable knowledge
 
-# Adding a new assignment auto-invalidates the old one
-kg.add("Maya", "assigned_to", "api-gateway", valid_from="2026-03-01")
+Triples
+    temporal subject-predicate-object facts with valid_from/valid_until
 ```
 
-When a triple is added for an existing `(subject, predicate)` pair, the previous triple's `valid_until` is automatically set, enabling point-in-time queries.
+The engine is still imported as `mnemosyne`. That name is an implementation detail for Clawd docs unless you are writing Python against the lower-level API.
 
-## Data Flow
+## Recall Pipeline
 
+Clawd recall combines two sources:
+
+1. Engine recall through `Mnemosyne.recall(query, top_k)`.
+2. Vault lookup through the Clawd note index.
+
+The engine pipeline can use:
+
+- SQLite FTS5 for lexical search.
+- sqlite-vec or fallback vector search for semantic search.
+- Importance scores for agent-weighted memories.
+- Recency and metadata filters in lower-level APIs.
+
+The Clawd layer adds Solana-aware tags, note kinds, markdown links, and durable source metadata.
+
+## Remember Pipeline
+
+```text
+remember(title, content, kind, source, tags, importance)
+    |
+    | detect domain tags and wiki links
+    | write markdown note to vault folder for kind
+    | write memory to default clawd bank
+    | update vault index database
+    v
+JSON result with note path, tags, memory ID, and timestamps
 ```
-remember(content, importance, scope)
-    │
-    ├── Write to working_memory (BEAM)
-    ├── Write to memories (legacy, backward compat)
-    └── Generate embedding (if fastembed available)
 
-recall(query, top_k)
-    │
-    ├── Search working_memory (FTS5 fast path)
-    ├── Search episodic_memory (hybrid: vec + FTS5 + importance)
-    ├── Merge, de-duplicate, re-rank
-    └── Return top_k results
+Agents should remember durable state only. Temporary chain-of-thought, raw logs, and secrets do not belong in durable memory.
 
-sleep()
-    │
-    ├── Fetch stale working memories (past TTL)
-    ├── Chunk by token budget
-    ├── Summarize via LLM
-    │     ├── Host backend (if MNEMOSYNE_HOST_LLM_ENABLED=true and registered)
-    │     ├── Remote OpenAI-compatible API (if BASE_URL set)
-    │     ├── Local GGUF (ctransformers / llama-cpp-python)
-    │     └── AAAK encoding (keyword-based, no LLM)
-    ├── Store summary in episodic_memory with embedding
-    └── Remove originals from working_memory
+## Research Pipeline
+
+```text
+research(target)
+    |
+    | if target is URL: fetch title and readable text snippet
+    | if target is topic: create queued research note
+    | tag and index the note
+    | store the summary as memory
+    v
+reusable research artifact
 ```
+
+Use this for Solana protocol docs, x402/AP2 notes, venue risk, wallet investigations, and reusable agent research.
+
+## OODA Ingestion
+
+`ingest-ooda` reads an OODA journal JSONL file and converts observations into Clawd memory. This is how operational loops become durable context for later planning.
+
+Default journal path:
+
+```text
+../ooda/journal/ticks.jsonl
+```
+
+## Persistence
+
+Clawd Memory persists locally:
+
+| Store | Purpose |
+|---|---|
+| `MemeBRain/vault` | Human-readable markdown research and memory notes |
+| `vault/90-indexes/clawd-brain.db` | Note and wiki link index |
+| `MNEMOSYNE_DATA_DIR` | Engine SQLite databases and named banks |
+| `~/.hermes/mnemosyne/data` | Default engine data directory when unset |
+
+Back up both the vault and engine data directory if you want a complete Clawd brain backup.
+
+## Compatibility Boundaries
+
+Do not rename these without a migration plan:
+
+| Name | Why it stays |
+|---|---|
+| `mnemosyne-memory` | Published package/distribution name |
+| `mnemosyne` | Python import path used across code and integrations |
+| `mnemosyne_*` tools | Hermes/MCP compatibility surface |
+| `MNEMOSYNE_*` env vars | Engine configuration |
+
+Use these for new Clawd-facing workflows:
+
+| Name | Purpose |
+|---|---|
+| `clawd-brain` | CLI |
+| `ClawdBrain` | Python API |
+| `CLAWD_BRAIN_VAULT` | Clawd vault override |
+| `clawd` | Default memory bank |

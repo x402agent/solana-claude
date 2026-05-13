@@ -1,23 +1,27 @@
-# Mnemosyne Documentation
+# Clawd Memory Documentation
 
-Local-first, zero-cloud memory for AI agents. SQLite-backed. Sub-millisecond. Fully private.
+Clawd Memory is the local brain for Clawd agents. It combines a Clawd-facing agent memory contract, a markdown vault, and a SQLite-backed memory engine.
 
-## Guides
+Start here:
 
-| Document | Description |
+| Guide | Purpose |
 |---|---|
-| [Getting Started](getting-started.md) | Installation, quickstart, storing your first memory |
-| [Architecture](architecture.md) | BEAM tiers, SQLite backend, hybrid search, knowledge graph |
-| [API Reference](api-reference.md) | Python API: `remember`, `recall`, `sleep`, triples, stats |
-| [Hermes Integration](hermes-integration.md) | Using Mnemosyne as a Hermes memory backend |
-| [LLM Installation Guide](llm-installation-guide.md) | Installation instructions for AI agents/LLMs |
-| [Configuration](configuration.md) | Environment variables, data directory, vector compression |
-| [Changelog](changelog.md) | Version history and release notes |
+| [Getting Started](getting-started.md) | Initialize the Clawd bank, write memories, recall context, and archive research |
+| [Architecture](architecture.md) | Understand the Clawd layers, vault, BEAM engine, and recall pipeline |
+| [Configuration](configuration.md) | Environment variables, vault paths, LLM consolidation, and Hermes config |
+| [API Reference](api-reference.md) | `ClawdBrain`, `clawd-brain`, and lower-level engine APIs |
+| [Hermes Integration](hermes-integration.md) | Use Clawd Memory through Hermes-compatible tools |
+| [LLM Installation Guide](llm-installation-guide.md) | Agent-oriented install and verification checklist |
+| [BEAM Benchmark](beam-benchmark.md) | Benchmark notes for the underlying memory engine |
+| [Comparison](comparison.md) | Trade-offs versus external/self-hosted memory providers |
 
-## Quick Links
+Compatibility names:
 
-- **Repository:** [github.com/AxDSan/mnemosyne](https://github.com/AxDSan/mnemosyne)
-- **PyPI:** [mnemosyne-memory](https://pypi.org/project/mnemosyne-memory/)
-- **Contributing:** See [CONTRIBUTING.md](../CONTRIBUTING.md) in the repo root
-- **Updating:** See [UPDATING.md](../UPDATING.md) for upgrade and rollback instructions
-- **License:** MIT — see [LICENSE](../LICENSE)
+| Name | Meaning |
+|---|---|
+| `clawd-brain` | Clawd-facing CLI |
+| `ClawdBrain` | Clawd-facing Python API |
+| `mnemosyne` | Underlying Python storage engine |
+| `mnemosyne_*` | Existing Hermes/MCP tool names kept for compatibility |
+
+Use Clawd names in user-facing docs and agent workflows. Use Mnemosyne names only where the code, package, or integration contract requires them.

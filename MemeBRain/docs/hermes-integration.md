@@ -1,6 +1,8 @@
-# Hermes Integration
+# Hermes Integration For Clawd Memory
 
-Mnemosyne is designed as a native memory backend for the [Hermes Agent Framework](https://github.com/NousResearch/hermes-agent). It implements the Hermes `MemoryProvider` interface and registers as a plugin.
+Clawd Memory can run through the existing Hermes-compatible Mnemosyne provider. The public Clawd workflow is `clawd-brain` and `ClawdBrain`; the Hermes plugin keeps `mnemosyne` names because those are the current provider and tool contracts.
+
+Use this integration when a Hermes agent should automatically recall and write Clawd memory during normal agent runs.
 
 ## Setup
 
@@ -13,8 +15,7 @@ pip install mnemosyne-memory
 Or from source:
 
 ```bash
-git clone https://github.com/AxDSan/mnemosyne.git
-cd mnemosyne
+cd /Users/8bit/bots/Cladwbot-solana/solana-clawd/MemeBRain
 pip install -e ".[all,dev]"
 ```
 
@@ -24,7 +25,7 @@ pip install -e ".[all,dev]"
 python -m mnemosyne.install
 ```
 
-This creates a plugin entry at `~/.hermes/plugins/mnemosyne/` and wires up the MemoryProvider.
+This creates a plugin entry at `~/.hermes/plugins/mnemosyne/` and wires up the MemoryProvider. That path is a compatibility name, not the product name.
 
 ### Step 3: Activate
 
@@ -42,7 +43,7 @@ hermes mnemosyne stats     # Working + episodic memory counts
 
 ## How It Works
 
-Mnemosyne hooks into the Hermes agent lifecycle:
+The provider hooks into the Hermes agent lifecycle:
 
 | Hook | Behavior |
 |---|---|
@@ -52,7 +53,7 @@ Mnemosyne hooks into the Hermes agent lifecycle:
 
 ### Registered Tools
 
-Mnemosyne registers these tools in the Hermes tool registry:
+The provider registers these tools in the Hermes tool registry. Use them as Clawd memory tools inside agent runs:
 
 | Tool | Description |
 |---|---|

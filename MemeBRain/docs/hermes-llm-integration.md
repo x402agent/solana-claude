@@ -1,6 +1,6 @@
-# Hermes Auxiliary LLM Integration
+# Hermes Auxiliary LLM Integration For Clawd Memory
 
-When Mnemosyne runs as a Hermes memory provider, it can optionally route its
+When Clawd Memory runs through the Mnemosyne-compatible Hermes memory provider, it can optionally route its
 LLM-backed memory operations — both consolidation (sleep) **and** structured
 fact extraction — through Hermes' authenticated auxiliary client. This lets a
 Hermes user reuse their configured provider (including OAuth-backed providers
@@ -55,7 +55,7 @@ and proceeds with the existing remote/local fallback chain.
 MNEMOSYNE_HOST_LLM_ENABLED=true
 
 # Optional: override the host default compression provider/model for
-# Mnemosyne calls. Leave unset to inherit Hermes' auxiliary.compression
+# Clawd Memory engine calls. Leave unset to inherit Hermes' auxiliary.compression
 # resolution. These are NOT credentials — Hermes still owns auth, OAuth
 # refresh, and transport.
 MNEMOSYNE_HOST_LLM_PROVIDER=openai-codex

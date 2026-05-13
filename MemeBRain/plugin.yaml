@@ -1,6 +1,6 @@
-name: mnemosyne
+name: clawd-memory
 version: 2.5
-description: Native AI memory system with SQLite - zero dependencies, sub-millisecond latency
+description: Clawd-native local agent memory system backed by the Mnemosyne SQLite engine
 author: Abdias J
 provides_tools:
   - mnemosyne_remember
@@ -23,4 +23,5 @@ provides_hooks:
   - on_session_start
   - post_tool_call
 dependencies: []
-# Mnemosyne requires no external dependencies - pure Python + SQLite
+# Clawd Memory requires no external database. Core storage is pure Python + SQLite.
+# Tool names stay mnemosyne_* for Hermes/MCP compatibility.

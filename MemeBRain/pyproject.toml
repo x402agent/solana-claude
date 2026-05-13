@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "mnemosyne-memory"
 dynamic = ["version"]
-description = "The Zero-Dependency, Sub-Millisecond AI Memory System"
+description = "Clawd Memory: local-first SQLite memory for agents, backed by the Mnemosyne engine"
 readme = "README.md"
 license = {text = "MIT"}
 requires-python = ">=3.9"
@@ -13,6 +13,7 @@ authors = [
     {name = "Abdias J", email = "abdi.moya@gmail.com"}
 ]
 keywords = [
+    "clawd",
     "ai",
     "memory",
     "sqlite",
@@ -48,10 +49,8 @@ all = ["ctransformers>=0.2.27", "llama-cpp-python>=0.2.0", "huggingface-hub>=0.2
 dev = ["pytest>=7.0", "build", "twine"]
 
 [project.urls]
-Homepage = "https://github.com/AxDSan/mnemosyne"
-Repository = "https://github.com/AxDSan/mnemosyne"
-Issues = "https://github.com/AxDSan/mnemosyne/issues"
-Documentation = "https://github.com/AxDSan/mnemosyne/blob/main/docs/README.md"
+Homepage = "https://clawd.x402.wtf/site/"
+Documentation = "https://clawd.x402.wtf/site/"
 
 [project.scripts]
 mnemosyne-install = "mnemosyne.install:install"

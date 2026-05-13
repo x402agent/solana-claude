@@ -1,7 +1,7 @@
 """
 Clawd Brain - persistent Solana-native memory and wiki layer.
 
-This module adapts Mnemosyne into the OpenClawd brain:
+This module adapts the Mnemosyne engine into the Clawd Memory brain:
 - durable SQLite bank named "clawd"
 - Obsidian-compatible markdown vault with wiki links and frontmatter
 - Solana, perpetual trading, OODA, x402, A2A, and agent harness metadata
@@ -369,7 +369,7 @@ class ClawdBrain:
         )
 
     def _fetch_url(self, url: str) -> tuple[str, str]:
-        req = Request(url, headers={"User-Agent": "OpenClawdBrain/1.0"})
+        req = Request(url, headers={"User-Agent": "ClawdMemory/1.0"})
         try:
             with urlopen(req, timeout=15) as response:
                 raw = response.read(750_000)
@@ -444,9 +444,9 @@ def _print_json(value: Any) -> None:
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="OpenClawd persistent brain and wiki")
+    parser = argparse.ArgumentParser(description="Clawd Memory persistent brain and wiki")
     parser.add_argument("--vault", default=None, help="Vault path. Defaults to CLAWD_BRAIN_VAULT or MemeBRain/vault.")
-    parser.add_argument("--bank", default=DEFAULT_BANK, help="Mnemosyne bank. Defaults to clawd.")
+    parser.add_argument("--bank", default=DEFAULT_BANK, help="Memory bank. Defaults to clawd.")
     sub = parser.add_subparsers(dest="command", required=True)
 
     sub.add_parser("init", help="Create the vault layout and memory bank")

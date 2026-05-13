@@ -185,7 +185,7 @@ def register(ctx):
     ctx.register_hook("on_session_start", _on_session_start)
     ctx.register_hook("post_tool_call", _on_post_tool_call)
     
-    return {"status": "registered", "plugin": "mnemosyne"}
+    return {"status": "registered", "plugin": "clawd-memory", "compat_provider": "mnemosyne"}
 
 
 def _on_session_start(session_id, model, platform, **kwargs):
@@ -196,7 +196,7 @@ def _on_session_start(session_id, model, platform, **kwargs):
     # Inject hard override rule so it survives across turns and sessions
     try:
         mem.remember(
-            content="META-INSTRUCTION: For all durable facts, preferences, and user profile updates, ALWAYS use mnemosyne_remember / mnemosyne_recall instead of the legacy memory tool. The memory tool is deprecated for durable storage. Mnemosyne is the primary and only memory system. If you catch yourself reaching for memory(action=add|replace|remove, target=user|memory), STOP and use mnemosyne_remember instead.",
+            content="META-INSTRUCTION: For all durable facts, preferences, and user profile updates, ALWAYS use mnemosyne_remember / mnemosyne_recall instead of the legacy memory tool. The memory tool is deprecated for durable storage. Clawd Memory is the primary memory system. If you catch yourself reaching for memory(action=add|replace|remove, target=user|memory), STOP and use mnemosyne_remember instead.",
             importance=0.99,
             source="system_override"
         )

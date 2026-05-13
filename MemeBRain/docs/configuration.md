@@ -1,6 +1,23 @@
-# Configuration
+# Clawd Memory Configuration
 
-Mnemosyne is designed to work with zero configuration. All settings have sensible defaults and are overridden via environment variables.
+Clawd Memory works with zero configuration for local use. The Clawd layer adds `CLAWD_BRAIN_VAULT` for the markdown vault and reuses the Mnemosyne engine variables for SQLite storage, BEAM limits, vector compression, and LLM consolidation.
+
+## Clawd Settings
+
+| Variable | Default | Description |
+|---|---|---|
+| `CLAWD_BRAIN_VAULT` | `MemeBRain/vault` | Markdown vault used by `ClawdBrain` and `clawd-brain` |
+| `MNEMOSYNE_DATA_DIR` | `~/.hermes/mnemosyne/data` | SQLite engine data directory |
+
+Example:
+
+```bash
+export CLAWD_BRAIN_VAULT="/Users/8bit/bots/Cladwbot-solana/solana-clawd/MemeBRain/vault"
+export MNEMOSYNE_DATA_DIR="$HOME/.hermes/mnemosyne/data"
+python3 -m mnemosyne.clawd_brain init
+```
+
+The sections below document the engine variables. They keep the `MNEMOSYNE_` prefix for compatibility.
 
 ## Data Directory
 

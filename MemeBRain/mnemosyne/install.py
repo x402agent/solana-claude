@@ -1,8 +1,8 @@
 """
-Mnemosyne Hermes Installer
-==========================
+Clawd Memory Hermes Installer
+=============================
 
-One-command setup for Mnemosyne as a Hermes MemoryProvider.
+One-command setup for Clawd Memory through the Mnemosyne-compatible Hermes MemoryProvider.
 
 Usage:
     python -m mnemosyne.install
@@ -18,7 +18,7 @@ from pathlib import Path
 
 
 def _get_mnemosyne_root() -> Path:
-    """Return the absolute path to the Mnemosyne repo root."""
+    """Return the absolute path to the Clawd Memory repo root."""
     # This file is at mnemosyne/install.py, so parent.parent is repo root
     return Path(__file__).resolve().parent.parent
 
@@ -65,7 +65,7 @@ def _ensure_symlink() -> bool:
     source = _get_mnemosyne_root() / "hermes_memory_provider"
 
     if not source.exists():
-        print(f"❌ Mnemosyne MemoryProvider not found at {source}")
+        print(f"❌ Clawd MemoryProvider not found at {source}")
         return False
 
     # Remove existing
@@ -145,7 +145,7 @@ def _verify() -> bool:
             print(f"✅ Provider verified: {provider.name} is_available=True")
             return True
         else:
-            print("⚠️  Provider loaded but not available (Mnemosyne core not importable)")
+            print("⚠️  Provider loaded but not available (memory engine not importable)")
             return False
     except Exception as e:
         print(f"⚠️  Verification skipped: {e}")
@@ -153,8 +153,8 @@ def _verify() -> bool:
 
 
 def install():
-    """Run the full Mnemosyne Hermes installation."""
-    print("🌀 Mnemosyne Hermes Installer")
+    """Run the full Clawd Memory Hermes installation."""
+    print("🌀 Clawd Memory Hermes Installer")
     print("=" * 40)
     print()
 
@@ -173,7 +173,7 @@ def install():
     _verify()
 
     print()
-    print("✅ Mnemosyne is ready!")
+    print("✅ Clawd Memory is ready!")
     print()
     print("Next steps:")
     print("  • Restart Hermes (if running)")
@@ -183,7 +183,7 @@ def install():
 
 
 def uninstall():
-    """Remove Mnemosyne from Hermes."""
+    """Remove Clawd Memory from Hermes."""
     hermes_home = _get_hermes_home()
     if not hermes_home:
         print("❌ Hermes not found.")
@@ -198,7 +198,7 @@ def uninstall():
             shutil.rmtree(target)
         print(f"🗑️  Removed {target}")
     else:
-        print("ℹ️  Mnemosyne plugin not found in Hermes.")
+        print("ℹ️  Clawd Memory plugin not found in Hermes.")
 
     # Reset config
     config_path = hermes_home / "config.yaml"
@@ -209,13 +209,13 @@ def uninstall():
             config_path.write_text(new_text, encoding="utf-8")
             print("✅ Reset memory.provider to null")
 
-    print("\n✅ Mnemosyne uninstalled. Hermes will use built-in memory.")
+    print("\n✅ Clawd Memory uninstalled. Hermes will use built-in memory.")
 
 
 if __name__ == "__main__":
     import argparse
-    parser = argparse.ArgumentParser(description="Mnemosyne Hermes Installer")
-    parser.add_argument("--uninstall", action="store_true", help="Remove Mnemosyne from Hermes")
+    parser = argparse.ArgumentParser(description="Clawd Memory Hermes Installer")
+    parser.add_argument("--uninstall", action="store_true", help="Remove Clawd Memory from Hermes")
     args = parser.parse_args()
 
     if args.uninstall:

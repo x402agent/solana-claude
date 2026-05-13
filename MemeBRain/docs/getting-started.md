@@ -1,78 +1,115 @@
-# Getting Started
+# Getting Started With Clawd Memory
 
-## Requirements
+This guide sets up the Clawd agent memory layer locally.
 
-- Python 3.9 or later
-- (Optional) Hermes Agent Framework for plugin integration
+## 1. Install
 
-## Installation
-
-### From PyPI (recommended)
+From the source tree:
 
 ```bash
-pip install mnemosyne-memory
+cd /Users/8bit/bots/Cladwbot-solana/solana-clawd/MemeBRain
+python3 -m pip install -e ".[all]"
 ```
 
-With all optional features (dense retrieval via fastembed + local LLM consolidation):
+If you only need the CLI from the checked-out repo, you can run the module directly without installing:
 
 ```bash
-pip install mnemosyne-memory[all]
+python3 -m mnemosyne.clawd_brain --help
 ```
 
-**Ubuntu 24.04 / Debian 12:** If `pip install` fails with `externally-managed-environment`, use a virtual environment:
+Package compatibility note: the Python package is still named `mnemosyne-memory`, and the module is still `mnemosyne`. The Clawd-facing command is `clawd-brain`.
+
+## 2. Initialize The Clawd Bank
 
 ```bash
-python3 -m venv .venv
-source .venv/bin/activate
-pip install mnemosyne-memory[all]
+python3 -m mnemosyne.clawd_brain init
 ```
 
-### From Source (for contributors)
+Expected output includes:
+
+- `bank`: `clawd`
+- `vault`: the markdown vault path
+- `index_db`: the Clawd vault index database
+- `memory`: engine statistics
+
+Override the vault location when needed:
 
 ```bash
-git clone https://github.com/AxDSan/mnemosyne.git
-cd mnemosyne
-pip install -e ".[all,dev]"
+export CLAWD_BRAIN_VAULT="$PWD/vault"
+python3 -m mnemosyne.clawd_brain init
 ```
 
-### One-command Hermes Provider (no pip)
+## 3. Remember Durable Agent Context
 
 ```bash
-curl -sSL https://raw.githubusercontent.com/AxDSan/mnemosyne/main/deploy_hermes_provider.sh | bash
+python3 -m mnemosyne.clawd_brain remember \
+  "Clawd Agent Contract" \
+  "Recall before planning. Remember durable decisions, preferences, protocol research, and risk findings. Never store secrets." \
+  --kind agent \
+  --tag clawd \
+  --tag agent \
+  --importance 0.9
 ```
 
-This symlinks the provider into `~/.hermes/plugins/mnemosyne`. No virtual environment required.
+Use short titles and direct content. The content should be useful if another agent recalls it days later.
 
-## Your First Memory
+## 4. Recall Context
 
-```python
-from mnemosyne import remember, recall
-
-# Store a fact
-remember("User prefers dark mode interfaces", importance=0.9, source="preference")
-
-# Store a global fact (visible in every session)
-remember("User email is alice@example.com", importance=0.95, source="profile", scope="global")
-
-# Store temporary data with expiry
-remember("API key: sk-abc123", importance=0.8, source="credential", valid_until="2026-12-31T00:00:00")
-
-# Search memories
-results = recall("interface preferences", top_k=3)
-for r in results:
-    print(r["content"])
+```bash
+python3 -m mnemosyne.clawd_brain recall "agent memory rules" --top-k 8
 ```
 
-## Verify Installation
+Recall returns matching memory records and vault notes. Agents should run recall before making decisions that depend on prior context.
 
-```python
-from mnemosyne import get_stats
-print(get_stats())
+## 5. Archive Research
+
+Archive a URL:
+
+```bash
+python3 -m mnemosyne.clawd_brain research "https://docs.jup.ag/" --tag solana --tag jupiter
 ```
 
-## Next Steps
+Queue a topic:
 
-- [Architecture](architecture.md) — understand how BEAM tiers work
-- [API Reference](api-reference.md) — full Python API documentation
-- [Configuration](configuration.md) — tune performance and storage
-- [Hermes Integration](hermes-integration.md) — use as a Hermes memory backend
+```bash
+python3 -m mnemosyne.clawd_brain research "BONK perpetual venue risk" --tag perp --tag risk
+```
+
+The research command creates a durable vault note and indexes it for later recall.
+
+## 6. Ingest OODA Ticks
+
+```bash
+python3 -m mnemosyne.clawd_brain ingest-ooda --journal ../ooda/journal/ticks.jsonl --limit 100
+```
+
+Use this when the OODA loop has produced operational observations that should become durable Clawd memory.
+
+## 7. Check Status
+
+```bash
+python3 -m mnemosyne.clawd_brain status
+```
+
+Status shows the active bank, vault path, vault note counts, link count, note counts by kind, and underlying memory stats.
+
+## Recommended Agent Workflow
+
+1. Recall relevant context for the user/task.
+2. Do the work.
+3. Remember decisions, preferences, risk findings, and deployment facts.
+4. Archive URLs or research topics that should be reusable.
+5. Consolidate periodically through the Hermes/MCP `mnemosyne_sleep` tool or the lower-level engine.
+
+## What Not To Store
+
+- API keys, private keys, seed phrases, tokens, passwords, or session cookies.
+- Raw logs that contain secrets or customer data.
+- Large command output that does not create future context.
+- Temporary thoughts that belong in scratchpad only.
+
+## Next
+
+- Read [Architecture](architecture.md) for the data model.
+- Read [Configuration](configuration.md) for environment variables.
+- Read [API Reference](api-reference.md) for Python usage.

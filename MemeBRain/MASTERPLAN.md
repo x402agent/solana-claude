@@ -1,5 +1,7 @@
-# Mnemosyne SOTA Memory Architecture - Masterplan
+# Clawd Memory SOTA Architecture - Masterplan
 ## Temporal Epistemic Graphs with Veracity-Weighted Consolidation
+
+This masterplan now targets Clawd Memory: the local-first agent brain for Clawd. The Clawd layer owns the agent contract, markdown vault, Solana/OODA metadata, and recall behavior. The Mnemosyne engine remains the SQLite storage and retrieval substrate until a deliberate migration is planned.
 
 ---
 

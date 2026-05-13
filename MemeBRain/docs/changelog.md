@@ -112,4 +112,4 @@ First major release. Production-ready.
 ---
 
 For the complete history, see [CHANGELOG.md](../CHANGELOG.md).
-For releases, see [GitHub Releases](https://github.com/AxDSan/mnemosyne/releases).
+For current Clawd user-facing releases, see the published site at [clawd.x402.wtf/site](https://clawd.x402.wtf/site/).

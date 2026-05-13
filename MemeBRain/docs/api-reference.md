@@ -1,6 +1,47 @@
-# API Reference — Mnemosyne v2.4
+# API Reference - Clawd Memory
 
-## Quick Start
+This page documents the Clawd-facing API first, then the lower-level Mnemosyne engine API.
+
+## ClawdBrain Quick Start
+
+```python
+from mnemosyne.clawd_brain import ClawdBrain
+
+brain = ClawdBrain()
+
+brain.remember(
+    "Solana RPC Provider",
+    "The Clawd gateway should use Helius for Solana RPC and websocket access.",
+    kind="protocol",
+    source="clawd",
+    tags=["solana", "helius"],
+    importance=0.8,
+)
+
+results = brain.recall("Solana RPC provider", top_k=5)
+status = brain.status()
+```
+
+## Clawd CLI
+
+```bash
+clawd-brain init
+clawd-brain status
+clawd-brain remember TITLE CONTENT --kind agent --tag clawd --importance 0.9
+clawd-brain recall QUERY --top-k 8
+clawd-brain research URL_OR_TOPIC --tag solana
+clawd-brain ingest-ooda --journal ../ooda/journal/ticks.jsonl --limit 100
+```
+
+Module form:
+
+```bash
+python3 -m mnemosyne.clawd_brain recall "agent preferences"
+```
+
+Compatibility note: `mnemosyne` remains the Python package and storage engine. Use `ClawdBrain` for Clawd agent workflows.
+
+## Engine Quick Start
 
 ```python
 from mnemosyne import Mnemosyne
@@ -296,8 +337,8 @@ from mnemosyne.core.entities import (
 )
 
 # Extract entities from text
-entities = extract_entities_regex("Abdias founded Mnemosyne in New York")
-# Returns: ["Abdias", "Mnemosyne", "New York"]
+entities = extract_entities_regex("Abdias founded Clawd Memory in New York")
+# Returns: ["Abdias", "Clawd Memory", "New York"]
 
 # Fuzzy match
 distance = levenshtein_distance("Abdias", "Abdias J")

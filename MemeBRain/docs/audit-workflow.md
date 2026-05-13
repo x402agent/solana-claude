@@ -1,4 +1,6 @@
-# Mnemosyne Docs Audit — Reusable Workflow Checklist
+# Clawd Memory Docs Audit - Reusable Workflow Checklist
+
+This workflow audits Clawd Memory documentation against the current codebase. Historical references to Mnemosyne refer to the underlying engine or the pre-rebrand docs site.
 
 **Purpose:** Bi-weekly cross-reference audit of docs site against codebase.
 **Cadence:** Every 2 weeks (or after any version bump / major feature merge).
