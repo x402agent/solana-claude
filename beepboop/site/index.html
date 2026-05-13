@@ -617,6 +617,7 @@
         <a href="#architecture">Architecture</a>
         <a href="#grow">Grow</a>
       </nav>
+      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle light mode">☾</button>
       <a class="button" href="#use">Start</a>
     </div>
   </header>
@@ -633,6 +634,20 @@
           <a class="button" href="#use">Run the app</a>
           <a class="button secondary" href="#gateway">Test gateway</a>
           <a class="button ghost" href="../README.md">Read docs</a>
+        </div>
+        <div class="music-player" aria-label="Solana Clawd music player">
+          <audio id="clawd-audio" preload="metadata" src="https://pub-fd3c06f5fe864363a179a41dc47843bf.r2.dev/Solana%2BClawd%20(2).mp3"></audio>
+          <div class="music-top">
+            <div class="track-title">
+              <strong>Solana Clawd</strong>
+              <span>official launch loop</span>
+            </div>
+            <button class="play-button" id="play-button" aria-label="Play Solana Clawd track">▶</button>
+          </div>
+          <div class="player-row">
+            <input class="seek" id="seek" type="range" min="0" max="100" value="0" aria-label="Track progress">
+            <span class="time" id="track-time">0:00</span>
+          </div>
         </div>
         <div class="gateway-strip" id="gateway-strip">
           <div class="status-pill"><strong>OpenAI</strong><span id="provider-openai">checking</span></div>
@@ -819,6 +834,65 @@ open beepboop/leanring-buddy.xcodeproj</pre>
 
   document.getElementById("health-button").addEventListener("click", checkHealth);
   document.getElementById("wallet-button").addEventListener("click", lookupWallet);
+
+  const themeToggle = document.getElementById("theme-toggle");
+  const savedTheme = localStorage.getItem("beepboop-theme");
+  if (savedTheme === "light") {
+    document.body.classList.add("light-mode");
+    themeToggle.textContent = "☀";
+    themeToggle.setAttribute("aria-label", "Toggle dark mode");
+  }
+
+  themeToggle.addEventListener("click", () => {
+    const isLight = document.body.classList.toggle("light-mode");
+    localStorage.setItem("beepboop-theme", isLight ? "light" : "dark");
+    themeToggle.textContent = isLight ? "☀" : "☾";
+    themeToggle.setAttribute("aria-label", isLight ? "Toggle dark mode" : "Toggle light mode");
+  });
+
+  const audio = document.getElementById("clawd-audio");
+  const playButton = document.getElementById("play-button");
+  const seek = document.getElementById("seek");
+  const trackTime = document.getElementById("track-time");
+
+  function formatTime(seconds) {
+    if (!Number.isFinite(seconds)) return "0:00";
+    const minutes = Math.floor(seconds / 60);
+    const remainder = Math.floor(seconds % 60).toString().padStart(2, "0");
+    return `${minutes}:${remainder}`;
+  }
+
+  playButton.addEventListener("click", async () => {
+    if (audio.paused) {
+      await audio.play();
+    } else {
+      audio.pause();
+    }
+  });
+
+  audio.addEventListener("play", () => {
+    playButton.textContent = "Ⅱ";
+    playButton.setAttribute("aria-label", "Pause Solana Clawd track");
+  });
+
+  audio.addEventListener("pause", () => {
+    playButton.textContent = "▶";
+    playButton.setAttribute("aria-label", "Play Solana Clawd track");
+  });
+
+  audio.addEventListener("timeupdate", () => {
+    if (audio.duration) {
+      seek.value = String((audio.currentTime / audio.duration) * 100);
+      trackTime.textContent = `${formatTime(audio.currentTime)} / ${formatTime(audio.duration)}`;
+    }
+  });
+
+  seek.addEventListener("input", () => {
+    if (audio.duration) {
+      audio.currentTime = (Number(seek.value) / 100) * audio.duration;
+    }
+  });
+
   checkHealth();
 </script>
 </body>

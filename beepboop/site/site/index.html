@@ -11,20 +11,44 @@
   * { box-sizing: border-box; }
 
   :root {
-    --ink: #17120f;
-    --paper: #f7f2e8;
-    --paper-strong: #fffaf0;
-    --line: rgba(23, 18, 15, 0.16);
-    --muted: #6d625b;
-    --muted-2: #92877f;
-    --red: #d83a2e;
-    --red-dark: #9f211a;
-    --blue: #1769aa;
-    --green: #16855a;
-    --yellow: #f3bc3f;
-    --black: #100d0b;
-    --panel: rgba(255, 250, 240, 0.86);
-    --shadow: 0 24px 70px rgba(52, 39, 28, 0.18);
+    color-scheme: dark;
+    --sol-purple: #9945FF;
+    --sol-green: #14F195;
+    --ink: #f4f0ff;
+    --paper: #05030b;
+    --paper-strong: #0c0718;
+    --line: rgba(153, 69, 255, 0.32);
+    --muted: #b8acd4;
+    --muted-2: #827497;
+    --red: #ff3d81;
+    --red-dark: #b91454;
+    --blue: #46b7ff;
+    --green: var(--sol-green);
+    --yellow: #f6d365;
+    --black: #f4f0ff;
+    --panel: rgba(13, 8, 27, 0.84);
+    --shadow: 0 24px 90px rgba(153, 69, 255, 0.24);
+    --grid-line: rgba(20, 241, 149, 0.08);
+    --topbar-bg: rgba(5, 3, 11, 0.78);
+    --button-text: #05030b;
+    --console-bg: #030207;
+  }
+
+  body.light-mode {
+    color-scheme: light;
+    --ink: #160f24;
+    --paper: #f3f0ff;
+    --paper-strong: #fffaff;
+    --line: rgba(83, 37, 148, 0.2);
+    --muted: #665a78;
+    --muted-2: #8d819e;
+    --black: #160f24;
+    --panel: rgba(255, 250, 255, 0.84);
+    --shadow: 0 24px 70px rgba(59, 31, 92, 0.16);
+    --grid-line: rgba(153, 69, 255, 0.07);
+    --topbar-bg: rgba(243, 240, 255, 0.78);
+    --button-text: #ffffff;
+    --console-bg: #120b22;
   }
 
   html { scroll-behavior: smooth; }
@@ -33,10 +57,11 @@
     margin: 0;
     color: var(--ink);
     background:
-      linear-gradient(90deg, rgba(23, 18, 15, 0.045) 1px, transparent 1px) 0 0 / 44px 44px,
-      linear-gradient(0deg, rgba(23, 18, 15, 0.035) 1px, transparent 1px) 0 0 / 44px 44px,
-      radial-gradient(circle at 74% 12%, rgba(216, 58, 46, 0.16), transparent 28rem),
-      radial-gradient(circle at 14% 18%, rgba(243, 188, 63, 0.22), transparent 26rem),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px) 0 0 / 44px 44px,
+      linear-gradient(0deg, rgba(153, 69, 255, 0.08) 1px, transparent 1px) 0 0 / 44px 44px,
+      radial-gradient(circle at 72% 6%, rgba(153, 69, 255, 0.32), transparent 30rem),
+      radial-gradient(circle at 16% 10%, rgba(20, 241, 149, 0.18), transparent 28rem),
+      linear-gradient(135deg, rgba(153, 69, 255, 0.08), rgba(20, 241, 149, 0.04) 48%, transparent 72%),
       var(--paper);
     font-family: "Instrument Sans", sans-serif;
     min-height: 100vh;
@@ -55,7 +80,7 @@
     top: 0;
     z-index: 20;
     backdrop-filter: blur(18px);
-    background: rgba(247, 242, 232, 0.78);
+    background: var(--topbar-bg);
     border-bottom: 1px solid var(--line);
   }
 
@@ -105,18 +130,18 @@
     justify-content: center;
     gap: 8px;
     border: 1px solid var(--black);
-    color: var(--paper-strong);
-    background: var(--black);
+    color: var(--button-text);
+    background: linear-gradient(135deg, var(--sol-green), var(--sol-purple));
     border-radius: 7px;
     padding: 11px 16px;
     font-weight: 700;
-    box-shadow: 4px 4px 0 rgba(23, 18, 15, 0.16);
+    box-shadow: 0 0 24px rgba(153, 69, 255, 0.22), 4px 4px 0 rgba(20, 241, 149, 0.16);
     cursor: pointer;
   }
 
   .button.secondary {
-    background: var(--paper-strong);
-    color: var(--black);
+    background: rgba(153, 69, 255, 0.14);
+    color: var(--ink);
   }
 
   .button.ghost {
@@ -125,7 +150,19 @@
     box-shadow: none;
   }
 
-  .button:hover { transform: translate(-1px, -1px); box-shadow: 5px 5px 0 rgba(23, 18, 15, 0.2); }
+  .button:hover { transform: translate(-1px, -1px); box-shadow: 0 0 32px rgba(20, 241, 149, 0.22), 5px 5px 0 rgba(153, 69, 255, 0.2); }
+
+  .theme-toggle {
+    width: 42px;
+    height: 42px;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: rgba(153, 69, 255, 0.12);
+    color: var(--ink);
+    cursor: pointer;
+  }
 
   .hero {
     min-height: calc(100vh - 66px);
@@ -142,7 +179,7 @@
     gap: 8px;
     padding: 7px 10px;
     border: 1px solid var(--line);
-    background: rgba(255, 250, 240, 0.68);
+    background: rgba(153, 69, 255, 0.13);
     border-radius: 999px;
     color: var(--muted);
     font-size: 0.86rem;
@@ -154,7 +191,7 @@
     height: 9px;
     border-radius: 999px;
     background: var(--green);
-    box-shadow: 0 0 0 6px rgba(22, 133, 90, 0.14);
+    box-shadow: 0 0 0 6px rgba(20, 241, 149, 0.14), 0 0 24px rgba(20, 241, 149, 0.42);
   }
 
   h1 {
@@ -189,7 +226,7 @@
 
   .status-pill {
     border: 1px solid var(--line);
-    background: rgba(255, 250, 240, 0.72);
+    background: rgba(153, 69, 255, 0.12);
     border-radius: 7px;
     padding: 10px;
     min-height: 58px;
@@ -213,7 +250,7 @@
     position: relative;
     border: 1px solid var(--black);
     background: var(--paper-strong);
-    box-shadow: 12px 12px 0 rgba(23, 18, 15, 0.16);
+    box-shadow: 12px 12px 0 rgba(153, 69, 255, 0.16), 0 0 50px rgba(20, 241, 149, 0.08);
     border-radius: 8px;
     overflow: hidden;
   }
@@ -225,7 +262,7 @@
     align-items: center;
     justify-content: space-between;
     padding: 0 14px;
-    background: #f2ddba;
+    background: linear-gradient(90deg, rgba(153, 69, 255, 0.22), rgba(20, 241, 149, 0.12));
     font-family: "JetBrains Mono", monospace;
     font-size: 0.78rem;
   }
@@ -242,6 +279,72 @@
     aspect-ratio: 16 / 10;
     object-fit: cover;
     background: #241a17;
+  }
+
+  .music-player {
+    margin-top: 24px;
+    max-width: 640px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background:
+      linear-gradient(135deg, rgba(153, 69, 255, 0.24), rgba(20, 241, 149, 0.08)),
+      var(--panel);
+    padding: 14px;
+    box-shadow: var(--shadow);
+  }
+
+  .music-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    margin-bottom: 12px;
+  }
+
+  .track-title {
+    min-width: 0;
+  }
+
+  .track-title strong {
+    display: block;
+  }
+
+  .track-title span {
+    display: block;
+    color: var(--muted);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 0.76rem;
+    margin-top: 4px;
+  }
+
+  .play-button {
+    width: 46px;
+    height: 46px;
+    flex: 0 0 46px;
+    border: 1px solid var(--sol-green);
+    border-radius: 999px;
+    background: var(--sol-green);
+    color: #05030b;
+    cursor: pointer;
+    font-weight: 900;
+  }
+
+  .player-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .seek {
+    width: 100%;
+    accent-color: var(--sol-purple);
+  }
+
+  .time {
+    color: var(--muted);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 0.76rem;
   }
 
   .caption-row {
@@ -349,7 +452,7 @@
     gap: 14px;
     align-items: start;
     border: 1px solid var(--line);
-    background: rgba(255, 250, 240, 0.72);
+    background: rgba(153, 69, 255, 0.1);
     border-radius: 8px;
     padding: 16px;
   }
@@ -361,7 +464,8 @@
     height: 44px;
     border: 1px solid var(--black);
     border-radius: 7px;
-    background: var(--yellow);
+    background: linear-gradient(135deg, var(--sol-purple), var(--sol-green));
+    color: #05030b;
     font-family: "JetBrains Mono", monospace;
   }
 
@@ -386,7 +490,7 @@
     border: 1px solid var(--line);
     border-radius: 8px;
     padding: 14px;
-    background: rgba(247, 242, 232, 0.76);
+    background: rgba(153, 69, 255, 0.1);
     min-height: 132px;
   }
 
@@ -426,7 +530,7 @@
     flex: 1;
     border: 1px solid var(--black);
     border-radius: 7px;
-    background: #fffdf7;
+    background: rgba(255, 255, 255, 0.06);
     padding: 11px 12px;
     color: var(--ink);
   }
@@ -435,8 +539,8 @@
     min-height: 148px;
     margin-top: 12px;
     border: 1px solid var(--line);
-    background: #17120f;
-    color: #f7f2e8;
+    background: var(--console-bg);
+    color: var(--ink);
     border-radius: 7px;
     padding: 14px;
     overflow: auto;
@@ -455,7 +559,7 @@
     border: 1px solid var(--line);
     border-radius: 8px;
     padding: 18px;
-    background: rgba(255, 250, 240, 0.74);
+    background: rgba(153, 69, 255, 0.1);
   }
 
   .growth-card strong { display: block; margin-bottom: 10px; }
@@ -463,7 +567,7 @@
 
   .footer {
     border-top: 1px solid var(--black);
-    background: var(--black);
+    background: #05030b;
     color: var(--paper);
     padding: 34px 0;
   }
@@ -513,6 +617,7 @@
         <a href="#architecture">Architecture</a>
         <a href="#grow">Grow</a>
       </nav>
+      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle light mode">☾</button>
       <a class="button" href="#use">Start</a>
     </div>
   </header>
@@ -529,6 +634,20 @@
           <a class="button" href="#use">Run the app</a>
           <a class="button secondary" href="#gateway">Test gateway</a>
           <a class="button ghost" href="../README.md">Read docs</a>
+        </div>
+        <div class="music-player" aria-label="Solana Clawd music player">
+          <audio id="clawd-audio" preload="metadata" src="https://pub-fd3c06f5fe864363a179a41dc47843bf.r2.dev/Solana%2BClawd%20(2).mp3"></audio>
+          <div class="music-top">
+            <div class="track-title">
+              <strong>Solana Clawd</strong>
+              <span>official launch loop</span>
+            </div>
+            <button class="play-button" id="play-button" aria-label="Play Solana Clawd track">▶</button>
+          </div>
+          <div class="player-row">
+            <input class="seek" id="seek" type="range" min="0" max="100" value="0" aria-label="Track progress">
+            <span class="time" id="track-time">0:00</span>
+          </div>
         </div>
         <div class="gateway-strip" id="gateway-strip">
           <div class="status-pill"><strong>OpenAI</strong><span id="provider-openai">checking</span></div>
@@ -715,6 +834,65 @@ open beepboop/leanring-buddy.xcodeproj</pre>
 
   document.getElementById("health-button").addEventListener("click", checkHealth);
   document.getElementById("wallet-button").addEventListener("click", lookupWallet);
+
+  const themeToggle = document.getElementById("theme-toggle");
+  const savedTheme = localStorage.getItem("beepboop-theme");
+  if (savedTheme === "light") {
+    document.body.classList.add("light-mode");
+    themeToggle.textContent = "☀";
+    themeToggle.setAttribute("aria-label", "Toggle dark mode");
+  }
+
+  themeToggle.addEventListener("click", () => {
+    const isLight = document.body.classList.toggle("light-mode");
+    localStorage.setItem("beepboop-theme", isLight ? "light" : "dark");
+    themeToggle.textContent = isLight ? "☀" : "☾";
+    themeToggle.setAttribute("aria-label", isLight ? "Toggle dark mode" : "Toggle light mode");
+  });
+
+  const audio = document.getElementById("clawd-audio");
+  const playButton = document.getElementById("play-button");
+  const seek = document.getElementById("seek");
+  const trackTime = document.getElementById("track-time");
+
+  function formatTime(seconds) {
+    if (!Number.isFinite(seconds)) return "0:00";
+    const minutes = Math.floor(seconds / 60);
+    const remainder = Math.floor(seconds % 60).toString().padStart(2, "0");
+    return `${minutes}:${remainder}`;
+  }
+
+  playButton.addEventListener("click", async () => {
+    if (audio.paused) {
+      await audio.play();
+    } else {
+      audio.pause();
+    }
+  });
+
+  audio.addEventListener("play", () => {
+    playButton.textContent = "Ⅱ";
+    playButton.setAttribute("aria-label", "Pause Solana Clawd track");
+  });
+
+  audio.addEventListener("pause", () => {
+    playButton.textContent = "▶";
+    playButton.setAttribute("aria-label", "Play Solana Clawd track");
+  });
+
+  audio.addEventListener("timeupdate", () => {
+    if (audio.duration) {
+      seek.value = String((audio.currentTime / audio.duration) * 100);
+      trackTime.textContent = `${formatTime(audio.currentTime)} / ${formatTime(audio.duration)}`;
+    }
+  });
+
+  seek.addEventListener("input", () => {
+    if (audio.duration) {
+      audio.currentTime = (Number(seek.value) / 100) * audio.duration;
+    }
+  });
+
   checkHealth();
 </script>
 </body>
