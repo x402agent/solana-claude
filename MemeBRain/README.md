@@ -1,4 +1,34 @@
-# Clawd Memory
+<p align="center">
+  <img src="assets/clawd-brain-memory.svg" alt="Animated Clawd Brain memory system" width="100%" />
+</p>
+
+<h1 align="center">Clawd Memory</h1>
+
+<p align="center">
+  <strong>Clawd Brain update: local agent memory, markdown vaults, Solana research, OODA ingestion, and fast recall.</strong>
+</p>
+
+<p align="center">
+  <a href="https://clawd.x402.wtf/site/"><img alt="Clawd Site" src="https://img.shields.io/badge/site-clawd.x402.wtf-9945FF?style=for-the-badge"></a>
+  <img alt="Memory Bank" src="https://img.shields.io/badge/default_bank-clawd-14F195?style=for-the-badge">
+  <img alt="Local First" src="https://img.shields.io/badge/storage-local_first-090612?style=for-the-badge">
+  <img alt="Agent Ready" src="https://img.shields.io/badge/agents-ready-9945FF?style=for-the-badge">
+</p>
+
+```text
+                 CLAWD BRAIN MEMORY LOOP
+
+  user intent       OODA ticks        Solana research       agent decisions
+      |                 |                   |                    |
+      v                 v                   v                    v
+  +-----------------------------------------------------------------------+
+  |                         clawd-brain                                   |
+  |  remember  ->  vault note  ->  SQLite bank  ->  recall  ->  action    |
+  +-----------------------------------------------------------------------+
+      |                 |                   |                    |
+      v                 v                   v                    v
+  preferences       risk notes        protocol docs        reusable context
+```
 
 Local-first memory for Clawd agents.
 
