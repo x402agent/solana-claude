@@ -17,14 +17,14 @@
   },
   "dependencies": {
     "@cloudflare/puppeteer": "^1.0.5",
-    "hono": "^4.11.6",
+    "hono": "^4.12.18",
     "jose": "^6.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
   "devDependencies": {
     "@cloudflare/sandbox": "*",
-    "@cloudflare/vite-plugin": "^1.0.0",
+    "@cloudflare/vite-plugin": "^1.36.4",
     "@cloudflare/workers-types": "^4.20250109.0",
     "@types/node": "^22.0.0",
     "@types/react": "^19.0.0",
@@ -33,9 +33,9 @@
     "@vitest/coverage-v8": "^4.0.18",
     "node-addon-api": "^8.5.0",
     "typescript": "^5.9.3",
-    "vite": "^6.0.0",
+    "vite": "^6.4.2",
     "vitest": "^4.0.18",
-    "wrangler": "^4.50.0"
+    "wrangler": "^4.90.1"
   },
   "author": "",
   "license": "MIT",
