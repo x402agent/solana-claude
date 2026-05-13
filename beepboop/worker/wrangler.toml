@@ -5,5 +5,10 @@ compatibility_date = "2024-01-01"
 [vars]
 ELEVENLABS_VOICE_ID = "kPzsL2i3teMYv0FxEYQ6"
 SOLANA_NETWORK = "mainnet-beta"
-# Set SOLANA_RPC_URL as a secret for private RPC endpoints (Helius, Quicknode, etc.)
+# Optional secret-based providers:
+# npx wrangler secret put OPENAI_API_KEY
+# npx wrangler secret put HELIUS_RPC_URL
+# npx wrangler secret put HELIUS_API_KEY
+# npx wrangler secret put HELIUS_WSS_URL
+# npx wrangler secret put BIRDEYE_API_KEY
 # npx wrangler secret put SOLANA_RPC_URL

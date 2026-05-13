@@ -2,27 +2,37 @@
  * Beep Boop Clawd Gateway Worker
  *
  * The lobster claw proxy. Routes requests to Claude (the brain),
- * ElevenLabs (the voice), AssemblyAI (the ears), and Solana RPC
- * (the blockchain). API keys are stored as Cloudflare secrets so
- * nothing sensitive ships in the app binary.
+ * OpenAI (alternate brain), ElevenLabs (the voice), AssemblyAI (the ears),
+ * and Solana data providers (the blockchain). API keys are stored as
+ * Cloudflare secrets so nothing sensitive ships in the app binary.
  *
  * Routes:
- *   POST /chat             -> Anthropic Messages API (streaming)
- *   POST /tts              -> ElevenLabs TTS API (lobster voice)
- *   POST /transcribe-token -> AssemblyAI websocket token
- *   POST /solana/rpc       -> Solana JSON-RPC proxy (mainnet/devnet)
- *   POST /solana/balance    -> Quick SOL balance lookup
- *   POST /solana/tokens     -> Token accounts for a wallet
- *   GET  /health            -> Clawd health check
+ *   POST /chat                        -> Anthropic Messages API (streaming)
+ *   POST /openai/responses            -> OpenAI Responses API
+ *   POST /tts                         -> ElevenLabs TTS API (lobster voice)
+ *   POST /transcribe-token            -> AssemblyAI websocket token
+ *   POST /solana/rpc                  -> Solana / Helius JSON-RPC proxy
+ *   POST /solana/balance              -> Quick SOL balance lookup
+ *   POST /solana/tokens               -> Token accounts for a wallet
+ *   POST /solana/assets               -> Helius DAS getAssetsByOwner
+ *   GET  /solana/address-transactions -> Helius enhanced address history
+ *   GET  /solana/price                -> Birdeye token price
+ *   GET  /solana/wallet-tokens        -> Birdeye wallet token balances
+ *   GET  /health                      -> Clawd health check
  */
 
 interface Env {
-  ANTHROPIC_API_KEY: string;
-  ELEVENLABS_API_KEY: string;
-  ELEVENLABS_VOICE_ID: string;
-  ASSEMBLYAI_API_KEY: string;
-  SOLANA_RPC_URL: string;
-  SOLANA_NETWORK: string;
+  ANTHROPIC_API_KEY?: string;
+  OPENAI_API_KEY?: string;
+  ELEVENLABS_API_KEY?: string;
+  ELEVENLABS_VOICE_ID?: string;
+  ASSEMBLYAI_API_KEY?: string;
+  SOLANA_RPC_URL?: string;
+  SOLANA_NETWORK?: string;
+  HELIUS_RPC_URL?: string;
+  HELIUS_API_KEY?: string;
+  HELIUS_WSS_URL?: string;
+  BIRDEYE_API_KEY?: string;
 }
 
 const CORS_HEADERS = {
@@ -45,14 +55,24 @@ export default {
       return handleHealth(env);
     }
 
-    if (request.method !== "POST") {
-      return new Response("Method not allowed. The claw only accepts POST.", { status: 405 });
+    const allowsGetRoute =
+      (url.pathname === "/health" && request.method === "GET") ||
+      (url.pathname === "/solana/address-transactions" && request.method === "GET") ||
+      (url.pathname === "/solana/price" && request.method === "GET") ||
+      (url.pathname === "/solana/wallet-tokens" && request.method === "GET");
+
+    if (request.method !== "POST" && !allowsGetRoute) {
+      return new Response("Method not allowed. The claw only accepts POST here.", { status: 405 });
     }
 
     try {
       // Claude AI chat (the brain)
       if (url.pathname === "/chat") {
         return await handleChat(request, env);
+      }
+
+      if (url.pathname === "/openai/responses") {
+        return await handleOpenAIResponses(request, env);
       }
 
       // ElevenLabs TTS (the lobster voice)
@@ -79,6 +99,22 @@ export default {
       if (url.pathname === "/solana/tokens") {
         return await handleSolanaTokenAccounts(request, env);
       }
+
+      if (url.pathname === "/solana/assets") {
+        return await handleHeliusAssets(request, env);
+      }
+
+      if (url.pathname === "/solana/address-transactions" && request.method === "GET") {
+        return await handleHeliusAddressTransactions(url, env);
+      }
+
+      if (url.pathname === "/solana/price" && request.method === "GET") {
+        return await handleBirdeyePrice(url, env);
+      }
+
+      if (url.pathname === "/solana/wallet-tokens" && request.method === "GET") {
+        return await handleBirdeyeWalletTokens(url, env);
+      }
     } catch (error) {
       console.error(`[${url.pathname}] Clawd error:`, error);
       return new Response(
@@ -96,13 +132,32 @@ export default {
 function handleHealth(env: Env): Response {
   const network = env.SOLANA_NETWORK || "mainnet-beta";
   return new Response(
-    JSON.stringify({
-      status: "clawing",
-      name: "beepboop-clawd-gateway",
-      network,
-      routes: ["/chat", "/tts", "/transcribe-token", "/solana/rpc", "/solana/balance", "/solana/tokens"],
-      timestamp: new Date().toISOString(),
-    }),
+      JSON.stringify({
+        status: "clawing",
+        name: "beepboop-clawd-gateway",
+        network,
+        routes: [
+          "/chat",
+          "/openai/responses",
+          "/tts",
+          "/transcribe-token",
+          "/solana/rpc",
+          "/solana/balance",
+          "/solana/tokens",
+          "/solana/assets",
+          "/solana/address-transactions",
+          "/solana/price",
+          "/solana/wallet-tokens",
+        ],
+        providers: {
+          anthropic: Boolean(env.ANTHROPIC_API_KEY),
+          openai: Boolean(env.OPENAI_API_KEY),
+          helius: Boolean(env.HELIUS_RPC_URL || env.HELIUS_API_KEY),
+          birdeye: Boolean(env.BIRDEYE_API_KEY),
+          solanaWebsocket: env.HELIUS_WSS_URL || null,
+        },
+        timestamp: new Date().toISOString(),
+      }),
     { status: 200, headers: { "content-type": "application/json", ...CORS_HEADERS } }
   );
 }
@@ -110,6 +165,13 @@ function handleHealth(env: Env): Response {
 // ── Claude Chat (The Brain) ──────────────────────────────────────────
 
 async function handleChat(request: Request, env: Env): Promise<Response> {
+  if (!env.ANTHROPIC_API_KEY) {
+    return new Response(
+      JSON.stringify({ error: "ANTHROPIC_API_KEY is not configured" }),
+      { status: 500, headers: { "content-type": "application/json", ...CORS_HEADERS } }
+    );
+  }
+
   const body = await request.text();
 
   const response = await fetch("https://api.anthropic.com/v1/messages", {
@@ -141,9 +203,54 @@ async function handleChat(request: Request, env: Env): Promise<Response> {
   });
 }
 
+// ── OpenAI Responses (Alternate Brain) ──────────────────────────────
+
+async function handleOpenAIResponses(request: Request, env: Env): Promise<Response> {
+  if (!env.OPENAI_API_KEY) {
+    return new Response(
+      JSON.stringify({ error: "OPENAI_API_KEY is not configured" }),
+      { status: 500, headers: { "content-type": "application/json", ...CORS_HEADERS } }
+    );
+  }
+
+  const body = await request.text();
+  const response = await fetch("https://api.openai.com/v1/responses", {
+    method: "POST",
+    headers: {
+      authorization: `Bearer ${env.OPENAI_API_KEY}`,
+      "content-type": "application/json",
+    },
+    body,
+  });
+
+  if (!response.ok) {
+    const errorBody = await response.text();
+    console.error(`[/openai/responses] OpenAI API error ${response.status}: ${errorBody}`);
+    return new Response(errorBody, {
+      status: response.status,
+      headers: { "content-type": "application/json", ...CORS_HEADERS },
+    });
+  }
+
+  return new Response(response.body, {
+    status: response.status,
+    headers: {
+      "content-type": response.headers.get("content-type") || "application/json",
+      ...CORS_HEADERS,
+    },
+  });
+}
+
 // ── AssemblyAI Transcription Token (The Ears) ────────────────────────
 
 async function handleTranscribeToken(env: Env): Promise<Response> {
+  if (!env.ASSEMBLYAI_API_KEY) {
+    return new Response(
+      JSON.stringify({ error: "ASSEMBLYAI_API_KEY is not configured" }),
+      { status: 500, headers: { "content-type": "application/json", ...CORS_HEADERS } }
+    );
+  }
+
   const response = await fetch(
     "https://streaming.assemblyai.com/v3/token?expires_in_seconds=480",
     {
@@ -173,6 +280,13 @@ async function handleTranscribeToken(env: Env): Promise<Response> {
 // ── ElevenLabs TTS (The Lobster Voice) ───────────────────────────────
 
 async function handleTTS(request: Request, env: Env): Promise<Response> {
+  if (!env.ELEVENLABS_API_KEY || !env.ELEVENLABS_VOICE_ID) {
+    return new Response(
+      JSON.stringify({ error: "ELEVENLABS_API_KEY or ELEVENLABS_VOICE_ID is not configured" }),
+      { status: 500, headers: { "content-type": "application/json", ...CORS_HEADERS } }
+    );
+  }
+
   const body = await request.text();
   const voiceId = env.ELEVENLABS_VOICE_ID;
 
@@ -210,11 +324,43 @@ async function handleTTS(request: Request, env: Env): Promise<Response> {
 // ── Solana JSON-RPC Proxy (The Blockchain Claw) ─────────────────────
 
 function getSolanaRpcUrl(env: Env): string {
+  const heliusBaseUrl = env.HELIUS_RPC_URL || "https://mainnet.helius-rpc.com";
+  if (env.HELIUS_RPC_URL || env.HELIUS_API_KEY) {
+    const heliusUrl = new URL(heliusBaseUrl);
+    if (env.HELIUS_API_KEY && !heliusUrl.searchParams.has("api-key")) {
+      heliusUrl.searchParams.set("api-key", env.HELIUS_API_KEY);
+    }
+    return heliusUrl.toString();
+  }
   if (env.SOLANA_RPC_URL) {
     return env.SOLANA_RPC_URL;
   }
   const network = env.SOLANA_NETWORK || "mainnet-beta";
   return `https://api.${network}.solana.com`;
+}
+
+function getHeliusRestUrl(env: Env, path: string, params?: Record<string, string>): string {
+  if (!env.HELIUS_API_KEY) {
+    throw new Error("HELIUS_API_KEY is required for this route");
+  }
+
+  const url = new URL(`https://api.helius.xyz${path}`);
+  url.searchParams.set("api-key", env.HELIUS_API_KEY);
+  for (const [key, value] of Object.entries(params || {})) {
+    url.searchParams.set(key, value);
+  }
+  return url.toString();
+}
+
+function getBirdeyeHeaders(env: Env): Record<string, string> {
+  if (!env.BIRDEYE_API_KEY) {
+    throw new Error("BIRDEYE_API_KEY is required for this route");
+  }
+
+  return {
+    "x-api-key": env.BIRDEYE_API_KEY,
+    "x-chain": "solana",
+  };
 }
 
 async function handleSolanaRPC(request: Request, env: Env): Promise<Response> {
@@ -320,4 +466,122 @@ async function handleSolanaTokenAccounts(request: Request, env: Env): Promise<Re
     JSON.stringify(result),
     { status: 200, headers: { "content-type": "application/json", ...CORS_HEADERS } }
   );
+}
+
+async function handleHeliusAssets(request: Request, env: Env): Promise<Response> {
+  const { ownerAddress, page = 1, limit = 100 } = (await request.json()) as {
+    ownerAddress?: string;
+    page?: number;
+    limit?: number;
+  };
+
+  if (!ownerAddress) {
+    return new Response(
+      JSON.stringify({ error: "ownerAddress is required" }),
+      { status: 400, headers: { "content-type": "application/json", ...CORS_HEADERS } }
+    );
+  }
+
+  const rpcBody = JSON.stringify({
+    jsonrpc: "2.0",
+    id: "clawd-assets",
+    method: "getAssetsByOwner",
+    params: {
+      ownerAddress,
+      page,
+      limit,
+      displayOptions: {
+        showFungible: true,
+      },
+    },
+  });
+
+  const response = await fetch(getSolanaRpcUrl(env), {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: rpcBody,
+  });
+
+  const data = await response.text();
+  return new Response(data, {
+    status: response.status,
+    headers: { "content-type": "application/json", ...CORS_HEADERS },
+  });
+}
+
+async function handleHeliusAddressTransactions(url: URL, env: Env): Promise<Response> {
+  const address = url.searchParams.get("address");
+  const limit = url.searchParams.get("limit") || "25";
+  const before = url.searchParams.get("before");
+
+  if (!address) {
+    return new Response(
+      JSON.stringify({ error: "address query parameter is required" }),
+      { status: 400, headers: { "content-type": "application/json", ...CORS_HEADERS } }
+    );
+  }
+
+  const heliusUrl = getHeliusRestUrl(env, `/v0/addresses/${address}/transactions`, {
+    limit,
+    ...(before ? { before } : {}),
+  });
+
+  const response = await fetch(heliusUrl, { headers: { accept: "application/json" } });
+  const data = await response.text();
+  return new Response(data, {
+    status: response.status,
+    headers: { "content-type": "application/json", ...CORS_HEADERS },
+  });
+}
+
+async function handleBirdeyePrice(url: URL, env: Env): Promise<Response> {
+  const address = url.searchParams.get("address");
+  if (!address) {
+    return new Response(
+      JSON.stringify({ error: "address query parameter is required" }),
+      { status: 400, headers: { "content-type": "application/json", ...CORS_HEADERS } }
+    );
+  }
+
+  const response = await fetch(
+    `https://public-api.birdeye.so/defi/price?address=${encodeURIComponent(address)}`,
+    {
+      headers: {
+        accept: "application/json",
+        ...getBirdeyeHeaders(env),
+      },
+    }
+  );
+
+  const data = await response.text();
+  return new Response(data, {
+    status: response.status,
+    headers: { "content-type": "application/json", ...CORS_HEADERS },
+  });
+}
+
+async function handleBirdeyeWalletTokens(url: URL, env: Env): Promise<Response> {
+  const wallet = url.searchParams.get("wallet");
+  if (!wallet) {
+    return new Response(
+      JSON.stringify({ error: "wallet query parameter is required" }),
+      { status: 400, headers: { "content-type": "application/json", ...CORS_HEADERS } }
+    );
+  }
+
+  const response = await fetch(
+    `https://public-api.birdeye.so/v1/wallet/token_list?wallet=${encodeURIComponent(wallet)}`,
+    {
+      headers: {
+        accept: "application/json",
+        ...getBirdeyeHeaders(env),
+      },
+    }
+  );
+
+  const data = await response.text();
+  return new Response(data, {
+    status: response.status,
+    headers: { "content-type": "application/json", ...CORS_HEADERS },
+  });
 }

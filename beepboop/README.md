@@ -2,7 +2,7 @@
 
 A lobster claw pointer that follows you during your daily tasks on macOS. It can see your screen, explain things, prompt you, generate code, talk to you with voice, and connect to Solana blockchain gateways. Part lobster, part claw, all clawd.
 
-Built on Anthropic Claude, AssemblyAI, ElevenLabs, and Solana.
+Built on Anthropic Claude, OpenAI, AssemblyAI, ElevenLabs, Helius, Birdeye, and Solana.
 
 > **[View Interactive Architecture Diagram](architecture-viz.html)** -- open in your browser for an animated visualization of the full system.
 
@@ -11,13 +11,13 @@ Built on Anthropic Claude, AssemblyAI, ElevenLabs, and Solana.
 1. **Push-to-talk** (Ctrl+Option) captures your voice via `AVAudioEngine`
 2. **AssemblyAI** transcribes speech in real-time via websocket (`u3-rt-pro` model)
 3. **ScreenCaptureKit** takes a screenshot of your current screen (multi-monitor)
-4. Transcript + screenshot are sent to **Claude** (Sonnet/Opus) via streaming SSE
+4. Transcript + screenshot are sent to **Claude** (default) or **OpenAI** (alternate clawd brain) for vision + reasoning
 5. Claude responds with text and can embed `[CLAW:x,y:label:screenN]` tags
 6. **ElevenLabs** converts the response to lobster speech (`eleven_flash_v2_5`)
 7. A lobster claw overlay flies to and points at UI elements Claude references
-8. **Solana RPC** calls are proxied through the Clawd Gateway for on-chain lookups
+8. **Solana/Helius/Birdeye** calls are proxied through the Clawd Gateway for on-chain lookups, wallet data, and token pricing
 
-All API keys (including Solana RPC) are proxied through the **Clawd Gateway** (Cloudflare Worker) -- nothing sensitive ships in the app binary.
+All API keys (including Helius, Birdeye, OpenAI, and Solana RPC) are proxied through the **Clawd Gateway** (Cloudflare Worker) -- nothing sensitive ships in the app binary.
 
 ## Architecture
 
@@ -26,12 +26,12 @@ All API keys (including Solana RPC) are proxied through the **Clawd Gateway** (C
 | App Type | macOS menu bar (`LSUIElement=true`) | No dock icon, no main window |
 | Framework | SwiftUI + AppKit bridging | `NSPanel` for floating windows, `NSHostingView` bridge |
 | Pattern | MVVM | `@StateObject` / `@Published` state management |
-| AI Chat | Claude (Sonnet 4.6 / Opus 4.6) | SSE streaming via Clawd Gateway |
+| AI Chat | Claude by default, OpenAI as alternate | Both proxied through the Clawd Gateway |
 | Speech-to-Text | AssemblyAI (`u3-rt-pro`) | Real-time websocket streaming; OpenAI and Apple Speech fallbacks |
 | Text-to-Speech | ElevenLabs (`eleven_flash_v2_5`) | Via Clawd Gateway |
 | Screen Capture | ScreenCaptureKit (macOS 14.2+) | Multi-monitor support |
 | Voice Input | `AVAudioEngine` + pluggable providers | System-wide shortcut via listen-only `CGEvent` tap |
-| Solana | JSON-RPC via Clawd Gateway | Balance, token accounts, raw RPC proxy |
+| Solana | Helius / Solana RPC / Birdeye via Clawd Gateway | RPC, wallet assets, price and token data |
 | Analytics | PostHog | Via `ClickyAnalytics.swift` |
 | Concurrency | `@MainActor` isolation | async/await throughout |
 
@@ -42,14 +42,19 @@ The app never calls external APIs directly. All requests go through the Clawd Ga
 | Route | Upstream | Purpose |
 | ----- | -------- | ------- |
 | `POST /chat` | `api.anthropic.com/v1/messages` | Claude vision + streaming chat |
+| `POST /openai/responses` | `api.openai.com/v1/responses` | OpenAI Responses API for vision/text clawd flows |
 | `POST /tts` | `api.elevenlabs.io/v1/text-to-speech/{voiceId}` | ElevenLabs TTS (lobster voice) |
 | `POST /transcribe-token` | `streaming.assemblyai.com/v3/token` | Short-lived (480s) AssemblyAI websocket token |
-| `POST /solana/rpc` | Solana JSON-RPC endpoint | Raw RPC proxy to mainnet/devnet |
+| `POST /solana/rpc` | Helius RPC or Solana JSON-RPC | Raw RPC proxy to mainnet/devnet |
 | `POST /solana/balance` | Solana JSON-RPC endpoint | Quick SOL balance lookup |
 | `POST /solana/tokens` | Solana JSON-RPC endpoint | Token accounts (SPL) for a wallet |
+| `POST /solana/assets` | Helius DAS | Wallet assets via `getAssetsByOwner` |
+| `GET /solana/address-transactions` | Helius Enhanced API | Address transaction history |
+| `GET /solana/price` | Birdeye | Token price lookup by mint |
+| `GET /solana/wallet-tokens` | Birdeye | Wallet token list and balances |
 | `GET /health` | -- | Clawd Gateway health check |
 
-**Worker secrets**: `ANTHROPIC_API_KEY`, `ASSEMBLYAI_API_KEY`, `ELEVENLABS_API_KEY`, `SOLANA_RPC_URL` (optional)
+**Worker secrets**: `ANTHROPIC_API_KEY`, `OPENAI_API_KEY`, `ASSEMBLYAI_API_KEY`, `ELEVENLABS_API_KEY`, `HELIUS_RPC_URL`, `HELIUS_API_KEY`, `HELIUS_WSS_URL`, `BIRDEYE_API_KEY`, `SOLANA_RPC_URL` (legacy/optional)
 **Worker vars**: `ELEVENLABS_VOICE_ID`, `SOLANA_NETWORK`
 
 ### Key Architecture Decisions
@@ -59,7 +64,7 @@ The app never calls external APIs directly. All requests go through the Clawd Ga
 - **Global Push-To-Talk**: Listen-only `CGEvent` tap so `Ctrl+Option` is detected reliably in the background
 - **Shared URLSession for AssemblyAI**: Single long-lived session to avoid OS connection pool corruption
 - **Transient Claw Mode**: When "Show Beep Boop" is off, the claw fades in for the interaction, then fades out after 1 second of inactivity
-- **Solana Clawd Gateway**: All Solana RPC calls proxied through Cloudflare Worker so private RPC URLs never ship in the binary
+- **Solana Clawd Gateway**: All Solana RPC/data calls are proxied through Cloudflare Worker so Helius/Birdeye/OpenAI keys and private RPC URLs never ship in the binary
 
 ## Project Structure
 
@@ -134,9 +139,12 @@ beepboop/
 - A [Cloudflare](https://cloudflare.com) account (free tier works)
 - API keys for:
   - [Anthropic](https://console.anthropic.com) (Claude)
+  - [OpenAI](https://platform.openai.com/api-keys) (vision, text, and alternate clawd agent brain)
   - [AssemblyAI](https://www.assemblyai.com) (speech-to-text)
   - [ElevenLabs](https://elevenlabs.io) (text-to-speech)
-- A Solana RPC endpoint (public works, [Helius](https://helius.dev) or [Quicknode](https://quicknode.com) recommended)
+  - [Helius](https://helius.dev) (recommended Solana RPC + enhanced data)
+  - [Birdeye](https://birdeye.so) (token price and wallet token data)
+- A Solana RPC endpoint if you are not using Helius (public works, [Quicknode](https://quicknode.com) recommended)
 
 ## Quick Start with Claude Code
 
@@ -158,9 +166,14 @@ npm install
 
 # Add your API key secrets
 npx wrangler secret put ANTHROPIC_API_KEY
+npx wrangler secret put OPENAI_API_KEY
 npx wrangler secret put ASSEMBLYAI_API_KEY
 npx wrangler secret put ELEVENLABS_API_KEY
-npx wrangler secret put SOLANA_RPC_URL    # optional -- for private RPC endpoints
+npx wrangler secret put HELIUS_RPC_URL    # recommended
+npx wrangler secret put HELIUS_API_KEY    # recommended
+npx wrangler secret put HELIUS_WSS_URL    # optional websocket endpoint
+npx wrangler secret put BIRDEYE_API_KEY   # recommended for token prices / wallet token data
+npx wrangler secret put SOLANA_RPC_URL    # optional legacy fallback if not using Helius
 
 # Configure voice and network in wrangler.toml:
 # [vars]
@@ -184,9 +197,14 @@ Create `worker/.dev.vars`:
 
 ```
 ANTHROPIC_API_KEY=sk-ant-...
+OPENAI_API_KEY=sk-proj-...
 ASSEMBLYAI_API_KEY=...
 ELEVENLABS_API_KEY=...
 ELEVENLABS_VOICE_ID=...
+HELIUS_RPC_URL=https://mainnet.helius-rpc.com/?api-key=YOUR_HELIUS_API_KEY
+HELIUS_API_KEY=YOUR_HELIUS_API_KEY
+HELIUS_WSS_URL=wss://mainnet.helius-rpc.com/?api-key=YOUR_HELIUS_API_KEY
+BIRDEYE_API_KEY=YOUR_BIRDEYE_API_KEY
 SOLANA_RPC_URL=https://api.mainnet-beta.solana.com
 ```
 
@@ -239,10 +257,29 @@ curl -X POST http://localhost:8787/solana/tokens \
   -H "Content-Type: application/json" \
   -d '{"address":"vines1vzrYbzLMRdu58ou5XTby4qAqVRLmqo36NKPTg"}'
 
+# Helius DAS wallet assets
+curl -X POST http://localhost:8787/solana/assets \
+  -H "Content-Type: application/json" \
+  -d '{"ownerAddress":"vines1vzrYbzLMRdu58ou5XTby4qAqVRLmqo36NKPTg","limit":20}'
+
+# Helius enhanced transactions
+curl "http://localhost:8787/solana/address-transactions?address=vines1vzrYbzLMRdu58ou5XTby4qAqVRLmqo36NKPTg&limit=10"
+
+# Birdeye token price by mint
+curl "http://localhost:8787/solana/price?address=So11111111111111111111111111111111111111112"
+
+# Birdeye wallet token list
+curl "http://localhost:8787/solana/wallet-tokens?wallet=vines1vzrYbzLMRdu58ou5XTby4qAqVRLmqo36NKPTg"
+
 # Claude chat (non-streaming)
 curl -X POST http://localhost:8787/chat \
   -H "Content-Type: application/json" \
   -d '{"model":"claude-sonnet-4-6-20250514","max_tokens":100,"messages":[{"role":"user","content":"Say hello from the clawd in 10 words or less"}]}'
+
+# OpenAI Responses API with vision/text support
+curl -X POST http://localhost:8787/openai/responses \
+  -H "Content-Type: application/json" \
+  -d '{"model":"gpt-5.5","input":"Say hello from the clawd in 10 words or less"}'
 
 # ElevenLabs TTS
 curl -X POST http://localhost:8787/tts \
