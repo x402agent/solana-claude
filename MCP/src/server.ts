@@ -1464,6 +1464,7 @@ emitter.on("event", (e) => console.log(e.type, e.signature, e.description));`,
             const now = new Date().toISOString();
             const entry = {
               ...inspected,
+              mint,
               symbol: a.symbol ? String(a.symbol) : inspected.tokenProgram === "p-token" ? `P-${mint.slice(0, 4).toUpperCase()}` : mint.slice(0, 6).toUpperCase(),
               name: a.name ? String(a.name) : "Registered p-token",
               tags: Array.isArray(a.tags) ? a.tags.map(String) : [],
