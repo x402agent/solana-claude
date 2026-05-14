@@ -12,6 +12,8 @@ This folder is the solana-clawd starting point for developers and agents buildin
 
 Pinocchio is a zero-dependency, `no_std` Solana program library from Anza that replaces most `solana-program` runtime overhead with zero-copy account access. It is useful when compute units and binary size matter more than framework convenience. It is not beginner-focused: developers must own account validation, instruction parsing, serialization, CPI safety, and tests.
 
+Start with the complete user guide: [`USER_GUIDE.md`](./USER_GUIDE.md).
+
 solana-clawd uses this area for:
 
 - p-token launch workflows and registry exploration.
@@ -21,6 +23,12 @@ solana-clawd uses this area for:
 - x402 p-token payment support through the existing Solana payment rail.
 
 ## Quick Start
+
+Read the full guide:
+
+```bash
+open pinocchio/USER_GUIDE.md
+```
 
 List available templates:
 
@@ -53,6 +61,7 @@ npm run programs:show -- token-launcher
 
 | Path | Purpose |
 | --- | --- |
+| [`USER_GUIDE.md`](./USER_GUIDE.md) | Complete guide to what Pinocchio is, how to develop with it, and what this repo added for p-token, p-agent-token, and launcher workflows. |
 | [`docs/PINOCCHIO_GUIDE.md`](./docs/PINOCCHIO_GUIDE.md) | Practical Pinocchio notes for solana-clawd developers and agents. |
 | [`docs/AGENT_WORKFLOWS.md`](./docs/AGENT_WORKFLOWS.md) | MCP and agent workflows for p-token exploration and template use. |
 | [`docs/P_TOKEN_LAUNCHES.md`](./docs/P_TOKEN_LAUNCHES.md) | Unsigned p-token launch planning and bonding curve workflow. |

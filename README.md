@@ -56,7 +56,7 @@ This pass connected three workstreams into the root story so a new operator can 
 
 | Workstream | What shipped | Where to start |
 | --- | --- | --- |
-| **Pinocchio + p-token** | Native Solana program support, vault and escrow starters, p-token launchpad, p-agent-token planning, bonding-curve quotes, registry inspection, and a one-by-one helper-program map. | [`docs/PTOKEN_LAUNCHPAD.md`](./docs/PTOKEN_LAUNCHPAD.md), [`pinocchio/README.md`](./pinocchio/README.md), [`pinocchio/docs/P_AGENT_TOKEN.md`](./pinocchio/docs/P_AGENT_TOKEN.md), [`docs/PTOKEN_EXPLORER.md`](./docs/PTOKEN_EXPLORER.md) |
+| **Pinocchio + p-token** | Native Solana program support, vault and escrow starters, p-token launchpad, p-agent-token planning, bonding-curve quotes, registry inspection, and a one-by-one helper-program map. | [`pinocchio/USER_GUIDE.md`](./pinocchio/USER_GUIDE.md), [`docs/PTOKEN_LAUNCHPAD.md`](./docs/PTOKEN_LAUNCHPAD.md), [`pinocchio/README.md`](./pinocchio/README.md), [`pinocchio/docs/P_AGENT_TOKEN.md`](./pinocchio/docs/P_AGENT_TOKEN.md), [`docs/PTOKEN_EXPLORER.md`](./docs/PTOKEN_EXPLORER.md) |
 | **LLM Oracle** | Rust oracle runner that watches Solana GPT oracle interaction accounts, loads Clawd character context, calls a configured LLM provider, and submits callback responses on-chain. | [`llm_oracle/README.md`](./llm_oracle/README.md) |
 | **x402 payment rail** | Solana HTTP 402 payment flow with pay.sh-style confidential settlement, A2A task payments, SDK helpers, p-token support, worker deployment surface, and revenue-vault documentation. | Private source; excluded from public GitHub exports. |
 | **Program map** | Machine-readable map of the on-chain workspace, including inference, GPT oracle, staking, agent minting, token launchers, and metadata references. | [`data/programs-map.json`](./data/programs-map.json), [`programs/README.md`](./programs/README.md) |
@@ -552,13 +552,14 @@ solana-clawd/
 6. [`MemeBRain/README.md`](./MemeBRain/README.md)
 7. [`openclawd/README.md`](./openclawd/README.md)
 8. [`openclawd-framework/README.md`](./openclawd-framework/README.md)
-9. [`pinocchio/README.md`](./pinocchio/README.md)
-10. [`docs/PTOKEN_LAUNCHPAD.md`](./docs/PTOKEN_LAUNCHPAD.md)
-11. [`docs/PTOKEN_EXPLORER.md`](./docs/PTOKEN_EXPLORER.md)
-12. [`pinocchio/docs/P_AGENT_TOKEN.md`](./pinocchio/docs/P_AGENT_TOKEN.md)
-13. [`programs/p-token-launchpad/README.md`](./programs/p-token-launchpad/README.md)
-14. [`programs/README.md`](./programs/README.md)
-15. [`docs/risk-engine-spec.md`](./docs/risk-engine-spec.md)
+9. [`pinocchio/USER_GUIDE.md`](./pinocchio/USER_GUIDE.md)
+10. [`pinocchio/README.md`](./pinocchio/README.md)
+11. [`docs/PTOKEN_LAUNCHPAD.md`](./docs/PTOKEN_LAUNCHPAD.md)
+12. [`docs/PTOKEN_EXPLORER.md`](./docs/PTOKEN_EXPLORER.md)
+13. [`pinocchio/docs/P_AGENT_TOKEN.md`](./pinocchio/docs/P_AGENT_TOKEN.md)
+14. [`programs/p-token-launchpad/README.md`](./programs/p-token-launchpad/README.md)
+15. [`programs/README.md`](./programs/README.md)
+16. [`docs/risk-engine-spec.md`](./docs/risk-engine-spec.md)
 
 ---
 
