@@ -82,6 +82,9 @@ export interface AgentRecord {
   splitBuybackBps?: number;
   splitTreasuryBps?: number;
   splitOperatorBps?: number;
+  buybackRecipient?: string;
+  treasuryRecipient?: string;
+  operatorRecipient?: string;
   /** IPFS CID of the agent manifest (A2A agent card + pricing) */
   manifestCid: string;
   /** Per-method pricing in USDC base units */

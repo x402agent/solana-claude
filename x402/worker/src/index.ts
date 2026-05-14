@@ -20,6 +20,7 @@ import { getAgent, methodHash, priceFor } from "./solana/registry";
 import { holderDiscount, applyDiscount } from "./clawd";
 import { computeSplit, receipt } from "./revenue";
 import { pinJson } from "./ipfs/pinata";
+import { buildUpstreamUrl, forwardHeaders, securityHeaders } from "./security";
 import { negotiate, advertiseProtocols } from "./protocols/negotiate";
 import {
   buildSolanaChallenge,
@@ -47,6 +48,7 @@ import {
 const app = new Hono<{ Bindings: Env }>();
 
 app.use("*", cors({ origin: "*", allowHeaders: ["*"], exposeHeaders: ["*"] }));
+app.use("*", securityHeaders);
 
 app.get("/health", (c) =>
   c.json({ ok: true, network: c.env.NETWORK, gateway: "solanaclawd.com/x402" }),
@@ -106,7 +108,14 @@ async function gatedAgentCall(
   let methodName: string;
   let a2aRpc: A2ARequest | null = null;
   if (opts.mode === "a2a") {
-    a2aRpc = (await c.req.json()) as A2ARequest;
+    try {
+      a2aRpc = (await c.req.json()) as A2ARequest;
+    } catch {
+      return c.json({ error: "invalid JSON-RPC body" }, 400);
+    }
+    if (!isValidA2ARequest(a2aRpc)) {
+      return c.json({ error: "invalid A2A JSON-RPC request" }, 400);
+    }
     methodName = a2aRpc.method;
   } else {
     methodName = `${c.req.method} ${new URL(c.req.url).pathname.replace(`/agents/${agentId}`, "")}`;
@@ -114,10 +123,15 @@ async function gatedAgentCall(
 
   const mh = await methodHash(methodName);
   const DEFAULT_PRICE = 10000n; // 0.01 USDC fallback in 6-decimal base units
-  const basePrice =
-    opts.mode === "a2a" && a2aRpc
-      ? priceForA2ACall(record, a2aRpc, DEFAULT_PRICE)
-      : priceFor(record, methodName, mh, DEFAULT_PRICE);
+  let basePrice: bigint;
+  try {
+    basePrice =
+      opts.mode === "a2a" && a2aRpc
+        ? priceForA2ACall(record, a2aRpc, DEFAULT_PRICE)
+        : priceFor(record, methodName, mh, DEFAULT_PRICE);
+  } catch (e) {
+    return c.json({ error: e instanceof Error ? e.message : "invalid agent pricing" }, 422);
+  }
 
   // Negotiate the protocol the caller wants.
   const protocol = negotiate(c);
@@ -141,13 +155,11 @@ async function gatedAgentCall(
     (protocol === "mpp" && authHeader.toLowerCase().startsWith("payment ")) ||
     (protocol === "ap2" && mandate && paymentSig);
 
-  if (!hasPayment) {
-    // Apply holder discount if we can identify the caller from the session/sender header.
-    // For callers who haven't yet paid, we only know their identity if they declared it.
-    const caller = c.req.header("x-payer") ?? "";
-    const discount = caller ? await holderDiscount(c.env, caller) : { tier: 0 as const, bps: 0 };
-    const effectivePrice = applyDiscount(basePrice, discount.bps);
+  const declaredPayer = c.req.header("x-payer") ?? "";
+  const discount = declaredPayer ? await holderDiscount(c.env, declaredPayer) : { tier: 0 as const, bps: 0 };
+  const effectivePrice = applyDiscount(basePrice, discount.bps);
 
+  if (!hasPayment) {
     const challenge = await buildSolanaChallenge(
       c.env,
       new URL(c.req.url).pathname,
@@ -181,21 +193,40 @@ async function gatedAgentCall(
     `Call ${methodName} on agent ${agentId}`,
     c.env.TREASURY_OWNER,
     c.env.USDC_MINT,
-    basePrice,
+    effectivePrice,
     6,
     `clawdrouter:${agentId}:${methodName}`,
   );
 
   let paymentResult;
+  let ap2Mandate:
+    | {
+        iss: string;
+        sub: string;
+        aud: string;
+        exp: number;
+        maxAmount: string;
+        asset: string;
+        resource: string;
+      }
+    | null = null;
   try {
     if (protocol === "mpp") {
-      paymentResult = await handleMppPayment(c.env, authHeader, challenge);
+      paymentResult = await handleMppPayment(c.env, authHeader, challenge, declaredPayer || undefined);
     } else if (protocol === "ap2") {
       const audience = new URL(c.req.url).origin;
-      const flow = await handleAp2UserFlow(c.env, mandate, paymentSig!, challenge, audience);
+      const flow = await handleAp2UserFlow(
+        c.env,
+        mandate,
+        paymentSig!,
+        challenge,
+        audience,
+        declaredPayer || undefined,
+      );
       paymentResult = flow.payment;
+      ap2Mandate = flow.mandate;
     } else {
-      paymentResult = await handlePayment(c.env, paymentSig!, challenge);
+      paymentResult = await handlePayment(c.env, paymentSig!, challenge, declaredPayer || undefined);
     }
   } catch (e) {
     return c.json({ error: `payment failed: ${e instanceof Error ? e.message : String(e)}` }, 402);
@@ -211,6 +242,9 @@ async function gatedAgentCall(
     paymentResult.amount,
     paymentResult.asset,
     split,
+    discount.tier > 0
+      ? { tier: discount.tier, bps: discount.bps, originalAmount: basePrice.toString() }
+      : undefined,
   );
   let receiptCid: string | null = null;
   try {
@@ -231,16 +265,18 @@ async function gatedAgentCall(
       headers: { "content-type": "application/json" },
     });
   } else {
-    const upstream = new URL(
-      c.req.url.replace(`${new URL(c.req.url).origin}/agents/${agentId}`, record.endpoint),
-    );
+    let upstream: URL;
+    try {
+      upstream = buildUpstreamUrl(record.endpoint, c.req.url, agentId);
+    } catch (e) {
+      return c.json({ error: e instanceof Error ? e.message : "invalid agent endpoint" }, 502);
+    }
     upstreamResponse = await fetch(upstream.toString(), {
       method: c.req.method,
-      headers: {
-        ...Object.fromEntries(c.req.raw.headers),
+      headers: forwardHeaders(c.req.raw.headers, {
         "x-clawd-payer": paymentResult.payer,
         "x-clawd-signature": paymentResult.signature,
-      },
+      }),
       body: ["GET", "HEAD"].includes(c.req.method) ? undefined : await c.req.raw.clone().arrayBuffer(),
     });
   }
@@ -253,7 +289,7 @@ async function gatedAgentCall(
       : protocol === "ap2"
         ? ap2ReceiptHeader(
             paymentResult,
-            { iss: "", sub: paymentResult.payer, aud: "", exp: 0, maxAmount: "", asset: "", resource: "" },
+            ap2Mandate ?? { iss: "", sub: paymentResult.payer, aud: "", exp: 0, maxAmount: "", asset: "", resource: "" },
             c.env.NETWORK,
           )
         : paymentResponseHeader(paymentResult, c.env.NETWORK);
@@ -261,6 +297,20 @@ async function gatedAgentCall(
   if (receiptCid) out.set("x-clawd-receipt-cid", receiptCid);
 
   return new Response(upstreamResponse.body, { status: upstreamResponse.status, headers: out });
+}
+
+function isValidA2ARequest(value: unknown): value is A2ARequest {
+  if (!value || typeof value !== "object") return false;
+  const rpc = value as Partial<A2ARequest>;
+  return (
+    rpc.jsonrpc === "2.0" &&
+    (typeof rpc.id === "string" || typeof rpc.id === "number") &&
+    typeof rpc.method === "string" &&
+    rpc.method.length > 0 &&
+    rpc.method.length <= 128 &&
+    !!rpc.params &&
+    typeof rpc.params === "object"
+  );
 }
 
 export default app;

@@ -94,6 +94,7 @@
     "ptoken:show": "node scripts/ptoken-explorer.mjs show",
     "ptoken:launch-plan": "node scripts/ptoken-launch-planner.mjs plan",
     "ptoken:curve-quote": "node scripts/ptoken-launch-planner.mjs quote",
+    "ptoken:launcher": "node pinocchio/templates/p-token-launcher/server.mjs",
     "pinocchio:templates": "node scripts/pinocchio-scaffold.mjs list",
     "pinocchio:scaffold": "node scripts/pinocchio-scaffold.mjs",
     "pinocchio:ptoken:inspect": "node scripts/ptoken-explorer.mjs inspect",

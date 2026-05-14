@@ -12,7 +12,7 @@
 use anchor_lang::prelude::*;
 use anchor_spl::token::{self, Token, TokenAccount, Transfer};
 
-declare_id!("REPLACE_WITH_PROGRAM_ID_AFTER_ANCHOR_BUILD");
+declare_id!("11111111111111111111111111111111");
 
 pub const REGISTRY_SEED: &[u8] = b"clawd-registry-v1";
 pub const VAULT_SEED: &[u8] = b"clawd-vault-v1";
@@ -31,6 +31,7 @@ pub mod clawd_vault {
         manifest_cid: [u8; 64],
         endpoint: [u8; 128],
         split: SplitConfig,
+        recipients: SplitRecipients,
         protocols_mask: u8,
         pricing: Vec<PricingEntry>,
     ) -> Result<()> {
@@ -45,6 +46,9 @@ pub mod clawd_vault {
         agent.split_buyback_bps = split.buyback_bps;
         agent.split_treasury_bps = split.treasury_bps;
         agent.split_operator_bps = split.operator_bps;
+        agent.buyback_recipient = recipients.buyback;
+        agent.treasury_recipient = recipients.treasury;
+        agent.operator_recipient = recipients.operator;
         agent.protocols_mask = protocols_mask;
         agent.pricing_count = pricing.len() as u8;
 
@@ -60,6 +64,7 @@ pub mod clawd_vault {
     pub fn update_agent(
         ctx: Context<UpdateAgent>,
         new_split: Option<SplitConfig>,
+        new_recipients: Option<SplitRecipients>,
         new_pricing: Option<Vec<PricingEntry>>,
         new_protocols_mask: Option<u8>,
     ) -> Result<()> {
@@ -73,8 +78,14 @@ pub mod clawd_vault {
             agent.split_treasury_bps = s.treasury_bps;
             agent.split_operator_bps = s.operator_bps;
         }
+        if let Some(r) = new_recipients {
+            agent.buyback_recipient = r.buyback;
+            agent.treasury_recipient = r.treasury;
+            agent.operator_recipient = r.operator;
+        }
         if let Some(p) = new_pricing {
             require!(p.len() <= 16, VaultError::TooManyPricingEntries);
+            agent.pricing = [PricingEntry::default(); 16];
             agent.pricing_count = p.len() as u8;
             for (i, e) in p.into_iter().enumerate() {
                 agent.pricing[i] = e;
@@ -88,8 +99,8 @@ pub mod clawd_vault {
     }
 
     /// Distribute accumulated revenue from the agent's vault ATA.
-    /// Anyone can call this — the program enforces the split — but only the
-    /// operator named at distribute-time gets the operator share.
+    /// Anyone can call this — the program enforces the split and payout
+    /// authorities stored on the agent account.
     pub fn distribute(ctx: Context<Distribute>, amount: u64) -> Result<()> {
         require!(amount > 0, VaultError::ZeroAmount);
         require!(
@@ -98,6 +109,27 @@ pub mod clawd_vault {
         );
 
         let agent = &ctx.accounts.agent;
+        require!(
+            ctx.accounts.vault_ata.mint == ctx.accounts.owner_ata.mint
+                && ctx.accounts.vault_ata.mint == ctx.accounts.buyback_ata.mint
+                && ctx.accounts.vault_ata.mint == ctx.accounts.treasury_ata.mint
+                && ctx.accounts.vault_ata.mint == ctx.accounts.operator_ata.mint,
+            VaultError::MintMismatch
+        );
+        require!(ctx.accounts.owner_ata.owner == agent.owner, VaultError::InvalidRecipient);
+        require!(
+            ctx.accounts.buyback_ata.owner == agent.buyback_recipient,
+            VaultError::InvalidRecipient
+        );
+        require!(
+            ctx.accounts.treasury_ata.owner == agent.treasury_recipient,
+            VaultError::InvalidRecipient
+        );
+        require!(
+            ctx.accounts.operator_ata.owner == agent.operator_recipient,
+            VaultError::InvalidRecipient
+        );
+
         let owner_bps = agent.split_owner_bps as u128;
         let buyback_bps = agent.split_buyback_bps as u128;
         let treasury_bps = agent.split_treasury_bps as u128;
@@ -118,10 +150,38 @@ pub mod clawd_vault {
         let seeds: &[&[u8]] = &[VAULT_SEED, agent_key.as_ref(), &[ctx.bumps.vault_authority]];
         let signer_seeds = &[seeds];
 
-        transfer_from_vault(&ctx, &ctx.accounts.owner_ata, owner_share_final, signer_seeds)?;
-        transfer_from_vault(&ctx, &ctx.accounts.buyback_ata, buyback_share, signer_seeds)?;
-        transfer_from_vault(&ctx, &ctx.accounts.treasury_ata, treasury_share, signer_seeds)?;
-        transfer_from_vault(&ctx, &ctx.accounts.operator_ata, operator_share, signer_seeds)?;
+        transfer_from_vault(
+            ctx.accounts.vault_ata.to_account_info(),
+            ctx.accounts.owner_ata.to_account_info(),
+            ctx.accounts.vault_authority.to_account_info(),
+            ctx.accounts.token_program.to_account_info(),
+            owner_share_final,
+            signer_seeds,
+        )?;
+        transfer_from_vault(
+            ctx.accounts.vault_ata.to_account_info(),
+            ctx.accounts.buyback_ata.to_account_info(),
+            ctx.accounts.vault_authority.to_account_info(),
+            ctx.accounts.token_program.to_account_info(),
+            buyback_share,
+            signer_seeds,
+        )?;
+        transfer_from_vault(
+            ctx.accounts.vault_ata.to_account_info(),
+            ctx.accounts.treasury_ata.to_account_info(),
+            ctx.accounts.vault_authority.to_account_info(),
+            ctx.accounts.token_program.to_account_info(),
+            treasury_share,
+            signer_seeds,
+        )?;
+        transfer_from_vault(
+            ctx.accounts.vault_ata.to_account_info(),
+            ctx.accounts.operator_ata.to_account_info(),
+            ctx.accounts.vault_authority.to_account_info(),
+            ctx.accounts.token_program.to_account_info(),
+            operator_share,
+            signer_seeds,
+        )?;
 
         emit!(Distributed {
             agent: agent_key,
@@ -136,8 +196,10 @@ pub mod clawd_vault {
 }
 
 fn transfer_from_vault<'info>(
-    ctx: &Context<Distribute>,
-    to: &Account<'info, TokenAccount>,
+    from: AccountInfo<'info>,
+    to: AccountInfo<'info>,
+    authority: AccountInfo<'info>,
+    token_program: AccountInfo<'info>,
     amount: u64,
     signer_seeds: &[&[&[u8]]],
 ) -> Result<()> {
@@ -145,12 +207,12 @@ fn transfer_from_vault<'info>(
         return Ok(());
     }
     let cpi_accounts = Transfer {
-        from: ctx.accounts.vault_ata.to_account_info(),
-        to: to.to_account_info(),
-        authority: ctx.accounts.vault_authority.to_account_info(),
+        from,
+        to,
+        authority,
     };
     let cpi_ctx = CpiContext::new_with_signer(
-        ctx.accounts.token_program.to_account_info(),
+        token_program,
         cpi_accounts,
         signer_seeds,
     );
@@ -168,6 +230,9 @@ pub struct Agent {
     pub split_buyback_bps: u16,
     pub split_treasury_bps: u16,
     pub split_operator_bps: u16,
+    pub buyback_recipient: Pubkey,
+    pub treasury_recipient: Pubkey,
+    pub operator_recipient: Pubkey,
     pub protocols_mask: u8,
     pub pricing_count: u8,
     pub pricing: [PricingEntry; 16],
@@ -179,6 +244,7 @@ impl Agent {
         + 64                      // manifest_cid
         + 128                     // endpoint
         + 2 + 2 + 2 + 2           // splits
+        + 32 + 32 + 32            // payout recipients
         + 1                       // protocols_mask
         + 1                       // pricing_count
         + (16 * PricingEntry::LEN); // pricing array
@@ -202,12 +268,22 @@ pub struct SplitConfig {
 }
 impl SplitConfig {
     pub fn validate(&self) -> Result<()> {
-        let total = self.owner_bps + self.buyback_bps + self.treasury_bps + self.operator_bps;
+        let total = self.owner_bps as u32
+            + self.buyback_bps as u32
+            + self.treasury_bps as u32
+            + self.operator_bps as u32;
         require!(total == 10000, VaultError::SplitMustSumTo10000);
         require!(self.owner_bps >= MIN_OWNER_BPS, VaultError::OwnerShareTooLow);
         require!(self.operator_bps <= MAX_OPERATOR_BPS, VaultError::OperatorShareTooHigh);
         Ok(())
     }
+}
+
+#[derive(AnchorSerialize, AnchorDeserialize, Clone, Copy)]
+pub struct SplitRecipients {
+    pub buyback: Pubkey,
+    pub treasury: Pubkey,
+    pub operator: Pubkey,
 }
 
 #[derive(Accounts)]
@@ -302,4 +378,8 @@ pub enum VaultError {
     ZeroAmount,
     #[msg("Vault balance is insufficient for the requested distribution")]
     InsufficientVaultBalance,
+    #[msg("Payout token account mint does not match the vault mint")]
+    MintMismatch,
+    #[msg("Payout token account authority does not match the registered recipient")]
+    InvalidRecipient,
 }

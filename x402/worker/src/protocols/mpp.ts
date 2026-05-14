@@ -101,6 +101,7 @@ export async function handleMppPayment(
   env: Env,
   authHeader: string,
   challenge: SolanaPaymentRequirement,
+  expectedPayer?: string,
 ): Promise<PaymentResult> {
   const blob = extractSolanaBlob(authHeader);
   if (!blob) {
@@ -108,7 +109,7 @@ export async function handleMppPayment(
     // Solana transfer to close the loop. Deferred to the MPP integration pass.
     throw new Error("MPP: only solana-exact method is implemented in this build");
   }
-  return handleX402Payment(env, blob, challenge);
+  return handleX402Payment(env, blob, challenge, expectedPayer);
 }
 
 export function mppReceiptHeader(result: PaymentResult, network: string): Record<string, string> {

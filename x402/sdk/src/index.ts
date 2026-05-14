@@ -74,6 +74,10 @@ export interface ClawdFetchOptions extends RequestInit {
   advertisePayer?: boolean;
   /** For AP2 flow: caller-provided JWT-VC intent mandate. */
   ap2Mandate?: string;
+  /** Optional client-side spend ceiling in base units. */
+  maxAmount?: bigint | string | number;
+  /** Optional allow-list of accepted token mints. */
+  allowedAssets?: string[];
 }
 
 export interface ClawdFetchResult extends Response {
@@ -100,6 +104,7 @@ export async function clawdFetch(
 
   const challenge = await extractChallenge(first, opts.protocol ?? "x402");
   if (!challenge) throw new Error(`402 without parseable challenge`);
+  validateChallenge(url, challenge, opts);
 
   if (opts.onPaymentRequired) {
     const ok = await opts.onPaymentRequired(challenge);
@@ -107,7 +112,7 @@ export async function clawdFetch(
   }
 
   const signedTx = await buildAndSignTransfer(challenge, opts.signer, opts.connection);
-  const signatureB64 = Buffer.from(signedTx.serialize()).toString("base64");
+  const signatureB64 = bytesToBase64(signedTx.serialize());
 
   const paidHeaders = new Headers(headers);
   if (opts.protocol === "mpp") {
@@ -176,10 +181,35 @@ async function extractChallenge(
   // x402: prefer header, fall back to body.accepts[0]
   const header = res.headers.get("payment-required");
   if (header) {
-    return JSON.parse(atob(header)) as SolanaPaymentRequirement;
+    return JSON.parse(base64ToText(header)) as SolanaPaymentRequirement;
   }
   const body = (await res.clone().json()) as { accepts?: SolanaPaymentRequirement[] };
   return body.accepts?.[0] ?? null;
+}
+
+function validateChallenge(
+  url: string,
+  req: SolanaPaymentRequirement,
+  opts: ClawdFetchOptions,
+): void {
+  const amount = BigInt(req.maxAmountRequired);
+  if (amount <= 0n) throw new Error("payment challenge amount must be greater than zero");
+  if (!Number.isInteger(req.extra.decimals) || req.extra.decimals < 0 || req.extra.decimals > 18) {
+    throw new Error("payment challenge has invalid decimals");
+  }
+  if (opts.maxAmount !== undefined && amount > BigInt(opts.maxAmount)) {
+    throw new Error(`payment challenge exceeds maxAmount: ${amount} > ${opts.maxAmount}`);
+  }
+  if (opts.allowedAssets?.length && !opts.allowedAssets.includes(req.asset)) {
+    throw new Error("payment challenge asset is not allowed");
+  }
+  const expectedPath = new URL(url).pathname;
+  if (req.resource !== expectedPath) {
+    throw new Error(`payment challenge resource mismatch: got ${req.resource} want ${expectedPath}`);
+  }
+  if (req.extra.batchOutputs?.length && req.extra.tokenProgram !== "p-token") {
+    throw new Error("payment challenge batchOutputs require p-token");
+  }
 }
 
 async function buildAndSignTransfer(
@@ -329,6 +359,18 @@ function decorate(res: Response): ClawdFetchResult {
     }
   }
   return decorated;
+}
+
+function bytesToBase64(bytes: Uint8Array): string {
+  let binary = "";
+  for (let i = 0; i < bytes.length; i++) binary += String.fromCharCode(bytes[i]);
+  return btoa(binary);
+}
+
+function base64ToText(value: string): string {
+  const binary = atob(value);
+  const bytes = Uint8Array.from(binary, (char) => char.charCodeAt(0));
+  return new TextDecoder().decode(bytes);
 }
 
 /* ——— Discovery helpers ——— */
