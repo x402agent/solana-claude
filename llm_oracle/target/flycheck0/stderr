@@ -1,0 +1,185 @@
+   0.314794250s  INFO prepare_target{force=false package_id=llm_oracle v0.1.0 (/Users/8bit/Downloads/ClawdBrowser/llm_oracle) target="llm_oracle"}: cargo::core::compiler::fingerprint: fingerprint error for llm_oracle v0.1.0 (/Users/8bit/Downloads/ClawdBrowser/llm_oracle)/Check { test: false }/TargetInner { name: "llm_oracle", doc: true, ..: with_path("/Users/8bit/Downloads/ClawdBrowser/llm_oracle/src/main.rs", Edition2021) }
+   0.314817292s  INFO prepare_target{force=false package_id=llm_oracle v0.1.0 (/Users/8bit/Downloads/ClawdBrowser/llm_oracle) target="llm_oracle"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/ClawdBrowser/llm_oracle/target/debug/.fingerprint/llm_oracle-a4d4ed345c94dcfc/bin-llm_oracle`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   7: cargo::ops::cargo_compile::compile_ws
+   8: cargo::ops::cargo_compile::compile_with_exec
+   9: cargo::ops::cargo_compile::compile
+  10: cargo::commands::check::exec
+  11: <cargo::cli::Exec>::exec
+  12: cargo::main
+  13: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  14: std::rt::lang_start::<()>::{closure#0}
+  15: std::rt::lang_start_internal
+  16: _main
+   0.345859042s  INFO prepare_target{force=false package_id=solana-gpt-oracle v0.1.0 (/Users/8bit/Downloads/ClawdBrowser/agents/solana-gpt-oracle) target="solana_gpt_oracle"}: cargo::core::compiler::fingerprint: fingerprint error for solana-gpt-oracle v0.1.0 (/Users/8bit/Downloads/ClawdBrowser/agents/solana-gpt-oracle)/Check { test: false }/TargetInner { ..: lib_target("solana_gpt_oracle", ["cdylib", "lib"], "/Users/8bit/Downloads/ClawdBrowser/agents/solana-gpt-oracle/src/lib.rs", Edition2021) }
+   0.345876792s  INFO prepare_target{force=false package_id=solana-gpt-oracle v0.1.0 (/Users/8bit/Downloads/ClawdBrowser/agents/solana-gpt-oracle) target="solana_gpt_oracle"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/ClawdBrowser/llm_oracle/target/debug/.fingerprint/solana-gpt-oracle-6204dcaf6a8e0b38/lib-solana_gpt_oracle`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   8: cargo::ops::cargo_compile::compile_ws
+   9: cargo::ops::cargo_compile::compile_with_exec
+  10: cargo::ops::cargo_compile::compile
+  11: cargo::commands::check::exec
+  12: <cargo::cli::Exec>::exec
+  13: cargo::main
+  14: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  15: std::rt::lang_start::<()>::{closure#0}
+  16: std::rt::lang_start_internal
+  17: _main
+   0.346404834s  INFO prepare_target{force=false package_id=ephemeral-rollups-sdk v0.2.12 target="ephemeral_rollups_sdk"}: cargo::core::compiler::fingerprint: fingerprint error for ephemeral-rollups-sdk v0.2.12/Check { test: false }/TargetInner { ..: lib_target("ephemeral_rollups_sdk", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ephemeral-rollups-sdk-0.2.12/src/lib.rs", Edition2021) }
+   0.346410375s  INFO prepare_target{force=false package_id=ephemeral-rollups-sdk v0.2.12 target="ephemeral_rollups_sdk"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/ClawdBrowser/llm_oracle/target/debug/.fingerprint/ephemeral-rollups-sdk-2fc7cb17d963fddf/lib-ephemeral_rollups_sdk`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   9: cargo::ops::cargo_compile::compile_ws
+  10: cargo::ops::cargo_compile::compile_with_exec
+  11: cargo::ops::cargo_compile::compile
+  12: cargo::commands::check::exec
+  13: <cargo::cli::Exec>::exec
+  14: cargo::main
+  15: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  16: std::rt::lang_start::<()>::{closure#0}
+  17: std::rt::lang_start_internal
+  18: _main
+   0.347301750s  INFO prepare_target{force=false package_id=solana-program v3.0.0 target="solana_program"}: cargo::core::compiler::fingerprint: fingerprint error for solana-program v3.0.0/Check { test: false }/TargetInner { ..: lib_target("solana_program", ["rlib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-program-3.0.0/src/lib.rs", Edition2021) }
+   0.347306709s  INFO prepare_target{force=false package_id=solana-program v3.0.0 target="solana_program"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/ClawdBrowser/llm_oracle/target/debug/.fingerprint/solana-program-e6019fbf8900aaed/lib-solana_program`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  10: cargo::ops::cargo_compile::compile_ws
+  11: cargo::ops::cargo_compile::compile_with_exec
+  12: cargo::ops::cargo_compile::compile
+  13: cargo::commands::check::exec
+  14: <cargo::cli::Exec>::exec
+  15: cargo::main
+  16: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  17: std::rt::lang_start::<()>::{closure#0}
+  18: std::rt::lang_start_internal
+  19: _main
+   0.348820792s  INFO prepare_target{force=false package_id=solana-example-mocks v3.0.0 target="solana_example_mocks"}: cargo::core::compiler::fingerprint: fingerprint error for solana-example-mocks v3.0.0/Check { test: false }/TargetInner { ..: lib_target("solana_example_mocks", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-example-mocks-3.0.0/src/lib.rs", Edition2021) }
+   0.348826792s  INFO prepare_target{force=false package_id=solana-example-mocks v3.0.0 target="solana_example_mocks"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/ClawdBrowser/llm_oracle/target/debug/.fingerprint/solana-example-mocks-04b729af74fd24d4/lib-solana_example_mocks`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  11: cargo::ops::cargo_compile::compile_ws
+  12: cargo::ops::cargo_compile::compile_with_exec
+  13: cargo::ops::cargo_compile::compile
+  14: cargo::commands::check::exec
+  15: <cargo::cli::Exec>::exec
+  16: cargo::main
+  17: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  18: std::rt::lang_start::<()>::{closure#0}
+  19: std::rt::lang_start_internal
+  20: _main
+   0.349281417s  INFO prepare_target{force=false package_id=solana-message v3.0.1 target="solana_message"}: cargo::core::compiler::fingerprint: fingerprint error for solana-message v3.0.1/Check { test: false }/TargetInner { ..: lib_target("solana_message", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-message-3.0.1/src/lib.rs", Edition2021) }
+   0.349287750s  INFO prepare_target{force=false package_id=solana-message v3.0.1 target="solana_message"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/ClawdBrowser/llm_oracle/target/debug/.fingerprint/solana-message-793b96939c780377/lib-solana_message`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: cargo::core::compiler::compile
+  11: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  12: cargo::ops::cargo_compile::compile_ws
+  13: cargo::ops::cargo_compile::compile_with_exec
+  14: cargo::ops::cargo_compile::compile
+  15: cargo::commands::check::exec
+  16: <cargo::cli::Exec>::exec
+  17: cargo::main
+  18: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  19: std::rt::lang_start::<()>::{closure#0}
+  20: std::rt::lang_start_internal
+  21: _main
+   0.353042625s  INFO prepare_target{force=false package_id=llm_oracle v0.1.0 (/Users/8bit/Downloads/ClawdBrowser/llm_oracle) target="llm_oracle"}: cargo::core::compiler::fingerprint: fingerprint error for llm_oracle v0.1.0 (/Users/8bit/Downloads/ClawdBrowser/llm_oracle)/Check { test: true }/TargetInner { name: "llm_oracle", doc: true, ..: with_path("/Users/8bit/Downloads/ClawdBrowser/llm_oracle/src/main.rs", Edition2021) }
+   0.353062125s  INFO prepare_target{force=false package_id=llm_oracle v0.1.0 (/Users/8bit/Downloads/ClawdBrowser/llm_oracle) target="llm_oracle"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/ClawdBrowser/llm_oracle/target/debug/.fingerprint/llm_oracle-26d4547f77f1bab3/test-bin-llm_oracle`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   7: cargo::ops::cargo_compile::compile_ws
+   8: cargo::ops::cargo_compile::compile_with_exec
+   9: cargo::ops::cargo_compile::compile
+  10: cargo::commands::check::exec
+  11: <cargo::cli::Exec>::exec
+  12: cargo::main
+  13: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  14: std::rt::lang_start::<()>::{closure#0}
+  15: std::rt::lang_start_internal
+  16: _main
+    Checking solana-message v3.0.1
+error: could not compile `solana-message` (lib) due to 18 previous errors

@@ -1,0 +1,10 @@
+/Users/8bit/Downloads/ClawdBrowser/llm_oracle/target/debug/deps/zerovec_derive-6cf83886fe75d614.d: /Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zerovec-derive-0.10.3/src/lib.rs /Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zerovec-derive-0.10.3/src/make_ule.rs /Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zerovec-derive-0.10.3/src/make_varule.rs /Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zerovec-derive-0.10.3/src/ule.rs /Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zerovec-derive-0.10.3/src/utils.rs /Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zerovec-derive-0.10.3/src/varule.rs
+
+/Users/8bit/Downloads/ClawdBrowser/llm_oracle/target/debug/deps/libzerovec_derive-6cf83886fe75d614.dylib: /Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zerovec-derive-0.10.3/src/lib.rs /Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zerovec-derive-0.10.3/src/make_ule.rs /Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zerovec-derive-0.10.3/src/make_varule.rs /Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zerovec-derive-0.10.3/src/ule.rs /Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zerovec-derive-0.10.3/src/utils.rs /Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zerovec-derive-0.10.3/src/varule.rs
+
+/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zerovec-derive-0.10.3/src/lib.rs:
+/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zerovec-derive-0.10.3/src/make_ule.rs:
+/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zerovec-derive-0.10.3/src/make_varule.rs:
+/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zerovec-derive-0.10.3/src/ule.rs:
+/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zerovec-derive-0.10.3/src/utils.rs:
+/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zerovec-derive-0.10.3/src/varule.rs:
