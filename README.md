@@ -103,6 +103,14 @@ npm run pinocchio:templates
 npm run pinocchio:scaffold -- --template escrow --name my-escrow --out ./programs/my-escrow
 ```
 
+Map the on-chain program workspace:
+
+```bash
+npm run programs:map
+npm run programs:show -- solana-ai-inference
+cd programs && cargo check
+```
+
 Common environment variables:
 
 ```bash
@@ -159,6 +167,7 @@ Clawd does not just prompt. It loops, pays, records, scores, resolves, and retur
 | **LLM Oracle** | Rust listener that watches Solana oracle interactions, calls an LLM provider, and submits callback responses on-chain | [`llm_oracle/`](./llm_oracle/) |
 | **Percolator Ops** | Bundled Percolator CLI and upstream references for perp-market oracle, keeper, and risk-engine workflows | [`llm_oracle/percolator-cli-master/`](./llm_oracle/percolator-cli-master/) and [`llm_oracle/upstream/`](./llm_oracle/upstream/) |
 | **Pinocchio Support** | Native Solana p-token, vault, escrow, launcher templates, bonding curves, upstream program maps, and agent/MCP workflows | [`pinocchio/`](./pinocchio/) and [`pinocchio/pinocchio-main/programs/`](./pinocchio/pinocchio-main/programs/) |
+| **Program Workspace** | Anchor/Rust/TypeScript Solana programs for inference, staking, GPT oracle callbacks, agent minting, launchers, and metadata rails | [`programs/`](./programs/) and [`data/programs-map.json`](./data/programs-map.json) |
 | **p-token Explorer** | SPL-compatible p-token registry, mint inspector, and x402 p-token payment support | [`scripts/ptoken-explorer.mjs`](./scripts/ptoken-explorer.mjs), [`data/ptokens.json`](./data/ptokens.json), [`docs/PTOKEN_EXPLORER.md`](./docs/PTOKEN_EXPLORER.md) |
 | **MCP Surface** | Local tools and machine interfaces | [`MCP/`](./MCP/) |
 | **Browser Bridge** | Wallet, extension, and browser-side controls | [`chrome-extension/`](./chrome-extension/) |
@@ -418,6 +427,7 @@ solana-clawd/
 ├── clawdrouter/            # model routing
 ├── MCP/                    # MCP server
 ├── pinocchio/              # p-token, vault, escrow templates + Pinocchio docs
+├── programs/               # on-chain program workspace + program map
 ├── MemeBRain/              # Mnemosyne / Clawd brain substrate
 ├── llm-wiki-tang/          # Clawd vault
 ├── chrome-extension/       # browser surfaces
@@ -443,6 +453,7 @@ solana-clawd/
 8. [`openclawd/README.md`](./openclawd/README.md)
 9. [`openclawd-framework/README.md`](./openclawd-framework/README.md)
 10. [`pinocchio/README.md`](./pinocchio/README.md)
+11. [`programs/README.md`](./programs/README.md)
 
 ---
 

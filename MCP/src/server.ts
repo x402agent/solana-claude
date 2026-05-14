@@ -418,6 +418,8 @@ export function createServer(): Server {
       { uri: "solana-clawd://pinocchio-guide", name: "Pinocchio Guide", description: "Native Solana Pinocchio guide for agents and developers", mimeType: "text/markdown" },
       { uri: "solana-clawd://pinocchio-programs", name: "Pinocchio Program Map", description: "One-by-one upstream Pinocchio program crate map", mimeType: "text/markdown" },
       { uri: "solana-clawd://pinocchio-programs-json", name: "Pinocchio Program Map JSON", description: "Machine-readable Pinocchio program map", mimeType: "application/json" },
+      { uri: "solana-clawd://programs", name: "Solana Program Workspace", description: "Program-by-program map of the solana-clawd on-chain workspace", mimeType: "text/markdown" },
+      { uri: "solana-clawd://programs-json", name: "Solana Program Map JSON", description: "Machine-readable solana-clawd program map", mimeType: "application/json" },
       { uri: "solana-clawd://ptoken-launches", name: "p-token Launches", description: "Unsigned p-token launch and bonding curve workflow", mimeType: "text/markdown" },
       { uri: "solana-clawd://ptokens", name: "p-token Registry", description: "Registered p-token mint metadata", mimeType: "application/json" },
     ],
@@ -472,6 +474,14 @@ export function createServer(): Server {
     }
     if (uri === "solana-clawd://pinocchio-programs-json") {
       const text = (await readFileText(path.join(REPO_ROOT, "data", "pinocchio-programs.json"))) ?? JSON.stringify({ version: 1, programs: [] }, null, 2);
+      return { contents: [{ uri, mimeType: "application/json", text }] };
+    }
+    if (uri === "solana-clawd://programs") {
+      const text = (await readFileText(path.join(REPO_ROOT, "programs", "README.md"))) ?? "programs/README.md not found.";
+      return { contents: [{ uri, mimeType: "text/markdown", text }] };
+    }
+    if (uri === "solana-clawd://programs-json") {
+      const text = (await readFileText(path.join(REPO_ROOT, "data", "programs-map.json"))) ?? JSON.stringify({ version: 1, programs: [] }, null, 2);
       return { contents: [{ uri, mimeType: "application/json", text }] };
     }
     if (uri === "solana-clawd://ptoken-launches") {
@@ -739,6 +749,13 @@ export function createServer(): Server {
         inputSchema: { type: "object" as const, properties: {
           program: { type: "string", description: "system, token, token-2022, associated-token-account, memo, or crate name" },
         }, required: ["program"] },
+      },
+      {
+        name: "programs_map",
+        description: "Return the solana-clawd program workspace map, or one program by slug/path/name.",
+        inputSchema: { type: "object" as const, properties: {
+          program: { type: "string", description: "Optional program slug, path basename, or display name" },
+        } },
       },
       {
         name: "ptoken_registry_list",
@@ -1632,6 +1649,22 @@ emitter.on("event", (e) => console.log(e.type, e.signature, e.description));`,
             const map = raw ? JSON.parse(raw) : { version: 1, programs: [] };
             const match = map.programs.find((item: Record<string, unknown>) => item.slug === program || item.crate === program);
             if (!match) return text({ error: `Unknown Pinocchio program: ${program}`, available: map.programs.map((item: Record<string, unknown>) => item.slug) });
+            return text(match);
+          }
+
+          case "programs_map": {
+            const program = String(a.program ?? "");
+            const raw = await readFileText(path.join(REPO_ROOT, "data", "programs-map.json"));
+            const map = raw ? JSON.parse(raw) : { version: 1, programs: [] };
+            if (!program) return text(map);
+            const needle = program.toLowerCase();
+            const match = map.programs.find((item: Record<string, unknown>) => {
+              const slug = String(item.slug ?? "").toLowerCase();
+              const name = String(item.name ?? "").toLowerCase();
+              const dir = String(item.path ?? "").split("/").filter(Boolean).pop()?.toLowerCase();
+              return slug === needle || name === needle || dir === needle;
+            });
+            if (!match) return text({ error: `Unknown program: ${program}`, available: map.programs.map((item: Record<string, unknown>) => item.slug) });
             return text(match);
           }
 

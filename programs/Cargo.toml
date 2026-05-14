@@ -4,7 +4,10 @@ members = [
     "clawd-stake"
 ]
 exclude = [
+    "agent-minter",
+    "llm_oracle",
     "mpl-corenft-staking",
+    "solana-gpt-oracle",
     "token-launcher",
     "token-launchpad"
 ]

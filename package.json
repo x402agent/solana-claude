@@ -100,7 +100,9 @@
     "pinocchio:ptoken:add": "node scripts/ptoken-explorer.mjs add",
     "pinocchio:ptoken:list": "node scripts/ptoken-explorer.mjs list",
     "pinocchio:ptoken:launch-plan": "node scripts/ptoken-launch-planner.mjs plan",
-    "pinocchio:ptoken:curve-quote": "node scripts/ptoken-launch-planner.mjs quote"
+    "pinocchio:ptoken:curve-quote": "node scripts/ptoken-launch-planner.mjs quote",
+    "programs:map": "node scripts/programs-map.mjs list",
+    "programs:show": "node scripts/programs-map.mjs show"
   },
   "dependencies": {
     "@ai-sdk/xai": "^1.2.0",

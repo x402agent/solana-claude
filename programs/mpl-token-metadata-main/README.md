@@ -14,6 +14,12 @@
   <a href="https://crates.io/crates/mpl-token-metadata"><img src="https://img.shields.io/crates/v/mpl-token-metadata?logo=rust" /></a>
 </p>
 
+## Solana Clawd Map
+
+This vendored upstream program anchors the metadata layer for Clawd launches and agent assets. The canonical program id is `metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s`.
+
+Use the folder map in [`../README.md`](../README.md) or the machine-readable registry in [`../../data/programs-map.json`](../../data/programs-map.json) when agents need to discover the metadata program alongside inference, staking, oracle, and launcher programs.
+
 ## Getting Started
 
 The packages below can be used to interact with Token Metadata program.

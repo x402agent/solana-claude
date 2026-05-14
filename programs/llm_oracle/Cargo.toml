@@ -10,7 +10,7 @@ solana-sdk = "^2.1.16"
 solana-account-decoder = "^2.1.16"
 tokio = { version = "1.44.1", features = ["full"]  }
 tokio-stream = "0.1.17"
-solana-gpt-oracle = { path = "../programs/solana-gpt-oracle", features = ["cpi"] }
+solana-gpt-oracle = { path = "../solana-gpt-oracle", features = ["cpi"] }
 futures = "0.3.31"
 anchor-lang = "0.31.0"
 chatgpt_rs = "1.2.3"

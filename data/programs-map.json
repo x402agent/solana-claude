@@ -1,0 +1,107 @@
+{
+  "version": 1,
+  "source": "programs",
+  "programs": [
+    {
+      "slug": "agent-minter",
+      "kind": "anchor-program",
+      "programId": "agnmDKzZkv63sRhPFvm3iWpxaopgTRcohXA6CSYSXvQ",
+      "path": "programs/agent-minter",
+      "readme": "programs/agent-minter/README.md",
+      "purpose": "LLM-backed agent token minter that mints MAR1O rewards from oracle callback JSON.",
+      "instructions": ["initialize", "interact_agent", "callback_from_agent"],
+      "status": "mapped"
+    },
+    {
+      "slug": "clawd-stake",
+      "kind": "anchor-program",
+      "programId": "5bp3bDnWYdjiYyB99XWWi6h8ga2wnB1TxuRUb4VNJrTn",
+      "path": "programs/clawd-stake",
+      "readme": "programs/clawd-stake/README.md",
+      "purpose": "CLAWD reward and fee-share staking protocol for Metaplex Agent assets.",
+      "instructions": ["initialize_pool", "update_pool", "stake", "unstake", "claim_rewards", "deposit_gacha_fees"],
+      "status": "documented"
+    },
+    {
+      "slug": "client",
+      "kind": "typescript-sdk",
+      "programId": null,
+      "path": "programs/client",
+      "readme": "programs/client/README.md",
+      "purpose": "Typed client exports for SolanaOS AI inference and ORE integrations.",
+      "instructions": [],
+      "status": "mapped"
+    },
+    {
+      "slug": "llm_oracle",
+      "kind": "offchain-worker",
+      "programId": null,
+      "path": "programs/llm_oracle",
+      "readme": "programs/llm_oracle/README.md",
+      "purpose": "Rust worker that listens for oracle interactions, calls an LLM, and submits callbacks.",
+      "instructions": [],
+      "status": "mapped"
+    },
+    {
+      "slug": "mpl-corenft-staking",
+      "kind": "anchor-program",
+      "programId": "7AFH2R2vAowRbYxLJnS5eRazZxQyHcMD9VTJKEFsjpdZ",
+      "path": "programs/mpl-corenft-staking",
+      "readme": "programs/mpl-corenft-staking/README.md",
+      "purpose": "Lightweight Metaplex Core agent staking registry.",
+      "instructions": ["initialize", "stake_agent", "unstake_agent"],
+      "status": "documented"
+    },
+    {
+      "slug": "mpl-token-metadata-main",
+      "kind": "upstream-reference",
+      "programId": "metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s",
+      "path": "programs/mpl-token-metadata-main",
+      "readme": "programs/mpl-token-metadata-main/README.md",
+      "purpose": "Metaplex Token Metadata reference used by mint and launch flows.",
+      "instructions": [],
+      "status": "upstream"
+    },
+    {
+      "slug": "solana-ai-inference",
+      "kind": "anchor-program",
+      "programId": "3xFBRCtk5hxeLWzHvwyDg2B67RHoA9JFTKmHPzzccBVc",
+      "path": "programs/solana-ai-inference",
+      "readme": "programs/solana-ai-inference/README.md",
+      "purpose": "On-chain AI inference market with model registry, requests, validation, staking, and DNA records.",
+      "instructions": ["initialize_protocol", "set_paused", "propose_admin", "accept_admin", "update_protocol_fee", "initialize_model", "update_model", "finalize_training", "submit_data", "rate_data", "request_inference", "submit_inference_result", "fail_inference", "stake_tokens", "request_unstake", "execute_unstake", "register_validator", "slash_validator", "record_dna_generation"],
+      "status": "workspace-member"
+    },
+    {
+      "slug": "solana-contracts",
+      "kind": "typescript-builder",
+      "programId": "TLaunDAP1sZks8dGmcNWHxdAgzMuiYzKg87mfjHRFzM",
+      "path": "programs/solana-contracts",
+      "readme": "programs/solana-contracts/README.md",
+      "purpose": "TypeScript transaction builders for token launchpad flows.",
+      "instructions": ["InitializeLaunchpad", "CreateTokenLaunch", "FundTokenLaunch", "CreateLiquidityPool", "UpdateLaunchParameters", "StartTokenTrading", "ExecuteTrade", "ClaimLaunchProceeds", "CloseTokenLaunch"],
+      "status": "demo"
+    },
+    {
+      "slug": "solana-gpt-oracle",
+      "kind": "anchor-program",
+      "programId": "LLMrieZMpbJFwN52WgmBNMxYojrpRVYXdC1RCweEbab",
+      "path": "programs/solana-gpt-oracle",
+      "readme": "programs/solana-gpt-oracle/README.md",
+      "purpose": "On-chain LLM context, interaction, and callback router.",
+      "instructions": ["initialize", "create_llm_context", "interact_with_llm", "callback_from_llm", "callback_from_oracle", "delegate_interaction"],
+      "status": "mapped"
+    },
+    {
+      "slug": "token-launcher",
+      "kind": "anchor-program",
+      "programId": "funvWGBmpr8N7pTNqpxkWPgWnQbL3Yr5vzCHNJT2YkL",
+      "path": "programs/token-launcher",
+      "readme": "programs/token-launcher/README.md",
+      "purpose": "Anchor token launchpad for SPL mint creation and Metaplex metadata.",
+      "instructions": ["initialize", "launch_token"],
+      "status": "template"
+    }
+  ]
+}
+
