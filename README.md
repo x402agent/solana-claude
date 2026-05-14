@@ -23,6 +23,7 @@
 [![Claude](https://img.shields.io/badge/Claude-ACP%20Opus%204.7-FF6B35?style=for-the-badge&logo=anthropic&logoColor=white)](https://anthropic.com)
 [![xAI](https://img.shields.io/badge/xAI-Grok%204-00D4FF?style=for-the-badge)](https://x.ai)
 [![x402](https://img.shields.io/badge/x402-pay.solanaclawd.com-FF00FF?style=for-the-badge)](https://pay.solanaclawd.com)
+[![P-Token](https://img.shields.io/badge/P--Token-SIMD--0266-14F195?style=for-the-badge&logo=solana&logoColor=black)](https://solana.com/upgrades/p-token)
 [![License: MIT](https://img.shields.io/badge/License-MIT-14F195?style=for-the-badge)](LICENSE)
 
 <br/>
@@ -206,6 +207,39 @@ npx tsx ooda/loop.ts --goblin --ticks 200
 ```
 
 > **Safety contract still holds.** Goblin mode is paper-only, devnet-only. The Three Laws are not overridable. The kill-switch fires at 5 consecutive losses. No private keys. No mainnet.
+
+---
+
+<!-- ════════════════════════════ P-TOKEN ═════════════════════════════════ -->
+
+## ⚡ P-Token — Pinocchio-Optimized Token Program
+
+<img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=600&size=15&duration=1800&pause=500&color=14F195&center=true&vCenter=true&width=960&lines=P-Token%3A+TransferChecked+6%2C200+CU+%E2%86%92+105+CU+(-98%25);Drop-in+replacement+%E2%80%94+same+instruction+layout%2C+new+program+ID;ptok6rngomXrDbWf5v5Mkmu5CEbB51hzSCPDoj9DrvF;All+x402+payments+automatically+use+p-token;Batch+instruction+%E2%80%94+multiple+transfers%2C+one+CU+base+cost;SIMD-0266+%C2%B7+Pinocchio+zero-copy+%C2%B7+no+heap+allocations" alt="p-token banner" />
+
+P-Token is the compute-optimized replacement for the SPL Token program ([SIMD-0266](https://solana.com/upgrades/p-token)). It uses the same instruction format — every x402 payment in this stack automatically benefits.
+
+| Instruction | SPL Token | P-Token | Savings |
+|-------------|-----------|---------|---------|
+| `TransferChecked` | 6,200 CU | **105 CU** | **-98.3%** |
+| `Transfer` | 4,645 CU | **76 CU** | **-98.4%** |
+| `Approve` | 2,904 CU | **124 CU** | **-95.7%** |
+| `ApproveChecked` | 4,458 CU | **149 CU** | **-96.7%** |
+| `Burn` | 4,753 CU | **1,884 CU** | **-60.4%** |
+
+```typescript
+import { createPTokenTransferChecked, createPTokenComputeBudget } from './x402/p-token.js';
+
+// Every x402 payment tx now uses p-token automatically
+const instructions = [
+  ...createPTokenComputeBudget(),   // 12,000 CU limit (vs 200,000 default)
+  createPTokenATAIdempotent(payer, destAta, owner, mint),
+  createPTokenTransferChecked(sourceAta, mint, destAta, owner, amount, decimals),
+];
+// Program: ptok6rngomXrDbWf5v5Mkmu5CEbB51hzSCPDoj9DrvF
+// Fallback: set USE_P_TOKEN=0 to revert to standard SPL Token
+```
+
+The x402 facilitator (`pay.solanaclawd.com`) verifies both `TOKEN_PROGRAM_ID` and `P_TOKEN_PROGRAM_ID` in incoming payment transactions — so the upgrade is fully backward compatible.
 
 ---
 

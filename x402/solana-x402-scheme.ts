@@ -26,6 +26,7 @@ import {
   TOKEN_PROGRAM_ID,
   ASSOCIATED_TOKEN_PROGRAM_ID,
 } from "@solana/spl-token";
+import { isTokenProgram, getPTokenATA } from "./p-token.js";
 import bs58 from "bs58";
 
 import type { Env, SolanaPaymentRequirement } from "../types";
@@ -119,10 +120,11 @@ export async function verifyPayment(
       return { valid: false, reason: "blockhash mismatch" };
     }
 
-    // Find the SPL transferChecked instruction
+    // Find the SPL / p-token transferChecked instruction
     const mint = new PublicKey(req.asset);
     const payToOwner = new PublicKey(req.payTo);
-    const expectedDestAta = getAssociatedTokenAddressSync(mint, payToOwner, true);
+    // Accept ATA derived by either TOKEN_PROGRAM_ID or P_TOKEN_PROGRAM_ID (same address)
+    const expectedDestAta = getPTokenATA(mint, payToOwner);
     const expectedAmount = BigInt(req.maxAmountRequired);
 
     const transferIx = findTransferCheckedIx(tx, mint, expectedDestAta, expectedAmount);
@@ -191,7 +193,8 @@ function findTransferCheckedIx(
   for (const ix of msg.compiledInstructions) {
     const programId = keys[ix.programIdIndex];
     if (!programId) continue;
-    if (!programId.equals(TOKEN_PROGRAM_ID)) continue;
+    // Accept standard SPL Token or p-token (Pinocchio) — same instruction layout
+    if (!isTokenProgram(programId)) continue;
 
     const data = ix.data;
     // transferChecked has opcode 12 and 1 + 8 + 1 = 10 bytes of data
