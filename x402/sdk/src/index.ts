@@ -24,6 +24,7 @@ import {
   Connection,
   Keypair,
   PublicKey,
+  TransactionInstruction,
   TransactionMessage,
   VersionedTransaction,
 } from "@solana/web3.js";
@@ -31,6 +32,8 @@ import {
   createTransferCheckedInstruction,
   getAssociatedTokenAddressSync,
   createAssociatedTokenAccountIdempotentInstruction,
+  TOKEN_PROGRAM_ID,
+  ASSOCIATED_TOKEN_PROGRAM_ID,
 } from "@solana/spl-token";
 import bs58 from "bs58";
 
@@ -47,7 +50,17 @@ export interface SolanaPaymentRequirement {
     decimals: number;
     recentBlockhash?: string;
     memo?: string;
+    tokenProgram?: "spl" | "p-token";
+    pTokenProgramId?: string;
+    batchOutputs?: BatchOutput[];
   };
+}
+
+export interface BatchOutput {
+  /** base58 ATA owner, not ATA address */
+  payTo: string;
+  /** amount in base units */
+  amount: string;
 }
 
 export interface ClawdFetchOptions extends RequestInit {
@@ -175,27 +188,91 @@ async function buildAndSignTransfer(
   connection: Connection,
 ): Promise<VersionedTransaction> {
   const mint = new PublicKey(req.asset);
+  const tokenProgramId = tokenProgramIdFor(req);
   const payToOwner = new PublicKey(req.payTo);
-  const destAta = getAssociatedTokenAddressSync(mint, payToOwner, true);
-  const sourceAta = getAssociatedTokenAddressSync(mint, signer.publicKey, true);
+  const sourceAta = getAssociatedTokenAddressSync(
+    mint,
+    signer.publicKey,
+    true,
+    tokenProgramId,
+    ASSOCIATED_TOKEN_PROGRAM_ID,
+  );
 
-  const instructions = [
-    // idempotent — no-op if the destination ATA already exists
-    createAssociatedTokenAccountIdempotentInstruction(
-      signer.publicKey,
-      destAta,
+  const instructions: TransactionInstruction[] = [];
+
+  if (req.extra.batchOutputs?.length) {
+    if (req.extra.tokenProgram !== "p-token") {
+      throw new Error("batchOutputs require p-token");
+    }
+    const destAtas = req.extra.batchOutputs.map((output) => {
+      const owner = new PublicKey(output.payTo);
+      const ata = getAssociatedTokenAddressSync(
+        mint,
+        owner,
+        true,
+        tokenProgramId,
+        ASSOCIATED_TOKEN_PROGRAM_ID,
+      );
+      instructions.push(
+        createAssociatedTokenAccountIdempotentInstruction(
+          signer.publicKey,
+          ata,
+          owner,
+          mint,
+          tokenProgramId,
+          ASSOCIATED_TOKEN_PROGRAM_ID,
+        ),
+      );
+      return ata;
+    });
+
+    instructions.push(
+      new TransactionInstruction({
+        programId: tokenProgramId,
+        keys: [
+          { pubkey: sourceAta, isSigner: false, isWritable: true },
+          { pubkey: mint, isSigner: false, isWritable: false },
+          { pubkey: signer.publicKey, isSigner: true, isWritable: false },
+          ...destAtas.map((pubkey) => ({ pubkey, isSigner: false, isWritable: true })),
+        ],
+        data: buildPTokenBatchData(
+          req.extra.batchOutputs.map((output) => ({
+            amount: BigInt(output.amount),
+            decimals: req.extra.decimals,
+          })),
+        ),
+      }),
+    );
+  } else {
+    const destAta = getAssociatedTokenAddressSync(
+      mint,
       payToOwner,
-      mint,
-    ),
-    createTransferCheckedInstruction(
-      sourceAta,
-      mint,
-      destAta,
-      signer.publicKey,
-      BigInt(req.maxAmountRequired),
-      req.extra.decimals,
-    ),
-  ];
+      true,
+      tokenProgramId,
+      ASSOCIATED_TOKEN_PROGRAM_ID,
+    );
+    // idempotent — no-op if the destination ATA already exists
+    instructions.push(
+      createAssociatedTokenAccountIdempotentInstruction(
+        signer.publicKey,
+        destAta,
+        payToOwner,
+        mint,
+        tokenProgramId,
+        ASSOCIATED_TOKEN_PROGRAM_ID,
+      ),
+      createTransferCheckedInstruction(
+        sourceAta,
+        mint,
+        destAta,
+        signer.publicKey,
+        BigInt(req.maxAmountRequired),
+        req.extra.decimals,
+        [],
+        tokenProgramId,
+      ),
+    );
+  }
 
   // Use the blockhash named in the challenge when present — this binds the tx
   // to the server's challenge window. Otherwise fetch a fresh one.
@@ -211,6 +288,31 @@ async function buildAndSignTransfer(
   const tx = new VersionedTransaction(message);
   tx.sign([signer]);
   return tx;
+}
+
+function tokenProgramIdFor(req: SolanaPaymentRequirement): PublicKey {
+  if (req.extra.tokenProgram !== "p-token") return TOKEN_PROGRAM_ID;
+  if (!req.extra.pTokenProgramId) {
+    throw new Error("p-token challenge missing extra.pTokenProgramId");
+  }
+  return new PublicKey(req.extra.pTokenProgramId);
+}
+
+function buildPTokenBatchData(outputs: Array<{ amount: bigint; decimals: number }>): Uint8Array {
+  if (outputs.length === 0 || outputs.length > 64) {
+    throw new RangeError("p-token batch requires 1-64 outputs");
+  }
+  const buf = new Uint8Array(2 + outputs.length * 9);
+  const view = new DataView(buf.buffer);
+  buf[0] = 25;
+  buf[1] = outputs.length;
+  let offset = 2;
+  for (const output of outputs) {
+    view.setBigUint64(offset, output.amount, true);
+    offset += 8;
+    buf[offset++] = output.decimals;
+  }
+  return buf;
 }
 
 function decorate(res: Response): ClawdFetchResult {

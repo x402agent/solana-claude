@@ -77,7 +77,7 @@ function decodeRegistryAccount(raw: Uint8Array, agentId: string): AgentRecord {
   const pricingCount = raw[o]; o += 1;
   const pricing: Record<string, string> = {};
   for (let i = 0; i < pricingCount && i < 16; i++) {
-    const hash = Buffer.from(raw.slice(o, o + 8)).toString("hex"); o += 8;
+    const hash = Array.from(raw.slice(o, o + 8), (b) => b.toString(16).padStart(2, "0")).join(""); o += 8;
     const amount = dv.getBigUint64(o, true); o += 8;
     pricing[hash] = amount.toString();
   }
@@ -100,7 +100,7 @@ function decodeRegistryAccount(raw: Uint8Array, agentId: string): AgentRecord {
 export async function methodHash(method: string): Promise<string> {
   const data = new TextEncoder().encode(method);
   const digest = await crypto.subtle.digest("SHA-256", data);
-  return Buffer.from(digest, 0, 8).toString("hex").slice(0, 16);
+  return Array.from(new Uint8Array(digest).slice(0, 8), (b) => b.toString(16).padStart(2, "0")).join("");
 }
 
 export function priceFor(record: AgentRecord, method: string, hash: string, fallback: bigint): bigint {

@@ -86,7 +86,12 @@
     "oracle:run": "cargo run --manifest-path llm_oracle/Cargo.toml",
     "percolator:install": "cd llm_oracle/percolator-cli-master && pnpm install",
     "percolator:build": "cd llm_oracle/percolator-cli-master && pnpm build",
-    "percolator:test": "cd llm_oracle/percolator-cli-master && pnpm test"
+    "percolator:test": "cd llm_oracle/percolator-cli-master && pnpm test",
+    "ptoken:explorer": "node scripts/ptoken-explorer.mjs",
+    "ptoken:inspect": "node scripts/ptoken-explorer.mjs inspect",
+    "ptoken:add": "node scripts/ptoken-explorer.mjs add",
+    "ptoken:list": "node scripts/ptoken-explorer.mjs list",
+    "ptoken:show": "node scripts/ptoken-explorer.mjs show"
   },
   "dependencies": {
     "@ai-sdk/xai": "^1.2.0",

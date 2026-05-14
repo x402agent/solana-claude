@@ -92,6 +92,13 @@ npm run oracle:check
 npm run oracle:run
 ```
 
+Inspect and register SPL-compatible p-tokens:
+
+```bash
+npm run ptoken:inspect -- --mint <mint>
+npm run ptoken:add -- --mint <mint> --symbol PFOO --name "P Foo"
+```
+
 Common environment variables:
 
 ```bash
@@ -104,6 +111,7 @@ SOLANA_PRIVATE_KEY=        # only for intentional signing flows
 ORACLE_PROGRAM_ID=         # deployed solana-gpt-oracle program id
 LLM_PROVIDER=clawd         # clawd/anthropic or openai
 CHARACTER=clawd            # agents/characters name or JSON path
+P_TOKEN_PROGRAM_ID=        # optional p-token program for x402 payments
 ```
 
 ---
@@ -145,6 +153,7 @@ Clawd does not just prompt. It loops, pays, records, scores, resolves, and retur
 | **Clawd Memory / Vault** | Markdown vault, MCP workflows, long-horizon memory | [`llm-wiki-tang/`](./llm-wiki-tang/) and [`MemeBRain/`](./MemeBRain/) |
 | **LLM Oracle** | Rust listener that watches Solana oracle interactions, calls an LLM provider, and submits callback responses on-chain | [`llm_oracle/`](./llm_oracle/) |
 | **Percolator Ops** | Bundled Percolator CLI and upstream references for perp-market oracle, keeper, and risk-engine workflows | [`llm_oracle/percolator-cli-master/`](./llm_oracle/percolator-cli-master/) and [`llm_oracle/upstream/`](./llm_oracle/upstream/) |
+| **p-token Explorer** | SPL-compatible p-token registry, mint inspector, and x402 p-token payment support | [`scripts/ptoken-explorer.mjs`](./scripts/ptoken-explorer.mjs), [`data/ptokens.json`](./data/ptokens.json), [`docs/PTOKEN_EXPLORER.md`](./docs/PTOKEN_EXPLORER.md) |
 | **MCP Surface** | Local tools and machine interfaces | [`MCP/`](./MCP/) |
 | **Browser Bridge** | Wallet, extension, and browser-side controls | [`chrome-extension/`](./chrome-extension/) |
 | **Agent Wallet** | Local encrypted wallet API and vault tooling | [`packages/agentwallet/`](./packages/agentwallet/) |
