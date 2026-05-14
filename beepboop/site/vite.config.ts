@@ -8,7 +8,8 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: resolve(__dirname, "index.html"),
-        wallet: resolve(__dirname, "wallet.html")
+        wallet: resolve(__dirname, "wallet.html"),
+        p: resolve(__dirname, "p/index.html")
       }
     }
   }

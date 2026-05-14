@@ -18,4 +18,10 @@ Pinocchio developer support lives in [`../pinocchio/`](../pinocchio/). It includ
 ```bash
 npm run pinocchio:templates
 npm run pinocchio:scaffold -- --template escrow --name my-escrow --out ./programs/my-escrow
+npm run ptoken:launch-plan -- --symbol PFOO --name "P Foo"
+npm run ptoken:curve-quote -- --virtual-sol 30 --virtual-token 1073000000 --sol 1
 ```
+
+Launch planning and bonding curve notes are in
+[`../pinocchio/docs/P_TOKEN_LAUNCHES.md`](../pinocchio/docs/P_TOKEN_LAUNCHES.md).
+The static developer page is available at `/p/` in the Beep Boop site.

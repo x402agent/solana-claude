@@ -92,11 +92,15 @@
     "ptoken:add": "node scripts/ptoken-explorer.mjs add",
     "ptoken:list": "node scripts/ptoken-explorer.mjs list",
     "ptoken:show": "node scripts/ptoken-explorer.mjs show",
+    "ptoken:launch-plan": "node scripts/ptoken-launch-planner.mjs plan",
+    "ptoken:curve-quote": "node scripts/ptoken-launch-planner.mjs quote",
     "pinocchio:templates": "node scripts/pinocchio-scaffold.mjs list",
     "pinocchio:scaffold": "node scripts/pinocchio-scaffold.mjs",
     "pinocchio:ptoken:inspect": "node scripts/ptoken-explorer.mjs inspect",
     "pinocchio:ptoken:add": "node scripts/ptoken-explorer.mjs add",
-    "pinocchio:ptoken:list": "node scripts/ptoken-explorer.mjs list"
+    "pinocchio:ptoken:list": "node scripts/ptoken-explorer.mjs list",
+    "pinocchio:ptoken:launch-plan": "node scripts/ptoken-launch-planner.mjs plan",
+    "pinocchio:ptoken:curve-quote": "node scripts/ptoken-launch-planner.mjs quote"
   },
   "dependencies": {
     "@ai-sdk/xai": "^1.2.0",

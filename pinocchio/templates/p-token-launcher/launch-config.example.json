@@ -13,8 +13,21 @@
     "freezeAuthority": null,
     "updateAuthority": "<wallet-or-pda>"
   },
+  "bondingCurve": {
+    "enabled": true,
+    "type": "constant-product",
+    "virtualSol": 30,
+    "virtualToken": 1073000000,
+    "realSol": 0,
+    "realToken": 793100000,
+    "feeBps": 100,
+    "graduation": {
+      "trigger": "real-sol-reserve",
+      "targetSol": 85,
+      "postGraduation": "seed-amm-liquidity"
+    }
+  },
   "registry": {
     "tags": ["pinocchio", "p-token", "launch"]
   }
 }
-

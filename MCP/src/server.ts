@@ -11,9 +11,9 @@
  *   - Jupiter price API (no key)
  *   - Public Solana mainnet RPC (fallback)
  *
- * Tools: 49 (15 original + 8 Helius + 6 services + 8 Pump.fun + 5 Pinocchio/p-token + 7 Chess.com)
- * Resources: 7 (README, soul, skills, tools, Pinocchio, Pinocchio guide, p-token registry)
- * Prompts: 8
+ * Tools: 51 (15 original + 8 Helius + 6 services + 8 Pump.fun + 7 Pinocchio/p-token + 7 Chess.com)
+ * Resources: 8 (README, soul, skills, tools, Pinocchio, Pinocchio guide, p-token launches, p-token registry)
+ * Prompts: 9
  */
 
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
@@ -253,6 +253,124 @@ function formatUiAmount(amount: string, decimals: number): string {
   return frac ? `${whole}.${frac}` : whole.toString();
 }
 
+function num(input: unknown, fallback: number): number {
+  if (input === undefined || input === null || input === "") return fallback;
+  const value = Number(input);
+  if (!Number.isFinite(value) || value < 0) throw new Error(`Invalid numeric value: ${input}`);
+  return value;
+}
+
+function decimalToBaseUnits(amount: number, decimals: number): string {
+  const [whole, fraction = ""] = String(amount).split(".");
+  const padded = `${fraction}${"0".repeat(decimals)}`.slice(0, decimals);
+  return `${whole}${padded}`.replace(/^0+(?=\d)/, "");
+}
+
+function pTokenBondingCurveQuote(args: Record<string, unknown>): Record<string, unknown> {
+  const virtualSol = num(args.virtualSol, 30);
+  const virtualToken = num(args.virtualToken, 1_073_000_000);
+  const feeBps = num(args.feeBps, 100);
+  const side = String(args.side ?? (args.tokens !== undefined ? "sell" : "buy"));
+  const spotPriceBefore = virtualSol / virtualToken;
+  if (side === "sell") {
+    const tokensIn = num(args.tokens ?? args.tokenAmount, 0);
+    if (tokensIn <= 0) throw new Error("tokens is required for sell quotes");
+    const k = virtualSol * virtualToken;
+    const virtualTokenAfter = virtualToken + tokensIn;
+    const virtualSolAfter = k / virtualTokenAfter;
+    const grossSolOut = Math.max(0, virtualSol - virtualSolAfter);
+    const fee = grossSolOut * feeBps / 10_000;
+    return {
+      side,
+      tokensIn,
+      grossSolOut,
+      fee,
+      netSolOut: grossSolOut - fee,
+      spotPriceBefore,
+      spotPriceAfter: virtualSolAfter / virtualTokenAfter,
+      virtualSolAfter,
+      virtualTokenAfter,
+      unsigned: true,
+    };
+  }
+  const solIn = num(args.sol ?? args.solAmount, 1);
+  if (solIn <= 0) throw new Error("sol is required for buy quotes");
+  const fee = solIn * feeBps / 10_000;
+  const netSolIn = solIn - fee;
+  const k = virtualSol * virtualToken;
+  const virtualSolAfter = virtualSol + netSolIn;
+  const virtualTokenAfter = k / virtualSolAfter;
+  return {
+    side: "buy",
+    solIn,
+    fee,
+    netSolIn,
+    tokensOut: Math.max(0, virtualToken - virtualTokenAfter),
+    spotPriceBefore,
+    spotPriceAfter: virtualSolAfter / virtualTokenAfter,
+    virtualSolAfter,
+    virtualTokenAfter,
+    unsigned: true,
+  };
+}
+
+function pTokenLaunchPlan(args: Record<string, unknown>): Record<string, unknown> {
+  const symbol = String(args.symbol ?? "PFOO").toUpperCase();
+  const name = String(args.name ?? "Example p-token");
+  const decimals = num(args.decimals, 9);
+  const supply = num(args.supply, 1_000_000_000);
+  const network = String(args.network ?? "solana-devnet");
+  const pTokenProgramId = String(args.pTokenProgramId ?? process.env.P_TOKEN_PROGRAM_ID ?? DEFAULT_P_TOKEN_PROGRAM_ID);
+  const virtualSol = num(args.virtualSol, 30);
+  const virtualToken = num(args.virtualToken, 1_073_000_000);
+  return {
+    unsigned: true,
+    warning: "Planning only. This MCP tool does not sign transactions, deploy programs, or move funds.",
+    network,
+    tokenProgram: "p-token",
+    pTokenProgramId,
+    metadata: {
+      name,
+      symbol,
+      uri: String(args.uri ?? "https://example.com/metadata.json"),
+      decimals,
+    },
+    supply: {
+      human: supply,
+      baseUnits: decimalToBaseUnits(supply, decimals),
+    },
+    bondingCurve: {
+      enabled: args.bondingCurve !== false,
+      type: "constant-product",
+      virtualSol,
+      virtualToken,
+      realSol: num(args.realSol, 0),
+      realToken: num(args.realToken, 793_100_000),
+      feeBps: num(args.feeBps, 100),
+      spotPrice: virtualSol / virtualToken,
+      graduation: {
+        trigger: "real-sol-reserve",
+        targetSol: num(args.graduationSol, 85),
+        postGraduation: "seed-amm-liquidity",
+      },
+    },
+    commands: {
+      scaffold: `npm run pinocchio:scaffold -- --template p-token-launcher --name ${symbol.toLowerCase()}-launch --out ./programs/${symbol.toLowerCase()}-launch`,
+      quote: `npm run ptoken:curve-quote -- --virtual-sol ${virtualSol} --virtual-token ${virtualToken} --sol 1`,
+      inspect: "npm run ptoken:inspect -- --mint <mint>",
+      register: `npm run ptoken:add -- --mint <mint> --symbol ${symbol} --name "${name}" --p-token-program-id ${pTokenProgramId}`,
+    },
+    checklist: [
+      "scaffold from pinocchio/templates/p-token-launcher",
+      "review authority, PDA, fee, graduation, and close/refund paths",
+      "test on devnet before accepting value",
+      "inspect the mint over RPC",
+      "register the verified mint in data/ptokens.json",
+      "enable x402 p-token routing only after verification",
+    ],
+  };
+}
+
 const BASE58_ALPHABET = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
 function base58(bytes: Uint8Array): string {
   let num = 0n;
@@ -298,6 +416,7 @@ export function createServer(): Server {
       { uri: "solana-clawd://tools", name: "Source Tools", description: "TypeScript tool source listing", mimeType: "application/json" },
       { uri: "solana-clawd://pinocchio", name: "Pinocchio Support", description: "Pinocchio and p-token developer support README", mimeType: "text/markdown" },
       { uri: "solana-clawd://pinocchio-guide", name: "Pinocchio Guide", description: "Native Solana Pinocchio guide for agents and developers", mimeType: "text/markdown" },
+      { uri: "solana-clawd://ptoken-launches", name: "p-token Launches", description: "Unsigned p-token launch and bonding curve workflow", mimeType: "text/markdown" },
       { uri: "solana-clawd://ptokens", name: "p-token Registry", description: "Registered p-token mint metadata", mimeType: "application/json" },
     ],
   }));
@@ -341,6 +460,10 @@ export function createServer(): Server {
     }
     if (uri === "solana-clawd://pinocchio-guide") {
       const text = (await readFileText(path.join(PINOCCHIO_ROOT, "docs", "PINOCCHIO_GUIDE.md"))) ?? "Pinocchio guide not found.";
+      return { contents: [{ uri, mimeType: "text/markdown", text }] };
+    }
+    if (uri === "solana-clawd://ptoken-launches") {
+      const text = (await readFileText(path.join(PINOCCHIO_ROOT, "docs", "P_TOKEN_LAUNCHES.md"))) ?? "p-token launch guide not found.";
       return { contents: [{ uri, mimeType: "text/markdown", text }] };
     }
     if (uri === "solana-clawd://ptokens") {
@@ -620,6 +743,37 @@ export function createServer(): Server {
           pTokenProgramId: { type: "string", description: "Program id used to classify p-token mints" },
           tags: { type: "array", items: { type: "string" }, description: "Registry tags" },
         }, required: ["mint"] },
+      },
+      {
+        name: "ptoken_launch_plan",
+        description: "Generate an unsigned p-token launch plan with metadata, registry, x402, and constant-product bonding curve settings.",
+        inputSchema: { type: "object" as const, properties: {
+          symbol: { type: "string", description: "Token symbol, e.g. PFOO" },
+          name: { type: "string", description: "Token display name" },
+          uri: { type: "string", description: "Metadata URI" },
+          decimals: { type: "number", description: "Mint decimals, default 9" },
+          supply: { type: "number", description: "Human token supply, default 1B" },
+          network: { type: "string", description: "solana-devnet or solana-mainnet" },
+          pTokenProgramId: { type: "string", description: "p-token program id" },
+          virtualSol: { type: "number", description: "Virtual SOL reserve for curve" },
+          virtualToken: { type: "number", description: "Virtual token reserve for curve" },
+          realSol: { type: "number", description: "Initial real SOL reserve" },
+          realToken: { type: "number", description: "Initial real token reserve" },
+          feeBps: { type: "number", description: "Trade fee in basis points" },
+          graduationSol: { type: "number", description: "Real SOL reserve target for graduation" },
+        } },
+      },
+      {
+        name: "ptoken_bonding_curve_quote",
+        description: "Simulate a constant-product p-token launch curve buy or sell quote. Planning only, no signing.",
+        inputSchema: { type: "object" as const, properties: {
+          side: { type: "string", enum: ["buy", "sell"], description: "Quote side" },
+          virtualSol: { type: "number", description: "Virtual SOL reserve" },
+          virtualToken: { type: "number", description: "Virtual token reserve" },
+          sol: { type: "number", description: "SOL input for buy quotes" },
+          tokens: { type: "number", description: "Token input for sell quotes" },
+          feeBps: { type: "number", description: "Trade fee in basis points" },
+        } },
       },
 
       // ── Chess.com (autonomous agent chess) ──────────────────────────────
@@ -1424,7 +1578,7 @@ emitter.on("event", (e) => console.log(e.type, e.signature, e.description));`,
             return text({
               templates,
               scaffold: "npm run pinocchio:scaffold -- --template <template> --name <name> --out ./programs/<name>",
-              docs: "pinocchio/README.md",
+              docs: ["pinocchio/README.md", "pinocchio/docs/P_TOKEN_LAUNCHES.md", "pinocchio/P_TOKEN.md", "pinocchio/PROGRAMS.md"],
             });
           }
 
@@ -1467,7 +1621,7 @@ emitter.on("event", (e) => console.log(e.type, e.signature, e.description));`,
               mint,
               symbol: a.symbol ? String(a.symbol) : inspected.tokenProgram === "p-token" ? `P-${mint.slice(0, 4).toUpperCase()}` : mint.slice(0, 6).toUpperCase(),
               name: a.name ? String(a.name) : "Registered p-token",
-              tags: Array.isArray(a.tags) ? a.tags.map(String) : [],
+              tags: Array.isArray(a.tags) ? a.tags.map(String) : ["pinocchio", "p-token"],
               addedAt: now,
               updatedAt: now,
             };
@@ -1480,6 +1634,14 @@ emitter.on("event", (e) => console.log(e.type, e.signature, e.description));`,
             registry.tokens.sort((left, right) => String(left.symbol ?? left.mint).localeCompare(String(right.symbol ?? right.mint)));
             await writePTokenRegistry(registry);
             return text({ message: "p-token registered", entry, count: registry.tokens.length });
+          }
+
+          case "ptoken_launch_plan": {
+            return text(pTokenLaunchPlan(a));
+          }
+
+          case "ptoken_bonding_curve_quote": {
+            return text(pTokenBondingCurveQuote(a));
           }
 
           // ── Chess.com ─────────────────────────────────────────────────
@@ -1620,6 +1782,7 @@ emitter.on("event", (e) => console.log(e.type, e.signature, e.description));`,
       { name: "pump_scan", description: "Scan Pump.fun for high-signal new token launches and bonding curve plays" },
       { name: "pump_ooda", description: "Full OODA loop focused on Pump.fun bonding curve opportunities", arguments: [{ name: "mint", description: "Token mint to evaluate (optional)", required: false }] },
       { name: "pinocchio_builder", description: "Plan a Pinocchio p-token, vault, or escrow build", arguments: [{ name: "template", description: "vault, escrow, or p-token-launcher", required: false }] },
+      { name: "ptoken_launch", description: "Plan a p-token launch with bonding curve, explorer registration, and x402 routing", arguments: [{ name: "symbol", description: "Token symbol", required: false }] },
     ],
   }));
 
@@ -1665,7 +1828,12 @@ emitter.on("event", (e) => console.log(e.type, e.signature, e.description));`,
 
         case "pinocchio_builder": {
           const template = args?.template ?? "vault";
-          return msg(`Plan a Pinocchio build using template: ${template}\n\n1. Read solana-clawd://pinocchio and solana-clawd://pinocchio-guide.\n2. Run pinocchio_templates and pinocchio_read_template template=${template}.\n3. Identify required account checks, signer checks, PDA seeds, CPI calls, and close/refund paths.\n4. If this is a p-token launch, run ptoken_registry_list and inspect any mint with ptoken_inspect before suggesting registry changes.\n5. Output:\n- Scope\n- Template files to start from\n- Security checks needed before deployment\n- Test plan\n- Exact scaffold command\n\nDo not claim the scaffold is audited or production-ready.`);
+          return msg(`Plan a Pinocchio build using template: ${template}\n\n1. Read solana-clawd://pinocchio, solana-clawd://pinocchio-guide, and solana-clawd://ptoken-launches.\n2. Run pinocchio_templates and pinocchio_read_template template=${template}.\n3. Identify required account checks, signer checks, PDA seeds, CPI calls, and close/refund paths.\n4. If this is a p-token launch, run ptoken_launch_plan, ptoken_bonding_curve_quote, ptoken_registry_list, and inspect any mint with ptoken_inspect before suggesting registry changes.\n5. Output:\n- Scope\n- Template files to start from\n- Security checks needed before deployment\n- Test plan\n- Exact scaffold command\n\nDo not claim the scaffold is audited or production-ready.`);
+        }
+
+        case "ptoken_launch": {
+          const symbol = args?.symbol ?? "PFOO";
+          return msg(`Plan a p-token launch for symbol ${symbol}.\n\n1. Read solana-clawd://pinocchio and solana-clawd://ptoken-launches.\n2. Run ptoken_launch_plan symbol=${symbol}.\n3. Run ptoken_bonding_curve_quote side=buy sol=1 using the returned virtual reserves.\n4. Read pinocchio_read_template template=p-token-launcher.\n5. Output:\n- unsigned launch config\n- bonding curve assumptions\n- authority and PDA checks to implement\n- mint inspection and registry steps\n- x402 env needed after verification\n\nDo not request private keys. Do not claim that the launch is deployed or audited.`);
         }
 
         default:

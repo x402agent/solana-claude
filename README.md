@@ -97,6 +97,8 @@ Inspect and register SPL-compatible p-tokens:
 ```bash
 npm run ptoken:inspect -- --mint <mint>
 npm run ptoken:add -- --mint <mint> --symbol PFOO --name "P Foo"
+npm run ptoken:launch-plan -- --symbol PFOO --name "P Foo"
+npm run ptoken:curve-quote -- --virtual-sol 30 --virtual-token 1073000000 --sol 1
 npm run pinocchio:templates
 npm run pinocchio:scaffold -- --template escrow --name my-escrow --out ./programs/my-escrow
 ```
@@ -156,7 +158,7 @@ Clawd does not just prompt. It loops, pays, records, scores, resolves, and retur
 | **Clawd Memory / Vault** | Markdown vault, MCP workflows, long-horizon memory | [`llm-wiki-tang/`](./llm-wiki-tang/) and [`MemeBRain/`](./MemeBRain/) |
 | **LLM Oracle** | Rust listener that watches Solana oracle interactions, calls an LLM provider, and submits callback responses on-chain | [`llm_oracle/`](./llm_oracle/) |
 | **Percolator Ops** | Bundled Percolator CLI and upstream references for perp-market oracle, keeper, and risk-engine workflows | [`llm_oracle/percolator-cli-master/`](./llm_oracle/percolator-cli-master/) and [`llm_oracle/upstream/`](./llm_oracle/upstream/) |
-| **Pinocchio Support** | Native Solana p-token, vault, escrow, launcher templates, and agent/MCP workflows | [`pinocchio/`](./pinocchio/) |
+| **Pinocchio Support** | Native Solana p-token, vault, escrow, launcher templates, bonding curves, and agent/MCP workflows | [`pinocchio/`](./pinocchio/) |
 | **p-token Explorer** | SPL-compatible p-token registry, mint inspector, and x402 p-token payment support | [`scripts/ptoken-explorer.mjs`](./scripts/ptoken-explorer.mjs), [`data/ptokens.json`](./data/ptokens.json), [`docs/PTOKEN_EXPLORER.md`](./docs/PTOKEN_EXPLORER.md) |
 | **MCP Surface** | Local tools and machine interfaces | [`MCP/`](./MCP/) |
 | **Browser Bridge** | Wallet, extension, and browser-side controls | [`chrome-extension/`](./chrome-extension/) |
@@ -382,6 +384,8 @@ The Three Laws live in [`leviathan/three-laws.txt`](./leviathan/three-laws.txt) 
 | `npm run pinocchio:scaffold` | Scaffold a Pinocchio vault, escrow, or p-token launcher starter |
 | `npm run ptoken:inspect` | Inspect an SPL-compatible p-token mint over RPC |
 | `npm run ptoken:add` | Register a launched p-token in `data/ptokens.json` |
+| `npm run ptoken:launch-plan` | Generate an unsigned p-token launch and bonding curve config |
+| `npm run ptoken:curve-quote` | Simulate a constant-product p-token launch curve quote |
 
 Standalone examples:
 
