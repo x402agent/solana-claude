@@ -1,13 +1,44 @@
-node_modules/
-dist/
+# Secrets and local credentials
 .env
-.env.local
-*.env
-*.env.local
-*.key
+.env.*
+!.env.example
+!**/.env.example
+!**/.env.sample
+!**/.env.template
+.npmrc
+.netrc
 *.pem
+*.key
+*.p12
+*.pfx
+*.crt
+*.cer
+*.mobileprovision
+id_rsa
+id_ed25519
+
+# Dependencies and package manager caches
+node_modules/
+.pnpm-store/
+
+# Build output
+dist/
+build/
+.next/
+coverage/
+*.tsbuildinfo
+
+# Logs and local databases
 *.log
+*.sqlite
+*.sqlite3
+
+# OS and editor noise
 .DS_Store
-Thumbs.db
+.idea/
+.vscode/
+
+# Nested repositories and release noise
+**/.git
 tui/dist/
 tui/node_modules/

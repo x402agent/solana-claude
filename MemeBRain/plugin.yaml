@@ -1,0 +1,27 @@
+name: clawd-memory
+version: 2.5
+description: Clawd-native local agent memory system backed by the Mnemosyne SQLite engine
+author: Abdias J
+provides_tools:
+  - mnemosyne_remember
+  - mnemosyne_recall
+  - mnemosyne_stats
+  - mnemosyne_triple_add
+  - mnemosyne_triple_query
+  - mnemosyne_sleep
+  - mnemosyne_scratchpad_write
+  - mnemosyne_scratchpad_read
+  - mnemosyne_scratchpad_clear
+  - mnemosyne_invalidate
+  - mnemosyne_export
+  - mnemosyne_import
+  - mnemosyne_update
+  - mnemosyne_forget
+  - mnemosyne_diagnose
+provides_hooks:
+  - pre_llm_call
+  - on_session_start
+  - post_tool_call
+dependencies: []
+# Clawd Memory requires no external database. Core storage is pure Python + SQLite.
+# Tool names stay mnemosyne_* for Hermes/MCP compatibility.

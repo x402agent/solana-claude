@@ -1,0 +1,108 @@
+<svg width="1100" height="360" viewBox="0 0 1100 360" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Clawd Brain Memory System</title>
+  <desc id="desc">Animated cyberpunk Solana-themed diagram of Clawd agents writing and recalling memories from a local brain vault.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1100" y2="360" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#090612"/>
+      <stop offset="0.48" stop-color="#180b2d"/>
+      <stop offset="1" stop-color="#021913"/>
+    </linearGradient>
+    <linearGradient id="solana" x1="250" y1="60" x2="850" y2="300" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#9945FF"/>
+      <stop offset="1" stop-color="#14F195"/>
+    </linearGradient>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0H0V40" stroke="#ffffff" stroke-opacity="0.055"/>
+    </pattern>
+  </defs>
+
+  <rect width="1100" height="360" rx="28" fill="url(#bg)"/>
+  <rect width="1100" height="360" rx="28" fill="url(#grid)"/>
+
+  <g opacity="0.7">
+    <path d="M-80 305C120 245 190 346 380 286C560 229 595 93 780 84C938 77 1022 163 1180 102" stroke="#9945FF" stroke-width="2" stroke-opacity="0.35"/>
+    <path d="M-90 255C105 184 226 283 384 221C535 162 599 32 792 44C940 53 1019 111 1188 61" stroke="#14F195" stroke-width="2" stroke-opacity="0.28"/>
+  </g>
+
+  <g filter="url(#glow)">
+    <circle cx="550" cy="180" r="86" stroke="url(#solana)" stroke-width="3" stroke-dasharray="18 12">
+      <animateTransform attributeName="transform" type="rotate" from="0 550 180" to="360 550 180" dur="18s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="550" cy="180" r="55" stroke="#14F195" stroke-width="2" stroke-opacity="0.8" stroke-dasharray="8 10">
+      <animateTransform attributeName="transform" type="rotate" from="360 550 180" to="0 550 180" dur="10s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+
+  <g>
+    <path d="M509 169C506 146 524 126 550 126C576 126 594 146 591 169C607 176 614 195 604 211C595 226 577 230 564 221C557 236 536 236 529 221C515 230 497 226 488 211C478 195 485 176 509 169Z" fill="#0D0B19" stroke="url(#solana)" stroke-width="3"/>
+    <path d="M525 169H575M522 190H578M539 149V211M561 149V211" stroke="#14F195" stroke-width="3" stroke-linecap="round" opacity="0.85"/>
+    <text x="550" y="264" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="20" font-weight="700" fill="#F8F4FF">CLAWD BRAIN</text>
+    <text x="550" y="289" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="13" fill="#9AFDE2">local memory . vault notes . agent recall</text>
+  </g>
+
+  <g font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="14">
+    <g>
+      <rect x="90" y="72" width="210" height="70" rx="16" fill="#10081F" stroke="#9945FF" stroke-opacity="0.9"/>
+      <text x="116" y="105" fill="#F8F4FF" font-weight="700">AGENT INPUT</text>
+      <text x="116" y="126" fill="#BFA2FF">user prefs . tasks</text>
+    </g>
+    <g>
+      <rect x="90" y="218" width="210" height="70" rx="16" fill="#071610" stroke="#14F195" stroke-opacity="0.9"/>
+      <text x="116" y="251" fill="#F8F4FF" font-weight="700">OODA SIGNALS</text>
+      <text x="116" y="272" fill="#9AFDE2">ticks . research . risk</text>
+    </g>
+    <g>
+      <rect x="800" y="72" width="215" height="70" rx="16" fill="#10081F" stroke="#9945FF" stroke-opacity="0.9"/>
+      <text x="826" y="105" fill="#F8F4FF" font-weight="700">RECALL CONTEXT</text>
+      <text x="826" y="126" fill="#BFA2FF">hybrid search . tags</text>
+    </g>
+    <g>
+      <rect x="800" y="218" width="215" height="70" rx="16" fill="#071610" stroke="#14F195" stroke-opacity="0.9"/>
+      <text x="826" y="251" fill="#F8F4FF" font-weight="700">MARKDOWN VAULT</text>
+      <text x="826" y="272" fill="#9AFDE2">wallets . perps . docs</text>
+    </g>
+  </g>
+
+  <g stroke-width="3" stroke-linecap="round" stroke-dasharray="10 12">
+    <path d="M303 107C383 107 424 143 472 164" stroke="#9945FF">
+      <animate attributeName="stroke-dashoffset" values="0;-44" dur="2.2s" repeatCount="indefinite"/>
+    </path>
+    <path d="M303 253C383 253 427 217 472 196" stroke="#14F195">
+      <animate attributeName="stroke-dashoffset" values="0;-44" dur="2.5s" repeatCount="indefinite"/>
+    </path>
+    <path d="M628 164C681 142 727 107 797 107" stroke="#9945FF">
+      <animate attributeName="stroke-dashoffset" values="0;-44" dur="2.3s" repeatCount="indefinite"/>
+    </path>
+    <path d="M628 196C681 218 727 253 797 253" stroke="#14F195">
+      <animate attributeName="stroke-dashoffset" values="0;-44" dur="2.7s" repeatCount="indefinite"/>
+    </path>
+  </g>
+
+  <g filter="url(#glow)">
+    <circle cx="340" cy="107" r="5" fill="#9945FF">
+      <animate attributeName="cx" values="340;460;340" dur="3s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.2;1;0.2" dur="3s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="340" cy="253" r="5" fill="#14F195">
+      <animate attributeName="cx" values="340;460;340" dur="3.2s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.2;1;0.2" dur="3.2s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="760" cy="107" r="5" fill="#9945FF">
+      <animate attributeName="cx" values="760;640;760" dur="3.1s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.2;1;0.2" dur="3.1s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="760" cy="253" r="5" fill="#14F195">
+      <animate attributeName="cx" values="760;640;760" dur="3.3s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.2;1;0.2" dur="3.3s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+
+  <text x="42" y="330" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" fill="#8EEFD7" opacity="0.85">remember -> recall -> research -> ingest-ooda -> consolidate</text>
+</svg>

@@ -5,7 +5,7 @@
 
 ## Overview
 
-Beep Boop is a Solana blockchain clawd pointer — a lobster claw companion that lives in the macOS menu bar. It follows you during daily tasks: seeing your screen, explaining things, generating code, talking to you with voice, and connecting to Solana blockchain gateways. Push-to-talk (ctrl+option) captures voice, transcribes via AssemblyAI, sends transcript + screenshot to Claude, which responds with streamed text and ElevenLabs TTS voice. A lobster claw overlay flies to and points at UI elements Claude references on any monitor. Claude embeds `[CLAW:x,y:label:screenN]` tags to direct the claw.
+Beep Boop is a Solana blockchain clawd pointer — a lobster claw companion that lives in the macOS menu bar. It follows you during daily tasks: seeing your screen, explaining things, generating code, talking to you with voice, and connecting to Solana blockchain gateways. Push-to-talk (ctrl+option) captures voice, transcribes via AssemblyAI, sends transcript + screenshot to OpenAI by default or Claude as a fallback, and speaks the streamed response with ElevenLabs TTS. A lobster claw overlay flies to and points at UI elements the selected model references on any monitor. The model embeds `[CLAW:x,y:label:screenN]` tags to direct the claw.
 
 All API keys (including Solana RPC) live on a Cloudflare Worker proxy (the "Clawd Gateway") — nothing sensitive ships in the app.
 
@@ -14,13 +14,13 @@ All API keys (including Solana RPC) live on a Cloudflare Worker proxy (the "Claw
 - **App Type**: Menu bar-only (`LSUIElement=true`), no dock icon or main window
 - **Framework**: SwiftUI (macOS native) with AppKit bridging for menu bar panel and claw overlay
 - **Pattern**: MVVM with `@StateObject` / `@Published` state management
-- **AI Chat**: Claude (Sonnet 4.6 default, Opus 4.6 optional) via Clawd Gateway with SSE streaming
+- **AI Chat**: OpenAI Responses by default, Claude fallback via Clawd Gateway
 - **Speech-to-Text**: AssemblyAI real-time streaming (`u3-rt-pro` model) via websocket, with OpenAI and Apple Speech as fallbacks
 - **Text-to-Speech**: ElevenLabs (`eleven_flash_v2_5` model) via Clawd Gateway
 - **Screen Capture**: ScreenCaptureKit (macOS 14.2+), multi-monitor support
 - **Voice Input**: Push-to-talk via `AVAudioEngine` + pluggable transcription-provider layer. System-wide keyboard shortcut via listen-only CGEvent tap.
-- **Claw Pointing**: Claude embeds `[CLAW:x,y:label:screenN]` tags in responses. The overlay parses these, maps coordinates to the correct monitor, and animates the lobster claw along a bezier arc to the target.
-- **Solana Integration**: Clawd Gateway proxies Solana JSON-RPC calls. Balance lookups, token account queries, and raw RPC pass-through for on-chain operations.
+- **Claw Pointing**: The selected model embeds `[CLAW:x,y:label:screenN]` tags in responses. The overlay parses these, maps coordinates to the correct monitor, and animates the lobster claw along a bezier arc to the target.
+- **Solana Integration**: Clawd Gateway proxies Solana JSON-RPC plus Helius/Birdeye routes. Balance lookups, token account queries, wallet assets, enhanced transactions, price data, and raw RPC pass-through for on-chain operations.
 - **Concurrency**: `@MainActor` isolation, async/await throughout
 - **Analytics**: PostHog via `ClickyAnalytics.swift`
 
@@ -31,14 +31,19 @@ The app never calls external APIs directly. All requests go through the Clawd Ga
 | Route | Upstream | Purpose |
 |-------|----------|---------|
 | `POST /chat` | `api.anthropic.com/v1/messages` | Claude vision + streaming chat |
+| `POST /openai/responses` | `api.openai.com/v1/responses` | OpenAI Responses API |
 | `POST /tts` | `api.elevenlabs.io/v1/text-to-speech/{voiceId}` | ElevenLabs TTS (lobster voice) |
 | `POST /transcribe-token` | `streaming.assemblyai.com/v3/token` | Short-lived (480s) AssemblyAI websocket token |
-| `POST /solana/rpc` | Solana JSON-RPC endpoint | Raw RPC proxy to mainnet/devnet |
+| `POST /solana/rpc` | Helius RPC or Solana JSON-RPC endpoint | Raw RPC proxy to mainnet/devnet |
 | `POST /solana/balance` | Solana JSON-RPC endpoint | Quick SOL balance for a wallet address |
 | `POST /solana/tokens` | Solana JSON-RPC endpoint | Token accounts (SPL) for a wallet |
+| `POST /solana/assets` | Helius DAS | Wallet assets via `getAssetsByOwner` |
+| `GET /solana/address-transactions` | Helius Enhanced API | Address transaction history |
+| `GET /solana/price` | Birdeye | Token price lookup by mint |
+| `GET /solana/wallet-tokens` | Birdeye | Wallet token balances |
 | `GET /health` | — | Clawd Gateway health check |
 
-Worker secrets: `ANTHROPIC_API_KEY`, `ASSEMBLYAI_API_KEY`, `ELEVENLABS_API_KEY`, `SOLANA_RPC_URL` (optional)
+Worker secrets: `ANTHROPIC_API_KEY`, `OPENAI_API_KEY`, `ASSEMBLYAI_API_KEY`, `ELEVENLABS_API_KEY`, `HELIUS_RPC_URL`, `HELIUS_API_KEY`, `HELIUS_WSS_URL`, `BIRDEYE_API_KEY`, `SOLANA_RPC_URL` (optional)
 Worker vars: `ELEVENLABS_VOICE_ID`, `SOLANA_NETWORK`
 
 ### Key Architecture Decisions
@@ -60,7 +65,7 @@ Worker vars: `ELEVENLABS_VOICE_ID`, `SOLANA_NETWORK`
 | File | Lines | Purpose |
 |------|-------|---------|
 | `leanring_buddyApp.swift` | ~89 | Menu bar app entry point. `@NSApplicationDelegateAdaptor` with `CompanionAppDelegate`. |
-| `CompanionManager.swift` | ~1026 | Central state machine. Coordinates push-to-talk -> screenshot -> Claude -> TTS -> claw pointing pipeline. |
+| `CompanionManager.swift` | ~1160 | Central state machine. Coordinates push-to-talk -> screenshot -> OpenAI/Claude -> optional Solana context -> TTS -> claw pointing pipeline. |
 | `MenuBarPanelManager.swift` | ~243 | NSStatusItem + custom NSPanel lifecycle for the menu bar. |
 | `CompanionPanelView.swift` | ~761 | SwiftUI panel content — status, push-to-talk, model picker, permissions UI. |
 | `OverlayWindow.swift` | ~881 | Full-screen transparent overlay hosting the lobster claw, response text, waveform. |
@@ -74,14 +79,14 @@ Worker vars: `ELEVENLABS_VOICE_ID`, `SOLANA_NETWORK`
 | `BuddyAudioConversionSupport.swift` | ~108 | Audio conversion helpers (PCM16 mono, WAV building). |
 | `GlobalPushToTalkShortcutMonitor.swift` | ~132 | System-wide CGEvent tap for push-to-talk. |
 | `ClaudeAPI.swift` | ~291 | Claude vision API client with SSE streaming. |
-| `OpenAIAPI.swift` | ~142 | OpenAI GPT vision API client. |
+| `OpenAIAPI.swift` | ~285 | OpenAI Responses vision API client with SSE streaming. |
 | `ElevenLabsTTSClient.swift` | ~81 | ElevenLabs TTS client via Clawd Gateway. |
 | `ElementLocationDetector.swift` | ~335 | UI element location detection for claw pointing. |
 | `DesignSystem.swift` | ~880 | Design system — lobster red/orange theme, claw colors, button styles. |
 | `ClickyAnalytics.swift` | ~121 | PostHog analytics. |
 | `WindowPositionManager.swift` | ~262 | Window placement, Screen Recording permission flow. |
 | `AppBundleConfiguration.swift` | ~28 | Runtime config from Info.plist. |
-| `worker/src/index.ts` | ~280 | Clawd Gateway Worker. Routes: /chat, /tts, /transcribe-token, /solana/*. |
+| `worker/src/index.ts` | ~450 | Clawd Gateway Worker. Routes: /chat, /openai/responses, /tts, /transcribe-token, /solana/*. |
 
 ## Build & Run
 
@@ -105,9 +110,14 @@ npm install
 
 # Add secrets
 npx wrangler secret put ANTHROPIC_API_KEY
+npx wrangler secret put OPENAI_API_KEY
 npx wrangler secret put ASSEMBLYAI_API_KEY
 npx wrangler secret put ELEVENLABS_API_KEY
-npx wrangler secret put SOLANA_RPC_URL    # optional — for private RPC
+npx wrangler secret put HELIUS_RPC_URL
+npx wrangler secret put HELIUS_API_KEY
+npx wrangler secret put HELIUS_WSS_URL
+npx wrangler secret put BIRDEYE_API_KEY
+npx wrangler secret put SOLANA_RPC_URL    # optional — legacy private RPC
 
 # Deploy
 npx wrangler deploy

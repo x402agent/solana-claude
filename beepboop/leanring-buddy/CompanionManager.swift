@@ -21,6 +21,16 @@ enum CompanionVoiceState {
     case responding
 }
 
+struct SolanaTokenPrice: Identifiable, Equatable {
+    let symbol: String
+    let mint: String
+    let price: Double?
+    let priceChange24h: Double?
+    let updatedAt: Date?
+
+    var id: String { mint }
+}
+
 @MainActor
 final class CompanionManager: ObservableObject {
     @Published private(set) var voiceState: CompanionVoiceState = .idle
@@ -32,7 +42,7 @@ final class CompanionManager: ObservableObject {
     @Published private(set) var hasScreenContentPermission = false
 
     /// Screen location (global AppKit coords) of a detected UI element the
-    /// buddy should fly to and point at. Parsed from Claude's response;
+    /// buddy should fly to and point at. Parsed from the model response;
     /// observed by BlueCursorView to trigger the flight animation.
     @Published var detectedElementScreenLocation: CGPoint?
     /// The display frame (global AppKit coords) of the screen the detected
@@ -42,17 +52,9 @@ final class CompanionManager: ObservableObject {
     /// BlueCursorView uses this instead of a random pointer phrase.
     @Published var detectedElementBubbleText: String?
 
-    // MARK: - Onboarding Video State (shared across all screen overlays)
-
-    @Published var onboardingVideoPlayer: AVPlayer?
-    @Published var showOnboardingVideo: Bool = false
-    @Published var onboardingVideoOpacity: Double = 0.0
-    private var onboardingVideoEndObserver: NSObjectProtocol?
-    private var onboardingDemoTimeObserver: Any?
-
     // MARK: - Onboarding Prompt Bubble
 
-    /// Text streamed character-by-character on the cursor after the onboarding video ends.
+    /// Text streamed character-by-character on the cursor after setup starts.
     @Published var onboardingPromptText: String = ""
     @Published var onboardingPromptOpacity: Double = 0.0
     @Published var showOnboardingPrompt: Bool = false
@@ -70,18 +72,38 @@ final class CompanionManager: ObservableObject {
 
     /// Base URL for the Cloudflare Worker proxy. All API requests route
     /// through this so keys never ship in the app binary.
-    private static let workerBaseURL = "https://beepboop-clawd-gateway.x402.workers.dev"
+    private static let workerBaseURL = AppBundleConfiguration.stringValue(forKey: "ClawdGatewayBaseURL") ?? "https://beepboop-clawd-gateway.x402.workers.dev"
 
     private lazy var claudeAPI: ClaudeAPI = {
         return ClaudeAPI(proxyURL: "\(Self.workerBaseURL)/chat", model: selectedModel)
+    }()
+
+    private lazy var openAIAPI: OpenAIAPI = {
+        return OpenAIAPI(proxyURL: "\(Self.workerBaseURL)/openai/responses", model: selectedModel)
     }()
 
     private lazy var elevenLabsTTSClient: ElevenLabsTTSClient = {
         return ElevenLabsTTSClient(proxyURL: "\(Self.workerBaseURL)/tts")
     }()
 
-    /// Conversation history so Claude remembers prior exchanges within a session.
-    /// Each entry is the user's transcript and Claude's response.
+    private static let trackedTokenMints: [(symbol: String, mint: String)] = [
+        ("SOL", "So11111111111111111111111111111111111111112"),
+        ("JUP", "JUPyiwrYJFskUPiHa7hkeR8VUtAeFoSYbKedZNsDvCN"),
+        ("BONK", "DezXAZ8z7PnrnRJjz3B263RQAcVAMiRqtpPb9SizpSSP"),
+        ("WIF", "EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLjmN7Gf8hPP")
+    ]
+
+    @Published private(set) var solanaTokenPrices: [SolanaTokenPrice] = CompanionManager.trackedTokenMints.map {
+        SolanaTokenPrice(symbol: $0.symbol, mint: $0.mint, price: nil, priceChange24h: nil, updatedAt: nil)
+    }
+    @Published private(set) var isRefreshingTokenPrices = false
+    @Published private(set) var tokenPriceError: String?
+
+    private var tokenPriceRefreshTimer: Timer?
+    private var tokenPriceRefreshTask: Task<Void, Never>?
+
+    /// Conversation history so the selected model remembers prior exchanges within a session.
+    /// Each entry is the user's transcript and assistant response.
     private var conversationHistory: [(userTranscript: String, assistantResponse: String)] = []
 
     /// The currently running AI response task, if any. Cancelled when the user
@@ -103,20 +125,139 @@ final class CompanionManager: ObservableObject {
         hasAccessibilityPermission && hasScreenRecordingPermission && hasMicrophonePermission && hasScreenContentPermission
     }
 
-    /// Whether the blue cursor overlay is currently visible on screen.
+    /// Whether the lobster claw overlay is currently visible on screen.
     /// Used by the panel to show accurate status text ("Active" vs "Ready").
     @Published private(set) var isOverlayVisible: Bool = false
 
-    /// The Claude model used for voice responses. Persisted to UserDefaults.
-    @Published var selectedModel: String = UserDefaults.standard.string(forKey: "selectedClaudeModel") ?? "claude-sonnet-4-6"
+    /// The AI model used for voice responses. Persisted to UserDefaults.
+    @Published var selectedModel: String = UserDefaults.standard.string(forKey: "selectedClawdModel") ?? "gpt-5.5"
 
     func setSelectedModel(_ model: String) {
         selectedModel = model
-        UserDefaults.standard.set(model, forKey: "selectedClaudeModel")
-        claudeAPI.model = model
+        UserDefaults.standard.set(model, forKey: "selectedClawdModel")
+        if Self.isClaudeModel(model) {
+            claudeAPI.model = model
+        } else {
+            openAIAPI.model = model
+        }
     }
 
-    /// User preference for whether the Clicky cursor should be shown.
+    private static func isClaudeModel(_ model: String) -> Bool {
+        model.hasPrefix("claude-")
+    }
+
+    private func analyzeScreenImagesStreaming(
+        images: [(data: Data, label: String)],
+        systemPrompt: String,
+        conversationHistory: [(userPlaceholder: String, assistantResponse: String)] = [],
+        userPrompt: String,
+        onTextChunk: @MainActor @Sendable (String) -> Void
+    ) async throws -> (text: String, duration: TimeInterval) {
+        if Self.isClaudeModel(selectedModel) {
+            claudeAPI.model = selectedModel
+            return try await claudeAPI.analyzeImageStreaming(
+                images: images,
+                systemPrompt: systemPrompt,
+                conversationHistory: conversationHistory,
+                userPrompt: userPrompt,
+                onTextChunk: onTextChunk
+            )
+        }
+
+        openAIAPI.model = selectedModel
+        return try await openAIAPI.analyzeImageStreaming(
+            images: images,
+            systemPrompt: systemPrompt,
+            conversationHistory: conversationHistory,
+            userPrompt: userPrompt,
+            onTextChunk: onTextChunk
+        )
+    }
+
+    private func fetchSolanaContextIfUseful(for transcript: String) async -> String? {
+        let addressCandidates = Self.extractSolanaAddressCandidates(from: transcript)
+        guard !addressCandidates.isEmpty else { return nil }
+
+        var contextSections: [String] = []
+        for address in addressCandidates.prefix(2) {
+            var addressSections: [String] = ["address: \(address)"]
+
+            if let balanceJSON = await fetchGatewayJSON(path: "/solana/balance", method: "POST", body: ["address": address]) {
+                addressSections.append("balance: \(Self.compactJSONSnippet(balanceJSON))")
+            }
+
+            if let assetsJSON = await fetchGatewayJSON(path: "/solana/assets", method: "POST", body: ["ownerAddress": address, "limit": 20]) {
+                addressSections.append("assets: \(Self.compactJSONSnippet(assetsJSON, maxCharacters: 1800))")
+            }
+
+            if let priceJSON = await fetchGatewayJSON(path: "/solana/price?address=\(address)", method: "GET") {
+                addressSections.append("price_if_token_mint: \(Self.compactJSONSnippet(priceJSON))")
+            }
+
+            contextSections.append(addressSections.joined(separator: "\n"))
+        }
+
+        return contextSections.joined(separator: "\n\n")
+    }
+
+    private func fetchGatewayJSON(path: String, method: String, body: [String: Any]? = nil) async -> String? {
+        guard let url = URL(string: "\(Self.workerBaseURL)\(path)") else { return nil }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = method
+        request.timeoutInterval = 10
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        if let body {
+            request.httpBody = try? JSONSerialization.data(withJSONObject: body)
+        }
+
+        do {
+            let (data, response) = try await URLSession.shared.data(for: request)
+            guard let httpResponse = response as? HTTPURLResponse,
+                  (200...299).contains(httpResponse.statusCode),
+                  let jsonString = String(data: data, encoding: .utf8),
+                  !jsonString.isEmpty else {
+                return nil
+            }
+            return jsonString
+        } catch {
+            print("Solana context fetch failed for \(path): \(error.localizedDescription)")
+            return nil
+        }
+    }
+
+    private static func extractSolanaAddressCandidates(from text: String) -> [String] {
+        let pattern = #"\b[1-9A-HJ-NP-Za-km-z]{32,44}\b"#
+        guard let regex = try? NSRegularExpression(pattern: pattern) else { return [] }
+
+        let matches = regex.matches(in: text, range: NSRange(text.startIndex..., in: text))
+        var seen = Set<String>()
+        var addresses: [String] = []
+
+        for match in matches {
+            guard let range = Range(match.range, in: text) else { continue }
+            let candidate = String(text[range])
+            guard !seen.contains(candidate) else { continue }
+            seen.insert(candidate)
+            addresses.append(candidate)
+        }
+
+        return addresses
+    }
+
+    private static func compactJSONSnippet(_ jsonString: String, maxCharacters: Int = 900) -> String {
+        let compacted = jsonString
+            .replacingOccurrences(of: "\n", with: " ")
+            .replacingOccurrences(of: #"\s+"#, with: " ", options: .regularExpression)
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+
+        guard compacted.count > maxCharacters else { return compacted }
+        let endIndex = compacted.index(compacted.startIndex, offsetBy: maxCharacters)
+        return String(compacted[..<endIndex]) + "... truncated"
+    }
+
+    /// User preference for whether the Clawd cursor should be shown.
     /// When toggled off, the overlay is hidden and push-to-talk is disabled.
     /// Persisted to UserDefaults so the choice survives app restarts.
     @Published var isClickyCursorEnabled: Bool = UserDefaults.standard.object(forKey: "isClickyCursorEnabled") == nil
@@ -174,14 +315,16 @@ final class CompanionManager: ObservableObject {
 
     func start() {
         refreshAllPermissions()
-        print("🔑 Clicky start — accessibility: \(hasAccessibilityPermission), screen: \(hasScreenRecordingPermission), mic: \(hasMicrophonePermission), screenContent: \(hasScreenContentPermission), onboarded: \(hasCompletedOnboarding)")
+        print("🔑 Clawd start — accessibility: \(hasAccessibilityPermission), screen: \(hasScreenRecordingPermission), mic: \(hasMicrophonePermission), screenContent: \(hasScreenContentPermission), onboarded: \(hasCompletedOnboarding)")
         startPermissionPolling()
+        startTokenPriceRefresh()
         bindVoiceStateObservation()
         bindAudioPowerLevel()
         bindShortcutTransitions()
-        // Eagerly touch the Claude API so its TLS warmup handshake completes
-        // well before the onboarding demo fires at ~40s into the video.
+        // Eagerly touch the API clients so TLS warmup completes before
+        // the first voice interaction.
         _ = claudeAPI
+        _ = openAIAPI
 
         // If the user already completed onboarding AND all permissions are
         // still granted, show the cursor overlay immediately. If permissions
@@ -196,8 +339,8 @@ final class CompanionManager: ObservableObject {
 
     /// Called by BlueCursorView after the buddy finishes its pointing
     /// animation and returns to cursor-following mode.
-    /// Triggers the onboarding sequence — dismisses the panel and restarts
-    /// the overlay so the welcome animation and intro video play.
+    /// Triggers the onboarding sequence: dismisses the panel and restarts
+    /// the overlay so the welcome animation and setup prompt play.
     func triggerOnboarding() {
         // Post notification so the panel manager can dismiss the panel
         NotificationCenter.default.post(name: .clickyDismissPanel, object: nil)
@@ -211,15 +354,15 @@ final class CompanionManager: ObservableObject {
         // Play Besaid theme at 60% volume, fade out after 1m 30s
         startOnboardingMusic()
 
-        // Show the overlay for the first time — isFirstAppearance triggers
-        // the welcome animation and onboarding video
+        // Show the overlay for the first time. isFirstAppearance triggers
+        // the welcome animation and setup prompt.
         overlayWindowManager.showOverlay(onScreens: NSScreen.screens, companionManager: self)
         isOverlayVisible = true
     }
 
-    /// Replays the onboarding experience from the "Watch Onboarding Again"
+    /// Replays the onboarding experience from the "Replay Intro" footer link.
     /// footer link. Same flow as triggerOnboarding but the cursor overlay
-    /// is already visible so we just restart the welcome animation and video.
+    /// is already visible so we just restart the welcome animation and prompt.
     func replayOnboarding() {
         NotificationCenter.default.post(name: .clickyDismissPanel, object: nil)
         ClickyAnalytics.trackOnboardingReplayed()
@@ -237,10 +380,16 @@ final class CompanionManager: ObservableObject {
         onboardingMusicPlayer = nil
     }
 
+    func clearOnboardingPrompt() {
+        showOnboardingPrompt = false
+        onboardingPromptOpacity = 0.0
+        onboardingPromptText = ""
+    }
+
     private func startOnboardingMusic() {
         stopOnboardingMusic()
         guard let musicURL = Bundle.main.url(forResource: "ff", withExtension: "mp3") else {
-            print("⚠️ Clicky: ff.mp3 not found in bundle")
+            print("⚠️ Clawd: ff.mp3 not found in bundle")
             return
         }
 
@@ -255,7 +404,7 @@ final class CompanionManager: ObservableObject {
                 self?.fadeOutOnboardingMusic()
             }
         } catch {
-            print("⚠️ Clicky: Failed to play onboarding music: \(error)")
+            print("⚠️ Clawd: Failed to play onboarding music: \(error)")
         }
     }
 
@@ -300,6 +449,74 @@ final class CompanionManager: ObservableObject {
         audioPowerCancellable?.cancel()
         accessibilityCheckTimer?.invalidate()
         accessibilityCheckTimer = nil
+        tokenPriceRefreshTimer?.invalidate()
+        tokenPriceRefreshTimer = nil
+        tokenPriceRefreshTask?.cancel()
+        tokenPriceRefreshTask = nil
+    }
+
+    func refreshTokenPrices() {
+        tokenPriceRefreshTask?.cancel()
+        tokenPriceRefreshTask = Task { [weak self] in
+            await self?.loadTokenPrices()
+        }
+    }
+
+    private func startTokenPriceRefresh() {
+        refreshTokenPrices()
+        tokenPriceRefreshTimer?.invalidate()
+        tokenPriceRefreshTimer = Timer.scheduledTimer(withTimeInterval: 20, repeats: true) { [weak self] _ in
+            Task { @MainActor in
+                self?.refreshTokenPrices()
+            }
+        }
+    }
+
+    private func loadTokenPrices() async {
+        isRefreshingTokenPrices = true
+        tokenPriceError = nil
+        defer { isRefreshingTokenPrices = false }
+
+        var nextPrices: [SolanaTokenPrice] = []
+        for token in Self.trackedTokenMints {
+            guard !Task.isCancelled else { return }
+            if let price = await fetchTokenPrice(symbol: token.symbol, mint: token.mint) {
+                nextPrices.append(price)
+            } else {
+                let previous = solanaTokenPrices.first(where: { $0.mint == token.mint })
+                nextPrices.append(previous ?? SolanaTokenPrice(symbol: token.symbol, mint: token.mint, price: nil, priceChange24h: nil, updatedAt: nil))
+            }
+        }
+
+        if nextPrices.allSatisfy({ $0.price == nil }) {
+            tokenPriceError = "Birdeye prices unavailable"
+        }
+        solanaTokenPrices = nextPrices
+    }
+
+    private func fetchTokenPrice(symbol: String, mint: String) async -> SolanaTokenPrice? {
+        guard let jsonString = await fetchGatewayJSON(path: "/solana/price?address=\(mint)", method: "GET"),
+              let data = jsonString.data(using: .utf8),
+              let payload = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else {
+            return nil
+        }
+
+        let dataPayload = payload["data"] as? [String: Any]
+        let price = (dataPayload?["value"] as? NSNumber)?.doubleValue
+            ?? dataPayload?["value"] as? Double
+        let change = (dataPayload?["priceChange24h"] as? NSNumber)?.doubleValue
+            ?? dataPayload?["priceChange24h"] as? Double
+        let unixTime = (dataPayload?["updateUnixTime"] as? NSNumber)?.doubleValue
+            ?? dataPayload?["updateUnixTime"] as? Double
+        let updatedAt = unixTime.map { Date(timeIntervalSince1970: $0) } ?? Date()
+
+        return SolanaTokenPrice(
+            symbol: symbol,
+            mint: mint,
+            price: price,
+            priceChange24h: change,
+            updatedAt: updatedAt
+        )
     }
 
     func refreshAllPermissions() {
@@ -474,8 +691,8 @@ final class CompanionManager: ObservableObject {
         switch transition {
         case .pressed:
             guard !buddyDictationManager.isDictationInProgress else { return }
-            // Don't register push-to-talk while the onboarding video is playing
-            guard !showOnboardingVideo else { return }
+            // Don't register push-to-talk while the onboarding prompt is streaming.
+            guard !showOnboardingPrompt else { return }
 
             // Cancel any pending transient hide so the overlay stays visible
             transientHideTask?.cancel()
@@ -542,11 +759,12 @@ final class CompanionManager: ObservableObject {
     // MARK: - Companion Prompt
 
     private static let companionVoiceResponseSystemPrompt = """
-    you're clicky, a friendly always-on companion that lives in the user's menu bar. the user just spoke to you via push-to-talk and you can see their screen(s). your reply will be spoken aloud via text-to-speech, so write the way you'd actually talk. this is an ongoing conversation — you remember everything they've said before.
+    you're clawd, a friendly lobster-themed companion that lives in the user's menu bar. the user just spoke to you via push-to-talk and you can see their screen(s). your reply will be spoken aloud via text-to-speech, so write the way you'd actually talk. this is an ongoing conversation — you remember everything they've said before.
 
     rules:
     - default to one or two sentences. be direct and dense. BUT if the user asks you to explain more, go deeper, or elaborate, then go all out — give a thorough, detailed explanation with no length limit.
     - all lowercase, casual, warm. no emojis.
+    - if a "solana context from clawd gateway" block is included in the user's prompt, treat it as fresh live data. use it for wallet balances, token holdings, transaction clues, and token prices, but say when something is missing instead of guessing.
     - write for the ear, not the eye. short sentences. no lists, bullet points, markdown, or formatting — just natural speech.
     - don't use abbreviations or symbols that sound weird read aloud. write "for example" not "e.g.", spell out small numbers.
     - if the user's question relates to what's on their screen, reference specific things you see.
@@ -559,7 +777,7 @@ final class CompanionManager: ObservableObject {
     - if you receive multiple screen images, the one labeled "primary focus" is where the cursor is — prioritize that one but reference others if relevant.
 
     element pointing:
-    you have a small blue triangle cursor that can fly to and point at things on screen. use it whenever pointing would genuinely help the user — if they're asking how to do something, looking for a menu, trying to find a button, or need help navigating an app, point at the relevant element. err on the side of pointing rather than not pointing, because it makes your help way more useful and concrete.
+    you have a small lobster claw cursor that can fly to and point at things on screen. use it whenever pointing would genuinely help the user — if they're asking how to do something, looking for a menu, trying to find a button, or need help navigating an app, point at the relevant element. err on the side of pointing rather than not pointing, because it makes your help way more useful and concrete.
 
     don't point at things when it would be pointless — like if the user asks a general knowledge question, or the conversation has nothing to do with what's on screen, or you'd just be pointing at something obvious they're already looking at. but if there's a specific UI element, menu, button, or area on screen that's relevant to what you're helping with, point at it.
 
@@ -578,10 +796,10 @@ final class CompanionManager: ObservableObject {
 
     // MARK: - AI Response Pipeline
 
-    /// Captures a screenshot, sends it along with the transcript to Claude,
+    /// Captures a screenshot, sends it along with the transcript to the selected AI model,
     /// and plays the response aloud via ElevenLabs TTS. The cursor stays in
     /// the spinner/processing state until TTS audio begins playing.
-    /// Claude's response may include a [POINT:x,y:label] tag which triggers
+    /// The response may include a [POINT:x,y:label] tag which triggers
     /// the buddy to fly to that element on screen.
     private func sendTranscriptToClaudeWithScreenshot(transcript: String) {
         currentResponseTask?.cancel()
@@ -598,23 +816,36 @@ final class CompanionManager: ObservableObject {
                 guard !Task.isCancelled else { return }
 
                 // Build image labels with the actual screenshot pixel dimensions
-                // so Claude's coordinate space matches the image it sees. We
+                    // so the model's coordinate space matches the image it sees. We
                 // scale from screenshot pixels to display points ourselves.
                 let labeledImages = screenCaptures.map { capture in
                     let dimensionInfo = " (image dimensions: \(capture.screenshotWidthInPixels)x\(capture.screenshotHeightInPixels) pixels)"
                     return (data: capture.imageData, label: capture.label + dimensionInfo)
                 }
 
-                // Pass conversation history so Claude remembers prior exchanges
+                // Pass conversation history so the model remembers prior exchanges
                 let historyForAPI = conversationHistory.map { entry in
                     (userPlaceholder: entry.userTranscript, assistantResponse: entry.assistantResponse)
                 }
 
-                let (fullResponseText, _) = try await claudeAPI.analyzeImageStreaming(
+                let solanaContext = await fetchSolanaContextIfUseful(for: transcript)
+                let enrichedUserPrompt: String
+                if let solanaContext {
+                    enrichedUserPrompt = """
+                    \(transcript)
+
+                    solana context from clawd gateway:
+                    \(solanaContext)
+                    """
+                } else {
+                    enrichedUserPrompt = transcript
+                }
+
+                let (fullResponseText, _) = try await analyzeScreenImagesStreaming(
                     images: labeledImages,
                     systemPrompt: Self.companionVoiceResponseSystemPrompt,
                     conversationHistory: historyForAPI,
-                    userPrompt: transcript,
+                    userPrompt: enrichedUserPrompt,
                     onTextChunk: { _ in
                         // No streaming text display — spinner stays until TTS plays
                     }
@@ -622,11 +853,11 @@ final class CompanionManager: ObservableObject {
 
                 guard !Task.isCancelled else { return }
 
-                // Parse the [POINT:...] tag from Claude's response
+                // Parse the [POINT:...] tag from the model response
                 let parseResult = Self.parsePointingCoordinates(from: fullResponseText)
                 let spokenText = parseResult.spokenText
 
-                // Handle element pointing if Claude returned coordinates.
+                // Handle element pointing if the model returned coordinates.
                 // Switch to idle BEFORE setting the location so the triangle
                 // becomes visible and can fly to the target. Without this, the
                 // spinner hides the triangle and the flight animation is invisible.
@@ -635,7 +866,7 @@ final class CompanionManager: ObservableObject {
                     voiceState = .idle
                 }
 
-                // Pick the screen capture matching Claude's screen number,
+                // Pick the screen capture matching the model's screen number,
                 // falling back to the cursor screen if not specified.
                 let targetScreenCapture: CompanionScreenCapture? = {
                     if let screenNumber = parseResult.screenNumber,
@@ -647,7 +878,7 @@ final class CompanionManager: ObservableObject {
 
                 if let pointCoordinate = parseResult.coordinate,
                    let targetScreenCapture {
-                    // Claude's coordinates are in the screenshot's pixel space
+                    // Model coordinates are in the screenshot's pixel space
                     // (top-left origin, e.g. 1280x831). Scale to the display's
                     // point space (e.g. 1512x982), then convert to AppKit global coords.
                     let screenshotWidth = CGFloat(targetScreenCapture.screenshotWidthInPixels)
@@ -725,7 +956,7 @@ final class CompanionManager: ObservableObject {
         }
     }
 
-    /// If the cursor is in transient mode (user toggled "Show Clicky" off),
+    /// If the cursor is in transient mode (user toggled "Show Clawd" off),
     /// waits for TTS playback and any pointing animation to finish, then
     /// fades out the overlay after a 1-second pause. Cancelled automatically
     /// if the user starts another push-to-talk interaction.
@@ -759,7 +990,7 @@ final class CompanionManager: ObservableObject {
     /// credits run out. Uses NSSpeechSynthesizer so it works even when
     /// ElevenLabs is down.
     private func speakCreditsErrorFallback() {
-        let utterance = "I'm all out of credits. Please DM Farza and tell him to bring me back to life."
+        let utterance = "I'm all out of credits. Clawd needs the gateway topped up before I can keep talking."
         let synthesizer = NSSpeechSynthesizer()
         synthesizer.startSpeaking(utterance)
         voiceState = .responding
@@ -767,11 +998,11 @@ final class CompanionManager: ObservableObject {
 
     // MARK: - Point Tag Parsing
 
-    /// Result of parsing a [POINT:...] tag from Claude's response.
+    /// Result of parsing a [POINT:...] tag from the model response.
     struct PointingParseResult {
         /// The response text with the [POINT:...] tag removed — this is what gets spoken.
         let spokenText: String
-        /// The parsed pixel coordinate, or nil if Claude said "none" or no tag was found.
+        /// The parsed pixel coordinate, or nil if the model said "none" or no tag was found.
         let coordinate: CGPoint?
         /// Short label describing the element (e.g. "run button"), or "none".
         let elementLabel: String?
@@ -779,7 +1010,7 @@ final class CompanionManager: ObservableObject {
         let screenNumber: Int?
     }
 
-    /// Parses a [POINT:x,y:label:screenN] or [POINT:none] tag from the end of Claude's response.
+    /// Parses a [POINT:x,y:label:screenN] or [POINT:none] tag from the end of the model response.
     /// Returns the spoken text (tag removed) and the optional coordinate + label + screen number.
     static func parsePointingCoordinates(from responseText: String) -> PointingParseResult {
         // Match [POINT:none] or [POINT:123,456:label] or [POINT:123,456:label:screen2]
@@ -822,74 +1053,13 @@ final class CompanionManager: ObservableObject {
         )
     }
 
-    // MARK: - Onboarding Video
+    // MARK: - Onboarding Prompt
 
-    /// Sets up the onboarding video player, starts playback, and schedules
-    /// the demo interaction at 40s. Called by BlueCursorView when onboarding starts.
-    func setupOnboardingVideo() {
-        guard let videoURL = URL(string: "https://stream.mux.com/e5jB8UuSrtFABVnTHCR7k3sIsmcUHCyhtLu1tzqLlfs.m3u8") else { return }
-
-        let player = AVPlayer(url: videoURL)
-        player.isMuted = false
-        player.volume = 0.0
-        self.onboardingVideoPlayer = player
-        self.showOnboardingVideo = true
-        self.onboardingVideoOpacity = 0.0
-
-        // Start playback immediately — the video plays while invisible,
-        // then we fade in both the visual and audio over 1s.
-        player.play()
-
-        // Wait for SwiftUI to mount the view, then set opacity to 1.
-        // The .animation modifier on the view handles the actual animation.
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-            self.onboardingVideoOpacity = 1.0
-            // Fade audio volume from 0 → 1 over 2s to match visual fade
-            self.fadeInVideoAudio(player: player, targetVolume: 1.0, duration: 2.0)
-        }
-
-        // At 40 seconds into the video, trigger the onboarding demo where
-        // Clicky flies to something interesting on screen and comments on it
-        let demoTriggerTime = CMTime(seconds: 40, preferredTimescale: 600)
-        onboardingDemoTimeObserver = player.addBoundaryTimeObserver(
-            forTimes: [NSValue(time: demoTriggerTime)],
-            queue: .main
-        ) { [weak self] in
-            ClickyAnalytics.trackOnboardingDemoTriggered()
-            self?.performOnboardingDemoInteraction()
-        }
-
-        // Fade out and clean up when the video finishes
-        onboardingVideoEndObserver = NotificationCenter.default.addObserver(
-            forName: AVPlayerItem.didPlayToEndTimeNotification,
-            object: player.currentItem,
-            queue: .main
-        ) { [weak self] _ in
-            guard let self else { return }
-            ClickyAnalytics.trackOnboardingVideoCompleted()
-            self.onboardingVideoOpacity = 0.0
-            // Wait for the 2s fade-out animation to complete before tearing down
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-                self.tearDownOnboardingVideo()
-                // After the video disappears, stream in the prompt to try talking
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                    self.startOnboardingPromptStream()
-                }
-            }
-        }
-    }
-
-    func tearDownOnboardingVideo() {
-        showOnboardingVideo = false
-        if let timeObserver = onboardingDemoTimeObserver {
-            onboardingVideoPlayer?.removeTimeObserver(timeObserver)
-            onboardingDemoTimeObserver = nil
-        }
-        onboardingVideoPlayer?.pause()
-        onboardingVideoPlayer = nil
-        if let observer = onboardingVideoEndObserver {
-            NotificationCenter.default.removeObserver(observer)
-            onboardingVideoEndObserver = nil
+    /// Completes the intro without showing remote media and prompts the
+    /// user to try push-to-talk.
+    func finishOnboardingIntro() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+            self.startOnboardingPromptStream()
         }
     }
 
@@ -926,29 +1096,10 @@ final class CompanionManager: ObservableObject {
         }
     }
 
-    /// Gradually raises an AVPlayer's volume from its current level to the
-    /// target over the specified duration, creating a smooth audio fade-in.
-    private func fadeInVideoAudio(player: AVPlayer, targetVolume: Float, duration: Double) {
-        let steps = 20
-        let stepInterval = duration / Double(steps)
-        let volumeIncrement = (targetVolume - player.volume) / Float(steps)
-        var stepsRemaining = steps
-
-        Timer.scheduledTimer(withTimeInterval: stepInterval, repeats: true) { timer in
-            stepsRemaining -= 1
-            player.volume += volumeIncrement
-
-            if stepsRemaining <= 0 {
-                timer.invalidate()
-                player.volume = targetVolume
-            }
-        }
-    }
-
     // MARK: - Onboarding Demo Interaction
 
     private static let onboardingDemoSystemPrompt = """
-    you're clicky, a small blue cursor buddy living on the user's screen. you're showing off during onboarding — look at their screen and find ONE specific, concrete thing to point at. pick something with a clear name or identity: a specific app icon (say its name), a specific word or phrase of text you can read, a specific filename, a specific button label, a specific tab title, a specific image you can describe. do NOT point at vague things like "a window" or "some text" — be specific about exactly what you see.
+    you're clawd, a small lobster claw companion living on the user's screen. you're showing off during onboarding — look at their screen and find ONE specific, concrete thing to point at. pick something with a clear name or identity: a specific app icon (say its name), a specific word or phrase of text you can read, a specific filename, a specific button label, a specific tab title, a specific image you can describe. do NOT point at vague things like "a window" or "some text" — be specific about exactly what you see.
 
     make a short quirky 3-6 word observation about the specific thing you picked — something fun, playful, or curious that shows you actually read/recognized it. no emojis ever. NEVER quote or repeat text you see on screen — just react to it. keep it to 6 words max, no exceptions.
 
@@ -961,9 +1112,9 @@ final class CompanionManager: ObservableObject {
     the screenshot images are labeled with their pixel dimensions. use those dimensions as the coordinate space. origin (0,0) is top-left. x increases rightward, y increases downward.
     """
 
-    /// Captures a screenshot and asks Claude to find something interesting to
+    /// Captures a screenshot and asks the selected model to find something interesting to
     /// point at, then triggers the buddy's flight animation. Used during
-    /// onboarding to demo the pointing feature while the intro video plays.
+    /// onboarding to demo the pointing feature during the intro.
     func performOnboardingDemoInteraction() {
         // Don't interrupt an active voice response
         guard voiceState == .idle || voiceState == .responding else { return }
@@ -972,7 +1123,7 @@ final class CompanionManager: ObservableObject {
             do {
                 let screenCaptures = try await CompanionScreenCaptureUtility.captureAllScreensAsJPEG()
 
-                // Only send the cursor screen so Claude can't pick something
+                // Only send the cursor screen so the model can't pick something
                 // on a different monitor that we can't point at.
                 guard let cursorScreenCapture = screenCaptures.first(where: { $0.isCursorScreen }) else {
                     print("🎯 Onboarding demo: no cursor screen found")
@@ -982,7 +1133,7 @@ final class CompanionManager: ObservableObject {
                 let dimensionInfo = " (image dimensions: \(cursorScreenCapture.screenshotWidthInPixels)x\(cursorScreenCapture.screenshotHeightInPixels) pixels)"
                 let labeledImages = [(data: cursorScreenCapture.imageData, label: cursorScreenCapture.label + dimensionInfo)]
 
-                let (fullResponseText, _) = try await claudeAPI.analyzeImageStreaming(
+                let (fullResponseText, _) = try await analyzeScreenImagesStreaming(
                     images: labeledImages,
                     systemPrompt: Self.onboardingDemoSystemPrompt,
                     userPrompt: "look around my screen and find something interesting to point at",
@@ -1012,12 +1163,12 @@ final class CompanionManager: ObservableObject {
                     y: appKitY + displayFrame.origin.y
                 )
 
-                // Set custom bubble text so the pointing animation uses Claude's
+                // Set custom bubble text so the pointing animation uses the model's
                 // comment instead of a random phrase
                 detectedElementBubbleText = parseResult.spokenText
                 detectedElementScreenLocation = globalLocation
                 detectedElementDisplayFrame = displayFrame
-                print("🎯 Onboarding demo: pointing at \"\(parseResult.elementLabel ?? "element")\" — \"\(parseResult.spokenText)\"")
+                print("Onboarding demo: pointing at \"\(parseResult.elementLabel ?? "element")\" - \"\(parseResult.spokenText)\"")
             } catch {
                 print("⚠️ Onboarding demo error: \(error)")
             }

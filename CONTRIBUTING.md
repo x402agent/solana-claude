@@ -45,6 +45,7 @@ npm run setup      # runs scripts/setup.sh
 | `npm run demo` | Run the demo entry point |
 | `npm run birth` | Run the buddy birth entry point |
 | `npm run spinners` | Preview all $CLAWD spinners |
+| `npm run repo:audit` | Scan for tracked secret files and release debris before push |
 
 ### Running Tests
 
@@ -146,6 +147,7 @@ Check the [issue tracker](https://github.com/x402agent/solana-clawd/issues) for 
 
 3. **Run the build** to make sure nothing is broken:
    ```bash
+   npm run repo:audit
    npm run build
    npm run typecheck
    ```

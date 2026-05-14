@@ -8,7 +8,7 @@
  */
 
 import { DEPTH_TIERS } from './types.js';
-import type { Depth, DepthTier } from './types.js';
+import type { ClawAction, Depth, DepthTier } from './types.js';
 
 /** Determine current depth tier from USDC balance */
 export function computeDepth(usdcBalance: number): Depth {

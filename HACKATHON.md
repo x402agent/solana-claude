@@ -119,6 +119,9 @@ git clone https://github.com/x402agent/solana-clawd
 cd solana-clawd
 npm install
 
+# Repo hygiene check before recording or publishing
+npm run repo:audit
+
 # Launch the HERMES x402 TUI dashboard
 npm run hermes
 

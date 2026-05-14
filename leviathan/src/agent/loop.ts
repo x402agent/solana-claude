@@ -21,10 +21,17 @@ import { buildSystemPrompt, buildShorelinePrompt } from './system-prompt.js';
 import { computeDepth, selectModel, isActionAllowed, formatDepth } from '../survival.js';
 import { assertConstitutionIntact } from '../three-laws.js';
 import { appendStrike } from '../state/index.js';
-import type { ClawState, ClawStrike, TailFlickEvent } from '../types.js';
+import type { ClawState, ClawStrike, ClawdMemoryKind, TailFlickEvent } from '../types.js';
 import { TOOLS } from './tools.js';
 import { Percolator } from './percolator.js';
 import { getWallet } from './wallet.js';
+import {
+  loadLeviathanMemoryContext,
+  recallClawdMemory,
+  rememberClawdMemory,
+  rememberLeviathanStrike,
+  researchClawdMemory,
+} from '../memory/clawd.js';
 
 export interface TailFlickResult {
   tick: number;
@@ -88,6 +95,11 @@ export async function tailFlick(
     `success=${s.success} output=${JSON.stringify(s.output ?? '').slice(0, 120)}`,
   ).join('\n');
 
+  const memoryContext = await loadLeviathanMemoryContext(state, strikeHistory, {
+    bank: 'clawd',
+    timeoutMs: 8_000,
+  });
+
   const userMessage = [
     `Tick: ${tick}`,
     `Depth: ${formatDepth(newDepth, state.usdcBalance)}`,
@@ -97,6 +109,9 @@ export async function tailFlick(
     '',
     'Recent strikes:',
     historyBlock || '(none yet)',
+    '',
+    'Clawd Memory recall:',
+    memoryContext.text,
     '',
     'Choose your next action. Call exactly one tool.',
   ].join('\n');
@@ -161,6 +176,10 @@ export async function tailFlick(
 
   // Journal this strike for future ticks
   appendStrike(strike);
+  void rememberLeviathanStrike(state, strike, {
+    bank: 'clawd',
+    timeoutMs: 8_000,
+  }).catch(() => undefined);
 
   // ── DRIFT ────────────────────────────────────────────────────────────────
   // Update SHELL.md if shell_write was called
@@ -230,6 +249,47 @@ async function executeTool(
       }
     }
 
+    // ── Clawd Memory ──────────────────────────────────────────────────────
+    case 'clawd_memory_recall': {
+      const query = String(input['query'] ?? '');
+      const topK = Number(input['topK'] ?? 6);
+      if (!query.trim()) return { output: 'query required', success: false };
+      const result = await recallClawdMemory({ query, topK }, { bank: 'clawd', timeoutMs: 10_000 });
+      return { output: result.ok ? result.data : result.error, success: result.ok };
+    }
+
+    case 'clawd_memory_remember': {
+      const title = String(input['title'] ?? '');
+      const content = String(input['content'] ?? '');
+      const kind = normalizeMemoryKind(String(input['kind'] ?? 'agent'));
+      const tags = Array.isArray(input['tags']) ? input['tags'].map(String) : ['clawd', 'leviathan'];
+      const importance = Number(input['importance'] ?? 0.7);
+      if (!title.trim() || !content.trim()) return { output: 'title and content required', success: false };
+      if (/(private key|seed phrase|api key|secret|password|token=|sk-)/i.test(content)) {
+        return { output: 'refusing to store likely secret material', success: false };
+      }
+      const result = await rememberClawdMemory({
+        title,
+        content,
+        kind,
+        tags: ['clawd', 'leviathan', ...tags],
+        importance,
+        source: 'leviathan',
+      }, { bank: 'clawd', timeoutMs: 10_000 });
+      return { output: result.ok ? result.data : result.error, success: result.ok };
+    }
+
+    case 'clawd_memory_research': {
+      const target = String(input['target'] ?? '');
+      const tags = Array.isArray(input['tags']) ? input['tags'].map(String) : [];
+      if (!target.trim()) return { output: 'target required', success: false };
+      const result = await researchClawdMemory(target, ['clawd', 'leviathan', ...tags], {
+        bank: 'clawd',
+        timeoutMs: 15_000,
+      });
+      return { output: result.ok ? result.data : result.error, success: result.ok };
+    }
+
     // ── Jupiter ────────────────────────────────────────────────────────────
     case 'jupiter_quote': {
       const { inputMint, outputMint, amount } = input as { inputMint: string; outputMint: string; amount: string };
@@ -263,7 +323,8 @@ async function executeTool(
     // ── OODA signal ────────────────────────────────────────────────────────
     case 'ooda_signal': {
       try {
-        const { deterministicDecision } = await import('../../ooda/claude-decision.js') as {
+        const oodaModule = '../../ooda/claude-decision.js';
+        const { deterministicDecision } = await import(oodaModule) as {
           deterministicDecision: (obs: unknown) => unknown
         };
         const signal = deterministicDecision({
@@ -285,7 +346,8 @@ async function executeTool(
     case 'a2a_task': {
       const { agentUrl, skill, message } = input as { agentUrl: string; skill: string; message: string };
       try {
-        const { A2AClient } = await import('../../x402/a2a-agent.js') as {
+        const a2aModule = '../../x402/a2a-agent.js';
+        const { A2AClient } = await import(a2aModule) as {
           A2AClient: new (opts: { agentUrl: string; autoPay: boolean; maxAmountUsdc: number; timeoutMs: number }) => {
             discover: () => Promise<{ name: string; skills: Array<{ id: string }> }>
           }
@@ -395,4 +457,9 @@ function mapToolToAction(toolName: string): ClawStrike['action'] {
   if (toolName === 'hold') return 'hold';
   if (toolName === 'jupiter_swap' || toolName === 'paysh_pay') return 'transfer';
   return 'tool_call';
+}
+
+function normalizeMemoryKind(kind: string): ClawdMemoryKind {
+  const allowed: ClawdMemoryKind[] = ['agent', 'research', 'signal', 'trade', 'protocol', 'wallet', 'perp', 'note'];
+  return allowed.includes(kind as ClawdMemoryKind) ? kind as ClawdMemoryKind : 'agent';
 }

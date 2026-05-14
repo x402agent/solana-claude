@@ -1,0 +1,82 @@
+"""
+Clawd Memory setup configuration.
+
+The package distribution remains mnemosyne-memory for compatibility.
+"""
+
+from setuptools import setup, find_packages
+from pathlib import Path
+
+# Read the README
+readme_path = Path(__file__).parent / "README.md"
+long_description = readme_path.read_text(encoding="utf-8") if readme_path.exists() else ""
+
+# Single source of truth for version
+version_path = Path(__file__).parent / "mnemosyne" / "__init__.py"
+_version = "0.1"
+for line in version_path.read_text(encoding="utf-8").splitlines():
+    if line.startswith("__version__"):
+        _version = line.split("=")[1].strip().strip('"').strip("'")
+        break
+
+setup(
+    name="mnemosyne-memory",
+    version=_version,
+    author="Abdias J",
+    author_email="abdi.moya@gmail.com",
+    description="Clawd Memory: local-first SQLite memory for agents, backed by the Mnemosyne engine",
+    long_description=long_description,
+    long_description_content_type="text/markdown",
+    url="https://clawd.x402.wtf/site/",
+    packages=find_packages(),
+    classifiers=[
+        "Development Status :: 5 - Production/Stable",
+        "Intended Audience :: Developers",
+        "Topic :: Software Development :: Libraries :: Python Modules",
+        "Topic :: Scientific/Engineering :: Artificial Intelligence",
+        "License :: OSI Approved :: MIT License",
+        "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
+        "Operating System :: OS Independent",
+    ],
+    python_requires=">=3.9",
+    keywords=[
+        "clawd",
+        "ai",
+        "memory",
+        "sqlite",
+        "agent",
+        "llm",
+        "context",
+        "embeddings",
+        "vector-store",
+        "honcho",
+        "zep",
+        "solana",
+        "perpetual-trading",
+        "obsidian",
+        "agentic-harness",
+    ],
+    project_urls={
+        "Homepage": "https://clawd.x402.wtf/site/",
+        "Documentation": "https://clawd.x402.wtf/site/",
+    },
+    extras_require={
+        "llm": ["ctransformers>=0.2.27", "llama-cpp-python>=0.2.0", "huggingface-hub>=0.20"],
+        "embeddings": ["fastembed>=0.3.0"],
+        "mcp": ["mcp>=1.0.0; python_version >= '3.10'", "anyio>=4.0; python_version >= '3.10'"],
+        "all": ["ctransformers>=0.2.27", "llama-cpp-python>=0.2.0", "huggingface-hub>=0.20", "fastembed>=0.3.0", "mcp>=1.0.0; python_version >= '3.10'", "anyio>=4.0; python_version >= '3.10'"],
+        "dev": ["pytest>=7.0", "build", "twine"],
+    },
+    entry_points={
+        "console_scripts": [
+            "mnemosyne-install=mnemosyne.install:install",
+            "mnemosyne-uninstall=mnemosyne.install:uninstall",
+            "mnemosyne=mnemosyne.cli:run_cli",
+            "clawd-brain=mnemosyne.clawd_brain:run_cli",
+        ],
+    },
+)
