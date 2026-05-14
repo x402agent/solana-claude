@@ -11,7 +11,7 @@
  *   - Jupiter price API (no key)
  *   - Public Solana mainnet RPC (fallback)
  *
- * Tools: 52 (15 original + 8 Helius + 6 services + 8 Pump.fun + 8 Pinocchio/p-token + 7 Chess.com)
+ * Tools: 53 (15 original + 8 Helius + 6 services + 8 Pump.fun + 9 Pinocchio/p-token + 7 Chess.com)
  * Resources: 10 (README, soul, skills, tools, Pinocchio, Pinocchio guide, program map, program JSON, p-token launches, p-token registry)
  * Prompts: 9
  */
@@ -732,6 +732,13 @@ export function createServer(): Server {
         name: "pinocchio_program_map",
         description: "Return the one-by-one Pinocchio upstream program crate map and how each crate is adapted into solana-clawd.",
         inputSchema: { type: "object" as const, properties: {} },
+      },
+      {
+        name: "pinocchio_program",
+        description: "Return one mapped Pinocchio helper program by slug or crate name.",
+        inputSchema: { type: "object" as const, properties: {
+          program: { type: "string", description: "system, token, token-2022, associated-token-account, memo, or crate name" },
+        }, required: ["program"] },
       },
       {
         name: "ptoken_registry_list",
@@ -1616,6 +1623,16 @@ emitter.on("event", (e) => console.log(e.type, e.signature, e.description));`,
               markdown: map ?? "Pinocchio program map not found.",
               json: json ? JSON.parse(json) : { version: 1, programs: [] },
             });
+          }
+
+          case "pinocchio_program": {
+            const program = String(a.program ?? "");
+            if (!program) return text("program is required");
+            const raw = await readFileText(path.join(REPO_ROOT, "data", "pinocchio-programs.json"));
+            const map = raw ? JSON.parse(raw) : { version: 1, programs: [] };
+            const match = map.programs.find((item: Record<string, unknown>) => item.slug === program || item.crate === program);
+            if (!match) return text({ error: `Unknown Pinocchio program: ${program}`, available: map.programs.map((item: Record<string, unknown>) => item.slug) });
+            return text(match);
           }
 
           case "ptoken_registry_list": {

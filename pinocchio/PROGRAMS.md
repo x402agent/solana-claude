@@ -58,6 +58,24 @@ These programs are built with Pinocchio. An account owned by one of these benefi
 }
 ```
 
+## Vendored Pinocchio Helper Program Crates
+
+The upstream Pinocchio workspace under
+[`pinocchio-main/programs`](./pinocchio-main/programs) is mapped one by one for
+agents and developers:
+
+| Helper crate | Canonical program | Local role |
+| --- | --- | --- |
+| `pinocchio-system` | `11111111111111111111111111111111` | Account creation, lamport transfer, rent funding, assign/allocate, and nonce CPI helpers. |
+| `pinocchio-token` | `TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA` | SPL Token mint/account state, transfer, mint, burn, close, and batch helpers for p-token-compatible flows. |
+| `pinocchio-token-2022` | `TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb` | Token extension helpers for metadata, transfer fees, guards, pausable tokens, scaled UI amounts, and extension-aware launches. |
+| `pinocchio-associated-token-account` | `ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJe8bXV` | ATA create, idempotent create, and nested recovery helpers for launch/vault/escrow account setup. |
+| `pinocchio-memo` | `MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr` | Memo helper for launch receipts, payment notes, and agent-readable transaction traces. |
+
+See [`PROGRAM_MAP.md`](./PROGRAM_MAP.md) and
+[`../data/pinocchio-programs.json`](../data/pinocchio-programs.json) for the
+full adaptation map.
+
 ## Classification Logic for Agents
 
 When inspecting an account's `owner` field:

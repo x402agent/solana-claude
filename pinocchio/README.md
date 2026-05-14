@@ -117,5 +117,6 @@ The repo MCP server exposes these p-token and Pinocchio tools:
 - `ptoken_launch_plan`
 - `ptoken_bonding_curve_quote`
 - `pinocchio_program_map`
+- `pinocchio_program`
 
 It also exposes resources for this README, the guide, launch docs, the one-by-one program map, and the p-token registry so agents can discover the support surface without scraping the filesystem.
