@@ -1,0 +1,19 @@
+[submodule "llm_oracle/upstream/percolator"]
+	path = llm_oracle/upstream/percolator
+	url = https://github.com/aeyakovenko/percolator.git
+
+[submodule "llm_oracle/upstream/percolator-match"]
+	path = llm_oracle/upstream/percolator-match
+	url = https://github.com/aeyakovenko/percolator-match.git
+
+[submodule "llm_oracle/upstream/percolator-prog"]
+	path = llm_oracle/upstream/percolator-prog
+	url = https://github.com/aeyakovenko/percolator-prog.git
+
+[submodule "openclawd"]
+	path = openclawd
+	url = https://github.com/x402agent/openclawd-stack-publish.git
+
+[submodule "openclawd-framework/pay"]
+	path = openclawd-framework/pay
+	url = https://github.com/solana-foundation/pay.git
