@@ -714,7 +714,7 @@ struct CompanionPanelView: View {
                         LobsterClawMark()
                             .fill(DS.Colors.textTertiary)
                             .frame(width: 13, height: 13)
-                        Text("Watch Onboarding Again")
+                        Text("Replay Intro")
                             .font(.system(size: 12, weight: .medium))
                     }
                     .foregroundColor(DS.Colors.textTertiary)

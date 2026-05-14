@@ -345,7 +345,7 @@ struct BlueCursorView: View {
         .onDisappear {
             timer?.invalidate()
             navigationAnimationTimer?.invalidate()
-            companionManager.tearDownOnboardingVideo()
+            companionManager.clearOnboardingPrompt()
         }
         .onChange(of: companionManager.detectedElementScreenLocation) { newLocation in
             // When a UI element location is detected, navigate the buddy to

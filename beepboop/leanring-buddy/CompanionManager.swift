@@ -360,7 +360,7 @@ final class CompanionManager: ObservableObject {
         isOverlayVisible = true
     }
 
-    /// Replays the onboarding experience from the "Watch Onboarding Again"
+    /// Replays the onboarding experience from the "Replay Intro" footer link.
     /// footer link. Same flow as triggerOnboarding but the cursor overlay
     /// is already visible so we just restart the welcome animation and prompt.
     func replayOnboarding() {
@@ -380,7 +380,7 @@ final class CompanionManager: ObservableObject {
         onboardingMusicPlayer = nil
     }
 
-    func tearDownOnboardingVideo() {
+    func clearOnboardingPrompt() {
         showOnboardingPrompt = false
         onboardingPromptOpacity = 0.0
         onboardingPromptText = ""
@@ -1055,7 +1055,7 @@ final class CompanionManager: ObservableObject {
 
     // MARK: - Onboarding Prompt
 
-    /// Completes the intro without showing any remote video and prompts the
+    /// Completes the intro without showing remote media and prompts the
     /// user to try push-to-talk.
     func finishOnboardingIntro() {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
@@ -1114,7 +1114,7 @@ final class CompanionManager: ObservableObject {
 
     /// Captures a screenshot and asks the selected model to find something interesting to
     /// point at, then triggers the buddy's flight animation. Used during
-    /// onboarding to demo the pointing feature while the intro video plays.
+    /// onboarding to demo the pointing feature during the intro.
     func performOnboardingDemoInteraction() {
         // Don't interrupt an active voice response
         guard voiceState == .idle || voiceState == .responding else { return }

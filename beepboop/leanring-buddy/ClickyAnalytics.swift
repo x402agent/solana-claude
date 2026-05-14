@@ -46,22 +46,10 @@ enum ClickyAnalytics {
         PostHogSDK.shared.capture("onboarding_started")
     }
 
-    /// User clicked "Watch Onboarding Again" from the panel footer.
+    /// User clicked "Replay Intro" from the panel footer.
     static func trackOnboardingReplayed() {
         guard isConfigured else { return }
         PostHogSDK.shared.capture("onboarding_replayed")
-    }
-
-    /// The onboarding video finished playing to the end.
-    static func trackOnboardingVideoCompleted() {
-        guard isConfigured else { return }
-        PostHogSDK.shared.capture("onboarding_video_completed")
-    }
-
-    /// The 40s onboarding demo interaction where Clicky points at something.
-    static func trackOnboardingDemoTriggered() {
-        guard isConfigured else { return }
-        PostHogSDK.shared.capture("onboarding_demo_triggered")
     }
 
     // MARK: - Permissions
