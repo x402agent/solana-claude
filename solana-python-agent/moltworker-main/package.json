@@ -33,7 +33,7 @@
     "@vitest/coverage-v8": "^4.0.18",
     "node-addon-api": "^8.5.0",
     "typescript": "^5.9.3",
-    "vite": "^6.4.2",
+    "vite": "^8.0.13",
     "vitest": "^4.0.18",
     "wrangler": "^4.90.1"
   },
