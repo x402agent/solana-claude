@@ -15,6 +15,7 @@ Pinocchio is a zero-dependency, `no_std` Solana program library from Anza that r
 solana-clawd uses this area for:
 
 - p-token launch workflows and registry exploration.
+- p-agent-token workflows for faster agent tokens using p-token plus Pinocchio.
 - Pinocchio program templates for vaults and escrow applications.
 - agent/MCP discovery so local agents can inspect templates, explain tradeoffs, and register launched p-tokens.
 - x402 p-token payment support through the existing Solana payment rail.
@@ -42,6 +43,8 @@ npm run ptoken:add -- --mint <mint> --symbol PFOO --name "P Foo" --p-token-progr
 npm run ptoken:list
 npm run ptoken:launch-plan -- --symbol PFOO --name "P Foo"
 npm run ptoken:curve-quote -- --virtual-sol 30 --virtual-token 1073000000 --sol 1
+npm run pagent:plan -- --symbol PCLAWD --name "Clawd Agent Token" --agent-name "Clawd"
+npm run pagent:quote -- --virtual-sol 30 --virtual-token 1073000000 --sol 1
 npm run pinocchio:programs
 npm run pinocchio:program -- token
 ```
@@ -53,6 +56,7 @@ npm run pinocchio:program -- token
 | [`docs/PINOCCHIO_GUIDE.md`](./docs/PINOCCHIO_GUIDE.md) | Practical Pinocchio notes for solana-clawd developers and agents. |
 | [`docs/AGENT_WORKFLOWS.md`](./docs/AGENT_WORKFLOWS.md) | MCP and agent workflows for p-token exploration and template use. |
 | [`docs/P_TOKEN_LAUNCHES.md`](./docs/P_TOKEN_LAUNCHES.md) | Unsigned p-token launch planning and bonding curve workflow. |
+| [`docs/P_AGENT_TOKEN.md`](./docs/P_AGENT_TOKEN.md) | p-token + Pinocchio agent token planning and template workflow. |
 | [`P_TOKEN.md`](./P_TOKEN.md) | p-token overview and compute-unit notes. |
 | [`PROGRAMS.md`](./PROGRAMS.md) | Known Pinocchio and token program references. |
 | [`PROGRAM_MAP.md`](./PROGRAM_MAP.md) | One-by-one local adaptation map for each Pinocchio helper program. |
@@ -62,6 +66,7 @@ npm run pinocchio:program -- token
 | [`templates/vault/`](./templates/vault/) | Minimal Pinocchio vault starter. |
 | [`templates/escrow/`](./templates/escrow/) | Make/take/refund escrow starter. |
 | [`templates/p-token-launcher/`](./templates/p-token-launcher/) | p-token launch checklist, config shape, and bonding curve starter for site/MCP workflows. |
+| [`templates/p-agent-token/`](./templates/p-agent-token/) | p-token agent-token starter with one-way binding and Metaplex-compatible identity concepts. |
 | [`pinocchio-main/programs/`](./pinocchio-main/programs/) | Vendored upstream Pinocchio helper program crates mapped one by one. |
 
 ## Program Map
@@ -93,6 +98,7 @@ flowchart LR
 | Vault starter | [`templates/vault/`](./templates/vault/) | Forkable starter for PDA vault state and deposit/withdraw instruction structure. |
 | Escrow starter | [`templates/escrow/`](./templates/escrow/) | Forkable starter for make/take/refund token swap applications. |
 | p-token launcher starter | [`templates/p-token-launcher/`](./templates/p-token-launcher/) | Forkable config contract for launches, bonding curve planning, mint verification, registry updates, and x402 routing. |
+| p-agent-token starter | [`templates/p-agent-token/`](./templates/p-agent-token/) | Forkable p-token agent-token contract shape with agent identity, delegation, bonding curve, and one-way token binding. |
 
 For the full upstream helper crate map, see [`pinocchio-main/programs/README.md`](./pinocchio-main/programs/README.md).
 

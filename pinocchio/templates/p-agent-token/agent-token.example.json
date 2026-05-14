@@ -1,0 +1,30 @@
+{
+  "standard": "p-agent-token-v1",
+  "network": "solana-devnet",
+  "tokenProgram": "p-token",
+  "pTokenProgramId": "ptok6rngomXrDbWf5v5Mkmu5CEbB51hzSCPDoj9DrvF",
+  "token": {
+    "name": "Clawd Agent Token",
+    "symbol": "PCLAWD",
+    "uri": "https://example.com/pclawd-token.json",
+    "decimals": 9,
+    "supply": 1000000000
+  },
+  "agent": {
+    "name": "Clawd",
+    "uri": "https://example.com/clawd-agent.json",
+    "coreAsset": "create-new-core-agent-asset",
+    "owner": "<owner-wallet-or-multisig>",
+    "executive": null
+  },
+  "bondingCurve": {
+    "type": "constant-product",
+    "virtualSol": 30,
+    "virtualToken": 1073000000,
+    "realSol": 0,
+    "realToken": 793100000,
+    "feeBps": 100,
+    "creatorFeeBps": 500,
+    "graduationSol": 85
+  }
+}
