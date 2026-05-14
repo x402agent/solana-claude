@@ -11,9 +11,9 @@
  *   - Jupiter price API (no key)
  *   - Public Solana mainnet RPC (fallback)
  *
- * Tools: 63 (15 original + 8 Helius + 6 services + 8 Pump.fun + 9 Pinocchio/p-token + 7 Chess.com + 10 P-Token Launch Pad)
+ * Tools: 73 (15 original + 8 Helius + 6 services + 8 Pump.fun + 9 Pinocchio/p-token + 7 Chess.com + 10 P-Token Launch Pad + 10 P-Token Launch Pad tools)
  * Resources: 14 (README, soul, skills, tools, Pinocchio, Pinocchio guide, program map, program JSON, p-token launches, p-token registry, p-token launch pad, launch pad SDK, launch pad program, launch pad README)
- * Prompts: 11
+ * Prompts: 13 (solana_overview, trade_research, ooda_loop, market_scan, wallet_analysis, pump_scan, pump_ooda, pinocchio_builder, ptoken_launch, ptoken_launch_pad_plan, ptoken_launch_pad_ooda)
  */
 
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
@@ -515,6 +515,23 @@ export function createServer(): Server {
       const text = await readTemplateFile(template, pathParts.join("/"));
       return { contents: [{ uri, mimeType: "text/plain", text }] };
     }
+    // ── P-Token Launch Pad resources ─────────────────────────────────────
+    if (uri === "solana-clawd://ptoken-launchpad") {
+      const text = (await readFileText(LAUNCHPAD_DOCS_PATH)) ?? "PTOKEN_LAUNCHPAD.md not found.";
+      return { contents: [{ uri, mimeType: "text/markdown", text }] };
+    }
+    if (uri === "solana-clawd://ptoken-launchpad-sdk") {
+      const text = (await readFileText(LAUNCHPAD_SDK_PATH)) ?? "p-token-launchpad.ts not found.";
+      return { contents: [{ uri, mimeType: "text/typescript", text }] };
+    }
+    if (uri === "solana-clawd://ptoken-launchpad-program") {
+      const text = (await readFileText(path.join(PTOKEN_LAUNCHPAD_ROOT, "src", "lib.rs"))) ?? "lib.rs not found.";
+      return { contents: [{ uri, mimeType: "text/plain", text }] };
+    }
+    if (uri === "solana-clawd://ptoken-launchpad-readme") {
+      const text = (await readFileText(path.join(PTOKEN_LAUNCHPAD_ROOT, "README.md"))) ?? "README.md not found.";
+      return { contents: [{ uri, mimeType: "text/markdown", text }] };
+    }
     throw new Error(`Unknown resource: ${uri}`);
   });
 
@@ -823,6 +840,101 @@ export function createServer(): Server {
           tokens: { type: "number", description: "Token input for sell quotes" },
           feeBps: { type: "number", description: "Trade fee in basis points" },
         } },
+      },
+
+      // ── P-Token Launch Pad (SIMD-0266 / Pinocchio bonding curves) ──────
+      {
+        name: "ptoken_launch_pad_create",
+        description: "Create an agent token with bonding curve via the p-token launch pad. Wraps createAgentToken from the SDK. Planning/simulation only — does not send transactions.",
+        inputSchema: { type: "object" as const, properties: {
+          name: { type: "string", description: "Token name" },
+          symbol: { type: "string", description: "Token symbol" },
+          uri: { type: "string", description: "Metadata URI" },
+          agentUri: { type: "string", description: "Agent metadata URI" },
+          decimals: { type: "number", description: "Mint decimals (default 9)" },
+          usePToken: { type: "boolean", description: "Use p-token program instead of SPL (default true)" },
+          computeUnitLimit: { type: "number", description: "Compute unit budget override" },
+          priorityFeeMicroLamports: { type: "number", description: "Priority fee in microLamports" },
+        }, required: ["name", "symbol", "uri", "agentUri"] },
+      },
+      {
+        name: "ptoken_launch_pad_buy",
+        description: "Simulate buying from a p-token launch pad bonding curve. Returns post-fee token output. No funds moved.",
+        inputSchema: { type: "object" as const, properties: {
+          mint: { type: "string", description: "Token mint address" },
+          amountInLamports: { type: "number", description: "SOL input in lamports" },
+          maxSolCost: { type: "number", description: "Maximum SOL cost for slippage protection" },
+          computeUnitLimit: { type: "number" },
+          priorityFeeMicroLamports: { type: "number" },
+        }, required: ["mint", "amountInLamports"] },
+      },
+      {
+        name: "ptoken_launch_pad_sell",
+        description: "Simulate selling from a p-token launch pad bonding curve. Returns post-fee SOL output. No funds moved.",
+        inputSchema: { type: "object" as const, properties: {
+          mint: { type: "string", description: "Token mint address" },
+          tokenAmount: { type: "number", description: "Token amount in whole tokens" },
+          minSolOut: { type: "number", description: "Minimum SOL out for slippage protection" },
+          computeUnitLimit: { type: "number" },
+          priorityFeeMicroLamports: { type: "number" },
+        }, required: ["mint", "tokenAmount"] },
+      },
+      {
+        name: "ptoken_launch_pad_register_agent",
+        description: "Simulate registering an agent identity via the p-token launch pad agent registry PDA. No funds moved.",
+        inputSchema: { type: "object" as const, properties: {
+          uri: { type: "string", description: "Agent metadata URI" },
+          computeUnitLimit: { type: "number" },
+        }, required: ["uri"] },
+      },
+      {
+        name: "ptoken_launch_pad_register_executive",
+        description: "Simulate registering an executive delegate for an agent. No funds moved.",
+        inputSchema: { type: "object" as const, properties: {
+          agent: { type: "string", description: "Agent PDA or public key" },
+          delegate: { type: "string", description: "Delegate wallet address" },
+          computeUnitLimit: { type: "number" },
+        }, required: ["agent", "delegate"] },
+      },
+      {
+        name: "ptoken_launch_pad_delegate_execution",
+        description: "Simulate delegating execution authority with an expiry slot. No funds moved.",
+        inputSchema: { type: "object" as const, properties: {
+          agent: { type: "string", description: "Agent PDA or public key" },
+          delegate: { type: "string", description: "Delegate wallet address" },
+          expiresAtSlot: { type: "number", description: "Expiry slot number" },
+          computeUnitLimit: { type: "number" },
+        }, required: ["agent", "delegate", "expiresAtSlot"] },
+      },
+      {
+        name: "ptoken_launch_pad_price_quote",
+        description: "Calculate buy or sell price from a constant-product bonding curve. Uses the p-token launch pad formula (virtual reserves based).",
+        inputSchema: { type: "object" as const, properties: {
+          virtualTokenReserves: { type: "number", description: "Virtual token reserve" },
+          virtualSolReserves: { type: "number", description: "Virtual SOL reserve" },
+          tokenAmount: { type: "number", description: "Token amount for the quote" },
+          side: { type: "string", enum: ["buy", "sell"], description: "Quote direction" },
+        }, required: ["virtualTokenReserves", "virtualSolReserves", "tokenAmount", "side"] },
+      },
+      {
+        name: "ptoken_launch_pad_market_cap",
+        description: "Calculate market cap for a p-token launch pad token given curve state.",
+        inputSchema: { type: "object" as const, properties: {
+          initialVirtualSol: { type: "number", description: "Initial virtual SOL reserve" },
+          solRaised: { type: "number", description: "SOL raised so far" },
+          tokenSupply: { type: "number", description: "Total token supply" },
+          tokensSold: { type: "number", description: "Tokens sold so far" },
+        }, required: ["initialVirtualSol", "solRaised", "tokenSupply", "tokensSold"] },
+      },
+      {
+        name: "ptoken_launch_pad_graduation_threshold",
+        description: "Return the graduation threshold for the p-token launch pad bonding curve in lamports and SOL.",
+        inputSchema: { type: "object" as const, properties: {} },
+      },
+      {
+        name: "ptoken_launch_pad_cu_savings",
+        description: "Return the estimated compute unit savings report for p-token vs SPL token operations.",
+        inputSchema: { type: "object" as const, properties: {} },
       },
 
       // ── Chess.com (autonomous agent chess) ──────────────────────────────
@@ -1729,6 +1841,228 @@ emitter.on("event", (e) => console.log(e.type, e.signature, e.description));`,
             return text(pTokenBondingCurveQuote(a));
           }
 
+          // ── P-Token Launch Pad (SIMD-0266 / Pinocchio bonding curves) ─
+
+          case "ptoken_launch_pad_create": {
+            return text({
+              tool: "ptoken_launch_pad_create",
+              simulation: true,
+              programId: LAUNCHPAD_PROGRAM_ID,
+              sdkSource: "x402/p-token-launchpad.ts",
+              parameters: {
+                name: String(a.name ?? ""),
+                symbol: String(a.symbol ?? ""),
+                uri: String(a.uri ?? ""),
+                agentUri: String(a.agentUri ?? ""),
+                decimals: Number(a.decimals ?? 9),
+                usePToken: a.usePToken !== false,
+              },
+              warning: "Simulation only. To deploy: import { createAgentToken } from 'x402/p-token-launchpad.ts', supply a wallet adapter and connection.",
+              instruction: "Run the createAgentToken function from the SDK with a connected wallet. The function creates the mint, bonding curve, and agent identity in one transaction.",
+              docs: [
+                "solana-clawd://ptoken-launchpad (full docs)",
+                "solana-clawd://ptoken-launchpad-sdk (SDK source)",
+              ],
+            });
+          }
+
+          case "ptoken_launch_pad_buy": {
+            const mint = String(a.mint ?? "");
+            const amountInLamports = Number(a.amountInLamports ?? 0);
+            if (!mint) return text("mint is required");
+            if (amountInLamports <= 0) return text("amountInLamports must be > 0");
+            return text({
+              tool: "ptoken_launch_pad_buy",
+              simulation: true,
+              programId: LAUNCHPAD_PROGRAM_ID,
+              mint,
+              amountInLamports,
+              maxSolCost: a.maxSolCost ? Number(a.maxSolCost) : undefined,
+              warning: "Simulation only. To execute: import { buy } from 'x402/p-token-launchpad.ts' and supply a wallet adapter + connection.",
+              docs: [
+                "solana-clawd://ptoken-launchpad",
+                "solana-clawd://ptoken-launchpad-sdk",
+              ],
+            });
+          }
+
+          case "ptoken_launch_pad_sell": {
+            const mint = String(a.mint ?? "");
+            const tokenAmount = Number(a.tokenAmount ?? 0);
+            if (!mint) return text("mint is required");
+            if (tokenAmount <= 0) return text("tokenAmount must be > 0");
+            return text({
+              tool: "ptoken_launch_pad_sell",
+              simulation: true,
+              programId: LAUNCHPAD_PROGRAM_ID,
+              mint,
+              tokenAmount,
+              minSolOut: a.minSolOut ? Number(a.minSolOut) : undefined,
+              warning: "Simulation only. To execute: import { sell } from 'x402/p-token-launchpad.ts' and supply a wallet adapter + connection.",
+              docs: [
+                "solana-clawd://ptoken-launchpad",
+                "solana-clawd://ptoken-launchpad-sdk",
+              ],
+            });
+          }
+
+          case "ptoken_launch_pad_register_agent": {
+            const uri = String(a.uri ?? "");
+            if (!uri) return text("uri is required");
+            return text({
+              tool: "ptoken_launch_pad_register_agent",
+              simulation: true,
+              programId: LAUNCHPAD_PROGRAM_ID,
+              uri,
+              warning: "Simulation only. To execute: import { registerAgent } from 'x402/p-token-launchpad.ts' and supply a wallet adapter + connection.",
+              docs: [
+                "solana-clawd://ptoken-launchpad",
+                "solana-clawd://ptoken-launchpad-sdk",
+              ],
+            });
+          }
+
+          case "ptoken_launch_pad_register_executive": {
+            const agent = String(a.agent ?? "");
+            const delegate = String(a.delegate ?? "");
+            if (!agent) return text("agent is required");
+            if (!delegate) return text("delegate is required");
+            return text({
+              tool: "ptoken_launch_pad_register_executive",
+              simulation: true,
+              programId: LAUNCHPAD_PROGRAM_ID,
+              agent,
+              delegate,
+              warning: "Simulation only. To execute: import { registerExecutive } from 'x402/p-token-launchpad.ts' and supply a wallet adapter + connection.",
+              docs: [
+                "solana-clawd://ptoken-launchpad",
+                "solana-clawd://ptoken-launchpad-sdk",
+              ],
+            });
+          }
+
+          case "ptoken_launch_pad_delegate_execution": {
+            const delAgent = String(a.agent ?? "");
+            const delDelegate = String(a.delegate ?? "");
+            const expiresAtSlot = Number(a.expiresAtSlot ?? 0);
+            if (!delAgent) return text("agent is required");
+            if (!delDelegate) return text("delegate is required");
+            if (expiresAtSlot <= 0) return text("expiresAtSlot must be > 0");
+            return text({
+              tool: "ptoken_launch_pad_delegate_execution",
+              simulation: true,
+              programId: LAUNCHPAD_PROGRAM_ID,
+              agent: delAgent,
+              delegate: delDelegate,
+              expiresAtSlot,
+              warning: "Simulation only. To execute: import { delegateExecution } from 'x402/p-token-launchpad.ts' and supply a wallet adapter + connection.",
+              docs: [
+                "solana-clawd://ptoken-launchpad",
+                "solana-clawd://ptoken-launchpad-sdk",
+              ],
+            });
+          }
+
+          case "ptoken_launch_pad_price_quote": {
+            const vToken = Number(a.virtualTokenReserves ?? 0);
+            const vSol = Number(a.virtualSolReserves ?? 0);
+            const tAmt = Number(a.tokenAmount ?? 0);
+            const side = String(a.side ?? "buy");
+            if (vToken <= 0 || vSol <= 0) return text("virtualTokenReserves and virtualSolReserves must be > 0");
+            if (tAmt <= 0) return text("tokenAmount must be > 0");
+            const k = vSol * vToken;
+            let result: Record<string, unknown>;
+            if (side === "sell") {
+              const vTokenAfter = vToken + tAmt;
+              const vSolAfter = k / vTokenAfter;
+              const grossSolOut = Math.max(0, vSol - vSolAfter);
+              result = {
+                side: "sell",
+                tokensIn: tAmt,
+                grossSolOut,
+                estimatedNetSolOut: grossSolOut * 0.99, // 1% fee approx
+                spotPriceBefore: vSol / vToken,
+                spotPriceAfter: vSolAfter / vTokenAfter,
+                virtualSolAfter: vSolAfter,
+                virtualTokenAfter: vTokenAfter,
+              };
+            } else {
+              const vSolAfter = vSol + tAmt; // using tokenAmount as solIn for simplicity
+              const vTokenAfter = k / vSolAfter;
+              result = {
+                side: "buy",
+                solIn: tAmt,
+                tokensOut: Math.max(0, vToken - vTokenAfter),
+                fee: tAmt * 0.01,
+                spotPriceBefore: vSol / vToken,
+                spotPriceAfter: vSolAfter / vTokenAfter,
+                virtualSolAfter: vSolAfter,
+                virtualTokenAfter: vTokenAfter,
+              };
+            }
+            return text({
+              tool: "ptoken_launch_pad_price_quote",
+              formula: "constant-product: k = virtualSolReserves * virtualTokenReserves",
+              programId: LAUNCHPAD_PROGRAM_ID,
+              ...result,
+            });
+          }
+
+          case "ptoken_launch_pad_market_cap": {
+            const initialVirtualSol = Number(a.initialVirtualSol ?? 0);
+            const solRaised = Number(a.solRaised ?? 0);
+            const tokenSupply = Number(a.tokenSupply ?? 0);
+            const tokensSold = Number(a.tokensSold ?? 0);
+            if (tokenSupply <= 0 || tokensSold <= 0) return text("tokenSupply and tokensSold must be > 0");
+            const currentVirtualSol = initialVirtualSol + solRaised;
+            const currentVirtualToken = tokenSupply - tokensSold;
+            const spotPrice = currentVirtualSol / currentVirtualToken;
+            const mcap = spotPrice * tokenSupply;
+            return text({
+              tool: "ptoken_launch_pad_market_cap",
+              formula: "marketCap = (virtualSolReserves / virtualTokenReserves) * totalSupply",
+              initialVirtualSol,
+              solRaised,
+              tokenSupply,
+              tokensSold,
+              currentVirtualSol,
+              currentVirtualToken,
+              spotPrice,
+              marketCapSOL: mcap,
+              graduation: {
+                thresholdSOL: 24.5,
+                progressPct: Math.min(100, (solRaised / 24.5) * 100),
+                remainingSOL: Math.max(0, 24.5 - solRaised),
+              },
+            });
+          }
+
+          case "ptoken_launch_pad_graduation_threshold": {
+            return text({
+              tool: "ptoken_launch_pad_graduation_threshold",
+              programId: LAUNCHPAD_PROGRAM_ID,
+              graduationThresholdLamports: 24.5 * 1e9,
+              graduationThresholdSOL: 24.5,
+              description: "Graduation triggers when real SOL reserve reaches ~24.5 SOL. At that point SOL is seeded to a DEX AMM pool (e.g. Meteora DLMM) and bonding curve is closed.",
+            });
+          }
+
+          case "ptoken_launch_pad_cu_savings": {
+            return text({
+              tool: "ptoken_launch_pad_cu_savings",
+              report: {
+                summary: "p-token (SIMD-0266/Pinocchio) uses 98% fewer CUs than SPL Token for common operations",
+                benchmarks: {
+                  MintTo: { spl: 4128, pToken: 2012, savings: "51%" },
+                  Burn: { spl: 4753, pToken: 1884, savings: "60%" },
+                  Transfer: { spl: 4645, pToken: 76, savings: "98%" },
+                },
+                batchFeeDistribution: "p-token opcode 25 enables multi-recipient fee distribution in a single CPI — saves multiple Transfer CPIs",
+              },
+              docs: "solana-clawd://ptoken-launchpad",
+            });
+          }
+
           // ── Chess.com ─────────────────────────────────────────────────
 
           case "chess_player": {
@@ -1868,6 +2202,8 @@ emitter.on("event", (e) => console.log(e.type, e.signature, e.description));`,
       { name: "pump_ooda", description: "Full OODA loop focused on Pump.fun bonding curve opportunities", arguments: [{ name: "mint", description: "Token mint to evaluate (optional)", required: false }] },
       { name: "pinocchio_builder", description: "Plan a Pinocchio p-token, vault, or escrow build", arguments: [{ name: "template", description: "vault, escrow, or p-token-launcher", required: false }] },
       { name: "ptoken_launch", description: "Plan a p-token launch with bonding curve, explorer registration, and x402 routing", arguments: [{ name: "symbol", description: "Token symbol", required: false }] },
+      { name: "ptoken_launch_pad_plan", description: "Plan a full p-token launch pad deployment — agent token, bonding curve, registry, graduation path", arguments: [{ name: "symbol", description: "Token symbol", required: false }] },
+      { name: "ptoken_launch_pad_ooda", description: "Full OODA cycle for p-token launch pad opportunities — scan, evaluate, decide, act", arguments: [{ name: "mint", description: "Specific token mint to evaluate (optional)", required: false }] },
     ],
   }));
 
@@ -1919,6 +2255,19 @@ emitter.on("event", (e) => console.log(e.type, e.signature, e.description));`,
         case "ptoken_launch": {
           const symbol = args?.symbol ?? "PFOO";
           return msg(`Plan a p-token launch for symbol ${symbol}.\n\n1. Read solana-clawd://pinocchio and solana-clawd://ptoken-launches.\n2. Run ptoken_launch_plan symbol=${symbol}.\n3. Run ptoken_bonding_curve_quote side=buy sol=1 using the returned virtual reserves.\n4. Read pinocchio_read_template template=p-token-launcher.\n5. Output:\n- unsigned launch config\n- bonding curve assumptions\n- authority and PDA checks to implement\n- mint inspection and registry steps\n- x402 env needed after verification\n\nDo not request private keys. Do not claim that the launch is deployed or audited.`);
+        }
+
+        case "ptoken_launch_pad_plan": {
+          const symbol = args?.symbol ?? "PFOO";
+          return msg(`Plan a p-token launch pad deployment for symbol ${symbol}.\n\n1. Read solana-clawd://ptoken-launchpad (full docs), solana-clawd://ptoken-launchpad-sdk (SDK source), and solana-clawd://ptoken-launchpad-program (Anchor program).\n2. Run ptoken_launch_plan symbol=${symbol} for the unsigned launch config.\n3. Run ptoken_launch_pad_price_quote virtualTokenReserves=1073000000 virtualSolReserves=30 tokenAmount=1000000 side=buy to simulate a test buy.\n4. Run ptoken_launch_pad_market_cap initialVirtualSol=30 solRaised=5 tokenSupply=1000000000 tokensSold=500000000 to estimate market cap.\n5. Run ptoken_launch_pad_graduation_threshold to verify graduation conditions.\n6. Run ptoken_launch_pad_cu_savings to see the p-token cost advantage.\n7. Output:\n- unsigned launch config with bonding curve parameters\n- SDK function mapping (createAgentToken → buy → sell → graduate)\n- agent registry plan (register_agent, register_executive, delegate_execution if needed)\n- graduation path (SOL threshold, AMM seed, curve close)\n- compute unit savings with p-token\n- test plan (devnet dry-run first)\n\nDo not request private keys. Do not claim the launch is deployed or audited.`);
+        }
+
+        case "ptoken_launch_pad_ooda": {
+          const mint = args?.mint;
+          if (mint) {
+            return msg(`OODA cycle for p-token launch pad token: \`${mint}\`\n\n**OBSERVE**\n- solana_price token=${mint} — current price\n- solana_token_info mint=${mint} — metadata and security\n- ptoken_inspect mint=${mint} — on-chain classification\n- sol_price — market context\n\n**ORIENT**\n- ptoken_launch_pad_price_quote virtualTokenReserves=1073000000 virtualSolReserves=30 tokenAmount=100000 side=buy\n- ptoken_launch_pad_market_cap initialVirtualSol=30 solRaised=0 tokenSupply=1000000000 tokensSold=0\n- ptoken_launch_pad_graduation_threshold\n- memory_recall query=${mint.slice(0, 8)}\n\n**DECIDE**\n- Is this token using the launch pad? (owner program check)\n- Bonding curve stage: early/mid/late\n- Risk factors: mint authority, freeze authority, top holder concentration\n- Signal: STRONG / MODERATE / WEAK / AVOID\n\n**ACT**\n- memory_write your INFERRED signal with score and reasoning\n- If STRONG: propose entry size, stop loss, graduation exit plan\n- If AVOID: document why for future reference`);
+          }
+          return msg(`Full OODA cycle for p-token launch pad market.\n\n**OBSERVE**\n- solana_trending limit=20 — what's moving\n- ptoken_registry_list — registered p-token mints\n- sol_price — market context\n- Read solana-clawd://ptoken-launchpad for full documentation\n\n**ORIENT**\n- For any interesting mints from the registry: ptoken_inspect, solana_token_info\n- ptoken_launch_pad_price_quote with default parameters to understand bonding curve\n- ptoken_launch_pad_market_cap with estimated parameters\n- ptoken_launch_pad_cu_savings\n- memory_recall query="launchpad" tier="LEARNED" — any patterns?\n\n**DECIDE**\n1. Best launch pad opportunity (risk/reward, bonding curve stage, mint authority)\n2. Best agent token to watch (registered agents, executive delegates)\n3. Avoid list (high risk, unverified, centralized authority)\n\n**ACT**\n- memory_write top INFERRED signals with scoring rationale\n- Report top 3 findings with entry/exit thesis`);
         }
 
         default:
