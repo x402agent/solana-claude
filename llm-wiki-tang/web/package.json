@@ -18,7 +18,7 @@
     "@radix-ui/react-slot": "1.2.4",
     "@sentry/nextjs": "10.47.0",
     "@supabase/ssr": "0.7.0",
-    "@supabase/supabase-js": "2.101.1",
+    "@supabase/supabase-js": "2.105.4",
     "@tanstack/react-table": "8.21.3",
     "@tanstack/react-virtual": "3.13.23",
     "@tiptap/extension-image": "3.22.2",
