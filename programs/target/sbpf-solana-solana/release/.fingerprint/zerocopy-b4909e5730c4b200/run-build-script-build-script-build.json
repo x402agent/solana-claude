@@ -1,0 +1,1 @@
+{"rustc":12275994350512301641,"features":"","declared_features":"","target":0,"profile":0,"path":0,"deps":[[3612005756660025491,"build_script_build",false,705662304613270139]],"local":[{"RerunIfChanged":{"output":"sbpf-solana-solana/release/build/zerocopy-b4909e5730c4b200/output","paths":["build.rs","Cargo.toml"]}}],"rustflags":["-Zremap-cwd-prefix="],"config":0,"compile_kind":0}

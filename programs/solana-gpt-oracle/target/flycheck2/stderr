@@ -1,0 +1,3251 @@
+    Blocking waiting for file lock on package cache
+   0.121802750s  INFO prepare_target{force=false package_id=solana-gpt-oracle v0.1.0 (/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle) target="solana_gpt_oracle"}: cargo::core::compiler::fingerprint: fingerprint error for solana-gpt-oracle v0.1.0 (/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle)/Check { test: false }/TargetInner { ..: lib_target("solana_gpt_oracle", ["cdylib", "lib"], "/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/src/lib.rs", Edition2021) }
+   0.121818666s  INFO prepare_target{force=false package_id=solana-gpt-oracle v0.1.0 (/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle) target="solana_gpt_oracle"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-gpt-oracle-b4cdd26873048106/lib-solana_gpt_oracle`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   7: cargo::ops::cargo_compile::compile_ws
+   8: cargo::ops::cargo_compile::compile_with_exec
+   9: cargo::ops::cargo_compile::compile
+  10: cargo::commands::check::exec
+  11: <cargo::cli::Exec>::exec
+  12: cargo::main
+  13: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  14: std::rt::lang_start::<()>::{closure#0}
+  15: std::rt::lang_start_internal
+  16: _main
+   0.124376750s  INFO prepare_target{force=false package_id=anchor-lang v0.31.1 target="anchor_lang"}: cargo::core::compiler::fingerprint: fingerprint error for anchor-lang v0.31.1/Check { test: false }/TargetInner { ..: lib_target("anchor_lang", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/anchor-lang-0.31.1/src/lib.rs", Edition2021) }
+   0.124384083s  INFO prepare_target{force=false package_id=anchor-lang v0.31.1 target="anchor_lang"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/anchor-lang-f2975d21d49b0938/lib-anchor_lang`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   8: cargo::ops::cargo_compile::compile_ws
+   9: cargo::ops::cargo_compile::compile_with_exec
+  10: cargo::ops::cargo_compile::compile
+  11: cargo::commands::check::exec
+  12: <cargo::cli::Exec>::exec
+  13: cargo::main
+  14: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  15: std::rt::lang_start::<()>::{closure#0}
+  16: std::rt::lang_start_internal
+  17: _main
+   0.127248333s  INFO prepare_target{force=false package_id=bincode v1.3.3 target="bincode"}: cargo::core::compiler::fingerprint: fingerprint error for bincode v1.3.3/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("bincode", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/bincode-1.3.3/src/lib.rs", Edition2015) }
+   0.127253541s  INFO prepare_target{force=false package_id=bincode v1.3.3 target="bincode"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/bincode-5c6e781c289e5d7c/lib-bincode`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   9: cargo::ops::cargo_compile::compile_ws
+  10: cargo::ops::cargo_compile::compile_with_exec
+  11: cargo::ops::cargo_compile::compile
+  12: cargo::commands::check::exec
+  13: <cargo::cli::Exec>::exec
+  14: cargo::main
+  15: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  16: std::rt::lang_start::<()>::{closure#0}
+  17: std::rt::lang_start_internal
+  18: _main
+   0.127354458s  INFO prepare_target{force=false package_id=serde v1.0.228 target="serde"}: cargo::core::compiler::fingerprint: fingerprint error for serde v1.0.228/Check { test: false }/TargetInner { ..: lib_target("serde", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/lib.rs", Edition2021) }
+   0.127359166s  INFO prepare_target{force=false package_id=serde v1.0.228 target="serde"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/serde-759ab3efda8e34de/lib-serde`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  10: cargo::ops::cargo_compile::compile_ws
+  11: cargo::ops::cargo_compile::compile_with_exec
+  12: cargo::ops::cargo_compile::compile
+  13: cargo::commands::check::exec
+  14: <cargo::cli::Exec>::exec
+  15: cargo::main
+  16: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  17: std::rt::lang_start::<()>::{closure#0}
+  18: std::rt::lang_start_internal
+  19: _main
+   0.127568458s  INFO prepare_target{force=false package_id=serde_core v1.0.228 target="serde_core"}: cargo::core::compiler::fingerprint: fingerprint error for serde_core v1.0.228/Check { test: false }/TargetInner { ..: lib_target("serde_core", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde_core-1.0.228/src/lib.rs", Edition2021) }
+   0.127572750s  INFO prepare_target{force=false package_id=serde_core v1.0.228 target="serde_core"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/serde_core-a0fbd787a1c2754e/lib-serde_core`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  11: cargo::ops::cargo_compile::compile_ws
+  12: cargo::ops::cargo_compile::compile_with_exec
+  13: cargo::ops::cargo_compile::compile
+  14: cargo::commands::check::exec
+  15: <cargo::cli::Exec>::exec
+  16: cargo::main
+  17: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  18: std::rt::lang_start::<()>::{closure#0}
+  19: std::rt::lang_start_internal
+  20: _main
+   0.127744250s  INFO prepare_target{force=false package_id=borsh v0.10.4 target="borsh"}: cargo::core::compiler::fingerprint: fingerprint error for borsh v0.10.4/Check { test: false }/TargetInner { ..: lib_target("borsh", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/borsh-0.10.4/src/lib.rs", Edition2018) }
+   0.127748833s  INFO prepare_target{force=false package_id=borsh v0.10.4 target="borsh"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/borsh-a9fce311e039edad/lib-borsh`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   9: cargo::ops::cargo_compile::compile_ws
+  10: cargo::ops::cargo_compile::compile_with_exec
+  11: cargo::ops::cargo_compile::compile
+  12: cargo::commands::check::exec
+  13: <cargo::cli::Exec>::exec
+  14: cargo::main
+  15: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  16: std::rt::lang_start::<()>::{closure#0}
+  17: std::rt::lang_start_internal
+  18: _main
+   0.127977708s  INFO prepare_target{force=false package_id=hashbrown v0.13.2 target="hashbrown"}: cargo::core::compiler::fingerprint: fingerprint error for hashbrown v0.13.2/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("hashbrown", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/hashbrown-0.13.2/src/lib.rs", Edition2021) }
+   0.127982041s  INFO prepare_target{force=false package_id=hashbrown v0.13.2 target="hashbrown"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/hashbrown-0220589988d66ed5/lib-hashbrown`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  10: cargo::ops::cargo_compile::compile_ws
+  11: cargo::ops::cargo_compile::compile_with_exec
+  12: cargo::ops::cargo_compile::compile
+  13: cargo::commands::check::exec
+  14: <cargo::cli::Exec>::exec
+  15: cargo::main
+  16: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  17: std::rt::lang_start::<()>::{closure#0}
+  18: std::rt::lang_start_internal
+  19: _main
+   0.128081166s  INFO prepare_target{force=false package_id=ahash v0.8.12 target="ahash"}: cargo::core::compiler::fingerprint: fingerprint error for ahash v0.8.12/Check { test: false }/TargetInner { ..: lib_target("ahash", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ahash-0.8.12/src/lib.rs", Edition2018) }
+   0.128085125s  INFO prepare_target{force=false package_id=ahash v0.8.12 target="ahash"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/ahash-79c90d761279b3cb/lib-ahash`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  11: cargo::ops::cargo_compile::compile_ws
+  12: cargo::ops::cargo_compile::compile_with_exec
+  13: cargo::ops::cargo_compile::compile
+  14: cargo::commands::check::exec
+  15: <cargo::cli::Exec>::exec
+  16: cargo::main
+  17: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  18: std::rt::lang_start::<()>::{closure#0}
+  19: std::rt::lang_start_internal
+  20: _main
+   0.128365166s  INFO prepare_target{force=false package_id=zerocopy v0.8.48 target="zerocopy"}: cargo::core::compiler::fingerprint: fingerprint error for zerocopy v0.8.48/Check { test: false }/TargetInner { ..: lib_target("zerocopy", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zerocopy-0.8.48/src/lib.rs", Edition2021) }
+   0.128369458s  INFO prepare_target{force=false package_id=zerocopy v0.8.48 target="zerocopy"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/zerocopy-bbdb1f81dcc1b9aa/lib-zerocopy`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: cargo::core::compiler::compile
+  11: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  12: cargo::ops::cargo_compile::compile_ws
+  13: cargo::ops::cargo_compile::compile_with_exec
+  14: cargo::ops::cargo_compile::compile
+  15: cargo::commands::check::exec
+  16: <cargo::cli::Exec>::exec
+  17: cargo::main
+  18: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  19: std::rt::lang_start::<()>::{closure#0}
+  20: std::rt::lang_start_internal
+  21: _main
+   0.128639000s  INFO prepare_target{force=false package_id=solana-program v2.3.0 target="solana_program"}: cargo::core::compiler::fingerprint: fingerprint error for solana-program v2.3.0/Check { test: false }/TargetInner { ..: lib_target("solana_program", ["cdylib", "rlib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-program-2.3.0/src/lib.rs", Edition2021) }
+   0.128643625s  INFO prepare_target{force=false package_id=solana-program v2.3.0 target="solana_program"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-program-703a43138a9b4a52/lib-solana_program`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   9: cargo::ops::cargo_compile::compile_ws
+  10: cargo::ops::cargo_compile::compile_with_exec
+  11: cargo::ops::cargo_compile::compile
+  12: cargo::commands::check::exec
+  13: <cargo::cli::Exec>::exec
+  14: cargo::main
+  15: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  16: std::rt::lang_start::<()>::{closure#0}
+  17: std::rt::lang_start_internal
+  18: _main
+   0.129838291s  INFO prepare_target{force=false package_id=blake3 v1.8.5 target="blake3"}: cargo::core::compiler::fingerprint: fingerprint error for blake3 v1.8.5/Check { test: false }/TargetInner { ..: lib_target("blake3", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/blake3-1.8.5/src/lib.rs", Edition2024) }
+   0.129842541s  INFO prepare_target{force=false package_id=blake3 v1.8.5 target="blake3"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/blake3-441624603caebf18/lib-blake3`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  10: cargo::ops::cargo_compile::compile_ws
+  11: cargo::ops::cargo_compile::compile_with_exec
+  12: cargo::ops::cargo_compile::compile
+  13: cargo::commands::check::exec
+  14: <cargo::cli::Exec>::exec
+  15: cargo::main
+  16: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  17: std::rt::lang_start::<()>::{closure#0}
+  18: std::rt::lang_start_internal
+  19: _main
+   0.131780375s  INFO prepare_target{force=false package_id=rand v0.8.6 target="rand"}: cargo::core::compiler::fingerprint: fingerprint error for rand v0.8.6/Check { test: false }/TargetInner { ..: lib_target("rand", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/rand-0.8.6/src/lib.rs", Edition2018) }
+   0.131786541s  INFO prepare_target{force=false package_id=rand v0.8.6 target="rand"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/rand-fac1d3b17d065f53/lib-rand`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  10: cargo::ops::cargo_compile::compile_ws
+  11: cargo::ops::cargo_compile::compile_with_exec
+  12: cargo::ops::cargo_compile::compile
+  13: cargo::commands::check::exec
+  14: <cargo::cli::Exec>::exec
+  15: cargo::main
+  16: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  17: std::rt::lang_start::<()>::{closure#0}
+  18: std::rt::lang_start_internal
+  19: _main
+   0.131971041s  INFO prepare_target{force=false package_id=rand_chacha v0.3.1 target="rand_chacha"}: cargo::core::compiler::fingerprint: fingerprint error for rand_chacha v0.3.1/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("rand_chacha", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/rand_chacha-0.3.1/src/lib.rs", Edition2018) }
+   0.131976166s  INFO prepare_target{force=false package_id=rand_chacha v0.3.1 target="rand_chacha"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/rand_chacha-a1b77ce06a6cf789/lib-rand_chacha`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  11: cargo::ops::cargo_compile::compile_ws
+  12: cargo::ops::cargo_compile::compile_with_exec
+  13: cargo::ops::cargo_compile::compile
+  14: cargo::commands::check::exec
+  15: <cargo::cli::Exec>::exec
+  16: cargo::main
+  17: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  18: std::rt::lang_start::<()>::{closure#0}
+  19: std::rt::lang_start_internal
+  20: _main
+   0.132097125s  INFO prepare_target{force=false package_id=ppv-lite86 v0.2.21 target="ppv_lite86"}: cargo::core::compiler::fingerprint: fingerprint error for ppv-lite86 v0.2.21/Check { test: false }/TargetInner { ..: lib_target("ppv_lite86", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ppv-lite86-0.2.21/src/lib.rs", Edition2021) }
+   0.132101666s  INFO prepare_target{force=false package_id=ppv-lite86 v0.2.21 target="ppv_lite86"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/ppv-lite86-1439837335f5cc8e/lib-ppv_lite86`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: cargo::core::compiler::compile
+  11: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  12: cargo::ops::cargo_compile::compile_ws
+  13: cargo::ops::cargo_compile::compile_with_exec
+  14: cargo::ops::cargo_compile::compile
+  15: cargo::commands::check::exec
+  16: <cargo::cli::Exec>::exec
+  17: cargo::main
+  18: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  19: std::rt::lang_start::<()>::{closure#0}
+  20: std::rt::lang_start_internal
+  21: _main
+   0.132254666s  INFO prepare_target{force=false package_id=serde_bytes v0.11.19 target="serde_bytes"}: cargo::core::compiler::fingerprint: fingerprint error for serde_bytes v0.11.19/Check { test: false }/TargetInner { ..: lib_target("serde_bytes", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde_bytes-0.11.19/src/lib.rs", Edition2018) }
+   0.132259041s  INFO prepare_target{force=false package_id=serde_bytes v0.11.19 target="serde_bytes"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/serde_bytes-7cba41802bbb92e7/lib-serde_bytes`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  10: cargo::ops::cargo_compile::compile_ws
+  11: cargo::ops::cargo_compile::compile_with_exec
+  12: cargo::ops::cargo_compile::compile
+  13: cargo::commands::check::exec
+  14: <cargo::cli::Exec>::exec
+  15: cargo::main
+  16: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  17: std::rt::lang_start::<()>::{closure#0}
+  18: std::rt::lang_start_internal
+  19: _main
+   0.132354250s  INFO prepare_target{force=false package_id=solana-account-info v2.3.0 target="solana_account_info"}: cargo::core::compiler::fingerprint: fingerprint error for solana-account-info v2.3.0/Check { test: false }/TargetInner { ..: lib_target("solana_account_info", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-account-info-2.3.0/src/lib.rs", Edition2021) }
+   0.132358708s  INFO prepare_target{force=false package_id=solana-account-info v2.3.0 target="solana_account_info"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-account-info-d8956e1694eded6b/lib-solana_account_info`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  10: cargo::ops::cargo_compile::compile_ws
+  11: cargo::ops::cargo_compile::compile_with_exec
+  12: cargo::ops::cargo_compile::compile
+  13: cargo::commands::check::exec
+  14: <cargo::cli::Exec>::exec
+  15: cargo::main
+  16: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  17: std::rt::lang_start::<()>::{closure#0}
+  18: std::rt::lang_start_internal
+  19: _main
+   0.132565750s  INFO prepare_target{force=false package_id=solana-program-error v2.2.2 target="solana_program_error"}: cargo::core::compiler::fingerprint: fingerprint error for solana-program-error v2.2.2/Check { test: false }/TargetInner { ..: lib_target("solana_program_error", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-program-error-2.2.2/src/lib.rs", Edition2021) }
+   0.132570500s  INFO prepare_target{force=false package_id=solana-program-error v2.2.2 target="solana_program_error"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-program-error-80bb38cfa3402bf9/lib-solana_program_error`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  11: cargo::ops::cargo_compile::compile_ws
+  12: cargo::ops::cargo_compile::compile_with_exec
+  13: cargo::ops::cargo_compile::compile
+  14: cargo::commands::check::exec
+  15: <cargo::cli::Exec>::exec
+  16: cargo::main
+  17: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  18: std::rt::lang_start::<()>::{closure#0}
+  19: std::rt::lang_start_internal
+  20: _main
+   0.132866958s  INFO prepare_target{force=false package_id=solana-instruction v2.3.3 target="solana_instruction"}: cargo::core::compiler::fingerprint: fingerprint error for solana-instruction v2.3.3/Check { test: false }/TargetInner { ..: lib_target("solana_instruction", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-instruction-2.3.3/src/lib.rs", Edition2021) }
+   0.132871541s  INFO prepare_target{force=false package_id=solana-instruction v2.3.3 target="solana_instruction"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-instruction-0d58f7c7d4236a9b/lib-solana_instruction`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: cargo::core::compiler::compile
+  11: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  12: cargo::ops::cargo_compile::compile_ws
+  13: cargo::ops::cargo_compile::compile_with_exec
+  14: cargo::ops::cargo_compile::compile
+  15: cargo::commands::check::exec
+  16: <cargo::cli::Exec>::exec
+  17: cargo::main
+  18: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  19: std::rt::lang_start::<()>::{closure#0}
+  20: std::rt::lang_start_internal
+  21: _main
+   0.133109625s  INFO prepare_target{force=false package_id=serde_json v1.0.149 target="serde_json"}: cargo::core::compiler::fingerprint: fingerprint error for serde_json v1.0.149/Check { test: false }/TargetInner { ..: lib_target("serde_json", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde_json-1.0.149/src/lib.rs", Edition2021) }
+   0.133113791s  INFO prepare_target{force=false package_id=serde_json v1.0.149 target="serde_json"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/serde_json-bda050d4610de99c/lib-serde_json`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: cargo::core::compiler::compile
+  11: cargo::core::compiler::compile
+  12: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  13: cargo::ops::cargo_compile::compile_ws
+  14: cargo::ops::cargo_compile::compile_with_exec
+  15: cargo::ops::cargo_compile::compile
+  16: cargo::commands::check::exec
+  17: <cargo::cli::Exec>::exec
+  18: cargo::main
+  19: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  20: std::rt::lang_start::<()>::{closure#0}
+  21: std::rt::lang_start_internal
+  22: _main
+   0.133353000s  INFO prepare_target{force=false package_id=solana-pubkey v2.4.0 target="solana_pubkey"}: cargo::core::compiler::fingerprint: fingerprint error for solana-pubkey v2.4.0/Check { test: false }/TargetInner { ..: lib_target("solana_pubkey", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-pubkey-2.4.0/src/lib.rs", Edition2021) }
+   0.133357416s  INFO prepare_target{force=false package_id=solana-pubkey v2.4.0 target="solana_pubkey"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-pubkey-5dde9a4a3974d2c0/lib-solana_pubkey`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: cargo::core::compiler::compile
+  11: cargo::core::compiler::compile
+  12: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  13: cargo::ops::cargo_compile::compile_ws
+  14: cargo::ops::cargo_compile::compile_with_exec
+  15: cargo::ops::cargo_compile::compile
+  16: cargo::commands::check::exec
+  17: <cargo::cli::Exec>::exec
+  18: cargo::main
+  19: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  20: std::rt::lang_start::<()>::{closure#0}
+  21: std::rt::lang_start_internal
+  22: _main
+   0.134312208s  INFO prepare_target{force=false package_id=solana-sha256-hasher v2.3.0 target="solana_sha256_hasher"}: cargo::core::compiler::fingerprint: fingerprint error for solana-sha256-hasher v2.3.0/Check { test: false }/TargetInner { ..: lib_target("solana_sha256_hasher", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-sha256-hasher-2.3.0/src/lib.rs", Edition2021) }
+   0.134316750s  INFO prepare_target{force=false package_id=solana-sha256-hasher v2.3.0 target="solana_sha256_hasher"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-sha256-hasher-e5b3ebe6b39fbc0c/lib-solana_sha256_hasher`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: cargo::core::compiler::compile
+  11: cargo::core::compiler::compile
+  12: cargo::core::compiler::compile
+  13: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  14: cargo::ops::cargo_compile::compile_ws
+  15: cargo::ops::cargo_compile::compile_with_exec
+  16: cargo::ops::cargo_compile::compile
+  17: cargo::commands::check::exec
+  18: <cargo::cli::Exec>::exec
+  19: cargo::main
+  20: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  21: std::rt::lang_start::<()>::{closure#0}
+  22: std::rt::lang_start_internal
+  23: _main
+   0.134545833s  INFO prepare_target{force=false package_id=solana-hash v2.3.0 target="solana_hash"}: cargo::core::compiler::fingerprint: fingerprint error for solana-hash v2.3.0/Check { test: false }/TargetInner { ..: lib_target("solana_hash", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-hash-2.3.0/src/lib.rs", Edition2021) }
+   0.134550000s  INFO prepare_target{force=false package_id=solana-hash v2.3.0 target="solana_hash"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-hash-b4c8457b3195ace2/lib-solana_hash`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: cargo::core::compiler::compile
+  11: cargo::core::compiler::compile
+  12: cargo::core::compiler::compile
+  13: cargo::core::compiler::compile
+  14: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  15: cargo::ops::cargo_compile::compile_ws
+  16: cargo::ops::cargo_compile::compile_with_exec
+  17: cargo::ops::cargo_compile::compile
+  18: cargo::commands::check::exec
+  19: <cargo::cli::Exec>::exec
+  20: cargo::main
+  21: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  22: std::rt::lang_start::<()>::{closure#0}
+  23: std::rt::lang_start_internal
+  24: _main
+   0.134854708s  INFO prepare_target{force=false package_id=solana-address-lookup-table-interface v2.2.2 target="solana_address_lookup_table_interface"}: cargo::core::compiler::fingerprint: fingerprint error for solana-address-lookup-table-interface v2.2.2/Check { test: false }/TargetInner { ..: lib_target("solana_address_lookup_table_interface", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-address-lookup-table-interface-2.2.2/src/lib.rs", Edition2021) }
+   0.134858750s  INFO prepare_target{force=false package_id=solana-address-lookup-table-interface v2.2.2 target="solana_address_lookup_table_interface"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-address-lookup-table-interface-cea83ebbac9c53f9/lib-solana_address_lookup_table_interface`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  10: cargo::ops::cargo_compile::compile_ws
+  11: cargo::ops::cargo_compile::compile_with_exec
+  12: cargo::ops::cargo_compile::compile
+  13: cargo::commands::check::exec
+  14: <cargo::cli::Exec>::exec
+  15: cargo::main
+  16: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  17: std::rt::lang_start::<()>::{closure#0}
+  18: std::rt::lang_start_internal
+  19: _main
+   0.135117250s  INFO prepare_target{force=false package_id=solana-clock v2.2.3 target="solana_clock"}: cargo::core::compiler::fingerprint: fingerprint error for solana-clock v2.2.3/Check { test: false }/TargetInner { ..: lib_target("solana_clock", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-clock-2.2.3/src/lib.rs", Edition2021) }
+   0.135121500s  INFO prepare_target{force=false package_id=solana-clock v2.2.3 target="solana_clock"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-clock-a7a5b40eb33ddbc7/lib-solana_clock`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  11: cargo::ops::cargo_compile::compile_ws
+  12: cargo::ops::cargo_compile::compile_with_exec
+  13: cargo::ops::cargo_compile::compile
+  14: cargo::commands::check::exec
+  15: <cargo::cli::Exec>::exec
+  16: cargo::main
+  17: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  18: std::rt::lang_start::<()>::{closure#0}
+  19: std::rt::lang_start_internal
+  20: _main
+   0.135310166s  INFO prepare_target{force=false package_id=solana-sdk-ids v2.2.1 target="solana_sdk_ids"}: cargo::core::compiler::fingerprint: fingerprint error for solana-sdk-ids v2.2.1/Check { test: false }/TargetInner { ..: lib_target("solana_sdk_ids", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-sdk-ids-2.2.1/src/lib.rs", Edition2021) }
+   0.135314583s  INFO prepare_target{force=false package_id=solana-sdk-ids v2.2.1 target="solana_sdk_ids"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-sdk-ids-6ade77203c5836f0/lib-solana_sdk_ids`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: cargo::core::compiler::compile
+  11: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  12: cargo::ops::cargo_compile::compile_ws
+  13: cargo::ops::cargo_compile::compile_with_exec
+  14: cargo::ops::cargo_compile::compile
+  15: cargo::commands::check::exec
+  16: <cargo::cli::Exec>::exec
+  17: cargo::main
+  18: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  19: std::rt::lang_start::<()>::{closure#0}
+  20: std::rt::lang_start_internal
+  21: _main
+   0.135472625s  INFO prepare_target{force=false package_id=solana-sysvar-id v2.2.1 target="solana_sysvar_id"}: cargo::core::compiler::fingerprint: fingerprint error for solana-sysvar-id v2.2.1/Check { test: false }/TargetInner { ..: lib_target("solana_sysvar_id", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-sysvar-id-2.2.1/src/lib.rs", Edition2021) }
+   0.135476625s  INFO prepare_target{force=false package_id=solana-sysvar-id v2.2.1 target="solana_sysvar_id"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-sysvar-id-c2884a18aebc99dd/lib-solana_sysvar_id`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: cargo::core::compiler::compile
+  11: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  12: cargo::ops::cargo_compile::compile_ws
+  13: cargo::ops::cargo_compile::compile_with_exec
+  14: cargo::ops::cargo_compile::compile
+  15: cargo::commands::check::exec
+  16: <cargo::cli::Exec>::exec
+  17: cargo::main
+  18: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  19: std::rt::lang_start::<()>::{closure#0}
+  20: std::rt::lang_start_internal
+  21: _main
+   0.135617750s  INFO prepare_target{force=false package_id=solana-slot-hashes v2.2.1 target="solana_slot_hashes"}: cargo::core::compiler::fingerprint: fingerprint error for solana-slot-hashes v2.2.1/Check { test: false }/TargetInner { ..: lib_target("solana_slot_hashes", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-slot-hashes-2.2.1/src/lib.rs", Edition2021) }
+   0.135621958s  INFO prepare_target{force=false package_id=solana-slot-hashes v2.2.1 target="solana_slot_hashes"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-slot-hashes-a9b8d3b1e0b02d04/lib-solana_slot_hashes`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  11: cargo::ops::cargo_compile::compile_ws
+  12: cargo::ops::cargo_compile::compile_with_exec
+  13: cargo::ops::cargo_compile::compile
+  14: cargo::commands::check::exec
+  15: <cargo::cli::Exec>::exec
+  16: cargo::main
+  17: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  18: std::rt::lang_start::<()>::{closure#0}
+  19: std::rt::lang_start_internal
+  20: _main
+   0.135836375s  INFO prepare_target{force=false package_id=solana-bincode v2.2.1 target="solana_bincode"}: cargo::core::compiler::fingerprint: fingerprint error for solana-bincode v2.2.1/Check { test: false }/TargetInner { ..: lib_target("solana_bincode", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-bincode-2.2.1/src/lib.rs", Edition2021) }
+   0.135840416s  INFO prepare_target{force=false package_id=solana-bincode v2.2.1 target="solana_bincode"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-bincode-9560a4a7b62ee6fe/lib-solana_bincode`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  10: cargo::ops::cargo_compile::compile_ws
+  11: cargo::ops::cargo_compile::compile_with_exec
+  12: cargo::ops::cargo_compile::compile
+  13: cargo::commands::check::exec
+  14: <cargo::cli::Exec>::exec
+  15: cargo::main
+  16: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  17: std::rt::lang_start::<()>::{closure#0}
+  18: std::rt::lang_start_internal
+  19: _main
+   0.135997375s  INFO prepare_target{force=false package_id=solana-blake3-hasher v2.2.1 target="solana_blake3_hasher"}: cargo::core::compiler::fingerprint: fingerprint error for solana-blake3-hasher v2.2.1/Check { test: false }/TargetInner { ..: lib_target("solana_blake3_hasher", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-blake3-hasher-2.2.1/src/lib.rs", Edition2021) }
+   0.136001791s  INFO prepare_target{force=false package_id=solana-blake3-hasher v2.2.1 target="solana_blake3_hasher"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-blake3-hasher-eae6d10c21caa467/lib-solana_blake3_hasher`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  10: cargo::ops::cargo_compile::compile_ws
+  11: cargo::ops::cargo_compile::compile_with_exec
+  12: cargo::ops::cargo_compile::compile
+  13: cargo::commands::check::exec
+  14: <cargo::cli::Exec>::exec
+  15: cargo::main
+  16: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  17: std::rt::lang_start::<()>::{closure#0}
+  18: std::rt::lang_start_internal
+  19: _main
+   0.136143541s  INFO prepare_target{force=false package_id=solana-borsh v2.2.1 target="solana_borsh"}: cargo::core::compiler::fingerprint: fingerprint error for solana-borsh v2.2.1/Check { test: false }/TargetInner { ..: lib_target("solana_borsh", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-borsh-2.2.1/src/lib.rs", Edition2021) }
+   0.136147833s  INFO prepare_target{force=false package_id=solana-borsh v2.2.1 target="solana_borsh"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-borsh-53ffb5b4798db347/lib-solana_borsh`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  10: cargo::ops::cargo_compile::compile_ws
+  11: cargo::ops::cargo_compile::compile_with_exec
+  12: cargo::ops::cargo_compile::compile
+  13: cargo::commands::check::exec
+  14: <cargo::cli::Exec>::exec
+  15: cargo::main
+  16: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  17: std::rt::lang_start::<()>::{closure#0}
+  18: std::rt::lang_start_internal
+  19: _main
+   0.136265583s  INFO prepare_target{force=false package_id=solana-cpi v2.2.1 target="solana_cpi"}: cargo::core::compiler::fingerprint: fingerprint error for solana-cpi v2.2.1/Check { test: false }/TargetInner { ..: lib_target("solana_cpi", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-cpi-2.2.1/src/lib.rs", Edition2021) }
+   0.136269791s  INFO prepare_target{force=false package_id=solana-cpi v2.2.1 target="solana_cpi"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-cpi-92be98e7dbb02041/lib-solana_cpi`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  10: cargo::ops::cargo_compile::compile_ws
+  11: cargo::ops::cargo_compile::compile_with_exec
+  12: cargo::ops::cargo_compile::compile
+  13: cargo::commands::check::exec
+  14: <cargo::cli::Exec>::exec
+  15: cargo::main
+  16: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  17: std::rt::lang_start::<()>::{closure#0}
+  18: std::rt::lang_start_internal
+  19: _main
+   0.136443833s  INFO prepare_target{force=false package_id=solana-epoch-rewards v2.2.1 target="solana_epoch_rewards"}: cargo::core::compiler::fingerprint: fingerprint error for solana-epoch-rewards v2.2.1/Check { test: false }/TargetInner { ..: lib_target("solana_epoch_rewards", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-epoch-rewards-2.2.1/src/lib.rs", Edition2021) }
+   0.136447750s  INFO prepare_target{force=false package_id=solana-epoch-rewards v2.2.1 target="solana_epoch_rewards"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-epoch-rewards-8a45e9271c0ad932/lib-solana_epoch_rewards`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  10: cargo::ops::cargo_compile::compile_ws
+  11: cargo::ops::cargo_compile::compile_with_exec
+  12: cargo::ops::cargo_compile::compile
+  13: cargo::commands::check::exec
+  14: <cargo::cli::Exec>::exec
+  15: cargo::main
+  16: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  17: std::rt::lang_start::<()>::{closure#0}
+  18: std::rt::lang_start_internal
+  19: _main
+   0.136641416s  INFO prepare_target{force=false package_id=solana-epoch-schedule v2.2.1 target="solana_epoch_schedule"}: cargo::core::compiler::fingerprint: fingerprint error for solana-epoch-schedule v2.2.1/Check { test: false }/TargetInner { ..: lib_target("solana_epoch_schedule", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-epoch-schedule-2.2.1/src/lib.rs", Edition2021) }
+   0.136645625s  INFO prepare_target{force=false package_id=solana-epoch-schedule v2.2.1 target="solana_epoch_schedule"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-epoch-schedule-286c9f6c7f88e1e9/lib-solana_epoch_schedule`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  10: cargo::ops::cargo_compile::compile_ws
+  11: cargo::ops::cargo_compile::compile_with_exec
+  12: cargo::ops::cargo_compile::compile
+  13: cargo::commands::check::exec
+  14: <cargo::cli::Exec>::exec
+  15: cargo::main
+  16: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  17: std::rt::lang_start::<()>::{closure#0}
+  18: std::rt::lang_start_internal
+  19: _main
+   0.136824750s  INFO prepare_target{force=false package_id=solana-example-mocks v2.2.1 target="solana_example_mocks"}: cargo::core::compiler::fingerprint: fingerprint error for solana-example-mocks v2.2.1/Check { test: false }/TargetInner { ..: lib_target("solana_example_mocks", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-example-mocks-2.2.1/src/lib.rs", Edition2021) }
+   0.136828958s  INFO prepare_target{force=false package_id=solana-example-mocks v2.2.1 target="solana_example_mocks"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-example-mocks-b91611cb7dacacbb/lib-solana_example_mocks`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  10: cargo::ops::cargo_compile::compile_ws
+  11: cargo::ops::cargo_compile::compile_with_exec
+  12: cargo::ops::cargo_compile::compile
+  13: cargo::commands::check::exec
+  14: <cargo::cli::Exec>::exec
+  15: cargo::main
+  16: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  17: std::rt::lang_start::<()>::{closure#0}
+  18: std::rt::lang_start_internal
+  19: _main
+   0.137147458s  INFO prepare_target{force=false package_id=solana-keccak-hasher v2.2.1 target="solana_keccak_hasher"}: cargo::core::compiler::fingerprint: fingerprint error for solana-keccak-hasher v2.2.1/Check { test: false }/TargetInner { ..: lib_target("solana_keccak_hasher", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-keccak-hasher-2.2.1/src/lib.rs", Edition2021) }
+   0.137151833s  INFO prepare_target{force=false package_id=solana-keccak-hasher v2.2.1 target="solana_keccak_hasher"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-keccak-hasher-e90283c10a2ac038/lib-solana_keccak_hasher`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  11: cargo::ops::cargo_compile::compile_ws
+  12: cargo::ops::cargo_compile::compile_with_exec
+  13: cargo::ops::cargo_compile::compile
+  14: cargo::commands::check::exec
+  15: <cargo::cli::Exec>::exec
+  16: cargo::main
+  17: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  18: std::rt::lang_start::<()>::{closure#0}
+  19: std::rt::lang_start_internal
+  20: _main
+   0.137347708s  INFO prepare_target{force=false package_id=solana-message v2.4.0 target="solana_message"}: cargo::core::compiler::fingerprint: fingerprint error for solana-message v2.4.0/Check { test: false }/TargetInner { ..: lib_target("solana_message", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-message-2.4.0/src/lib.rs", Edition2021) }
+   0.137351958s  INFO prepare_target{force=false package_id=solana-message v2.4.0 target="solana_message"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-message-f8b65bf1be4a2415/lib-solana_message`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  11: cargo::ops::cargo_compile::compile_ws
+  12: cargo::ops::cargo_compile::compile_with_exec
+  13: cargo::ops::cargo_compile::compile
+  14: cargo::commands::check::exec
+  15: <cargo::cli::Exec>::exec
+  16: cargo::main
+  17: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  18: std::rt::lang_start::<()>::{closure#0}
+  19: std::rt::lang_start_internal
+  20: _main
+   0.137691208s  INFO prepare_target{force=false package_id=solana-short-vec v2.2.1 target="solana_short_vec"}: cargo::core::compiler::fingerprint: fingerprint error for solana-short-vec v2.2.1/Check { test: false }/TargetInner { ..: lib_target("solana_short_vec", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-short-vec-2.2.1/src/lib.rs", Edition2021) }
+   0.137695458s  INFO prepare_target{force=false package_id=solana-short-vec v2.2.1 target="solana_short_vec"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-short-vec-77609eb1e6214d73/lib-solana_short_vec`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: cargo::core::compiler::compile
+  11: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  12: cargo::ops::cargo_compile::compile_ws
+  13: cargo::ops::cargo_compile::compile_with_exec
+  14: cargo::ops::cargo_compile::compile
+  15: cargo::commands::check::exec
+  16: <cargo::cli::Exec>::exec
+  17: cargo::main
+  18: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  19: std::rt::lang_start::<()>::{closure#0}
+  20: std::rt::lang_start_internal
+  21: _main
+   0.137795458s  INFO prepare_target{force=false package_id=solana-system-interface v1.0.0 target="solana_system_interface"}: cargo::core::compiler::fingerprint: fingerprint error for solana-system-interface v1.0.0/Check { test: false }/TargetInner { ..: lib_target("solana_system_interface", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-system-interface-1.0.0/src/lib.rs", Edition2021) }
+   0.137800083s  INFO prepare_target{force=false package_id=solana-system-interface v1.0.0 target="solana_system_interface"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-system-interface-227acc81c16a629a/lib-solana_system_interface`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: cargo::core::compiler::compile
+  11: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  12: cargo::ops::cargo_compile::compile_ws
+  13: cargo::ops::cargo_compile::compile_with_exec
+  14: cargo::ops::cargo_compile::compile
+  15: cargo::commands::check::exec
+  16: <cargo::cli::Exec>::exec
+  17: cargo::main
+  18: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  19: std::rt::lang_start::<()>::{closure#0}
+  20: std::rt::lang_start_internal
+  21: _main
+   0.138010458s  INFO prepare_target{force=false package_id=solana-transaction-error v2.2.1 target="solana_transaction_error"}: cargo::core::compiler::fingerprint: fingerprint error for solana-transaction-error v2.2.1/Check { test: false }/TargetInner { ..: lib_target("solana_transaction_error", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-transaction-error-2.2.1/src/lib.rs", Edition2021) }
+   0.138014708s  INFO prepare_target{force=false package_id=solana-transaction-error v2.2.1 target="solana_transaction_error"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-transaction-error-2f3a764e413062ee/lib-solana_transaction_error`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: cargo::core::compiler::compile
+  11: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  12: cargo::ops::cargo_compile::compile_ws
+  13: cargo::ops::cargo_compile::compile_with_exec
+  14: cargo::ops::cargo_compile::compile
+  15: cargo::commands::check::exec
+  16: <cargo::cli::Exec>::exec
+  17: cargo::main
+  18: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  19: std::rt::lang_start::<()>::{closure#0}
+  20: std::rt::lang_start_internal
+  21: _main
+   0.138158666s  INFO prepare_target{force=false package_id=solana-nonce v2.2.1 target="solana_nonce"}: cargo::core::compiler::fingerprint: fingerprint error for solana-nonce v2.2.1/Check { test: false }/TargetInner { ..: lib_target("solana_nonce", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-nonce-2.2.1/src/lib.rs", Edition2021) }
+   0.138162666s  INFO prepare_target{force=false package_id=solana-nonce v2.2.1 target="solana_nonce"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-nonce-40a73da50c2739bf/lib-solana_nonce`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  11: cargo::ops::cargo_compile::compile_ws
+  12: cargo::ops::cargo_compile::compile_with_exec
+  13: cargo::ops::cargo_compile::compile
+  14: cargo::commands::check::exec
+  15: <cargo::cli::Exec>::exec
+  16: cargo::main
+  17: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  18: std::rt::lang_start::<()>::{closure#0}
+  19: std::rt::lang_start_internal
+  20: _main
+   0.138362250s  INFO prepare_target{force=false package_id=solana-fee-calculator v2.2.1 target="solana_fee_calculator"}: cargo::core::compiler::fingerprint: fingerprint error for solana-fee-calculator v2.2.1/Check { test: false }/TargetInner { ..: lib_target("solana_fee_calculator", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-fee-calculator-2.2.1/src/lib.rs", Edition2021) }
+   0.138366458s  INFO prepare_target{force=false package_id=solana-fee-calculator v2.2.1 target="solana_fee_calculator"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-fee-calculator-40dab2f8a494fb5b/lib-solana_fee_calculator`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: cargo::core::compiler::compile
+  11: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  12: cargo::ops::cargo_compile::compile_ws
+  13: cargo::ops::cargo_compile::compile_with_exec
+  14: cargo::ops::cargo_compile::compile
+  15: cargo::commands::check::exec
+  16: <cargo::cli::Exec>::exec
+  17: cargo::main
+  18: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  19: std::rt::lang_start::<()>::{closure#0}
+  20: std::rt::lang_start_internal
+  21: _main
+   0.138647666s  INFO prepare_target{force=false package_id=solana-feature-gate-interface v2.2.2 target="solana_feature_gate_interface"}: cargo::core::compiler::fingerprint: fingerprint error for solana-feature-gate-interface v2.2.2/Check { test: false }/TargetInner { ..: lib_target("solana_feature_gate_interface", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-feature-gate-interface-2.2.2/src/lib.rs", Edition2021) }
+   0.138653125s  INFO prepare_target{force=false package_id=solana-feature-gate-interface v2.2.2 target="solana_feature_gate_interface"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-feature-gate-interface-de5f376644842a34/lib-solana_feature_gate_interface`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  10: cargo::ops::cargo_compile::compile_ws
+  11: cargo::ops::cargo_compile::compile_with_exec
+  12: cargo::ops::cargo_compile::compile
+  13: cargo::commands::check::exec
+  14: <cargo::cli::Exec>::exec
+  15: cargo::main
+  16: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  17: std::rt::lang_start::<()>::{closure#0}
+  18: std::rt::lang_start_internal
+  19: _main
+   0.138935166s  INFO prepare_target{force=false package_id=solana-account v2.2.1 target="solana_account"}: cargo::core::compiler::fingerprint: fingerprint error for solana-account v2.2.1/Check { test: false }/TargetInner { ..: lib_target("solana_account", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-account-2.2.1/src/lib.rs", Edition2021) }
+   0.138939333s  INFO prepare_target{force=false package_id=solana-account v2.2.1 target="solana_account"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-account-05dbf68b44d7cd19/lib-solana_account`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  11: cargo::ops::cargo_compile::compile_ws
+  12: cargo::ops::cargo_compile::compile_with_exec
+  13: cargo::ops::cargo_compile::compile
+  14: cargo::commands::check::exec
+  15: <cargo::cli::Exec>::exec
+  16: cargo::main
+  17: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  18: std::rt::lang_start::<()>::{closure#0}
+  19: std::rt::lang_start_internal
+  20: _main
+   0.139133958s  INFO prepare_target{force=false package_id=solana-rent v2.2.1 target="solana_rent"}: cargo::core::compiler::fingerprint: fingerprint error for solana-rent v2.2.1/Check { test: false }/TargetInner { ..: lib_target("solana_rent", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-rent-2.2.1/src/lib.rs", Edition2021) }
+   0.139137750s  INFO prepare_target{force=false package_id=solana-rent v2.2.1 target="solana_rent"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-rent-89e9959ba737f0c7/lib-solana_rent`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  11: cargo::ops::cargo_compile::compile_ws
+  12: cargo::ops::cargo_compile::compile_with_exec
+  13: cargo::ops::cargo_compile::compile
+  14: cargo::commands::check::exec
+  15: <cargo::cli::Exec>::exec
+  16: cargo::main
+  17: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  18: std::rt::lang_start::<()>::{closure#0}
+  19: std::rt::lang_start_internal
+  20: _main
+   0.139322875s  INFO prepare_target{force=false package_id=solana-instructions-sysvar v2.2.2 target="solana_instructions_sysvar"}: cargo::core::compiler::fingerprint: fingerprint error for solana-instructions-sysvar v2.2.2/Check { test: false }/TargetInner { ..: lib_target("solana_instructions_sysvar", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-instructions-sysvar-2.2.2/src/lib.rs", Edition2021) }
+   0.139326583s  INFO prepare_target{force=false package_id=solana-instructions-sysvar v2.2.2 target="solana_instructions_sysvar"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-instructions-sysvar-b95bc5da4602a45c/lib-solana_instructions_sysvar`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  10: cargo::ops::cargo_compile::compile_ws
+  11: cargo::ops::cargo_compile::compile_with_exec
+  12: cargo::ops::cargo_compile::compile
+  13: cargo::commands::check::exec
+  14: <cargo::cli::Exec>::exec
+  15: cargo::main
+  16: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  17: std::rt::lang_start::<()>::{closure#0}
+  18: std::rt::lang_start_internal
+  19: _main
+   0.139625083s  INFO prepare_target{force=false package_id=solana-serialize-utils v2.2.1 target="solana_serialize_utils"}: cargo::core::compiler::fingerprint: fingerprint error for solana-serialize-utils v2.2.1/Check { test: false }/TargetInner { ..: lib_target("solana_serialize_utils", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-serialize-utils-2.2.1/src/lib.rs", Edition2021) }
+   0.139629166s  INFO prepare_target{force=false package_id=solana-serialize-utils v2.2.1 target="solana_serialize_utils"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-serialize-utils-8c01567367f5b924/lib-solana_serialize_utils`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  11: cargo::ops::cargo_compile::compile_ws
+  12: cargo::ops::cargo_compile::compile_with_exec
+  13: cargo::ops::cargo_compile::compile
+  14: cargo::commands::check::exec
+  15: <cargo::cli::Exec>::exec
+  16: cargo::main
+  17: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  18: std::rt::lang_start::<()>::{closure#0}
+  19: std::rt::lang_start_internal
+  20: _main
+   0.139784166s  INFO prepare_target{force=false package_id=solana-last-restart-slot v2.2.1 target="solana_last_restart_slot"}: cargo::core::compiler::fingerprint: fingerprint error for solana-last-restart-slot v2.2.1/Check { test: false }/TargetInner { ..: lib_target("solana_last_restart_slot", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-last-restart-slot-2.2.1/src/lib.rs", Edition2021) }
+   0.139787750s  INFO prepare_target{force=false package_id=solana-last-restart-slot v2.2.1 target="solana_last_restart_slot"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-last-restart-slot-fd627c62d6b55e0e/lib-solana_last_restart_slot`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  10: cargo::ops::cargo_compile::compile_ws
+  11: cargo::ops::cargo_compile::compile_with_exec
+  12: cargo::ops::cargo_compile::compile
+  13: cargo::commands::check::exec
+  14: <cargo::cli::Exec>::exec
+  15: cargo::main
+  16: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  17: std::rt::lang_start::<()>::{closure#0}
+  18: std::rt::lang_start_internal
+  19: _main
+   0.139970875s  INFO prepare_target{force=false package_id=solana-loader-v2-interface v2.2.1 target="solana_loader_v2_interface"}: cargo::core::compiler::fingerprint: fingerprint error for solana-loader-v2-interface v2.2.1/Check { test: false }/TargetInner { ..: lib_target("solana_loader_v2_interface", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-loader-v2-interface-2.2.1/src/lib.rs", Edition2021) }
+   0.139974375s  INFO prepare_target{force=false package_id=solana-loader-v2-interface v2.2.1 target="solana_loader_v2_interface"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-loader-v2-interface-e57c807e1c48294d/lib-solana_loader_v2_interface`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  10: cargo::ops::cargo_compile::compile_ws
+  11: cargo::ops::cargo_compile::compile_with_exec
+  12: cargo::ops::cargo_compile::compile
+  13: cargo::commands::check::exec
+  14: <cargo::cli::Exec>::exec
+  15: cargo::main
+  16: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  17: std::rt::lang_start::<()>::{closure#0}
+  18: std::rt::lang_start_internal
+  19: _main
+   0.140174041s  INFO prepare_target{force=false package_id=solana-loader-v3-interface v5.0.0 target="solana_loader_v3_interface"}: cargo::core::compiler::fingerprint: fingerprint error for solana-loader-v3-interface v5.0.0/Check { test: false }/TargetInner { ..: lib_target("solana_loader_v3_interface", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-loader-v3-interface-5.0.0/src/lib.rs", Edition2021) }
+   0.140178291s  INFO prepare_target{force=false package_id=solana-loader-v3-interface v5.0.0 target="solana_loader_v3_interface"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-loader-v3-interface-b733c36753232382/lib-solana_loader_v3_interface`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  10: cargo::ops::cargo_compile::compile_ws
+  11: cargo::ops::cargo_compile::compile_with_exec
+  12: cargo::ops::cargo_compile::compile
+  13: cargo::commands::check::exec
+  14: <cargo::cli::Exec>::exec
+  15: cargo::main
+  16: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  17: std::rt::lang_start::<()>::{closure#0}
+  18: std::rt::lang_start_internal
+  19: _main
+   0.140399583s  INFO prepare_target{force=false package_id=solana-loader-v4-interface v2.2.1 target="solana_loader_v4_interface"}: cargo::core::compiler::fingerprint: fingerprint error for solana-loader-v4-interface v2.2.1/Check { test: false }/TargetInner { ..: lib_target("solana_loader_v4_interface", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-loader-v4-interface-2.2.1/src/lib.rs", Edition2021) }
+   0.140403583s  INFO prepare_target{force=false package_id=solana-loader-v4-interface v2.2.1 target="solana_loader_v4_interface"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-loader-v4-interface-6a73ca0d4713fac1/lib-solana_loader_v4_interface`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  10: cargo::ops::cargo_compile::compile_ws
+  11: cargo::ops::cargo_compile::compile_with_exec
+  12: cargo::ops::cargo_compile::compile
+  13: cargo::commands::check::exec
+  14: <cargo::cli::Exec>::exec
+  15: cargo::main
+  16: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  17: std::rt::lang_start::<()>::{closure#0}
+  18: std::rt::lang_start_internal
+  19: _main
+   0.140655708s  INFO prepare_target{force=false package_id=solana-program-entrypoint v2.3.0 target="solana_program_entrypoint"}: cargo::core::compiler::fingerprint: fingerprint error for solana-program-entrypoint v2.3.0/Check { test: false }/TargetInner { ..: lib_target("solana_program_entrypoint", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-program-entrypoint-2.3.0/src/lib.rs", Edition2021) }
+   0.140660083s  INFO prepare_target{force=false package_id=solana-program-entrypoint v2.3.0 target="solana_program_entrypoint"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-program-entrypoint-d63af0eb14b1fb3e/lib-solana_program_entrypoint`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  10: cargo::ops::cargo_compile::compile_ws
+  11: cargo::ops::cargo_compile::compile_with_exec
+  12: cargo::ops::cargo_compile::compile
+  13: cargo::commands::check::exec
+  14: <cargo::cli::Exec>::exec
+  15: cargo::main
+  16: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  17: std::rt::lang_start::<()>::{closure#0}
+  18: std::rt::lang_start_internal
+  19: _main
+   0.140863125s  INFO prepare_target{force=false package_id=solana-program-pack v2.2.1 target="solana_program_pack"}: cargo::core::compiler::fingerprint: fingerprint error for solana-program-pack v2.2.1/Check { test: false }/TargetInner { ..: lib_target("solana_program_pack", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-program-pack-2.2.1/src/lib.rs", Edition2021) }
+   0.140867291s  INFO prepare_target{force=false package_id=solana-program-pack v2.2.1 target="solana_program_pack"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-program-pack-3a7d13610a1167e5/lib-solana_program_pack`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  10: cargo::ops::cargo_compile::compile_ws
+  11: cargo::ops::cargo_compile::compile_with_exec
+  12: cargo::ops::cargo_compile::compile
+  13: cargo::commands::check::exec
+  14: <cargo::cli::Exec>::exec
+  15: cargo::main
+  16: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  17: std::rt::lang_start::<()>::{closure#0}
+  18: std::rt::lang_start_internal
+  19: _main
+   0.140995458s  INFO prepare_target{force=false package_id=solana-secp256k1-recover v2.2.1 target="solana_secp256k1_recover"}: cargo::core::compiler::fingerprint: fingerprint error for solana-secp256k1-recover v2.2.1/Check { test: false }/TargetInner { ..: lib_target("solana_secp256k1_recover", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-secp256k1-recover-2.2.1/src/lib.rs", Edition2021) }
+   0.141000083s  INFO prepare_target{force=false package_id=solana-secp256k1-recover v2.2.1 target="solana_secp256k1_recover"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-secp256k1-recover-107ae86b731b589a/lib-solana_secp256k1_recover`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  10: cargo::ops::cargo_compile::compile_ws
+  11: cargo::ops::cargo_compile::compile_with_exec
+  12: cargo::ops::cargo_compile::compile
+  13: cargo::commands::check::exec
+  14: <cargo::cli::Exec>::exec
+  15: cargo::main
+  16: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  17: std::rt::lang_start::<()>::{closure#0}
+  18: std::rt::lang_start_internal
+  19: _main
+   0.141219500s  INFO prepare_target{force=false package_id=libsecp256k1 v0.6.0 target="libsecp256k1"}: cargo::core::compiler::fingerprint: fingerprint error for libsecp256k1 v0.6.0/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("libsecp256k1", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/libsecp256k1-0.6.0/src/lib.rs", Edition2018) }
+   0.141230333s  INFO prepare_target{force=false package_id=libsecp256k1 v0.6.0 target="libsecp256k1"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/libsecp256k1-f0d1d8035293eb42/lib-libsecp256k1`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  11: cargo::ops::cargo_compile::compile_ws
+  12: cargo::ops::cargo_compile::compile_with_exec
+  13: cargo::ops::cargo_compile::compile
+  14: cargo::commands::check::exec
+  15: <cargo::cli::Exec>::exec
+  16: cargo::main
+  17: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  18: std::rt::lang_start::<()>::{closure#0}
+  19: std::rt::lang_start_internal
+  20: _main
+   0.142250750s  INFO prepare_target{force=false package_id=rand v0.7.3 target="rand"}: cargo::core::compiler::fingerprint: fingerprint error for rand v0.7.3/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("rand", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/rand-0.7.3/src/lib.rs", Edition2018) }
+   0.142255666s  INFO prepare_target{force=false package_id=rand v0.7.3 target="rand"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/rand-91c57557500c7cf0/lib-rand`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: cargo::core::compiler::compile
+  11: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  12: cargo::ops::cargo_compile::compile_ws
+  13: cargo::ops::cargo_compile::compile_with_exec
+  14: cargo::ops::cargo_compile::compile
+  15: cargo::commands::check::exec
+  16: <cargo::cli::Exec>::exec
+  17: cargo::main
+  18: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  19: std::rt::lang_start::<()>::{closure#0}
+  20: std::rt::lang_start_internal
+  21: _main
+   0.142603250s  INFO prepare_target{force=false package_id=rand_chacha v0.2.2 target="rand_chacha"}: cargo::core::compiler::fingerprint: fingerprint error for rand_chacha v0.2.2/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("rand_chacha", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/rand_chacha-0.2.2/src/lib.rs", Edition2018) }
+   0.142607125s  INFO prepare_target{force=false package_id=rand_chacha v0.2.2 target="rand_chacha"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/rand_chacha-4ed7e64d43f6e85f/lib-rand_chacha`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: cargo::core::compiler::compile
+  11: cargo::core::compiler::compile
+  12: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  13: cargo::ops::cargo_compile::compile_ws
+  14: cargo::ops::cargo_compile::compile_with_exec
+  15: cargo::ops::cargo_compile::compile
+  16: cargo::commands::check::exec
+  17: <cargo::cli::Exec>::exec
+  18: cargo::main
+  19: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  20: std::rt::lang_start::<()>::{closure#0}
+  21: std::rt::lang_start_internal
+  22: _main
+   0.142929208s  INFO prepare_target{force=false package_id=solana-serde-varint v2.2.2 target="solana_serde_varint"}: cargo::core::compiler::fingerprint: fingerprint error for solana-serde-varint v2.2.2/Check { test: false }/TargetInner { ..: lib_target("solana_serde_varint", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-serde-varint-2.2.2/src/lib.rs", Edition2021) }
+   0.142932833s  INFO prepare_target{force=false package_id=solana-serde-varint v2.2.2 target="solana_serde_varint"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-serde-varint-1326fe01b494f529/lib-solana_serde_varint`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  10: cargo::ops::cargo_compile::compile_ws
+  11: cargo::ops::cargo_compile::compile_with_exec
+  12: cargo::ops::cargo_compile::compile
+  13: cargo::commands::check::exec
+  14: <cargo::cli::Exec>::exec
+  15: cargo::main
+  16: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  17: std::rt::lang_start::<()>::{closure#0}
+  18: std::rt::lang_start_internal
+  19: _main
+   0.143048833s  INFO prepare_target{force=false package_id=solana-slot-history v2.2.1 target="solana_slot_history"}: cargo::core::compiler::fingerprint: fingerprint error for solana-slot-history v2.2.1/Check { test: false }/TargetInner { ..: lib_target("solana_slot_history", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-slot-history-2.2.1/src/lib.rs", Edition2021) }
+   0.143052250s  INFO prepare_target{force=false package_id=solana-slot-history v2.2.1 target="solana_slot_history"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-slot-history-f63ce2737b079a25/lib-solana_slot_history`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  10: cargo::ops::cargo_compile::compile_ws
+  11: cargo::ops::cargo_compile::compile_with_exec
+  12: cargo::ops::cargo_compile::compile
+  13: cargo::commands::check::exec
+  14: <cargo::cli::Exec>::exec
+  15: cargo::main
+  16: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  17: std::rt::lang_start::<()>::{closure#0}
+  18: std::rt::lang_start_internal
+  19: _main
+   0.143314916s  INFO prepare_target{force=false package_id=bv v0.11.1 target="bv"}: cargo::core::compiler::fingerprint: fingerprint error for bv v0.11.1/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("bv", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/bv-0.11.1/src/lib.rs", Edition2015) }
+   0.143321375s  INFO prepare_target{force=false package_id=bv v0.11.1 target="bv"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/bv-7d138925668539c5/lib-bv`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  11: cargo::ops::cargo_compile::compile_ws
+  12: cargo::ops::cargo_compile::compile_with_exec
+  13: cargo::ops::cargo_compile::compile
+  14: cargo::commands::check::exec
+  15: <cargo::cli::Exec>::exec
+  16: cargo::main
+  17: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  18: std::rt::lang_start::<()>::{closure#0}
+  19: std::rt::lang_start_internal
+  20: _main
+   0.143595041s  INFO prepare_target{force=false package_id=solana-stable-layout v2.2.1 target="solana_stable_layout"}: cargo::core::compiler::fingerprint: fingerprint error for solana-stable-layout v2.2.1/Check { test: false }/TargetInner { ..: lib_target("solana_stable_layout", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-stable-layout-2.2.1/src/lib.rs", Edition2021) }
+   0.143600458s  INFO prepare_target{force=false package_id=solana-stable-layout v2.2.1 target="solana_stable_layout"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-stable-layout-1edaa4178d13bd67/lib-solana_stable_layout`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  10: cargo::ops::cargo_compile::compile_ws
+  11: cargo::ops::cargo_compile::compile_with_exec
+  12: cargo::ops::cargo_compile::compile
+  13: cargo::commands::check::exec
+  14: <cargo::cli::Exec>::exec
+  15: cargo::main
+  16: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  17: std::rt::lang_start::<()>::{closure#0}
+  18: std::rt::lang_start_internal
+  19: _main
+   0.143783208s  INFO prepare_target{force=false package_id=solana-stake-interface v1.2.1 target="solana_stake_interface"}: cargo::core::compiler::fingerprint: fingerprint error for solana-stake-interface v1.2.1/Check { test: false }/TargetInner { ..: lib_target("solana_stake_interface", ["rlib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-stake-interface-1.2.1/src/lib.rs", Edition2021) }
+   0.143788375s  INFO prepare_target{force=false package_id=solana-stake-interface v1.2.1 target="solana_stake_interface"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-stake-interface-1572294a898f5a48/lib-solana_stake_interface`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  10: cargo::ops::cargo_compile::compile_ws
+  11: cargo::ops::cargo_compile::compile_with_exec
+  12: cargo::ops::cargo_compile::compile
+  13: cargo::commands::check::exec
+  14: <cargo::cli::Exec>::exec
+  15: cargo::main
+  16: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  17: std::rt::lang_start::<()>::{closure#0}
+  18: std::rt::lang_start_internal
+  19: _main
+   0.144159708s  INFO prepare_target{force=false package_id=solana-sysvar v2.3.0 target="solana_sysvar"}: cargo::core::compiler::fingerprint: fingerprint error for solana-sysvar v2.3.0/Check { test: false }/TargetInner { ..: lib_target("solana_sysvar", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-sysvar-2.3.0/src/lib.rs", Edition2021) }
+   0.144165041s  INFO prepare_target{force=false package_id=solana-sysvar v2.3.0 target="solana_sysvar"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-sysvar-34c1b6ebd46ce010/lib-solana_sysvar`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  10: cargo::ops::cargo_compile::compile_ws
+  11: cargo::ops::cargo_compile::compile_with_exec
+  12: cargo::ops::cargo_compile::compile
+  13: cargo::commands::check::exec
+  14: <cargo::cli::Exec>::exec
+  15: cargo::main
+  16: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  17: std::rt::lang_start::<()>::{closure#0}
+  18: std::rt::lang_start_internal
+  19: _main
+   0.144790333s  INFO prepare_target{force=false package_id=solana-vote-interface v2.2.6 target="solana_vote_interface"}: cargo::core::compiler::fingerprint: fingerprint error for solana-vote-interface v2.2.6/Check { test: false }/TargetInner { ..: lib_target("solana_vote_interface", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-vote-interface-2.2.6/src/lib.rs", Edition2021) }
+   0.144794666s  INFO prepare_target{force=false package_id=solana-vote-interface v2.2.6 target="solana_vote_interface"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-vote-interface-ac34ce823b80ee34/lib-solana_vote_interface`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  10: cargo::ops::cargo_compile::compile_ws
+  11: cargo::ops::cargo_compile::compile_with_exec
+  12: cargo::ops::cargo_compile::compile
+  13: cargo::commands::check::exec
+  14: <cargo::cli::Exec>::exec
+  15: cargo::main
+  16: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  17: std::rt::lang_start::<()>::{closure#0}
+  18: std::rt::lang_start_internal
+  19: _main
+   0.145194666s  INFO prepare_target{force=false package_id=ephemeral-rollups-sdk v0.2.12 target="ephemeral_rollups_sdk"}: cargo::core::compiler::fingerprint: fingerprint error for ephemeral-rollups-sdk v0.2.12/Check { test: false }/TargetInner { ..: lib_target("ephemeral_rollups_sdk", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ephemeral-rollups-sdk-0.2.12/src/lib.rs", Edition2021) }
+   0.145198750s  INFO prepare_target{force=false package_id=ephemeral-rollups-sdk v0.2.12 target="ephemeral_rollups_sdk"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/ephemeral-rollups-sdk-a5d2d163c8f9eee0/lib-ephemeral_rollups_sdk`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   8: cargo::ops::cargo_compile::compile_ws
+   9: cargo::ops::cargo_compile::compile_with_exec
+  10: cargo::ops::cargo_compile::compile
+  11: cargo::commands::check::exec
+  12: <cargo::cli::Exec>::exec
+  13: cargo::main
+  14: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  15: std::rt::lang_start::<()>::{closure#0}
+  16: std::rt::lang_start_internal
+  17: _main
+   0.145503458s  INFO prepare_target{force=false package_id=anchor-lang v1.0.2 target="anchor_lang"}: cargo::core::compiler::fingerprint: fingerprint error for anchor-lang v1.0.2/Check { test: false }/TargetInner { ..: lib_target("anchor_lang", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/anchor-lang-1.0.2/src/lib.rs", Edition2021) }
+   0.145507916s  INFO prepare_target{force=false package_id=anchor-lang v1.0.2 target="anchor_lang"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/anchor-lang-ced13b4d54e8020b/lib-anchor_lang`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   9: cargo::ops::cargo_compile::compile_ws
+  10: cargo::ops::cargo_compile::compile_with_exec
+  11: cargo::ops::cargo_compile::compile
+  12: cargo::commands::check::exec
+  13: <cargo::cli::Exec>::exec
+  14: cargo::main
+  15: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  16: std::rt::lang_start::<()>::{closure#0}
+  17: std::rt::lang_start_internal
+  18: _main
+   0.146622750s  INFO prepare_target{force=false package_id=solana-account-info v3.1.1 target="solana_account_info"}: cargo::core::compiler::fingerprint: fingerprint error for solana-account-info v3.1.1/Check { test: false }/TargetInner { ..: lib_target("solana_account_info", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-account-info-3.1.1/src/lib.rs", Edition2021) }
+   0.146627208s  INFO prepare_target{force=false package_id=solana-account-info v3.1.1 target="solana_account_info"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-account-info-67167b5e61a7a19b/lib-solana_account_info`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  10: cargo::ops::cargo_compile::compile_ws
+  11: cargo::ops::cargo_compile::compile_with_exec
+  12: cargo::ops::cargo_compile::compile
+  13: cargo::commands::check::exec
+  14: <cargo::cli::Exec>::exec
+  15: cargo::main
+  16: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  17: std::rt::lang_start::<()>::{closure#0}
+  18: std::rt::lang_start_internal
+  19: _main
+   0.146814250s  INFO prepare_target{force=false package_id=solana-address v2.6.0 target="solana_address"}: cargo::core::compiler::fingerprint: fingerprint error for solana-address v2.6.0/Check { test: false }/TargetInner { ..: lib_target("solana_address", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-address-2.6.0/src/lib.rs", Edition2021) }
+   0.146818250s  INFO prepare_target{force=false package_id=solana-address v2.6.0 target="solana_address"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-address-0dad4cd5b9f818f1/lib-solana_address`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  11: cargo::ops::cargo_compile::compile_ws
+  12: cargo::ops::cargo_compile::compile_with_exec
+  13: cargo::ops::cargo_compile::compile
+  14: cargo::commands::check::exec
+  15: <cargo::cli::Exec>::exec
+  16: cargo::main
+  17: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  18: std::rt::lang_start::<()>::{closure#0}
+  19: std::rt::lang_start_internal
+  20: _main
+   0.147254291s  INFO prepare_target{force=false package_id=solana-program-error v3.0.1 target="solana_program_error"}: cargo::core::compiler::fingerprint: fingerprint error for solana-program-error v3.0.1/Check { test: false }/TargetInner { ..: lib_target("solana_program_error", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-program-error-3.0.1/src/lib.rs", Edition2021) }
+   0.147257875s  INFO prepare_target{force=false package_id=solana-program-error v3.0.1 target="solana_program_error"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-program-error-382bd8cb4bf0587c/lib-solana_program_error`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: cargo::core::compiler::compile
+  11: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  12: cargo::ops::cargo_compile::compile_ws
+  13: cargo::ops::cargo_compile::compile_with_exec
+  14: cargo::ops::cargo_compile::compile
+  15: cargo::commands::check::exec
+  16: <cargo::cli::Exec>::exec
+  17: cargo::main
+  18: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  19: std::rt::lang_start::<()>::{closure#0}
+  20: std::rt::lang_start_internal
+  21: _main
+   0.147420916s  INFO prepare_target{force=false package_id=solana-sha256-hasher v3.1.0 target="solana_sha256_hasher"}: cargo::core::compiler::fingerprint: fingerprint error for solana-sha256-hasher v3.1.0/Check { test: false }/TargetInner { ..: lib_target("solana_sha256_hasher", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-sha256-hasher-3.1.0/src/lib.rs", Edition2021) }
+   0.147425416s  INFO prepare_target{force=false package_id=solana-sha256-hasher v3.1.0 target="solana_sha256_hasher"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-sha256-hasher-2912cad3a1bd29d1/lib-solana_sha256_hasher`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: cargo::core::compiler::compile
+  11: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  12: cargo::ops::cargo_compile::compile_ws
+  13: cargo::ops::cargo_compile::compile_with_exec
+  14: cargo::ops::cargo_compile::compile
+  15: cargo::commands::check::exec
+  16: <cargo::cli::Exec>::exec
+  17: cargo::main
+  18: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  19: std::rt::lang_start::<()>::{closure#0}
+  20: std::rt::lang_start_internal
+  21: _main
+   0.147555416s  INFO prepare_target{force=false package_id=solana-hash v4.3.0 target="solana_hash"}: cargo::core::compiler::fingerprint: fingerprint error for solana-hash v4.3.0/Check { test: false }/TargetInner { ..: lib_target("solana_hash", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-hash-4.3.0/src/lib.rs", Edition2021) }
+   0.147559750s  INFO prepare_target{force=false package_id=solana-hash v4.3.0 target="solana_hash"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-hash-4b72e24c35fb5104/lib-solana_hash`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: cargo::core::compiler::compile
+  11: cargo::core::compiler::compile
+  12: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  13: cargo::ops::cargo_compile::compile_ws
+  14: cargo::ops::cargo_compile::compile_with_exec
+  15: cargo::ops::cargo_compile::compile
+  16: cargo::commands::check::exec
+  17: <cargo::cli::Exec>::exec
+  18: cargo::main
+  19: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  20: std::rt::lang_start::<()>::{closure#0}
+  21: std::rt::lang_start_internal
+  22: _main
+   0.147792166s  INFO prepare_target{force=false package_id=solana-clock v3.0.1 target="solana_clock"}: cargo::core::compiler::fingerprint: fingerprint error for solana-clock v3.0.1/Check { test: false }/TargetInner { ..: lib_target("solana_clock", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-clock-3.0.1/src/lib.rs", Edition2021) }
+   0.147796083s  INFO prepare_target{force=false package_id=solana-clock v3.0.1 target="solana_clock"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-clock-2dcf3a70cdece4bd/lib-solana_clock`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  10: cargo::ops::cargo_compile::compile_ws
+  11: cargo::ops::cargo_compile::compile_with_exec
+  12: cargo::ops::cargo_compile::compile
+  13: cargo::commands::check::exec
+  14: <cargo::cli::Exec>::exec
+  15: cargo::main
+  16: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  17: std::rt::lang_start::<()>::{closure#0}
+  18: std::rt::lang_start_internal
+  19: _main
+   0.147977958s  INFO prepare_target{force=false package_id=solana-sdk-ids v3.1.0 target="solana_sdk_ids"}: cargo::core::compiler::fingerprint: fingerprint error for solana-sdk-ids v3.1.0/Check { test: false }/TargetInner { ..: lib_target("solana_sdk_ids", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-sdk-ids-3.1.0/src/lib.rs", Edition2021) }
+   0.147981875s  INFO prepare_target{force=false package_id=solana-sdk-ids v3.1.0 target="solana_sdk_ids"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-sdk-ids-b65a75f8abf629f5/lib-solana_sdk_ids`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  11: cargo::ops::cargo_compile::compile_ws
+  12: cargo::ops::cargo_compile::compile_with_exec
+  13: cargo::ops::cargo_compile::compile
+  14: cargo::commands::check::exec
+  15: <cargo::cli::Exec>::exec
+  16: cargo::main
+  17: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  18: std::rt::lang_start::<()>::{closure#0}
+  19: std::rt::lang_start_internal
+  20: _main
+   0.148257875s  INFO prepare_target{force=false package_id=solana-sysvar-id v3.1.0 target="solana_sysvar_id"}: cargo::core::compiler::fingerprint: fingerprint error for solana-sysvar-id v3.1.0/Check { test: false }/TargetInner { ..: lib_target("solana_sysvar_id", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-sysvar-id-3.1.0/src/lib.rs", Edition2021) }
+   0.148265583s  INFO prepare_target{force=false package_id=solana-sysvar-id v3.1.0 target="solana_sysvar_id"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-sysvar-id-837cb73172ba66ae/lib-solana_sysvar_id`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  11: cargo::ops::cargo_compile::compile_ws
+  12: cargo::ops::cargo_compile::compile_with_exec
+  13: cargo::ops::cargo_compile::compile
+  14: cargo::commands::check::exec
+  15: <cargo::cli::Exec>::exec
+  16: cargo::main
+  17: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  18: std::rt::lang_start::<()>::{closure#0}
+  19: std::rt::lang_start_internal
+  20: _main
+   0.148433791s  INFO prepare_target{force=false package_id=solana-cpi v3.1.0 target="solana_cpi"}: cargo::core::compiler::fingerprint: fingerprint error for solana-cpi v3.1.0/Check { test: false }/TargetInner { ..: lib_target("solana_cpi", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-cpi-3.1.0/src/lib.rs", Edition2021) }
+   0.148438166s  INFO prepare_target{force=false package_id=solana-cpi v3.1.0 target="solana_cpi"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-cpi-6f660a6bab676c0f/lib-solana_cpi`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  10: cargo::ops::cargo_compile::compile_ws
+  11: cargo::ops::cargo_compile::compile_with_exec
+  12: cargo::ops::cargo_compile::compile
+  13: cargo::commands::check::exec
+  14: <cargo::cli::Exec>::exec
+  15: cargo::main
+  16: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  17: std::rt::lang_start::<()>::{closure#0}
+  18: std::rt::lang_start_internal
+  19: _main
+   0.148618333s  INFO prepare_target{force=false package_id=solana-instruction v3.4.0 target="solana_instruction"}: cargo::core::compiler::fingerprint: fingerprint error for solana-instruction v3.4.0/Check { test: false }/TargetInner { ..: lib_target("solana_instruction", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-instruction-3.4.0/src/lib.rs", Edition2021) }
+   0.148623041s  INFO prepare_target{force=false package_id=solana-instruction v3.4.0 target="solana_instruction"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-instruction-70b32caa9a94bc2f/lib-solana_instruction`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  11: cargo::ops::cargo_compile::compile_ws
+  12: cargo::ops::cargo_compile::compile_with_exec
+  13: cargo::ops::cargo_compile::compile
+  14: cargo::commands::check::exec
+  15: <cargo::cli::Exec>::exec
+  16: cargo::main
+  17: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  18: std::rt::lang_start::<()>::{closure#0}
+  19: std::rt::lang_start_internal
+  20: _main
+   0.148832208s  INFO prepare_target{force=false package_id=solana-instruction-error v2.3.0 target="solana_instruction_error"}: cargo::core::compiler::fingerprint: fingerprint error for solana-instruction-error v2.3.0/Check { test: false }/TargetInner { ..: lib_target("solana_instruction_error", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-instruction-error-2.3.0/src/lib.rs", Edition2021) }
+   0.148836333s  INFO prepare_target{force=false package_id=solana-instruction-error v2.3.0 target="solana_instruction_error"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-instruction-error-51a8c4ff484addc5/lib-solana_instruction_error`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: cargo::core::compiler::compile
+  11: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  12: cargo::ops::cargo_compile::compile_ws
+  13: cargo::ops::cargo_compile::compile_with_exec
+  14: cargo::ops::cargo_compile::compile
+  15: cargo::commands::check::exec
+  16: <cargo::cli::Exec>::exec
+  17: cargo::main
+  18: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  19: std::rt::lang_start::<()>::{closure#0}
+  20: std::rt::lang_start_internal
+  21: _main
+   0.148969041s  INFO prepare_target{force=false package_id=solana-pubkey v4.2.0 target="solana_pubkey"}: cargo::core::compiler::fingerprint: fingerprint error for solana-pubkey v4.2.0/Check { test: false }/TargetInner { ..: lib_target("solana_pubkey", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-pubkey-4.2.0/src/lib.rs", Edition2021) }
+   0.148973500s  INFO prepare_target{force=false package_id=solana-pubkey v4.2.0 target="solana_pubkey"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-pubkey-8ea8c4fdf47a04e2/lib-solana_pubkey`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: cargo::core::compiler::compile
+  11: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  12: cargo::ops::cargo_compile::compile_ws
+  13: cargo::ops::cargo_compile::compile_with_exec
+  14: cargo::ops::cargo_compile::compile
+  15: cargo::commands::check::exec
+  16: <cargo::cli::Exec>::exec
+  17: cargo::main
+  18: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  19: std::rt::lang_start::<()>::{closure#0}
+  20: std::rt::lang_start_internal
+  21: _main
+   0.149135958s  INFO prepare_target{force=false package_id=solana-feature-gate-interface v3.1.0 target="solana_feature_gate_interface"}: cargo::core::compiler::fingerprint: fingerprint error for solana-feature-gate-interface v3.1.0/Check { test: false }/TargetInner { ..: lib_target("solana_feature_gate_interface", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-feature-gate-interface-3.1.0/src/lib.rs", Edition2021) }
+   0.149140666s  INFO prepare_target{force=false package_id=solana-feature-gate-interface v3.1.0 target="solana_feature_gate_interface"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-feature-gate-interface-d85e10a610bb1db2/lib-solana_feature_gate_interface`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  10: cargo::ops::cargo_compile::compile_ws
+  11: cargo::ops::cargo_compile::compile_with_exec
+  12: cargo::ops::cargo_compile::compile
+  13: cargo::commands::check::exec
+  14: <cargo::cli::Exec>::exec
+  15: cargo::main
+  16: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  17: std::rt::lang_start::<()>::{closure#0}
+  18: std::rt::lang_start_internal
+  19: _main
+   0.149293500s  INFO prepare_target{force=false package_id=solana-instructions-sysvar v3.0.0 target="solana_instructions_sysvar"}: cargo::core::compiler::fingerprint: fingerprint error for solana-instructions-sysvar v3.0.0/Check { test: false }/TargetInner { ..: lib_target("solana_instructions_sysvar", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-instructions-sysvar-3.0.0/src/lib.rs", Edition2021) }
+   0.149299166s  INFO prepare_target{force=false package_id=solana-instructions-sysvar v3.0.0 target="solana_instructions_sysvar"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-instructions-sysvar-76dfc2aff445a54e/lib-solana_instructions_sysvar`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  10: cargo::ops::cargo_compile::compile_ws
+  11: cargo::ops::cargo_compile::compile_with_exec
+  12: cargo::ops::cargo_compile::compile
+  13: cargo::commands::check::exec
+  14: <cargo::cli::Exec>::exec
+  15: cargo::main
+  16: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  17: std::rt::lang_start::<()>::{closure#0}
+  18: std::rt::lang_start_internal
+  19: _main
+   0.149566083s  INFO prepare_target{force=false package_id=solana-pubkey v3.0.0 target="solana_pubkey"}: cargo::core::compiler::fingerprint: fingerprint error for solana-pubkey v3.0.0/Check { test: false }/TargetInner { ..: lib_target("solana_pubkey", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-pubkey-3.0.0/src/lib.rs", Edition2021) }
+   0.149570375s  INFO prepare_target{force=false package_id=solana-pubkey v3.0.0 target="solana_pubkey"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-pubkey-376643b33e91e9c1/lib-solana_pubkey`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  11: cargo::ops::cargo_compile::compile_ws
+  12: cargo::ops::cargo_compile::compile_with_exec
+  13: cargo::ops::cargo_compile::compile
+  14: cargo::commands::check::exec
+  15: <cargo::cli::Exec>::exec
+  16: cargo::main
+  17: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  18: std::rt::lang_start::<()>::{closure#0}
+  19: std::rt::lang_start_internal
+  20: _main
+   0.149707333s  INFO prepare_target{force=false package_id=solana-address v1.1.0 target="solana_address"}: cargo::core::compiler::fingerprint: fingerprint error for solana-address v1.1.0/Check { test: false }/TargetInner { ..: lib_target("solana_address", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-address-1.1.0/src/lib.rs", Edition2021) }
+   0.149711541s  INFO prepare_target{force=false package_id=solana-address v1.1.0 target="solana_address"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-address-16cd4dd6c22e1634/lib-solana_address`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: cargo::core::compiler::compile
+  11: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  12: cargo::ops::cargo_compile::compile_ws
+  13: cargo::ops::cargo_compile::compile_with_exec
+  14: cargo::ops::cargo_compile::compile
+  15: cargo::commands::check::exec
+  16: <cargo::cli::Exec>::exec
+  17: cargo::main
+  18: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  19: std::rt::lang_start::<()>::{closure#0}
+  20: std::rt::lang_start_internal
+  21: _main
+   0.149835166s  INFO prepare_target{force=false package_id=solana-serialize-utils v3.1.1 target="solana_serialize_utils"}: cargo::core::compiler::fingerprint: fingerprint error for solana-serialize-utils v3.1.1/Check { test: false }/TargetInner { ..: lib_target("solana_serialize_utils", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-serialize-utils-3.1.1/src/lib.rs", Edition2021) }
+   0.149838916s  INFO prepare_target{force=false package_id=solana-serialize-utils v3.1.1 target="solana_serialize_utils"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-serialize-utils-5b61a2d19d8bdf0c/lib-solana_serialize_utils`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  11: cargo::ops::cargo_compile::compile_ws
+  12: cargo::ops::cargo_compile::compile_with_exec
+  13: cargo::ops::cargo_compile::compile
+  14: cargo::commands::check::exec
+  15: <cargo::cli::Exec>::exec
+  16: cargo::main
+  17: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  18: std::rt::lang_start::<()>::{closure#0}
+  19: std::rt::lang_start_internal
+  20: _main
+   0.149989833s  INFO prepare_target{force=false package_id=solana-invoke v0.5.0 target="solana_invoke"}: cargo::core::compiler::fingerprint: fingerprint error for solana-invoke v0.5.0/Check { test: false }/TargetInner { ..: lib_target("solana_invoke", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-invoke-0.5.0/src/lib.rs", Edition2021) }
+   0.149994041s  INFO prepare_target{force=false package_id=solana-invoke v0.5.0 target="solana_invoke"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-invoke-abe48a877f3070e4/lib-solana_invoke`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  10: cargo::ops::cargo_compile::compile_ws
+  11: cargo::ops::cargo_compile::compile_with_exec
+  12: cargo::ops::cargo_compile::compile
+  13: cargo::commands::check::exec
+  14: <cargo::cli::Exec>::exec
+  15: cargo::main
+  16: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  17: std::rt::lang_start::<()>::{closure#0}
+  18: std::rt::lang_start_internal
+  19: _main
+   0.150197375s  INFO prepare_target{force=false package_id=solana-program-entrypoint v3.1.1 target="solana_program_entrypoint"}: cargo::core::compiler::fingerprint: fingerprint error for solana-program-entrypoint v3.1.1/Check { test: false }/TargetInner { ..: lib_target("solana_program_entrypoint", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-program-entrypoint-3.1.1/src/lib.rs", Edition2021) }
+   0.150201083s  INFO prepare_target{force=false package_id=solana-program-entrypoint v3.1.1 target="solana_program_entrypoint"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-program-entrypoint-96b57f75cdcd1db5/lib-solana_program_entrypoint`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  11: cargo::ops::cargo_compile::compile_ws
+  12: cargo::ops::cargo_compile::compile_with_exec
+  13: cargo::ops::cargo_compile::compile
+  14: cargo::commands::check::exec
+  15: <cargo::cli::Exec>::exec
+  16: cargo::main
+  17: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  18: std::rt::lang_start::<()>::{closure#0}
+  19: std::rt::lang_start_internal
+  20: _main
+   0.150430916s  INFO prepare_target{force=false package_id=solana-stable-layout v3.0.1 target="solana_stable_layout"}: cargo::core::compiler::fingerprint: fingerprint error for solana-stable-layout v3.0.1/Check { test: false }/TargetInner { ..: lib_target("solana_stable_layout", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-stable-layout-3.0.1/src/lib.rs", Edition2021) }
+   0.150434958s  INFO prepare_target{force=false package_id=solana-stable-layout v3.0.1 target="solana_stable_layout"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-stable-layout-28ed63adbd33a5ff/lib-solana_stable_layout`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  11: cargo::ops::cargo_compile::compile_ws
+  12: cargo::ops::cargo_compile::compile_with_exec
+  13: cargo::ops::cargo_compile::compile
+  14: cargo::commands::check::exec
+  15: <cargo::cli::Exec>::exec
+  16: cargo::main
+  17: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  18: std::rt::lang_start::<()>::{closure#0}
+  19: std::rt::lang_start_internal
+  20: _main
+   0.150588000s  INFO prepare_target{force=false package_id=solana-loader-v3-interface v6.1.1 target="solana_loader_v3_interface"}: cargo::core::compiler::fingerprint: fingerprint error for solana-loader-v3-interface v6.1.1/Check { test: false }/TargetInner { ..: lib_target("solana_loader_v3_interface", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-loader-v3-interface-6.1.1/src/lib.rs", Edition2021) }
+   0.150591958s  INFO prepare_target{force=false package_id=solana-loader-v3-interface v6.1.1 target="solana_loader_v3_interface"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-loader-v3-interface-4adeca46fd75b1b8/lib-solana_loader_v3_interface`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  10: cargo::ops::cargo_compile::compile_ws
+  11: cargo::ops::cargo_compile::compile_with_exec
+  12: cargo::ops::cargo_compile::compile
+  13: cargo::commands::check::exec
+  14: <cargo::cli::Exec>::exec
+  15: cargo::main
+  16: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  17: std::rt::lang_start::<()>::{closure#0}
+  18: std::rt::lang_start_internal
+  19: _main
+   0.150869166s  INFO prepare_target{force=false package_id=solana-system-interface v3.2.0 target="solana_system_interface"}: cargo::core::compiler::fingerprint: fingerprint error for solana-system-interface v3.2.0/Check { test: false }/TargetInner { ..: lib_target("solana_system_interface", ["rlib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-system-interface-3.2.0/src/lib.rs", Edition2021) }
+   0.150875083s  INFO prepare_target{force=false package_id=solana-system-interface v3.2.0 target="solana_system_interface"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-system-interface-d9d04891d777c035/lib-solana_system_interface`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  11: cargo::ops::cargo_compile::compile_ws
+  12: cargo::ops::cargo_compile::compile_with_exec
+  13: cargo::ops::cargo_compile::compile
+  14: cargo::commands::check::exec
+  15: <cargo::cli::Exec>::exec
+  16: cargo::main
+  17: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  18: std::rt::lang_start::<()>::{closure#0}
+  19: std::rt::lang_start_internal
+  20: _main
+   0.151297250s  INFO prepare_target{force=false package_id=solana-program-pack v3.1.0 target="solana_program_pack"}: cargo::core::compiler::fingerprint: fingerprint error for solana-program-pack v3.1.0/Check { test: false }/TargetInner { ..: lib_target("solana_program_pack", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-program-pack-3.1.0/src/lib.rs", Edition2021) }
+   0.151308500s  INFO prepare_target{force=false package_id=solana-program-pack v3.1.0 target="solana_program_pack"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-program-pack-6cb7602f340b4a90/lib-solana_program_pack`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  10: cargo::ops::cargo_compile::compile_ws
+  11: cargo::ops::cargo_compile::compile_with_exec
+  12: cargo::ops::cargo_compile::compile
+  13: cargo::commands::check::exec
+  14: <cargo::cli::Exec>::exec
+  15: cargo::main
+  16: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  17: std::rt::lang_start::<()>::{closure#0}
+  18: std::rt::lang_start_internal
+  19: _main
+   0.151516541s  INFO prepare_target{force=false package_id=solana-stake-interface v2.0.2 target="solana_stake_interface"}: cargo::core::compiler::fingerprint: fingerprint error for solana-stake-interface v2.0.2/Check { test: false }/TargetInner { ..: lib_target("solana_stake_interface", ["rlib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-stake-interface-2.0.2/src/lib.rs", Edition2021) }
+   0.151522958s  INFO prepare_target{force=false package_id=solana-stake-interface v2.0.2 target="solana_stake_interface"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-stake-interface-b42b78b9c936ff29/lib-solana_stake_interface`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  10: cargo::ops::cargo_compile::compile_ws
+  11: cargo::ops::cargo_compile::compile_with_exec
+  12: cargo::ops::cargo_compile::compile
+  13: cargo::commands::check::exec
+  14: <cargo::cli::Exec>::exec
+  15: cargo::main
+  16: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  17: std::rt::lang_start::<()>::{closure#0}
+  18: std::rt::lang_start_internal
+  19: _main
+   0.151884375s  INFO prepare_target{force=false package_id=solana-system-interface v2.0.0 target="solana_system_interface"}: cargo::core::compiler::fingerprint: fingerprint error for solana-system-interface v2.0.0/Check { test: false }/TargetInner { ..: lib_target("solana_system_interface", ["rlib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-system-interface-2.0.0/src/lib.rs", Edition2021) }
+   0.151890458s  INFO prepare_target{force=false package_id=solana-system-interface v2.0.0 target="solana_system_interface"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-system-interface-61338add2eb64571/lib-solana_system_interface`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  11: cargo::ops::cargo_compile::compile_ws
+  12: cargo::ops::cargo_compile::compile_with_exec
+  13: cargo::ops::cargo_compile::compile
+  14: cargo::commands::check::exec
+  15: <cargo::cli::Exec>::exec
+  16: cargo::main
+  17: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  18: std::rt::lang_start::<()>::{closure#0}
+  19: std::rt::lang_start_internal
+  20: _main
+   0.152150250s  INFO prepare_target{force=false package_id=solana-sysvar v3.1.1 target="solana_sysvar"}: cargo::core::compiler::fingerprint: fingerprint error for solana-sysvar v3.1.1/Check { test: false }/TargetInner { ..: lib_target("solana_sysvar", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-sysvar-3.1.1/src/lib.rs", Edition2021) }
+   0.152154958s  INFO prepare_target{force=false package_id=solana-sysvar v3.1.1 target="solana_sysvar"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-sysvar-d2130a53910ae8ae/lib-solana_sysvar`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  11: cargo::ops::cargo_compile::compile_ws
+  12: cargo::ops::cargo_compile::compile_with_exec
+  13: cargo::ops::cargo_compile::compile
+  14: cargo::commands::check::exec
+  15: <cargo::cli::Exec>::exec
+  16: cargo::main
+  17: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  18: std::rt::lang_start::<()>::{closure#0}
+  19: std::rt::lang_start_internal
+  20: _main
+   0.152684458s  INFO prepare_target{force=false package_id=solana-epoch-rewards v3.0.1 target="solana_epoch_rewards"}: cargo::core::compiler::fingerprint: fingerprint error for solana-epoch-rewards v3.0.1/Check { test: false }/TargetInner { ..: lib_target("solana_epoch_rewards", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-epoch-rewards-3.0.1/src/lib.rs", Edition2021) }
+   0.152689041s  INFO prepare_target{force=false package_id=solana-epoch-rewards v3.0.1 target="solana_epoch_rewards"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-epoch-rewards-cbdd884d676fe54a/lib-solana_epoch_rewards`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: cargo::core::compiler::compile
+  11: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  12: cargo::ops::cargo_compile::compile_ws
+  13: cargo::ops::cargo_compile::compile_with_exec
+  14: cargo::ops::cargo_compile::compile
+  15: cargo::commands::check::exec
+  16: <cargo::cli::Exec>::exec
+  17: cargo::main
+  18: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  19: std::rt::lang_start::<()>::{closure#0}
+  20: std::rt::lang_start_internal
+  21: _main
+   0.152918875s  INFO prepare_target{force=false package_id=solana-epoch-schedule v3.1.0 target="solana_epoch_schedule"}: cargo::core::compiler::fingerprint: fingerprint error for solana-epoch-schedule v3.1.0/Check { test: false }/TargetInner { ..: lib_target("solana_epoch_schedule", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-epoch-schedule-3.1.0/src/lib.rs", Edition2021) }
+   0.152922708s  INFO prepare_target{force=false package_id=solana-epoch-schedule v3.1.0 target="solana_epoch_schedule"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-epoch-schedule-25fbdb640cd77df0/lib-solana_epoch_schedule`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: cargo::core::compiler::compile
+  11: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  12: cargo::ops::cargo_compile::compile_ws
+  13: cargo::ops::cargo_compile::compile_with_exec
+  14: cargo::ops::cargo_compile::compile
+  15: cargo::commands::check::exec
+  16: <cargo::cli::Exec>::exec
+  17: cargo::main
+  18: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  19: std::rt::lang_start::<()>::{closure#0}
+  20: std::rt::lang_start_internal
+  21: _main
+   0.153255708s  INFO prepare_target{force=false package_id=solana-fee-calculator v3.2.0 target="solana_fee_calculator"}: cargo::core::compiler::fingerprint: fingerprint error for solana-fee-calculator v3.2.0/Check { test: false }/TargetInner { ..: lib_target("solana_fee_calculator", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-fee-calculator-3.2.0/src/lib.rs", Edition2021) }
+   0.153263041s  INFO prepare_target{force=false package_id=solana-fee-calculator v3.2.0 target="solana_fee_calculator"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-fee-calculator-6ccdd6f39f61fd88/lib-solana_fee_calculator`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: cargo::core::compiler::compile
+  11: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  12: cargo::ops::cargo_compile::compile_ws
+  13: cargo::ops::cargo_compile::compile_with_exec
+  14: cargo::ops::cargo_compile::compile
+  15: cargo::commands::check::exec
+  16: <cargo::cli::Exec>::exec
+  17: cargo::main
+  18: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  19: std::rt::lang_start::<()>::{closure#0}
+  20: std::rt::lang_start_internal
+  21: _main
+   0.153454583s  INFO prepare_target{force=false package_id=solana-last-restart-slot v3.0.0 target="solana_last_restart_slot"}: cargo::core::compiler::fingerprint: fingerprint error for solana-last-restart-slot v3.0.0/Check { test: false }/TargetInner { ..: lib_target("solana_last_restart_slot", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-last-restart-slot-3.0.0/src/lib.rs", Edition2021) }
+   0.153459500s  INFO prepare_target{force=false package_id=solana-last-restart-slot v3.0.0 target="solana_last_restart_slot"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-last-restart-slot-d49070282668d6da/lib-solana_last_restart_slot`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: cargo::core::compiler::compile
+  11: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  12: cargo::ops::cargo_compile::compile_ws
+  13: cargo::ops::cargo_compile::compile_with_exec
+  14: cargo::ops::cargo_compile::compile
+  15: cargo::commands::check::exec
+  16: <cargo::cli::Exec>::exec
+  17: cargo::main
+  18: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  19: std::rt::lang_start::<()>::{closure#0}
+  20: std::rt::lang_start_internal
+  21: _main
+   0.153685666s  INFO prepare_target{force=false package_id=solana-rent v3.1.0 target="solana_rent"}: cargo::core::compiler::fingerprint: fingerprint error for solana-rent v3.1.0/Check { test: false }/TargetInner { ..: lib_target("solana_rent", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-rent-3.1.0/src/lib.rs", Edition2021) }
+   0.153690625s  INFO prepare_target{force=false package_id=solana-rent v3.1.0 target="solana_rent"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-rent-a1a2b12a36a2fa5f/lib-solana_rent`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: cargo::core::compiler::compile
+  11: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  12: cargo::ops::cargo_compile::compile_ws
+  13: cargo::ops::cargo_compile::compile_with_exec
+  14: cargo::ops::cargo_compile::compile
+  15: cargo::commands::check::exec
+  16: <cargo::cli::Exec>::exec
+  17: cargo::main
+  18: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  19: std::rt::lang_start::<()>::{closure#0}
+  20: std::rt::lang_start_internal
+  21: _main
+   0.153913708s  INFO prepare_target{force=false package_id=solana-slot-hashes v3.0.1 target="solana_slot_hashes"}: cargo::core::compiler::fingerprint: fingerprint error for solana-slot-hashes v3.0.1/Check { test: false }/TargetInner { ..: lib_target("solana_slot_hashes", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-slot-hashes-3.0.1/src/lib.rs", Edition2021) }
+   0.153918250s  INFO prepare_target{force=false package_id=solana-slot-hashes v3.0.1 target="solana_slot_hashes"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-slot-hashes-5b2c4a370ba4eccb/lib-solana_slot_hashes`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: cargo::core::compiler::compile
+  11: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  12: cargo::ops::cargo_compile::compile_ws
+  13: cargo::ops::cargo_compile::compile_with_exec
+  14: cargo::ops::cargo_compile::compile
+  15: cargo::commands::check::exec
+  16: <cargo::cli::Exec>::exec
+  17: cargo::main
+  18: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  19: std::rt::lang_start::<()>::{closure#0}
+  20: std::rt::lang_start_internal
+  21: _main
+   0.154133500s  INFO prepare_target{force=false package_id=solana-slot-history v3.0.0 target="solana_slot_history"}: cargo::core::compiler::fingerprint: fingerprint error for solana-slot-history v3.0.0/Check { test: false }/TargetInner { ..: lib_target("solana_slot_history", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-slot-history-3.0.0/src/lib.rs", Edition2021) }
+   0.154137916s  INFO prepare_target{force=false package_id=solana-slot-history v3.0.0 target="solana_slot_history"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-slot-history-5e171b0362a4454b/lib-solana_slot_history`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: cargo::core::compiler::compile
+  11: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  12: cargo::ops::cargo_compile::compile_ws
+  13: cargo::ops::cargo_compile::compile_with_exec
+  14: cargo::ops::cargo_compile::compile
+  15: cargo::commands::check::exec
+  16: <cargo::cli::Exec>::exec
+  17: cargo::main
+  18: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  19: std::rt::lang_start::<()>::{closure#0}
+  20: std::rt::lang_start_internal
+  21: _main
+   0.154518208s  INFO prepare_target{force=false package_id=solana-program v4.0.0 target="solana_program"}: cargo::core::compiler::fingerprint: fingerprint error for solana-program v4.0.0/Check { test: false }/TargetInner { ..: lib_target("solana_program", ["rlib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-program-4.0.0/src/lib.rs", Edition2021) }
+   0.154523041s  INFO prepare_target{force=false package_id=solana-program v4.0.0 target="solana_program"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-program-e21f18e1d077edb2/lib-solana_program`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   9: cargo::ops::cargo_compile::compile_ws
+  10: cargo::ops::cargo_compile::compile_with_exec
+  11: cargo::ops::cargo_compile::compile
+  12: cargo::commands::check::exec
+  13: <cargo::cli::Exec>::exec
+  14: cargo::main
+  15: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  16: std::rt::lang_start::<()>::{closure#0}
+  17: std::rt::lang_start_internal
+  18: _main
+   0.155515041s  INFO prepare_target{force=false package_id=solana-blake3-hasher v3.1.0 target="solana_blake3_hasher"}: cargo::core::compiler::fingerprint: fingerprint error for solana-blake3-hasher v3.1.0/Check { test: false }/TargetInner { ..: lib_target("solana_blake3_hasher", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-blake3-hasher-3.1.0/src/lib.rs", Edition2021) }
+   0.155524625s  INFO prepare_target{force=false package_id=solana-blake3-hasher v3.1.0 target="solana_blake3_hasher"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-blake3-hasher-f9719b2f3de57b90/lib-solana_blake3_hasher`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  10: cargo::ops::cargo_compile::compile_ws
+  11: cargo::ops::cargo_compile::compile_with_exec
+  12: cargo::ops::cargo_compile::compile
+  13: cargo::commands::check::exec
+  14: <cargo::cli::Exec>::exec
+  15: cargo::main
+  16: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  17: std::rt::lang_start::<()>::{closure#0}
+  18: std::rt::lang_start_internal
+  19: _main
+   0.155805375s  INFO prepare_target{force=false package_id=solana-epoch-stake v3.0.1 target="solana_epoch_stake"}: cargo::core::compiler::fingerprint: fingerprint error for solana-epoch-stake v3.0.1/Check { test: false }/TargetInner { ..: lib_target("solana_epoch_stake", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-epoch-stake-3.0.1/src/lib.rs", Edition2021) }
+   0.155811916s  INFO prepare_target{force=false package_id=solana-epoch-stake v3.0.1 target="solana_epoch_stake"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-epoch-stake-7744b3c2e60bd5eb/lib-solana_epoch_stake`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  10: cargo::ops::cargo_compile::compile_ws
+  11: cargo::ops::cargo_compile::compile_with_exec
+  12: cargo::ops::cargo_compile::compile
+  13: cargo::commands::check::exec
+  14: <cargo::cli::Exec>::exec
+  15: cargo::main
+  16: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  17: std::rt::lang_start::<()>::{closure#0}
+  18: std::rt::lang_start_internal
+  19: _main
+   0.155997916s  INFO prepare_target{force=false package_id=solana-example-mocks v4.0.0 target="solana_example_mocks"}: cargo::core::compiler::fingerprint: fingerprint error for solana-example-mocks v4.0.0/Check { test: false }/TargetInner { ..: lib_target("solana_example_mocks", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-example-mocks-4.0.0/src/lib.rs", Edition2021) }
+   0.156002250s  INFO prepare_target{force=false package_id=solana-example-mocks v4.0.0 target="solana_example_mocks"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-example-mocks-3c05f2365e04f217/lib-solana_example_mocks`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  10: cargo::ops::cargo_compile::compile_ws
+  11: cargo::ops::cargo_compile::compile_with_exec
+  12: cargo::ops::cargo_compile::compile
+  13: cargo::commands::check::exec
+  14: <cargo::cli::Exec>::exec
+  15: cargo::main
+  16: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  17: std::rt::lang_start::<()>::{closure#0}
+  18: std::rt::lang_start_internal
+  19: _main
+   0.156349625s  INFO prepare_target{force=false package_id=solana-nonce v3.2.0 target="solana_nonce"}: cargo::core::compiler::fingerprint: fingerprint error for solana-nonce v3.2.0/Check { test: false }/TargetInner { ..: lib_target("solana_nonce", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-nonce-3.2.0/src/lib.rs", Edition2021) }
+   0.156355041s  INFO prepare_target{force=false package_id=solana-nonce v3.2.0 target="solana_nonce"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-nonce-db9975018dc6116f/lib-solana_nonce`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  11: cargo::ops::cargo_compile::compile_ws
+  12: cargo::ops::cargo_compile::compile_with_exec
+  13: cargo::ops::cargo_compile::compile
+  14: cargo::commands::check::exec
+  15: <cargo::cli::Exec>::exec
+  16: cargo::main
+  17: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  18: std::rt::lang_start::<()>::{closure#0}
+  19: std::rt::lang_start_internal
+  20: _main
+   0.156542500s  INFO prepare_target{force=false package_id=solana-keccak-hasher v3.1.0 target="solana_keccak_hasher"}: cargo::core::compiler::fingerprint: fingerprint error for solana-keccak-hasher v3.1.0/Check { test: false }/TargetInner { ..: lib_target("solana_keccak_hasher", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-keccak-hasher-3.1.0/src/lib.rs", Edition2021) }
+   0.156547250s  INFO prepare_target{force=false package_id=solana-keccak-hasher v3.1.0 target="solana_keccak_hasher"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-keccak-hasher-8eebb02aed59991e/lib-solana_keccak_hasher`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  10: cargo::ops::cargo_compile::compile_ws
+  11: cargo::ops::cargo_compile::compile_with_exec
+  12: cargo::ops::cargo_compile::compile
+  13: cargo::commands::check::exec
+  14: <cargo::cli::Exec>::exec
+  15: cargo::main
+  16: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  17: std::rt::lang_start::<()>::{closure#0}
+  18: std::rt::lang_start_internal
+  19: _main
+   0.156716916s  INFO prepare_target{force=false package_id=solana-rent v4.2.0 target="solana_rent"}: cargo::core::compiler::fingerprint: fingerprint error for solana-rent v4.2.0/Check { test: false }/TargetInner { ..: lib_target("solana_rent", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-rent-4.2.0/src/lib.rs", Edition2021) }
+   0.156721125s  INFO prepare_target{force=false package_id=solana-rent v4.2.0 target="solana_rent"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-rent-790fb629c80107d2/lib-solana_rent`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  10: cargo::ops::cargo_compile::compile_ws
+  11: cargo::ops::cargo_compile::compile_with_exec
+  12: cargo::ops::cargo_compile::compile
+  13: cargo::commands::check::exec
+  14: <cargo::cli::Exec>::exec
+  15: cargo::main
+  16: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  17: std::rt::lang_start::<()>::{closure#0}
+  18: std::rt::lang_start_internal
+  19: _main
+   0.156914958s  INFO prepare_target{force=false package_id=solana-secp256k1-recover v3.1.1 target="solana_secp256k1_recover"}: cargo::core::compiler::fingerprint: fingerprint error for solana-secp256k1-recover v3.1.1/Check { test: false }/TargetInner { ..: lib_target("solana_secp256k1_recover", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-secp256k1-recover-3.1.1/src/lib.rs", Edition2021) }
+   0.156919041s  INFO prepare_target{force=false package_id=solana-secp256k1-recover v3.1.1 target="solana_secp256k1_recover"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-secp256k1-recover-77a173b07fe1b963/lib-solana_secp256k1_recover`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  10: cargo::ops::cargo_compile::compile_ws
+  11: cargo::ops::cargo_compile::compile_with_exec
+  12: cargo::ops::cargo_compile::compile
+  13: cargo::commands::check::exec
+  14: <cargo::cli::Exec>::exec
+  15: cargo::main
+  16: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  17: std::rt::lang_start::<()>::{closure#0}
+  18: std::rt::lang_start_internal
+  19: _main
+   0.157065916s  INFO prepare_target{force=false package_id=k256 v0.13.4 target="k256"}: cargo::core::compiler::fingerprint: fingerprint error for k256 v0.13.4/Check { test: false }/TargetInner { ..: lib_target("k256", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/k256-0.13.4/src/lib.rs", Edition2021) }
+   0.157070291s  INFO prepare_target{force=false package_id=k256 v0.13.4 target="k256"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/k256-f63e9034159b3fe5/lib-k256`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  11: cargo::ops::cargo_compile::compile_ws
+  12: cargo::ops::cargo_compile::compile_with_exec
+  13: cargo::ops::cargo_compile::compile
+  14: cargo::commands::check::exec
+  15: <cargo::cli::Exec>::exec
+  16: cargo::main
+  17: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  18: std::rt::lang_start::<()>::{closure#0}
+  19: std::rt::lang_start_internal
+  20: _main
+   0.157280291s  INFO prepare_target{force=false package_id=ecdsa v0.16.9 target="ecdsa"}: cargo::core::compiler::fingerprint: fingerprint error for ecdsa v0.16.9/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("ecdsa", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ecdsa-0.16.9/src/lib.rs", Edition2021) }
+   0.157285125s  INFO prepare_target{force=false package_id=ecdsa v0.16.9 target="ecdsa"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/ecdsa-42be90f7cf431bda/lib-ecdsa`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: cargo::core::compiler::compile
+  11: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  12: cargo::ops::cargo_compile::compile_ws
+  13: cargo::ops::cargo_compile::compile_with_exec
+  14: cargo::ops::cargo_compile::compile
+  15: cargo::commands::check::exec
+  16: <cargo::cli::Exec>::exec
+  17: cargo::main
+  18: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  19: std::rt::lang_start::<()>::{closure#0}
+  20: std::rt::lang_start_internal
+  21: _main
+   0.157539208s  INFO prepare_target{force=false package_id=elliptic-curve v0.13.8 target="elliptic_curve"}: cargo::core::compiler::fingerprint: fingerprint error for elliptic-curve v0.13.8/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("elliptic_curve", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/elliptic-curve-0.13.8/src/lib.rs", Edition2021) }
+   0.157545041s  INFO prepare_target{force=false package_id=elliptic-curve v0.13.8 target="elliptic_curve"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/elliptic-curve-c9db64848267683d/lib-elliptic_curve`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: cargo::core::compiler::compile
+  11: cargo::core::compiler::compile
+  12: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  13: cargo::ops::cargo_compile::compile_ws
+  14: cargo::ops::cargo_compile::compile_with_exec
+  15: cargo::ops::cargo_compile::compile
+  16: cargo::commands::check::exec
+  17: <cargo::cli::Exec>::exec
+  18: cargo::main
+  19: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  20: std::rt::lang_start::<()>::{closure#0}
+  21: std::rt::lang_start_internal
+  22: _main
+   0.157910500s  INFO prepare_target{force=false package_id=crypto-bigint v0.5.5 target="crypto_bigint"}: cargo::core::compiler::fingerprint: fingerprint error for crypto-bigint v0.5.5/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("crypto_bigint", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/crypto-bigint-0.5.5/src/lib.rs", Edition2021) }
+   0.157914958s  INFO prepare_target{force=false package_id=crypto-bigint v0.5.5 target="crypto_bigint"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/crypto-bigint-23b6283aa5ffef59/lib-crypto_bigint`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: cargo::core::compiler::compile
+  11: cargo::core::compiler::compile
+  12: cargo::core::compiler::compile
+  13: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  14: cargo::ops::cargo_compile::compile_ws
+  15: cargo::ops::cargo_compile::compile_with_exec
+  16: cargo::ops::cargo_compile::compile
+  17: cargo::commands::check::exec
+  18: <cargo::cli::Exec>::exec
+  19: cargo::main
+  20: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  21: std::rt::lang_start::<()>::{closure#0}
+  22: std::rt::lang_start_internal
+  23: _main
+   0.158370500s  INFO prepare_target{force=false package_id=solana-serde-varint v3.0.1 target="solana_serde_varint"}: cargo::core::compiler::fingerprint: fingerprint error for solana-serde-varint v3.0.1/Check { test: false }/TargetInner { ..: lib_target("solana_serde_varint", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-serde-varint-3.0.1/src/lib.rs", Edition2021) }
+   0.158374875s  INFO prepare_target{force=false package_id=solana-serde-varint v3.0.1 target="solana_serde_varint"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-serde-varint-4eff75716a5bb83d/lib-solana_serde_varint`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  10: cargo::ops::cargo_compile::compile_ws
+  11: cargo::ops::cargo_compile::compile_with_exec
+  12: cargo::ops::cargo_compile::compile
+  13: cargo::commands::check::exec
+  14: <cargo::cli::Exec>::exec
+  15: cargo::main
+  16: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  17: std::rt::lang_start::<()>::{closure#0}
+  18: std::rt::lang_start_internal
+  19: _main
+   0.158515041s  INFO prepare_target{force=false package_id=solana-sysvar v4.0.0 target="solana_sysvar"}: cargo::core::compiler::fingerprint: fingerprint error for solana-sysvar v4.0.0/Check { test: false }/TargetInner { ..: lib_target("solana_sysvar", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-sysvar-4.0.0/src/lib.rs", Edition2021) }
+   0.158519666s  INFO prepare_target{force=false package_id=solana-sysvar v4.0.0 target="solana_sysvar"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-sysvar-5a79cdbe6425c993/lib-solana_sysvar`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  10: cargo::ops::cargo_compile::compile_ws
+  11: cargo::ops::cargo_compile::compile_with_exec
+  12: cargo::ops::cargo_compile::compile
+  13: cargo::commands::check::exec
+  14: <cargo::cli::Exec>::exec
+  15: cargo::main
+  16: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  17: std::rt::lang_start::<()>::{closure#0}
+  18: std::rt::lang_start_internal
+  19: _main
+   0.159072083s  INFO prepare_target{force=false package_id=solana-gpt-oracle v0.1.0 (/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle) target="solana_gpt_oracle"}: cargo::core::compiler::fingerprint: fingerprint error for solana-gpt-oracle v0.1.0 (/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle)/Check { test: true }/TargetInner { ..: lib_target("solana_gpt_oracle", ["cdylib", "lib"], "/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/src/lib.rs", Edition2021) }
+   0.159076791s  INFO prepare_target{force=false package_id=solana-gpt-oracle v0.1.0 (/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle) target="solana_gpt_oracle"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/Downloads/FunPumpAi/solana-gpt-oracle/target/debug/.fingerprint/solana-gpt-oracle-0e40fb97fcfeae7b/test-lib-solana_gpt_oracle`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   7: cargo::ops::cargo_compile::compile_ws
+   8: cargo::ops::cargo_compile::compile_with_exec
+   9: cargo::ops::cargo_compile::compile
+  10: cargo::commands::check::exec
+  11: <cargo::cli::Exec>::exec
+  12: cargo::main
+  13: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  14: std::rt::lang_start::<()>::{closure#0}
+  15: std::rt::lang_start_internal
+  16: _main
+    Checking serde_core v1.0.228
+    Checking zerocopy v0.8.48
+    Checking crypto-bigint v0.5.5
+    Checking blake3 v1.8.5
+    Checking elliptic-curve v0.13.8
+    Checking ecdsa v0.16.9
+    Checking k256 v0.13.4
+    Checking serde v1.0.228
+    Checking serde_json v1.0.149
+    Checking serde_bytes v0.11.19
+    Checking solana-secp256k1-recover v3.1.1
+    Checking bincode v1.3.3
+    Checking solana-hash v2.3.0
+    Checking solana-hash v4.3.0
+    Checking solana-program-error v3.0.1
+    Checking bv v0.11.1
+    Checking solana-fee-calculator v3.2.0
+    Checking solana-fee-calculator v2.2.1
+    Checking solana-short-vec v2.2.1
+    Checking solana-serde-varint v2.2.2
+    Checking solana-serde-varint v3.0.1
+    Checking solana-sha256-hasher v3.1.0
+    Checking solana-blake3-hasher v3.1.0
+    Checking solana-keccak-hasher v3.1.0
+    Checking solana-instruction-error v2.3.0
+    Checking solana-program-pack v3.1.0
+    Checking solana-sha256-hasher v2.3.0
+    Checking solana-keccak-hasher v2.2.1
+    Checking solana-blake3-hasher v2.2.1
+    Checking ahash v0.8.12
+    Checking ppv-lite86 v0.2.21
+    Checking solana-address v2.6.0
+    Checking hashbrown v0.13.2
+    Checking solana-pubkey v4.2.0
+    Checking solana-sdk-ids v3.1.0
+    Checking solana-account-info v3.1.1
+    Checking solana-address v1.1.0
+    Checking rand_chacha v0.2.2
+    Checking rand_chacha v0.3.1
+    Checking solana-pubkey v3.0.0
+    Checking solana-instruction v3.4.0
+    Checking solana-serialize-utils v3.1.1
+    Checking solana-nonce v3.2.0
+    Checking solana-epoch-stake v3.0.1
+    Checking solana-program-entrypoint v3.1.1
+    Checking solana-sysvar-id v3.1.0
+    Checking solana-feature-gate-interface v3.1.0
+    Checking rand v0.7.3
+    Checking rand v0.8.6
+    Checking solana-epoch-schedule v3.1.0
+    Checking solana-clock v3.0.1
+    Checking solana-slot-history v3.0.0
+    Checking solana-last-restart-slot v3.0.0
+    Checking solana-epoch-rewards v3.0.1
+    Checking solana-slot-hashes v3.0.1
+    Checking solana-rent v3.1.0
+    Checking solana-rent v4.2.0
+    Checking solana-system-interface v3.2.0
+    Checking solana-stable-layout v3.0.1
+    Checking solana-cpi v3.1.0
+    Checking solana-instructions-sysvar v3.0.0
+    Checking solana-system-interface v2.0.0
+    Checking solana-invoke v0.5.0
+    Checking solana-sysvar v3.1.1
+    Checking solana-sysvar v4.0.0
+    Checking borsh v0.10.4
+    Checking solana-stake-interface v2.0.2
+    Checking solana-loader-v3-interface v6.1.1
+    Checking solana-example-mocks v4.0.0
+    Checking solana-program v4.0.0
+    Checking libsecp256k1 v0.6.0
+    Checking solana-pubkey v2.4.0
+    Checking solana-borsh v2.2.1
+    Checking anchor-lang v1.0.2
+    Checking solana-instruction v2.3.3
+    Checking solana-sdk-ids v2.2.1
+    Checking solana-nonce v2.2.1
+    Checking solana-sysvar-id v2.2.1
+    Checking solana-program-error v2.2.2
+    Checking solana-system-interface v1.0.0
+    Checking solana-serialize-utils v2.2.1
+    Checking solana-transaction-error v2.2.1
+    Checking solana-bincode v2.2.1
+    Checking solana-stable-layout v2.2.1
+    Checking solana-loader-v2-interface v2.2.1
+    Checking solana-clock v2.2.3
+    Checking solana-rent v2.2.1
+    Checking solana-slot-hashes v2.2.1
+    Checking solana-epoch-rewards v2.2.1
+    Checking solana-last-restart-slot v2.2.1
+    Checking solana-epoch-schedule v2.2.1
+    Checking solana-slot-history v2.2.1
+    Checking solana-account-info v2.3.0
+    Checking solana-program-pack v2.2.1
+    Checking ephemeral-rollups-sdk v0.2.12
+    Checking solana-address-lookup-table-interface v2.2.2
+    Checking solana-cpi v2.2.1
+    Checking solana-instructions-sysvar v2.2.2
+    Checking solana-account v2.2.1
+    Checking solana-program-entrypoint v2.3.0
+    Checking solana-message v2.4.0
+    Checking solana-vote-interface v2.2.6
+    Checking solana-loader-v3-interface v5.0.0
+    Checking solana-loader-v4-interface v2.2.1
+    Checking solana-stake-interface v1.2.1
+    Checking solana-feature-gate-interface v2.2.2
+error: could not compile `ephemeral-rollups-sdk` (lib) due to 11 previous errors
+warning: build failed, waiting for other jobs to finish...
+    Checking solana-example-mocks v2.2.1
+    Checking solana-sysvar v2.3.0
+    Checking solana-secp256k1-recover v2.2.1
+    Checking solana-program v2.3.0
+    Checking anchor-lang v0.31.1

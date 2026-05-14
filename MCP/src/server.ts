@@ -11,8 +11,8 @@
  *   - Jupiter price API (no key)
  *   - Public Solana mainnet RPC (fallback)
  *
- * Tools: 44 (15 original + 8 Helius + 6 services + 8 Pump.fun + 7 Chess.com)
- * Resources: 4 (README, soul, skills, tools)
+ * Tools: 49 (15 original + 8 Helius + 6 services + 8 Pump.fun + 5 Pinocchio/p-token + 7 Chess.com)
+ * Resources: 7 (README, soul, skills, tools, Pinocchio, Pinocchio guide, p-token registry)
  * Prompts: 5
  */
 
@@ -35,6 +35,11 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const REPO_ROOT = path.resolve(__dirname, "..", "..");
 const SRC_ROOT = path.resolve(REPO_ROOT, "src");
+const PINOCCHIO_ROOT = path.resolve(REPO_ROOT, "pinocchio");
+const PINOCCHIO_TEMPLATES_ROOT = path.resolve(PINOCCHIO_ROOT, "templates");
+const PTOKEN_REGISTRY_PATH = path.resolve(REPO_ROOT, "data", "ptokens.json");
+const SPL_TOKEN_PROGRAM_ID = "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA";
+const DEFAULT_P_TOKEN_PROGRAM_ID = "ptok6rngomXrDbWf5v5Mkmu5CEbB51hzSCPDoj9DrvF";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Free public API helpers
@@ -121,6 +126,150 @@ function safePath(root: string, rel: string): string | null {
   return resolved;
 }
 
+type PTokenRegistry = {
+  version: number;
+  tokens: Array<Record<string, unknown> & { mint: string; symbol?: string; addedAt?: string }>;
+};
+
+async function listPinocchioTemplates(): Promise<string[]> {
+  const entries = await fs.readdir(PINOCCHIO_TEMPLATES_ROOT, { withFileTypes: true });
+  return entries.filter(entry => entry.isDirectory()).map(entry => entry.name).sort();
+}
+
+async function listTemplateFiles(template: string): Promise<string[]> {
+  const root = path.resolve(PINOCCHIO_TEMPLATES_ROOT, template);
+  if (!root.startsWith(PINOCCHIO_TEMPLATES_ROOT)) throw new Error("Invalid template");
+  const out: string[] = [];
+  async function walk(dir: string): Promise<void> {
+    const entries = await fs.readdir(dir, { withFileTypes: true });
+    for (const entry of entries) {
+      const abs = path.join(dir, entry.name);
+      if (entry.isDirectory()) {
+        await walk(abs);
+      } else {
+        out.push(path.relative(root, abs));
+      }
+    }
+  }
+  await walk(root);
+  return out.sort();
+}
+
+async function readTemplateFile(template: string, relPath: string): Promise<string> {
+  const root = path.resolve(PINOCCHIO_TEMPLATES_ROOT, template);
+  if (!root.startsWith(PINOCCHIO_TEMPLATES_ROOT)) throw new Error("Invalid template");
+  const abs = path.resolve(root, relPath);
+  if (!abs.startsWith(root)) throw new Error("Invalid template path");
+  const text = await readFileText(abs);
+  if (text === null) throw new Error(`Template file not found: ${template}/${relPath}`);
+  return text;
+}
+
+async function readPTokenRegistry(): Promise<PTokenRegistry> {
+  const text = await readFileText(PTOKEN_REGISTRY_PATH);
+  if (!text) return { version: 1, tokens: [] };
+  const parsed = JSON.parse(text) as Partial<PTokenRegistry>;
+  return { version: parsed.version ?? 1, tokens: Array.isArray(parsed.tokens) ? parsed.tokens : [] };
+}
+
+async function writePTokenRegistry(registry: PTokenRegistry): Promise<void> {
+  await fs.mkdir(path.dirname(PTOKEN_REGISTRY_PATH), { recursive: true });
+  await fs.writeFile(PTOKEN_REGISTRY_PATH, `${JSON.stringify(registry, null, 2)}\n`, "utf-8");
+}
+
+async function inspectPTokenMint(
+  mint: string,
+  options: { network?: string; tokenProgram?: string; pTokenProgramId?: string },
+): Promise<Record<string, unknown>> {
+  const pTokenProgramId = options.pTokenProgramId || process.env.P_TOKEN_PROGRAM_ID || DEFAULT_P_TOKEN_PROGRAM_ID;
+  const account = await heliusRPC("getAccountInfo", [mint, { encoding: "base64", commitment: "confirmed" }]) as {
+    value?: { owner: string; data: [string, string] };
+  };
+  if (!account.value) throw new Error(`Mint account not found: ${mint}`);
+
+  const data = Buffer.from(account.value.data[0], "base64");
+  const mintLayout = parseMintLayout(data);
+  const supply = await heliusRPC("getTokenSupply", [mint]).catch(() => null) as
+    | { value?: { amount?: string; decimals?: number; uiAmountString?: string } }
+    | null;
+  const ownerProgram = account.value.owner;
+  const tokenProgram = classifyTokenProgram(ownerProgram, pTokenProgramId, options.tokenProgram);
+  const network = options.network ?? (HELIUS_RPC.includes("devnet") ? "solana-devnet" : "solana-mainnet");
+  return {
+    mint,
+    network,
+    tokenProgram,
+    ownerProgram,
+    pTokenProgramId: tokenProgram === "p-token" ? ownerProgram : undefined,
+    decimals: supply?.value?.decimals ?? mintLayout.decimals,
+    supply: supply?.value?.amount ?? mintLayout.supply,
+    uiSupply: supply?.value?.uiAmountString ?? formatUiAmount(mintLayout.supply, mintLayout.decimals),
+    isInitialized: mintLayout.isInitialized,
+    mintAuthority: mintLayout.mintAuthority,
+    freezeAuthority: mintLayout.freezeAuthority,
+    links: explorerLinks(network, mint),
+  };
+}
+
+function parseMintLayout(data: Buffer): {
+  mintAuthority: string | null;
+  supply: string;
+  decimals: number;
+  isInitialized: boolean;
+  freezeAuthority: string | null;
+} {
+  if (data.length < 82) throw new Error(`Account is too short for an SPL-compatible mint: ${data.length} bytes`);
+  const mintAuthorityOption = data.readUInt32LE(0);
+  const freezeAuthorityOption = data.readUInt32LE(46);
+  return {
+    mintAuthority: mintAuthorityOption ? base58(data.subarray(4, 36)) : null,
+    supply: data.readBigUInt64LE(36).toString(),
+    decimals: data[44],
+    isInitialized: data[45] === 1,
+    freezeAuthority: freezeAuthorityOption ? base58(data.subarray(50, 82)) : null,
+  };
+}
+
+function classifyTokenProgram(ownerProgram: string, pTokenProgramId: string, explicit?: string): string {
+  if (explicit && explicit !== "auto") return explicit;
+  if (pTokenProgramId && ownerProgram === pTokenProgramId) return "p-token";
+  if (ownerProgram === SPL_TOKEN_PROGRAM_ID) return "spl";
+  return "custom";
+}
+
+function explorerLinks(network: string, mint: string): Record<string, string> {
+  const devnet = network === "solana-devnet";
+  return {
+    solanaExplorer: `https://explorer.solana.com/address/${mint}${devnet ? "?cluster=devnet" : ""}`,
+    solscan: `https://solscan.io/token/${mint}${devnet ? "?cluster=devnet" : ""}`,
+  };
+}
+
+function formatUiAmount(amount: string, decimals: number): string {
+  const raw = BigInt(amount);
+  const scale = 10n ** BigInt(decimals);
+  const whole = raw / scale;
+  const frac = (raw % scale).toString().padStart(decimals, "0").replace(/0+$/, "");
+  return frac ? `${whole}.${frac}` : whole.toString();
+}
+
+const BASE58_ALPHABET = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
+function base58(bytes: Uint8Array): string {
+  let num = 0n;
+  for (const byte of bytes) num = (num << 8n) + BigInt(byte);
+  let encoded = "";
+  while (num > 0n) {
+    const rem = Number(num % 58n);
+    num /= 58n;
+    encoded = BASE58_ALPHABET[rem] + encoded;
+  }
+  for (const byte of bytes) {
+    if (byte === 0) encoded = `1${encoded}`;
+    else break;
+  }
+  return encoded || "1";
+}
+
 // ─────────────────────────────────────────────────────────────────────────────
 // In-memory storage (no database needed)
 // ─────────────────────────────────────────────────────────────────────────────
@@ -147,12 +296,16 @@ export function createServer(): Server {
       { uri: "solana-clawd://soul", name: "SOUL.md", description: "Agent identity and operating principles", mimeType: "text/markdown" },
       { uri: "solana-clawd://skills", name: "Skills", description: "Available agent skills", mimeType: "application/json" },
       { uri: "solana-clawd://tools", name: "Source Tools", description: "TypeScript tool source listing", mimeType: "application/json" },
+      { uri: "solana-clawd://pinocchio", name: "Pinocchio Support", description: "Pinocchio and p-token developer support README", mimeType: "text/markdown" },
+      { uri: "solana-clawd://pinocchio-guide", name: "Pinocchio Guide", description: "Native Solana Pinocchio guide for agents and developers", mimeType: "text/markdown" },
+      { uri: "solana-clawd://ptokens", name: "p-token Registry", description: "Registered p-token mint metadata", mimeType: "application/json" },
     ],
   }));
 
   server.setRequestHandler(ListResourceTemplatesRequestSchema, async () => ({
     resourceTemplates: [
       { uriTemplate: "solana-clawd://source/{path}", name: "Source file", description: "Read a src/ file", mimeType: "text/plain" },
+      { uriTemplate: "solana-clawd://pinocchio-template/{template}/{path}", name: "Pinocchio template file", description: "Read a Pinocchio template file", mimeType: "text/plain" },
     ],
   }));
 
@@ -182,12 +335,31 @@ export function createServer(): Server {
       } catch { /**/ }
       return { contents: [{ uri, mimeType: "application/json", text: JSON.stringify({ tools }, null, 2) }] };
     }
+    if (uri === "solana-clawd://pinocchio") {
+      const text = (await readFileText(path.join(PINOCCHIO_ROOT, "README.md"))) ?? "pinocchio/README.md not found.";
+      return { contents: [{ uri, mimeType: "text/markdown", text }] };
+    }
+    if (uri === "solana-clawd://pinocchio-guide") {
+      const text = (await readFileText(path.join(PINOCCHIO_ROOT, "docs", "PINOCCHIO_GUIDE.md"))) ?? "Pinocchio guide not found.";
+      return { contents: [{ uri, mimeType: "text/markdown", text }] };
+    }
+    if (uri === "solana-clawd://ptokens") {
+      const registry = await readPTokenRegistry();
+      return { contents: [{ uri, mimeType: "application/json", text: JSON.stringify(registry, null, 2) }] };
+    }
     if (uri.startsWith("solana-clawd://source/")) {
       const rel = uri.slice("solana-clawd://source/".length);
       const abs = safePath(SRC_ROOT, rel);
       if (!abs) throw new Error("Invalid path");
       const text = await readFileText(abs);
       if (!text) throw new Error(`Not found: ${rel}`);
+      return { contents: [{ uri, mimeType: "text/plain", text }] };
+    }
+    if (uri.startsWith("solana-clawd://pinocchio-template/")) {
+      const rel = uri.slice("solana-clawd://pinocchio-template/".length);
+      const [template, ...pathParts] = rel.split("/");
+      if (!template || pathParts.length === 0) throw new Error("Expected solana-clawd://pinocchio-template/{template}/{path}");
+      const text = await readTemplateFile(template, pathParts.join("/"));
       return { contents: [{ uri, mimeType: "text/plain", text }] };
     }
     throw new Error(`Unknown resource: ${uri}`);
@@ -405,6 +577,49 @@ export function createServer(): Server {
         name: "pump_cashback_info",
         description: "Explain Pump.fun cashback mechanics — UserVolumeAccumulator PDAs, unclaimed cashback balance, and how to claim for a specific token.",
         inputSchema: { type: "object" as const, properties: { mint: { type: "string", description: "Token mint (optional — if omitted returns general cashback docs)" } } },
+      },
+
+      // ── Pinocchio + p-token developer support ────────────────────────────
+      {
+        name: "pinocchio_templates",
+        description: "List forkable Pinocchio starter templates for p-token, vault, escrow, and launch workflows.",
+        inputSchema: { type: "object" as const, properties: {} },
+      },
+      {
+        name: "pinocchio_read_template",
+        description: "Read or list files from a Pinocchio starter template. Use without path to list files.",
+        inputSchema: { type: "object" as const, properties: {
+          template: { type: "string", description: "Template name, e.g. vault, escrow, p-token-launcher" },
+          path: { type: "string", description: "Optional file path inside the template" },
+        }, required: ["template"] },
+      },
+      {
+        name: "ptoken_registry_list",
+        description: "List p-tokens registered in data/ptokens.json.",
+        inputSchema: { type: "object" as const, properties: {} },
+      },
+      {
+        name: "ptoken_inspect",
+        description: "Inspect an SPL-compatible p-token mint over Solana RPC and classify the owner program.",
+        inputSchema: { type: "object" as const, properties: {
+          mint: { type: "string", description: "Token mint address" },
+          network: { type: "string", description: "solana-mainnet or solana-devnet" },
+          tokenProgram: { type: "string", enum: ["auto", "spl", "p-token", "custom"], description: "Explicit classification override" },
+          pTokenProgramId: { type: "string", description: "Program id used to classify p-token mints" },
+        }, required: ["mint"] },
+      },
+      {
+        name: "ptoken_registry_add",
+        description: "Inspect a mint and add or update it in data/ptokens.json for agent/site discovery.",
+        inputSchema: { type: "object" as const, properties: {
+          mint: { type: "string", description: "Token mint address" },
+          symbol: { type: "string", description: "Token symbol" },
+          name: { type: "string", description: "Token display name" },
+          network: { type: "string", description: "solana-mainnet or solana-devnet" },
+          tokenProgram: { type: "string", enum: ["auto", "spl", "p-token", "custom"], description: "Explicit classification override" },
+          pTokenProgramId: { type: "string", description: "Program id used to classify p-token mints" },
+          tags: { type: "array", items: { type: "string" }, description: "Registry tags" },
+        }, required: ["mint"] },
       },
 
       // ── Chess.com (autonomous agent chess) ──────────────────────────────
