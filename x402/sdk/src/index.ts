@@ -298,7 +298,7 @@ function tokenProgramIdFor(req: SolanaPaymentRequirement): PublicKey {
   return new PublicKey(req.extra.pTokenProgramId);
 }
 
-function buildPTokenBatchData(outputs: Array<{ amount: bigint; decimals: number }>): Uint8Array {
+function buildPTokenBatchData(outputs: Array<{ amount: bigint; decimals: number }>): Buffer {
   if (outputs.length === 0 || outputs.length > 64) {
     throw new RangeError("p-token batch requires 1-64 outputs");
   }
@@ -312,7 +312,7 @@ function buildPTokenBatchData(outputs: Array<{ amount: bigint; decimals: number 
     offset += 8;
     buf[offset++] = output.decimals;
   }
-  return buf;
+  return Buffer.from(buf);
 }
 
 function decorate(res: Response): ClawdFetchResult {
