@@ -13,7 +13,7 @@
  *
  * Tools: 49 (15 original + 8 Helius + 6 services + 8 Pump.fun + 5 Pinocchio/p-token + 7 Chess.com)
  * Resources: 7 (README, soul, skills, tools, Pinocchio, Pinocchio guide, p-token registry)
- * Prompts: 5
+ * Prompts: 8
  */
 
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
@@ -1417,6 +1417,70 @@ emitter.on("event", (e) => console.log(e.type, e.signature, e.description));`,
             return text(docs);
           }
 
+          // ── Pinocchio + p-token developer support ────────────────────────
+
+          case "pinocchio_templates": {
+            const templates = await listPinocchioTemplates();
+            return text({
+              templates,
+              scaffold: "npm run pinocchio:scaffold -- --template <template> --name <name> --out ./programs/<name>",
+              docs: "pinocchio/README.md",
+            });
+          }
+
+          case "pinocchio_read_template": {
+            const template = String(a.template ?? "");
+            if (!template) return text("template is required");
+            if (!a.path) {
+              return text({ template, files: await listTemplateFiles(template) });
+            }
+            return text(await readTemplateFile(template, String(a.path)));
+          }
+
+          case "ptoken_registry_list": {
+            const registry = await readPTokenRegistry();
+            return text({ ...registry, count: registry.tokens.length });
+          }
+
+          case "ptoken_inspect": {
+            const mint = String(a.mint ?? "");
+            if (!mint) return text("mint is required");
+            return text(await inspectPTokenMint(mint, {
+              network: a.network ? String(a.network) : undefined,
+              tokenProgram: a.tokenProgram ? String(a.tokenProgram) : undefined,
+              pTokenProgramId: a.pTokenProgramId ? String(a.pTokenProgramId) : undefined,
+            }));
+          }
+
+          case "ptoken_registry_add": {
+            const mint = String(a.mint ?? "");
+            if (!mint) return text("mint is required");
+            const registry = await readPTokenRegistry();
+            const inspected = await inspectPTokenMint(mint, {
+              network: a.network ? String(a.network) : undefined,
+              tokenProgram: a.tokenProgram ? String(a.tokenProgram) : undefined,
+              pTokenProgramId: a.pTokenProgramId ? String(a.pTokenProgramId) : undefined,
+            });
+            const now = new Date().toISOString();
+            const entry = {
+              ...inspected,
+              symbol: a.symbol ? String(a.symbol) : inspected.tokenProgram === "p-token" ? `P-${mint.slice(0, 4).toUpperCase()}` : mint.slice(0, 6).toUpperCase(),
+              name: a.name ? String(a.name) : "Registered p-token",
+              tags: Array.isArray(a.tags) ? a.tags.map(String) : [],
+              addedAt: now,
+              updatedAt: now,
+            };
+            const idx = registry.tokens.findIndex(token => token.mint === mint);
+            if (idx >= 0) {
+              registry.tokens[idx] = { ...registry.tokens[idx], ...entry, addedAt: registry.tokens[idx].addedAt ?? now };
+            } else {
+              registry.tokens.push(entry as PTokenRegistry["tokens"][number]);
+            }
+            registry.tokens.sort((left, right) => String(left.symbol ?? left.mint).localeCompare(String(right.symbol ?? right.mint)));
+            await writePTokenRegistry(registry);
+            return text({ message: "p-token registered", entry, count: registry.tokens.length });
+          }
+
           // ── Chess.com ─────────────────────────────────────────────────
 
           case "chess_player": {
@@ -1554,6 +1618,7 @@ emitter.on("event", (e) => console.log(e.type, e.signature, e.description));`,
       { name: "wallet_analysis", description: "Analyze a wallet's performance and holdings", arguments: [{ name: "wallet", description: "Solana wallet address", required: true }] },
       { name: "pump_scan", description: "Scan Pump.fun for high-signal new token launches and bonding curve plays" },
       { name: "pump_ooda", description: "Full OODA loop focused on Pump.fun bonding curve opportunities", arguments: [{ name: "mint", description: "Token mint to evaluate (optional)", required: false }] },
+      { name: "pinocchio_builder", description: "Plan a Pinocchio p-token, vault, or escrow build", arguments: [{ name: "template", description: "vault, escrow, or p-token-launcher", required: false }] },
     ],
   }));
 
@@ -1595,6 +1660,11 @@ emitter.on("event", (e) => console.log(e.type, e.signature, e.description));`,
             return msg(`OODA loop on Pump.fun token: \`${mint}\`\n\n**OBSERVE**\n- pump_token_scan mint=${mint}\n- pump_graduation mint=${mint}\n- pump_market_cap mint=${mint}\n- sol_price\n\n**ORIENT**\n- pump_buy_quote mint=${mint} sol_amount=0.1\n- pump_sell_quote mint=${mint} token_amount=100000\n- pump_cashback_info mint=${mint}\n- memory_recall query=${mint.slice(0, 8)}\n\n**DECIDE**\n- Signal: STRONG / MODERATE / WEAK / AVOID\n- Is this a graduation play? Pre-grad entry? Exit setup?\n- Risk factors: whale concentration? Creator still holding?\n\n**ACT**\n- memory_write your INFERRED signal with score and reasoning\n- If STRONG: propose entry size (% of portfolio) + stop loss\n- If AVOID: document why for future reference`);
           }
           return msg(`Full Pump.fun OODA loop — no specific token.\n\n**OBSERVE**\n- pump_new_tokens limit=30\n- pump_top_tokens sort_by=graduating\n- sol_price\n\n**ORIENT**\nFor top 3 promising new tokens:\n- pump_token_scan\n- pump_graduation\n\n**DECIDE**\nRank by signal score. Identify:\n1. Best pre-grad play (60-90% bonded, strong signal)\n2. Best new launch (fresh, low mcap, creator holding)\n3. Avoid list (rugs, whales, low volume)\n\n**ACT**\n- memory_write top signals with scoring rationale\n- Report top 3 findings with entry thesis`);
+        }
+
+        case "pinocchio_builder": {
+          const template = args?.template ?? "vault";
+          return msg(`Plan a Pinocchio build using template: ${template}\n\n1. Read solana-clawd://pinocchio and solana-clawd://pinocchio-guide.\n2. Run pinocchio_templates and pinocchio_read_template template=${template}.\n3. Identify required account checks, signer checks, PDA seeds, CPI calls, and close/refund paths.\n4. If this is a p-token launch, run ptoken_registry_list and inspect any mint with ptoken_inspect before suggesting registry changes.\n5. Output:\n- Scope\n- Template files to start from\n- Security checks needed before deployment\n- Test plan\n- Exact scaffold command\n\nDo not claim the scaffold is audited or production-ready.`);
         }
 
         default:
