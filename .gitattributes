@@ -1,0 +1,2 @@
+# Keep proprietary/private payment rail source out of generated archives.
+x402/ export-ignore

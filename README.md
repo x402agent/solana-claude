@@ -47,6 +47,21 @@ This repo is the command deck. It is not a landing page. Run it, inspect it, wir
 
 ---
 
+## What Changed Here
+
+This pass connected three workstreams into the root story so a new operator can find and run them from one place:
+
+| Workstream | What shipped | Where to start |
+| --- | --- | --- |
+| **Pinocchio + p-token** | Native Solana program support, vault and escrow starters, p-token launch planning, bonding-curve quotes, registry inspection, and a one-by-one helper-program map. | [`pinocchio/README.md`](./pinocchio/README.md), [`docs/PTOKEN_EXPLORER.md`](./docs/PTOKEN_EXPLORER.md) |
+| **LLM Oracle** | Rust oracle runner that watches Solana GPT oracle interaction accounts, loads Clawd character context, calls a configured LLM provider, and submits callback responses on-chain. | [`llm_oracle/README.md`](./llm_oracle/README.md) |
+| **x402 payment rail** | Solana HTTP 402 payment flow with pay.sh-style confidential settlement, A2A task payments, SDK helpers, p-token support, worker deployment surface, and revenue-vault documentation. | [`x402/README.md`](./x402/README.md) |
+| **Program map** | Machine-readable map of the on-chain workspace, including inference, GPT oracle, staking, agent minting, token launchers, and metadata references. | [`data/programs-map.json`](./data/programs-map.json), [`programs/README.md`](./programs/README.md) |
+
+The short version: Pinocchio gives builders cheaper native program paths, `llm_oracle` gives the chain an LLM callback bridge, and x402 gives agents a way to charge, settle, and prove paid work over Solana.
+
+---
+
 ## Fast Boot
 
 ```bash
@@ -393,10 +408,15 @@ The Three Laws live in [`leviathan/three-laws.txt`](./leviathan/three-laws.txt) 
 | `npm run pinocchio:scaffold` | Scaffold a Pinocchio vault, escrow, or p-token launcher starter |
 | `npm run ptoken:inspect` | Inspect an SPL-compatible p-token mint over RPC |
 | `npm run ptoken:add` | Register a launched p-token in `data/ptokens.json` |
+| `npm run ptoken:list` | List the local p-token registry |
+| `npm run ptoken:show` | Show one registered p-token by mint or symbol |
 | `npm run ptoken:launch-plan` | Generate an unsigned p-token launch and bonding curve config |
 | `npm run ptoken:curve-quote` | Simulate a constant-product p-token launch curve quote |
-| `npm run pinocchio:programs` | List mapped Pinocchio helper programs one by one |
-| `npm run pinocchio:program -- token` | Show one mapped Pinocchio helper program |
+| `npm run programs:map` | List mapped on-chain programs and local program references |
+| `npm run programs:show -- token-launcher` | Show one mapped program entry |
+| `npm run oracle:check` | Type/check the Rust LLM oracle crate |
+| `npm run oracle:build` | Build the Rust LLM oracle runner |
+| `npm run oracle:run` | Run the LLM oracle worker against the configured RPC/program |
 
 Standalone examples:
 
@@ -483,4 +503,3 @@ MIT. See [`LICENSE`](./LICENSE).
 </sub>
 
 </div>
-Clawd Memory — The Persistent Brain Layer for Autonomous Solana Agents
