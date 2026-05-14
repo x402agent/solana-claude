@@ -378,6 +378,10 @@ The Three Laws live in [`leviathan/three-laws.txt`](./leviathan/three-laws.txt) 
 | `npm run brain:mcp` | Start Mnemosyne MCP for the Clawd bank |
 | `npm run mcp:start` | Start the repo MCP server |
 | `npm run vault:web:dev` | Start the vault web surface |
+| `npm run pinocchio:templates` | List Pinocchio/p-token starter templates |
+| `npm run pinocchio:scaffold` | Scaffold a Pinocchio vault, escrow, or p-token launcher starter |
+| `npm run ptoken:inspect` | Inspect an SPL-compatible p-token mint over RPC |
+| `npm run ptoken:add` | Register a launched p-token in `data/ptokens.json` |
 
 Standalone examples:
 
@@ -407,6 +411,7 @@ solana-clawd/
 ├── x402/                   # payment gateway, A2A, facilitator
 ├── clawdrouter/            # model routing
 ├── MCP/                    # MCP server
+├── pinocchio/              # p-token, vault, escrow templates + Pinocchio docs
 ├── MemeBRain/              # Mnemosyne / Clawd brain substrate
 ├── llm-wiki-tang/          # Clawd vault
 ├── chrome-extension/       # browser surfaces
@@ -431,6 +436,7 @@ solana-clawd/
 7. [`MemeBRain/README.md`](./MemeBRain/README.md)
 8. [`openclawd/README.md`](./openclawd/README.md)
 9. [`openclawd-framework/README.md`](./openclawd-framework/README.md)
+10. [`pinocchio/README.md`](./pinocchio/README.md)
 
 ---
 
