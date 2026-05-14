@@ -1,56 +1,48 @@
 /**
- * Solana-native x402 `exact` scheme.
+ * Solana-native x402 `exact` scheme with opt-in p-token support.
  *
  * Flow:
- *   1. Server calls `buildChallenge(req)` → returns `SolanaPaymentRequirement`
- *      which goes into the PAYMENT-REQUIRED header (base64-JSON).
- *   2. Client builds an SPL transfer transaction:
- *        - instructions: [createATA (if needed), transferChecked(source→destATA, amount)]
- *        - feePayer: client wallet
- *        - recentBlockhash: exact value from challenge.extra.recentBlockhash
- *      then signs with their wallet keypair.
- *   3. Client base64-encodes the signed transaction, sends it as
- *      PAYMENT-SIGNATURE on retry.
- *   4. Server calls `verifyPayment(tx, requirement)` — returns `{ valid, reason }`.
- *      If valid, server calls `settlePayment(tx)` which broadcasts via RPC.
+ *   1. Server builds a PAYMENT-REQUIRED challenge.
+ *   2. Client builds a transferChecked or p-token batch transaction.
+ *   3. Client sends the signed transaction as PAYMENT-SIGNATURE.
+ *   4. Server verifies the transaction, then settles it through RPC.
  */
 
+import { PublicKey, VersionedTransaction } from "@solana/web3.js";
 import {
-  Connection,
-  PublicKey,
-  Transaction,
-  VersionedTransaction,
-} from "@solana/web3.js";
-import {
-  getAssociatedTokenAddressSync,
-  TOKEN_PROGRAM_ID,
   ASSOCIATED_TOKEN_PROGRAM_ID,
+  getAssociatedTokenAddressSync,
 } from "@solana/spl-token";
-
-// P-Token: Pinocchio-optimized token program (SIMD-0266)
-// Same instruction layout as SPL Token, ~98% cheaper on TransferChecked
-const P_TOKEN_PROGRAM_ID = new PublicKey('ptok6rngomXrDbWf5v5Mkmu5CEbB51hzSCPDoj9DrvF');
-const KNOWN_TOKEN_PROGRAMS = [TOKEN_PROGRAM_ID, P_TOKEN_PROGRAM_ID];
 import bs58 from "bs58";
 
-import type { Env, SolanaPaymentRequirement } from "../types";
+import type { BatchOutput, Env, SolanaPaymentRequirement } from "../types";
 import { getLatestBlockhash, sendRawTransaction, simulateTransaction } from "./rpc";
+import {
+  P_TOKEN_OPCODE_BATCH,
+  SPL_TOKEN_PROGRAM_ID,
+  cuSavingsSummary,
+  deriveDestinationAtas,
+  detectPToken,
+} from "./p-token";
 
-/** Build a PAYMENT-REQUIRED challenge for a given resource + price. */
+/** Build a PAYMENT-REQUIRED challenge for a given resource and price. */
 export async function buildChallenge(
   env: Env,
   params: {
     resource: string;
     description: string;
-    payTo: string; // owner pubkey (ATA is derived)
-    asset: string; // SPL mint
-    amount: bigint; // base units
+    payTo: string;
+    asset: string;
+    amount: bigint;
     decimals: number;
     memo?: string;
     timeoutSeconds?: number;
   },
 ): Promise<SolanaPaymentRequirement> {
-  const { blockhash } = await getLatestBlockhash(env);
+  const [{ blockhash }, pToken] = await Promise.all([
+    getLatestBlockhash(env),
+    detectPToken(env),
+  ]);
 
   return {
     scheme: "exact",
@@ -66,6 +58,50 @@ export async function buildChallenge(
       decimals: params.decimals,
       recentBlockhash: blockhash,
       memo: params.memo,
+      tokenProgram: pToken.active ? "p-token" : "spl",
+      pTokenProgramId: pToken.active ? pToken.programId : undefined,
+    },
+  };
+}
+
+/** Build a p-token batch PAYMENT-REQUIRED challenge for multi-recipient payment. */
+export async function buildBatchChallenge(
+  env: Env,
+  params: {
+    resource: string;
+    description: string;
+    asset: string;
+    decimals: number;
+    outputs: BatchOutput[];
+    memo?: string;
+    timeoutSeconds?: number;
+  },
+): Promise<SolanaPaymentRequirement> {
+  const [{ blockhash }, pToken] = await Promise.all([
+    getLatestBlockhash(env),
+    detectPToken(env),
+  ]);
+
+  const totalAmount = params.outputs.reduce((sum, output) => sum + BigInt(output.amount), 0n);
+  const savings = cuSavingsSummary(params.outputs.length);
+
+  return {
+    scheme: "exact",
+    network: env.NETWORK === "solana-devnet" ? "solana-devnet" : "solana",
+    resource: params.resource,
+    description: `${params.description} [batch x${params.outputs.length}, saves ${savings.savedPct}% CU]`,
+    mimeType: "application/json",
+    payTo: params.outputs[0].payTo,
+    asset: params.asset,
+    maxAmountRequired: totalAmount.toString(),
+    maxTimeoutSeconds: params.timeoutSeconds ?? 60,
+    extra: {
+      decimals: params.decimals,
+      recentBlockhash: blockhash,
+      memo: params.memo,
+      tokenProgram: pToken.active ? "p-token" : "spl",
+      pTokenProgramId: pToken.active ? pToken.programId : undefined,
+      batchOutputs: params.outputs,
     },
   };
 }
@@ -88,174 +124,241 @@ export function decodeSignedTransaction(header: string): VersionedTransaction {
 export interface VerifyResult {
   valid: boolean;
   reason?: string;
-  /** The tx hash that will be produced once broadcast */
   signature?: string;
-  /** The caller's pubkey (fee payer) — useful for receipts + holder-discount checks */
   payer?: string;
+  usedPToken?: boolean;
 }
 
-/**
- * Verify that a submitted transaction matches the payment requirement.
- *
- * Checks:
- *   - Transaction is signed and signature verifies
- *   - Exactly one SPL transferChecked instruction
- *   - transferChecked.mint === requirement.asset
- *   - transferChecked.destination === derived ATA for (payTo, asset)
- *   - transferChecked.amount === maxAmountRequired
- *   - recentBlockhash === requirement.extra.recentBlockhash
- *   - Simulating the tx does not error
- */
+/** Verify that a submitted transaction matches the payment requirement. */
 export async function verifyPayment(
   env: Env,
   tx: VersionedTransaction,
   req: SolanaPaymentRequirement,
 ): Promise<VerifyResult> {
   try {
-    // Basic: must have at least one signature
     if (tx.signatures.length === 0) return { valid: false, reason: "no signatures" };
 
     const msg = tx.message;
     const feePayer = msg.staticAccountKeys[0];
     if (!feePayer) return { valid: false, reason: "no fee payer" };
 
-    // Blockhash must match — this binds the tx to our challenge window
     if (msg.recentBlockhash !== req.extra.recentBlockhash) {
       return { valid: false, reason: "blockhash mismatch" };
     }
 
-    // Find the SPL / p-token transferChecked instruction (same layout, either program ID)
     const mint = new PublicKey(req.asset);
-    const payToOwner = new PublicKey(req.payTo);
-    const expectedDestAta = getAssociatedTokenAddressSync(mint, payToOwner, true);
     const expectedAmount = BigInt(req.maxAmountRequired);
+    const isBatch = req.extra.batchOutputs && req.extra.batchOutputs.length > 0;
 
-    const transferIx = findTransferCheckedIx(tx, mint, expectedDestAta, expectedAmount);
-    if (!transferIx.ok) return { valid: false, reason: transferIx.reason };
+    let usedPToken = false;
+    if (isBatch) {
+      const batchResult = findBatchIx(env, tx, mint, req.extra.batchOutputs!, expectedAmount);
+      if (!batchResult.ok) return { valid: false, reason: batchResult.reason };
+      usedPToken = batchResult.usedPToken;
+    } else {
+      const tokenProgramId = tokenProgramIdFor(env, req);
+      const payToOwner = new PublicKey(req.payTo);
+      const expectedDestAta = getAssociatedTokenAddressSync(
+        mint,
+        payToOwner,
+        true,
+        tokenProgramId,
+        ASSOCIATED_TOKEN_PROGRAM_ID,
+      );
+      const transferIx = findTransferCheckedIx(
+        tx,
+        tokenProgramId,
+        mint,
+        expectedDestAta,
+        expectedAmount,
+      );
+      if (!transferIx.ok) return { valid: false, reason: transferIx.reason };
+      usedPToken = transferIx.usedPToken;
+    }
 
-    // Simulate — cheap belt-and-braces, catches insufficient balance, missing ATA, etc.
-    const base64 = Buffer.from(tx.serialize()).toString("base64");
-    const sim = await simulateTransaction(env, base64);
+    const sim = await simulateTransaction(env, bytesToBase64(tx.serialize()));
     if (sim.err) {
       return {
         valid: false,
-        reason: `simulation failed: ${JSON.stringify(sim.err)} — logs: ${sim.logs.join(" | ")}`,
+        reason: `simulation failed: ${JSON.stringify(sim.err)} - logs: ${sim.logs.join(" | ")}`,
       };
     }
 
-    // Pre-compute the signature the RPC will return
     const sig = bs58.encode(tx.signatures[0]);
-
-    return { valid: true, signature: sig, payer: feePayer.toBase58() };
+    return { valid: true, signature: sig, payer: feePayer.toBase58(), usedPToken };
   } catch (e) {
     return { valid: false, reason: `parse error: ${e instanceof Error ? e.message : String(e)}` };
   }
 }
 
-/**
- * Broadcast a verified transaction. Returns the signature.
- * This is called from the facilitator /settle endpoint.
- */
+/** Broadcast a verified transaction. Returns the signature. */
 export async function settlePayment(env: Env, tx: VersionedTransaction): Promise<string> {
-  const base64 = Buffer.from(tx.serialize()).toString("base64");
-  return sendRawTransaction(env, base64);
+  return sendRawTransaction(env, bytesToBase64(tx.serialize()));
 }
 
-/* ——— helpers ——— */
+function bytesToBase64(bytes: Uint8Array): string {
+  let binary = "";
+  for (let i = 0; i < bytes.length; i++) binary += String.fromCharCode(bytes[i]);
+  return btoa(binary);
+}
 
 interface TransferCheckedResult {
   ok: true;
   destinationAta: string;
   amount: bigint;
+  usedPToken: boolean;
 }
+
 interface TransferCheckedFail {
   ok: false;
   reason: string;
 }
 
-/**
- * Walk the versioned message's compiled instructions looking for a single
- * transferChecked that matches (mint, destAta, amount).
- *
- * SPL transferChecked layout:
- *   accounts: [source, mint, destination, owner, ...multisig]
- *   data: [instructionType:u8=12, amount:u64LE, decimals:u8]
- */
 function findTransferCheckedIx(
   tx: VersionedTransaction,
+  expectedTokenProgram: PublicKey,
   expectedMint: PublicKey,
   expectedDestAta: PublicKey,
   expectedAmount: bigint,
 ): TransferCheckedResult | TransferCheckedFail {
   const msg = tx.message;
   const keys = msg.staticAccountKeys;
-
   let matched: TransferCheckedResult | null = null;
-  let otherTokenIx = 0;
 
   for (const ix of msg.compiledInstructions) {
     const programId = keys[ix.programIdIndex];
-    if (!programId) continue;
-    // Accept standard SPL Token or p-token (Pinocchio) — same instruction layout
-    if (!KNOWN_TOKEN_PROGRAMS.some(id => id.equals(programId))) continue;
+    if (!programId?.equals(expectedTokenProgram)) continue;
 
     const data = ix.data;
-    // transferChecked has opcode 12 and 1 + 8 + 1 = 10 bytes of data
-    if (data.length !== 10 || data[0] !== 12) {
-      otherTokenIx++;
-      continue;
-    }
+    if (data.length !== 10 || data[0] !== 12) continue;
 
     const amount = readU64LE(data, 1);
     const accountIdx = ix.accountKeyIndexes;
-    // source, mint, destination, owner
     if (accountIdx.length < 4) continue;
+
     const mintKey = keys[accountIdx[1]];
     const destKey = keys[accountIdx[2]];
     if (!mintKey || !destKey) continue;
 
-    if (!mintKey.equals(expectedMint)) {
-      return { ok: false, reason: "mint mismatch" };
-    }
+    if (!mintKey.equals(expectedMint)) return { ok: false, reason: "mint mismatch" };
     if (!destKey.equals(expectedDestAta)) {
       return { ok: false, reason: "destination ATA mismatch" };
     }
     if (amount !== expectedAmount) {
       return { ok: false, reason: `amount mismatch: got ${amount} want ${expectedAmount}` };
     }
+    if (matched) return { ok: false, reason: "multiple transferChecked instructions - ambiguous" };
 
-    if (matched) {
-      return { ok: false, reason: "multiple transferChecked instructions — ambiguous" };
+    matched = {
+      ok: true,
+      destinationAta: destKey.toBase58(),
+      amount,
+      usedPToken: !expectedTokenProgram.equals(SPL_TOKEN_PROGRAM_ID),
+    };
+  }
+
+  return matched ?? { ok: false, reason: "no matching transferChecked instruction found" };
+}
+
+interface BatchResult {
+  ok: true;
+  usedPToken: boolean;
+}
+
+interface BatchFail {
+  ok: false;
+  reason: string;
+}
+
+function findBatchIx(
+  env: Env,
+  tx: VersionedTransaction,
+  expectedMint: PublicKey,
+  outputs: BatchOutput[],
+  expectedTotal: bigint,
+): BatchResult | BatchFail {
+  if (!env.P_TOKEN_PROGRAM_ID) {
+    return { ok: false, reason: "p-token batch requested but P_TOKEN_PROGRAM_ID is not configured" };
+  }
+  if (outputs.length === 0 || outputs.length > 64) {
+    return { ok: false, reason: "p-token batch output count must be 1-64" };
+  }
+
+  const tokenProgramId = new PublicKey(env.P_TOKEN_PROGRAM_ID);
+  const msg = tx.message;
+  const keys = msg.staticAccountKeys;
+  const expectedAtas = deriveDestinationAtas(expectedMint, outputs, tokenProgramId);
+
+  for (const ix of msg.compiledInstructions) {
+    const programId = keys[ix.programIdIndex];
+    if (!programId?.equals(tokenProgramId)) continue;
+
+    const data = ix.data;
+    if (data.length < 2 || data[0] !== P_TOKEN_OPCODE_BATCH) continue;
+
+    const n = data[1];
+    if (n === undefined) return { ok: false, reason: "batch count missing" };
+    if (n !== outputs.length) {
+      return { ok: false, reason: `batch count mismatch: got ${n} want ${outputs.length}` };
     }
-    matched = { ok: true, destinationAta: destKey.toBase58(), amount };
+    if (data.length < 2 + n * 9) return { ok: false, reason: "batch data too short" };
+
+    let total = 0n;
+    for (let i = 0; i < n; i++) {
+      const amount = readU64LE(data, 2 + i * 9);
+      total += amount;
+      if (amount !== BigInt(outputs[i].amount)) {
+        return { ok: false, reason: `batch amount[${i}] mismatch` };
+      }
+    }
+    if (total !== expectedTotal) {
+      return { ok: false, reason: `batch total mismatch: got ${total} want ${expectedTotal}` };
+    }
+
+    const accountIdx = ix.accountKeyIndexes;
+    if (accountIdx.length < 3 + n) return { ok: false, reason: "batch accounts too few" };
+
+    const mintKey = keys[accountIdx[1]];
+    if (!mintKey?.equals(expectedMint)) return { ok: false, reason: "batch mint mismatch" };
+
+    for (let i = 0; i < n; i++) {
+      const destKey = keys[accountIdx[3 + i]];
+      if (!destKey?.equals(expectedAtas[i])) {
+        return { ok: false, reason: `batch dest[${i}] ATA mismatch` };
+      }
+    }
+
+    return { ok: true, usedPToken: true };
   }
 
-  if (!matched) {
-    return { ok: false, reason: "no matching transferChecked instruction found" };
+  return { ok: false, reason: "no matching p-token batch instruction found" };
+}
+
+function tokenProgramIdFor(env: Env, req: SolanaPaymentRequirement): PublicKey {
+  if (req.extra.tokenProgram !== "p-token") return SPL_TOKEN_PROGRAM_ID;
+  const programId = req.extra.pTokenProgramId ?? env.P_TOKEN_PROGRAM_ID;
+  if (!programId) {
+    throw new Error("p-token requested but P_TOKEN_PROGRAM_ID is not configured");
   }
-  return matched;
+  return new PublicKey(programId);
 }
 
 function readU64LE(buf: Uint8Array, offset: number): bigint {
   const view = new DataView(buf.buffer, buf.byteOffset + offset, 8);
-  // biome-ignore lint: bigint readers are the correct tool here
   return view.getBigUint64(0, true);
 }
 
-/** For the AP2 path — build + sign a transfer ourselves when the client posted an intent. */
+/** For the AP2 path: build and sign a transfer ourselves for custodial settlement. */
 export async function operatorSignedTransfer(
   _env: Env,
   _params: {
-    from: string; // agent caller (if custodial); omit for user-signed
+    from: string;
     to: string;
     mint: string;
     amount: bigint;
   },
 ): Promise<VersionedTransaction> {
-  // TODO: When AP2 is used with a custodial payer (e.g. a Tempo-bridged charge),
-  // the operator signs the Solana leg. Build a transaction via @solana/web3.js,
-  // sign with OPERATOR_KEYPAIR, and return. Deferred to integration pass.
-  throw new Error("operatorSignedTransfer: not implemented — wire operator keypair");
+  throw new Error("operatorSignedTransfer: not implemented - wire operator keypair");
 }
 
 export { ASSOCIATED_TOKEN_PROGRAM_ID };

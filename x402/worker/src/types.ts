@@ -51,7 +51,19 @@ export interface SolanaPaymentRequirement {
     recentBlockhash?: string;
     /** optional memo to tag the payment with the agent + caller */
     memo?: string;
+    /** which token program to use — "p-token" opts into SIMD-0266 lower CUs */
+    tokenProgram?: "spl" | "p-token";
+    /** p-token batch: multiple outputs in a single instruction */
+    batchOutputs?: BatchOutput[];
   };
+}
+
+/** One recipient in a p-token batch transfer instruction. */
+export interface BatchOutput {
+  /** base58 ATA owner (not ATA address) */
+  payTo: string;
+  /** amount in base units */
+  amount: string;
 }
 
 /** Agent entry fetched from the on-chain registry. */
@@ -118,6 +130,15 @@ export interface AP2IntentMandate {
     resource: string;
     exp: number;
   };
+}
+
+/** p-token network status — cached result of program detection. */
+export interface PTokenStatus {
+  active: boolean;
+  programId: string;
+  /** CU savings vs SPL for a single transferChecked — informational */
+  cuSavingsPerTransfer: number;
+  checkedAt: number; // epoch ms
 }
 
 /** Settlement receipt — what we write to IPFS after a successful payment. */
