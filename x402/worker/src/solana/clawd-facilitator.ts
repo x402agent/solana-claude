@@ -136,6 +136,110 @@ const TOOLS = [
       "Returns program ID, active flag, and CU savings per transfer.",
     input_schema: { type: "object", properties: {} },
   },
+  // ─── P-Token Launch Pad tools (adapted from Metaplex Genesis) ─────
+  {
+    name: "clawd_launch_token",
+    description:
+      "Create a new agent token with p-token bonding curve. " +
+      "Launches a token + bonding curve + agent identity + agent-token binding " +
+      "in a single transaction. Returns the mint address, bonding curve PDA, and agent PDA. " +
+      "Adapted from Metaplex Genesis createAndRegisterLaunch + setAgentTokenV1.",
+    input_schema: {
+      type: "object",
+      required: ["payerSecretKey", "name", "symbol", "uri", "agentUri"],
+      properties: {
+        payerSecretKey: { type: "string", description: "base58 secret key of the creator wallet" },
+        name: { type: "string", description: "Token name (max 32 chars)" },
+        symbol: { type: "string", description: "Token symbol (max 10 chars)" },
+        uri: { type: "string", description: "Token metadata URI (Irys/Arweave URL)" },
+        agentUri: { type: "string", description: "Agent registration JSON URI (ERC-8004 format)" },
+        usePToken: { type: "boolean", description: "Use p-token program (default true)" },
+      },
+    },
+  },
+  {
+    name: "clawd_buy_token",
+    description:
+      "Buy tokens from a p-token bonding curve. " +
+      "Uses constant-product formula with p-token CU savings. " +
+      "Returns the transaction signature and fee info. " +
+      "Adapted from Metaplex Genesis / pump.fun buy.",
+    input_schema: {
+      type: "object",
+      required: ["payerSecretKey", "mint", "amountInLamports"],
+      properties: {
+        payerSecretKey: { type: "string", description: "base58 secret key of buyer wallet" },
+        mint: { type: "string", description: "base58 token mint address" },
+        amountInLamports: { type: "string", description: "SOL amount to spend (lamports, bigint string)" },
+        maxSolCost: { type: "string", description: "Maximum SOL to spend (lamports, bigint string)" },
+      },
+    },
+  },
+  {
+    name: "clawd_sell_token",
+    description:
+      "Sell tokens back to a p-token bonding curve. " +
+      "Tokens are burned, SOL is returned minus fees. " +
+      "Returns the transaction signature. " +
+      "Adapted from Metaplex Genesis / pump.fun sell.",
+    input_schema: {
+      type: "object",
+      required: ["payerSecretKey", "mint", "tokenAmount"],
+      properties: {
+        payerSecretKey: { type: "string", description: "base58 secret key of seller wallet" },
+        mint: { type: "string", description: "base58 token mint address" },
+        tokenAmount: { type: "string", description: "Token amount to sell (base units, bigint string)" },
+        minSolOut: { type: "string", description: "Minimum SOL to receive (lamports, bigint string)" },
+      },
+    },
+  },
+  {
+    name: "clawd_register_agent",
+    description:
+      "Register an agent identity on-chain without creating a token. " +
+      "Creates an Agent PDA with metadata URI. " +
+      "Returns the agent PDA address. " +
+      "Adapted from Metaplex registerIdentityV1.",
+    input_schema: {
+      type: "object",
+      required: ["payerSecretKey", "uri"],
+      properties: {
+        payerSecretKey: { type: "string", description: "base58 secret key of agent owner" },
+        uri: { type: "string", description: "Agent registration URI (max 256 chars)" },
+      },
+    },
+  },
+  {
+    name: "clawd_fee_distribute",
+    description:
+      "Distribute trading fees to multiple recipients using p-token's batch instruction " +
+      "(opcode 25). A single CPI instead of N individual transfers. " +
+      "Costs ~1,000 CU base + 25 CU per recipient vs N × 6,200 CU with SPL Token. " +
+      "Returns the batch instruction details. " +
+      "INNOVATION: Single-CPI fee distribution via p-token batch.",
+    input_schema: {
+      type: "object",
+      required: ["sourceAta", "mint", "owner", "recipients"],
+      properties: {
+        sourceAta: { type: "string", description: "source ATA holding the fees" },
+        mint: { type: "string", description: "token mint address" },
+        owner: { type: "string", description: "owner of the source ATA" },
+        recipients: {
+          type: "array",
+          items: {
+            type: "object",
+            required: ["destinationAta", "amount"],
+            properties: {
+              destinationAta: { type: "string" },
+              amount: { type: "string", description: "Amount in base units (bigint string)" },
+            },
+          },
+          minItems: 1,
+          maxItems: 64,
+        },
+      },
+    },
+  },
 ] as const;
 
 // ─── Routes ───────────────────────────────────────────────────────────────────

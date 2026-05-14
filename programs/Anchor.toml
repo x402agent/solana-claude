@@ -8,14 +8,17 @@ skip-lint = false
 [programs.localnet]
 solana_ai_inference = "3xFBRCtk5hxeLWzHvwyDg2B67RHoA9JFTKmHPzzccBVc"
 clawd_stake = "5bp3bDnWYdjiYyB99XWWi6h8ga2wnB1TxuRUb4VNJrTn"
+p_token_launchpad = "pLPha99abcdefghijklmnopqrstuvwxyz1234567890"
 
 [programs.devnet]
 solana_ai_inference = "3xFBRCtk5hxeLWzHvwyDg2B67RHoA9JFTKmHPzzccBVc"
 clawd_stake = "5bp3bDnWYdjiYyB99XWWi6h8ga2wnB1TxuRUb4VNJrTn"
+p_token_launchpad = "pLPha99abcdefghijklmnopqrstuvwxyz1234567890"
 
 [programs.mainnet]
 solana_ai_inference = "3xFBRCtk5hxeLWzHvwyDg2B67RHoA9JFTKmHPzzccBVc"
 clawd_stake = "5bp3bDnWYdjiYyB99XWWi6h8ga2wnB1TxuRUb4VNJrTn"
+p_token_launchpad = "pLPha99abcdefghijklmnopqrstuvwxyz1234567890"
 
 [registry]
 url = "https://api.apr.dev"

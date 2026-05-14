@@ -1,7 +1,8 @@
 [workspace]
 members = [
     "solana-ai-inference",
-    "clawd-stake"
+    "clawd-stake",
+    "p-token-launchpad",
 ]
 exclude = [
     "agent-minter",
