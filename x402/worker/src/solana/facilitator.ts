@@ -18,15 +18,17 @@ import {
   verifyPayment,
   settlePayment,
 } from "./x402";
+import { detectPToken, SPL_TOKEN_PROGRAM_ID } from "./p-token";
 
 export const facilitator = new Hono<{ Bindings: Env }>();
 
-facilitator.get("/supported", (c) => {
+facilitator.get("/supported", async (c) => {
+  const pToken = await detectPToken(c.env);
   const tokenPrograms = [
-    { id: "spl", programId: "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA" },
+    { id: "spl", programId: SPL_TOKEN_PROGRAM_ID.toBase58() },
   ];
-  if (c.env.P_TOKEN_PROGRAM_ID) {
-    tokenPrograms.push({ id: "p-token", programId: c.env.P_TOKEN_PROGRAM_ID });
+  if (pToken.active) {
+    tokenPrograms.push({ id: "p-token", programId: pToken.programId });
   }
 
   return c.json({

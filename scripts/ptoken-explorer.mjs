@@ -9,6 +9,7 @@ const repoRoot = resolve(__dirname, "..");
 const DEFAULT_REGISTRY = resolve(repoRoot, "data/ptokens.json");
 const DEFAULT_RPC = process.env.SOLANA_RPC_URL ?? process.env.HELIUS_RPC_URL ?? "https://api.mainnet-beta.solana.com";
 const SPL_TOKEN_PROGRAM_ID = "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA";
+const DEFAULT_P_TOKEN_PROGRAM_ID = "ptok6rngomXrDbWf5v5Mkmu5CEbB51hzSCPDoj9DrvF";
 
 const [command, ...rawArgs] = process.argv.slice(2);
 const args = parseArgs(rawArgs);
@@ -86,7 +87,7 @@ function showToken(mint, options) {
 async function fetchMintProfile(mint, options) {
   const rpcUrl = options.rpc ?? DEFAULT_RPC;
   const network = options.network ?? inferNetwork(rpcUrl);
-  const pTokenProgramId = options.pTokenProgramId ?? process.env.P_TOKEN_PROGRAM_ID;
+  const pTokenProgramId = options.pTokenProgramId ?? process.env.P_TOKEN_PROGRAM_ID ?? DEFAULT_P_TOKEN_PROGRAM_ID;
   const account = await rpc(rpcUrl, "getAccountInfo", [
     mint,
     { encoding: "base64", commitment: "confirmed" },

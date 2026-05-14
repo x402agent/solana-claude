@@ -11,4 +11,4 @@ npm run ptoken:show -- --mint PFOO
 
 The explorer records supply, decimals, mint/freeze authority, owner program, and Solana Explorer/Solscan links. It uses `SOLANA_RPC_URL` or `HELIUS_RPC_URL` when present, otherwise it falls back to public mainnet RPC.
 
-For x402, p-token support is opt-in. Set `P_TOKEN_PROGRAM_ID` in the worker environment to advertise `extra.tokenProgram = "p-token"` and verify p-token `transferChecked` or batch payments. When the variable is unset, payments stay on classic SPL Token.
+For x402, p-token support is enabled by default with the known p-token program id. Set `P_TOKEN_PROGRAM_ID` to override the program id for a custom deployment, or set `USE_P_TOKEN=0` / `USE_P_TOKEN=false` to force classic SPL Token payments.

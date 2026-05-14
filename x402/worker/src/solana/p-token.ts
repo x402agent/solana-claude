@@ -2,18 +2,19 @@
  * p-token (SIMD-0266) integration for the Clawd x402 facilitator.
  *
  * p-token is treated here as a CU-optimised token-program-compatible rail for
- * SPL-style payments. It is opt-in through P_TOKEN_PROGRAM_ID.
+ * SPL-style payments. It is enabled by default and can be disabled with
+ * USE_P_TOKEN=0 or USE_P_TOKEN=false.
  *
  * Key facts:
  *   - Same program address post-activation (hard fork upgrade).
  *   - All existing SPL Token instructions are preserved with same opcodes.
  *   - New opcodes: 25 = batch, 26 = unwrap_lamports.
  *   - CU savings per transfer: ~15 CUs (~10%).  Burn saves ~67 CUs.
- *   - Pre-activation: optionally deploy at P_TOKEN_PREVIEW_PROGRAM_ID for testnet.
+ *   - P_TOKEN_PROGRAM_ID can override the default p-token program address.
  *
  * Detection strategy:
- *   - if env.P_TOKEN_PROGRAM_ID is set, advertise and verify p-token.
- *   - otherwise stay on the canonical SPL Token program.
+ *   - if USE_P_TOKEN is unset, advertise and verify p-token.
+ *   - if USE_P_TOKEN=0/false, stay on the canonical SPL Token program.
  *
  * Instruction layout reference (SIMD-0266):
  *   batch (opcode 25):
@@ -39,32 +40,47 @@ export const SPL_TOKEN_PROGRAM_ID = new PublicKey(
 );
 
 /**
- * p-token preview program for testnet/devnet — set P_TOKEN_PROGRAM_ID in wrangler env.
- * Post mainnet activation this collapses to SPL_TOKEN_PROGRAM_ID.
+ * P-Token (Pinocchio) program — mainnet + devnet.
+ * Feature gate: ptokFjwyJtrwCa9Kgo9xoDS59V4QccBGEaRFnRPnSdP
+ * Ref: https://solana.com/upgrades/p-token
  */
-export const P_TOKEN_PREVIEW_PROGRAM_ID = new PublicKey(
-  "11111111111111111111111111111111",
+export const P_TOKEN_PROGRAM_ID = new PublicKey(
+  "ptok6rngomXrDbWf5v5Mkmu5CEbB51hzSCPDoj9DrvF",
 );
 
-/** CU benchmarks from SIMD-0266 (logs disabled). */
+export const P_TOKEN_FEATURE_GATE = new PublicKey(
+  "ptokFjwyJtrwCa9Kgo9xoDS59V4QccBGEaRFnRPnSdP",
+);
+
+/** Measured CU costs for p-token (Pinocchio). TransferChecked is 98% cheaper than SPL. */
 export const P_TOKEN_CU = {
-  InitializeMint: 112,
-  InitializeAccount: 143,
-  Transfer: 131,
-  MintTo: 126,
-  Burn: 135,
-  CloseAccount: 132,
-  TransferChecked: 131,
+  transfer:            76,
+  transferChecked:    105,
+  approve:            124,
+  approveChecked:     149,
+  burn:              1884,
+  burnChecked:       1899,
+  mintTo:            2012,
+  mintToChecked:     2027,
+  initializeAccount: 2355,
+  closeAccount:      1402,
+  // legacy keys for compatibility
+  TransferChecked:    105,
 } as const;
 
 export const SPL_TOKEN_CU = {
-  InitializeMint: 154,
-  InitializeAccount: 220,
-  Transfer: 156,
-  MintTo: 156,
-  Burn: 217,
-  CloseAccount: 183,
-  TransferChecked: 146,
+  transfer:           4645,
+  transferChecked:    6200,
+  approve:            2904,
+  approveChecked:     4458,
+  burn:               4753,
+  burnChecked:        4768,
+  mintTo:             4128,
+  mintToChecked:      4143,
+  initializeAccount:  4210,
+  closeAccount:       2915,
+  // legacy keys for compatibility
+  TransferChecked:    6200,
 } as const;
 
 // p-token instruction opcodes (new instructions only; legacy opcodes unchanged)
@@ -85,20 +101,17 @@ export async function detectPToken(env: Env): Promise<PTokenStatus> {
     return _cachedStatus;
   }
 
-  if (env.P_TOKEN_PROGRAM_ID) {
-    _cachedStatus = {
-      active: true,
-      programId: env.P_TOKEN_PROGRAM_ID,
-      cuSavingsPerTransfer: SPL_TOKEN_CU.TransferChecked - P_TOKEN_CU.TransferChecked,
-      checkedAt: Date.now(),
-    };
-    return _cachedStatus;
-  }
+  // Explicit opt-out via env var (USE_P_TOKEN=0 or USE_P_TOKEN=false)
+  const optOut = (env as unknown as Record<string, string>).USE_P_TOKEN;
+  const disabled = optOut === "0" || optOut === "false";
+
+  // Use explicit override ID if set, otherwise default to the real p-token address
+  const programId = env.P_TOKEN_PROGRAM_ID ?? P_TOKEN_PROGRAM_ID.toBase58();
 
   _cachedStatus = {
-    active: false,
-    programId: SPL_TOKEN_PROGRAM_ID.toBase58(),
-    cuSavingsPerTransfer: 0,
+    active: !disabled,
+    programId: disabled ? SPL_TOKEN_PROGRAM_ID.toBase58() : programId,
+    cuSavingsPerTransfer: disabled ? 0 : SPL_TOKEN_CU.TransferChecked - P_TOKEN_CU.TransferChecked,
     checkedAt: Date.now(),
   };
   return _cachedStatus;

@@ -111,7 +111,8 @@ SOLANA_PRIVATE_KEY=        # only for intentional signing flows
 ORACLE_PROGRAM_ID=         # deployed solana-gpt-oracle program id
 LLM_PROVIDER=clawd         # clawd/anthropic or openai
 CHARACTER=clawd            # agents/characters name or JSON path
-P_TOKEN_PROGRAM_ID=        # optional p-token program for x402 payments
+P_TOKEN_PROGRAM_ID=        # optional p-token program override for x402 payments
+USE_P_TOKEN=               # set 0/false to force classic SPL Token payments
 ```
 
 ---

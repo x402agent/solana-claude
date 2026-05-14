@@ -152,7 +152,11 @@ export async function verifyPayment(
 
     let usedPToken = false;
     if (isBatch) {
-      const batchResult = findBatchIx(env, tx, mint, req.extra.batchOutputs!, expectedAmount);
+      if (req.extra.tokenProgram !== "p-token") {
+        return { valid: false, reason: "batchOutputs require p-token" };
+      }
+      const tokenProgramId = tokenProgramIdFor(env, req);
+      const batchResult = findBatchIx(tx, tokenProgramId, mint, req.extra.batchOutputs!, expectedAmount);
       if (!batchResult.ok) return { valid: false, reason: batchResult.reason };
       usedPToken = batchResult.usedPToken;
     } else {
@@ -271,20 +275,15 @@ interface BatchFail {
 }
 
 function findBatchIx(
-  env: Env,
   tx: VersionedTransaction,
+  tokenProgramId: PublicKey,
   expectedMint: PublicKey,
   outputs: BatchOutput[],
   expectedTotal: bigint,
 ): BatchResult | BatchFail {
-  if (!env.P_TOKEN_PROGRAM_ID) {
-    return { ok: false, reason: "p-token batch requested but P_TOKEN_PROGRAM_ID is not configured" };
-  }
   if (outputs.length === 0 || outputs.length > 64) {
     return { ok: false, reason: "p-token batch output count must be 1-64" };
   }
-
-  const tokenProgramId = new PublicKey(env.P_TOKEN_PROGRAM_ID);
   const msg = tx.message;
   const keys = msg.staticAccountKeys;
   const expectedAtas = deriveDestinationAtas(expectedMint, outputs, tokenProgramId);

@@ -9,8 +9,10 @@ export interface Env {
   USDC_MINT: string;
   CLAWD_MINT: string;
   CLAWD_VAULT_PROGRAM: string;
-  /** Optional p-token program id. When unset, the gateway stays on classic SPL Token. */
+  /** Optional p-token program id override. */
   P_TOKEN_PROGRAM_ID?: string;
+  /** Set to "0" or "false" to force classic SPL Token payments. */
+  USE_P_TOKEN?: string;
   REGISTRY_SEED: string;
   PINATA_GATEWAY: string;
   SPLIT_OWNER_BPS: number;
