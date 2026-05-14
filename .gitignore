@@ -40,3 +40,5 @@ coverage/
 
 # Nested repositories and release noise
 **/.git
+tui/dist/
+tui/node_modules/

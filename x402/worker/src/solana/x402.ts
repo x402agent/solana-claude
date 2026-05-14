@@ -26,6 +26,11 @@ import {
   TOKEN_PROGRAM_ID,
   ASSOCIATED_TOKEN_PROGRAM_ID,
 } from "@solana/spl-token";
+
+// P-Token: Pinocchio-optimized token program (SIMD-0266)
+// Same instruction layout as SPL Token, ~98% cheaper on TransferChecked
+const P_TOKEN_PROGRAM_ID = new PublicKey('ptok6rngomXrDbWf5v5Mkmu5CEbB51hzSCPDoj9DrvF');
+const KNOWN_TOKEN_PROGRAMS = [TOKEN_PROGRAM_ID, P_TOKEN_PROGRAM_ID];
 import bs58 from "bs58";
 
 import type { Env, SolanaPaymentRequirement } from "../types";
@@ -119,7 +124,7 @@ export async function verifyPayment(
       return { valid: false, reason: "blockhash mismatch" };
     }
 
-    // Find the SPL transferChecked instruction
+    // Find the SPL / p-token transferChecked instruction (same layout, either program ID)
     const mint = new PublicKey(req.asset);
     const payToOwner = new PublicKey(req.payTo);
     const expectedDestAta = getAssociatedTokenAddressSync(mint, payToOwner, true);
@@ -191,7 +196,8 @@ function findTransferCheckedIx(
   for (const ix of msg.compiledInstructions) {
     const programId = keys[ix.programIdIndex];
     if (!programId) continue;
-    if (!programId.equals(TOKEN_PROGRAM_ID)) continue;
+    // Accept standard SPL Token or p-token (Pinocchio) — same instruction layout
+    if (!KNOWN_TOKEN_PROGRAMS.some(id => id.equals(programId))) continue;
 
     const data = ix.data;
     // transferChecked has opcode 12 and 1 + 8 + 1 = 10 bytes of data

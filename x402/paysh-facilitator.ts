@@ -30,6 +30,14 @@ import {
   getAssociatedTokenAddressSync,
   createAssociatedTokenAccountIdempotentInstruction,
 } from '@solana/spl-token';
+import {
+  tokenProgramId,
+  createPTokenTransferChecked,
+  createPTokenATAIdempotent,
+  createPTokenComputeBudget,
+  getPTokenATA,
+  pTokenSavingsReport,
+} from './p-token.js';
 import bs58 from 'bs58';
 
 // Primary relay: pay.solanaclawd.com (OpenClawd hosted facilitator)
@@ -194,20 +202,16 @@ export class PayshFacilitator {
   private async buildTransfer(req: PayshPaymentRequirement): Promise<VersionedTransaction> {
     const mint = new PublicKey(req.asset);
     const payToOwner = new PublicKey(req.payTo);
-    const destAta = getAssociatedTokenAddressSync(mint, payToOwner, true);
-    const sourceAta = getAssociatedTokenAddressSync(mint, this.config.signer.publicKey, true);
+    // Use p-token ATA derivation (same result; just locks in the right program ID)
+    const destAta = getPTokenATA(mint, payToOwner);
+    const sourceAta = getPTokenATA(mint, this.config.signer.publicKey);
 
     const instructions = [
-      createAssociatedTokenAccountIdempotentInstruction(
-        this.config.signer.publicKey,
-        destAta,
-        payToOwner,
-        mint,
-      ),
-      createTransferCheckedInstruction(
-        sourceAta,
-        mint,
-        destAta,
+      // Tight CU budget — p-token TransferChecked costs 105 CU vs SPL's 6,200
+      ...createPTokenComputeBudget(),
+      createPTokenATAIdempotent(this.config.signer.publicKey, destAta, payToOwner, mint),
+      createPTokenTransferChecked(
+        sourceAta, mint, destAta,
         this.config.signer.publicKey,
         BigInt(req.maxAmountRequired),
         req.extra.decimals,

@@ -32,6 +32,12 @@ import {
   getAssociatedTokenAddressSync,
   createAssociatedTokenAccountIdempotentInstruction,
 } from "@solana/spl-token";
+import {
+  createPTokenTransferChecked,
+  createPTokenATAIdempotent,
+  createPTokenComputeBudget,
+  getPTokenATA,
+} from "./p-token.js";
 import bs58 from "bs58";
 
 export interface SolanaPaymentRequirement {
@@ -176,21 +182,17 @@ async function buildAndSignTransfer(
 ): Promise<VersionedTransaction> {
   const mint = new PublicKey(req.asset);
   const payToOwner = new PublicKey(req.payTo);
-  const destAta = getAssociatedTokenAddressSync(mint, payToOwner, true);
-  const sourceAta = getAssociatedTokenAddressSync(mint, signer.publicKey, true);
+  // p-token: same ATA address, just locks in the optimised program ID
+  const destAta = getPTokenATA(mint, payToOwner);
+  const sourceAta = getPTokenATA(mint, signer.publicKey);
 
   const instructions = [
+    // p-token TransferChecked: 105 CU vs SPL's 6,200 (~98% cheaper)
+    ...createPTokenComputeBudget(),
     // idempotent — no-op if the destination ATA already exists
-    createAssociatedTokenAccountIdempotentInstruction(
-      signer.publicKey,
-      destAta,
-      payToOwner,
-      mint,
-    ),
-    createTransferCheckedInstruction(
-      sourceAta,
-      mint,
-      destAta,
+    createPTokenATAIdempotent(signer.publicKey, destAta, payToOwner, mint),
+    createPTokenTransferChecked(
+      sourceAta, mint, destAta,
       signer.publicKey,
       BigInt(req.maxAmountRequired),
       req.extra.decimals,
