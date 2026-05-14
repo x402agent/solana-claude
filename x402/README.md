@@ -45,6 +45,7 @@ The viral hook is simple: every useful API call becomes a collectible, auditable
 | AP2 bridge | `worker/src/protocols/ap2.ts` | Verifies AP2 intent mandates before accepting Solana settlement. |
 | SDK | `sdk/src/index.ts` | Drop-in `clawdFetch` client. Detects 402, validates challenge, signs the transfer, retries with payment. |
 | Vault program | `programs/clawd-vault/src/lib.rs` | Anchor registry and revenue vault. Stores pricing, protocols, split config, and payout recipients. |
+| Metaplex agent token | `METAPLEX_AGENT_TOKEN.md` | Launches the canonical token for a registered agent through Metaplex Genesis and routes creator fees to the agent PDA. |
 
 ## Hardened In This Pass
 
@@ -123,6 +124,32 @@ Default split, configurable per agent:
 | Operator | 5% | Pays the node or facilitator operator. |
 
 The on-chain vault stores payout authorities for buyback, treasury, and operator. Distribution validates token mint and owner on every payout account before moving funds.
+
+## Metaplex Agent Token
+
+Clawd agents can also launch one canonical token through Metaplex Genesis. This is separate from x402 payments: x402 charges for calls, while the Genesis token gives the agent a public market identity and creator-fee stream.
+
+Use `createAndRegisterLaunch` with:
+
+```ts
+agent: {
+  mint: agentAssetAddress,
+  setToken: true,
+}
+```
+
+That makes Genesis:
+
+| Action | Result |
+| --- | --- |
+| Creates a bonding curve token | The agent gets a token mint and launch page. |
+| Routes creator fees | Fees go to the agent's Core asset signer PDA. |
+| Wraps launch transactions | The agent executes the launch onchain through Core execute instructions. |
+| Optionally performs first buy | `firstBuyAmount` reserves the initial fee-free swap for the agent PDA. |
+
+Important: `setToken: true` is permanent. Each Metaplex agent can only ever have one agent token; once set, it cannot be changed, replaced, or unset. Use `setToken: false` on devnet or while testing.
+
+See [METAPLEX_AGENT_TOKEN.md](/Users/8bit/bots/Cladwbot-solana/solana-clawd/x402/METAPLEX_AGENT_TOKEN.md) for the full launch flow.
 
 ## Holder Discounts
 
