@@ -9,6 +9,8 @@ export interface Env {
   USDC_MINT: string;
   CLAWD_MINT: string;
   CLAWD_VAULT_PROGRAM: string;
+  /** Optional p-token program id. When unset, the gateway stays on classic SPL Token. */
+  P_TOKEN_PROGRAM_ID?: string;
   REGISTRY_SEED: string;
   PINATA_GATEWAY: string;
   SPLIT_OWNER_BPS: number;
@@ -53,6 +55,8 @@ export interface SolanaPaymentRequirement {
     memo?: string;
     /** which token program to use — "p-token" opts into SIMD-0266 lower CUs */
     tokenProgram?: "spl" | "p-token";
+    /** concrete p-token program id clients should compile against */
+    pTokenProgramId?: string;
     /** p-token batch: multiple outputs in a single instruction */
     batchOutputs?: BatchOutput[];
   };

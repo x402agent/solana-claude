@@ -15,6 +15,7 @@ import { cors } from "hono/cors";
 
 import type { Env } from "./types";
 import { facilitator } from "./solana/facilitator";
+import { clawdFacilitator } from "./solana/clawd-facilitator";
 import { getAgent, methodHash, priceFor } from "./solana/registry";
 import { holderDiscount, applyDiscount } from "./clawd";
 import { computeSplit, receipt } from "./revenue";
@@ -52,6 +53,7 @@ app.get("/health", (c) =>
 );
 
 app.route("/facilitator", facilitator);
+app.route("/facilitator/clawd", clawdFacilitator);
 
 /* ——— Registry read ——— */
 

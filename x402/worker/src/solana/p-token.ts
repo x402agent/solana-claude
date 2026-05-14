@@ -1,8 +1,8 @@
 /**
  * p-token (SIMD-0266) integration for the Clawd x402 facilitator.
  *
- * SIMD-0266 merged Mar 13 2026. p-token is a CU-optimised drop-in replacement
- * for SPL Token (TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA).
+ * p-token is treated here as a CU-optimised token-program-compatible rail for
+ * SPL-style payments. It is opt-in through P_TOKEN_PROGRAM_ID.
  *
  * Key facts:
  *   - Same program address post-activation (hard fork upgrade).
@@ -12,9 +12,8 @@
  *   - Pre-activation: optionally deploy at P_TOKEN_PREVIEW_PROGRAM_ID for testnet.
  *
  * Detection strategy:
- *   - On mainnet: p-token is active once the feature gate is flipped.  We detect
- *     by reading the program's account data header (first 8 bytes) via getProgramInfo.
- *   - On devnet/testnet: check env.P_TOKEN_PROGRAM_ID; fall back to SPL_TOKEN_PROGRAM_ID.
+ *   - if env.P_TOKEN_PROGRAM_ID is set, advertise and verify p-token.
+ *   - otherwise stay on the canonical SPL Token program.
  *
  * Instruction layout reference (SIMD-0266):
  *   batch (opcode 25):
@@ -33,7 +32,6 @@
 import { PublicKey } from "@solana/web3.js";
 import { getAssociatedTokenAddressSync } from "@solana/spl-token";
 import type { Env, PTokenStatus, BatchOutput } from "../types";
-import { rpcCall } from "./rpc";
 
 /** The well-known SPL Token program address. */
 export const SPL_TOKEN_PROGRAM_ID = new PublicKey(
@@ -45,7 +43,7 @@ export const SPL_TOKEN_PROGRAM_ID = new PublicKey(
  * Post mainnet activation this collapses to SPL_TOKEN_PROGRAM_ID.
  */
 export const P_TOKEN_PREVIEW_PROGRAM_ID = new PublicKey(
-  "p1aceHo1derXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", // override via env
+  "11111111111111111111111111111111",
 );
 
 /** CU benchmarks from SIMD-0266 (logs disabled). */
@@ -87,47 +85,20 @@ export async function detectPToken(env: Env): Promise<PTokenStatus> {
     return _cachedStatus;
   }
 
-  // On devnet, honour the explicit override env var.
-  if (env.NETWORK === "solana-devnet" && (env as unknown as Record<string, string>).P_TOKEN_PROGRAM_ID) {
-    const id = (env as unknown as Record<string, string>).P_TOKEN_PROGRAM_ID;
+  if (env.P_TOKEN_PROGRAM_ID) {
     _cachedStatus = {
       active: true,
-      programId: id,
+      programId: env.P_TOKEN_PROGRAM_ID,
       cuSavingsPerTransfer: SPL_TOKEN_CU.TransferChecked - P_TOKEN_CU.TransferChecked,
       checkedAt: Date.now(),
     };
     return _cachedStatus;
   }
 
-  // Check if the SPL Token program data starts with the p-token magic header.
-  // p-token prefixes its program data with a Pinocchio-style 8-byte discriminator
-  // that differs from the classic BPF loader header.
-  type AccountInfoResult = { value: { data: [string, string] } | null };
-  let isPToken = false;
-  try {
-    const result = await rpcCall<AccountInfoResult>(env, "getAccountInfo", [
-      SPL_TOKEN_PROGRAM_ID.toBase58(),
-      { encoding: "base64" },
-    ]);
-    if (result.value?.data) {
-      const bytes = Uint8Array.from(atob(result.value.data[0]).split("").map((c) => c.charCodeAt(0)));
-      // p-token programs built with Pinocchio have the BPF upgradeable loader
-      // discriminant at offset 0 = 0x02 (same as classic), but the deployed bytecode
-      // length differs. We use a proxy: program executable data is much smaller
-      // in p-token (~3 KB vs ~120 KB for SPL Token). This is a heuristic — replace
-      // with a deterministic on-chain flag once the feature gate lands.
-      isPToken = bytes.length > 0 && bytes.length < 10_000;
-    }
-  } catch {
-    isPToken = false;
-  }
-
   _cachedStatus = {
-    active: isPToken,
+    active: false,
     programId: SPL_TOKEN_PROGRAM_ID.toBase58(),
-    cuSavingsPerTransfer: isPToken
-      ? SPL_TOKEN_CU.TransferChecked - P_TOKEN_CU.TransferChecked
-      : 0,
+    cuSavingsPerTransfer: 0,
     checkedAt: Date.now(),
   };
   return _cachedStatus;
@@ -189,9 +160,10 @@ export function buildUnwrapLamportsData(): Uint8Array {
 export function deriveDestinationAtas(
   mint: PublicKey,
   outputs: BatchOutput[],
+  tokenProgramId: PublicKey = SPL_TOKEN_PROGRAM_ID,
 ): PublicKey[] {
   return outputs.map((o) =>
-    getAssociatedTokenAddressSync(mint, new PublicKey(o.payTo), true, SPL_TOKEN_PROGRAM_ID),
+    getAssociatedTokenAddressSync(mint, new PublicKey(o.payTo), true, tokenProgramId),
   );
 }
 

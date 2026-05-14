@@ -22,12 +22,20 @@ import {
 export const facilitator = new Hono<{ Bindings: Env }>();
 
 facilitator.get("/supported", (c) => {
+  const tokenPrograms = [
+    { id: "spl", programId: "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA" },
+  ];
+  if (c.env.P_TOKEN_PROGRAM_ID) {
+    tokenPrograms.push({ id: "p-token", programId: c.env.P_TOKEN_PROGRAM_ID });
+  }
+
   return c.json({
     networks: [c.env.NETWORK],
     schemes: ["exact"],
+    tokenPrograms,
     assets: [
-      { mint: c.env.USDC_MINT, symbol: "USDC", decimals: 6 },
-      { mint: c.env.CLAWD_MINT, symbol: "CLAWD", decimals: 9 },
+      { mint: c.env.USDC_MINT, symbol: "USDC", decimals: 6, tokenPrograms: tokenPrograms.map((p) => p.id) },
+      { mint: c.env.CLAWD_MINT, symbol: "CLAWD", decimals: 9, tokenPrograms: tokenPrograms.map((p) => p.id) },
     ],
   });
 });
