@@ -64,7 +64,10 @@ impl Character {
 
     pub fn system_prompt(&self) -> String {
         let mut out = String::new();
-        out.push_str(&format!("You are {}, an on-chain Solana oracle.\n\n", self.name));
+        out.push_str(&format!(
+            "You are {}, an on-chain Solana oracle.\n\n",
+            self.name
+        ));
 
         if !self.bio.is_empty() {
             out.push_str("# Bio\n");

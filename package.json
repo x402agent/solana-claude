@@ -80,7 +80,13 @@
     "brain:init": "cd MemeBRain && python3 -m mnemosyne.clawd_brain init",
     "brain:status": "cd MemeBRain && python3 -m mnemosyne.clawd_brain status",
     "brain:ingest-ooda": "cd MemeBRain && python3 -m mnemosyne.clawd_brain ingest-ooda",
-    "brain:mcp": "cd MemeBRain && python3 -m mnemosyne.cli mcp --bank clawd"
+    "brain:mcp": "cd MemeBRain && python3 -m mnemosyne.cli mcp --bank clawd",
+    "oracle:check": "cargo check --manifest-path llm_oracle/Cargo.toml",
+    "oracle:build": "cargo build --manifest-path llm_oracle/Cargo.toml",
+    "oracle:run": "cargo run --manifest-path llm_oracle/Cargo.toml",
+    "percolator:install": "cd llm_oracle/percolator-cli-master && pnpm install",
+    "percolator:build": "cd llm_oracle/percolator-cli-master && pnpm build",
+    "percolator:test": "cd llm_oracle/percolator-cli-master && pnpm test"
   },
   "dependencies": {
     "@ai-sdk/xai": "^1.2.0",

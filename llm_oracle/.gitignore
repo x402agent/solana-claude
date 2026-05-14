@@ -1,0 +1,12 @@
+target/
+
+# Imported upstream repositories are kept as source references; their build
+# outputs and nested VCS metadata should not be committed from this monorepo.
+upstream/**/target/
+upstream/**/.git/
+
+# Percolator CLI local state/build output.
+percolator-cli-master/node_modules/
+percolator-cli-master/dist/
+percolator-cli-master/.env
+percolator-cli-master/*.log

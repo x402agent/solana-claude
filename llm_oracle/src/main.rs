@@ -39,6 +39,7 @@ struct OracleConfig {
     rpc_url: String,
     websocket_url: String,
     payer: Keypair,
+    oracle_program_id: Pubkey,
     identity_pda: Pubkey,
     provider: Provider,
     character: Character,
@@ -55,6 +56,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
     let mut interaction_memory = InteractionMemory::new(10);
 
     println!(" Oracle identity:  {}", cfg.payer.pubkey());
+    println!(" Oracle program:   {}", cfg.oracle_program_id);
     println!(" RPC:              {}", cfg.rpc_url);
     println!(" WS:               {}", cfg.websocket_url);
     println!(" Character:        {}", cfg.character.name);
@@ -128,6 +130,7 @@ async fn run_oracle(
         &rpc_client,
         filters.clone(),
         &cfg.payer,
+        &cfg.oracle_program_id,
         &cfg.identity_pda,
         &llm,
         &system_prompt,
@@ -143,7 +146,7 @@ async fn run_oracle(
 
     let subscription = PubsubClient::program_subscribe(
         &cfg.websocket_url,
-        &solana_gpt_oracle::ID,
+        &cfg.oracle_program_id,
         Some(program_config),
     )?;
 
@@ -161,6 +164,7 @@ async fn run_oracle(
             if let Some(data) = update.value.account.data.decode() {
                 process_interaction(
                     &cfg.payer,
+                    &cfg.oracle_program_id,
                     &cfg.identity_pda,
                     &llm,
                     &system_prompt,
@@ -180,6 +184,7 @@ async fn run_oracle(
 /// Process an interaction and respond to it
 async fn process_interaction(
     payer: &Keypair,
+    oracle_program_id: &Pubkey,
     identity_pda: &Pubkey,
     llm: &LlmClient,
     system_prompt: &str,
@@ -259,7 +264,7 @@ async fn process_interaction(
                 .concat();
 
                 let mut callback_instruction = Instruction {
-                    program_id: solana_gpt_oracle::ID,
+                    program_id: *oracle_program_id,
                     accounts: vec![
                         AccountMeta::new(payer.pubkey(), true),
                         AccountMeta::new_readonly(*identity_pda, false),
@@ -324,6 +329,7 @@ async fn fetch_and_process_program_accounts(
     rpc_client: &RpcClient,
     filters: Vec<solana_client::rpc_filter::RpcFilterType>,
     payer: &Keypair,
+    oracle_program_id: &Pubkey,
     identity_pda: &Pubkey,
     llm: &LlmClient,
     system_prompt: &str,
@@ -342,11 +348,12 @@ async fn fetch_and_process_program_accounts(
     };
 
     let accounts =
-        rpc_client.get_program_accounts_with_config(&solana_gpt_oracle::ID, program_config)?;
+        rpc_client.get_program_accounts_with_config(oracle_program_id, program_config)?;
 
     for (pubkey, account) in accounts {
         process_interaction(
             payer,
+            oracle_program_id,
             identity_pda,
             llm,
             system_prompt,
@@ -371,15 +378,18 @@ fn load_config() -> Result<OracleConfig, Box<dyn Error>> {
     let websocket_url =
         env::var("WEBSOCKET_URL").unwrap_or_else(|_| "ws://localhost:8900".to_string());
     let payer = Keypair::from_base58_string(&identity);
-    let identity_pda = Pubkey::find_program_address(&[b"identity"], &solana_gpt_oracle::ID).0;
+    let oracle_program_id = env::var("ORACLE_PROGRAM_ID")
+        .ok()
+        .and_then(|value| Pubkey::from_str(&value).ok())
+        .unwrap_or(solana_gpt_oracle::ID);
+    let identity_pda = Pubkey::find_program_address(&[b"identity"], &oracle_program_id).0;
 
     let provider_name = env::var("LLM_PROVIDER").unwrap_or_else(|_| "clawd".to_string());
     let provider = match provider_name.to_lowercase().as_str() {
         "clawd" | "claude" | "anthropic" => {
             let api_key = env::var("ANTHROPIC_API_KEY")
                 .map_err(|_| "ANTHROPIC_API_KEY not set (required for clawd provider)")?;
-            let model =
-                env::var("CLAWD_MODEL").unwrap_or_else(|_| "claude-sonnet-4-6".to_string());
+            let model = env::var("CLAWD_MODEL").unwrap_or_else(|_| "claude-sonnet-4-6".to_string());
             Provider::Clawd { api_key, model }
         }
         "openai" | "gpt" | "chatgpt" => {
@@ -398,6 +408,7 @@ fn load_config() -> Result<OracleConfig, Box<dyn Error>> {
         rpc_url,
         websocket_url,
         payer,
+        oracle_program_id,
         identity_pda,
         provider,
         character,
