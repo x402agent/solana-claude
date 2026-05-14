@@ -1,0 +1,20 @@
+{
+  "network": "solana-devnet",
+  "tokenProgram": "p-token",
+  "pTokenProgramId": "ptok6rngomXrDbWf5v5Mkmu5CEbB51hzSCPDoj9DrvF",
+  "metadata": {
+    "name": "Example p-token",
+    "symbol": "PFOO",
+    "uri": "https://example.com/pfoo.json",
+    "decimals": 9
+  },
+  "authorities": {
+    "mintAuthority": "<wallet-or-pda>",
+    "freezeAuthority": null,
+    "updateAuthority": "<wallet-or-pda>"
+  },
+  "registry": {
+    "tags": ["pinocchio", "p-token", "launch"]
+  }
+}
+

@@ -1,0 +1,19 @@
+[package]
+name = "{{crate_name}}"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["lib", "cdylib"]
+
+[features]
+default = ["perf"]
+perf = []
+
+[dependencies]
+pinocchio = "0.8"
+pinocchio-system = "0.2"
+pinocchio-token = "0.6"
+pinocchio-associated-token-account = "0.2"
+thiserror = { version = "2", default-features = false }
+
