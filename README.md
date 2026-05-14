@@ -55,7 +55,7 @@ This pass connected three workstreams into the root story so a new operator can 
 | --- | --- | --- |
 | **Pinocchio + p-token** | Native Solana program support, vault and escrow starters, p-token launch planning, bonding-curve quotes, registry inspection, and a one-by-one helper-program map. | [`pinocchio/README.md`](./pinocchio/README.md), [`docs/PTOKEN_EXPLORER.md`](./docs/PTOKEN_EXPLORER.md) |
 | **LLM Oracle** | Rust oracle runner that watches Solana GPT oracle interaction accounts, loads Clawd character context, calls a configured LLM provider, and submits callback responses on-chain. | [`llm_oracle/README.md`](./llm_oracle/README.md) |
-| **x402 payment rail** | Solana HTTP 402 payment flow with pay.sh-style confidential settlement, A2A task payments, SDK helpers, p-token support, worker deployment surface, and revenue-vault documentation. | [`x402/README.md`](./x402/README.md) |
+| **x402 payment rail** | Solana HTTP 402 payment flow with pay.sh-style confidential settlement, A2A task payments, SDK helpers, p-token support, worker deployment surface, and revenue-vault documentation. | Private source; excluded from public GitHub exports. |
 | **Program map** | Machine-readable map of the on-chain workspace, including inference, GPT oracle, staking, agent minting, token launchers, and metadata references. | [`data/programs-map.json`](./data/programs-map.json), [`programs/README.md`](./programs/README.md) |
 
 The short version: Pinocchio gives builders cheaper native program paths, `llm_oracle` gives the chain an LLM callback bridge, and x402 gives agents a way to charge, settle, and prove paid work over Solana.
@@ -175,7 +175,7 @@ Clawd does not just prompt. It loops, pays, records, scores, resolves, and retur
 | --- | --- | --- |
 | **HERMES Terminal** | Neon Solana terminal for OODA, markets, and payment panels | [`tui/`](./tui/) |
 | **Leviathan Runtime** | Sovereign shell, depth tiers, identity, and Three Laws | [`leviathan/`](./leviathan/) |
-| **x402 Rails** | HTTP 402, pay.sh, A2A, confidential agent settlement | [`x402/`](./x402/) |
+| **x402 Rails** | HTTP 402, pay.sh, A2A, confidential agent settlement | Private source; excluded from public GitHub exports. |
 | **Dark Ralph OODA** | Observe-orient-decide-act loop and trading lab | [`ooda/`](./ooda/) |
 | **ClawdRouter** | Model routing and agent economics | [`clawdrouter/`](./clawdrouter/) |
 | **Clawd Memory / Vault** | Markdown vault, MCP workflows, long-horizon memory | [`llm-wiki-tang/`](./llm-wiki-tang/) and [`MemeBRain/`](./MemeBRain/) |
@@ -183,7 +183,7 @@ Clawd does not just prompt. It loops, pays, records, scores, resolves, and retur
 | **Percolator Ops** | Bundled Percolator CLI and upstream references for perp-market oracle, keeper, and risk-engine workflows | [`llm_oracle/percolator-cli-master/`](./llm_oracle/percolator-cli-master/) and [`llm_oracle/upstream/`](./llm_oracle/upstream/) |
 | **Pinocchio Support** | Native Solana p-token, vault, escrow, launcher templates, bonding curves, upstream program maps, and agent/MCP workflows | [`pinocchio/`](./pinocchio/) and [`pinocchio/pinocchio-main/programs/`](./pinocchio/pinocchio-main/programs/) |
 | **Program Workspace** | Anchor/Rust/TypeScript Solana programs for inference, staking, GPT oracle callbacks, agent minting, launchers, and metadata rails | [`programs/`](./programs/) and [`data/programs-map.json`](./data/programs-map.json) |
-| **p-token Explorer** | SPL-compatible p-token registry, mint inspector, and x402 p-token payment support | [`scripts/ptoken-explorer.mjs`](./scripts/ptoken-explorer.mjs), [`data/ptokens.json`](./data/ptokens.json), [`docs/PTOKEN_EXPLORER.md`](./docs/PTOKEN_EXPLORER.md) |
+| **p-token Explorer** | SPL-compatible p-token registry, mint inspector, and payment-rail p-token support | [`scripts/ptoken-explorer.mjs`](./scripts/ptoken-explorer.mjs), [`data/ptokens.json`](./data/ptokens.json), [`docs/PTOKEN_EXPLORER.md`](./docs/PTOKEN_EXPLORER.md) |
 | **MCP Surface** | Local tools and machine interfaces | [`MCP/`](./MCP/) |
 | **Browser Bridge** | Wallet, extension, and browser-side controls | [`chrome-extension/`](./chrome-extension/) |
 | **Agent Wallet** | Local encrypted wallet API and vault tooling | [`packages/agentwallet/`](./packages/agentwallet/) |
@@ -331,18 +331,20 @@ Success targets:
 
 ---
 
-## x402: The Payment Nerve
+## x402: The Private Payment Nerve
 
 HERMES x402 turns HTTP `402 Payment Required` into agent-native settlement.
 
-| Piece | What it does | Path |
+The implementation source is proprietary/private and intentionally excluded from public GitHub exports. The public README keeps the protocol surface documented without publishing the gateway, SDK, worker, or vault source.
+
+| Piece | What it does | Public status |
 | --- | --- | --- |
-| **PayshFacilitator** | Blind relay and confidential x402 settlement | [`x402/paysh-facilitator.ts`](./x402/paysh-facilitator.ts) |
-| **A2A Agent** | Google A2A task flow with payment-aware transport | [`x402/a2a-agent.ts`](./x402/a2a-agent.ts) |
-| **Confidential Agent** | NaCl-encrypted payment/inference flow | [`x402/confidential-agent.ts`](./x402/confidential-agent.ts) |
-| **Dark DeFi** | Whale intelligence, MEV detection, route scanning | [`x402/dark-defi.ts`](./x402/dark-defi.ts) |
-| **Client SDK** | Client-side x402 helpers | [`x402/client-sdk.ts`](./x402/client-sdk.ts) |
-| **Worker** | Gateway/facilitator deployment surface | [`x402/worker/`](./x402/worker/) |
+| **PayshFacilitator** | Blind relay and confidential x402 settlement | Private |
+| **A2A Agent** | Google A2A task flow with payment-aware transport | Private |
+| **Confidential Agent** | NaCl-encrypted payment/inference flow | Private |
+| **Dark DeFi** | Whale intelligence, MEV detection, route scanning | Private |
+| **Client SDK** | Client-side x402 helpers | Private |
+| **Worker** | Gateway/facilitator deployment surface | Private |
 
 ```text
 x402  -> HTTP 402 challenge and receipt flow
@@ -443,7 +445,7 @@ solana-clawd/
 ├── tui/                    # HERMES terminal
 ├── ooda/                   # OODA loop lab
 ├── leviathan/              # sovereign runtime
-├── x402/                   # payment gateway, A2A, facilitator
+├── x402/                   # private payment gateway, A2A, facilitator source; not public
 ├── clawdrouter/            # model routing
 ├── MCP/                    # MCP server
 ├── pinocchio/              # p-token, vault, escrow templates + Pinocchio docs
@@ -466,14 +468,13 @@ solana-clawd/
 1. [`HACKATHON.md`](./HACKATHON.md)
 2. [`architecture.md`](./architecture.md)
 3. [`docs/architecture.md`](./docs/architecture.md)
-4. [`x402/README.md`](./x402/README.md)
-5. [`clawdrouter/README.md`](./clawdrouter/README.md)
-6. [`llm-wiki-tang/README.md`](./llm-wiki-tang/README.md)
-7. [`MemeBRain/README.md`](./MemeBRain/README.md)
-8. [`openclawd/README.md`](./openclawd/README.md)
-9. [`openclawd-framework/README.md`](./openclawd-framework/README.md)
-10. [`pinocchio/README.md`](./pinocchio/README.md)
-11. [`programs/README.md`](./programs/README.md)
+4. [`clawdrouter/README.md`](./clawdrouter/README.md)
+5. [`llm-wiki-tang/README.md`](./llm-wiki-tang/README.md)
+6. [`MemeBRain/README.md`](./MemeBRain/README.md)
+7. [`openclawd/README.md`](./openclawd/README.md)
+8. [`openclawd-framework/README.md`](./openclawd-framework/README.md)
+9. [`pinocchio/README.md`](./pinocchio/README.md)
+10. [`programs/README.md`](./programs/README.md)
 
 ---
 
