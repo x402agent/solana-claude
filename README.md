@@ -85,6 +85,13 @@ npm run mcp:start
 npm run vault:web:dev
 ```
 
+Check or run the on-chain LLM oracle adapter:
+
+```bash
+npm run oracle:check
+npm run oracle:run
+```
+
 Common environment variables:
 
 ```bash
@@ -94,6 +101,9 @@ OPENROUTER_API_KEY=
 XAI_API_KEY=
 ANTHROPIC_API_KEY=
 SOLANA_PRIVATE_KEY=        # only for intentional signing flows
+ORACLE_PROGRAM_ID=         # deployed solana-gpt-oracle program id
+LLM_PROVIDER=clawd         # clawd/anthropic or openai
+CHARACTER=clawd            # agents/characters name or JSON path
 ```
 
 ---
@@ -133,10 +143,27 @@ Clawd does not just prompt. It loops, pays, records, scores, resolves, and retur
 | **Dark Ralph OODA** | Observe-orient-decide-act loop and trading lab | [`ooda/`](./ooda/) |
 | **ClawdRouter** | Model routing and agent economics | [`clawdrouter/`](./clawdrouter/) |
 | **Clawd Memory / Vault** | Markdown vault, MCP workflows, long-horizon memory | [`llm-wiki-tang/`](./llm-wiki-tang/) and [`MemeBRain/`](./MemeBRain/) |
+| **LLM Oracle** | Rust listener that watches Solana oracle interactions, calls an LLM provider, and submits callback responses on-chain | [`llm_oracle/`](./llm_oracle/) |
+| **Percolator Ops** | Bundled Percolator CLI and upstream references for perp-market oracle, keeper, and risk-engine workflows | [`llm_oracle/percolator-cli-master/`](./llm_oracle/percolator-cli-master/) and [`llm_oracle/upstream/`](./llm_oracle/upstream/) |
 | **MCP Surface** | Local tools and machine interfaces | [`MCP/`](./MCP/) |
 | **Browser Bridge** | Wallet, extension, and browser-side controls | [`chrome-extension/`](./chrome-extension/) |
 | **Agent Wallet** | Local encrypted wallet API and vault tooling | [`packages/agentwallet/`](./packages/agentwallet/) |
 | **OpenClawd Assembly** | Bridge, gateway, orchestrator, package surfaces | [`openclawd/`](./openclawd/) |
+
+---
+
+## LLM Oracle
+
+[`llm_oracle/`](./llm_oracle/) adapts the Solana GPT oracle flow into Clawd. It subscribes to interaction accounts from a deployed oracle program, builds persona-aware prompts from the repo character files, calls Anthropic-compatible Clawd or OpenAI, and posts the answer back through the program callback instruction.
+
+The oracle package includes:
+
+- Rust oracle runner in [`llm_oracle/src/`](./llm_oracle/src/).
+- ABI support crate in [`agents/solana-gpt-oracle/`](./agents/solana-gpt-oracle/).
+- Percolator CLI operational tools in [`llm_oracle/percolator-cli-master/`](./llm_oracle/percolator-cli-master/).
+- Upstream Percolator source references in [`llm_oracle/upstream/`](./llm_oracle/upstream/).
+
+Use `npm run oracle:check` before running it. Set `ORACLE_PROGRAM_ID`, `RPC_URL`, `WEBSOCKET_URL`, `IDENTITY`, and the matching LLM provider key for a live network.
 
 ---
 
