@@ -53,7 +53,7 @@ This pass connected three workstreams into the root story so a new operator can 
 
 | Workstream | What shipped | Where to start |
 | --- | --- | --- |
-| **Pinocchio + p-token** | Native Solana program support, vault and escrow starters, p-token launch planning, bonding-curve quotes, registry inspection, and a one-by-one helper-program map. | [`pinocchio/README.md`](./pinocchio/README.md), [`docs/PTOKEN_EXPLORER.md`](./docs/PTOKEN_EXPLORER.md) |
+| **Pinocchio + p-token** | Native Solana program support, vault and escrow starters, p-token and p-agent-token planning, bonding-curve quotes, registry inspection, and a one-by-one helper-program map. | [`pinocchio/README.md`](./pinocchio/README.md), [`pinocchio/docs/P_AGENT_TOKEN.md`](./pinocchio/docs/P_AGENT_TOKEN.md), [`docs/PTOKEN_EXPLORER.md`](./docs/PTOKEN_EXPLORER.md) |
 | **LLM Oracle** | Rust oracle runner that watches Solana GPT oracle interaction accounts, loads Clawd character context, calls a configured LLM provider, and submits callback responses on-chain. | [`llm_oracle/README.md`](./llm_oracle/README.md) |
 | **x402 payment rail** | Solana HTTP 402 payment flow with pay.sh-style confidential settlement, A2A task payments, SDK helpers, p-token support, worker deployment surface, and revenue-vault documentation. | Private source; excluded from public GitHub exports. |
 | **Program map** | Machine-readable map of the on-chain workspace, including inference, GPT oracle, staking, agent minting, token launchers, and metadata references. | [`data/programs-map.json`](./data/programs-map.json), [`programs/README.md`](./programs/README.md) |
@@ -114,7 +114,10 @@ npm run ptoken:inspect -- --mint <mint>
 npm run ptoken:add -- --mint <mint> --symbol PFOO --name "P Foo"
 npm run ptoken:launch-plan -- --symbol PFOO --name "P Foo"
 npm run ptoken:curve-quote -- --virtual-sol 30 --virtual-token 1073000000 --sol 1
+npm run pagent:plan -- --symbol PCLAWD --name "Clawd Agent Token" --agent-name "Clawd"
+npm run pagent:quote -- --virtual-sol 30 --virtual-token 1073000000 --sol 1
 npm run pinocchio:templates
+npm run pinocchio:scaffold -- --template p-agent-token --name pclawd-agent-token --out ./programs/pclawd-agent-token
 npm run pinocchio:scaffold -- --template escrow --name my-escrow --out ./programs/my-escrow
 ```
 
@@ -181,7 +184,7 @@ Clawd does not just prompt. It loops, pays, records, scores, resolves, and retur
 | **Clawd Memory / Vault** | Markdown vault, MCP workflows, long-horizon memory | [`llm-wiki-tang/`](./llm-wiki-tang/) and [`MemeBRain/`](./MemeBRain/) |
 | **LLM Oracle** | Rust listener that watches Solana oracle interactions, calls an LLM provider, and submits callback responses on-chain | [`llm_oracle/`](./llm_oracle/) |
 | **Percolator Ops** | Bundled Percolator CLI and upstream references for perp-market oracle, keeper, and risk-engine workflows | [`llm_oracle/percolator-cli-master/`](./llm_oracle/percolator-cli-master/) and [`llm_oracle/upstream/`](./llm_oracle/upstream/) |
-| **Pinocchio Support** | Native Solana p-token, vault, escrow, launcher templates, bonding curves, upstream program maps, and agent/MCP workflows | [`pinocchio/`](./pinocchio/) and [`pinocchio/pinocchio-main/programs/`](./pinocchio/pinocchio-main/programs/) |
+| **Pinocchio Support** | Native Solana p-token, p-agent-token, vault, escrow, launcher templates, bonding curves, upstream program maps, and agent/MCP workflows | [`pinocchio/`](./pinocchio/) and [`pinocchio/pinocchio-main/programs/`](./pinocchio/pinocchio-main/programs/) |
 | **Program Workspace** | Anchor/Rust/TypeScript Solana programs for inference, staking, GPT oracle callbacks, agent minting, launchers, and metadata rails | [`programs/`](./programs/) and [`data/programs-map.json`](./data/programs-map.json) |
 | **p-token Explorer** | SPL-compatible p-token registry, mint inspector, and payment-rail p-token support | [`scripts/ptoken-explorer.mjs`](./scripts/ptoken-explorer.mjs), [`data/ptokens.json`](./data/ptokens.json), [`docs/PTOKEN_EXPLORER.md`](./docs/PTOKEN_EXPLORER.md) |
 | **MCP Surface** | Local tools and machine interfaces | [`MCP/`](./MCP/) |
@@ -414,6 +417,8 @@ The Three Laws live in [`leviathan/three-laws.txt`](./leviathan/three-laws.txt) 
 | `npm run ptoken:show` | Show one registered p-token by mint or symbol |
 | `npm run ptoken:launch-plan` | Generate an unsigned p-token launch and bonding curve config |
 | `npm run ptoken:curve-quote` | Simulate a constant-product p-token launch curve quote |
+| `npm run pagent:plan` | Generate an unsigned p-token agent-token plan with agent identity and binding steps |
+| `npm run pagent:quote` | Simulate a p-agent-token bonding curve quote |
 | `npm run programs:map` | List mapped on-chain programs and local program references |
 | `npm run programs:show -- token-launcher` | Show one mapped program entry |
 | `npm run oracle:check` | Type/check the Rust LLM oracle crate |
@@ -448,7 +453,7 @@ solana-clawd/
 ├── x402/                   # private payment gateway, A2A, facilitator source; not public
 ├── clawdrouter/            # model routing
 ├── MCP/                    # MCP server
-├── pinocchio/              # p-token, vault, escrow templates + Pinocchio docs
+├── pinocchio/              # p-token, p-agent-token, vault, escrow templates + Pinocchio docs
 ├── programs/               # on-chain program workspace + program map
 ├── MemeBRain/              # Mnemosyne / Clawd brain substrate
 ├── llm-wiki-tang/          # Clawd vault
