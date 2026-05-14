@@ -11,9 +11,9 @@
  *   - Jupiter price API (no key)
  *   - Public Solana mainnet RPC (fallback)
  *
- * Tools: 53 (15 original + 8 Helius + 6 services + 8 Pump.fun + 9 Pinocchio/p-token + 7 Chess.com)
- * Resources: 10 (README, soul, skills, tools, Pinocchio, Pinocchio guide, program map, program JSON, p-token launches, p-token registry)
- * Prompts: 9
+ * Tools: 63 (15 original + 8 Helius + 6 services + 8 Pump.fun + 9 Pinocchio/p-token + 7 Chess.com + 10 P-Token Launch Pad)
+ * Resources: 14 (README, soul, skills, tools, Pinocchio, Pinocchio guide, program map, program JSON, p-token launches, p-token registry, p-token launch pad, launch pad SDK, launch pad program, launch pad README)
+ * Prompts: 11
  */
 
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
@@ -40,6 +40,10 @@ const PINOCCHIO_TEMPLATES_ROOT = path.resolve(PINOCCHIO_ROOT, "templates");
 const PTOKEN_REGISTRY_PATH = path.resolve(REPO_ROOT, "data", "ptokens.json");
 const SPL_TOKEN_PROGRAM_ID = "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA";
 const DEFAULT_P_TOKEN_PROGRAM_ID = "ptok6rngomXrDbWf5v5Mkmu5CEbB51hzSCPDoj9DrvF";
+const PTOKEN_LAUNCHPAD_ROOT = path.resolve(REPO_ROOT, "programs", "p-token-launchpad");
+const LAUNCHPAD_PROGRAM_ID = "pLPha99abcdefghijklmnopqrstuvwxyz1234567890";
+const LAUNCHPAD_SDK_PATH = path.resolve(REPO_ROOT, "x402", "p-token-launchpad.ts");
+const LAUNCHPAD_DOCS_PATH = path.resolve(REPO_ROOT, "docs", "PTOKEN_LAUNCHPAD.md");
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Free public API helpers
@@ -422,6 +426,10 @@ export function createServer(): Server {
       { uri: "solana-clawd://programs-json", name: "Solana Program Map JSON", description: "Machine-readable solana-clawd program map", mimeType: "application/json" },
       { uri: "solana-clawd://ptoken-launches", name: "p-token Launches", description: "Unsigned p-token launch and bonding curve workflow", mimeType: "text/markdown" },
       { uri: "solana-clawd://ptokens", name: "p-token Registry", description: "Registered p-token mint metadata", mimeType: "application/json" },
+      { uri: "solana-clawd://ptoken-launchpad", name: "P-Token Launch Pad Docs", description: "P-Token Launch Pad full documentation — adapted from Metaplex Genesis", mimeType: "text/markdown" },
+      { uri: "solana-clawd://ptoken-launchpad-sdk", name: "P-Token Launch Pad SDK", description: "TypeScript SDK source — createAgentToken, buy, sell, registerAgent, fee distribution", mimeType: "text/typescript" },
+      { uri: "solana-clawd://ptoken-launchpad-program", name: "P-Token Launch Pad Program", description: "Anchor program source — bonding curves, agent registry, graduation, fee withdrawal", mimeType: "text/plain" },
+      { uri: "solana-clawd://ptoken-launchpad-readme", name: "P-Token Launch Pad README", description: "Deployment guide and SDK reference for the p-token launch pad program", mimeType: "text/markdown" },
     ],
   }));
 

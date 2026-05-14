@@ -5,13 +5,15 @@
 <p>
   <a href="https://solanaclawd.com"><img src="https://img.shields.io/badge/$CLAWD-Solana-14F195?style=for-the-badge&logo=solana&logoColor=111827" alt="$CLAWD on Solana"></a>
   <a href="https://pay.solanaclawd.com"><img src="https://img.shields.io/badge/x402-pay.solanaclawd.com-ff00ff?style=for-the-badge" alt="x402 pay.solanaclawd.com"></a>
+  <a href="docs/PTOKEN_LAUNCHPAD.md"><img src="https://img.shields.io/badge/p--token-launchpad-14F195?style=for-the-badge&logo=solana&logoColor=111827" alt="p-token launchpad"></a>
+  <a href="pinocchio/README.md"><img src="https://img.shields.io/badge/Pinocchio-zero--copy-9945FF?style=for-the-badge" alt="Pinocchio support"></a>
   <a href="https://x.com/clawddevs"><img src="https://img.shields.io/badge/@clawddevs-X-000000?style=for-the-badge&logo=x" alt="@clawddevs"></a>
   <a href="https://www.npmjs.com/package/solana-clawd"><img src="https://img.shields.io/badge/npm-solana--clawd-CB3837?style=for-the-badge&logo=npm" alt="solana-clawd on npm"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-38bdf8?style=for-the-badge" alt="MIT license"></a>
 </p>
 
 <a href="https://git.io/typing-svg">
-  <img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=800&size=22&duration=2600&pause=650&color=14F195&center=true&vCenter=true&width=1040&lines=HERMES+OF+WEB3+%3A%3A+messages+move%2C+payments+settle%2C+memory+survives;SENSE+-%3E+THINK+-%3E+STRIKE+-%3E+DRIFT+-%3E+RECALL;TRADE+-%3E+EARN+USDC+-%3E+PAY+x402+-%3E+GET+SMARTER+-%3E+TRADE+BETTER;Temporal+Epistemic+Graphs+with+Veracity-Weighted+Consolidation;Token+CA+%3A%3A+8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump" alt="Clawd animated typing lines" />
+  <img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=800&size=22&duration=2600&pause=650&color=14F195&center=true&vCenter=true&width=1040&lines=HERMES+OF+WEB3+%3A%3A+messages+move%2C+payments+settle%2C+memory+survives;p-TOKEN+LAUNCHPAD+%3A%3A+agent+tokens+%2B+bonding+curves+%2B+explorer;PINOCCHIO+ZERO-COPY+%3A%3A+faster+mints%2C+burns%2C+transfers;TRADE+-%3E+EARN+USDC+-%3E+PAY+x402+-%3E+GET+SMARTER+-%3E+TRADE+BETTER;Token+CA+%3A%3A+8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump" alt="Clawd animated typing lines" />
 </a>
 
 <br/>
@@ -53,12 +55,12 @@ This pass connected three workstreams into the root story so a new operator can 
 
 | Workstream | What shipped | Where to start |
 | --- | --- | --- |
-| **Pinocchio + p-token** | Native Solana program support, vault and escrow starters, p-token and p-agent-token planning, bonding-curve quotes, registry inspection, and a one-by-one helper-program map. | [`pinocchio/README.md`](./pinocchio/README.md), [`pinocchio/docs/P_AGENT_TOKEN.md`](./pinocchio/docs/P_AGENT_TOKEN.md), [`docs/PTOKEN_EXPLORER.md`](./docs/PTOKEN_EXPLORER.md) |
+| **Pinocchio + p-token** | Native Solana program support, vault and escrow starters, p-token launchpad, p-agent-token planning, bonding-curve quotes, registry inspection, and a one-by-one helper-program map. | [`docs/PTOKEN_LAUNCHPAD.md`](./docs/PTOKEN_LAUNCHPAD.md), [`pinocchio/README.md`](./pinocchio/README.md), [`pinocchio/docs/P_AGENT_TOKEN.md`](./pinocchio/docs/P_AGENT_TOKEN.md), [`docs/PTOKEN_EXPLORER.md`](./docs/PTOKEN_EXPLORER.md) |
 | **LLM Oracle** | Rust oracle runner that watches Solana GPT oracle interaction accounts, loads Clawd character context, calls a configured LLM provider, and submits callback responses on-chain. | [`llm_oracle/README.md`](./llm_oracle/README.md) |
 | **x402 payment rail** | Solana HTTP 402 payment flow with pay.sh-style confidential settlement, A2A task payments, SDK helpers, p-token support, worker deployment surface, and revenue-vault documentation. | Private source; excluded from public GitHub exports. |
 | **Program map** | Machine-readable map of the on-chain workspace, including inference, GPT oracle, staking, agent minting, token launchers, and metadata references. | [`data/programs-map.json`](./data/programs-map.json), [`programs/README.md`](./programs/README.md) |
 
-The short version: Pinocchio gives builders cheaper native program paths, `llm_oracle` gives the chain an LLM callback bridge, and x402 gives agents a way to charge, settle, and prove paid work over Solana.
+The short version: Pinocchio gives builders cheaper native program paths, p-token launchpad gives agents faster token markets, `llm_oracle` gives the chain an LLM callback bridge, and x402 gives agents a way to charge, settle, and prove paid work over Solana.
 
 ---
 
@@ -187,10 +189,80 @@ Clawd does not just prompt. It loops, pays, records, scores, resolves, and retur
 | **Pinocchio Support** | Native Solana p-token, p-agent-token, vault, escrow, launcher templates, bonding curves, upstream program maps, and agent/MCP workflows | [`pinocchio/`](./pinocchio/) and [`pinocchio/pinocchio-main/programs/`](./pinocchio/pinocchio-main/programs/) |
 | **Program Workspace** | Anchor/Rust/TypeScript Solana programs for inference, staking, GPT oracle callbacks, agent minting, launchers, and metadata rails | [`programs/`](./programs/) and [`data/programs-map.json`](./data/programs-map.json) |
 | **p-token Explorer** | SPL-compatible p-token registry, mint inspector, and payment-rail p-token support | [`scripts/ptoken-explorer.mjs`](./scripts/ptoken-explorer.mjs), [`data/ptokens.json`](./data/ptokens.json), [`docs/PTOKEN_EXPLORER.md`](./docs/PTOKEN_EXPLORER.md) |
+| **P-Token Launch Pad** | Self-hosted agent token launches, constant-product curves, PDA registry, executive delegation, batch fee distribution, and DEX graduation | [`programs/p-token-launchpad/`](./programs/p-token-launchpad/), [`docs/PTOKEN_LAUNCHPAD.md`](./docs/PTOKEN_LAUNCHPAD.md) |
+| **Risk Engine Spec** | Protected principal, lazy ADL, funding, keeper, and liquidation invariants for the perp-risk layer | [`docs/risk-engine-spec.md`](./docs/risk-engine-spec.md) |
 | **MCP Surface** | Local tools and machine interfaces | [`MCP/`](./MCP/) |
 | **Browser Bridge** | Wallet, extension, and browser-side controls | [`chrome-extension/`](./chrome-extension/) |
 | **Agent Wallet** | Local encrypted wallet API and vault tooling | [`packages/agentwallet/`](./packages/agentwallet/) |
 | **OpenClawd Assembly** | Bridge, gateway, orchestrator, package surfaces | [`openclawd/`](./openclawd/) |
+
+---
+
+## P-Token Launch Pad
+
+<div align="center">
+  <img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=800&size=18&duration=1800&pause=500&color=14F195&center=true&vCenter=true&width=1040&lines=CREATE+AGENT+TOKEN+-%3E+BIND+IDENTITY+-%3E+OPEN+CURVE;BATCH+FEES+WITH+OPCODE+25+%3A%3A+ONE+CPI+MANY+RECIPIENTS;EXPLORE+MINTS+-%3E+REGISTER+p-TOKENS+-%3E+GRADUATE+TO+DEX" alt="p-token launchpad animation" />
+</div>
+
+```text
+╔══════════════════════════════════════════════════════════════════════════╗
+║  ADAPTED FROM: Metaplex Genesis agent-token launch concepts             ║
+║  Originals: createAndRegisterLaunch, setAgentTokenV1,                  ║
+║             registerIdentityV1, registerExecutiveV1, delegateExecutionV1║
+║  Adaptation: p-token (SIMD-0266) bonding curves + PDA agent registry    ║
+║  CU Savings: 98% on transfers, 51% on mints, 60% on burns               ║
+╚══════════════════════════════════════════════════════════════════════════╝
+```
+
+The public launchpad is the self-hosted path for fast agent tokens: create the mint, initialize a constant-product bonding curve, register the agent identity, bind token-to-agent once, trade through buy/sell, distribute fees with p-token batch CPI, and graduate liquidity to an external DEX.
+
+| Surface | What it does | Public path |
+| --- | --- | --- |
+| **Launchpad program** | Anchor program for curves, agent registry, agent-token binding, delegation, buys/sells, fee withdrawal, and graduation | [`programs/p-token-launchpad/`](./programs/p-token-launchpad/) |
+| **Launchpad guide** | Full 11-section spec adapted from Genesis into p-token/Pinocchio terms | [`docs/PTOKEN_LAUNCHPAD.md`](./docs/PTOKEN_LAUNCHPAD.md) |
+| **p-token explorer** | Inspect mints over RPC, classify SPL vs p-token, and register local p-token metadata | [`docs/PTOKEN_EXPLORER.md`](./docs/PTOKEN_EXPLORER.md) |
+| **p-agent-token template** | Forkable Pinocchio starter for token + agent state + one-way binding | [`pinocchio/templates/p-agent-token/`](./pinocchio/templates/p-agent-token/) |
+| **Launch planner** | Unsigned launch plans and curve quotes for agents/operators | [`pinocchio/docs/P_TOKEN_LAUNCHES.md`](./pinocchio/docs/P_TOKEN_LAUNCHES.md), [`pinocchio/docs/P_AGENT_TOKEN.md`](./pinocchio/docs/P_AGENT_TOKEN.md) |
+
+```text
+┌──────────────────────────────────────────────────────────┐
+│                   P-Token Launch Pad                     │
+│                                                          │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐      │
+│  │ Bonding     │  │ Agent       │  │ Agent       │      │
+│  │ Curves      │  │ Registry    │  │ Token Bind  │      │
+│  │ buy/sell    │  │ identity    │  │ irreversible│      │
+│  │ price calc  │  │ executive   │  │ PDA state   │      │
+│  └──────┬──────┘  └──────┬──────┘  └──────┬──────┘      │
+│         └────────────────┴────────────────┘             │
+│                          │                               │
+│                    ┌─────┴─────┐                         │
+│                    │ P-Token   │                         │
+│                    │ SIMD-0266 │ batch CPI, low CU       │
+│                    └───────────┘                         │
+└──────────────────────────────────────────────────────────┘
+```
+
+| Operation | SPL Token CU | p-token CU | Savings |
+| --- | ---: | ---: | ---: |
+| Transfer / fee distribution | 4,645 | 76 | 98.4% |
+| MintTo / buy path | 4,128 | 2,012 | 51.3% |
+| Burn / sell path | 4,753 | 1,884 | 60.4% |
+| Batch fee distribution, 10 recipients | 62,000 | 1,250 | 98.0% |
+
+Fast path commands:
+
+```bash
+npm run ptoken:launch-plan -- --symbol PFOO --name "P Foo"
+npm run ptoken:curve-quote -- --virtual-sol 30 --virtual-token 1073000000 --sol 1
+npm run ptoken:inspect -- --mint <mint>
+npm run ptoken:add -- --mint <mint> --symbol PFOO --name "P Foo" --p-token-program-id <program>
+npm run pagent:plan -- --symbol PCLAWD --name "Clawd Agent Token" --agent-name "Clawd"
+npm run pagent:quote -- --virtual-sol 30 --virtual-token 1073000000 --sol 1
+cd programs && cargo check -p p-token-launchpad
+```
+
+Current deployment note: the launchpad program id is a placeholder until a real deployment is chosen. Treat p-token and launchpad code as pre-audit infrastructure; verify the exact p-token program id, feature gate, curve math, fee custody, PDA signer model, and DEX graduation adapter before mainnet use. Private payment-rail implementation files stay excluded from public GitHub.
 
 ---
 
@@ -419,6 +491,7 @@ The Three Laws live in [`leviathan/three-laws.txt`](./leviathan/three-laws.txt) 
 | `npm run ptoken:curve-quote` | Simulate a constant-product p-token launch curve quote |
 | `npm run pagent:plan` | Generate an unsigned p-token agent-token plan with agent identity and binding steps |
 | `npm run pagent:quote` | Simulate a p-agent-token bonding curve quote |
+| `cd programs && cargo check -p p-token-launchpad` | Compile-check the public p-token launchpad program |
 | `npm run programs:map` | List mapped on-chain programs and local program references |
 | `npm run programs:show -- token-launcher` | Show one mapped program entry |
 | `npm run oracle:check` | Type/check the Rust LLM oracle crate |
@@ -479,7 +552,12 @@ solana-clawd/
 7. [`openclawd/README.md`](./openclawd/README.md)
 8. [`openclawd-framework/README.md`](./openclawd-framework/README.md)
 9. [`pinocchio/README.md`](./pinocchio/README.md)
-10. [`programs/README.md`](./programs/README.md)
+10. [`docs/PTOKEN_LAUNCHPAD.md`](./docs/PTOKEN_LAUNCHPAD.md)
+11. [`docs/PTOKEN_EXPLORER.md`](./docs/PTOKEN_EXPLORER.md)
+12. [`pinocchio/docs/P_AGENT_TOKEN.md`](./pinocchio/docs/P_AGENT_TOKEN.md)
+13. [`programs/p-token-launchpad/README.md`](./programs/p-token-launchpad/README.md)
+14. [`programs/README.md`](./programs/README.md)
+15. [`docs/risk-engine-spec.md`](./docs/risk-engine-spec.md)
 
 ---
 
