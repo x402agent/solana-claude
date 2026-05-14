@@ -1,4 +1,602 @@
+warning: profiles for the non root package will be ignored, specify profiles at the workspace root:
+package:   /Users/8bit/bots/Cladwbot-solana/solana-clawd/programs/p-token-launchpad/Cargo.toml
+workspace: /Users/8bit/bots/Cladwbot-solana/solana-clawd/programs/Cargo.toml
     Blocking waiting for file lock on package cache
     Blocking waiting for file lock on package cache
     Blocking waiting for file lock on package cache
-    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.24s
+   0.255371458s  INFO prepare_target{force=false package_id=clawd-stake v0.1.0 (/Users/8bit/bots/Cladwbot-solana/solana-clawd/programs/clawd-stake) target="clawd_stake"}: cargo::core::compiler::fingerprint: dependency on `build_script_build` is newer than we are 1778791658.568391937s > 1778769302.638832227s "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde_core-1.0.228"
+   0.255757416s  INFO prepare_target{force=false package_id=clawd-stake v0.1.0 (/Users/8bit/bots/Cladwbot-solana/solana-clawd/programs/clawd-stake) target="clawd_stake"}: cargo::core::compiler::fingerprint: dependency on `serde_derive` is newer than we are 1778791663.220244659s > 1778769302.621475388s "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228"
+   0.256896500s  INFO prepare_target{force=false package_id=clawd-stake v0.1.0 (/Users/8bit/bots/Cladwbot-solana/solana-clawd/programs/clawd-stake) target="clawd_stake"}: cargo::core::compiler::fingerprint: dependency on `build_script_build` is newer than we are 1778791658.664623745s > 1778766214.277725844s "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zerocopy-0.8.48"
+   0.256920708s  INFO prepare_target{force=false package_id=clawd-stake v0.1.0 (/Users/8bit/bots/Cladwbot-solana/solana-clawd/programs/clawd-stake) target="clawd_stake"}: cargo::core::compiler::fingerprint: dependency on `build_script_build` is newer than we are 1778791658.470325938s > 1778769194.732783304s "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ahash-0.8.12"
+   0.257070500s  INFO prepare_target{force=false package_id=clawd-stake v0.1.0 (/Users/8bit/bots/Cladwbot-solana/solana-clawd/programs/clawd-stake) target="clawd_stake"}: cargo::core::compiler::fingerprint: dependency on `bytemuck_derive` is newer than we are 1778791662.565652784s > 1778769200.342950121s "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/bytemuck-1.25.0"
+   0.257234666s  INFO prepare_target{force=false package_id=clawd-stake v0.1.0 (/Users/8bit/bots/Cladwbot-solana/solana-clawd/programs/clawd-stake) target="clawd_stake"}: cargo::core::compiler::fingerprint: dependency on `build_script_build` is newer than we are 1778791658.622785962s > 1778769194.176892981s "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/libc-0.2.186"
+   0.258983458s  INFO prepare_target{force=false package_id=clawd-stake v0.1.0 (/Users/8bit/bots/Cladwbot-solana/solana-clawd/programs/clawd-stake) target="clawd_stake"}: cargo::core::compiler::fingerprint: dependency on `build_script_build` is newer than we are 1778791658.635511458s > 1778769194.791625389s "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/num-traits-0.2.19"
+   0.259745375s  INFO prepare_target{force=false package_id=clawd-stake v0.1.0 (/Users/8bit/bots/Cladwbot-solana/solana-clawd/programs/clawd-stake) target="clawd_stake"}: cargo::core::compiler::fingerprint: dependency on `ark_serialize_derive` is newer than we are 1778791661.443872586s > 1778769302.208985950s "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ark-serialize-0.4.2"
+   0.260696250s  INFO prepare_target{force=false package_id=clawd-stake v0.1.0 (/Users/8bit/bots/Cladwbot-solana/solana-clawd/programs/clawd-stake) target="clawd_stake"}: cargo::core::compiler::fingerprint: dependency on `zeroize_derive` is newer than we are 1778791661.869289085s > 1778769199.695773890s "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zeroize-1.3.0"
+   0.260719916s  INFO prepare_target{force=false package_id=clawd-stake v0.1.0 (/Users/8bit/bots/Cladwbot-solana/solana-clawd/programs/clawd-stake) target="clawd_stake"}: cargo::core::compiler::fingerprint: dependency on `ark_ff_macros` is newer than we are 1778791661.915380880s > 1778769302.117998253s "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ark-ff-0.4.2"
+   0.265154708s  INFO prepare_target{force=false package_id=clawd-stake v0.1.0 (/Users/8bit/bots/Cladwbot-solana/solana-clawd/programs/clawd-stake) target="clawd_stake"}: cargo::core::compiler::fingerprint: dependency on `build_script_build` is newer than we are 1778791659.923973195s > 1778769198.498474145s "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/blake3-1.8.5"
+   0.266239416s  INFO prepare_target{force=false package_id=clawd-stake v0.1.0 (/Users/8bit/bots/Cladwbot-solana/solana-clawd/programs/clawd-stake) target="clawd_stake"}: cargo::core::compiler::fingerprint: dependency on `borsh_derive` is newer than we are 1778791664.203827681s > 1778769302.245140852s "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/borsh-0.9.3"
+   0.269004458s  INFO prepare_target{force=false package_id=clawd-stake v0.1.0 (/Users/8bit/bots/Cladwbot-solana/solana-clawd/programs/clawd-stake) target="clawd_stake"}: cargo::core::compiler::fingerprint: dependency on `borsh_derive` is newer than we are 1778791662.521028299s > 1778769200.656239196s "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/borsh-1.6.1"
+   0.269681125s  INFO prepare_target{force=false package_id=clawd-stake v0.1.0 (/Users/8bit/bots/Cladwbot-solana/solana-clawd/programs/clawd-stake) target="clawd_stake"}: cargo::core::compiler::fingerprint: dependency on `build_script_build` is newer than we are 1778791658.656454391s > 1778769302.334573783s "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/bv-0.11.1"
+   0.270174666s  INFO prepare_target{force=false package_id=clawd-stake v0.1.0 (/Users/8bit/bots/Cladwbot-solana/solana-clawd/programs/clawd-stake) target="clawd_stake"}: cargo::core::compiler::fingerprint: dependency on `build_script_build` is newer than we are 1778791658.623463929s > 1778769195.241375030s "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/getrandom-0.1.16"
+   0.271164708s  INFO prepare_target{force=false package_id=clawd-stake v0.1.0 (/Users/8bit/bots/Cladwbot-solana/solana-clawd/programs/clawd-stake) target="clawd_stake"}: cargo::core::compiler::fingerprint: dependency on `build_script_build` is newer than we are 1778791658.070385388s > 1778769302.357177675s "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/crunchy-0.2.4"
+   0.271939375s  INFO prepare_target{force=false package_id=clawd-stake v0.1.0 (/Users/8bit/bots/Cladwbot-solana/solana-clawd/programs/clawd-stake) target="clawd_stake"}: cargo::core::compiler::fingerprint: dependency on `build_script_build` is newer than we are 1778791658.094210608s > 1778769200.427183251s "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-1.0.69"
+   0.272468458s  INFO prepare_target{force=false package_id=clawd-stake v0.1.0 (/Users/8bit/bots/Cladwbot-solana/solana-clawd/programs/clawd-stake) target="clawd_stake"}: cargo::core::compiler::fingerprint: dependency on `build_script_build` is newer than we are 1778791658.619539255s > 1778769196.369082792s "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/memoffset-0.9.1"
+   0.273182833s  INFO prepare_target{force=false package_id=clawd-stake v0.1.0 (/Users/8bit/bots/Cladwbot-solana/solana-clawd/programs/clawd-stake) target="clawd_stake"}: cargo::core::compiler::fingerprint: dependency on `build_script_build` is newer than we are 1778791658.035533028s > 1778769194.191040789s "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zmij-1.0.21"
+   0.273701875s  INFO prepare_target{force=false package_id=clawd-stake v0.1.0 (/Users/8bit/bots/Cladwbot-solana/solana-clawd/programs/clawd-stake) target="clawd_stake"}: cargo::core::compiler::fingerprint: dependency on `build_script_build` is newer than we are 1778791658.564641597s > 1778766211.120247177s "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/crossbeam-utils-0.8.21"
+   0.273795250s  INFO prepare_target{force=false package_id=clawd-stake v0.1.0 (/Users/8bit/bots/Cladwbot-solana/solana-clawd/programs/clawd-stake) target="clawd_stake"}: cargo::core::compiler::fingerprint: dependency on `build_script_build` is newer than we are 1778791658.607195722s > 1778769195.060246687s "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/rayon-core-1.13.0"
+   0.274479958s  INFO prepare_target{force=false package_id=clawd-stake v0.1.0 (/Users/8bit/bots/Cladwbot-solana/solana-clawd/programs/clawd-stake) target="clawd_stake"}: cargo::core::compiler::fingerprint: dependency on `build_script_build` is newer than we are 1778791658.622793338s > 1778769203.102422492s "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-frozen-abi-1.18.26"
+   0.274815875s  INFO prepare_target{force=false package_id=clawd-stake v0.1.0 (/Users/8bit/bots/Cladwbot-solana/solana-clawd/programs/clawd-stake) target="clawd_stake"}: cargo::core::compiler::fingerprint: dependency on `build_script_build` is newer than we are 1778791658.107020146s > 1778766210.460901868s "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/anyhow-1.0.102"
+   0.275940958s  INFO prepare_target{force=false package_id=clawd-stake v0.1.0 (/Users/8bit/bots/Cladwbot-solana/solana-clawd/programs/clawd-stake) target="clawd_stake"}: cargo::core::compiler::fingerprint: dependency on `build_script_build` is newer than we are 1778791658.080867313s > 1778769196.273911303s "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/wasm-bindgen-shared-0.2.120"
+   0.275950041s  INFO prepare_target{force=false package_id=clawd-stake v0.1.0 (/Users/8bit/bots/Cladwbot-solana/solana-clawd/programs/clawd-stake) target="clawd_stake"}: cargo::core::compiler::fingerprint: dependency on `wasm_bindgen_macro` is newer than we are 1778791663.293957264s > 1778769201.572762815s "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/wasm-bindgen-0.2.120"
+   0.275964208s  INFO prepare_target{force=false package_id=clawd-stake v0.1.0 (/Users/8bit/bots/Cladwbot-solana/solana-clawd/programs/clawd-stake) target="clawd_stake"}: cargo::core::compiler::fingerprint: dependency on `build_script_build` is newer than we are 1778791659.861359647s > 1778769302.832464320s "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-program-1.18.26"
+   0.276297583s  INFO prepare_target{force=false package_id=clawd-stake v0.1.0 (/Users/8bit/bots/Cladwbot-solana/solana-clawd/programs/clawd-stake) target="clawd_stake"}: cargo::core::compiler::fingerprint: dependency on `num_enum_derive` is newer than we are 1778791662.043486928s > 1778769302.515475791s "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/num_enum-0.7.6"
+   0.278692416s  INFO prepare_target{force=false package_id=clawd-stake v0.1.0 (/Users/8bit/bots/Cladwbot-solana/solana-clawd/programs/clawd-stake) target="clawd_stake"}: cargo::core::compiler::fingerprint: dependency on `serde_with_macros` is newer than we are 1778791663.373927657s > 1778769302.785511061s "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde_with-2.3.3"
+   0.281394625s  INFO prepare_target{force=false package_id=clawd-stake v0.1.0 (/Users/8bit/bots/Cladwbot-solana/solana-clawd/programs/clawd-stake) target="clawd_stake"}: cargo::core::compiler::fingerprint: dependency on `modular_bitfield_impl` is newer than we are 1778791662.211046519s > 1778766211.835213128s "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/modular-bitfield-0.11.2"
+   0.281729083s  INFO prepare_target{force=false package_id=clawd-stake v0.1.0 (/Users/8bit/bots/Cladwbot-solana/solana-clawd/programs/clawd-stake) target="clawd_stake"}: cargo::core::compiler::fingerprint: fingerprint error for clawd-stake v0.1.0 (/Users/8bit/bots/Cladwbot-solana/solana-clawd/programs/clawd-stake)/Check { test: false }/TargetInner { ..: lib_target("clawd_stake", ["cdylib", "lib"], "/Users/8bit/bots/Cladwbot-solana/solana-clawd/programs/clawd-stake/src/lib.rs", Edition2021) }
+   0.282280541s  INFO prepare_target{force=false package_id=clawd-stake v0.1.0 (/Users/8bit/bots/Cladwbot-solana/solana-clawd/programs/clawd-stake) target="clawd_stake"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/bots/Cladwbot-solana/solana-clawd/programs/target/debug/.fingerprint/clawd-stake-726ab2388757f5f1/lib-clawd_stake`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   7: cargo::ops::cargo_compile::compile_ws
+   8: cargo::ops::cargo_compile::compile_with_exec
+   9: cargo::ops::cargo_compile::compile
+  10: cargo::commands::check::exec
+  11: <cargo::cli::Exec>::exec
+  12: cargo::main
+  13: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  14: std::rt::lang_start::<()>::{closure#0}
+  15: std::rt::lang_start_internal
+  16: _main
+   0.298662666s  INFO prepare_target{force=false package_id=anchor-lang v0.30.1 target="anchor_lang"}: cargo::core::compiler::fingerprint: fingerprint dirty for anchor-lang v0.30.1/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("anchor_lang", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/anchor-lang-0.30.1/src/lib.rs", Edition2021) }
+   0.298674833s  INFO prepare_target{force=false package_id=anchor-lang v0.30.1 target="anchor_lang"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(283) })
+   0.304861916s  INFO prepare_target{force=false package_id=bincode v1.3.3 target="bincode"}: cargo::core::compiler::fingerprint: fingerprint dirty for bincode v1.3.3/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("bincode", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/bincode-1.3.3/src/lib.rs", Edition2015) }
+   0.304880375s  INFO prepare_target{force=false package_id=bincode v1.3.3 target="bincode"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(246) })
+   0.305471166s  INFO prepare_target{force=false package_id=serde v1.0.228 target="serde"}: cargo::core::compiler::fingerprint: fingerprint dirty for serde v1.0.228/Check { test: false }/TargetInner { ..: lib_target("serde", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/lib.rs", Edition2021) }
+   0.305478833s  INFO prepare_target{force=false package_id=serde v1.0.228 target="serde"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDependency { unit: UnitIndex(258), dep_mtime: FileTime { seconds: 1778791663, nanos: 220244659 }, max_mtime: FileTime { seconds: 1778769302, nanos: 621475388 } })
+   0.306043291s  INFO prepare_target{force=false package_id=serde_core v1.0.228 target="serde_core"}: cargo::core::compiler::fingerprint: fingerprint dirty for serde_core v1.0.228/Check { test: false }/TargetInner { ..: lib_target("serde_core", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde_core-1.0.228/src/lib.rs", Edition2021) }
+   0.306050625s  INFO prepare_target{force=false package_id=serde_core v1.0.228 target="serde_core"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDependency { unit: UnitIndex(257), dep_mtime: FileTime { seconds: 1778791658, nanos: 568391937 }, max_mtime: FileTime { seconds: 1778769302, nanos: 638832227 } })
+   0.306750125s  INFO prepare_target{force=false package_id=borsh v0.10.4 target="borsh"}: cargo::core::compiler::fingerprint: fingerprint dirty for borsh v0.10.4/Check { test: false }/TargetInner { ..: lib_target("borsh", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/borsh-0.10.4/src/lib.rs", Edition2018) }
+   0.306757541s  INFO prepare_target{force=false package_id=borsh v0.10.4 target="borsh"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(140) })
+   0.307446458s  INFO prepare_target{force=false package_id=hashbrown v0.13.2 target="hashbrown"}: cargo::core::compiler::fingerprint: fingerprint dirty for hashbrown v0.13.2/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("hashbrown", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/hashbrown-0.13.2/src/lib.rs", Edition2021) }
+   0.307452291s  INFO prepare_target{force=false package_id=hashbrown v0.13.2 target="hashbrown"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(6) })
+   0.307985666s  INFO prepare_target{force=false package_id=ahash v0.8.12 target="ahash"}: cargo::core::compiler::fingerprint: fingerprint dirty for ahash v0.8.12/Check { test: false }/TargetInner { ..: lib_target("ahash", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ahash-0.8.12/src/lib.rs", Edition2018) }
+   0.307990375s  INFO prepare_target{force=false package_id=ahash v0.8.12 target="ahash"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDependency { unit: UnitIndex(8), dep_mtime: FileTime { seconds: 1778791658, nanos: 470325938 }, max_mtime: FileTime { seconds: 1778769194, nanos: 732783304 } })
+   0.309901291s  INFO prepare_target{force=false package_id=zerocopy v0.8.48 target="zerocopy"}: cargo::core::compiler::fingerprint: fingerprint dirty for zerocopy v0.8.48/Check { test: false }/TargetInner { ..: lib_target("zerocopy", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zerocopy-0.8.48/src/lib.rs", Edition2021) }
+   0.309911916s  INFO prepare_target{force=false package_id=zerocopy v0.8.48 target="zerocopy"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDependency { unit: UnitIndex(362), dep_mtime: FileTime { seconds: 1778791658, nanos: 664623745 }, max_mtime: FileTime { seconds: 1778766214, nanos: 277725844 } })
+   0.310685291s  INFO prepare_target{force=false package_id=bytemuck v1.25.0 target="bytemuck"}: cargo::core::compiler::fingerprint: fingerprint dirty for bytemuck v1.25.0/Check { test: false }/TargetInner { ..: lib_target("bytemuck", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/bytemuck-1.25.0/src/lib.rs", Edition2018) }
+   0.310692250s  INFO prepare_target{force=false package_id=bytemuck v1.25.0 target="bytemuck"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDependency { unit: UnitIndex(77), dep_mtime: FileTime { seconds: 1778791662, nanos: 565652784 }, max_mtime: FileTime { seconds: 1778769200, nanos: 342950121 } })
+   0.311177791s  INFO prepare_target{force=false package_id=getrandom v0.2.17 target="getrandom"}: cargo::core::compiler::fingerprint: fingerprint dirty for getrandom v0.2.17/Check { test: false }/TargetInner { ..: lib_target("getrandom", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/getrandom-0.2.17/src/lib.rs", Edition2018) }
+   0.311183333s  INFO prepare_target{force=false package_id=getrandom v0.2.17 target="getrandom"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(161) })
+   0.311635416s  INFO prepare_target{force=false package_id=libc v0.2.186 target="libc"}: cargo::core::compiler::fingerprint: fingerprint dirty for libc v0.2.186/Check { test: false }/TargetInner { ..: lib_target("libc", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/libc-0.2.186/src/lib.rs", Edition2021) }
+   0.311640500s  INFO prepare_target{force=false package_id=libc v0.2.186 target="libc"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDependency { unit: UnitIndex(165), dep_mtime: FileTime { seconds: 1778791658, nanos: 622785962 }, max_mtime: FileTime { seconds: 1778769194, nanos: 176892981 } })
+   0.312125333s  INFO prepare_target{force=false package_id=solana-program v1.18.26 target="solana_program"}: cargo::core::compiler::fingerprint: fingerprint dirty for solana-program v1.18.26/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("solana_program", ["cdylib", "rlib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-program-1.18.26/src/lib.rs", Edition2021) }
+   0.312132000s  INFO prepare_target{force=false package_id=solana-program v1.18.26 target="solana_program"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDependency { unit: UnitIndex(285), dep_mtime: FileTime { seconds: 1778791659, nanos: 861359647 }, max_mtime: FileTime { seconds: 1778769302, nanos: 832464320 } })
+   0.313527000s  INFO prepare_target{force=false package_id=ark-bn254 v0.4.0 target="ark_bn254"}: cargo::core::compiler::fingerprint: fingerprint dirty for ark-bn254 v0.4.0/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("ark_bn254", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ark-bn254-0.4.0/src/lib.rs", Edition2021) }
+   0.313535041s  INFO prepare_target{force=false package_id=ark-bn254 v0.4.0 target="ark_bn254"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(31) })
+   0.314197416s  INFO prepare_target{force=false package_id=ark-ec v0.4.2 target="ark_ec"}: cargo::core::compiler::fingerprint: fingerprint dirty for ark-ec v0.4.2/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("ark_ec", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ark-ec-0.4.2/src/lib.rs", Edition2021) }
+   0.314203083s  INFO prepare_target{force=false package_id=ark-ec v0.4.2 target="ark_ec"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(31) })
+   0.314739791s  INFO prepare_target{force=false package_id=ark-ff v0.4.2 target="ark_ff"}: cargo::core::compiler::fingerprint: fingerprint dirty for ark-ff v0.4.2/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("ark_ff", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ark-ff-0.4.2/src/lib.rs", Edition2021) }
+   0.314744666s  INFO prepare_target{force=false package_id=ark-ff v0.4.2 target="ark_ff"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDependency { unit: UnitIndex(33), dep_mtime: FileTime { seconds: 1778791661, nanos: 915380880 }, max_mtime: FileTime { seconds: 1778769302, nanos: 117998253 } })
+   0.316469500s  INFO prepare_target{force=false package_id=ark-serialize v0.4.2 target="ark_serialize"}: cargo::core::compiler::fingerprint: fingerprint dirty for ark-serialize v0.4.2/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("ark_serialize", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ark-serialize-0.4.2/src/lib.rs", Edition2021) }
+   0.316476791s  INFO prepare_target{force=false package_id=ark-serialize v0.4.2 target="ark_serialize"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDependency { unit: UnitIndex(36), dep_mtime: FileTime { seconds: 1778791661, nanos: 443872586 }, max_mtime: FileTime { seconds: 1778769302, nanos: 208985950 } })
+   0.319676375s  INFO prepare_target{force=false package_id=ark-std v0.4.0 target="ark_std"}: cargo::core::compiler::fingerprint: fingerprint dirty for ark-std v0.4.0/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("ark_std", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ark-std-0.4.0/src/lib.rs", Edition2021) }
+   0.319685208s  INFO prepare_target{force=false package_id=ark-std v0.4.0 target="ark_std"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(193) })
+   0.320212583s  INFO prepare_target{force=false package_id=num-traits v0.2.19 target="num_traits"}: cargo::core::compiler::fingerprint: fingerprint dirty for num-traits v0.2.19/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("num_traits", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/num-traits-0.2.19/src/lib.rs", Edition2021) }
+   0.320217750s  INFO prepare_target{force=false package_id=num-traits v0.2.19 target="num_traits"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDependency { unit: UnitIndex(197), dep_mtime: FileTime { seconds: 1778791658, nanos: 635511458 }, max_mtime: FileTime { seconds: 1778769194, nanos: 791625389 } })
+   0.320820750s  INFO prepare_target{force=false package_id=rand v0.8.6 target="rand"}: cargo::core::compiler::fingerprint: fingerprint dirty for rand v0.8.6/Check { test: false }/TargetInner { ..: lib_target("rand", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/rand-0.8.6/src/lib.rs", Edition2018) }
+   0.320839375s  INFO prepare_target{force=false package_id=rand v0.8.6 target="rand"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(226) })
+   0.321466333s  INFO prepare_target{force=false package_id=rand_chacha v0.3.1 target="rand_chacha"}: cargo::core::compiler::fingerprint: fingerprint dirty for rand_chacha v0.3.1/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("rand_chacha", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/rand_chacha-0.3.1/src/lib.rs", Edition2018) }
+   0.321474666s  INFO prepare_target{force=false package_id=rand_chacha v0.3.1 target="rand_chacha"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(212) })
+   0.321907041s  INFO prepare_target{force=false package_id=ppv-lite86 v0.2.21 target="ppv_lite86"}: cargo::core::compiler::fingerprint: fingerprint dirty for ppv-lite86 v0.2.21/Check { test: false }/TargetInner { ..: lib_target("ppv_lite86", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ppv-lite86-0.2.21/src/lib.rs", Edition2021) }
+   0.321913000s  INFO prepare_target{force=false package_id=ppv-lite86 v0.2.21 target="ppv_lite86"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(360) })
+   0.322745583s  INFO prepare_target{force=false package_id=rand_core v0.6.4 target="rand_core"}: cargo::core::compiler::fingerprint: fingerprint dirty for rand_core v0.6.4/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("rand_core", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/rand_core-0.6.4/src/lib.rs", Edition2018) }
+   0.322755750s  INFO prepare_target{force=false package_id=rand_core v0.6.4 target="rand_core"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(138) })
+   0.323494500s  INFO prepare_target{force=false package_id=digest v0.10.7 target="digest"}: cargo::core::compiler::fingerprint: fingerprint dirty for digest v0.10.7/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("digest", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/digest-0.10.7/src/lib.rs", Edition2018) }
+   0.323502291s  INFO prepare_target{force=false package_id=digest v0.10.7 target="digest"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(101) })
+   0.324375041s  INFO prepare_target{force=false package_id=block-buffer v0.10.4 target="block_buffer"}: cargo::core::compiler::fingerprint: fingerprint dirty for block-buffer v0.10.4/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("block_buffer", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/block-buffer-0.10.4/src/lib.rs", Edition2018) }
+   0.324381916s  INFO prepare_target{force=false package_id=block-buffer v0.10.4 target="block_buffer"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(130) })
+   0.324967708s  INFO prepare_target{force=false package_id=generic-array v0.14.9 target="generic_array"}: cargo::core::compiler::fingerprint: fingerprint dirty for generic-array v0.14.9/Check { test: false }/TargetInner { ..: lib_target("generic_array", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/generic-array-0.14.9/src/lib.rs", Edition2015) }
+   0.324973416s  INFO prepare_target{force=false package_id=generic-array v0.14.9 target="generic_array"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(246) })
+   0.325799125s  INFO prepare_target{force=false package_id=crypto-common v0.1.6 target="crypto_common"}: cargo::core::compiler::fingerprint: fingerprint dirty for crypto-common v0.1.6/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("crypto_common", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/crypto-common-0.1.6/src/lib.rs", Edition2018) }
+   0.325804500s  INFO prepare_target{force=false package_id=crypto-common v0.1.6 target="crypto_common"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(130) })
+   0.326449041s  INFO prepare_target{force=false package_id=num-bigint v0.4.6 target="num_bigint"}: cargo::core::compiler::fingerprint: fingerprint dirty for num-bigint v0.4.6/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("num_bigint", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/num-bigint-0.4.6/src/lib.rs", Edition2021) }
+   0.326454291s  INFO prepare_target{force=false package_id=num-bigint v0.4.6 target="num_bigint"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(193) })
+   0.326881333s  INFO prepare_target{force=false package_id=num-integer v0.1.46 target="num_integer"}: cargo::core::compiler::fingerprint: fingerprint dirty for num-integer v0.1.46/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("num_integer", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/num-integer-0.1.46/src/lib.rs", Edition2018) }
+   0.326886291s  INFO prepare_target{force=false package_id=num-integer v0.1.46 target="num_integer"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(193) })
+   0.327902833s  INFO prepare_target{force=false package_id=zeroize v1.3.0 target="zeroize"}: cargo::core::compiler::fingerprint: fingerprint dirty for zeroize v1.3.0/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("zeroize", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zeroize-1.3.0/src/lib.rs", Edition2018) }
+   0.327907833s  INFO prepare_target{force=false package_id=zeroize v1.3.0 target="zeroize"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDependency { unit: UnitIndex(364), dep_mtime: FileTime { seconds: 1778791661, nanos: 869289085 }, max_mtime: FileTime { seconds: 1778769199, nanos: 695773890 } })
+   0.328378125s  INFO prepare_target{force=false package_id=ark-poly v0.4.2 target="ark_poly"}: cargo::core::compiler::fingerprint: fingerprint dirty for ark-poly v0.4.2/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("ark_poly", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ark-poly-0.4.2/src/lib.rs", Edition2021) }
+   0.328382333s  INFO prepare_target{force=false package_id=ark-poly v0.4.2 target="ark_poly"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(31) })
+   0.328960250s  INFO prepare_target{force=false package_id=bitflags v2.11.1 target="bitflags"}: cargo::core::compiler::fingerprint: fingerprint dirty for bitflags v2.11.1/Check { test: false }/TargetInner { ..: lib_target("bitflags", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/bitflags-2.11.1/src/lib.rs", Edition2021) }
+   0.328966375s  INFO prepare_target{force=false package_id=bitflags v2.11.1 target="bitflags"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(253) })
+   0.329571708s  INFO prepare_target{force=false package_id=blake3 v1.8.5 target="blake3"}: cargo::core::compiler::fingerprint: fingerprint dirty for blake3 v1.8.5/Check { test: false }/TargetInner { ..: lib_target("blake3", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/blake3-1.8.5/src/lib.rs", Edition2024) }
+   0.329598458s  INFO prepare_target{force=false package_id=blake3 v1.8.5 target="blake3"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDependency { unit: UnitIndex(51), dep_mtime: FileTime { seconds: 1778791659, nanos: 923973195 }, max_mtime: FileTime { seconds: 1778769198, nanos: 498474145 } })
+   0.331946541s  INFO prepare_target{force=false package_id=borsh v0.9.3 target="borsh"}: cargo::core::compiler::fingerprint: fingerprint dirty for borsh v0.9.3/Check { test: false }/TargetInner { ..: lib_target("borsh", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/borsh-0.9.3/src/lib.rs", Edition2018) }
+   0.331953041s  INFO prepare_target{force=false package_id=borsh v0.9.3 target="borsh"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDependency { unit: UnitIndex(62), dep_mtime: FileTime { seconds: 1778791664, nanos: 203827681 }, max_mtime: FileTime { seconds: 1778769302, nanos: 245140852 } })
+   0.332534916s  INFO prepare_target{force=false package_id=hashbrown v0.11.2 target="hashbrown"}: cargo::core::compiler::fingerprint: fingerprint dirty for hashbrown v0.11.2/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("hashbrown", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/hashbrown-0.11.2/src/lib.rs", Edition2018) }
+   0.332539708s  INFO prepare_target{force=false package_id=hashbrown v0.11.2 target="hashbrown"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(3) })
+   0.333042333s  INFO prepare_target{force=false package_id=ahash v0.7.8 target="ahash"}: cargo::core::compiler::fingerprint: fingerprint dirty for ahash v0.7.8/Check { test: false }/TargetInner { ..: lib_target("ahash", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ahash-0.7.8/src/lib.rs", Edition2018) }
+   0.333047583s  INFO prepare_target{force=false package_id=ahash v0.7.8 target="ahash"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(138) })
+   0.333722333s  INFO prepare_target{force=false package_id=borsh v1.6.1 target="borsh"}: cargo::core::compiler::fingerprint: fingerprint dirty for borsh v1.6.1/Check { test: false }/TargetInner { ..: lib_target("borsh", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/borsh-1.6.1/src/lib.rs", Edition2018) }
+   0.333727666s  INFO prepare_target{force=false package_id=borsh v1.6.1 target="borsh"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDependency { unit: UnitIndex(64), dep_mtime: FileTime { seconds: 1778791662, nanos: 521028299 }, max_mtime: FileTime { seconds: 1778769200, nanos: 656239196 } })
+   0.336315791s  INFO prepare_target{force=false package_id=bv v0.11.1 target="bv"}: cargo::core::compiler::fingerprint: fingerprint dirty for bv v0.11.1/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("bv", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/bv-0.11.1/src/lib.rs", Edition2015) }
+   0.336326166s  INFO prepare_target{force=false package_id=bv v0.11.1 target="bv"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDependency { unit: UnitIndex(75), dep_mtime: FileTime { seconds: 1778791658, nanos: 656454391 }, max_mtime: FileTime { seconds: 1778769302, nanos: 334573783 } })
+   0.337094125s  INFO prepare_target{force=false package_id=curve25519-dalek v3.2.1 target="curve25519_dalek"}: cargo::core::compiler::fingerprint: fingerprint dirty for curve25519-dalek v3.2.1/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("curve25519_dalek", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/curve25519-dalek-3.2.1/src/lib.rs", Edition2015) }
+   0.337099541s  INFO prepare_target{force=false package_id=curve25519-dalek v3.2.1 target="curve25519_dalek"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(227) })
+   0.337738500s  INFO prepare_target{force=false package_id=digest v0.9.0 target="digest"}: cargo::core::compiler::fingerprint: fingerprint dirty for digest v0.9.0/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("digest", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/digest-0.9.0/src/lib.rs", Edition2018) }
+   0.337746583s  INFO prepare_target{force=false package_id=digest v0.9.0 target="digest"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(130) })
+   0.338197750s  INFO prepare_target{force=false package_id=rand_core v0.5.1 target="rand_core"}: cargo::core::compiler::fingerprint: fingerprint dirty for rand_core v0.5.1/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("rand_core", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/rand_core-0.5.1/src/lib.rs", Edition2018) }
+   0.338202666s  INFO prepare_target{force=false package_id=rand_core v0.5.1 target="rand_core"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(135) })
+   0.339110666s  INFO prepare_target{force=false package_id=getrandom v0.1.16 target="getrandom"}: cargo::core::compiler::fingerprint: fingerprint dirty for getrandom v0.1.16/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("getrandom", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/getrandom-0.1.16/src/lib.rs", Edition2018) }
+   0.339120166s  INFO prepare_target{force=false package_id=getrandom v0.1.16 target="getrandom"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDependency { unit: UnitIndex(137), dep_mtime: FileTime { seconds: 1778791658, nanos: 623463929 }, max_mtime: FileTime { seconds: 1778769195, nanos: 241375030 } })
+   0.340100125s  INFO prepare_target{force=false package_id=libsecp256k1 v0.6.0 target="libsecp256k1"}: cargo::core::compiler::fingerprint: fingerprint dirty for libsecp256k1 v0.6.0/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("libsecp256k1", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/libsecp256k1-0.6.0/src/lib.rs", Edition2018) }
+   0.340106708s  INFO prepare_target{force=false package_id=libsecp256k1 v0.6.0 target="libsecp256k1"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(146) })
+   0.340953291s  INFO prepare_target{force=false package_id=hmac-drbg v0.3.0 target="hmac_drbg"}: cargo::core::compiler::fingerprint: fingerprint dirty for hmac-drbg v0.3.0/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("hmac_drbg", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/hmac-drbg-0.3.0/src/lib.rs", Edition2018) }
+   0.340959583s  INFO prepare_target{force=false package_id=hmac-drbg v0.3.0 target="hmac_drbg"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(144) })
+   0.341364250s  INFO prepare_target{force=false package_id=hmac v0.8.1 target="hmac"}: cargo::core::compiler::fingerprint: fingerprint dirty for hmac v0.8.1/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("hmac", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/hmac-0.8.1/src/lib.rs", Edition2018) }
+   0.341370833s  INFO prepare_target{force=false package_id=hmac v0.8.1 target="hmac"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(103) })
+   0.341836875s  INFO prepare_target{force=false package_id=crypto-mac v0.8.0 target="crypto_mac"}: cargo::core::compiler::fingerprint: fingerprint dirty for crypto-mac v0.8.0/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("crypto_mac", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/crypto-mac-0.8.0/src/lib.rs", Edition2018) }
+   0.341841833s  INFO prepare_target{force=false package_id=crypto-mac v0.8.0 target="crypto_mac"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(130) })
+   0.342716833s  INFO prepare_target{force=false package_id=libsecp256k1-core v0.2.2 target="libsecp256k1_core"}: cargo::core::compiler::fingerprint: fingerprint dirty for libsecp256k1-core v0.2.2/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("libsecp256k1_core", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/libsecp256k1-core-0.2.2/src/lib.rs", Edition2018) }
+   0.342721625s  INFO prepare_target{force=false package_id=libsecp256k1-core v0.2.2 target="libsecp256k1_core"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(97) })
+   0.343149625s  INFO prepare_target{force=false package_id=crunchy v0.2.4 target="crunchy"}: cargo::core::compiler::fingerprint: fingerprint dirty for crunchy v0.2.4/Check { test: false }/TargetInner { ..: lib_target("crunchy", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/crunchy-0.2.4/src/lib.rs", Edition2021) }
+   0.343155083s  INFO prepare_target{force=false package_id=crunchy v0.2.4 target="crunchy"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDependency { unit: UnitIndex(99), dep_mtime: FileTime { seconds: 1778791658, nanos: 70385388 }, max_mtime: FileTime { seconds: 1778769302, nanos: 357177675 } })
+   0.343662541s  INFO prepare_target{force=false package_id=rand v0.7.3 target="rand"}: cargo::core::compiler::fingerprint: fingerprint dirty for rand v0.7.3/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("rand", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/rand-0.7.3/src/lib.rs", Edition2018) }
+   0.343669791s  INFO prepare_target{force=false package_id=rand v0.7.3 target="rand"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(225) })
+   0.344158125s  INFO prepare_target{force=false package_id=rand_chacha v0.2.2 target="rand_chacha"}: cargo::core::compiler::fingerprint: fingerprint dirty for rand_chacha v0.2.2/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("rand_chacha", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/rand_chacha-0.2.2/src/lib.rs", Edition2018) }
+   0.344163875s  INFO prepare_target{force=false package_id=rand_chacha v0.2.2 target="rand_chacha"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(227) })
+   0.344713333s  INFO prepare_target{force=false package_id=sha2 v0.9.9 target="sha2"}: cargo::core::compiler::fingerprint: fingerprint dirty for sha2 v0.9.9/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("sha2", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/sha2-0.9.9/src/lib.rs", Edition2018) }
+   0.344717666s  INFO prepare_target{force=false package_id=sha2 v0.9.9 target="sha2"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(113) })
+   0.345513625s  INFO prepare_target{force=false package_id=block-buffer v0.9.0 target="block_buffer"}: cargo::core::compiler::fingerprint: fingerprint dirty for block-buffer v0.9.0/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("block_buffer", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/block-buffer-0.9.0/src/lib.rs", Edition2018) }
+   0.345521291s  INFO prepare_target{force=false package_id=block-buffer v0.9.0 target="block_buffer"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(130) })
+   0.346220958s  INFO prepare_target{force=false package_id=cpufeatures v0.2.17 target="cpufeatures"}: cargo::core::compiler::fingerprint: fingerprint dirty for cpufeatures v0.2.17/Check { test: false }/TargetInner { ..: lib_target("cpufeatures", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cpufeatures-0.2.17/src/lib.rs", Edition2018) }
+   0.346226791s  INFO prepare_target{force=false package_id=cpufeatures v0.2.17 target="cpufeatures"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(161) })
+   0.347204125s  INFO prepare_target{force=false package_id=light-poseidon v0.2.0 target="light_poseidon"}: cargo::core::compiler::fingerprint: fingerprint dirty for light-poseidon v0.2.0/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("light_poseidon", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/light-poseidon-0.2.0/src/lib.rs", Edition2021) }
+   0.347211916s  INFO prepare_target{force=false package_id=light-poseidon v0.2.0 target="light_poseidon"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(31) })
+   0.347854916s  INFO prepare_target{force=false package_id=thiserror v1.0.69 target="thiserror"}: cargo::core::compiler::fingerprint: fingerprint dirty for thiserror v1.0.69/Check { test: false }/TargetInner { ..: lib_target("thiserror", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-1.0.69/src/lib.rs", Edition2021) }
+   0.347861375s  INFO prepare_target{force=false package_id=thiserror v1.0.69 target="thiserror"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDependency { unit: UnitIndex(332), dep_mtime: FileTime { seconds: 1778791658, nanos: 94210608 }, max_mtime: FileTime { seconds: 1778769200, nanos: 427183251 } })
+   0.349036375s  INFO prepare_target{force=false package_id=memoffset v0.9.1 target="memoffset"}: cargo::core::compiler::fingerprint: fingerprint dirty for memoffset v0.9.1/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("memoffset", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/memoffset-0.9.1/src/lib.rs", Edition2015) }
+   0.349043708s  INFO prepare_target{force=false package_id=memoffset v0.9.1 target="memoffset"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDependency { unit: UnitIndex(180), dep_mtime: FileTime { seconds: 1778791658, nanos: 619539255 }, max_mtime: FileTime { seconds: 1778769196, nanos: 369082792 } })
+   0.349741458s  INFO prepare_target{force=false package_id=serde_bytes v0.11.19 target="serde_bytes"}: cargo::core::compiler::fingerprint: fingerprint dirty for serde_bytes v0.11.19/Check { test: false }/TargetInner { ..: lib_target("serde_bytes", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde_bytes-0.11.19/src/lib.rs", Edition2018) }
+   0.349746625s  INFO prepare_target{force=false package_id=serde_bytes v0.11.19 target="serde_bytes"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(253) })
+   0.350162458s  INFO prepare_target{force=false package_id=serde_json v1.0.149 target="serde_json"}: cargo::core::compiler::fingerprint: fingerprint dirty for serde_json v1.0.149/Check { test: false }/TargetInner { ..: lib_target("serde_json", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde_json-1.0.149/src/lib.rs", Edition2021) }
+   0.350166625s  INFO prepare_target{force=false package_id=serde_json v1.0.149 target="serde_json"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(253) })
+   0.350858041s  INFO prepare_target{force=false package_id=zmij v1.0.21 target="zmij"}: cargo::core::compiler::fingerprint: fingerprint dirty for zmij v1.0.21/Check { test: false }/TargetInner { ..: lib_target("zmij", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zmij-1.0.21/src/lib.rs", Edition2021) }
+   0.350862500s  INFO prepare_target{force=false package_id=zmij v1.0.21 target="zmij"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDependency { unit: UnitIndex(368), dep_mtime: FileTime { seconds: 1778791658, nanos: 35533028 }, max_mtime: FileTime { seconds: 1778769194, nanos: 191040789 } })
+   0.351236750s  INFO prepare_target{force=false package_id=sha2 v0.10.9 target="sha2"}: cargo::core::compiler::fingerprint: fingerprint dirty for sha2 v0.10.9/Check { test: false }/TargetInner { ..: lib_target("sha2", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/sha2-0.10.9/src/lib.rs", Edition2018) }
+   0.351240125s  INFO prepare_target{force=false package_id=sha2 v0.10.9 target="sha2"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(115) })
+   0.351814958s  INFO prepare_target{force=false package_id=sha3 v0.10.9 target="sha3"}: cargo::core::compiler::fingerprint: fingerprint dirty for sha3 v0.10.9/Check { test: false }/TargetInner { ..: lib_target("sha3", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/sha3-0.10.9/src/lib.rs", Edition2018) }
+   0.351824083s  INFO prepare_target{force=false package_id=sha3 v0.10.9 target="sha3"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(158) })
+   0.352245416s  INFO prepare_target{force=false package_id=keccak v0.1.6 target="keccak"}: cargo::core::compiler::fingerprint: fingerprint dirty for keccak v0.1.6/Check { test: false }/TargetInner { ..: lib_target("keccak", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/keccak-0.1.6/src/lib.rs", Edition2018) }
+   0.352252458s  INFO prepare_target{force=false package_id=keccak v0.1.6 target="keccak"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(90) })
+   0.352883916s  INFO prepare_target{force=false package_id=solana-frozen-abi v1.18.26 target="solana_frozen_abi"}: cargo::core::compiler::fingerprint: fingerprint dirty for solana-frozen-abi v1.18.26/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("solana_frozen_abi", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-frozen-abi-1.18.26/src/lib.rs", Edition2021) }
+   0.352890875s  INFO prepare_target{force=false package_id=solana-frozen-abi v1.18.26 target="solana_frozen_abi"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDependency { unit: UnitIndex(278), dep_mtime: FileTime { seconds: 1778791658, nanos: 622793338 }, max_mtime: FileTime { seconds: 1778769203, nanos: 102422492 } })
+   0.353634416s  INFO prepare_target{force=false package_id=im v15.1.0 target="im"}: cargo::core::compiler::fingerprint: fingerprint dirty for im v15.1.0/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("im", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/im-15.1.0/src/lib.rs", Edition2018) }
+   0.353638791s  INFO prepare_target{force=false package_id=im v15.1.0 target="im"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(230) })
+   0.354757583s  INFO prepare_target{force=false package_id=rand_xoshiro v0.6.0 target="rand_xoshiro"}: cargo::core::compiler::fingerprint: fingerprint dirty for rand_xoshiro v0.6.0/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("rand_xoshiro", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/rand_xoshiro-0.6.0/src/lib.rs", Edition2018) }
+   0.354766458s  INFO prepare_target{force=false package_id=rand_xoshiro v0.6.0 target="rand_xoshiro"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(228) })
+   0.355351750s  INFO prepare_target{force=false package_id=rayon v1.12.0 target="rayon"}: cargo::core::compiler::fingerprint: fingerprint dirty for rayon v1.12.0/Check { test: false }/TargetInner { ..: lib_target("rayon", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/rayon-1.12.0/src/lib.rs", Edition2021) }
+   0.355359500s  INFO prepare_target{force=false package_id=rayon v1.12.0 target="rayon"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(231) })
+   0.355789708s  INFO prepare_target{force=false package_id=rayon-core v1.13.0 target="rayon_core"}: cargo::core::compiler::fingerprint: fingerprint dirty for rayon-core v1.13.0/Check { test: false }/TargetInner { ..: lib_target("rayon_core", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/rayon-core-1.13.0/src/lib.rs", Edition2021) }
+   0.355796416s  INFO prepare_target{force=false package_id=rayon-core v1.13.0 target="rayon_core"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDependency { unit: UnitIndex(233), dep_mtime: FileTime { seconds: 1778791658, nanos: 607195722 }, max_mtime: FileTime { seconds: 1778769195, nanos: 60246687 } })
+   0.356817708s  INFO prepare_target{force=false package_id=crossbeam-deque v0.8.6 target="crossbeam_deque"}: cargo::core::compiler::fingerprint: fingerprint dirty for crossbeam-deque v0.8.6/Check { test: false }/TargetInner { ..: lib_target("crossbeam_deque", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/crossbeam-deque-0.8.6/src/lib.rs", Edition2021) }
+   0.356824875s  INFO prepare_target{force=false package_id=crossbeam-deque v0.8.6 target="crossbeam_deque"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(92) })
+   0.357363291s  INFO prepare_target{force=false package_id=crossbeam-epoch v0.9.18 target="crossbeam_epoch"}: cargo::core::compiler::fingerprint: fingerprint dirty for crossbeam-epoch v0.9.18/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("crossbeam_epoch", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/crossbeam-epoch-0.9.18/src/lib.rs", Edition2021) }
+   0.357367708s  INFO prepare_target{force=false package_id=crossbeam-epoch v0.9.18 target="crossbeam_epoch"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(93) })
+   0.357786500s  INFO prepare_target{force=false package_id=crossbeam-utils v0.8.21 target="crossbeam_utils"}: cargo::core::compiler::fingerprint: fingerprint dirty for crossbeam-utils v0.8.21/Check { test: false }/TargetInner { ..: lib_target("crossbeam_utils", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/crossbeam-utils-0.8.21/src/lib.rs", Edition2021) }
+   0.357791208s  INFO prepare_target{force=false package_id=crossbeam-utils v0.8.21 target="crossbeam_utils"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDependency { unit: UnitIndex(95), dep_mtime: FileTime { seconds: 1778791658, nanos: 564641597 }, max_mtime: FileTime { seconds: 1778766211, nanos: 120247177 } })
+   0.358515250s  INFO prepare_target{force=false package_id=memmap2 v0.5.10 target="memmap2"}: cargo::core::compiler::fingerprint: fingerprint dirty for memmap2 v0.5.10/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("memmap2", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/memmap2-0.5.10/src/lib.rs", Edition2018) }
+   0.358520166s  INFO prepare_target{force=false package_id=memmap2 v0.5.10 target="memmap2"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(161) })
+   0.359896375s  INFO prepare_target{force=false package_id=tiny-bip39 v0.8.2 target="bip39"}: cargo::core::compiler::fingerprint: fingerprint dirty for tiny-bip39 v0.8.2/Check { test: false }/TargetInner { ..: lib_target("bip39", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tiny-bip39-0.8.2/src/lib.rs", Edition2018) }
+   0.359901708s  INFO prepare_target{force=false package_id=tiny-bip39 v0.8.2 target="bip39"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(363) })
+   0.360574791s  INFO prepare_target{force=false package_id=anyhow v1.0.102 target="anyhow"}: cargo::core::compiler::fingerprint: fingerprint dirty for anyhow v1.0.102/Check { test: false }/TargetInner { ..: lib_target("anyhow", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/anyhow-1.0.102/src/lib.rs", Edition2021) }
+   0.360579083s  INFO prepare_target{force=false package_id=anyhow v1.0.102 target="anyhow"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDependency { unit: UnitIndex(28), dep_mtime: FileTime { seconds: 1778791658, nanos: 107020146 }, max_mtime: FileTime { seconds: 1778766210, nanos: 460901868 } })
+   0.361085583s  INFO prepare_target{force=false package_id=pbkdf2 v0.4.0 target="pbkdf2"}: cargo::core::compiler::fingerprint: fingerprint dirty for pbkdf2 v0.4.0/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("pbkdf2", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/pbkdf2-0.4.0/src/lib.rs", Edition2018) }
+   0.361092208s  INFO prepare_target{force=false package_id=pbkdf2 v0.4.0 target="pbkdf2"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(103) })
+   0.362311875s  INFO prepare_target{force=false package_id=wasm-bindgen v0.2.120 target="wasm_bindgen"}: cargo::core::compiler::fingerprint: fingerprint dirty for wasm-bindgen v0.2.120/Check { test: false }/TargetInner { tested: false, ..: lib_target("wasm_bindgen", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/wasm-bindgen-0.2.120/src/lib.rs", Edition2021) }
+   0.362317875s  INFO prepare_target{force=false package_id=wasm-bindgen v0.2.120 target="wasm_bindgen"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDependency { unit: UnitIndex(353), dep_mtime: FileTime { seconds: 1778791663, nanos: 293957264 }, max_mtime: FileTime { seconds: 1778769201, nanos: 572762815 } })
+   0.364168875s  INFO prepare_target{force=false package_id=wasm-bindgen-shared v0.2.120 target="wasm_bindgen_shared"}: cargo::core::compiler::fingerprint: fingerprint dirty for wasm-bindgen-shared v0.2.120/Check { test: false }/TargetInner { ..: lib_target("wasm_bindgen_shared", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/wasm-bindgen-shared-0.2.120/src/lib.rs", Edition2021) }
+   0.364175833s  INFO prepare_target{force=false package_id=wasm-bindgen-shared v0.2.120 target="wasm_bindgen_shared"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDependency { unit: UnitIndex(358), dep_mtime: FileTime { seconds: 1778791658, nanos: 80867313 }, max_mtime: FileTime { seconds: 1778769196, nanos: 273911303 } })
+   0.364581541s  INFO prepare_target{force=false package_id=anchor-spl v0.30.1 target="anchor_spl"}: cargo::core::compiler::fingerprint: fingerprint error for anchor-spl v0.30.1/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("anchor_spl", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/anchor-spl-0.30.1/src/lib.rs", Edition2021) }
+   0.364587041s  INFO prepare_target{force=false package_id=anchor-spl v0.30.1 target="anchor_spl"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/bots/Cladwbot-solana/solana-clawd/programs/target/debug/.fingerprint/anchor-spl-7738d3ce4d3f994f/lib-anchor_spl`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   8: cargo::ops::cargo_compile::compile_ws
+   9: cargo::ops::cargo_compile::compile_with_exec
+  10: cargo::ops::cargo_compile::compile
+  11: cargo::commands::check::exec
+  12: <cargo::cli::Exec>::exec
+  13: cargo::main
+  14: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  15: std::rt::lang_start::<()>::{closure#0}
+  16: std::rt::lang_start_internal
+  17: _main
+   0.365130125s  INFO prepare_target{force=false package_id=mpl-token-metadata v4.1.2 target="mpl_token_metadata"}: cargo::core::compiler::fingerprint: fingerprint error for mpl-token-metadata v4.1.2/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("mpl_token_metadata", ["cdylib", "lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/mpl-token-metadata-4.1.2/src/lib.rs", Edition2021) }
+   0.365134583s  INFO prepare_target{force=false package_id=mpl-token-metadata v4.1.2 target="mpl_token_metadata"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/bots/Cladwbot-solana/solana-clawd/programs/target/debug/.fingerprint/mpl-token-metadata-43a63686888c768d/lib-mpl_token_metadata`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   9: cargo::ops::cargo_compile::compile_ws
+  10: cargo::ops::cargo_compile::compile_with_exec
+  11: cargo::ops::cargo_compile::compile
+  12: cargo::commands::check::exec
+  13: <cargo::cli::Exec>::exec
+  14: cargo::main
+  15: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  16: std::rt::lang_start::<()>::{closure#0}
+  17: std::rt::lang_start_internal
+  18: _main
+   0.365815333s  INFO prepare_target{force=false package_id=spl-associated-token-account v3.0.4 target="spl_associated_token_account"}: cargo::core::compiler::fingerprint: fingerprint dirty for spl-associated-token-account v3.0.4/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("spl_associated_token_account", ["cdylib", "lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-associated-token-account-3.0.4/src/lib.rs", Edition2021) }
+   0.365820541s  INFO prepare_target{force=false package_id=spl-associated-token-account v3.0.4 target="spl_associated_token_account"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(283) })
+   0.366789833s  INFO prepare_target{force=false package_id=spl-token v4.0.3 target="spl_token"}: cargo::core::compiler::fingerprint: fingerprint dirty for spl-token v4.0.3/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("spl_token", ["cdylib", "lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-token-4.0.3/src/lib.rs", Edition2021) }
+   0.366794833s  INFO prepare_target{force=false package_id=spl-token v4.0.3 target="spl_token"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(283) })
+   0.367439666s  INFO prepare_target{force=false package_id=num_enum v0.7.6 target="num_enum"}: cargo::core::compiler::fingerprint: fingerprint dirty for num_enum v0.7.6/Check { test: false }/TargetInner { ..: lib_target("num_enum", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/num_enum-0.7.6/src/lib.rs", Edition2021) }
+   0.367444791s  INFO prepare_target{force=false package_id=num_enum v0.7.6 target="num_enum"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDependency { unit: UnitIndex(199), dep_mtime: FileTime { seconds: 1778791662, nanos: 43486928 }, max_mtime: FileTime { seconds: 1778769302, nanos: 515475791 } })
+   0.367985000s  INFO prepare_target{force=false package_id=spl-token-2022 v3.0.5 target="spl_token_2022"}: cargo::core::compiler::fingerprint: fingerprint dirty for spl-token-2022 v3.0.5/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("spl_token_2022", ["cdylib", "lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-token-2022-3.0.5/src/lib.rs", Edition2021) }
+   0.367990000s  INFO prepare_target{force=false package_id=spl-token-2022 v3.0.5 target="spl_token_2022"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(291) })
+   0.369626791s  INFO prepare_target{force=false package_id=solana-zk-token-sdk v1.18.26 target="solana_zk_token_sdk"}: cargo::core::compiler::fingerprint: fingerprint dirty for solana-zk-token-sdk v1.18.26/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("solana_zk_token_sdk", ["cdylib", "rlib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-zk-token-sdk-1.18.26/src/lib.rs", Edition2021) }
+   0.369639250s  INFO prepare_target{force=false package_id=solana-zk-token-sdk v1.18.26 target="solana_zk_token_sdk"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(283) })
+   0.370682375s  INFO prepare_target{force=false package_id=aes-gcm-siv v0.10.3 target="aes_gcm_siv"}: cargo::core::compiler::fingerprint: fingerprint dirty for aes-gcm-siv v0.10.3/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("aes_gcm_siv", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aes-gcm-siv-0.10.3/src/lib.rs", Edition2018) }
+   0.370688958s  INFO prepare_target{force=false package_id=aes-gcm-siv v0.10.3 target="aes_gcm_siv"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(84) })
+   0.371473333s  INFO prepare_target{force=false package_id=aead v0.4.3 target="aead"}: cargo::core::compiler::fingerprint: fingerprint dirty for aead v0.4.3/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("aead", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aead-0.4.3/src/lib.rs", Edition2018) }
+   0.371505875s  INFO prepare_target{force=false package_id=aead v0.4.3 target="aead"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(130) })
+   0.372091458s  INFO prepare_target{force=false package_id=aes v0.7.5 target="aes"}: cargo::core::compiler::fingerprint: fingerprint dirty for aes v0.7.5/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("aes", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aes-0.7.5/src/lib.rs", Edition2018) }
+   0.372116166s  INFO prepare_target{force=false package_id=aes v0.7.5 target="aes"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(84) })
+   0.372968916s  INFO prepare_target{force=false package_id=cipher v0.3.0 target="cipher"}: cargo::core::compiler::fingerprint: fingerprint dirty for cipher v0.3.0/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("cipher", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cipher-0.3.0/src/lib.rs", Edition2018) }
+   0.372978833s  INFO prepare_target{force=false package_id=cipher v0.3.0 target="cipher"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(130) })
+   0.373522416s  INFO prepare_target{force=false package_id=ctr v0.8.0 target="ctr"}: cargo::core::compiler::fingerprint: fingerprint dirty for ctr v0.8.0/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("ctr", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ctr-0.8.0/src/lib.rs", Edition2018) }
+   0.373528125s  INFO prepare_target{force=false package_id=ctr v0.8.0 target="ctr"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(84) })
+   0.374113083s  INFO prepare_target{force=false package_id=polyval v0.5.3 target="polyval"}: cargo::core::compiler::fingerprint: fingerprint dirty for polyval v0.5.3/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("polyval", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/polyval-0.5.3/src/lib.rs", Edition2018) }
+   0.374147250s  INFO prepare_target{force=false package_id=polyval v0.5.3 target="polyval"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(347) })
+   0.374595291s  INFO prepare_target{force=false package_id=universal-hash v0.4.1 target="universal_hash"}: cargo::core::compiler::fingerprint: fingerprint dirty for universal-hash v0.4.1/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("universal_hash", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/universal-hash-0.4.1/src/lib.rs", Edition2018) }
+   0.374602958s  INFO prepare_target{force=false package_id=universal-hash v0.4.1 target="universal_hash"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(130) })
+   0.374998625s  INFO prepare_target{force=false package_id=merlin v3.0.0 target="merlin"}: cargo::core::compiler::fingerprint: fingerprint dirty for merlin v3.0.0/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("merlin", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/merlin-3.0.0/src/lib.rs", Edition2018) }
+   0.375002458s  INFO prepare_target{force=false package_id=merlin v3.0.0 target="merlin"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(363) })
+   0.375385666s  INFO prepare_target{force=false package_id=sha3 v0.9.1 target="sha3"}: cargo::core::compiler::fingerprint: fingerprint dirty for sha3 v0.9.1/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("sha3", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/sha3-0.9.1/src/lib.rs", Edition2018) }
+   0.375390291s  INFO prepare_target{force=false package_id=sha3 v0.9.1 target="sha3"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(113) })
+   0.375791458s  INFO prepare_target{force=false package_id=solana-sdk v1.18.26 target="solana_sdk"}: cargo::core::compiler::fingerprint: fingerprint dirty for solana-sdk v1.18.26/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("solana_sdk", ["cdylib", "rlib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-sdk-1.18.26/src/lib.rs", Edition2021) }
+   0.375795750s  INFO prepare_target{force=false package_id=solana-sdk v1.18.26 target="solana_sdk"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(283) })
+   0.377490166s  INFO prepare_target{force=false package_id=chrono v0.4.44 target="chrono"}: cargo::core::compiler::fingerprint: fingerprint dirty for chrono v0.4.44/Check { test: false }/TargetInner { ..: lib_target("chrono", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/chrono-0.4.44/src/lib.rs", Edition2021) }
+   0.377497166s  INFO prepare_target{force=false package_id=chrono v0.4.44 target="chrono"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(193) })
+   0.378527958s  INFO prepare_target{force=false package_id=ed25519-dalek v1.0.1 target="ed25519_dalek"}: cargo::core::compiler::fingerprint: fingerprint dirty for ed25519-dalek v1.0.1/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("ed25519_dalek", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ed25519-dalek-1.0.1/src/lib.rs", Edition2018) }
+   0.378534250s  INFO prepare_target{force=false package_id=ed25519-dalek v1.0.1 target="ed25519_dalek"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(363) })
+   0.379347458s  INFO prepare_target{force=false package_id=ed25519-dalek-bip32 v0.2.0 target="ed25519_dalek_bip32"}: cargo::core::compiler::fingerprint: fingerprint dirty for ed25519-dalek-bip32 v0.2.0/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("ed25519_dalek_bip32", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ed25519-dalek-bip32-0.2.0/src/lib.rs", Edition2018) }
+   0.379358000s  INFO prepare_target{force=false package_id=ed25519-dalek-bip32 v0.2.0 target="ed25519_dalek_bip32"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(145) })
+   0.379840041s  INFO prepare_target{force=false package_id=hmac v0.12.1 target="hmac"}: cargo::core::compiler::fingerprint: fingerprint dirty for hmac v0.12.1/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("hmac", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/hmac-0.12.1/src/lib.rs", Edition2018) }
+   0.379846791s  INFO prepare_target{force=false package_id=hmac v0.12.1 target="hmac"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(115) })
+   0.380181750s  INFO prepare_target{force=false package_id=pbkdf2 v0.11.0 target="pbkdf2"}: cargo::core::compiler::fingerprint: fingerprint dirty for pbkdf2 v0.11.0/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("pbkdf2", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/pbkdf2-0.11.0/src/lib.rs", Edition2021) }
+   0.380252958s  INFO prepare_target{force=false package_id=pbkdf2 v0.11.0 target="pbkdf2"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(115) })
+   0.381018541s  INFO prepare_target{force=false package_id=serde_with v2.3.3 target="serde_with"}: cargo::core::compiler::fingerprint: fingerprint dirty for serde_with v2.3.3/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("serde_with", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde_with-2.3.3/src/lib.rs", Edition2021) }
+   0.381023625s  INFO prepare_target{force=false package_id=serde_with v2.3.3 target="serde_with"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDependency { unit: UnitIndex(264), dep_mtime: FileTime { seconds: 1778791663, nanos: 373927657 }, max_mtime: FileTime { seconds: 1778769302, nanos: 785511061 } })
+   0.382187625s  INFO prepare_target{force=false package_id=solana-logger v1.18.26 target="solana_logger"}: cargo::core::compiler::fingerprint: fingerprint dirty for solana-logger v1.18.26/Check { test: false }/TargetInner { ..: lib_target("solana_logger", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-logger-1.18.26/src/lib.rs", Edition2021) }
+   0.382196625s  INFO prepare_target{force=false package_id=solana-logger v1.18.26 target="solana_logger"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(121) })
+   0.382735250s  INFO prepare_target{force=false package_id=env_logger v0.9.3 target="env_logger"}: cargo::core::compiler::fingerprint: fingerprint dirty for env_logger v0.9.3/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("env_logger", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/env_logger-0.9.3/src/lib.rs", Edition2018) }
+   0.382742291s  INFO prepare_target{force=false package_id=env_logger v0.9.3 target="env_logger"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(41) })
+   0.383252708s  INFO prepare_target{force=false package_id=atty v0.2.14 target="atty"}: cargo::core::compiler::fingerprint: fingerprint dirty for atty v0.2.14/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("atty", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/atty-0.2.14/src/lib.rs", Edition2015) }
+   0.383258458s  INFO prepare_target{force=false package_id=atty v0.2.14 target="atty"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(161) })
+   0.384890083s  INFO prepare_target{force=false package_id=spl-memo v4.0.4 target="spl_memo"}: cargo::core::compiler::fingerprint: fingerprint dirty for spl-memo v4.0.4/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("spl_memo", ["cdylib", "lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-memo-4.0.4/src/lib.rs", Edition2021) }
+   0.384896166s  INFO prepare_target{force=false package_id=spl-memo v4.0.4 target="spl_memo"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(283) })
+   0.385484000s  INFO prepare_target{force=false package_id=spl-pod v0.2.5 target="spl_pod"}: cargo::core::compiler::fingerprint: fingerprint dirty for spl-pod v0.2.5/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("spl_pod", ["cdylib", "lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-pod-0.2.5/src/lib.rs", Edition2021) }
+   0.385490625s  INFO prepare_target{force=false package_id=spl-pod v0.2.5 target="spl_pod"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(291) })
+   0.386147708s  INFO prepare_target{force=false package_id=spl-program-error v0.4.4 target="spl_program_error"}: cargo::core::compiler::fingerprint: fingerprint dirty for spl-program-error v0.4.4/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("spl_program_error", ["cdylib", "lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-program-error-0.4.4/src/lib.rs", Edition2021) }
+   0.386152125s  INFO prepare_target{force=false package_id=spl-program-error v0.4.4 target="spl_program_error"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(283) })
+   0.386780750s  INFO prepare_target{force=false package_id=spl-token-group-interface v0.2.5 target="spl_token_group_interface"}: cargo::core::compiler::fingerprint: fingerprint dirty for spl-token-group-interface v0.2.5/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("spl_token_group_interface", ["cdylib", "lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-token-group-interface-0.2.5/src/lib.rs", Edition2021) }
+   0.386784708s  INFO prepare_target{force=false package_id=spl-token-group-interface v0.2.5 target="spl_token_group_interface"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(283) })
+   0.387443458s  INFO prepare_target{force=false package_id=spl-discriminator v0.2.5 target="spl_discriminator"}: cargo::core::compiler::fingerprint: fingerprint dirty for spl-discriminator v0.2.5/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("spl_discriminator", ["cdylib", "lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-discriminator-0.2.5/src/lib.rs", Edition2021) }
+   0.387450833s  INFO prepare_target{force=false package_id=spl-discriminator v0.2.5 target="spl_discriminator"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(283) })
+   0.388596666s  INFO prepare_target{force=false package_id=spl-token-metadata-interface v0.3.5 target="spl_token_metadata_interface"}: cargo::core::compiler::fingerprint: fingerprint dirty for spl-token-metadata-interface v0.3.5/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("spl_token_metadata_interface", ["cdylib", "lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-token-metadata-interface-0.3.5/src/lib.rs", Edition2021) }
+   0.388608291s  INFO prepare_target{force=false package_id=spl-token-metadata-interface v0.3.5 target="spl_token_metadata_interface"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(283) })
+   0.389559375s  INFO prepare_target{force=false package_id=spl-type-length-value v0.4.6 target="spl_type_length_value"}: cargo::core::compiler::fingerprint: fingerprint dirty for spl-type-length-value v0.4.6/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("spl_type_length_value", ["cdylib", "lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-type-length-value-0.4.6/src/lib.rs", Edition2021) }
+   0.389565000s  INFO prepare_target{force=false package_id=spl-type-length-value v0.4.6 target="spl_type_length_value"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(283) })
+   0.390497750s  INFO prepare_target{force=false package_id=spl-transfer-hook-interface v0.6.5 target="spl_transfer_hook_interface"}: cargo::core::compiler::fingerprint: fingerprint dirty for spl-transfer-hook-interface v0.6.5/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("spl_transfer_hook_interface", ["cdylib", "lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-transfer-hook-interface-0.6.5/src/lib.rs", Edition2021) }
+   0.390512291s  INFO prepare_target{force=false package_id=spl-transfer-hook-interface v0.6.5 target="spl_transfer_hook_interface"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(283) })
+   0.391121208s  INFO prepare_target{force=false package_id=spl-tlv-account-resolution v0.6.5 target="spl_tlv_account_resolution"}: cargo::core::compiler::fingerprint: fingerprint dirty for spl-tlv-account-resolution v0.6.5/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("spl_tlv_account_resolution", ["cdylib", "lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-tlv-account-resolution-0.6.5/src/lib.rs", Edition2021) }
+   0.391128125s  INFO prepare_target{force=false package_id=spl-tlv-account-resolution v0.6.5 target="spl_tlv_account_resolution"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(283) })
+   0.391768291s  INFO prepare_target{force=false package_id=mpl-core v0.7.2 target="mpl_core"}: cargo::core::compiler::fingerprint: fingerprint dirty for mpl-core v0.7.2/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("mpl_core", ["cdylib", "lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/mpl-core-0.7.2/src/lib.rs", Edition2021) }
+   0.391774708s  INFO prepare_target{force=false package_id=mpl-core v0.7.2 target="mpl_core"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(283) })
+   0.392720166s  INFO prepare_target{force=false package_id=modular-bitfield v0.11.2 target="modular_bitfield"}: cargo::core::compiler::fingerprint: fingerprint dirty for modular-bitfield v0.11.2/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("modular_bitfield", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/modular-bitfield-0.11.2/src/lib.rs", Edition2018) }
+   0.392726250s  INFO prepare_target{force=false package_id=modular-bitfield v0.11.2 target="modular_bitfield"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDependency { unit: UnitIndex(183), dep_mtime: FileTime { seconds: 1778791662, nanos: 211046519 }, max_mtime: FileTime { seconds: 1778766211, nanos: 835213128 } })
+   0.393595500s  INFO prepare_target{force=false package_id=rmp-serde v1.3.1 target="rmp_serde"}: cargo::core::compiler::fingerprint: fingerprint dirty for rmp-serde v1.3.1/Check { test: false }/TargetInner { ..: lib_target("rmp_serde", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/rmp-serde-1.3.1/src/lib.rs", Edition2024) }
+   0.393634416s  INFO prepare_target{force=false package_id=rmp-serde v1.3.1 target="rmp_serde"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(237) })
+   0.394276250s  INFO prepare_target{force=false package_id=rmp v0.8.15 target="rmp"}: cargo::core::compiler::fingerprint: fingerprint dirty for rmp v0.8.15/Check { test: false }/TargetInner { ..: lib_target("rmp", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/rmp-0.8.15/src/lib.rs", Edition2024) }
+   0.394282375s  INFO prepare_target{force=false package_id=rmp v0.8.15 target="rmp"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(193) })
+   0.394673416s  INFO prepare_target{force=false package_id=spl-associated-token-account v2.3.0 target="spl_associated_token_account"}: cargo::core::compiler::fingerprint: fingerprint dirty for spl-associated-token-account v2.3.0/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("spl_associated_token_account", ["cdylib", "lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-associated-token-account-2.3.0/src/lib.rs", Edition2021) }
+   0.394678875s  INFO prepare_target{force=false package_id=spl-associated-token-account v2.3.0 target="spl_associated_token_account"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(283) })
+   0.395490208s  INFO prepare_target{force=false package_id=spl-token-2022 v1.0.0 target="spl_token_2022"}: cargo::core::compiler::fingerprint: fingerprint dirty for spl-token-2022 v1.0.0/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("spl_token_2022", ["cdylib", "lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-token-2022-1.0.0/src/lib.rs", Edition2021) }
+   0.395494333s  INFO prepare_target{force=false package_id=spl-token-2022 v1.0.0 target="spl_token_2022"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(291) })
+   0.396735500s  INFO prepare_target{force=false package_id=spl-pod v0.1.0 target="spl_pod"}: cargo::core::compiler::fingerprint: fingerprint dirty for spl-pod v0.1.0/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("spl_pod", ["cdylib", "lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-pod-0.1.0/src/lib.rs", Edition2021) }
+   0.396742375s  INFO prepare_target{force=false package_id=spl-pod v0.1.0 target="spl_pod"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(291) })
+   0.398024875s  INFO prepare_target{force=false package_id=spl-program-error v0.3.0 target="spl_program_error"}: cargo::core::compiler::fingerprint: fingerprint dirty for spl-program-error v0.3.0/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("spl_program_error", ["cdylib", "lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-program-error-0.3.0/src/lib.rs", Edition2021) }
+   0.398032333s  INFO prepare_target{force=false package_id=spl-program-error v0.3.0 target="spl_program_error"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(283) })
+   0.398932875s  INFO prepare_target{force=false package_id=spl-token-group-interface v0.1.0 target="spl_token_group_interface"}: cargo::core::compiler::fingerprint: fingerprint dirty for spl-token-group-interface v0.1.0/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("spl_token_group_interface", ["cdylib", "lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-token-group-interface-0.1.0/src/lib.rs", Edition2021) }
+   0.398942208s  INFO prepare_target{force=false package_id=spl-token-group-interface v0.1.0 target="spl_token_group_interface"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(283) })
+   0.399575375s  INFO prepare_target{force=false package_id=spl-discriminator v0.1.0 target="spl_discriminator"}: cargo::core::compiler::fingerprint: fingerprint dirty for spl-discriminator v0.1.0/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("spl_discriminator", ["cdylib", "lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-discriminator-0.1.0/src/lib.rs", Edition2021) }
+   0.399582500s  INFO prepare_target{force=false package_id=spl-discriminator v0.1.0 target="spl_discriminator"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(283) })
+   0.400279708s  INFO prepare_target{force=false package_id=spl-token-metadata-interface v0.2.0 target="spl_token_metadata_interface"}: cargo::core::compiler::fingerprint: fingerprint dirty for spl-token-metadata-interface v0.2.0/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("spl_token_metadata_interface", ["cdylib", "lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-token-metadata-interface-0.2.0/src/lib.rs", Edition2021) }
+   0.400286083s  INFO prepare_target{force=false package_id=spl-token-metadata-interface v0.2.0 target="spl_token_metadata_interface"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(283) })
+   0.400785416s  INFO prepare_target{force=false package_id=spl-type-length-value v0.3.0 target="spl_type_length_value"}: cargo::core::compiler::fingerprint: fingerprint dirty for spl-type-length-value v0.3.0/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("spl_type_length_value", ["cdylib", "lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-type-length-value-0.3.0/src/lib.rs", Edition2021) }
+   0.400790458s  INFO prepare_target{force=false package_id=spl-type-length-value v0.3.0 target="spl_type_length_value"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(283) })
+   0.401387208s  INFO prepare_target{force=false package_id=spl-transfer-hook-interface v0.4.1 target="spl_transfer_hook_interface"}: cargo::core::compiler::fingerprint: fingerprint dirty for spl-transfer-hook-interface v0.4.1/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("spl_transfer_hook_interface", ["cdylib", "lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-transfer-hook-interface-0.4.1/src/lib.rs", Edition2021) }
+   0.401392041s  INFO prepare_target{force=false package_id=spl-transfer-hook-interface v0.4.1 target="spl_transfer_hook_interface"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(283) })
+   0.402105291s  INFO prepare_target{force=false package_id=spl-tlv-account-resolution v0.5.1 target="spl_tlv_account_resolution"}: cargo::core::compiler::fingerprint: fingerprint dirty for spl-tlv-account-resolution v0.5.1/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("spl_tlv_account_resolution", ["cdylib", "lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-tlv-account-resolution-0.5.1/src/lib.rs", Edition2021) }
+   0.402111208s  INFO prepare_target{force=false package_id=spl-tlv-account-resolution v0.5.1 target="spl_tlv_account_resolution"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { unit: UnitIndex(283) })
+   0.402819500s  INFO prepare_target{force=false package_id=clawd-stake v0.1.0 (/Users/8bit/bots/Cladwbot-solana/solana-clawd/programs/clawd-stake) target="clawd_stake"}: cargo::core::compiler::fingerprint: fingerprint error for clawd-stake v0.1.0 (/Users/8bit/bots/Cladwbot-solana/solana-clawd/programs/clawd-stake)/Check { test: true }/TargetInner { ..: lib_target("clawd_stake", ["cdylib", "lib"], "/Users/8bit/bots/Cladwbot-solana/solana-clawd/programs/clawd-stake/src/lib.rs", Edition2021) }
+   0.402827791s  INFO prepare_target{force=false package_id=clawd-stake v0.1.0 (/Users/8bit/bots/Cladwbot-solana/solana-clawd/programs/clawd-stake) target="clawd_stake"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/bots/Cladwbot-solana/solana-clawd/programs/target/debug/.fingerprint/clawd-stake-a43b1e7966438be4/test-lib-clawd_stake`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   7: cargo::ops::cargo_compile::compile_ws
+   8: cargo::ops::cargo_compile::compile_with_exec
+   9: cargo::ops::cargo_compile::compile
+  10: cargo::commands::check::exec
+  11: <cargo::cli::Exec>::exec
+  12: cargo::main
+  13: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  14: std::rt::lang_start::<()>::{closure#0}
+  15: std::rt::lang_start_internal
+  16: _main
+   0.403366791s  INFO prepare_target{force=false package_id=p-token-launchpad v0.1.0 (/Users/8bit/bots/Cladwbot-solana/solana-clawd/programs/p-token-launchpad) target="p_token_launchpad"}: cargo::core::compiler::fingerprint: fingerprint error for p-token-launchpad v0.1.0 (/Users/8bit/bots/Cladwbot-solana/solana-clawd/programs/p-token-launchpad)/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("p_token_launchpad", ["cdylib", "lib"], "/Users/8bit/bots/Cladwbot-solana/solana-clawd/programs/p-token-launchpad/src/lib.rs", Edition2021) }
+   0.403373625s  INFO prepare_target{force=false package_id=p-token-launchpad v0.1.0 (/Users/8bit/bots/Cladwbot-solana/solana-clawd/programs/p-token-launchpad) target="p_token_launchpad"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/bots/Cladwbot-solana/solana-clawd/programs/target/debug/.fingerprint/p-token-launchpad-36f2b46ca4155f9e/lib-p_token_launchpad`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   7: cargo::ops::cargo_compile::compile_ws
+   8: cargo::ops::cargo_compile::compile_with_exec
+   9: cargo::ops::cargo_compile::compile
+  10: cargo::commands::check::exec
+  11: <cargo::cli::Exec>::exec
+  12: cargo::main
+  13: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  14: std::rt::lang_start::<()>::{closure#0}
+  15: std::rt::lang_start_internal
+  16: _main
+   0.403865083s  INFO prepare_target{force=false package_id=p-token-launchpad v0.1.0 (/Users/8bit/bots/Cladwbot-solana/solana-clawd/programs/p-token-launchpad) target="p_token_launchpad"}: cargo::core::compiler::fingerprint: fingerprint error for p-token-launchpad v0.1.0 (/Users/8bit/bots/Cladwbot-solana/solana-clawd/programs/p-token-launchpad)/Check { test: true }/TargetInner { name_inferred: true, ..: lib_target("p_token_launchpad", ["cdylib", "lib"], "/Users/8bit/bots/Cladwbot-solana/solana-clawd/programs/p-token-launchpad/src/lib.rs", Edition2021) }
+   0.403875083s  INFO prepare_target{force=false package_id=p-token-launchpad v0.1.0 (/Users/8bit/bots/Cladwbot-solana/solana-clawd/programs/p-token-launchpad) target="p_token_launchpad"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/bots/Cladwbot-solana/solana-clawd/programs/target/debug/.fingerprint/p-token-launchpad-523a62f0f5158420/test-lib-p_token_launchpad`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   7: cargo::ops::cargo_compile::compile_ws
+   8: cargo::ops::cargo_compile::compile_with_exec
+   9: cargo::ops::cargo_compile::compile
+  10: cargo::commands::check::exec
+  11: <cargo::cli::Exec>::exec
+  12: cargo::main
+  13: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  14: std::rt::lang_start::<()>::{closure#0}
+  15: std::rt::lang_start_internal
+  16: _main
+   0.404347125s  INFO prepare_target{force=false package_id=solana-ai-inference v0.1.0 (/Users/8bit/bots/Cladwbot-solana/solana-clawd/programs/solana-ai-inference) target="solana_ai_inference"}: cargo::core::compiler::fingerprint: fingerprint error for solana-ai-inference v0.1.0 (/Users/8bit/bots/Cladwbot-solana/solana-clawd/programs/solana-ai-inference)/Check { test: false }/TargetInner { ..: lib_target("solana_ai_inference", ["cdylib", "lib"], "/Users/8bit/bots/Cladwbot-solana/solana-clawd/programs/solana-ai-inference/src/lib.rs", Edition2021) }
+   0.404352541s  INFO prepare_target{force=false package_id=solana-ai-inference v0.1.0 (/Users/8bit/bots/Cladwbot-solana/solana-clawd/programs/solana-ai-inference) target="solana_ai_inference"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/bots/Cladwbot-solana/solana-clawd/programs/target/debug/.fingerprint/solana-ai-inference-86650ec75a8cf80b/lib-solana_ai_inference`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   7: cargo::ops::cargo_compile::compile_ws
+   8: cargo::ops::cargo_compile::compile_with_exec
+   9: cargo::ops::cargo_compile::compile
+  10: cargo::commands::check::exec
+  11: <cargo::cli::Exec>::exec
+  12: cargo::main
+  13: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  14: std::rt::lang_start::<()>::{closure#0}
+  15: std::rt::lang_start_internal
+  16: _main
+   0.404987583s  INFO prepare_target{force=false package_id=solana-ai-inference v0.1.0 (/Users/8bit/bots/Cladwbot-solana/solana-clawd/programs/solana-ai-inference) target="solana_ai_inference"}: cargo::core::compiler::fingerprint: fingerprint error for solana-ai-inference v0.1.0 (/Users/8bit/bots/Cladwbot-solana/solana-clawd/programs/solana-ai-inference)/Check { test: true }/TargetInner { ..: lib_target("solana_ai_inference", ["cdylib", "lib"], "/Users/8bit/bots/Cladwbot-solana/solana-clawd/programs/solana-ai-inference/src/lib.rs", Edition2021) }
+   0.404994333s  INFO prepare_target{force=false package_id=solana-ai-inference v0.1.0 (/Users/8bit/bots/Cladwbot-solana/solana-clawd/programs/solana-ai-inference) target="solana_ai_inference"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/bots/Cladwbot-solana/solana-clawd/programs/target/debug/.fingerprint/solana-ai-inference-8e51993201d80520/test-lib-solana_ai_inference`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: cargo_util::paths::read_bytes
+   2: cargo_util::paths::read
+   3: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   4: cargo::core::compiler::fingerprint::prepare_target
+   5: cargo::core::compiler::compile
+   6: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   7: cargo::ops::cargo_compile::compile_ws
+   8: cargo::ops::cargo_compile::compile_with_exec
+   9: cargo::ops::cargo_compile::compile
+  10: cargo::commands::check::exec
+  11: <cargo::cli::Exec>::exec
+  12: cargo::main
+  13: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  14: std::rt::lang_start::<()>::{closure#0}
+  15: std::rt::lang_start_internal
+  16: _main
+    Checking serde_core v1.0.228
+    Checking libc v0.2.186
+    Checking zerocopy v0.8.48
+    Checking num-traits v0.2.19
+    Checking zeroize v1.3.0
+    Checking crossbeam-utils v0.8.21
+    Checking thiserror v1.0.69
+    Checking crunchy v0.2.4
+    Checking wasm-bindgen-shared v0.2.120
+    Checking zmij v1.0.21
+    Checking anyhow v1.0.102
+    Checking borsh v1.6.1
+    Checking bytemuck v1.25.0
+    Checking blake3 v1.8.5
+    Checking memoffset v0.9.1
+    Checking num_enum v0.7.6
+    Checking modular-bitfield v0.11.2
+    Checking wasm-bindgen v0.2.120
+    Checking crossbeam-epoch v0.9.18
+    Checking num-integer v0.1.46
+    Checking chrono v0.4.44
+    Checking rmp v0.8.15
+    Checking crossbeam-deque v0.8.6
+    Checking rayon-core v1.13.0
+    Checking num-bigint v0.4.6
+    Checking getrandom v0.2.17
+    Checking cpufeatures v0.2.17
+    Checking getrandom v0.1.16
+    Checking memmap2 v0.5.10
+    Checking atty v0.2.14
+    Checking keccak v0.1.6
+    Checking env_logger v0.9.3
+    Checking rand_core v0.5.1
+    Checking rand_core v0.6.4
+    Checking ahash v0.7.8
+    Checking rand_xoshiro v0.6.0
+    Checking merlin v3.0.0
+    Checking hashbrown v0.11.2
+    Checking solana-logger v1.18.26
+    Checking rayon v1.12.0
+    Checking borsh v0.9.3
+    Checking serde v1.0.228
+    Checking serde_bytes v0.11.19
+    Checking serde_json v1.0.149
+    Checking bitflags v2.11.1
+    Checking generic-array v0.14.9
+    Checking bv v0.11.1
+    Checking bincode v1.3.3
+    Checking serde_with v2.3.3
+    Checking rmp-serde v1.3.1
+    Checking crypto-common v0.1.6
+    Checking block-buffer v0.10.4
+    Checking digest v0.9.0
+    Checking block-buffer v0.9.0
+    Checking crypto-mac v0.8.0
+    Checking cipher v0.3.0
+    Checking universal-hash v0.4.1
+    Checking aead v0.4.3
+    Checking digest v0.10.7
+    Checking polyval v0.5.3
+    Checking pbkdf2 v0.4.0
+    Checking sha2 v0.9.9
+    Checking hmac v0.8.1
+    Checking curve25519-dalek v3.2.1
+    Checking libsecp256k1-core v0.2.2
+    Checking sha3 v0.9.1
+    Checking ctr v0.8.0
+    Checking aes v0.7.5
+    Checking im v15.1.0
+    Checking hmac-drbg v0.3.0
+    Checking sha2 v0.10.9
+    Checking sha3 v0.10.9
+    Checking hmac v0.12.1
+    Checking pbkdf2 v0.11.0
+    Checking aes-gcm-siv v0.10.3
+    Checking solana-frozen-abi v1.18.26
+    Checking ppv-lite86 v0.2.21
+    Checking ahash v0.8.12
+    Checking hashbrown v0.13.2
+    Checking rand_chacha v0.3.1
+    Checking rand_chacha v0.2.2
+    Checking rand v0.7.3
+    Checking rand v0.8.6
+    Checking borsh v0.10.4
+    Checking ark-std v0.4.0
+    Checking ark-serialize v0.4.2
+    Checking tiny-bip39 v0.8.2
+    Checking libsecp256k1 v0.6.0
+    Checking ed25519-dalek v1.0.1
+    Checking ark-ff v0.4.2
+    Checking ed25519-dalek-bip32 v0.2.0
+    Checking ark-poly v0.4.2
+    Checking ark-ec v0.4.2
+    Checking ark-bn254 v0.4.0
+    Checking light-poseidon v0.2.0
+    Checking solana-program v1.18.26
+    Checking solana-sdk v1.18.26
+    Checking spl-program-error v0.4.4
+    Checking spl-discriminator v0.2.5
+    Checking spl-memo v4.0.4
+    Checking spl-token v4.0.3
+    Checking spl-program-error v0.3.0
+    Checking spl-discriminator v0.1.0
+    Checking anchor-lang v0.30.1
+    Checking mpl-token-metadata v4.1.2
+    Checking mpl-core v0.7.2
+    Checking solana-zk-token-sdk v1.18.26
+    Checking spl-pod v0.2.5
+    Checking spl-pod v0.1.0
+    Checking spl-type-length-value v0.3.0
+    Checking spl-token-group-interface v0.1.0
+    Checking spl-type-length-value v0.4.6
+    Checking spl-token-group-interface v0.2.5
+    Checking spl-tlv-account-resolution v0.6.5
+    Checking spl-token-metadata-interface v0.3.5
+    Checking spl-tlv-account-resolution v0.5.1
+    Checking spl-token-metadata-interface v0.2.0
+    Checking spl-transfer-hook-interface v0.6.5
+    Checking spl-transfer-hook-interface v0.4.1
+    Checking spl-token-2022 v1.0.0
+    Checking spl-token-2022 v3.0.5
+    Checking spl-associated-token-account v2.3.0
+    Checking spl-associated-token-account v3.0.4
+    Checking anchor-spl v0.30.1
+    Checking clawd-stake v0.1.0 (/Users/8bit/bots/Cladwbot-solana/solana-clawd/programs/clawd-stake)
+    Checking solana-ai-inference v0.1.0 (/Users/8bit/bots/Cladwbot-solana/solana-clawd/programs/solana-ai-inference)
+    Checking p-token-launchpad v0.1.0 (/Users/8bit/bots/Cladwbot-solana/solana-clawd/programs/p-token-launchpad)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 18.65s
