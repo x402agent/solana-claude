@@ -158,7 +158,7 @@ Clawd does not just prompt. It loops, pays, records, scores, resolves, and retur
 | **Clawd Memory / Vault** | Markdown vault, MCP workflows, long-horizon memory | [`llm-wiki-tang/`](./llm-wiki-tang/) and [`MemeBRain/`](./MemeBRain/) |
 | **LLM Oracle** | Rust listener that watches Solana oracle interactions, calls an LLM provider, and submits callback responses on-chain | [`llm_oracle/`](./llm_oracle/) |
 | **Percolator Ops** | Bundled Percolator CLI and upstream references for perp-market oracle, keeper, and risk-engine workflows | [`llm_oracle/percolator-cli-master/`](./llm_oracle/percolator-cli-master/) and [`llm_oracle/upstream/`](./llm_oracle/upstream/) |
-| **Pinocchio Support** | Native Solana p-token, vault, escrow, launcher templates, bonding curves, and agent/MCP workflows | [`pinocchio/`](./pinocchio/) |
+| **Pinocchio Support** | Native Solana p-token, vault, escrow, launcher templates, bonding curves, upstream program maps, and agent/MCP workflows | [`pinocchio/`](./pinocchio/) and [`pinocchio/pinocchio-main/programs/`](./pinocchio/pinocchio-main/programs/) |
 | **p-token Explorer** | SPL-compatible p-token registry, mint inspector, and x402 p-token payment support | [`scripts/ptoken-explorer.mjs`](./scripts/ptoken-explorer.mjs), [`data/ptokens.json`](./data/ptokens.json), [`docs/PTOKEN_EXPLORER.md`](./docs/PTOKEN_EXPLORER.md) |
 | **MCP Surface** | Local tools and machine interfaces | [`MCP/`](./MCP/) |
 | **Browser Bridge** | Wallet, extension, and browser-side controls | [`chrome-extension/`](./chrome-extension/) |
@@ -386,6 +386,8 @@ The Three Laws live in [`leviathan/three-laws.txt`](./leviathan/three-laws.txt) 
 | `npm run ptoken:add` | Register a launched p-token in `data/ptokens.json` |
 | `npm run ptoken:launch-plan` | Generate an unsigned p-token launch and bonding curve config |
 | `npm run ptoken:curve-quote` | Simulate a constant-product p-token launch curve quote |
+| `npm run pinocchio:programs` | List mapped Pinocchio helper programs one by one |
+| `npm run pinocchio:program -- token` | Show one mapped Pinocchio helper program |
 
 Standalone examples:
 

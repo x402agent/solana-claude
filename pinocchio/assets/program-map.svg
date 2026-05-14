@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="420" viewBox="0 0 1080 420" role="img" aria-labelledby="title desc">
+  <title id="title">Pinocchio program map</title>
+  <desc id="desc">Animated visual map of Pinocchio helper programs wired into Solana Clawd.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#07100c"/>
+      <stop offset="0.48" stop-color="#0e151c"/>
+      <stop offset="1" stop-color="#151108"/>
+    </linearGradient>
+    <linearGradient id="wire" x1="0" x2="1">
+      <stop offset="0" stop-color="#57e39f"/>
+      <stop offset="0.52" stop-color="#6ed9ef"/>
+      <stop offset="1" stop-color="#ffc46b"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <style>
+      text { font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      .label { fill: #eef7f1; font-weight: 800; font-size: 22px; letter-spacing: 0; }
+      .sub { fill: #aebbb4; font-size: 14px; letter-spacing: 0; }
+      .mini { fill: #10151b; font-size: 13px; font-weight: 800; letter-spacing: 0; }
+      .card { fill: rgba(255,255,255,0.055); stroke: rgba(255,255,255,0.16); stroke-width: 1.2; }
+      .hub { fill: #57e39f; filter: url(#glow); }
+      .wire { fill: none; stroke: url(#wire); stroke-width: 3; stroke-linecap: round; stroke-dasharray: 12 16; animation: dash 4s linear infinite; }
+      .pulse { animation: pulse 2.4s ease-in-out infinite; transform-origin: center; }
+      .pulse:nth-of-type(2n) { animation-delay: .4s; }
+      .pulse:nth-of-type(3n) { animation-delay: .8s; }
+      @keyframes dash { to { stroke-dashoffset: -56; } }
+      @keyframes pulse { 0%, 100% { opacity: .72; transform: scale(1); } 50% { opacity: 1; transform: scale(1.03); } }
+    </style>
+  </defs>
+  <rect width="1080" height="420" rx="24" fill="url(#bg)"/>
+  <circle cx="540" cy="210" r="72" class="hub"/>
+  <text x="540" y="201" text-anchor="middle" class="mini">SOLANA</text>
+  <text x="540" y="224" text-anchor="middle" class="mini">CLAWD</text>
+  <path class="wire" d="M470 184 C360 130 264 102 148 92"/>
+  <path class="wire" d="M480 232 C368 282 286 322 166 330"/>
+  <path class="wire" d="M610 180 C730 124 812 96 932 88"/>
+  <path class="wire" d="M612 232 C730 285 812 318 928 330"/>
+  <path class="wire" d="M540 138 C536 94 530 62 528 38"/>
+  <g class="pulse">
+    <rect x="40" y="48" width="250" height="92" rx="12" class="card"/>
+    <text x="64" y="86" class="label">pinocchio-system</text>
+    <text x="64" y="112" class="sub">create, transfer, assign, nonce</text>
+  </g>
+  <g class="pulse">
+    <rect x="40" y="280" width="270" height="92" rx="12" class="card"/>
+    <text x="64" y="318" class="label">pinocchio-token</text>
+    <text x="64" y="344" class="sub">mints, transfers, batch, escrow</text>
+  </g>
+  <g class="pulse">
+    <rect x="392" y="26" width="276" height="84" rx="12" class="card"/>
+    <text x="416" y="62" class="label">p-token launches</text>
+    <text x="416" y="88" class="sub">registry, curve planner, x402</text>
+  </g>
+  <g class="pulse">
+    <rect x="760" y="44" width="280" height="96" rx="12" class="card"/>
+    <text x="784" y="82" class="label">token-2022</text>
+    <text x="784" y="108" class="sub">extensions, metadata, guards</text>
+  </g>
+  <g class="pulse">
+    <rect x="760" y="278" width="280" height="96" rx="12" class="card"/>
+    <text x="784" y="316" class="label">associated-token</text>
+    <text x="784" y="342" class="sub">ATA create, idempotent, recover</text>
+  </g>
+  <g class="pulse">
+    <rect x="406" y="302" width="250" height="72" rx="12" class="card"/>
+    <text x="430" y="334" class="label">memo</text>
+    <text x="430" y="358" class="sub">receipts and agent traces</text>
+  </g>
+</svg>

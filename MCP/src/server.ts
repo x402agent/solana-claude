@@ -11,8 +11,8 @@
  *   - Jupiter price API (no key)
  *   - Public Solana mainnet RPC (fallback)
  *
- * Tools: 51 (15 original + 8 Helius + 6 services + 8 Pump.fun + 7 Pinocchio/p-token + 7 Chess.com)
- * Resources: 8 (README, soul, skills, tools, Pinocchio, Pinocchio guide, p-token launches, p-token registry)
+ * Tools: 52 (15 original + 8 Helius + 6 services + 8 Pump.fun + 8 Pinocchio/p-token + 7 Chess.com)
+ * Resources: 10 (README, soul, skills, tools, Pinocchio, Pinocchio guide, program map, program JSON, p-token launches, p-token registry)
  * Prompts: 9
  */
 
@@ -416,6 +416,8 @@ export function createServer(): Server {
       { uri: "solana-clawd://tools", name: "Source Tools", description: "TypeScript tool source listing", mimeType: "application/json" },
       { uri: "solana-clawd://pinocchio", name: "Pinocchio Support", description: "Pinocchio and p-token developer support README", mimeType: "text/markdown" },
       { uri: "solana-clawd://pinocchio-guide", name: "Pinocchio Guide", description: "Native Solana Pinocchio guide for agents and developers", mimeType: "text/markdown" },
+      { uri: "solana-clawd://pinocchio-programs", name: "Pinocchio Program Map", description: "One-by-one upstream Pinocchio program crate map", mimeType: "text/markdown" },
+      { uri: "solana-clawd://pinocchio-programs-json", name: "Pinocchio Program Map JSON", description: "Machine-readable Pinocchio program map", mimeType: "application/json" },
       { uri: "solana-clawd://ptoken-launches", name: "p-token Launches", description: "Unsigned p-token launch and bonding curve workflow", mimeType: "text/markdown" },
       { uri: "solana-clawd://ptokens", name: "p-token Registry", description: "Registered p-token mint metadata", mimeType: "application/json" },
     ],
@@ -461,6 +463,16 @@ export function createServer(): Server {
     if (uri === "solana-clawd://pinocchio-guide") {
       const text = (await readFileText(path.join(PINOCCHIO_ROOT, "docs", "PINOCCHIO_GUIDE.md"))) ?? "Pinocchio guide not found.";
       return { contents: [{ uri, mimeType: "text/markdown", text }] };
+    }
+    if (uri === "solana-clawd://pinocchio-programs") {
+      const text = (await readFileText(path.join(PINOCCHIO_ROOT, "PROGRAM_MAP.md"))) ??
+        (await readFileText(path.join(PINOCCHIO_ROOT, "pinocchio-main", "programs", "README.md"))) ??
+        "Pinocchio program map not found.";
+      return { contents: [{ uri, mimeType: "text/markdown", text }] };
+    }
+    if (uri === "solana-clawd://pinocchio-programs-json") {
+      const text = (await readFileText(path.join(REPO_ROOT, "data", "pinocchio-programs.json"))) ?? JSON.stringify({ version: 1, programs: [] }, null, 2);
+      return { contents: [{ uri, mimeType: "application/json", text }] };
     }
     if (uri === "solana-clawd://ptoken-launches") {
       const text = (await readFileText(path.join(PINOCCHIO_ROOT, "docs", "P_TOKEN_LAUNCHES.md"))) ?? "p-token launch guide not found.";
@@ -715,6 +727,11 @@ export function createServer(): Server {
           template: { type: "string", description: "Template name, e.g. vault, escrow, p-token-launcher" },
           path: { type: "string", description: "Optional file path inside the template" },
         }, required: ["template"] },
+      },
+      {
+        name: "pinocchio_program_map",
+        description: "Return the one-by-one Pinocchio upstream program crate map and how each crate is adapted into solana-clawd.",
+        inputSchema: { type: "object" as const, properties: {} },
       },
       {
         name: "ptoken_registry_list",
@@ -1589,6 +1606,16 @@ emitter.on("event", (e) => console.log(e.type, e.signature, e.description));`,
               return text({ template, files: await listTemplateFiles(template) });
             }
             return text(await readTemplateFile(template, String(a.path)));
+          }
+
+          case "pinocchio_program_map": {
+            const map = (await readFileText(path.join(PINOCCHIO_ROOT, "PROGRAM_MAP.md"))) ??
+              (await readFileText(path.join(PINOCCHIO_ROOT, "pinocchio-main", "programs", "README.md")));
+            const json = await readFileText(path.join(REPO_ROOT, "data", "pinocchio-programs.json"));
+            return text({
+              markdown: map ?? "Pinocchio program map not found.",
+              json: json ? JSON.parse(json) : { version: 1, programs: [] },
+            });
           }
 
           case "ptoken_registry_list": {
