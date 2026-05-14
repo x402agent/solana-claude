@@ -42,3 +42,4 @@ coverage/
 **/.git
 tui/dist/
 tui/node_modules/
+llm_oracle/upstream/percolator-prog
