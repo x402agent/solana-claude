@@ -110,7 +110,7 @@
     "@xterm/addon-webgl": "^0.19.0",
     "@xterm/xterm": "^5.5.0",
     "agentwallet-vault": "^0.1.0",
-    "ai": "^5.0.52",
+    "ai": "^6.0.178",
     "auto-bind": "^5.0.1",
     "axios": "^1.7.0",
     "bs58": "^6.0.0",
