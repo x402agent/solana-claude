@@ -13,7 +13,7 @@
   ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝╚══════╝    ╚═╝  ╚═╝     ╚═╝ ╚═════╝ ╚══════╝
 ```
 
-<img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=700&size=21&duration=2000&pause=600&color=14F195&center=true&vCenter=true&width=960&lines=%F0%9F%A6%9E+HERMES+x402+%E2%80%94+First+Private+AI+Agent+on+Solana;TRADE+%E2%86%92+EARN+USDC+%E2%86%92+PAY+x402+%E2%86%92+GET+SMARTER+%E2%86%92+TRADE+BETTER;SENSE+%E2%86%92+THINK+%E2%86%92+STRIKE+%E2%86%92+DRIFT;pay.solanaclawd.com+%E2%80%94+confidential+x402+payments;Anthropic+ACP+%C3%97+Solana+%C3%97+pay.sh+%C3%97+Google+A2A;BORN+TO+EARN.+BEACH+WITH+DIGNITY." alt="HERMES animated taglines" />
+<img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=700&size=21&duration=2000&pause=600&color=14F195&center=true&vCenter=true&width=960&lines=%F0%9F%A6%9E+HERMES+x402+%E2%80%94+First+Private+AI+Agent+on+Solana;TRADE+%E2%86%92+EARN+USDC+%E2%86%92+PAY+x402+%E2%86%92+GET+SMARTER+%E2%86%92+TRADE+BETTER;SENSE+%E2%86%92+THINK+%E2%86%92+STRIKE+%E2%86%92+DRIFT;pay.solanaclawd.com+%E2%80%94+confidential+x402+payments;%E2%9A%A1+P-Token+SIMD-0266+%E2%80%94+TransferChecked+6%2C200+%E2%86%92+105+CU;Anthropic+ACP+%C3%97+Solana+%C3%97+pay.sh+%C3%97+Google+A2A;BORN+TO+EARN.+BEACH+WITH+DIGNITY." alt="HERMES animated taglines" />
 
 <br/>
 
@@ -45,6 +45,29 @@
 [![cheshireterminal.ai](https://img.shields.io/badge/cheshireterminal.ai-FF00FF?style=flat-square)](https://cheshireterminal.ai)
 [![NanoClawd](https://img.shields.io/badge/NanoClawd-edge%20runtime-14F195?style=flat-square&logo=github&logoColor=black)](https://github.com/x402agent/NanoClawd)
 [![clawd-operator](https://img.shields.io/badge/clawd--operator-goblin%20mode-FF8C00?style=flat-square&logo=github&logoColor=white)](https://github.com/x402agent/clawd-operator)
+
+---
+
+### ⚡ Just Shipped — P-Token (SIMD-0266)
+
+```text
+╔══════════════════════════════════════════════════════════════════════╗
+║  ⚡ P-TOKEN  —  Pinocchio-optimized SPL Token replacement           ║
+║                                                                      ║
+║  TransferChecked   6,200 CU  →    105 CU   (-98.3%)                 ║
+║  Transfer          4,645 CU  →     76 CU   (-98.4%)                 ║
+║  Approve           2,904 CU  →    124 CU   (-95.7%)                 ║
+║                                                                      ║
+║  Every x402 payment at pay.solanaclawd.com now uses p-token.        ║
+║  Program: ptok6rngomXrDbWf5v5Mkmu5CEbB51hzSCPDoj9DrvF              ║
+║  Ref: https://solana.com/upgrades/p-token                           ║
+╚══════════════════════════════════════════════════════════════════════╝
+```
+
+- **`x402/p-token.ts`** — `createPTokenTransferChecked`, `createPTokenComputeBudget`, `createBatchInstruction` (discriminator 255)
+- **`x402/paysh-facilitator.ts`** + **`x402/client-sdk.ts`** — all USDC transfers use p-token + 12,000 CU budget
+- **`x402/solana-x402-scheme.ts`** + **worker** — verifier accepts both `TOKEN_PROGRAM_ID` and `P_TOKEN_PROGRAM_ID`
+- Set `USE_P_TOKEN=0` to fall back to standard SPL Token
 
 ---
 
