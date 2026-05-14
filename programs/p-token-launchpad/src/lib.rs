@@ -14,8 +14,8 @@
  *   5. Creator vaults use p-token ATA derivation
  *   6. Graduation sends liquidity to any DEX (Raydium CPMM, Orca, etc.)
  *
- * Program ID: (to be assigned on deploy)
- *   pLPha99abcdefghijklmnopqrstuvwxyz1234567890
+ * Program ID: placeholder until deploy
+ *   11111111111111111111111111111111
  */
 
 use anchor_lang::prelude::*;
@@ -24,15 +24,9 @@ use anchor_spl::{
     token::{Mint, Token, TokenAccount},
 };
 
-declare_id!("pLPha99abcdefghijklmnopqrstuvwxyz1234567890");
+declare_id!("11111111111111111111111111111111");
 
 // ─── Constants ─────────────────────────────────────────────────────────────────
-
-/// P-Token program ID (Pinocchio — SIMD-0266)
-const P_TOKEN_PROGRAM_ID: Pubkey = solana_program::pubkey!("ptok6rngomXrDbWf5v5Mkmu5CEbB51hzSCPDoj9DrvF");
-
-/// SPL Token program ID (fallback)
-const SPL_TOKEN_PROGRAM_ID: Pubkey = solana_program::pubkey!("TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA");
 
 /// Bonding curve seed prefix
 const BONDING_CURVE_SEED: &[u8] = b"bonding-curve";
@@ -81,7 +75,7 @@ pub mod p_token_launchpad {
         global.initial_real_token_reserves = INITIAL_REAL_TOKEN_RESERVES;
         global.fee_basis_points = FEE_BASIS_POINTS;
         global.initialized = true;
-        global.p_token_program_id = P_TOKEN_PROGRAM_ID;
+        global.p_token_program_id = ctx.accounts.p_token_program.key();
         global.token_count = 0;
         global.agent_count = 0;
 
@@ -615,6 +609,13 @@ pub struct CreateAgentToken<'info> {
     #[account(
         init,
         payer = owner,
+        mint::decimals = 6,
+        mint::authority = bonding_curve_vault.key(),
+    )]
+    pub mint: Account<'info, Mint>,
+    #[account(
+        init,
+        payer = owner,
         space = 8 + BondingCurve::INIT_SPACE,
         seeds = [BONDING_CURVE_SEED, mint.key().as_ref()],
         bump
@@ -629,13 +630,6 @@ pub struct CreateAgentToken<'info> {
         token::authority = bonding_curve,
     )]
     pub bonding_curve_vault: Account<'info, TokenAccount>,
-    #[account(
-        init,
-        payer = owner,
-        mint::decimals = 6,
-        mint::authority = bonding_curve_vault.key(),
-    )]
-    pub mint: Account<'info, Mint>,
     #[account(mut)]
     pub owner: Signer<'info>,
     pub token_program: Program<'info, Token>,

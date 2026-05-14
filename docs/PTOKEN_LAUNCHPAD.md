@@ -42,7 +42,7 @@ The Metaplex Genesis protocol allows creators to fundraise, launch token bonding
 
 ```
 P-Token:          ptok6rngomXrDbWf5v5Mkmu5CEbB51hzSCPDoj9DrvF
-P-Token Launchpad: pLPha99abcdefghijklmnopqrstuvwxyz1234567890
+P-Token Launchpad: 11111111111111111111111111111111 (placeholder until deploy)
 Feature Gate:     ptokFjwyJtrwCa9Kgo9xoDS59V4QccBGEaRFnRPnSdP
 ```
 
@@ -659,7 +659,7 @@ const sig = await graduate({
 | **Agent-Token Binding** | setAgentTokenV1 | createAgentToken (irreversible) |
 | **Executive Delegation** | registerExecutiveV1 | registerExecutive |
 | **Execution Delegation** | delegateExecutionV1 | delegateExecution |
-| **Program ID** | Genesis program | pLPha99... |
+| **Program ID** | Genesis program | deployment-specific program id |
 | **License** | Metaplex | MIT |
 
 ---
