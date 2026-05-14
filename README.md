@@ -10,6 +10,7 @@
   <a href="https://x.com/clawddevs"><img src="https://img.shields.io/badge/@clawddevs-X-000000?style=for-the-badge&logo=x" alt="@clawddevs"></a>
   <a href="https://www.npmjs.com/package/solana-clawd"><img src="https://img.shields.io/badge/npm-solana--clawd-CB3837?style=for-the-badge&logo=npm" alt="solana-clawd on npm"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-38bdf8?style=for-the-badge" alt="MIT license"></a>
+  <a href="MCP/src/server.ts"><img src="https://img.shields.io/badge/MCP-73%20tools%20%C2%B7%2014%20resources%20%C2%B7%2013%20prompts-7c3aed?style=for-the-badge" alt="MCP server: 73 tools · 14 resources · 13 prompts"></a>
 </p>
 
 <a href="https://git.io/typing-svg">
