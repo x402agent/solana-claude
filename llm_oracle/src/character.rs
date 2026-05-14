@@ -10,6 +10,7 @@ pub struct StyleSection {
     #[serde(default)]
     pub chat: Vec<String>,
     #[serde(default)]
+    #[allow(dead_code)]
     pub post: Vec<String>,
 }
 
