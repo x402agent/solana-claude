@@ -14,7 +14,7 @@ solana-gpt-oracle = { path = "../agents/solana-gpt-oracle", features = ["cpi"] }
 futures = "0.3.31"
 anchor-lang = "0.31.0"
 chatgpt_rs = "1.2.3"
-rand = "0.9.0"
+rand = "0.10.1"
 reqwest = { version = "0.12", features = ["json", "rustls-tls"], default-features = false }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"

@@ -17,7 +17,7 @@ test-bpf = []
 
 [dependencies]
 arrayref = "0.3.6"
-borsh = "0.9.3"
+borsh = "1.6.1"
 mpl-token-auth-rules = { version = "=1.4.3-beta.1", features = [
   "no-entrypoint",
 ] }
