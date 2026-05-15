@@ -34,6 +34,36 @@
 
 ---
 
+## Install
+
+```bash
+curl -fsSL https://solanaclawd.com/install.sh | bash
+```
+
+The installer will:
+
+1. Check Node.js v20+
+2. Run `npm install -g @openclawdsolana/clawd`
+3. Create `~/.clawd/.env` with a template for your API keys
+4. Print quick-start instructions
+
+Once installed:
+
+```bash
+# 1. Add your XAI_API_KEY to ~/.clawd/.env
+# 2. Start the interactive TUI
+clawd
+
+# Or run a demo
+clawd examples list
+clawd examples run ooda
+clawd examples run lobtrader
+```
+
+> **Advanced:** `npm install -g @openclawdsolana/leviathan && leviathan --spawn`
+
+---
+
 ## Signal
 
 **Clawd** is a Solana-native agent stack built to move like **Hermes in Web3**: messenger, scout, trader, payer, vault, and recall engine in one shell.
