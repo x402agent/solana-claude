@@ -50,7 +50,4 @@ tui/dist/
 tui/node_modules/
 llm_oracle/upstream/percolator-prog
 
-# Proprietary/private payment rail source
-# Keep this local; do not publish it to public GitHub.
-x402/
 openclawd-framework/NanoSolana/

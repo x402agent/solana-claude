@@ -1,0 +1,23 @@
+{
+  "name": "@solanaclawd/deep-clawd",
+  "version": "1.0.0",
+  "description": "DeepSeek V4 Pro/Flash OODA trading agent with dFlow routing for Solana Clawd",
+  "type": "module",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx src/index.ts",
+    "deep": "tsx src/index.ts --loop",
+    "deep:goblin": "DFLOW_MODE=aggro tsx src/index.ts --loop --ticks=100",
+    "deep:paper": "PAPER_ONLY=true tsx src/index.ts --loop",
+    "deep:orient": "tsx src/index.ts --orient"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.39.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.14.0",
+    "tsx": "^4.19.4",
+    "typescript": "^5.8.3"
+  }
+}
