@@ -1,0 +1,89 @@
+name: Main
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+env:
+  CACHE: true
+
+jobs:
+  sanity:
+    name: Process Workspace
+    runs-on: ubuntu-latest
+    outputs:
+      members: ${{ steps.filter.outputs.members }}
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+
+      - name: Setup Environment
+        uses: ./.github/actions/setup
+        with:
+          cargo-cache-key: cargo-audit
+          toolchain: lint
+          components: audit, miri
+
+      - name: cargo-audit
+        run: pnpm cargo-audit
+
+      - name: cargo-miri
+        run: pnpm miri
+
+      - name: Filter members
+        id: filter
+        run: pnpm tsx ./scripts/setup/members.mts
+
+  spellcheck:
+    name: Spellcheck
+    runs-on: ubuntu-latest
+    steps:
+      - name: Git Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+
+      - name: Setup Environment
+        uses: ./.github/actions/setup
+        with:
+          cargo-cache-key: cargo-spellcheck
+          components: spellcheck
+
+      - name: cargo-spellcheck
+        run: pnpm spellcheck
+
+  process:
+    name: Check
+    needs: sanity
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        member: ${{ fromJson(needs.sanity.outputs.members) }}
+    steps:
+      - name: Git Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+
+      - name: Setup Environment
+        uses: ./.github/actions/setup
+        with:
+          cargo-cache-key: cargo-${{ matrix.member }}
+          toolchain: build, format, lint, test
+          components: hack
+          solana: true
+
+      - name: fmt
+        run: pnpm format ${{ matrix.member }}
+
+      - name: clippy
+        run: pnpm clippy ${{ matrix.member }}
+
+      - name: cargo-doc
+        run: pnpm doc ${{ matrix.member }}
+
+      - name: cargo-hack
+        run: pnpm hack ${{ matrix.member }}
+
+      - name: build-sbf
+        run: pnpm build-sbf ${{ matrix.member }}
+
+      - name: test
+        run: pnpm test ${{ matrix.member }}

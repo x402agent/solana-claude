@@ -332,7 +332,14 @@ function buildOrchestrator(meter: SessionMeter): Orchestrator {
       const archives = (await archRes.json() as { archives: string[] }).archives;
       const gamesRes = await fetch(archives[archives.length - 1], { headers: { Accept: "application/json" }, signal: AbortSignal.timeout(15_000) });
       const all = ((await gamesRes.json()) as { games: Array<Record<string, unknown>> }).games;
-      return all.sort((x, y) => (y.end_time as number) - (x.end_time as number)).slice(0, limit).map(g => { const wh = g.white as Record<string, unknown>; const isW = (wh.username as string).toLowerCase() === u.toLowerCase(); const me = isW ? wh : g.black as Record<string, unknown>; return { opponent: (isW ? g.black : g.white as Record<string, unknown>).username, result: me.result, color: isW ? "white" : "black", rating: me.rating }; });
+      return all.sort((x, y) => (y.end_time as number) - (x.end_time as number)).slice(0, limit).map(g => {
+        const white = g.white as Record<string, unknown>;
+        const black = g.black as Record<string, unknown>;
+        const isWhite = String(white.username).toLowerCase() === u.toLowerCase();
+        const me = isWhite ? white : black;
+        const opponent = isWhite ? black : white;
+        return { opponent: opponent.username, result: me.result, color: isWhite ? "white" : "black", rating: me.rating };
+      });
     });
 
   reg({ name: "chess_current_games", description: "Ongoing Chess.com daily games — shows games where it's their turn", inputSchema: { type: "object", properties: { username: { type: "string" } }, required: ["username"] }, category: "chess" },

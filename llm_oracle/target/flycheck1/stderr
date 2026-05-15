@@ -1,0 +1,15 @@
+    Blocking waiting for file lock on package cache
+    Updating crates.io index
+error: failed to get `solana-gpt-oracle` as a dependency of package `llm_oracle v0.1.0 (/Users/8bit/Downloads/FunPumpAi/llm_oracle)`
+
+Caused by:
+  failed to load source for dependency `solana-gpt-oracle`
+
+Caused by:
+  Unable to update /Users/8bit/Downloads/FunPumpAi/programs/solana-gpt-oracle
+
+Caused by:
+  failed to read `/Users/8bit/Downloads/FunPumpAi/programs/solana-gpt-oracle/Cargo.toml`
+
+Caused by:
+  No such file or directory (os error 2)

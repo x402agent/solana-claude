@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>p-token Launcher Workbench</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <section class="hero">
+        <div>
+          <p class="eyebrow">Pinocchio p-token launch control</p>
+          <h1>Launch, quote, and review p-token markets for compute, agents, and humans.</h1>
+        </div>
+        <div class="status" id="status">Connecting</div>
+      </section>
+
+      <section class="grid">
+        <form class="panel" id="launch-form">
+          <div class="panel-title">
+            <h2>Launch Plan</h2>
+            <button type="submit">Generate</button>
+          </div>
+          <label>Symbol <input name="symbol" value="PQC" /></label>
+          <label>Name <input name="name" value="Quantum Compute p-token" /></label>
+          <label>Metadata URI <input name="uri" value="https://example.com/pqc.json" /></label>
+          <div class="split">
+            <label>Supply <input name="supply" type="number" value="1000000000" /></label>
+            <label>Decimals <input name="decimals" type="number" value="9" /></label>
+          </div>
+          <div class="split">
+            <label>Virtual SOL <input name="virtualSol" type="number" step="0.01" value="30" /></label>
+            <label>Virtual token <input name="virtualToken" type="number" value="1073000000" /></label>
+          </div>
+          <label>Thesis <textarea name="thesis">p-token market for quantum-style compute, agents, human launchers, and perpetual trading.</textarea></label>
+        </form>
+
+        <form class="panel" id="quote-form">
+          <div class="panel-title">
+            <h2>Curve Quote</h2>
+            <button type="submit">Quote</button>
+          </div>
+          <div class="segmented">
+            <label><input type="radio" name="side" value="buy" checked /> Buy</label>
+            <label><input type="radio" name="side" value="sell" /> Sell</label>
+          </div>
+          <div class="split">
+            <label>SOL in <input name="sol" type="number" step="0.01" value="1" /></label>
+            <label>Tokens in <input name="tokens" type="number" value="1000000" /></label>
+          </div>
+          <div class="split">
+            <label>Fee bps <input name="feeBps" type="number" value="100" /></label>
+            <label>Graduation SOL <input name="graduationSol" type="number" value="85" /></label>
+          </div>
+        </form>
+
+        <form class="panel" id="perp-form">
+          <div class="panel-title">
+            <h2>Perpetual Intent</h2>
+            <button type="submit">Plan</button>
+          </div>
+          <div class="segmented">
+            <label><input type="radio" name="perpSide" value="long" checked /> Long</label>
+            <label><input type="radio" name="perpSide" value="short" /> Short</label>
+          </div>
+          <div class="split">
+            <label>Collateral SOL <input name="collateralSol" type="number" step="0.01" value="1" /></label>
+            <label>Leverage <input name="leverage" type="number" step="0.1" value="2" /></label>
+          </div>
+          <label>Actor <input name="actor" value="agent-with-human-review" /></label>
+        </form>
+
+        <form class="panel" id="inspect-form">
+          <div class="panel-title">
+            <h2>Mint Inspector</h2>
+            <button type="submit">Inspect</button>
+          </div>
+          <label>Mint <input name="mint" placeholder="Mint address" /></label>
+          <label>RPC <input name="rpc" placeholder="Defaults to SOLANA_RPC_URL or devnet" /></label>
+        </form>
+      </section>
+
+      <section class="output-band">
+        <div class="tabs">
+          <button class="active" data-output="plan-output">Plan</button>
+          <button data-output="quote-output">Quote</button>
+          <button data-output="perp-output">Perp</button>
+          <button data-output="inspect-output">Inspect</button>
+          <button data-output="registry-output">Registry</button>
+        </div>
+        <pre id="plan-output" class="output active"></pre>
+        <pre id="quote-output" class="output"></pre>
+        <pre id="perp-output" class="output"></pre>
+        <pre id="inspect-output" class="output"></pre>
+        <pre id="registry-output" class="output"></pre>
+      </section>
+    </main>
+    <script src="/app.js" type="module"></script>
+  </body>
+</html>

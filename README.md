@@ -5,13 +5,16 @@
 <p>
   <a href="https://solanaclawd.com"><img src="https://img.shields.io/badge/$CLAWD-Solana-14F195?style=for-the-badge&logo=solana&logoColor=111827" alt="$CLAWD on Solana"></a>
   <a href="https://pay.solanaclawd.com"><img src="https://img.shields.io/badge/x402-pay.solanaclawd.com-ff00ff?style=for-the-badge" alt="x402 pay.solanaclawd.com"></a>
+  <a href="docs/PTOKEN_LAUNCHPAD.md"><img src="https://img.shields.io/badge/p--token-launchpad-14F195?style=for-the-badge&logo=solana&logoColor=111827" alt="p-token launchpad"></a>
+  <a href="pinocchio/README.md"><img src="https://img.shields.io/badge/Pinocchio-zero--copy-9945FF?style=for-the-badge" alt="Pinocchio support"></a>
   <a href="https://x.com/clawddevs"><img src="https://img.shields.io/badge/@clawddevs-X-000000?style=for-the-badge&logo=x" alt="@clawddevs"></a>
   <a href="https://www.npmjs.com/package/solana-clawd"><img src="https://img.shields.io/badge/npm-solana--clawd-CB3837?style=for-the-badge&logo=npm" alt="solana-clawd on npm"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-38bdf8?style=for-the-badge" alt="MIT license"></a>
+  <a href="MCP/src/server.ts"><img src="https://img.shields.io/badge/MCP-73%20tools%20%C2%B7%2014%20resources%20%C2%B7%2013%20prompts-7c3aed?style=for-the-badge" alt="MCP server: 73 tools · 14 resources · 13 prompts"></a>
 </p>
 
 <a href="https://git.io/typing-svg">
-  <img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=800&size=22&duration=2600&pause=650&color=14F195&center=true&vCenter=true&width=1040&lines=HERMES+OF+WEB3+%3A%3A+messages+move%2C+payments+settle%2C+memory+survives;SENSE+-%3E+THINK+-%3E+STRIKE+-%3E+DRIFT+-%3E+RECALL;TRADE+-%3E+EARN+USDC+-%3E+PAY+x402+-%3E+GET+SMARTER+-%3E+TRADE+BETTER;Temporal+Epistemic+Graphs+with+Veracity-Weighted+Consolidation;Token+CA+%3A%3A+8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump" alt="Clawd animated typing lines" />
+  <img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=800&size=22&duration=2600&pause=650&color=14F195&center=true&vCenter=true&width=1040&lines=HERMES+OF+WEB3+%3A%3A+messages+move%2C+payments+settle%2C+memory+survives;p-TOKEN+LAUNCHPAD+%3A%3A+agent+tokens+%2B+bonding+curves+%2B+explorer;PINOCCHIO+ZERO-COPY+%3A%3A+faster+mints%2C+burns%2C+transfers;TRADE+-%3E+EARN+USDC+-%3E+PAY+x402+-%3E+GET+SMARTER+-%3E+TRADE+BETTER;Token+CA+%3A%3A+8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump" alt="Clawd animated typing lines" />
 </a>
 
 <br/>
@@ -44,6 +47,21 @@ It fuses:
   `8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump`
 
 This repo is the command deck. It is not a landing page. Run it, inspect it, wire it into agents, and let the shell remember.
+
+---
+
+## What Changed Here
+
+This pass connected three workstreams into the root story so a new operator can find and run them from one place:
+
+| Workstream | What shipped | Where to start |
+| --- | --- | --- |
+| **Pinocchio + p-token** | Native Solana program support, vault and escrow starters, p-token launchpad, p-agent-token planning, bonding-curve quotes, registry inspection, and a one-by-one helper-program map. | [`pinocchio/USER_GUIDE.md`](./pinocchio/USER_GUIDE.md), [`docs/PTOKEN_LAUNCHPAD.md`](./docs/PTOKEN_LAUNCHPAD.md), [`pinocchio/README.md`](./pinocchio/README.md), [`pinocchio/docs/P_AGENT_TOKEN.md`](./pinocchio/docs/P_AGENT_TOKEN.md), [`docs/PTOKEN_EXPLORER.md`](./docs/PTOKEN_EXPLORER.md) |
+| **LLM Oracle** | Rust oracle runner that watches Solana GPT oracle interaction accounts, loads Clawd character context, calls a configured LLM provider, and submits callback responses on-chain. | [`llm_oracle/README.md`](./llm_oracle/README.md) |
+| **x402 payment rail** | Solana HTTP 402 payment flow with pay.sh-style confidential settlement, A2A task payments, SDK helpers, p-token support, worker deployment surface, and revenue-vault documentation. | Private source; excluded from public GitHub exports. |
+| **Program map** | Machine-readable map of the on-chain workspace, including inference, GPT oracle, staking, agent minting, token launchers, and metadata references. | [`data/programs-map.json`](./data/programs-map.json), [`programs/README.md`](./programs/README.md) |
+
+The short version: Pinocchio gives builders cheaper native program paths, p-token launchpad gives agents faster token markets, `llm_oracle` gives the chain an LLM callback bridge, and x402 gives agents a way to charge, settle, and prove paid work over Solana.
 
 ---
 
@@ -85,6 +103,35 @@ npm run mcp:start
 npm run vault:web:dev
 ```
 
+Check or run the on-chain LLM oracle adapter:
+
+```bash
+npm run oracle:check
+npm run oracle:run
+```
+
+Inspect and register SPL-compatible p-tokens:
+
+```bash
+npm run ptoken:inspect -- --mint <mint>
+npm run ptoken:add -- --mint <mint> --symbol PFOO --name "P Foo"
+npm run ptoken:launch-plan -- --symbol PFOO --name "P Foo"
+npm run ptoken:curve-quote -- --virtual-sol 30 --virtual-token 1073000000 --sol 1
+npm run pagent:plan -- --symbol PCLAWD --name "Clawd Agent Token" --agent-name "Clawd"
+npm run pagent:quote -- --virtual-sol 30 --virtual-token 1073000000 --sol 1
+npm run pinocchio:templates
+npm run pinocchio:scaffold -- --template p-agent-token --name pclawd-agent-token --out ./programs/pclawd-agent-token
+npm run pinocchio:scaffold -- --template escrow --name my-escrow --out ./programs/my-escrow
+```
+
+Map the on-chain program workspace:
+
+```bash
+npm run programs:map
+npm run programs:show -- solana-ai-inference
+cd programs && cargo check
+```
+
 Common environment variables:
 
 ```bash
@@ -94,6 +141,11 @@ OPENROUTER_API_KEY=
 XAI_API_KEY=
 ANTHROPIC_API_KEY=
 SOLANA_PRIVATE_KEY=        # only for intentional signing flows
+ORACLE_PROGRAM_ID=         # deployed solana-gpt-oracle program id
+LLM_PROVIDER=clawd         # clawd/anthropic or openai
+CHARACTER=clawd            # agents/characters name or JSON path
+P_TOKEN_PROGRAM_ID=        # optional p-token program override for x402 payments
+USE_P_TOKEN=               # set 0/false to force classic SPL Token payments
 ```
 
 ---
@@ -129,14 +181,104 @@ Clawd does not just prompt. It loops, pays, records, scores, resolves, and retur
 | --- | --- | --- |
 | **HERMES Terminal** | Neon Solana terminal for OODA, markets, and payment panels | [`tui/`](./tui/) |
 | **Leviathan Runtime** | Sovereign shell, depth tiers, identity, and Three Laws | [`leviathan/`](./leviathan/) |
-| **x402 Rails** | HTTP 402, pay.sh, A2A, confidential agent settlement | [`x402/`](./x402/) |
+| **x402 Rails** | HTTP 402, pay.sh, A2A, confidential agent settlement | Private source; excluded from public GitHub exports. |
 | **Dark Ralph OODA** | Observe-orient-decide-act loop and trading lab | [`ooda/`](./ooda/) |
 | **ClawdRouter** | Model routing and agent economics | [`clawdrouter/`](./clawdrouter/) |
 | **Clawd Memory / Vault** | Markdown vault, MCP workflows, long-horizon memory | [`llm-wiki-tang/`](./llm-wiki-tang/) and [`MemeBRain/`](./MemeBRain/) |
+| **LLM Oracle** | Rust listener that watches Solana oracle interactions, calls an LLM provider, and submits callback responses on-chain | [`llm_oracle/`](./llm_oracle/) |
+| **Percolator Ops** | Bundled Percolator CLI and upstream references for perp-market oracle, keeper, and risk-engine workflows | [`llm_oracle/percolator-cli-master/`](./llm_oracle/percolator-cli-master/) and [`llm_oracle/upstream/`](./llm_oracle/upstream/) |
+| **Pinocchio Support** | Native Solana p-token, p-agent-token, vault, escrow, launcher templates, bonding curves, upstream program maps, and agent/MCP workflows | [`pinocchio/`](./pinocchio/) and [`pinocchio/pinocchio-main/programs/`](./pinocchio/pinocchio-main/programs/) |
+| **Program Workspace** | Anchor/Rust/TypeScript Solana programs for inference, staking, GPT oracle callbacks, agent minting, launchers, and metadata rails | [`programs/`](./programs/) and [`data/programs-map.json`](./data/programs-map.json) |
+| **p-token Explorer** | SPL-compatible p-token registry, mint inspector, and payment-rail p-token support | [`scripts/ptoken-explorer.mjs`](./scripts/ptoken-explorer.mjs), [`data/ptokens.json`](./data/ptokens.json), [`docs/PTOKEN_EXPLORER.md`](./docs/PTOKEN_EXPLORER.md) |
+| **P-Token Launch Pad** | Self-hosted agent token launches, constant-product curves, PDA registry, executive delegation, batch fee distribution, and DEX graduation | [`programs/p-token-launchpad/`](./programs/p-token-launchpad/), [`docs/PTOKEN_LAUNCHPAD.md`](./docs/PTOKEN_LAUNCHPAD.md) |
+| **Risk Engine Spec** | Protected principal, lazy ADL, funding, keeper, and liquidation invariants for the perp-risk layer | [`docs/risk-engine-spec.md`](./docs/risk-engine-spec.md) |
 | **MCP Surface** | Local tools and machine interfaces | [`MCP/`](./MCP/) |
 | **Browser Bridge** | Wallet, extension, and browser-side controls | [`chrome-extension/`](./chrome-extension/) |
 | **Agent Wallet** | Local encrypted wallet API and vault tooling | [`packages/agentwallet/`](./packages/agentwallet/) |
 | **OpenClawd Assembly** | Bridge, gateway, orchestrator, package surfaces | [`openclawd/`](./openclawd/) |
+
+---
+
+## P-Token Launch Pad
+
+<div align="center">
+  <img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=800&size=18&duration=1800&pause=500&color=14F195&center=true&vCenter=true&width=1040&lines=CREATE+AGENT+TOKEN+-%3E+BIND+IDENTITY+-%3E+OPEN+CURVE;BATCH+FEES+WITH+OPCODE+25+%3A%3A+ONE+CPI+MANY+RECIPIENTS;EXPLORE+MINTS+-%3E+REGISTER+p-TOKENS+-%3E+GRADUATE+TO+DEX" alt="p-token launchpad animation" />
+</div>
+
+```text
+╔══════════════════════════════════════════════════════════════════════════╗
+║  ADAPTED FROM: Metaplex Genesis agent-token launch concepts             ║
+║  Originals: createAndRegisterLaunch, setAgentTokenV1,                  ║
+║             registerIdentityV1, registerExecutiveV1, delegateExecutionV1║
+║  Adaptation: p-token (SIMD-0266) bonding curves + PDA agent registry    ║
+║  CU Savings: 98% on transfers, 51% on mints, 60% on burns               ║
+╚══════════════════════════════════════════════════════════════════════════╝
+```
+
+The public launchpad is the self-hosted path for fast agent tokens: create the mint, initialize a constant-product bonding curve, register the agent identity, bind token-to-agent once, trade through buy/sell, distribute fees with p-token batch CPI, and graduate liquidity to an external DEX.
+
+| Surface | What it does | Public path |
+| --- | --- | --- |
+| **Launchpad program** | Anchor program for curves, agent registry, agent-token binding, delegation, buys/sells, fee withdrawal, and graduation | [`programs/p-token-launchpad/`](./programs/p-token-launchpad/) |
+| **Launchpad guide** | Full 11-section spec adapted from Genesis into p-token/Pinocchio terms | [`docs/PTOKEN_LAUNCHPAD.md`](./docs/PTOKEN_LAUNCHPAD.md) |
+| **p-token explorer** | Inspect mints over RPC, classify SPL vs p-token, and register local p-token metadata | [`docs/PTOKEN_EXPLORER.md`](./docs/PTOKEN_EXPLORER.md) |
+| **p-agent-token template** | Forkable Pinocchio starter for token + agent state + one-way binding | [`pinocchio/templates/p-agent-token/`](./pinocchio/templates/p-agent-token/) |
+| **Launch planner** | Unsigned launch plans and curve quotes for agents/operators | [`pinocchio/docs/P_TOKEN_LAUNCHES.md`](./pinocchio/docs/P_TOKEN_LAUNCHES.md), [`pinocchio/docs/P_AGENT_TOKEN.md`](./pinocchio/docs/P_AGENT_TOKEN.md) |
+
+```text
+┌──────────────────────────────────────────────────────────┐
+│                   P-Token Launch Pad                     │
+│                                                          │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐      │
+│  │ Bonding     │  │ Agent       │  │ Agent       │      │
+│  │ Curves      │  │ Registry    │  │ Token Bind  │      │
+│  │ buy/sell    │  │ identity    │  │ irreversible│      │
+│  │ price calc  │  │ executive   │  │ PDA state   │      │
+│  └──────┬──────┘  └──────┬──────┘  └──────┬──────┘      │
+│         └────────────────┴────────────────┘             │
+│                          │                               │
+│                    ┌─────┴─────┐                         │
+│                    │ P-Token   │                         │
+│                    │ SIMD-0266 │ batch CPI, low CU       │
+│                    └───────────┘                         │
+└──────────────────────────────────────────────────────────┘
+```
+
+| Operation | SPL Token CU | p-token CU | Savings |
+| --- | ---: | ---: | ---: |
+| Transfer / fee distribution | 4,645 | 76 | 98.4% |
+| MintTo / buy path | 4,128 | 2,012 | 51.3% |
+| Burn / sell path | 4,753 | 1,884 | 60.4% |
+| Batch fee distribution, 10 recipients | 62,000 | 1,250 | 98.0% |
+
+Fast path commands:
+
+```bash
+npm run ptoken:launch-plan -- --symbol PFOO --name "P Foo"
+npm run ptoken:curve-quote -- --virtual-sol 30 --virtual-token 1073000000 --sol 1
+npm run ptoken:inspect -- --mint <mint>
+npm run ptoken:add -- --mint <mint> --symbol PFOO --name "P Foo" --p-token-program-id <program>
+npm run pagent:plan -- --symbol PCLAWD --name "Clawd Agent Token" --agent-name "Clawd"
+npm run pagent:quote -- --virtual-sol 30 --virtual-token 1073000000 --sol 1
+cd programs && cargo check -p p-token-launchpad
+```
+
+Current deployment note: the launchpad program id is a placeholder until a real deployment is chosen. Treat p-token and launchpad code as pre-audit infrastructure; verify the exact p-token program id, feature gate, curve math, fee custody, PDA signer model, and DEX graduation adapter before mainnet use. Private payment-rail implementation files stay excluded from public GitHub.
+
+---
+
+## LLM Oracle
+
+[`llm_oracle/`](./llm_oracle/) adapts the Solana GPT oracle flow into Clawd. It subscribes to interaction accounts from a deployed oracle program, builds persona-aware prompts from the repo character files, calls Anthropic-compatible Clawd or OpenAI, and posts the answer back through the program callback instruction.
+
+The oracle package includes:
+
+- Rust oracle runner in [`llm_oracle/src/`](./llm_oracle/src/).
+- ABI support crate in [`agents/solana-gpt-oracle/`](./agents/solana-gpt-oracle/).
+- Percolator CLI operational tools in [`llm_oracle/percolator-cli-master/`](./llm_oracle/percolator-cli-master/).
+- Upstream Percolator source references in [`llm_oracle/upstream/`](./llm_oracle/upstream/).
+
+Use `npm run oracle:check` before running it. Set `ORACLE_PROGRAM_ID`, `RPC_URL`, `WEBSOCKET_URL`, `IDENTITY`, and the matching LLM provider key for a live network.
 
 ---
 
@@ -265,18 +407,20 @@ Success targets:
 
 ---
 
-## x402: The Payment Nerve
+## x402: The Private Payment Nerve
 
 HERMES x402 turns HTTP `402 Payment Required` into agent-native settlement.
 
-| Piece | What it does | Path |
+The implementation source is proprietary/private and intentionally excluded from public GitHub exports. The public README keeps the protocol surface documented without publishing the gateway, SDK, worker, or vault source.
+
+| Piece | What it does | Public status |
 | --- | --- | --- |
-| **PayshFacilitator** | Blind relay and confidential x402 settlement | [`x402/paysh-facilitator.ts`](./x402/paysh-facilitator.ts) |
-| **A2A Agent** | Google A2A task flow with payment-aware transport | [`x402/a2a-agent.ts`](./x402/a2a-agent.ts) |
-| **Confidential Agent** | NaCl-encrypted payment/inference flow | [`x402/confidential-agent.ts`](./x402/confidential-agent.ts) |
-| **Dark DeFi** | Whale intelligence, MEV detection, route scanning | [`x402/dark-defi.ts`](./x402/dark-defi.ts) |
-| **Client SDK** | Client-side x402 helpers | [`x402/client-sdk.ts`](./x402/client-sdk.ts) |
-| **Worker** | Gateway/facilitator deployment surface | [`x402/worker/`](./x402/worker/) |
+| **PayshFacilitator** | Blind relay and confidential x402 settlement | Private |
+| **A2A Agent** | Google A2A task flow with payment-aware transport | Private |
+| **Confidential Agent** | NaCl-encrypted payment/inference flow | Private |
+| **Dark DeFi** | Whale intelligence, MEV detection, route scanning | Private |
+| **Client SDK** | Client-side x402 helpers | Private |
+| **Worker** | Gateway/facilitator deployment surface | Private |
 
 ```text
 x402  -> HTTP 402 challenge and receipt flow
@@ -338,6 +482,22 @@ The Three Laws live in [`leviathan/three-laws.txt`](./leviathan/three-laws.txt) 
 | `npm run brain:mcp` | Start Mnemosyne MCP for the Clawd bank |
 | `npm run mcp:start` | Start the repo MCP server |
 | `npm run vault:web:dev` | Start the vault web surface |
+| `npm run pinocchio:templates` | List Pinocchio/p-token starter templates |
+| `npm run pinocchio:scaffold` | Scaffold a Pinocchio vault, escrow, or p-token launcher starter |
+| `npm run ptoken:inspect` | Inspect an SPL-compatible p-token mint over RPC |
+| `npm run ptoken:add` | Register a launched p-token in `data/ptokens.json` |
+| `npm run ptoken:list` | List the local p-token registry |
+| `npm run ptoken:show` | Show one registered p-token by mint or symbol |
+| `npm run ptoken:launch-plan` | Generate an unsigned p-token launch and bonding curve config |
+| `npm run ptoken:curve-quote` | Simulate a constant-product p-token launch curve quote |
+| `npm run pagent:plan` | Generate an unsigned p-token agent-token plan with agent identity and binding steps |
+| `npm run pagent:quote` | Simulate a p-agent-token bonding curve quote |
+| `cd programs && cargo check -p p-token-launchpad` | Compile-check the public p-token launchpad program |
+| `npm run programs:map` | List mapped on-chain programs and local program references |
+| `npm run programs:show -- token-launcher` | Show one mapped program entry |
+| `npm run oracle:check` | Type/check the Rust LLM oracle crate |
+| `npm run oracle:build` | Build the Rust LLM oracle runner |
+| `npm run oracle:run` | Run the LLM oracle worker against the configured RPC/program |
 
 Standalone examples:
 
@@ -364,9 +524,11 @@ solana-clawd/
 ├── tui/                    # HERMES terminal
 ├── ooda/                   # OODA loop lab
 ├── leviathan/              # sovereign runtime
-├── x402/                   # payment gateway, A2A, facilitator
+├── x402/                   # private payment gateway, A2A, facilitator source; not public
 ├── clawdrouter/            # model routing
 ├── MCP/                    # MCP server
+├── pinocchio/              # p-token, p-agent-token, vault, escrow templates + Pinocchio docs
+├── programs/               # on-chain program workspace + program map
 ├── MemeBRain/              # Mnemosyne / Clawd brain substrate
 ├── llm-wiki-tang/          # Clawd vault
 ├── chrome-extension/       # browser surfaces
@@ -385,12 +547,19 @@ solana-clawd/
 1. [`HACKATHON.md`](./HACKATHON.md)
 2. [`architecture.md`](./architecture.md)
 3. [`docs/architecture.md`](./docs/architecture.md)
-4. [`x402/README.md`](./x402/README.md)
-5. [`clawdrouter/README.md`](./clawdrouter/README.md)
-6. [`llm-wiki-tang/README.md`](./llm-wiki-tang/README.md)
-7. [`MemeBRain/README.md`](./MemeBRain/README.md)
-8. [`openclawd/README.md`](./openclawd/README.md)
-9. [`openclawd-framework/README.md`](./openclawd-framework/README.md)
+4. [`clawdrouter/README.md`](./clawdrouter/README.md)
+5. [`llm-wiki-tang/README.md`](./llm-wiki-tang/README.md)
+6. [`MemeBRain/README.md`](./MemeBRain/README.md)
+7. [`openclawd/README.md`](./openclawd/README.md)
+8. [`openclawd-framework/README.md`](./openclawd-framework/README.md)
+9. [`pinocchio/USER_GUIDE.md`](./pinocchio/USER_GUIDE.md)
+10. [`pinocchio/README.md`](./pinocchio/README.md)
+11. [`docs/PTOKEN_LAUNCHPAD.md`](./docs/PTOKEN_LAUNCHPAD.md)
+12. [`docs/PTOKEN_EXPLORER.md`](./docs/PTOKEN_EXPLORER.md)
+13. [`pinocchio/docs/P_AGENT_TOKEN.md`](./pinocchio/docs/P_AGENT_TOKEN.md)
+14. [`programs/p-token-launchpad/README.md`](./programs/p-token-launchpad/README.md)
+15. [`programs/README.md`](./programs/README.md)
+16. [`docs/risk-engine-spec.md`](./docs/risk-engine-spec.md)
 
 ---
 
@@ -420,4 +589,3 @@ MIT. See [`LICENSE`](./LICENSE).
 </sub>
 
 </div>
-Clawd Memory — The Persistent Brain Layer for Autonomous Solana Agents

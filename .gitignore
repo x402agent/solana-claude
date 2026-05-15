@@ -17,6 +17,12 @@
 id_rsa
 id_ed25519
 
+# Wrangler / Cloudflare Workers build artifacts
+.wrangler/
+.wrangler
+**/.wrangler/
+**/.wrangler
+
 # Dependencies and package manager caches
 node_modules/
 .pnpm-store/
@@ -42,3 +48,6 @@ coverage/
 **/.git
 tui/dist/
 tui/node_modules/
+llm_oracle/upstream/percolator-prog
+
+openclawd-framework/NanoSolana/

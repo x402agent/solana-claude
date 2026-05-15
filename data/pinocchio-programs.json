@@ -1,0 +1,178 @@
+{
+  "version": 1,
+  "source": "pinocchio/pinocchio-main/programs",
+  "programs": [
+    {
+      "slug": "system",
+      "crate": "pinocchio-system",
+      "programId": "11111111111111111111111111111111",
+      "kind": "native-cpi-helper",
+      "path": "pinocchio/pinocchio-main/programs/system",
+      "docs": "pinocchio/pinocchio-main/programs/system/README.md",
+      "purpose": "Pinocchio CPI helpers for core System Program account creation, lamport transfer, assign, allocate, and nonce instructions.",
+      "useInSolanaClawd": [
+        "funding p-token mint accounts",
+        "creating PDA-backed program accounts in templates",
+        "lamport refunds and close paths",
+        "vault and escrow setup flows"
+      ],
+      "primaryInstructions": [
+        "CreateAccount",
+        "CreateAccountAllowPrefund",
+        "CreateAccountWithSeed",
+        "Transfer",
+        "TransferWithSeed",
+        "Assign",
+        "AssignWithSeed",
+        "Allocate",
+        "AllocateWithSeed",
+        "InitializeNonceAccount",
+        "AdvanceNonceAccount",
+        "WithdrawNonceAccount",
+        "AuthorizeNonceAccount",
+        "UpgradeNonceAccount"
+      ],
+      "status": "upstream-reference",
+      "notes": "Use this whenever a Pinocchio template needs native SOL movement or account allocation."
+    },
+    {
+      "slug": "token",
+      "crate": "pinocchio-token",
+      "programId": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+      "kind": "spl-token-cpi-helper",
+      "path": "pinocchio/pinocchio-main/programs/token",
+      "docs": "pinocchio/pinocchio-main/programs/token/README.md",
+      "purpose": "Pinocchio CPI helpers and zero-copy state views for the canonical SPL Token program.",
+      "useInSolanaClawd": [
+        "SPL-compatible p-token explorer fallback",
+        "escrow make/take/refund token movement",
+        "vault token account checks",
+        "x402 SPL and p-token payment compatibility"
+      ],
+      "primaryInstructions": [
+        "InitializeMint",
+        "InitializeMint2",
+        "InitializeAccount",
+        "InitializeAccount2",
+        "InitializeAccount3",
+        "InitializeMultisig",
+        "InitializeMultisig2",
+        "Transfer",
+        "TransferChecked",
+        "Approve",
+        "ApproveChecked",
+        "Revoke",
+        "SetAuthority",
+        "MintTo",
+        "MintToChecked",
+        "Burn",
+        "BurnChecked",
+        "CloseAccount",
+        "FreezeAccount",
+        "ThawAccount",
+        "SyncNative",
+        "AmountToUiAmount",
+        "UiAmountToAmount",
+        "GetAccountDataSize",
+        "InitializeImmutableOwner",
+        "Batch"
+      ],
+      "status": "adapted",
+      "notes": "The Batch helper matters for p-token style CU savings because it can collapse multiple token operations into one CPI boundary."
+    },
+    {
+      "slug": "token-2022",
+      "crate": "pinocchio-token-2022",
+      "programId": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb",
+      "kind": "token-extensions-cpi-helper",
+      "path": "pinocchio/pinocchio-main/programs/token-2022",
+      "docs": "pinocchio/pinocchio-main/programs/token-2022/README.md",
+      "purpose": "Pinocchio CPI helpers and account state views for SPL Token-2022, including extension-oriented instructions.",
+      "useInSolanaClawd": [
+        "Token-2022 mint classification in p-token explorer",
+        "future p-token launches with metadata pointer or extension-style controls",
+        "advanced token launch planning",
+        "agent education for extension account checks"
+      ],
+      "primaryInstructions": [
+        "InitializeMint",
+        "InitializeMint2",
+        "InitializeAccount2",
+        "InitializeAccount3",
+        "Transfer",
+        "TransferChecked",
+        "ApproveChecked",
+        "Revoke",
+        "SetAuthority",
+        "MintTo",
+        "Burn",
+        "BurnChecked",
+        "CloseAccount",
+        "FreezeAccount",
+        "ThawAccount",
+        "Reallocate",
+        "SyncNative",
+        "CreateNativeMint",
+        "WithdrawExcessLamports",
+        "GetAccountDataSize",
+        "InitializeImmutableOwner",
+        "InitializeNonTransferableMint",
+        "TransferFee",
+        "MetadataPointer",
+        "GroupPointer",
+        "GroupMemberPointer",
+        "DefaultAccountState",
+        "MemoTransfer",
+        "CpiGuard",
+        "Pausable",
+        "ScaledUiAmount",
+        "PermissionedBurn",
+        "MintCloseAuthority"
+      ],
+      "status": "mapped",
+      "notes": "Use byte 165 account discriminators for Token-2022 Mint versus TokenAccount classification when account length is extended."
+    },
+    {
+      "slug": "associated-token-account",
+      "crate": "pinocchio-associated-token-account",
+      "programId": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJe8bXV",
+      "kind": "ata-cpi-helper",
+      "path": "pinocchio/pinocchio-main/programs/associated-token-account",
+      "docs": "pinocchio/pinocchio-main/programs/associated-token-account/README.md",
+      "purpose": "Pinocchio CPI helpers for associated token account creation, idempotent creation, and nested ATA recovery.",
+      "useInSolanaClawd": [
+        "creating recipient token accounts around p-token launches",
+        "escrow and vault setup helpers",
+        "agent checks for derived ATA addresses",
+        "x402 recipient account preparation"
+      ],
+      "primaryInstructions": [
+        "Create",
+        "CreateIdempotent",
+        "RecoverNested"
+      ],
+      "status": "mapped",
+      "notes": "Prefer deriving and validating ATAs outside hot instruction paths when compute is tight."
+    },
+    {
+      "slug": "memo",
+      "crate": "pinocchio-memo",
+      "programId": "MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr",
+      "kind": "memo-cpi-helper",
+      "path": "pinocchio/pinocchio-main/programs/memo",
+      "docs": "pinocchio/pinocchio-main/programs/memo/README.md",
+      "purpose": "Pinocchio CPI helper for SPL Memo instructions.",
+      "useInSolanaClawd": [
+        "human-readable p-token launch receipts",
+        "x402 payment memos",
+        "agent provenance markers",
+        "devnet test traces"
+      ],
+      "primaryInstructions": [
+        "Memo"
+      ],
+      "status": "mapped",
+      "notes": "Keep memo payloads short; logging and memo strings are useful for observability but still consume transaction resources."
+    }
+  ]
+}

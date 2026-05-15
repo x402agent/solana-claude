@@ -1,0 +1,15 @@
+{
+  "name": "p-token-launcher-workbench",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Unsigned p-token launch, bonding curve, RISE-style floor, and WDK intent workbench.",
+  "scripts": {
+    "start": "node server.mjs",
+    "dev": "node server.mjs",
+    "check": "node --check server.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

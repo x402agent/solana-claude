@@ -1,0 +1,9 @@
+/Users/8bit/bots/Cladwbot-solana/solana-clawd/programs/target/debug/deps/spl_type_length_value-e97289972ff7f629.d: /Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-type-length-value-0.3.0/src/lib.rs /Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-type-length-value-0.3.0/src/error.rs /Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-type-length-value-0.3.0/src/length.rs /Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-type-length-value-0.3.0/src/state.rs /Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-type-length-value-0.3.0/src/variable_len_pack.rs
+
+/Users/8bit/bots/Cladwbot-solana/solana-clawd/programs/target/debug/deps/libspl_type_length_value-e97289972ff7f629.rmeta: /Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-type-length-value-0.3.0/src/lib.rs /Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-type-length-value-0.3.0/src/error.rs /Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-type-length-value-0.3.0/src/length.rs /Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-type-length-value-0.3.0/src/state.rs /Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-type-length-value-0.3.0/src/variable_len_pack.rs
+
+/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-type-length-value-0.3.0/src/lib.rs:
+/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-type-length-value-0.3.0/src/error.rs:
+/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-type-length-value-0.3.0/src/length.rs:
+/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-type-length-value-0.3.0/src/state.rs:
+/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-type-length-value-0.3.0/src/variable_len_pack.rs:

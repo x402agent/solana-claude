@@ -298,8 +298,10 @@ export const MARKET_TOOLS: Array<[ToolDef, ToolHandler]> = [
 
       // Determine overall flow direction from PnL data
       const successfulPnls = walletData
-        .filter((w) => w.pnl && !("error" in w))
-        .map((w) => (w.pnl as Record<string, number>)?.realizedPnlUSD ?? 0);
+        .filter((w): w is { wallet: string; fullAddress: string; pnl: Record<string, unknown>; tokenCount: number } =>
+          !("error" in w) && w.pnl !== null,
+        )
+        .map((w) => Number((w.pnl as Record<string, unknown>).realizedPnlUSD ?? 0));
       const avgPnl =
         successfulPnls.length > 0
           ? successfulPnls.reduce((a, b) => a + b, 0) / successfulPnls.length

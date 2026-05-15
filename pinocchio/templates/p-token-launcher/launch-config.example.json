@@ -1,0 +1,33 @@
+{
+  "network": "solana-devnet",
+  "tokenProgram": "p-token",
+  "pTokenProgramId": "ptok6rngomXrDbWf5v5Mkmu5CEbB51hzSCPDoj9DrvF",
+  "metadata": {
+    "name": "Example p-token",
+    "symbol": "PFOO",
+    "uri": "https://example.com/pfoo.json",
+    "decimals": 9
+  },
+  "authorities": {
+    "mintAuthority": "<wallet-or-pda>",
+    "freezeAuthority": null,
+    "updateAuthority": "<wallet-or-pda>"
+  },
+  "bondingCurve": {
+    "enabled": true,
+    "type": "constant-product",
+    "virtualSol": 30,
+    "virtualToken": 1073000000,
+    "realSol": 0,
+    "realToken": 793100000,
+    "feeBps": 100,
+    "graduation": {
+      "trigger": "real-sol-reserve",
+      "targetSol": 85,
+      "postGraduation": "seed-amm-liquidity"
+    }
+  },
+  "registry": {
+    "tags": ["pinocchio", "p-token", "launch"]
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "type": "constant-product",
+  "unsigned": true,
+  "description": "Planning config for a p-token launch curve. Program code must enforce reserve custody, PDA signer rules, fees, and graduation.",
+  "reserves": {
+    "virtualSol": 30,
+    "virtualToken": 1073000000,
+    "realSol": 0,
+    "realToken": 793100000
+  },
+  "fees": {
+    "tradeFeeBps": 100,
+    "creatorFeeBps": 0,
+    "protocolFeeBps": 0
+  },
+  "graduation": {
+    "trigger": "real-sol-reserve",
+    "targetSol": 85,
+    "actions": [
+      "disable curve trades",
+      "seed AMM liquidity",
+      "burn or lock remaining launch allocation",
+      "register mint in data/ptokens.json",
+      "enable x402 p-token routing"
+    ]
+  },
+  "quoteCommands": {
+    "buy": "npm run ptoken:curve-quote -- --virtual-sol 30 --virtual-token 1073000000 --sol 1",
+    "sell": "npm run ptoken:curve-quote -- --virtual-sol 31 --virtual-token 1038000000 --tokens 1000000"
+  }
+}

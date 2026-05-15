@@ -1,0 +1,6 @@
+/Users/8bit/bots/Cladwbot-solana/solana-clawd/programs/target/debug/deps/bytemuck_derive-36a6d230a83e8ace.d: /Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/bytemuck_derive-1.10.2/src/lib.rs /Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/bytemuck_derive-1.10.2/src/traits.rs
+
+/Users/8bit/bots/Cladwbot-solana/solana-clawd/programs/target/debug/deps/libbytemuck_derive-36a6d230a83e8ace.dylib: /Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/bytemuck_derive-1.10.2/src/lib.rs /Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/bytemuck_derive-1.10.2/src/traits.rs
+
+/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/bytemuck_derive-1.10.2/src/lib.rs:
+/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/bytemuck_derive-1.10.2/src/traits.rs:

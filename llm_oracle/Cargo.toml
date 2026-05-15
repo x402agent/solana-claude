@@ -1,0 +1,20 @@
+[package]
+name = "llm_oracle"
+version = "0.1.0"
+license = "MIT"
+edition = "2021"
+
+[dependencies]
+solana-client = "^2.1.16"
+solana-sdk = "^2.1.16"
+solana-account-decoder = "^2.1.16"
+tokio = { version = "1.44.1", features = ["full"]  }
+tokio-stream = "0.1.17"
+solana-gpt-oracle = { path = "../agents/solana-gpt-oracle", features = ["cpi"] }
+futures = "0.3.31"
+anchor-lang = "0.31.0"
+chatgpt_rs = "1.2.3"
+rand = "0.10.1"
+reqwest = { version = "0.12", features = ["json", "rustls-tls"], default-features = false }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"

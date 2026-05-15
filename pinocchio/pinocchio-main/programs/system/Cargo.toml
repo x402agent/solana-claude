@@ -1,0 +1,20 @@
+[package]
+name = "pinocchio-system"
+description = "Pinocchio helpers to invoke System program instructions"
+version = "0.6.1"
+edition = { workspace = true }
+license = { workspace = true }
+readme = "./README.md"
+repository = { workspace = true }
+rust-version = { workspace = true }
+
+[lib]
+crate-type = ["rlib"]
+
+[features]
+account-resize = ["pinocchio/account-resize"]
+unsafe-account-resize = ["pinocchio/unsafe-account-resize"]
+
+[dependencies]
+pinocchio = { workspace = true, features = ["cpi"] }
+solana-address = { workspace = true, features = ["decode"] }

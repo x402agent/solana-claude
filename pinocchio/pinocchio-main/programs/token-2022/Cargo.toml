@@ -1,0 +1,20 @@
+[package]
+name = "pinocchio-token-2022"
+description = "Pinocchio helpers to invoke Token-2022 program instructions"
+version = "0.3.1"
+edition = { workspace = true }
+license = { workspace = true }
+readme = "./README.md"
+repository = { workspace = true }
+
+[lib]
+crate-type = ["rlib"]
+
+[dependencies]
+solana-account-view = { workspace = true }
+solana-address = { workspace = true, features = ["decode"] }
+solana-instruction-view = { workspace = true, features = ["cpi"] }
+solana-program-error = { workspace = true }
+
+[dev-dependencies]
+solana-address = { workspace = true, features = ["curve25519"] }

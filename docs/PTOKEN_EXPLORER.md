@@ -1,0 +1,27 @@
+# p-token Explorer
+
+Solana Clawd includes a small p-token registry and explorer CLI for SPL-compatible mints. It can inspect a mint over Solana JSON-RPC, classify it as SPL or p-token when `P_TOKEN_PROGRAM_ID` is configured, and add it to `data/ptokens.json`.
+
+```bash
+npm run ptoken:inspect -- --mint <mint>
+npm run ptoken:add -- --mint <mint> --symbol PFOO --name "P Foo" --p-token-program-id <program>
+npm run ptoken:list
+npm run ptoken:show -- --mint PFOO
+```
+
+The explorer records supply, decimals, mint/freeze authority, owner program, and Solana Explorer/Solscan links. It uses `SOLANA_RPC_URL` or `HELIUS_RPC_URL` when present, otherwise it falls back to public mainnet RPC.
+
+For x402, p-token support is enabled by default with the known p-token program id. Set `P_TOKEN_PROGRAM_ID` to override the program id for a custom deployment, or set `USE_P_TOKEN=0` / `USE_P_TOKEN=false` to force classic SPL Token payments.
+
+Pinocchio developer support lives in [`../pinocchio/`](../pinocchio/). It includes forkable vault, escrow, and p-token launch templates plus MCP resources/tools that let agents inspect templates and register launched p-tokens.
+
+```bash
+npm run pinocchio:templates
+npm run pinocchio:scaffold -- --template escrow --name my-escrow --out ./programs/my-escrow
+npm run ptoken:launch-plan -- --symbol PFOO --name "P Foo"
+npm run ptoken:curve-quote -- --virtual-sol 30 --virtual-token 1073000000 --sol 1
+```
+
+Launch planning and bonding curve notes are in
+[`../pinocchio/docs/P_TOKEN_LAUNCHES.md`](../pinocchio/docs/P_TOKEN_LAUNCHES.md).
+The static developer page is available at `/p/` in the Beep Boop site.

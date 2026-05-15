@@ -1,0 +1,28 @@
+{
+  "name": "@clawd/solanaos-protocol-client",
+  "version": "0.2.0",
+  "description": "SolanaOS Protocol Client SDK - AI Inference + ORE Mining",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "@coral-xyz/anchor": "^0.30.1",
+    "@solana/web3.js": "^1.95.4",
+    "@solana/spl-token": "^0.4.9"
+  },
+  "devDependencies": {
+    "@types/bn.js": "^5.1.6",
+    "typescript": "^5.6.3"
+  },
+  "peerDependencies": {
+    "@coral-xyz/anchor": "^0.30.1",
+    "@solana/web3.js": "^1.95.4"
+  }
+}
