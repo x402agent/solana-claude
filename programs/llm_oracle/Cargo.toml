@@ -14,4 +14,4 @@ solana-gpt-oracle = { path = "../solana-gpt-oracle", features = ["cpi"] }
 futures = "0.3.31"
 anchor-lang = "0.31.0"
 chatgpt_rs = "1.2.3"
-rand = "0.9.0"
+rand = "0.10.1"
