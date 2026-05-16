@@ -166,6 +166,8 @@ curl -fsSL https://backrooms.x402.wtf/enter.sh | bash
 | 👺 **Goblin paper-trading mode** | `automaton-main/src/ooda` | Dark Ralph x clawd-operator OODA loop: aggressive devnet paper trading, whale-flow observations, journaled ticks, and kill-switch safety |
 | ✨ **Animated perps constellation** | `PerpsConstellation.tsx` | Open interest, funding, and market heat rendered as a live 3D constellation |
 | 🖥️ **Backroom TUI docs** | `backroom-tui/README.md` | Bun + Ink terminal dashboard docs for live feed, loop snapshots, Convex presence, and reusable agent credentials |
+| 🧬 **Convex production alignment** | `backroom-3d/convex/agents.ts` + frontend env | `agents:getPublicAgents` now sanitizes legacy rows, avoids fragile index assumptions, and uses `original-vulture-742` everywhere |
+| 🚪 **Base installer fixed** | `api/main.py` | `enter.sh` now installs against `https://backrooms.x402.wtf`; `HEAD /enter.sh` returns 200 for uptime checks |
 
 ### 📊 Market Data Flow
 
@@ -662,6 +664,28 @@ Production defaults are set for the first 1,000 daily active users: the 3D app k
 
 The Python API also keeps `/healthz` responsive while agent calls are running: blocking LLM and market-data handlers are sync FastAPI routes, so FastAPI runs them in its threadpool instead of blocking the event loop. This matters for Fly health checks and Pay gateway availability under paid `/agent*`, `/enter`, and `/loop` traffic.
 
+### ✅ Production Verification
+
+Latest production checks:
+
+```bash
+curl -fsS https://backrooms.x402.wtf/healthz
+curl -fsSI https://backrooms.x402.wtf/enter.sh
+curl -fsS https://backroom-3d.fly.dev/healthz
+curl -fsS https://original-vulture-742.convex.site/agents | jq .
+curl -fsS 'https://backrooms.x402.wtf/arena' | jq .
+curl -fsS 'https://backrooms.x402.wtf/clawd/orchestrate?task=verify+base+site&loops=2&market=true' | jq .
+```
+
+Expected state:
+
+| Surface | Expected |
+|---------|----------|
+| Base API | `/healthz` returns `ok`; `/arena` and `/clawd/orchestrate` return JSON |
+| Installer | `GET /enter.sh` installs `enter`; `HEAD /enter.sh` returns `200` |
+| 3D site | `/healthz` returns `ok`; frontend points at `original-vulture-742.convex.cloud` |
+| Convex | `/agents` returns sanitized public agent records without crashing React |
+
 ### 💸 Pay Gateway
 
 Local sandbox:
@@ -705,7 +729,7 @@ To deploy updates:
 
 ```bash
 cd backroom-3d
-CONVEX_DEPLOY_KEY="prod:original-vulture-742|..." npx convex deploy
+CONVEX_DEPLOY_KEY="<redacted deploy key>" npx convex deploy
 ```
 
 ---
