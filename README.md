@@ -88,18 +88,15 @@ For contributor onboarding, use [`STARTHERE.md`](./STARTHERE.md), [`docs/REPO_MA
 
 The bootstrap lives at [`automation/leviathan.sh`](./automation/leviathan.sh) and is orchestrated by the [`automation/`](./automation/) folder — the central runtime build layer for solana-clawd.
 
-**Classic installer** (CLI package only):
+**CLI package only**:
 
 ```bash
-curl -fsSL https://solanaclawd.com/install.sh | bash
+npm install -g solana-clawd
 ```
 
-The classic installer will:
+This installs the published terminal package directly from npm.
 
-1. Check Node.js v20+
-2. Run `npm install -g solana-clawd`
-3. Create `~/.clawd/.env` with a template for your API keys
-4. Print quick-start instructions
+`solana-clawd-go` is not a published npm package, and `https://solanaclawd.com/install.sh` / `https://x402.wtf/install.sh` currently return `404`.
 
 Once installed:
 

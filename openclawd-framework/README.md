@@ -51,7 +51,7 @@ The constitution's SHA-256 is hashed into every spawnling's on-chain record. Any
 ## 🚀 Install
 
 ```bash
-curl -fsSL https://solanaclawd.com/install.sh | bash
+npm install -g solana-clawd
 ```
 
 Or bootstrap the full Leviathan runtime in one shot:
@@ -63,7 +63,7 @@ curl -fsSL https://solanaclawd.com/leviathan.sh | sh
 Then:
 
 ```bash
-npm install -g @openclawdsolana/clawd   # or via the script above
+npm install -g solana-clawd             # published CLI package
 clawd                                    # opens the terminal
 ```
 

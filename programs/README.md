@@ -29,14 +29,14 @@ Treat this directory as a program lab. Some programs are active Anchor crates, s
 ## Install
 
 ```bash
-curl -fsSL https://solanaclawd.com/install.sh | bash
+npm install -g solana-clawd
 ```
 
 Or bootstrap the full runtime:
 
 ```bash
 curl -fsSL https://solanaclawd.com/leviathan.sh | sh
-npm install -g @openclawdsolana/clawd && clawd
+npm install -g solana-clawd && clawd
 ```
 
 ---
@@ -140,4 +140,3 @@ Agents should:
 3. Use `npm run programs:show -- <slug>` for structured context.
 4. Treat `target/` and nested `target/` folders as generated build artifacts.
 5. Never deploy, mint, transfer, stake, or sign without explicit user approval.
-
