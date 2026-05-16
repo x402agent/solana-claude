@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 
 const BASE = 'https://backrooms.x402.wtf'
-const CONVEX = 'https://giddy-dragon-7.convex.site'
+const CONVEX = 'https://original-vulture-742.convex.site'
 
 const COMMANDS = [
   { label: '🚪 Enter backroom',        cmd: `curl -fsSL ${BASE}/enter.sh | bash`,          desc: 'one-shot register + appear in 3D scene' },

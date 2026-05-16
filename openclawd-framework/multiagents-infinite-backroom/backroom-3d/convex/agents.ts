@@ -4,6 +4,44 @@ import { v } from 'convex/values'
 const ONLINE_THRESHOLD = 5 * 60 * 1000
 const PUBLIC_AGENT_LIMIT = 1000
 
+type PublicAgent = {
+  agentId: string
+  name: string
+  registeredAt: number
+  lastSeenAt: number
+  sessionCount: number
+  isOnline: boolean
+}
+
+function publicAgent(a: {
+  agentId?: string
+  name?: string
+  registeredAt?: number
+  lastSeenAt?: number
+  sessionCount?: number
+}): PublicAgent {
+  const now = Date.now()
+  const agentId = a.agentId ?? 'unknown-agent'
+  const lastSeenAt = typeof a.lastSeenAt === 'number' ? a.lastSeenAt : 0
+  return {
+    agentId,
+    name: a.name ?? `agent-${agentId.slice(0, 6)}`,
+    registeredAt: typeof a.registeredAt === 'number' ? a.registeredAt : lastSeenAt,
+    lastSeenAt,
+    sessionCount: typeof a.sessionCount === 'number' ? a.sessionCount : 0,
+    isOnline: lastSeenAt > 0 && now - lastSeenAt < ONLINE_THRESHOLD,
+  }
+}
+
+async function getRecentPublicAgents(ctx: any) {
+  // Avoid relying on the deployed index being available during rolling Convex deploys.
+  const agents = await ctx.db.query('curlAgents').collect()
+  return (agents as Array<Parameters<typeof publicAgent>[0]>)
+    .map(publicAgent)
+    .sort((a: PublicAgent, b: PublicAgent) => b.lastSeenAt - a.lastSeenAt)
+    .slice(0, PUBLIC_AGENT_LIMIT)
+}
+
 export const registerAgent = internalMutation({
   args: {
     agentId: v.string(),
@@ -71,38 +109,12 @@ export const getAgentName = internalQuery({
 
 export const listAgentsInternal = internalQuery({
   handler: async (ctx) => {
-    const agents = await ctx.db
-      .query('curlAgents')
-      .withIndex('by_lastSeen')
-      .order('desc')
-      .take(PUBLIC_AGENT_LIMIT)
-    const now = Date.now()
-    return agents.map((a) => ({
-      agentId: a.agentId,
-      name: a.name,
-      registeredAt: a.registeredAt,
-      lastSeenAt: a.lastSeenAt,
-      sessionCount: a.sessionCount,
-      isOnline: now - a.lastSeenAt < ONLINE_THRESHOLD,
-    }))
+    return getRecentPublicAgents(ctx)
   },
 })
 
 export const getPublicAgents = query({
   handler: async (ctx) => {
-    const agents = await ctx.db
-      .query('curlAgents')
-      .withIndex('by_lastSeen')
-      .order('desc')
-      .take(PUBLIC_AGENT_LIMIT)
-    const now = Date.now()
-    return agents.map((a) => ({
-      agentId: a.agentId,
-      name: a.name,
-      registeredAt: a.registeredAt,
-      lastSeenAt: a.lastSeenAt,
-      sessionCount: a.sessionCount,
-      isOnline: now - a.lastSeenAt < ONLINE_THRESHOLD,
-    }))
+    return getRecentPublicAgents(ctx)
   },
 })
