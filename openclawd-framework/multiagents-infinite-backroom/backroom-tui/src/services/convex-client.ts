@@ -1,7 +1,7 @@
 // Convex HTTP API client — uses the .convex.site HTTP actions URL
 // (no WebSocket subscription; polls for updates)
 
-const SITE_URL = process.env.CONVEX_SITE_URL ?? 'https://giddy-dragon-7.convex.site'
+const SITE_URL = process.env.CONVEX_SITE_URL ?? 'https://original-vulture-742.convex.site'
 const REQUEST_TIMEOUT_MS = 8000
 
 export interface Agent {
