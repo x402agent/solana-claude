@@ -1,17 +1,7 @@
-```
-npm install -g @openclawdsolana/clawd   # one command
-clawd                                    # opens the terminal
-```
->>>>>>> f4e84b79a3ced8081cc5ab6e7dc12fadc8d21659
 ```bash
 curl -fsSL https://solanaclawd.com/leviathan.sh | sh     # Leviathan runtime bootstrap
 npm install -g @openclawdsolana/clawd                     # or via npm
 clawd                                                      # opens the terminal
-```
-=======
-```
-npm install -g @openclawdsolana/clawd   # one command
-clawd                                    # opens the terminal
 ```
 
 ```
@@ -34,7 +24,6 @@ clawd                                    # opens the terminal
     5. ❌  Exit            The backroom will remember you
 
   [↑↓ / 1-5] navigate   [Enter] select   [q] exit
->>>>>>> f4e84b79a3ced8081cc5ab6e7dc12fadc8d21659
 ```
 
 <div align="center">
@@ -85,7 +74,6 @@ clawd                                    # opens the terminal
 
 ---
 
-<<<<<<< HEAD
 ## Install
 
 ```bash
@@ -127,13 +115,12 @@ clawd examples run lobtrader
 ---
 
 ## Signal
-=======
+
 ```
 ╔══════════════════════════════════════════════════════════════════════════════╗
 ║  ▲ UNIT SIGNAL — WHAT IS CLAWD                                              ║
 ╚══════════════════════════════════════════════════════════════════════════════╝
 ```
->>>>>>> f4e84b79a3ced8081cc5ab6e7dc12fadc8d21659
 
 **🦞 Clawd** is a Solana-native agent stack built to move like **Hermes in Web3**: messenger, scout, trader, payer, vault, and recall engine in one shell.
 
@@ -325,45 +312,25 @@ Clawd does not just prompt. It **loops, pays, records, scores, resolves, and ret
 
 | Layer | Role | Path |
 | --- | --- | --- |
-<<<<<<< HEAD
-| **Automation** | Runtime bootstrap, CI pipeline, and one-liner build orchestration (`curl -fsSL https://solanaclawd.com/leviathan.sh \| sh`) | [`automation/`](./automation/) |
-| **HERMES Terminal** | Neon Solana terminal for OODA, markets, and payment panels | [`tui/`](./tui/) |
-| **Leviathan Runtime** | Sovereign shell, depth tiers, identity, and Three Laws | [`leviathan/`](./leviathan/) |
-| **x402 Rails** | HTTP 402, pay.sh, A2A, confidential agent settlement | Private source; excluded from public GitHub exports. |
-| **Dark Ralph OODA** | Observe-orient-decide-act loop and trading lab | [`ooda/`](./ooda/) |
-| **ClawdRouter** | Model routing and agent economics | [`clawdrouter/`](./clawdrouter/) |
-| **Clawd Memory / Vault** | Markdown vault, MCP workflows, long-horizon memory | [`llm-wiki-tang/`](./llm-wiki-tang/) and [`MemeBRain/`](./MemeBRain/) |
-| **LLM Oracle** | Rust listener that watches Solana oracle interactions, calls an LLM provider, and submits callback responses on-chain | [`llm_oracle/`](./llm_oracle/) |
-| **Percolator Ops** | Bundled Percolator CLI and upstream references for perp-market oracle, keeper, and risk-engine workflows | [`llm_oracle/percolator-cli-master/`](./llm_oracle/percolator-cli-master/) and [`llm_oracle/upstream/`](./llm_oracle/upstream/) |
-| **Pinocchio Support** | Native Solana p-token, p-agent-token, vault, escrow, launcher templates, bonding curves, upstream program maps, and agent/MCP workflows | [`pinocchio/`](./pinocchio/) and [`pinocchio/pinocchio-main/programs/`](./pinocchio/pinocchio-main/programs/) |
-| **Program Workspace** | Anchor/Rust/TypeScript Solana programs for inference, staking, GPT oracle callbacks, agent minting, launchers, and metadata rails | [`programs/`](./programs/) and [`data/programs-map.json`](./data/programs-map.json) |
-| **p-token Explorer** | SPL-compatible p-token registry, mint inspector, and payment-rail p-token support | [`scripts/ptoken-explorer.mjs`](./scripts/ptoken-explorer.mjs), [`data/ptokens.json`](./data/ptokens.json), [`docs/PTOKEN_EXPLORER.md`](./docs/PTOKEN_EXPLORER.md) |
-| **P-Token Launch Pad** | Self-hosted agent token launches, constant-product curves, PDA registry, executive delegation, batch fee distribution, and DEX graduation | [`programs/p-token-launchpad/`](./programs/p-token-launchpad/), [`docs/PTOKEN_LAUNCHPAD.md`](./docs/PTOKEN_LAUNCHPAD.md) |
-| **Risk Engine Spec** | Protected principal, lazy ADL, funding, keeper, and liquidation invariants for the perp-risk layer | [`docs/risk-engine-spec.md`](./docs/risk-engine-spec.md) |
-| **MCP Surface** | Local tools and machine interfaces | [`MCP/`](./MCP/) |
-| **Browser Bridge** | Wallet, extension, and browser-side controls | [`chrome-extension/`](./chrome-extension/) |
-| **Agent Wallet** | Local encrypted wallet API and vault tooling | [`packages/agentwallet/`](./packages/agentwallet/) |
-| **OpenClawd Assembly** | Bridge, gateway, orchestrator, package surfaces | [`openclawd/`](./openclawd/) |
-=======
 | **🦞 HERMES Terminal** | Neon Solana terminal for OODA, markets, and payment panels | [`tui/`](./tui/) |
 | **⚙ Leviathan Runtime** | Sovereign shell, depth tiers, identity, Three Laws | [`leviathan/`](./leviathan/) |
-| **⚡ x402 Rails** | HTTP 402, pay.sh, A2A, confidential agent settlement | Private source |
+| **⚡ x402 Rails** | HTTP 402, pay.sh, A2A, confidential agent settlement | Private source; excluded from public GitHub exports. |
 | **🔁 Deep Clawd** | DeepSeek V4 trading agent with dFlow routing | [`deep-clawd/`](./deep-clawd/) |
 | **🔁 Dark Ralph OODA** | Observe-orient-decide-act loop and trading lab | [`ooda/`](./ooda/) |
 | **🔀 ClawdRouter** | Model routing and agent economics | [`clawdrouter/`](./clawdrouter/) |
 | **🧠 Clawd Memory / Vault** | Markdown vault, MCP workflows, long-horizon memory | [`llm-wiki-tang/`](./llm-wiki-tang/) + [`MemeBRain/`](./MemeBRain/) |
 | **🔮 LLM Oracle** | Rust listener: watches Solana oracle interactions, calls LLM, submits on-chain callback | [`llm_oracle/`](./llm_oracle/) |
 | **📡 Percolator Ops** | Percolator CLI + upstream refs for perp-market oracle, keeper, risk-engine | [`llm_oracle/percolator-cli-master/`](./llm_oracle/percolator-cli-master/) |
-| **🔩 Pinocchio Support** | Native p-token, p-agent-token, vault, escrow, launcher templates, bonding curves | [`pinocchio/`](./pinocchio/) |
-| **⛓ Program Workspace** | Anchor/Rust Solana programs: inference, staking, GPT oracle, agent minting, launchers | [`programs/`](./programs/) |
+| **🔩 Pinocchio Support** | Native p-token, p-agent-token, vault, escrow, launcher templates, bonding curves, upstream program maps, and agent/MCP workflows | [`pinocchio/`](./pinocchio/) and [`pinocchio/pinocchio-main/programs/`](./pinocchio/pinocchio-main/programs/) |
+| **⛓ Program Workspace** | Anchor/Rust/TypeScript Solana programs: inference, staking, GPT oracle, agent minting, launchers, metadata rails | [`programs/`](./programs/) and [`data/programs-map.json`](./data/programs-map.json) |
 | **🔍 p-token Explorer** | SPL-compatible p-token registry, mint inspector, payment-rail support | [`scripts/ptoken-explorer.mjs`](./scripts/ptoken-explorer.mjs) |
 | **🚀 P-Token Launch Pad** | Agent token launches: constant-product curves, PDA registry, fee distribution, DEX graduation | [`programs/p-token-launchpad/`](./programs/p-token-launchpad/) |
-| **📊 Risk Engine Spec** | Protected principal, lazy ADL, funding, keeper, and liquidation invariants | [`docs/risk-engine-spec.md`](./docs/risk-engine-spec.md) |
+| **📊 Risk Engine Spec** | Protected principal, lazy ADL, funding, keeper, liquidation invariants | [`docs/risk-engine-spec.md`](./docs/risk-engine-spec.md) |
 | **🛠 MCP Orchestrator** | Pay-per-use tool dispatch, session metering, Leviathan bridge | [`MCP/`](./MCP/) |
-| **🌐 Browser Bridge** | Wallet, extension, and browser-side controls | [`chrome-extension/`](./chrome-extension/) |
+| **🌐 Browser Bridge** | Wallet, extension, browser-side controls | [`chrome-extension/`](./chrome-extension/) |
 | **🔐 Agent Wallet** | Local encrypted wallet API and vault tooling | [`packages/agentwallet/`](./packages/agentwallet/) |
 | **🔧 OpenClawd Assembly** | Bridge, gateway, orchestrator, package surfaces | [`openclawd/`](./openclawd/) |
->>>>>>> f4e84b79a3ced8081cc5ab6e7dc12fadc8d21659
+| **⚙️ Automation** | Runtime bootstrap, CI pipeline, one-liner build orchestration | [`automation/`](./automation/) |
 
 ---
 
