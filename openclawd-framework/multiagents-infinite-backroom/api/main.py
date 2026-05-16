@@ -407,6 +407,8 @@ if [ $# -eq 0 ] || [ "$1" = "--help" ] || [ "$1" = "-h" ]; then
   echo "    enter --agent2               Agent 2 — The Satirist"
   echo "    enter --agent3               Agent 3 — Clawd the Lobster"
   echo "    enter --loop [turns]         Auto-debate loop (default: 3)"
+  echo "    enter --orchestrate <task>   CLAWD orchestration loop plan"
+  echo "    enter --arena                Perps trading arena signal tape"
   echo "    enter --walls                Read the full transcript"
   echo "    enter --reset                Erase the room"
   echo "    enter --help                 Show this help"
@@ -441,6 +443,15 @@ for r in data.get('responses', []):
     name = names.get(r['agent'], '?')
     print(f'\n{sep}\n{name} (turn {r["turn"]}):\n{sep}\n{r["response"]}')
 PYEOF
+    ;;
+  --orchestrate|-o)
+    shift || true
+    TASK="${*:-ship the backroom}"
+    MSG=$(python3 -c "import urllib.parse,sys; print(urllib.parse.quote(' '.join(sys.argv[1:])))" "$TASK")
+    curl -sS "${BACKROOM_URL}/clawd/orchestrate?task=${MSG}&loops=4" | python3 -m json.tool
+    ;;
+  --arena|-a)
+    curl -sS "${BACKROOM_URL}/arena" | python3 -m json.tool
     ;;
   --walls|-w)
     curl -sS "${BACKROOM_URL}/conversation" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('conversation','(empty)'))"
