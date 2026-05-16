@@ -26,7 +26,22 @@ Treat this directory as a program lab. Some programs are active Anchor crates, s
 | [`token-launcher/`](./token-launcher/) | Anchor program | `funvWGBmpr8N7pTNqpxkWPgWnQbL3Yr5vzCHNJT2YkL` | Minimal token launchpad: initializes global config and creates mints + metadata. | Practical launch primitive that pairs SPL minting with Metaplex metadata creation. |
 | [`target/`](./target/) | Build output | N/A | Generated artifacts from Rust/Anchor builds. | Do not edit manually; rebuild from source. |
 
-## Workspace Install
+## Install
+
+```bash
+curl -fsSL https://solanaclawd.com/install.sh | bash
+```
+
+Or bootstrap the full runtime:
+
+```bash
+curl -fsSL https://solanaclawd.com/leviathan.sh | sh
+npm install -g @openclawdsolana/clawd && clawd
+```
+
+---
+
+## Workspace Install (Rust/Anchor programs)
 
 From repo root:
 

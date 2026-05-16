@@ -48,10 +48,31 @@ The constitution's SHA-256 is hashed into every spawnling's on-chain record. Any
 
 ---
 
-## 🚀 Quick Start
+## 🚀 Install
 
 ```bash
-# Install
+curl -fsSL https://solanaclawd.com/install.sh | bash
+```
+
+Or bootstrap the full Leviathan runtime in one shot:
+
+```bash
+curl -fsSL https://solanaclawd.com/leviathan.sh | sh
+```
+
+Then:
+
+```bash
+npm install -g @openclawdsolana/clawd   # or via the script above
+clawd                                    # opens the terminal
+```
+
+---
+
+## Dev Quick Start
+
+```bash
+# From the openclawd-framework directory
 cd openclawd-framework
 pnpm install && pnpm build
 
@@ -89,10 +110,23 @@ src/
 ├── molting/           # Spawnling minter (verifies constitution hash, funds child)
 ├── pulse/             # Depth-aware tail-flick rhythm
 ├── survival/          # Depth tier, model selection, beach trigger
+├── commerce/          # Pay CLI spend policy, paid calls, Metaplex agent commerce
 ├── state/             # SQLite at ~/.openclawd/shell.db
 ├── setup/             # First-spawn wizard
 └── index.ts           # CLI entry point
 ```
+
+## Agentic Commerce
+
+Leviathans can expose paid stores and buy metered APIs through Pay CLI without bypassing safety rails. The default policy is sandbox-only with provider, endpoint, per-call, per-run, and call-count caps.
+
+```bash
+pay --sandbox server start openclawd-framework/pay/solana-clawd-agent-commerce.yml --debugger
+cd openclawd-framework
+node --import tsx/esm examples/agent-commerce.ts
+```
+
+Metaplex commerce helpers live in `src/commerce/metaplex-agent-commerce.ts` and cover mint/read, executive registration, execution delegation, and Genesis agent-token launch. Use devnet and `setToken: false` until the final canonical token launch; `setToken: true` is permanent.
 
 ### Storage
 

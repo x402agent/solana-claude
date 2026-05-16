@@ -18,6 +18,7 @@ Examples:
   python cli.py --balance          # Check wallet balance
   python cli.py --portfolio        # Show portfolio
   python cli.py --trending         # Show trending tokens
+  python cli.py --perps health     # Run Solana CLAWD Phoenix perps agent
   python cli.py -q "What's the price of BONK?"  # Single query
   
 Environment Variables (from .env.local):
@@ -51,6 +52,12 @@ Environment Variables (from .env.local):
         "--trending",
         action="store_true",
         help="Show trending tokens"
+    )
+
+    parser.add_argument(
+        "--perps",
+        nargs=argparse.REMAINDER,
+        help="Delegate to the official Solana CLAWD perps agent. Example: --perps market SOL"
     )
     
     parser.add_argument(
@@ -88,6 +95,15 @@ Environment Variables (from .env.local):
 
 async def async_main(args):
     """Async main function."""
+
+    if args.perps is not None:
+        try:
+            from perps_agent import main as perps_main
+        except ImportError as e:
+            print(f"❌ Perps agent import error: {e}")
+            sys.exit(1)
+        code = perps_main(args.perps or ["health"])
+        raise SystemExit(code)
     
     # Import here to avoid circular imports and catch import errors early
     try:

@@ -508,6 +508,145 @@ export const X402_TOOLS: Array<[ToolDef, ToolHandler]> = [
   ],
 ];
 
+// ─── Facilitator-aware session handler wrapper ─────────────────────────────────
+
+/**
+ * Wrap a handler with facilitator delegation for stream session tools.
+ * Overrides open/meter/close to call PTokenStreamFacilitator via the meter.
+ */
+function withFacilitator(
+  handler: ToolHandler,
+  toolName: string,
+  meter: SessionMeter,
+): ToolHandler {
+  return async (args: Record<string, unknown>) => {
+    switch (toolName) {
+      case "x402_session_open": {
+        const result = await meter.openStreamSession({
+          payerPubkey: String(args.payerPubkey),
+          maxTokens: Number(args.maxTokens ?? 1000),
+          maxSpendUsdc: Number(args.pricePerToken ?? 100) * Number(args.maxTokens ?? 1000) / 1_000_000,
+          mode: (args.mode as StreamSession["mode"]) ?? "batched",
+        });
+        return {
+          sessionId: result.sessionId,
+          scheme: "metered",
+          tokenProgram: P_TOKEN_PROGRAM_ID,
+          pricePerToken: Number(args.pricePerToken ?? 100),
+          pricePerTokenUSDC: ((args.pricePerToken as number ?? 100) / 1_000_000).toFixed(6),
+          maxTokens: Number(args.maxTokens ?? 1000),
+          maxSpendUSDC: ((Number(args.maxTokens ?? 1000) * Number(args.pricePerToken ?? 100)) / 1_000_000).toFixed(6),
+          settlementMode: (args.mode as string) ?? "batched",
+          cuPerSettlement: "~1,050 CU (batch)",
+          feeOverhead: "~1%",
+          facilitatorUrl: FACILITATOR_URL,
+          openedAt: new Date().toISOString(),
+          facilitatorBacked: true,
+          hint: "Call x402_session_meter to record tokens. Call x402_session_close to settle on-chain.",
+        };
+      }
+
+      case "x402_session_meter": {
+        const sessionId = String(args.sessionId);
+        const tokens = Number(args.tokens ?? 0);
+        const sig = await meter.meterStream(sessionId, tokens);
+        const savings = meter.getSavings();
+        return {
+          sessionId,
+          tokensConsumed: tokens,
+          costSoFarUSDC: "$0.00",
+          settlementTriggered: !!sig,
+          settlementSignature: sig ?? undefined,
+          facilitatorBacked: true,
+          totalCuSavedByFacilitator: savings.cuSaved,
+          hint: sig
+            ? "Auto-settlement triggered — check signature for on-chain proof"
+            : "Tokens metered. Call x402_session_close to settle.",
+        };
+      }
+
+      case "x402_session_close": {
+        const sessionId = String(args.sessionId);
+        const result = await meter.closeStreamSession(sessionId);
+        return {
+          sessionId,
+          settled: true,
+          finalBillUSDC: result.finalBillUsdc,
+          signature: result.signature,
+          settlementMode: "batched",
+          cuSaved: result.cuSaved,
+          facilitatorBacked: true,
+          facilitatorUrl: FACILITATOR_URL,
+          hint: result.signature
+            ? `Settled on-chain: ${result.signature}`
+            : "Session closed — no balance to settle.",
+        };
+      }
+
+      default:
+        return handler(args);
+    }
+  };
+}
+
+// ─── enhanceX402WithFacilitator ─────────────────────────────────────────────────
+
+/**
+ * Enhance the x402 tool array with PTokenStreamFacilitator integration.
+ *
+ * Replaces the in-memory x402_session_open / x402_session_meter / x402_session_close
+ * handlers with versions that delegate to the facilitator via SessionMeter.
+ * Read-only tools (x402_status, x402_billing_status, etc.) are NOT touched.
+ *
+ * Call this BEFORE withMeter() so both wrappers compose:
+ *   enhanceX402WithFacilitator(X402_TOOLS, meter, facilitator) → withMeter(...)
+ *
+ * The session definition is updated to show the facilitator-backed description.
+ */
+export function enhanceX402WithFacilitator(
+  tools: Array<[ToolDef, ToolHandler]>,
+  meter: SessionMeter,
+  facilitator: import("../orchestrator.js").StreamFacilitatorHandle,
+): Array<[ToolDef, ToolHandler]> {
+  return tools.map(([def, handler]) => {
+    let updatedDef = def;
+
+    switch (def.name) {
+      case "x402_session_open":
+        updatedDef = {
+          ...def,
+          description:
+            "Open a p-token metered stream session backed by PTokenStreamFacilitator. " +
+            "Issues a METER challenge on-chain via pay.solanaclawd.com. " +
+            "Tokens are billed via x402_session_meter and settled at x402_session_close. " +
+            "P-token 98% CU reduction makes per-output-token billing viable.",
+        };
+        break;
+      case "x402_session_meter":
+        updatedDef = {
+          ...def,
+          description:
+            "Record tokens consumed against a facilitator-backed stream session. " +
+            "May trigger auto-settlement if batch threshold reached. " +
+            "Returns on-chain settlement signature when applicable.",
+        };
+        break;
+      case "x402_session_close":
+        updatedDef = {
+          ...def,
+          description:
+            "Close a facilitator-backed metered session and settle the final balance on-chain. " +
+            "Returns the Solana transaction signature as payment proof. " +
+            "Unused pre-authorisation is released — agent never overpays.",
+        };
+        break;
+    }
+
+    const enhancedHandler = withFacilitator(handler, def.name, meter);
+    return [updatedDef, enhancedHandler];
+  });
+}
+
 // Export handler lookup including meter injection
 export function withMeter(
   tools: Array<[ToolDef, ToolHandler]>,

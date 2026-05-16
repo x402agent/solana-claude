@@ -243,15 +243,23 @@ export async function getStreamFacilitator(): Promise<StreamFacilitatorHandle | 
   if (!secretKey) return null;
 
   try {
-    const { createStreamFacilitator } = await import(
-      "../../x402/p-token-stream-facilitator.js"
-    );
+    // Use URL-based import to avoid TypeScript static analysis following this
+    // into the x402/ directory (which is outside rootDir).
+    const facilitatorUrl = new URL("../../x402/p-token-stream-facilitator.js", import.meta.url).href;
+    const { createStreamFacilitator } = await import(facilitatorUrl);
     const fac = createStreamFacilitator({ facilitatorSecretKey: secretKey });
     _facilitatorHandle = {
       issueChallenge: (opts) => fac.issueChallenge(opts),
       meter: (sessionId, tokens) => fac.meter(sessionId, tokens),
       settleSession: (sessionId) => fac.settleSession(sessionId),
-      settleBatch: (sessionIds) => fac.settleBatch(sessionIds),
+      settleBatch: async (sessionIds) => {
+        const results: Array<{ sessionId: string; signature: string; cuSavedVsSpl: number }> = await fac.settleBatch(sessionIds);
+        return results.map((r) => ({
+          sessionId: r.sessionId,
+          signature: r.signature,
+          cuSaved: r.cuSavedVsSpl,
+        }));
+      },
       closeSession: async (sessionId) => {
         const result = await fac.closeSession(sessionId);
         if (!result) return null;

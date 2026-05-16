@@ -3,6 +3,9 @@
   "version": "1.7.0",
   "description": "HERMES x402 — Solana-Native Agentic Harness. First private x402 AI agent with OODA loop, pay.sh confidential payments, Google A2A protocol, dark DeFi intelligence, and Nous Research model routing.",
   "type": "module",
+  "engines": {
+    "node": ">=20 <23"
+  },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "exports": {
@@ -28,12 +31,12 @@
     "clawd": "dist/entrypoints/clawd.js"
   },
   "scripts": {
-    "build": "node -e \"require('fs').rmSync('dist', { recursive: true, force: true })\" && tsc -p tsconfig.build.json && node -e \"require('fs').chmodSync('dist/entrypoints/clawd.js', 0o755)\"",
+    "build": "node scripts/repo-doctor.mjs --build",
     "macos:menubar:build": "bash apps/macos/build-menubar.sh",
     "macos:swift:build": "swift build --package-path apps/macos --product SolanaOS",
     "build:watch": "tsc -p tsconfig.build.json --watch",
     "dev": "tsc -p tsconfig.build.json --watch",
-    "typecheck": "tsc -p tsconfig.build.json --noEmit",
+    "typecheck": "node scripts/repo-doctor.mjs --typecheck",
     "prebuild": "node -e \"console.log('Building solana-clawd v' + require('./package.json').version)\"",
     "prepublishOnly": "node -e \"require('fs').rmSync('dist', { recursive: true, force: true })\" && tsc -p tsconfig.build.json --noCheck && node -e \"require('fs').chmodSync('dist/entrypoints/clawd.js', 0o755)\"",
     "mcp:build": "cd MCP && npm ci && npm run build",
@@ -76,11 +79,12 @@
     "automation:mcp": "bash automation/leviathan.sh --mcp",
     "setup": "bash scripts/setup.sh",
     "repo:audit": "bash scripts/repo-hygiene-audit.sh",
-    "lint": "biome check src/",
-    "lint:fix": "biome check --write src/",
-    "format": "biome format --write src/",
-    "format:check": "biome format src/",
+    "lint": "node scripts/repo-doctor.mjs --lint",
+    "lint:fix": "biome check --write automation beepboop/worker/src clawdrouter/src gateway/src leviathan/src MCP/src sdk/src scripts",
+    "format": "biome format --write automation beepboop/worker/src clawdrouter/src gateway/src leviathan/src MCP/src sdk/src scripts",
+    "format:check": "biome format automation beepboop/worker/src clawdrouter/src gateway/src leviathan/src MCP/src sdk/src scripts",
     "check": "npm run typecheck && npm run lint",
+    "doctor": "node scripts/repo-doctor.mjs",
     "ci": "npm run check && npm run build",
     "clean": "node -e \"require('fs').rmSync('dist', { recursive: true, force: true })\"",
     "adaptation:report": "node scripts/generate-claude-adaptation-report.mjs",
@@ -130,13 +134,13 @@
     "@metaplex-foundation/umi": "^1.5.1",
     "@metaplex-foundation/umi-bundle-defaults": "^1.5.1",
     "@modelcontextprotocol/sdk": "^1.12.1",
+    "@openclawdsolana/percolator": "^1.0.3",
     "@opentelemetry/api": "^1.9.0",
     "@opentelemetry/api-logs": "^0.57.0",
     "@opentelemetry/core": "^1.30.0",
     "@opentelemetry/sdk-logs": "^0.57.0",
     "@opentelemetry/sdk-metrics": "^1.30.0",
     "@opentelemetry/sdk-trace-base": "^1.30.0",
-    "@openclawdsolana/percolator": "^1.0.3",
     "@solana-tracker/data-api": "^0.2.3",
     "@solana/spl-token": "^0.4.14",
     "@solana/web3.js": "^1.98.4",
@@ -219,10 +223,8 @@
     "esbuild": "^0.27.0",
     "https-proxy-agent": "^9.0.0",
     "lru-cache": "^11.3.2",
+    "tsx": "^4.22.0",
     "typescript": "^5.8.3"
-  },
-  "engines": {
-    "node": ">=20"
   },
   "packageManager": "npm@10.9.2",
   "sideEffects": false,

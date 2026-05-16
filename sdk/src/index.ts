@@ -197,14 +197,19 @@ export interface ClawdInstance {
  *   }
  */
 export async function createClawd(config: ClawdConfig = {}): Promise<ClawdInstance> {
+  const agentCluster = config.cluster === 'testnet' ? 'devnet' : config.cluster;
+
   // Create agent handle (Three Laws guards fire here).
-  const agent = createAgent(config);
+  const agent = createAgent({
+    ...config,
+    cluster: agentCluster,
+  });
 
   // Create wallet adapter (async — may fail gracefully if no keystore).
   let wallet: AgentWallet | null = null;
   try {
     wallet = await createWallet({
-      cluster: (config.cluster as SolanaCluster | undefined) ?? 'devnet',
+      cluster: (config.wallet?.cluster ?? config.cluster ?? 'devnet') as SolanaCluster,
       ...config.wallet,
     });
   } catch {
@@ -218,7 +223,7 @@ export async function createClawd(config: ClawdConfig = {}): Promise<ClawdInstan
     depth,
     paperOnly: config.paperOnly ?? true,
     devnetOnly: config.devnetOnly ?? true,
-    cluster: (config.cluster as SolanaCluster | undefined) ?? 'devnet',
+    cluster: (config.wallet?.cluster ?? config.cluster ?? 'devnet') as SolanaCluster,
     walletPubkey: wallet?.pubkey,
   });
 

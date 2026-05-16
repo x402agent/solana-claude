@@ -1,6 +1,6 @@
 ```bash
 curl -fsSL https://solanaclawd.com/leviathan.sh | sh     # Leviathan runtime bootstrap
-npm install -g @openclawdsolana/clawd                     # or via npm
+npm install -g solana-clawd                               # published CLI package
 clawd                                                      # opens the terminal
 ```
 
@@ -49,7 +49,9 @@ clawd                                                      # opens the terminal
 <a href="https://x.com/clawddevs"><img src="https://img.shields.io/badge/@clawddevs-X-FF6B00?style=for-the-badge&logo=x&logoColor=000000&labelColor=1a0a00" alt="@clawddevs"></a>
 <a href="https://www.npmjs.com/package/solana-clawd"><img src="https://img.shields.io/badge/npm-solana--clawd-FF8C00?style=for-the-badge&logo=npm&logoColor=000000&labelColor=1a0a00" alt="solana-clawd on npm"></a>
 <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-FF6B00?style=for-the-badge&labelColor=1a0a00" alt="MIT license"></a>
-<a href="MCP/src/server.ts"><img src="https://img.shields.io/badge/MCP-73%20tools%20%C2%B7%2014%20resources%20%C2%B7%2013%20prompts-FF8C00?style=for-the-badge&labelColor=1a0a00" alt="MCP server"></a>
+<a href="MCP/src/server.ts"><img src="https://img.shields.io/badge/MCP-v3%20Orchestrator-FE6B00?style=for-the-badge&labelColor=1a0a00" alt="MCP v3 orchestrator"></a>
+<a href="MCP/README.md"><img src="https://img.shields.io/badge/MCP-PluginRegistry+FederationBridge+AgentTaskRouter+DocsSystem-FF8C00?style=for-the-badge&labelColor=1a0a00" alt="MCP subsystems"></a>
+<a href="MCP/src/orchestrator.ts"><img src="https://img.shields.io/badge/SessionMeter-PTokenStreamFacilitator-FF6B00?style=for-the-badge&labelColor=1a0a00" alt="SessionMeter + PTokenStreamFacilitator"></a>
 
 <br/><br/>
 
@@ -82,9 +84,11 @@ curl -fsSL https://solanaclawd.com/leviathan.sh | sh
 
 This is the **Leviathan runtime bootstrap** — it clones the repo (if needed), installs dependencies, compiles the TypeScript stack, spawns a sovereign identity, and launches the full agent runtime in one command.
 
+For contributor onboarding, use [`STARTHERE.md`](./STARTHERE.md), [`docs/REPO_MAP.md`](./docs/REPO_MAP.md), and `npm run doctor`.
+
 The bootstrap lives at [`automation/leviathan.sh`](./automation/leviathan.sh) and is orchestrated by the [`automation/`](./automation/) folder — the central runtime build layer for solana-clawd.
 
-**Classic installer** (npm package only):
+**Classic installer** (CLI package only):
 
 ```bash
 curl -fsSL https://solanaclawd.com/install.sh | bash
@@ -93,7 +97,7 @@ curl -fsSL https://solanaclawd.com/install.sh | bash
 The classic installer will:
 
 1. Check Node.js v20+
-2. Run `npm install -g @openclawdsolana/clawd`
+2. Run `npm install -g solana-clawd`
 3. Create `~/.clawd/.env` with a template for your API keys
 4. Print quick-start instructions
 
@@ -104,13 +108,21 @@ Once installed:
 # 2. Start the interactive TUI
 clawd
 
+# Phoenix perpetuals via Vulcan / Rise SDK
+clawd perps health
+clawd perps ticker SOL -o json
+clawd perps paper init --balance 10000
+clawd perps paper buy SOL --notional-usdc 100 --type market
+
 # Or run a demo
 clawd examples list
 clawd examples run ooda
 clawd examples run lobtrader
 ```
 
-> **Advanced:** `npm install -g @openclawdsolana/leviathan && leviathan --spawn`
+Perps defaults are paper-safe. Live Phoenix actions require an explicit live command and confirmation; strategy launches default to `--mode paper` unless the operator selects a live mode.
+
+> **Advanced:** `cd openclawd-framework && npm install -g . && leviathan --spawn`
 
 ---
 
@@ -145,11 +157,15 @@ clawd examples run lobtrader
 
 | Workstream | What shipped | Where to start |
 | --- | --- | --- |
+| **Automation runtime** | New `automation/` control plane for bootstrap, CI, identity spawn, state/versioning, self-mod hooks, registry discovery, and heartbeat orchestration | [`automation/README.md`](./automation/README.md), [`automation/leviathan.sh`](./automation/leviathan.sh), [`scripts/repo-doctor.mjs`](./scripts/repo-doctor.mjs) |
+| **Vulcan perps stack** | Local Vulcan CLI + skills pack for Phoenix perps, grid/TWAP/TA workflows, wallet setup, paper mode, and MCP exposure inside the terminal | [`vulcan-cli-master/README.md`](./vulcan-cli-master/README.md), [`skills/vulcan/SKILL.md`](./skills/vulcan/SKILL.md), [`tui/src/screens/perps.ts`](./tui/src/screens/perps.ts) |
+| **Backroom surfaces** | Multi-agent backroom workspace, 3D front-end, TUI client, Convex state, install worker, and mirrored automaton runtime under `openclawd-framework` | [`openclawd-framework/multiagents-infinite-backroom/README.md`](./openclawd-framework/multiagents-infinite-backroom/README.md), [`openclawd-framework/Backrooms-Solana`](./openclawd-framework/Backrooms-Solana), [`openclawd-framework/multiagents-infinite-backroom/backroom-3d`](./openclawd-framework/multiagents-infinite-backroom/backroom-3d) |
 | **Pinocchio + p-token** | Native Solana program support, vault and escrow starters, p-token launchpad, p-agent-token planning, bonding-curve quotes, registry inspection, and helper-program map | [`pinocchio/USER_GUIDE.md`](./pinocchio/USER_GUIDE.md), [`docs/PTOKEN_LAUNCHPAD.md`](./docs/PTOKEN_LAUNCHPAD.md), [`pinocchio/README.md`](./pinocchio/README.md), [`pinocchio/docs/P_AGENT_TOKEN.md`](./pinocchio/docs/P_AGENT_TOKEN.md), [`docs/PTOKEN_EXPLORER.md`](./docs/PTOKEN_EXPLORER.md) |
 | **LLM Oracle** | Rust oracle runner that watches Solana GPT oracle interaction accounts, loads Clawd character context, calls a configured LLM provider, and submits callback responses on-chain | [`llm_oracle/README.md`](./llm_oracle/README.md) |
 | **x402 payment rail** | Solana HTTP 402 payment flow with pay.sh-style confidential settlement, A2A task payments, SDK helpers, p-token support, worker deployment surface, and revenue-vault documentation | Private source; excluded from public GitHub exports |
-| **MCP Orchestrator** | Active C2 plane — pay-per-use tool dispatch, session metering, Leviathan bridge, Deep Clawd controls | [`MCP/`](./MCP/) |
+| **MCP Orchestrator** | Active C2 plane with upgraded server surface, deep-clawd tools, x402 tools, federation router updates, session metering, and Leviathan bridge controls | [`MCP/README.md`](./MCP/README.md), [`MCP/src/server.ts`](./MCP/src/server.ts), [`MCP/src/tools/deep-clawd-tools.ts`](./MCP/src/tools/deep-clawd-tools.ts) |
 | **Deep Clawd** | DeepSeek V4 trading agent with dFlow routing (3.2× cheaper than all-pro) | [`deep-clawd/`](./deep-clawd/) |
+| **SDK surface** | Canonical local TypeScript SDK for creating Clawd agents, wallets, tool registries, and MCP clients without vendoring the external monorepo | [`sdk/README.md`](./sdk/README.md), [`sdk/src/index.ts`](./sdk/src/index.ts) |
 | **Program map** | Machine-readable map of the on-chain workspace | [`data/programs-map.json`](./data/programs-map.json), [`programs/README.md`](./programs/README.md) |
 
 ---
@@ -454,28 +470,62 @@ Use `npm run oracle:check` before running it. Set `ORACLE_PROGRAM_ID`, `RPC_URL`
 
 ```
 ╔══════════════════════════════════════════════════════════════════════════════╗
-║  ▲ MCP ORCHESTRATOR — COMMAND-AND-CONTROL PLANE                             ║
+║  ▲ MCP v3 ORCHESTRATOR — FEDERATED C2 PLANE                                ║
 ╚══════════════════════════════════════════════════════════════════════════════╝
 ```
 
-The MCP server is not a passive tool vending machine. It is the **active C2 plane** of the entire Solana Clawd framework — orchestrating every subsystem, metering every tool call, and enforcing session budgets through x402.
+The MCP server is the **central orchestration plane** of the entire Solana Clawd framework — transforming a monolithic tool server into a federated, plugin-driven command-and-control layer. Full architecture in [`MCP/README.md`](./MCP/README.md).
 
-```text
-╔═══════════════════════════════════════════════════════════╗
-║  MCP ORCHESTRATOR — 73 TOOLS · 14 RESOURCES · 13 PROMPTS ║
-╠═══════════════════════════════════════════════════════════╣
-║  solana   │ token info, price, wallets, staking          ║
-║  helius   │ RPC, parsed tx, webhooks, priority fees      ║
-║  market   │ signals [premium], regime [premium], heatmap ║
-║  x402     │ metered billing, session management, p-token ║
-║  leviathan│ OODA bridge, state, shell, journal, laws     ║
-║  pump     │ Pump.fun scans, bonding curve, launch data   ║
-║  memory   │ vault read/write, recall, consolidation      ║
-║  agents   │ agent registry, spawn, status, routing       ║
-╚═══════════════════════════════════════════════════════════╝
+```
+                    MCP Server (server.ts)
+  ┌──────────┐  ┌────────────┐  ┌──────────────┐
+  │Plugin    │  │Federation  │  │Agent Task    │
+  │Registry  │  │Bridge      │  │Router        │
+  └────┬─────┘  └─────┬──────┘  └──────┬───────┘
+       │              │                │
+       ▼              ▼                ▼
+  ┌──────────────────────────────────────────┐
+  │           Orchestrator + SessionMeter    │
+  │  + optional PTokenStreamFacilitator      │
+  └──────────────────────────────────────────┘
+       │              │                │
+       ▼              ▼                ▼
+  Core Tools   Leviathan    Market      x402
+  (inline)    (plugin)     (inline)    (plugin)
 ```
 
-Premium market intelligence tools charge micro-USDC per call. Session budget enforced by `SessionMeter` — spend persisted to `~/.config/solana-claude/x402-payments.jsonl`.
+### 6 New Subsystems
+
+| Subsystem | What it does | Source |
+| --- | --- | --- |
+| **Plugin Registry** | Dynamic tool discovery from ooda/, leviathan/, x402/, deep-clawd/, skills/, programs/ | [`plugins/plugin-registry.ts`](./MCP/src/plugins/plugin-registry.ts) |
+| **Federation Bridge** | MCP-to-MCP calls (STDIO, HTTP+SSE, A2A) to external servers like Official Solana MCP | [`federation/federation-bridge.ts`](./MCP/src/federation/federation-bridge.ts) |
+| **Agent Task Router** | Cross-agent dispatch with priority queues and concurrency limits (max 3 leviathan, 2 deep-clawd) | [`federation/agent-task-router.ts`](./MCP/src/federation/agent-task-router.ts) |
+| **Docs System** | 20+ doc sources with list_sections / get_documentation / search_docs | [`docs/docs-system.ts`](./MCP/src/docs/docs-system.ts) |
+| **Deep Clawd Tools** | DeepSeek V4 trading agent tools (status, tick, analyze, portfolio, strategy, backtest) | [`tools/deep-clawd-tools.ts`](./MCP/src/tools/deep-clawd-tools.ts) |
+| **SessionMeter + Facilitator** | Pay-per-use dispatch, p-token on-chain settlement, auto-settle when budget low | [`orchestrator.ts`](./MCP/src/orchestrator.ts) |
+
+### 13 Tool Categories
+
+| Category | Count | Description |
+|----------|-------|-------------|
+| solana | 11 | Public Solana market data (free) |
+| helius | 8 | Helius RPC/DAS/Webhooks |
+| x402 | 9 | Payment protocol + p-token metered billing |
+| leviathan | 9 | OODA loop + autonomous agent control |
+| market | 5 | Composite intelligence (premium) |
+| pump | 8 | Pump.fun bonding curve |
+| memory | 4 | Persistent agent memory + autoDream |
+| agents | 6 | Agent fleet + skill management |
+| chess | 7 | Chess.com (autonomous agent chess) |
+| federation | N | Federated MCP tools from external servers |
+| docs | 3 | Documentation system (list/get/search) |
+| orchestrator | 4 | Orchestrator management tools |
+| deep-clawd | 6 | DeepSeek trading agent tools |
+
+- **Resources**: `solana-clawd://docs/sections`, `solana-clawd://federation/status`, `solana-clawd://plugins/status`
+- **Prompts**: `docs_explore`, `federated_query`, `task_orchestrate`, `trading_ooda`, `pump_ooda`, `trade_research`, `wallet_analysis`
+- **Version**: [`MCP/package.json`](./MCP/package.json) — **v3.0.0**
 
 ---
 
@@ -737,23 +787,46 @@ node --import tsx/esm examples/blockchain-buddies-demo.ts
 ╚══════════════════════════════════════════════════════════════════════════════╝
 ```
 
-1. [`HACKATHON.md`](./HACKATHON.md)
-2. [`architecture.md`](./architecture.md)
-3. [`docs/architecture.md`](./docs/architecture.md)
-4. [`ARTICLE_PTOKEN.md`](./ARTICLE_PTOKEN.md) — p-token economics deep dive
-5. [`clawdrouter/README.md`](./clawdrouter/README.md)
-6. [`llm-wiki-tang/README.md`](./llm-wiki-tang/README.md)
-7. [`MemeBRain/README.md`](./MemeBRain/README.md)
-8. [`openclawd/README.md`](./openclawd/README.md)
-9. [`openclawd-framework/README.md`](./openclawd-framework/README.md)
-10. [`pinocchio/USER_GUIDE.md`](./pinocchio/USER_GUIDE.md)
-11. [`pinocchio/README.md`](./pinocchio/README.md)
-12. [`docs/PTOKEN_LAUNCHPAD.md`](./docs/PTOKEN_LAUNCHPAD.md)
-13. [`docs/PTOKEN_EXPLORER.md`](./docs/PTOKEN_EXPLORER.md)
-14. [`pinocchio/docs/P_AGENT_TOKEN.md`](./pinocchio/docs/P_AGENT_TOKEN.md)
-15. [`programs/p-token-launchpad/README.md`](./programs/p-token-launchpad/README.md)
-16. [`programs/README.md`](./programs/README.md)
-17. [`docs/risk-engine-spec.md`](./docs/risk-engine-spec.md)
+**Start here:**
+
+1. [`STARTHERE.md`](./STARTHERE.md) — operator onboarding, first commands
+2. [`SOUL.md`](./SOUL.md) — what solana-clawd is and why it exists
+3. [`HACKATHON.md`](./HACKATHON.md)
+4. [`architecture.md`](./architecture.md)
+5. [`docs/architecture.md`](./docs/architecture.md)
+
+**Token economics + trading:**
+
+1. [`ARTICLE_PTOKEN.md`](./ARTICLE_PTOKEN.md) — p-token economics, 98% CU savings deep dive
+2. [`STRATEGY.md`](./STRATEGY.md) — $CLAWD trading strategy (spot + perps)
+3. [`TRADE.md`](./TRADE.md) — pump.fun trading agent skill, OODA risk engine
+4. [`BOUNTY.md`](./BOUNTY.md) — Percolator on-chain bounty program
+
+**Core subsystems:**
+
+1. [`BRAIN.md`](./BRAIN.md) — Clawd Memory architecture and recall engine
+2. [`BROWSER.md`](./BROWSER.md) — Clawd Browser + Upstash Box + war map
+3. [`clawdrouter/README.md`](./clawdrouter/README.md)
+4. [`llm-wiki-tang/README.md`](./llm-wiki-tang/README.md)
+5. [`MemeBRain/README.md`](./MemeBRain/README.md)
+
+**Ops + migration:**
+
+1. [`UPDATE.md`](./UPDATE.md) — changelog and release notes
+2. [`MIGRATE.md`](./MIGRATE.md) — migrate from OpenClaw / legacy installs
+
+**Framework + programs:**
+
+1. [`openclawd/README.md`](./openclawd/README.md)
+2. [`openclawd-framework/README.md`](./openclawd-framework/README.md)
+3. [`pinocchio/USER_GUIDE.md`](./pinocchio/USER_GUIDE.md)
+4. [`pinocchio/README.md`](./pinocchio/README.md)
+5. [`docs/PTOKEN_LAUNCHPAD.md`](./docs/PTOKEN_LAUNCHPAD.md)
+6. [`docs/PTOKEN_EXPLORER.md`](./docs/PTOKEN_EXPLORER.md)
+7. [`pinocchio/docs/P_AGENT_TOKEN.md`](./pinocchio/docs/P_AGENT_TOKEN.md)
+8. [`programs/p-token-launchpad/README.md`](./programs/p-token-launchpad/README.md)
+9. [`programs/README.md`](./programs/README.md)
+10. [`docs/risk-engine-spec.md`](./docs/risk-engine-spec.md)
 
 ---
 

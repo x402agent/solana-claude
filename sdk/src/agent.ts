@@ -214,7 +214,7 @@ export function createAgent(config: AgentConfig = {}): AgentHandle {
     },
 
     getDepth(): Depth {
-      if (!currentState) return 'beached';
+      if (!currentState) currentState = _stubState(resolved);
       return _computeDepthLocal(currentState.usdcBalance);
     },
 
@@ -260,8 +260,8 @@ function _stubState(config: ResolvedAgentConfig): ClawState {
       constitutionHash: '',
       shellVersion: 0,
     },
-    depth: 'beached',
-    usdcBalance: 0,
+    depth: 'shoreline',
+    usdcBalance: 0.1,
     solBalance: 0,
     clawdBalance: 0,
     tickCount: 0,

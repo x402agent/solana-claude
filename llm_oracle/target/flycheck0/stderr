@@ -1,7 +1,6 @@
     Blocking waiting for file lock on package cache
-    Blocking waiting for file lock on package cache
-   2.975804500s  INFO prepare_target{force=false package_id=llm_oracle v0.1.0 (/Users/8bit/bots/Cladwbot-solana/solana-clawd/llm_oracle) target="llm_oracle"}: cargo::core::compiler::fingerprint: fingerprint error for llm_oracle v0.1.0 (/Users/8bit/bots/Cladwbot-solana/solana-clawd/llm_oracle)/Check { test: false }/TargetInner { name: "llm_oracle", doc: true, ..: with_path("/Users/8bit/bots/Cladwbot-solana/solana-clawd/llm_oracle/src/main.rs", Edition2021) }
-   2.976246125s  INFO prepare_target{force=false package_id=llm_oracle v0.1.0 (/Users/8bit/bots/Cladwbot-solana/solana-clawd/llm_oracle) target="llm_oracle"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/bots/Cladwbot-solana/solana-clawd/llm_oracle/target/debug/.fingerprint/llm_oracle-5b9c62b9e1147b6e/bin-llm_oracle`
+   1.737996708s  INFO prepare_target{force=false package_id=llm_oracle v0.1.0 (/Users/8bit/bots/Cladwbot-solana/solana-clawd/llm_oracle) target="llm_oracle"}: cargo::core::compiler::fingerprint: fingerprint error for llm_oracle v0.1.0 (/Users/8bit/bots/Cladwbot-solana/solana-clawd/llm_oracle)/Check { test: false }/TargetInner { name: "llm_oracle", doc: true, ..: with_path("/Users/8bit/bots/Cladwbot-solana/solana-clawd/llm_oracle/src/main.rs", Edition2021) }
+   1.738015542s  INFO prepare_target{force=false package_id=llm_oracle v0.1.0 (/Users/8bit/bots/Cladwbot-solana/solana-clawd/llm_oracle) target="llm_oracle"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/bots/Cladwbot-solana/solana-clawd/llm_oracle/target/debug/.fingerprint/llm_oracle-5b9c62b9e1147b6e/bin-llm_oracle`
 
 Caused by:
     No such file or directory (os error 2)
@@ -24,8 +23,8 @@ Stack backtrace:
   14: std::rt::lang_start::<()>::{closure#0}
   15: std::rt::lang_start_internal
   16: _main
-   3.552891917s  INFO prepare_target{force=false package_id=solana-client v2.2.20 target="solana_client"}: cargo::core::compiler::fingerprint: fingerprint error for solana-client v2.2.20/Check { test: false }/TargetInner { ..: lib_target("solana_client", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-client-2.2.20/src/lib.rs", Edition2021) }
-   3.552921625s  INFO prepare_target{force=false package_id=solana-client v2.2.20 target="solana_client"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/bots/Cladwbot-solana/solana-clawd/llm_oracle/target/debug/.fingerprint/solana-client-e2ecf52c72f24433/lib-solana_client`
+   1.774221083s  INFO prepare_target{force=false package_id=solana-client v2.2.20 target="solana_client"}: cargo::core::compiler::fingerprint: fingerprint error for solana-client v2.2.20/Check { test: false }/TargetInner { ..: lib_target("solana_client", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-client-2.2.20/src/lib.rs", Edition2021) }
+   1.774237583s  INFO prepare_target{force=false package_id=solana-client v2.2.20 target="solana_client"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/bots/Cladwbot-solana/solana-clawd/llm_oracle/target/debug/.fingerprint/solana-client-e2ecf52c72f24433/lib-solana_client`
 
 Caused by:
     No such file or directory (os error 2)
@@ -49,8 +48,8 @@ Stack backtrace:
   15: std::rt::lang_start::<()>::{closure#0}
   16: std::rt::lang_start_internal
   17: _main
-   3.584243542s  INFO prepare_target{force=false package_id=quinn v0.11.6 target="quinn"}: cargo::core::compiler::fingerprint: fingerprint error for quinn v0.11.6/Check { test: false }/TargetInner { ..: lib_target("quinn", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/quinn-0.11.6/src/lib.rs", Edition2021) }
-   3.584253459s  INFO prepare_target{force=false package_id=quinn v0.11.6 target="quinn"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/bots/Cladwbot-solana/solana-clawd/llm_oracle/target/debug/.fingerprint/quinn-ced3a77bf14ce0c2/lib-quinn`
+   1.776122917s  INFO prepare_target{force=false package_id=quinn v0.11.6 target="quinn"}: cargo::core::compiler::fingerprint: fingerprint error for quinn v0.11.6/Check { test: false }/TargetInner { ..: lib_target("quinn", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/quinn-0.11.6/src/lib.rs", Edition2021) }
+   1.776131667s  INFO prepare_target{force=false package_id=quinn v0.11.6 target="quinn"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/bots/Cladwbot-solana/solana-clawd/llm_oracle/target/debug/.fingerprint/quinn-ced3a77bf14ce0c2/lib-quinn`
 
 Caused by:
     No such file or directory (os error 2)
@@ -75,8 +74,8 @@ Stack backtrace:
   16: std::rt::lang_start::<()>::{closure#0}
   17: std::rt::lang_start_internal
   18: _main
-   3.676990042s  INFO prepare_target{force=false package_id=solana-quic-client v2.2.20 target="solana_quic_client"}: cargo::core::compiler::fingerprint: fingerprint error for solana-quic-client v2.2.20/Check { test: false }/TargetInner { ..: lib_target("solana_quic_client", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-quic-client-2.2.20/src/lib.rs", Edition2021) }
-   3.677000959s  INFO prepare_target{force=false package_id=solana-quic-client v2.2.20 target="solana_quic_client"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/bots/Cladwbot-solana/solana-clawd/llm_oracle/target/debug/.fingerprint/solana-quic-client-32469024c64ab7f9/lib-solana_quic_client`
+   1.780239417s  INFO prepare_target{force=false package_id=solana-quic-client v2.2.20 target="solana_quic_client"}: cargo::core::compiler::fingerprint: fingerprint error for solana-quic-client v2.2.20/Check { test: false }/TargetInner { ..: lib_target("solana_quic_client", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-quic-client-2.2.20/src/lib.rs", Edition2021) }
+   1.780253458s  INFO prepare_target{force=false package_id=solana-quic-client v2.2.20 target="solana_quic_client"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/bots/Cladwbot-solana/solana-clawd/llm_oracle/target/debug/.fingerprint/solana-quic-client-32469024c64ab7f9/lib-solana_quic_client`
 
 Caused by:
     No such file or directory (os error 2)
@@ -101,8 +100,8 @@ Stack backtrace:
   16: std::rt::lang_start::<()>::{closure#0}
   17: std::rt::lang_start_internal
   18: _main
-   3.689038334s  INFO prepare_target{force=false package_id=solana-streamer v2.2.20 target="solana_streamer"}: cargo::core::compiler::fingerprint: fingerprint error for solana-streamer v2.2.20/Check { test: false }/TargetInner { ..: lib_target("solana_streamer", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-streamer-2.2.20/src/lib.rs", Edition2021) }
-   3.689050042s  INFO prepare_target{force=false package_id=solana-streamer v2.2.20 target="solana_streamer"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/bots/Cladwbot-solana/solana-clawd/llm_oracle/target/debug/.fingerprint/solana-streamer-6db24ef3f24272e2/lib-solana_streamer`
+   1.781512750s  INFO prepare_target{force=false package_id=solana-streamer v2.2.20 target="solana_streamer"}: cargo::core::compiler::fingerprint: fingerprint error for solana-streamer v2.2.20/Check { test: false }/TargetInner { ..: lib_target("solana_streamer", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-streamer-2.2.20/src/lib.rs", Edition2021) }
+   1.781522208s  INFO prepare_target{force=false package_id=solana-streamer v2.2.20 target="solana_streamer"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/bots/Cladwbot-solana/solana-clawd/llm_oracle/target/debug/.fingerprint/solana-streamer-6db24ef3f24272e2/lib-solana_streamer`
 
 Caused by:
     No such file or directory (os error 2)
@@ -128,8 +127,8 @@ Stack backtrace:
   17: std::rt::lang_start::<()>::{closure#0}
   18: std::rt::lang_start_internal
   19: _main
-   3.723496625s  INFO prepare_target{force=false package_id=solana-udp-client v2.2.20 target="solana_udp_client"}: cargo::core::compiler::fingerprint: fingerprint error for solana-udp-client v2.2.20/Check { test: false }/TargetInner { ..: lib_target("solana_udp_client", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-udp-client-2.2.20/src/lib.rs", Edition2021) }
-   3.723508625s  INFO prepare_target{force=false package_id=solana-udp-client v2.2.20 target="solana_udp_client"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/bots/Cladwbot-solana/solana-clawd/llm_oracle/target/debug/.fingerprint/solana-udp-client-e3a5da2a44539a1a/lib-solana_udp_client`
+   1.784882542s  INFO prepare_target{force=false package_id=solana-udp-client v2.2.20 target="solana_udp_client"}: cargo::core::compiler::fingerprint: fingerprint error for solana-udp-client v2.2.20/Check { test: false }/TargetInner { ..: lib_target("solana_udp_client", ["lib"], "/Users/8bit/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-udp-client-2.2.20/src/lib.rs", Edition2021) }
+   1.784893042s  INFO prepare_target{force=false package_id=solana-udp-client v2.2.20 target="solana_udp_client"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/bots/Cladwbot-solana/solana-clawd/llm_oracle/target/debug/.fingerprint/solana-udp-client-e3a5da2a44539a1a/lib-solana_udp_client`
 
 Caused by:
     No such file or directory (os error 2)
@@ -154,8 +153,8 @@ Stack backtrace:
   16: std::rt::lang_start::<()>::{closure#0}
   17: std::rt::lang_start_internal
   18: _main
-   3.755614209s  INFO prepare_target{force=false package_id=llm_oracle v0.1.0 (/Users/8bit/bots/Cladwbot-solana/solana-clawd/llm_oracle) target="llm_oracle"}: cargo::core::compiler::fingerprint: fingerprint error for llm_oracle v0.1.0 (/Users/8bit/bots/Cladwbot-solana/solana-clawd/llm_oracle)/Check { test: true }/TargetInner { name: "llm_oracle", doc: true, ..: with_path("/Users/8bit/bots/Cladwbot-solana/solana-clawd/llm_oracle/src/main.rs", Edition2021) }
-   3.755625584s  INFO prepare_target{force=false package_id=llm_oracle v0.1.0 (/Users/8bit/bots/Cladwbot-solana/solana-clawd/llm_oracle) target="llm_oracle"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/bots/Cladwbot-solana/solana-clawd/llm_oracle/target/debug/.fingerprint/llm_oracle-110c4c2aa2b8a931/test-bin-llm_oracle`
+   1.787991833s  INFO prepare_target{force=false package_id=llm_oracle v0.1.0 (/Users/8bit/bots/Cladwbot-solana/solana-clawd/llm_oracle) target="llm_oracle"}: cargo::core::compiler::fingerprint: fingerprint error for llm_oracle v0.1.0 (/Users/8bit/bots/Cladwbot-solana/solana-clawd/llm_oracle)/Check { test: true }/TargetInner { name: "llm_oracle", doc: true, ..: with_path("/Users/8bit/bots/Cladwbot-solana/solana-clawd/llm_oracle/src/main.rs", Edition2021) }
+   1.788001875s  INFO prepare_target{force=false package_id=llm_oracle v0.1.0 (/Users/8bit/bots/Cladwbot-solana/solana-clawd/llm_oracle) target="llm_oracle"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/8bit/bots/Cladwbot-solana/solana-clawd/llm_oracle/target/debug/.fingerprint/llm_oracle-110c4c2aa2b8a931/test-bin-llm_oracle`
 
 Caused by:
     No such file or directory (os error 2)

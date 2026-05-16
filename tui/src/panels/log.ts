@@ -4,10 +4,10 @@
  * Shows real-time log entries from all OODA/payment/A2A activity.
  */
 
-import chalk from 'chalk';
+import chalk, { type ChalkInstance } from 'chalk';
 import type { DashboardState, LogEntry } from '../state.js';
 
-const LEVEL_COLOR: Record<LogEntry['level'], chalk.Chalk> = {
+const LEVEL_COLOR: Record<LogEntry['level'], ChalkInstance> = {
   info:  chalk.cyan,
   warn:  chalk.yellow,
   error: chalk.red,
@@ -16,7 +16,7 @@ const LEVEL_COLOR: Record<LogEntry['level'], chalk.Chalk> = {
   trade: chalk.hex('#ff8c00'),
 };
 
-const PHASE_COLOR: Record<string, chalk.Chalk> = {
+const PHASE_COLOR: Record<string, ChalkInstance> = {
   OBSERVE: chalk.cyan,
   ORIENT:  chalk.yellow,
   DECIDE:  chalk.magenta,

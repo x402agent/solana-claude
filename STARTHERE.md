@@ -46,12 +46,15 @@ cd solana-clawd
 npm install
 
 # 2. Sanity check the repo
-npm run check
+npm run doctor
 
-# 3. Launch the HERMES terminal
+# 3. See the maintained surfaces
+cat docs/REPO_MAP.md
+
+# 4. Launch the HERMES terminal
 npm run hermes
 
-# 4. Try the public-data demos
+# 5. Try the public-data demos
 npm run demo:ooda
 npm run demo:paysh
 ```
@@ -72,7 +75,7 @@ npm run ext:dev
 npm run vault:web:dev
 ```
 
-There is no single root `.env.example` in this repo. Configure secrets per surface, or export the minimum set below in your shell before running the pieces you care about.
+Use [`.env.example`](./.env.example) as the shared root baseline, then add surface-specific secrets where required.
 
 ```bash
 HELIUS_API_KEY=

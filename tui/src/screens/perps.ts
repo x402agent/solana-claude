@@ -9,6 +9,7 @@
 
 import chalk from 'chalk';
 import { type PerpMarket } from '../state.js';
+import { getTraderSnapshot, loadVulcanMarkets as loadVulcanMarketData, normalizeSymbol, runVulcanJson, vulcanInstallHint } from '../vulcan.js';
 
 // ─── Safety gate ──────────────────────────────────────────────────────────────
 
@@ -43,7 +44,7 @@ function renderPerpsScreen(
   const border = chalk.cyan('─'.repeat(60));
   const corner = chalk.cyan;
 
-  process.stdout.write(chalk.cyanBright.bold('\n  📈  Phoenix Perpetuals  ') +
+  process.stdout.write(chalk.cyanBright.bold('\n  📈  Phoenix Perpetuals · Clawd Trader  ') +
     (LIVE_MODE ? chalk.red.bold('[LIVE]') : chalk.yellow('[PAPER]')) + '\n');
   process.stdout.write('  ' + border + '\n\n');
 
@@ -81,59 +82,15 @@ function renderPerpsScreen(
   }
 
   process.stdout.write(
-    '  ' + chalk.gray('[q] quote  [p] place paper order  [b] back') + '\n\n',
+    '  ' + chalk.gray('[q] quote  [p] paper long  [s] paper short  [t] trader snapshot  [b] back') + '\n\n',
   );
 }
 
 // ─── Vulcan markets fetcher ───────────────────────────────────────────────────
 
 async function loadVulcanMarkets(): Promise<PerpMarket[]> {
-  try {
-    // Dynamically import execa so it only fails at runtime if missing
-    const { execa } = await import('execa') as { execa: (cmd: string, args: string[], opts?: Record<string, unknown>) => Promise<{ stdout: string }> };
-    const result = await execa('vulcan', ['markets'], {
-      reject: false,
-      timeout: 8_000,
-    });
-    // Try to parse JSON output from vulcan markets
-    const raw = result.stdout.trim();
-    if (!raw) return fallbackMarkets();
-    try {
-      const parsed = JSON.parse(raw) as Array<{
-        symbol?: string;
-        name?: string;
-        markPrice?: number;
-        mark_price?: number;
-        fundingRate?: number;
-        funding_rate?: number;
-        openInterest?: number;
-        open_interest?: number;
-      }>;
-      if (!Array.isArray(parsed)) return fallbackMarkets();
-      return parsed.slice(0, 10).map(m => ({
-        symbol: (m.symbol ?? m.name ?? '???').toUpperCase(),
-        markPrice: m.markPrice ?? m.mark_price ?? 0,
-        fundingRate: m.fundingRate ?? m.funding_rate ?? 0,
-        openInterest: m.openInterest ?? m.open_interest ?? 0,
-      }));
-    } catch {
-      // Not JSON — vulcan may print a table; fall back
-      return fallbackMarkets();
-    }
-  } catch {
-    return fallbackMarkets();
-  }
-}
-
-/** Fallback demo markets when vulcan CLI is not installed */
-function fallbackMarkets(): PerpMarket[] {
-  return [
-    { symbol: 'SOL-PERP',  markPrice: 158.42, fundingRate:  0.0001, openInterest: 12_500_000 },
-    { symbol: 'BTC-PERP',  markPrice: 67200,  fundingRate:  0.00008, openInterest: 98_000_000 },
-    { symbol: 'ETH-PERP',  markPrice: 3540,   fundingRate: -0.00003, openInterest: 45_000_000 },
-    { symbol: 'JTO-PERP',  markPrice: 3.21,   fundingRate:  0.0002,  openInterest: 2_100_000 },
-    { symbol: 'BONK-PERP', markPrice: 0.0000285, fundingRate: 0.0003, openInterest: 890_000 },
-  ];
+  const result = await loadVulcanMarketData();
+  return result.markets;
 }
 
 // ─── Main exported function ───────────────────────────────────────────────────
@@ -154,7 +111,7 @@ export async function runPerps(): Promise<void> {
       : 'vulcan CLI not found — showing demo data';
     renderPerpsScreen(markets, status, orderPrompt);
   }).catch(() => {
-    markets = fallbackMarkets();
+    markets = [];
     status = 'vulcan CLI unavailable — showing demo data';
     renderPerpsScreen(markets, status, orderPrompt);
   });
@@ -184,7 +141,7 @@ export async function runPerps(): Promise<void> {
         // Quote mode
         if (markets.length > 0) {
           const first = markets[0]!;
-          status = `Quote: ${first.symbol} @ $${first.markPrice.toFixed(2)} | Funding: ${(first.fundingRate * 100).toFixed(4)}%`;
+          status = `Quote: ${first.symbol} @ ${first.markPrice ? `$${first.markPrice.toFixed(4)}` : 'n/a'} | Funding: ${(first.fundingRate * 100).toFixed(4)}%`;
         } else {
           status = 'No markets loaded yet.';
         }
@@ -194,11 +151,44 @@ export async function runPerps(): Promise<void> {
       }
 
       if (chunk === 'p' || chunk === 'P') {
-        // Paper order prompt
-        orderPrompt = LIVE_MODE
-          ? '⚠️  LIVE MODE: would submit real order (disabled in this build)'
-          : '📝  Paper order: BUY 1x SOL-PERP @ market — recorded (no real funds)';
-        status = 'Paper order placed (no real funds at risk)';
+        const sym = normalizeSymbol(markets[0]?.symbol);
+        runVulcanJson(['paper', 'buy', sym, '--notional-usdc', '100', '--type', 'market'])
+          .then(result => {
+            orderPrompt = result.ok
+              ? `Paper long submitted: ${sym} $100 notional`
+              : `Paper long failed: ${result.stderr || 'Vulcan unavailable'}`;
+            status = result.ok ? 'Paper fill recorded by Vulcan' : `Install Vulcan: ${vulcanInstallHint()}`;
+            renderPerpsScreen(markets, status, orderPrompt);
+          });
+        orderPrompt = `Submitting paper long ${sym} $100 notional...`;
+        status = 'Paper mode uses no real funds';
+        renderPerpsScreen(markets, status, orderPrompt);
+        return;
+      }
+
+      if (chunk === 's' || chunk === 'S') {
+        const sym = normalizeSymbol(markets[0]?.symbol);
+        runVulcanJson(['paper', 'sell', sym, '--notional-usdc', '100', '--type', 'market'])
+          .then(result => {
+            orderPrompt = result.ok
+              ? `Paper short submitted: ${sym} $100 notional`
+              : `Paper short failed: ${result.stderr || 'Vulcan unavailable'}`;
+            status = result.ok ? 'Paper fill recorded by Vulcan' : `Install Vulcan: ${vulcanInstallHint()}`;
+            renderPerpsScreen(markets, status, orderPrompt);
+          });
+        orderPrompt = `Submitting paper short ${sym} $100 notional...`;
+        status = 'Paper mode uses no real funds';
+        renderPerpsScreen(markets, status, orderPrompt);
+        return;
+      }
+
+      if (chunk === 't' || chunk === 'T') {
+        getTraderSnapshot(markets[0]?.symbol ?? 'SOL').then(snapshot => {
+          status = `Trader snapshot: ${snapshot.source} | markets ${snapshot.markets.length} | health ${snapshot.health ? 'loaded' : 'unavailable'}`;
+          orderPrompt = 'Use CLI for live actions: clawd perps preflight, then clawd perps long/short with explicit confirmation.';
+          renderPerpsScreen(snapshot.markets, status, orderPrompt);
+        });
+        status = 'Loading trader snapshot...';
         renderPerpsScreen(markets, status, orderPrompt);
         return;
       }

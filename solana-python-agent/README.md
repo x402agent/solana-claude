@@ -9,6 +9,7 @@ MAWDBot is an enterprise-grade AI-powered trading agent for Solana and multi-cha
 - **AI-Powered Intelligence**: Advanced NLP using OpenRouter (Claude, MiniMax) for natural conversation
 - **Solana DEX Trading**: Autonomous token swaps via Jupiter API (Meteora, Raydium aggregation)
 - **Perpetuals Trading**: LONG/SHORT positions with up to 125x leverage on Aster DEX & Hyperliquid
+- **Phoenix Perps Agent**: Official Solana CLAWD perps agent using Vulcan/Rise SDK skills, paper-first execution, strategy preflight, TWAP monitoring, and live confirmation gates
 - **CDP Wallet Management**: Secure custodial Solana accounts via Coinbase Developer Platform
 - **Real-Time Market Data**: Live prices from CoinGecko Pro API for 10,000+ cryptocurrencies
 - **Real-Time Analytics**: Live market data from Birdeye with trending tokens, charts, and security analysis
@@ -50,6 +51,38 @@ MAWDBot is an enterprise-grade AI-powered trading agent for Solana and multi-cha
 | `aster_get_balance` | Check futures and spot balances | "What's my Aster balance?" |
 | `aster_transfer` | Transfer between futures and spot | "Transfer 100 USDT to futures" |
 | `aster_get_price` | Get current price and 24h stats | "Price of SOLUSDT on Aster?" |
+
+### Phoenix Perps via Vulcan / Rise SDK
+
+The official Phoenix perps path is `perps_agent.py`. It loads the bundled Vulcan context, tool catalog, error catalog, and all 17 focused Vulcan skills from `../vulcan-cli-master/skills`.
+
+```bash
+# Health, skills, config, RPC/API, wallet, paper readiness
+python perps_agent.py health
+
+# Live market intelligence
+python perps_agent.py market SOL
+
+# Paper-safe trading
+python perps_agent.py paper-init --balance 10000
+python perps_agent.py paper-order buy SOL --notional-usdc 100
+
+# Strategy runner, paper by default
+python perps_agent.py twap SOL --side buy --notional-usdc 500 --slices 5 --interval-seconds 30
+
+# Live readiness and live-gated execution
+python perps_agent.py preflight
+python perps_agent.py live-market-order buy SOL --notional-usdc 100 --yes
+```
+
+From the existing CLI:
+
+```bash
+python cli.py --perps health
+python cli.py --perps market SOL
+```
+
+Live Phoenix actions remain gated twice: the Python agent requires `--yes`, and Vulcan still enforces its own dangerous-operation confirmation and wallet/margin checks.
 
 ### Hyperliquid DEX Perpetuals & Spot (15)
 

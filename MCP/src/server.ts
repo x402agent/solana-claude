@@ -1,20 +1,47 @@
 /**
- * solana-clawd MCP Server v2 — Orchestrated Command & Control
+ * solana-clawd MCP Server v3 — Orchestrated Command & Control
  *
- * Architecture: every tool is a registered ToolDef dispatched through the
- * Orchestrator. Premium tools deduct from the session billing meter.
- * The MCP layer is now the control plane for the entire Solana Clawd framework.
+ * Architecture:
+ *   ┌─────────────────────────────────────────────────────────┐
+ *   │                    MCP Server (server.ts)               │
+ *   │  ┌──────────┐  ┌────────────┐  ┌──────────────┐      │
+ *   │  │Plugin    │  │Federation  │  │Agent Task    │      │
+ *   │  │Registry  │  │Bridge      │  │Router        │      │
+ *   │  └────┬─────┘  └─────┬──────┘  └──────┬───────┘      │
+ *   │       │              │                │              │
+ *   │       ▼              ▼                ▼              │
+ *   │  ┌──────────────────────────────────────────┐        │
+ *   │  │           Orchestrator + SessionMeter    │        │
+ *   │  │  + optional PTokenStreamFacilitator      │        │
+ *   │  └──────────────────────────────────────────┘        │
+ *   │       │              │                │              │
+ *   │       ▼              ▼                ▼              │
+ *   │  Core Tools   Levia-than    Market      x402        │
+ *   │  (inline)    (plugin)     (inline)    (plugin)      │
+ *   └─────────────────────────────────────────────────────────┘
+ *
+ * This replaces the old monolithic server.ts (642 lines, 50+ tools
+ * all registered in one function). Now:
+ *   - Core tools stay inline (Solana, Helius, Pump, Chess, Memory)
+ *   - Plugin tools load dynamically from PluginRegistry
+ *   - Federation tools proxy to external MCP servers
+ *   - Docs tools serve framework documentation
+ *   - Task Router dispatches to agent subsystems
  *
  * Tool categories:
- *   solana   (11) — Public Solana market data, free
- *   helius   (8)  — Helius RPC/DAS/Webhooks, requires HELIUS_API_KEY
- *   x402     (8)  — Payment protocol + p-token metered billing
- *   leviathan(9)  — OODA loop + autonomous agent control
- *   market   (5)  — Composite intelligence, some premium
- *   pump     (8)  — Pump.fun bonding curve
- *   memory   (4)  — Persistent agent memory + autoDream
- *   agents   (3)  — Agent fleet management
- *   chess    (7)  — Chess.com (autonomous agent chess)
+ *   solana      (11) — Public Solana market data, free
+ *   helius      (8)  — Helius RPC/DAS/Webhooks
+ *   x402        (9)  — Payment protocol + p-token metered billing
+ *   leviathan   (9)  — OODA loop + autonomous agent control
+ *   market      (5)  — Composite intelligence, premium
+ *   pump        (8)  — Pump.fun bonding curve
+ *   memory      (4)  — Persistent agent memory + autoDream
+ *   agents      (6)  — Agent fleet + skill management
+ *   chess       (7)  — Chess.com (autonomous agent chess)
+ *   federation  (N)  — Federated MCP tools from external servers
+ *   docs        (3)  — Documentation system (list/get/search)
+ *   orchestrator (4) — Orchestrator management tools
+ *   deep-clawd  (N)  — DeepSeek trading agent tools
  */
 
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
@@ -32,14 +59,26 @@ import * as path from "node:path";
 import * as os from "node:os";
 import { fileURLToPath } from "node:url";
 
-import { Orchestrator, SessionMeter, type ToolDef, type ToolHandler } from "./orchestrator.js";
+import {
+  Orchestrator,
+  SessionMeter,
+  getStreamFacilitator,
+  type StreamFacilitatorHandle,
+  type ToolDef,
+  type ToolHandler,
+} from "./orchestrator.js";
 import {
   solanaTracker, coingeckoPrice, jupiterPrice, heliusRPC, heliusREST,
   HELIUS_KEY,
 } from "./api.js";
-import { X402_TOOLS, withMeter } from "./tools/x402-tools.js";
+import { X402_TOOLS, withMeter, enhanceX402WithFacilitator } from "./tools/x402-tools.js";
 import { LEVIATHAN_TOOLS } from "./tools/leviathan-tools.js";
 import { MARKET_TOOLS } from "./tools/market-tools.js";
+import { DEEP_CLAWD_TOOLS } from "./tools/deep-clawd-tools.js";
+import { getPluginRegistry, type PluginRegistry } from "./plugins/plugin-registry.js";
+import { getFederationBridge, type FederationBridge } from "./federation/federation-bridge.js";
+import { getAgentTaskRouter, type AgentTaskRouter } from "./federation/agent-task-router.js";
+import { getDocsSystem, type DocsSystem } from "./docs/docs-system.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -64,8 +103,14 @@ let _taskCounter = 0;
 
 // ─── Register all tools ───────────────────────────────────────────────────────
 
-function buildOrchestrator(meter: SessionMeter): Orchestrator {
+async function buildOrchestrator(
+  meter: SessionMeter,
+  facilitator: StreamFacilitatorHandle | null,
+): Promise<Orchestrator> {
   const orch = new Orchestrator();
+  const docs = getDocsSystem();
+  const bridge = getFederationBridge();
+  const router = getAgentTaskRouter();
 
   const reg = (def: ToolDef, handler: ToolHandler) => orch.register(def, handler);
   const t = (v: unknown) => typeof v === "string" ? v : JSON.stringify(v, null, 2);
@@ -155,16 +200,22 @@ function buildOrchestrator(meter: SessionMeter): Orchestrator {
       return `## Helius ${a.subscriptionType} Listener\n\nDocs: https://docs.helius.dev\n\n\`\`\`typescript\nimport { HeliusListener } from "./src/helius/index.js";\nconst listener = new HeliusListener({ apiKey: process.env.HELIUS_API_KEY! });\nawait listener.connect();\nawait listener.subscribe${String(a.subscriptionType).charAt(0).toUpperCase() + String(a.subscriptionType).slice(1)}("${addr}", (data) => console.log(data));\n\`\`\``;
     });
 
-  // ── x402 + p-token tools (from module) ─────────────────────────────────────
-  orch.registerAll(withMeter(X402_TOOLS, meter));
+  // ── x402 + p-token tools (with facilitator integration) ────────────────────
+  const enhancedX402 = facilitator
+    ? enhanceX402WithFacilitator(X402_TOOLS, meter, facilitator)
+    : X402_TOOLS;
+  orch.registerAll(withMeter(enhancedX402, meter));
 
-  // ── Leviathan OODA control (from module) ────────────────────────────────────
+  // ── Leviathan OODA control ────────────────────────────────────────────────
   orch.registerAll(LEVIATHAN_TOOLS);
 
-  // ── Composite market intelligence (from module) ─────────────────────────────
+  // ── Composite market intelligence ─────────────────────────────────────────
   orch.registerAll(MARKET_TOOLS);
 
-  // ── Memory + autoDream ──────────────────────────────────────────────────────
+  // ── Deep Clawd (DeepSeek trading agent) ──────────────────────────────────
+  orch.registerAll(DEEP_CLAWD_TOOLS);
+
+  // ── Memory + autoDream ────────────────────────────────────────────────────
 
   reg({ name: "memory_recall", description: "Recall facts from persistent agent memory by tier (KNOWN/LEARNED/INFERRED/all)", inputSchema: { type: "object", properties: { query: { type: "string" }, tier: { type: "string", enum: ["KNOWN", "LEARNED", "INFERRED", "all"] } }, required: ["query"] }, category: "memory" },
     async (a) => {
@@ -187,7 +238,7 @@ function buildOrchestrator(meter: SessionMeter): Orchestrator {
   reg({ name: "dream_run", description: "Generate a manual Dream memory consolidation prompt", inputSchema: { type: "object", properties: {} }, category: "memory" },
     async () => `# Manual Memory Consolidation\n\n1. memory_recall tier="INFERRED" — get all signals\n2. Group related signals by topic\n3. For clusters of 2+, memory_write tier="LEARNED"\n4. Write a summary conclusion to LEARNED`);
 
-  // ── Agent fleet ─────────────────────────────────────────────────────────────
+  // ── Agent fleet ───────────────────────────────────────────────────────────
 
   reg({ name: "agent_spawn", description: "Spawn a research, analysis, ooda, scanner, or dream agent task", inputSchema: { type: "object", properties: { type: { type: "string", enum: ["research", "analysis", "ooda", "scanner", "dream"] }, description: { type: "string" }, prompt: { type: "string" } }, required: ["type", "description", "prompt"] }, category: "agents" },
     async (a) => {
@@ -207,7 +258,7 @@ function buildOrchestrator(meter: SessionMeter): Orchestrator {
       return { message: `Stopped ${a.taskId}`, task };
     });
 
-  // ── Skills ──────────────────────────────────────────────────────────────────
+  // ── Skills ────────────────────────────────────────────────────────────────
 
   reg({ name: "skill_list", description: "List available solana-clawd skills", inputSchema: { type: "object", properties: {} }, category: "agents" },
     async () => {
@@ -225,7 +276,7 @@ function buildOrchestrator(meter: SessionMeter): Orchestrator {
       return `Skill not found: ${name}`;
     });
 
-  // ── Session helpers ─────────────────────────────────────────────────────────
+  // ── Session helpers ───────────────────────────────────────────────────────
 
   reg({ name: "prompt_suggestions", description: "Context-aware suggested next prompts for Solana research, agents, x402, and OODA", inputSchema: { type: "object", properties: {} }, category: "memory" },
     async () => [
@@ -237,7 +288,7 @@ function buildOrchestrator(meter: SessionMeter): Orchestrator {
       `### CLAWD`, `- "Check clawd_holder_check for wallet [address]"`, `- "Ping the facilitator: x402_facilitator_ping"`,
     ].join("\n"));
 
-  // ── Pump.fun ────────────────────────────────────────────────────────────────
+  // ── Pump.fun ──────────────────────────────────────────────────────────────
 
   reg({ name: "pump_token_scan", description: "Full Pump.fun token scan: bonding curve, signal score, flags", inputSchema: { type: "object", properties: { mint: { type: "string" } }, required: ["mint"] }, category: "pump" },
     async (a) => {
@@ -308,7 +359,7 @@ function buildOrchestrator(meter: SessionMeter): Orchestrator {
       return docs;
     });
 
-  // ── Chess.com ───────────────────────────────────────────────────────────────
+  // ── Chess.com ─────────────────────────────────────────────────────────────
 
   reg({ name: "chess_player", description: "Chess.com player profile and ratings across all time controls", inputSchema: { type: "object", properties: { username: { type: "string" } }, required: ["username"] }, category: "chess" },
     async (a) => {
@@ -372,17 +423,311 @@ function buildOrchestrator(meter: SessionMeter): Orchestrator {
       return { title, count: d.players.length, players: d.players.slice(0, 50) };
     });
 
+  // ── Docs System tools ─────────────────────────────────────────────────────
+
+  reg({
+    name: "list_sections",
+    description:
+      "[Docs System] List all available documentation sections and their sources. " +
+      "Use this FIRST to discover what documentation is available before using get_documentation.",
+    inputSchema: { type: "object", properties: {} },
+    category: "docs",
+  },
+    async () => docs.listSections());
+
+  reg({
+    name: "get_documentation",
+    description:
+      "[Docs System] Get documentation for a specific source or section. " +
+      "Use list_sections first to discover available IDs. " +
+      "Sources: readme, soul, architecture, brain, strategy, trade, percolator, leviathan, " +
+      "ooda, ptoken-article, clawd-token, mcp-architecture, and more.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        sourceId: {
+          type: "string",
+          description: "Source or section ID from list_sections",
+        },
+      },
+      required: ["sourceId"],
+    },
+    category: "docs",
+  },
+    async (a) => docs.getDocumentation(String(a.sourceId)));
+
+  reg({
+    name: "search_docs",
+    description:
+      "[Docs System] Full-text search across all Solana Clawd documentation. " +
+      "Returns scored results with snippets. Works on 20+ doc sources.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        query: { type: "string", description: "Search term or phrase" },
+        topK: { type: "number", description: "Number of results (default 5)" },
+      },
+      required: ["query"],
+    },
+    category: "docs",
+  },
+    async (a) => docs.searchDocs(String(a.query), Number(a.topK ?? 5)));
+
+  // ── Federation tools (federated MCP proxying) ─────────────────────────────
+  const federatedTools = await bridge.generateFederatedTools();
+  if (federatedTools.length > 0) {
+    // Tag all federated tools with federation category
+    for (const [def] of federatedTools) {
+      def.category = "federation";
+    }
+    orch.registerAll(federatedTools);
+  }
+
+  reg({
+    name: "federation_status",
+    description:
+      "[Federation] Show all federated MCP server connections, their health, " +
+      "and the tools proxied through each route. Lists routes from Federation Bridge.",
+    inputSchema: { type: "object", properties: {} },
+    category: "federation",
+  },
+    async () => {
+      const routes = bridge.getRoutes();
+      const health = await bridge.healthCheckAll();
+      return {
+        routes: routes.map((r) => ({
+          prefix: r.prefix,
+          serverName: r.server.name,
+          type: r.server.type,
+          url: r.server.url ?? r.server.agentUrl ?? r.server.command,
+          tags: r.server.tags ?? [],
+        })),
+        health,
+        totalRoutes: routes.length,
+      };
+    });
+
+  // ── Task Router tools ─────────────────────────────────────────────────────
+
+  reg({
+    name: "task_submit",
+    description:
+      "[Task Router] Submit a task to an agent type (leviathan, deep-clawd, ooda, x402, memory, orchestrator). " +
+      "Returns immediately with a task ID. Check status with task_result.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        type: {
+          type: "string",
+          enum: ["leviathan", "deep-clawd", "ooda", "x402", "memory", "orchestrator"],
+          description: "Agent type to run the task",
+        },
+        action: {
+          type: "string",
+          description: "Action to perform (e.g. tick, status, orient, recall, analyze)",
+        },
+        description: { type: "string", description: "Human-readable task description" },
+        priority: {
+          type: "string",
+          enum: ["low", "normal", "high", "critical"],
+          description: "Task priority (default: normal)",
+        },
+        payload: { type: "object", description: "Additional payload for the task" },
+        timeoutMs: { type: "number", description: "Timeout in ms (default: depends on agent type)" },
+      },
+      required: ["type", "action", "description"],
+    },
+    category: "orchestrator",
+  },
+    async (a) => {
+      const id = router.submitTask({
+        type: String(a.type) as any,
+        description: String(a.description),
+        priority: (a.priority as any) ?? "normal",
+        payload: { action: String(a.action), ...((a.payload as Record<string, unknown>) ?? {}) },
+        timeoutMs: Number(a.timeoutMs ?? 60_000),
+      });
+      return { taskId: id, status: "submitted", hint: "Use task_result to check completion" };
+    });
+
+  reg({
+    name: "task_result",
+    description:
+      "[Task Router] Get the result of a previously submitted task by ID. " +
+      "Returns status (pending/running/completed/failed/timeout) and output.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        taskId: { type: "string", description: "Task ID from task_submit" },
+      },
+      required: ["taskId"],
+    },
+    category: "orchestrator",
+  },
+    async (a) => {
+      const result = router.getResult(String(a.taskId));
+      if (!result) return { error: `Task not found: ${a.taskId}` };
+      return result;
+    });
+
+  reg({
+    name: "task_list",
+    description:
+      "[Task Router] List all tasks, optionally filtered by type, status, or priority. " +
+      "Returns tasks sorted by priority (critical first).",
+    inputSchema: {
+      type: "object",
+      properties: {
+        type: { type: "string", description: "Filter by agent type" },
+        status: { type: "string", enum: ["pending", "running", "completed", "failed", "timeout"], description: "Filter by status" },
+        limit: { type: "number", description: "Max results (default 20)" },
+      },
+    },
+    category: "orchestrator",
+  },
+    async (a) => {
+      const entries = router.findTasks({
+        type: a.type as any,
+        status: a.status as any,
+        limit: Number(a.limit ?? 20),
+      });
+      return { count: entries.length, tasks: entries };
+    });
+
+  reg({
+    name: "capabilities",
+    description:
+      "[Task Router] List all agent capabilities: types, concurrency limits, supported actions, " +
+      "and required environment variables. Use this to understand what agents can do.",
+    inputSchema: { type: "object", properties: {} },
+    category: "orchestrator",
+  },
+    async () => ({
+      capabilities: router.getCapabilities(),
+      activeConcurrency: {
+        leviathan: router.getActiveConcurrency("leviathan"),
+        "deep-clawd": router.getActiveConcurrency("deep-clawd"),
+        ooda: router.getActiveConcurrency("ooda"),
+        x402: router.getActiveConcurrency("x402"),
+        memory: router.getActiveConcurrency("memory"),
+      },
+    }));
+
+  // ── Plugin Registry tools ──────────────────────────────────────────────────
+
+  reg({
+    name: "plugin_status",
+    description:
+      "[Plugin Registry] Show all registered plugins, their enable/disable status, " +
+      "tool counts, and any load errors. Use this to discover which subsystems are active.",
+    inputSchema: { type: "object", properties: {} },
+    category: "orchestrator",
+  },
+    async () => {
+      const registry = getPluginRegistry();
+      return { plugins: registry.status() };
+    });
+
+  reg({
+    name: "plugin_reload",
+    description:
+      "[Plugin Registry] Reload a specific plugin (e.g. 'ooda', 'leviathan', 'x402-payment'). " +
+      "Allows hot-reloading plugins during development without restarting the MCP server.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        pluginId: {
+          type: "string",
+          description: "Plugin ID to reload (ooda, leviathan, x402-payment, deep-clawd, skills, programs)",
+        },
+      },
+      required: ["pluginId"],
+    },
+    category: "orchestrator",
+  },
+    async (a) => {
+      const registry = getPluginRegistry();
+      const ok = await registry.reload(String(a.pluginId));
+      return { reloaded: ok, pluginId: a.pluginId, hint: ok ? "Plugin reloaded" : "Plugin not found" };
+    });
+
+  // ── Deep Clawd bridge tools (for when the plugin can't be loaded) ─────────
+
+  reg({
+    name: "deep_clawd_status",
+    description:
+      "[Deep Clawd] Check DeepSeek trading agent status. Returns agent readiness, " +
+      "API key presence, and routing mode (dFlow).",
+    inputSchema: { type: "object", properties: {} },
+    category: "deep-clawd",
+  },
+    async () => {
+      const hasKey = !!process.env.DEEPSEEK_API_KEY;
+      const mode = process.env.DFLOW_ROUTING_MODE ?? "auto";
+      return {
+        ready: hasKey,
+        apiKeyConfigured: hasKey,
+        dFlowRoutingMode: mode,
+        agentType: "deep-clawd",
+        hint: hasKey
+          ? "Use task_submit with type='deep-clawd' to run DeepSeek ticks"
+          : "Set DEEPSEEK_API_KEY to enable Deep Clawd agent",
+      };
+    });
+
+  // ── Orchestrator health ────────────────────────────────────────────────────
+
+  reg({
+    name: "orchestrator_health",
+    description:
+      "[Orchestrator] Full orchestrator health check: tool counts, plugin status, " +
+      "federation routes, billing status, and system overview.",
+    inputSchema: { type: "object", properties: {} },
+    category: "orchestrator",
+  },
+    async () => {
+      const registry = getPluginRegistry();
+      return {
+        status: "healthy",
+        tools: {
+          total: orch.list().length,
+          byCategory: orch.categories(),
+        },
+        billing: meter.summary(),
+        plugins: registry.status(),
+        federation: {
+          routes: bridge.getRoutes().map((r) => r.prefix),
+          health: await bridge.healthCheckAll().catch(() => ({})),
+        },
+        facilitatorAttached: !!facilitator,
+        pTokenSavings: facilitator ? meter.getSavings() : { cuSaved: 0, transferCount: 0, usdcEquiv: "0" },
+        version: "3.0.0",
+      };
+    });
+
+  await orch.init();
   return orch;
 }
 
 // ─── Server factory ────────────────────────────────────────────────────────────
 
-export function createServer(): Server {
-  const meter = new SessionMeter();
-  const orch = buildOrchestrator(meter);
+export async function createServer(): Promise<Server> {
+  const facilitator = await getStreamFacilitator();
+  const meter = new SessionMeter(
+    parseFloat(process.env.X402_MAX_SESSION_USD ?? "5"),
+    facilitator ?? undefined,
+  );
+
+  // Warm up the plugin registry (discover all plugins)
+  const registry = getPluginRegistry();
+  await registry.discover().catch(() => {
+    console.warn("[server] Plugin discovery failed — continuing with core tools only");
+  });
+
+  const orch = await buildOrchestrator(meter, facilitator);
 
   const server = new Server(
-    { name: "solana-clawd", version: "2.0.0" },
+    { name: "solana-clawd", version: "3.0.0" },
     { capabilities: { tools: {}, resources: {}, prompts: {} } },
   );
 
@@ -403,18 +748,23 @@ export function createServer(): Server {
       { uri: "solana-clawd://x402/billing", name: "Session Billing", description: "Current MCP session spend ledger", mimeType: "application/json" },
       { uri: "solana-clawd://clawd/token", name: "CLAWD Token", description: "CLAWD token info and discount tiers", mimeType: "application/json" },
       { uri: "solana-clawd://orchestrator/tools", name: "Tool Registry", description: "All registered tools by category", mimeType: "application/json" },
+      { uri: "solana-clawd://docs/sections", name: "Doc Sections", description: "Available documentation sections", mimeType: "text/markdown" },
+      { uri: "solana-clawd://federation/status", name: "Federation Status", description: "Federated MCP server connections and health", mimeType: "application/json" },
+      { uri: "solana-clawd://plugins/status", name: "Plugin Status", description: "Plugin registry status and loaded tools", mimeType: "application/json" },
     ],
   }));
 
   server.setRequestHandler(ListResourceTemplatesRequestSchema, async () => ({
     resourceTemplates: [
       { uriTemplate: "solana-clawd://source/{path}", name: "Source file", description: "Read a repository source file", mimeType: "text/plain" },
+      { uriTemplate: "solana-clawd://docs/{sourceId}", name: "Documentation", description: "Documentation for a source or section", mimeType: "text/markdown" },
     ],
   }));
 
   server.setRequestHandler(ReadResourceRequestSchema, async (req: { params: { uri: string } }) => {
     const { uri } = req.params;
     const c = (mimeType: string, text: string) => ({ contents: [{ uri, mimeType, text }] });
+    const docs = getDocsSystem();
 
     if (uri === "solana-clawd://readme") return c("text/markdown", (await readFileText(path.join(REPO_ROOT, "README.md"))) ?? "README not found");
     if (uri === "solana-clawd://soul") return c("text/markdown", (await readFileText(path.join(REPO_ROOT, "SOUL.md"))) ?? "No SOUL.md — create one to give your agent identity");
@@ -441,6 +791,7 @@ export function createServer(): Server {
         usePToken: process.env.USE_P_TOKEN !== "false",
         pTokenProgram: "ptok6rngomXrDbWf5v5Mkmu5CEbB51hzSCPDoj9DrvF",
         facilitator: process.env.PAYSH_RELAY_URL ?? "https://pay.solanaclawd.com/relay/v1",
+        facilitatorAttached: !!facilitator,
         cuSavings: "98.3% (TransferChecked: 6,200 → 105 CU)",
       }, null, 2));
     }
@@ -457,6 +808,28 @@ export function createServer(): Server {
     }
     if (uri === "solana-clawd://orchestrator/tools") {
       return c("application/json", JSON.stringify(orch.categories(), null, 2));
+    }
+    if (uri === "solana-clawd://docs/sections") {
+      return c("text/markdown", docs.listSections());
+    }
+    if (uri === "solana-clawd://federation/status") {
+      const bridge = getFederationBridge();
+      const routes = bridge.getRoutes();
+      const health = await bridge.healthCheckAll().catch(() => ({}));
+      return c("application/json", JSON.stringify({ routes: routes.map(r => ({ prefix: r.prefix, name: r.server.name, type: r.server.type })), health }, null, 2));
+    }
+    if (uri === "solana-clawd://plugins/status") {
+      const registry = getPluginRegistry();
+      return c("application/json", JSON.stringify({ plugins: registry.status() }, null, 2));
+    }
+    if (uri.startsWith("solana-clawd://docs/")) {
+      const sourceId = uri.slice("solana-clawd://docs/".length);
+      try {
+        const doc = await docs.getDocumentation(sourceId);
+        return c("text/markdown", doc);
+      } catch (e) {
+        throw new Error(`Doc source not found: ${sourceId}`);
+      }
     }
     if (uri.startsWith("solana-clawd://source/")) {
       const rel = uri.slice("solana-clawd://source/".length);
@@ -502,6 +875,9 @@ export function createServer(): Server {
       { name: "pump_ooda", description: "OODA loop focused on Pump.fun bonding curve plays", arguments: [{ name: "mint", description: "Token mint to evaluate", required: false }] },
       { name: "trade_research", description: "Research a token for a trade decision", arguments: [{ name: "token", description: "Token symbol or mint", required: true }] },
       { name: "wallet_analysis", description: "Analyze a wallet's performance and holdings", arguments: [{ name: "wallet", description: "Solana wallet address", required: true }] },
+      { name: "docs_explore", description: "Explore the full Solana Clawd documentation system" },
+      { name: "federated_query", description: "Query federated MCP servers through the federation bridge" },
+      { name: "task_orchestrate", description: "Orchestrate multi-agent tasks with the Task Router" },
     ],
   }));
 
@@ -516,7 +892,7 @@ export function createServer(): Server {
           return msg([
             `# Solana Clawd — Framework Orchestration`,
             ``,
-            `You are the orchestration layer of the Solana Clawd framework. You have control over:`,
+            `You are the orchestration layer of the Solana Clawd framework v3. You have control over:`,
             ``,
             `## 1. Market Intelligence (start here)`,
             `- market_signal → composite signal across all sources`,
@@ -530,25 +906,104 @@ export function createServer(): Server {
             `- ooda_decide → structured decision (respects depth tier)`,
             `- ooda_act → record action to journal + SHELL.md`,
             ``,
-            `## 3. Payment Infrastructure`,
+            `## 3. Documentation System (NEW)`,
+            `- list_sections → discover all documentation sources`,
+            `- get_documentation → read any source or section`,
+            `- search_docs → full-text search across 20+ sources`,
+            ``,
+            `## 4. Federation Bridge (NEW)`,
+            `- federation__* → tools proxied from other MCP servers`,
+            `- federation_status → check connected servers`,
+            ``,
+            `## 5. Task Router (NEW)`,
+            `- task_submit → dispatch to leviathan / deep-clawd / ooda / memory`,
+            `- task_result → check status of any task`,
+            `- capabilities → see what agents can do`,
+            ``,
+            `## 6. Payment Infrastructure`,
             `- x402_status → full protocol + p-token stats`,
             `- x402_session_open → open metered billing session`,
             `- clawd_holder_check → CLAWD holder discount tier`,
             `- x402_facilitator_ping → check pay.solanaclawd.com health`,
             ``,
-            `## 4. Agent Fleet`,
+            `## 7. Agent Fleet`,
             `- leviathan_tick_request → trigger a Leviathan OODA tick`,
             `- agent_spawn → spawn research/scanner/dream agent`,
             `- memory_recall / memory_write → persistent memory`,
             ``,
             `## Suggested orchestration flow:`,
-            `1. market_signal → assess current opportunity`,
-            `2. leviathan_status → check agent state`,
-            `3. ooda_observe → structured market pull`,
-            `4. ooda_orient → pattern analysis`,
-            `5. ooda_decide → pick best action`,
-            `6. ooda_act → execute + record`,
-            `7. memory_write → persist the learnings`,
+            `1. list_sections → explore docs`,
+            `2. market_signal → assess current opportunity`,
+            `3. leviathan_status → check agent state`,
+            `4. ooda_observe → structured market pull`,
+            `5. ooda_orient → pattern analysis`,
+            `6. ooda_decide → pick best action`,
+            `7. ooda_act → execute + record`,
+            `8. memory_write → persist the learnings`,
+          ].join("\n"));
+
+        case "docs_explore":
+          return msg([
+            `# Documentation System Exploration`,
+            ``,
+            `The Solana Clawd MCP v3 includes a full documentation system inspired by the Official Solana MCP.`,
+            ``,
+            `## Step 1: list_sections`,
+            `Call list_sections first to see all 20+ documentation sources across categories:`,
+            `  core, trading, agents, payments, tokens, governance, mcp, llms`,
+            ``,
+            `## Step 2: get_documentation`,
+            `Pick a section or specific source ID:`,
+            `  get_documentation sourceId="core"`,
+            `  get_documentation sourceId="readme"`,
+            `  get_documentation sourceId="ptoken-article"`,
+            ``,
+            `## Step 3: search_docs`,
+            `Full-text search across all sources:`,
+            `  search_docs query="p-token" topK=5`,
+            `  search_docs query="leviathan"`,
+            ``,
+            `The docs system covers the ENTIRE framework — not just code, but strategy, architecture,`,
+            `tokenomics, agent runtimes, and payment protocol documentation.`,
+          ].join("\n"));
+
+        case "federated_query":
+          return msg([
+            `# Federated MCP Query`,
+            ``,
+            `The Federation Bridge proxies tools from other MCP servers.`,
+            ``,
+            `## Check what's available:`,
+            `1. federation_status → see active routes`,
+            ``,
+            `## Call federated tools:`,
+            `2. federation__solana_org__list_sections`,
+            `3. federation__solana_org__get_documentation sourceId="cli"`,
+            `4. federation__solana_org__Solana_Documentation_Search query="stake"`,
+            ``,
+            `Federated tools are named: federation__{prefix}__{tool_name}`,
+            `The default prefix for the Official Solana MCP is "solana_org".`,
+          ].join("\n"));
+
+        case "task_orchestrate":
+          return msg([
+            `# Multi-Agent Task Orchestration`,
+            ``,
+            `The Agent Task Router dispatches work across agent subsystems.`,
+            ``,
+            `## Check capabilities:`,
+            `1. capabilities → see all agent types and concurrency limits`,
+            ``,
+            `## Dispatch individual tasks:`,
+            `2. task_submit type="leviathan" action="status" description="Check agent health"`,
+            `3. task_submit type="deep-clawd" action="tick" description="Run DeepSeek tick"`,
+            `4. task_result taskId="<id>" → check result`,
+            ``,
+            `## Orchestrate multiple agents (via "orchestrator" type):`,
+            `5. task_submit type="orchestrator" action="compose" description="Multi-agent scan" ` +
+            `   payload={ tasks: [{ type: "leviathan", action: "status" }, { type: "ooda", action: "tick" }] }`,
+            ``,
+            `The router handles priority, concurrency limits, and timeouts automatically.`,
           ].join("\n"));
 
         case "leviathan_spawn":
@@ -606,7 +1061,7 @@ export function createServer(): Server {
           ].join("\n"));
 
         case "solana_overview":
-          return msg(`You are solana-clawd v2, an autonomous Solana research, trading, and agent orchestration platform.\n\nCapabilities:\n- Market intelligence: market_signal, market_regime, token_heat_map\n- OODA loop: ooda_observe, ooda_orient, ooda_decide, ooda_act\n- Leviathan agent control: leviathan_status, leviathan_journal, leviathan_tick_request\n- x402 p-token billing: x402_session_open/meter/close, clawd_holder_check\n- Pump.fun: pump_token_scan, pump_graduation, pump_new_tokens\n- Solana data: solana_price, solana_trending, helius_transactions\n\nStart with: market_signal → leviathan_status → ooda_observe`);
+          return msg(`You are solana-clawd v3, an autonomous Solana research, trading, and agent orchestration platform.\n\nCapabilities:\n- Market intelligence: market_signal, market_regime, token_heat_map\n- OODA loop: ooda_observe, ooda_orient, ooda_decide, ooda_act\n- Docs System: list_sections, get_documentation, search_docs (20+ sources)\n- Federation Bridge: federated MCP tools from external servers\n- Task Router: dispatch tasks to leviathan/deep-clawd/ooda/memory agents\n- Leviathan agent control: leviathan_status, leviathan_journal, leviathan_tick_request\n- x402 p-token billing: x402_session_open/meter/close, clawd_holder_check\n- Pump.fun: pump_token_scan, pump_graduation, pump_new_tokens\n- Solana data: solana_price, solana_trending, helius_transactions\n\nStart with: list_sections → market_signal → leviathan_status → ooda_observe`);
 
         case "ooda_loop":
           return msg(`Run a full OODA cycle:\n\n**OBSERVE**: ooda_observe (pulls sol_price + trending + leviathan context)\n**ORIENT**: ooda_orient observations=<above>\n**DECIDE**: ooda_decide orientation=<above>\n**ACT**: ooda_act action=<decision> result=<outcome>\n\nEnd with: memory_write the key INFERRED signal`);

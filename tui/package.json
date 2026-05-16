@@ -1,7 +1,7 @@
 {
   "name": "@solanaclawd/tui",
-  "version": "1.0.0",
-  "description": "HERMES x402 — Neon TUI Dashboard for the OpenClawd Agentic Harness",
+  "version": "1.1.0",
+  "description": "HERMES x402 TUI with OpenClawd dashboards, Phoenix perpetuals, and Vulcan paper-trading views",
   "type": "module",
   "main": "dist/index.js",
   "bin": {

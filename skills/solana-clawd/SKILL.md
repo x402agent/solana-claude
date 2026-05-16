@@ -28,6 +28,7 @@ metadata:
 - Deploying the web app or MCP server
 - Hatching blockchain buddies or running spinners
 - Running OODA trading loops
+- Running Phoenix perpetuals through the official Solana CLAWD perps agent and bundled Vulcan skills
 - Configuring voice mode (ElevenLabs + Grok)
 - Minting agents on Metaplex
 - Managing encrypted vault secrets
@@ -116,6 +117,34 @@ Add to `~/Library/Application Support/Claude/claude_desktop_config.json`:
 | **Metaplex** (6) | `metaplex_mint_agent`, `metaplex_register_identity`, `metaplex_read_agent`, `metaplex_delegate_execution`, `metaplex_verify_mint`, `metaplex_agent_wallet` | Mint AI agents as MPL Core assets |
 | **Pump.fun** (8) | `pump_token_scan`, `pump_buy_quote`, `pump_sell_quote`, `pump_graduation`, `pump_market_cap`, `pump_top_tokens`, `pump_new_tokens`, `pump_cashback_info` | Bonding curve scanner, quotes, graduation |
 | **Skills** (2) | `skill_list`, `skill_read` | Browse and load 95 SKILL.md files |
+
+## Phoenix Perps: Vulcan / Rise SDK
+
+The repo includes the full Vulcan skill pack under `vulcan-cli-master/skills` and exposes forwarding skills under `skills/vulcan-*`.
+
+Use this loading order for Phoenix perps work:
+
+1. `skills/vulcan/SKILL.md`
+2. `vulcan-cli-master/CONTEXT.md`
+3. `vulcan-cli-master/skills/INDEX.md`
+4. Focused skills such as `vulcan-market-intel`, `vulcan-risk-management`, `vulcan-trade-execution`, `vulcan-twap-execution`, `vulcan-grid-trading`, or `vulcan-ta-strategy`
+
+Official Python perps agent:
+
+```bash
+cd solana-python-agent
+python perps_agent.py health
+python perps_agent.py market SOL
+python perps_agent.py paper-order buy SOL --notional-usdc 100
+python perps_agent.py preflight
+```
+
+Safety contract:
+
+- Paper mode is default.
+- Live orders require explicit `--yes`.
+- Live strategies require preflight and explicit mode selection.
+- The agent never reads or prints private keys, wallet passwords, or MCP config secrets.
 
 ## Telegram Bot
 

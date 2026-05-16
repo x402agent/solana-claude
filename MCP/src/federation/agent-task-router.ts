@@ -345,8 +345,10 @@ export class AgentTaskRouter {
         switch (action) {
           case "tick":
             return this._execOODA(1);
-          case "analyze":
-            return this._execOODA(task.payload.ticks ?? 10);
+          case "analyze": {
+            const payload = task.payload as Record<string, unknown>;
+            return this._execOODA(typeof payload.ticks === "number" ? payload.ticks : 10);
+          }
           case "journal":
             return this._readFile(
               path.join(REPO_ROOT, "ooda", "journal", "ticks.jsonl"),

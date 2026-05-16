@@ -30,6 +30,18 @@
       "types": "./dist/identity/spawn-onchain.d.ts",
       "default": "./dist/identity/spawn-onchain.js"
     },
+    "./commerce/pay-policy.js": {
+      "types": "./dist/commerce/pay-policy.d.ts",
+      "default": "./dist/commerce/pay-policy.js"
+    },
+    "./commerce/pay-client.js": {
+      "types": "./dist/commerce/pay-client.d.ts",
+      "default": "./dist/commerce/pay-client.js"
+    },
+    "./commerce/metaplex-agent-commerce.js": {
+      "types": "./dist/commerce/metaplex-agent-commerce.d.ts",
+      "default": "./dist/commerce/metaplex-agent-commerce.js"
+    },
     "./setup/wizard.js": {
       "types": "./dist/setup/wizard.d.ts",
       "default": "./dist/setup/wizard.js"
@@ -81,14 +93,17 @@
     "build:all": "tsc && (cd packages/clawd && npm run build) && (cd packages/cli && npm run build || true)",
     "dev": "tsx watch src/index.ts",
     "test": "vitest run",
+    "commerce:plan": "tsx examples/agent-commerce.ts",
+    "commerce:gateway": "pay --sandbox server start pay/solana-clawd-agent-commerce.yml --debugger",
     "clean": "rm -rf dist",
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "@metaplex-foundation/mpl-agent-registry": "^0.2.0",
-    "@metaplex-foundation/mpl-core": "^1.4.0",
-    "@metaplex-foundation/umi": "^0.9.2",
-    "@metaplex-foundation/umi-bundle-defaults": "^0.9.2",
+    "@metaplex-foundation/genesis": "^0.36.2",
+    "@metaplex-foundation/mpl-agent-registry": "^0.2.5",
+    "@metaplex-foundation/mpl-core": "^1.9.1",
+    "@metaplex-foundation/umi": "^1.5.1",
+    "@metaplex-foundation/umi-bundle-defaults": "^1.5.1",
     "@solana/spl-token": "^0.4.14",
     "@solana/web3.js": "^1.98.4",
     "better-sqlite3": "^11.0.0",

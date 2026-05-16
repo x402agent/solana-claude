@@ -53,7 +53,7 @@ async function main(): Promise<void> {
     const sid = (req.headers["mcp-session-id"] as string) ?? undefined;
     let t = sid ? transports.get(sid) : undefined;
     if (!t) {
-      const s = createServer();
+      const s = await createServer();
       t = new StreamableHTTPServerTransport({ sessionIdGenerator: () => randomUUID() });
       await s.connect(t);
       t.onclose = () => { if (t!.sessionId) transports.delete(t!.sessionId); };
@@ -78,7 +78,7 @@ async function main(): Promise<void> {
   const sseTransports = new Map<string, SSEServerTransport>();
 
   app.get("/sse", async (_req, res) => {
-    const s = createServer();
+    const s = await createServer();
     const t = new SSEServerTransport("/messages", res);
     sseTransports.set(t.sessionId, t);
     t.onclose = () => sseTransports.delete(t.sessionId);

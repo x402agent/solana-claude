@@ -1,7 +1,7 @@
 {
   "name": "solana-clawd-mcp",
-  "version": "1.0.0",
-  "description": "solana-clawd MCP server — 15 Solana tools for any Clawd/Cursor/VS Code session",
+  "version": "3.0.0",
+  "description": "solana-clawd MCP server v3 — Orchestrated Command & Control: Plugin Registry, Federation Bridge, Agent Task Router, Docs System, and PTokenStreamFacilitator for the entire Solana Clawd framework",
   "type": "module",
   "main": "dist/index.js",
   "scripts": {
