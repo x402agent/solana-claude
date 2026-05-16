@@ -75,6 +75,40 @@ export async function fetchTradingArena(): Promise<TradingArenaResponse> {
   return resp.json()
 }
 
+export interface ClawdOrchestrationTrace {
+  iteration: number
+  phase: string
+  agent: string
+  goal: string
+  risk: string
+  marketMood: string
+  output: string
+}
+
+export interface ClawdOrchestrationResponse {
+  name: string
+  source: string
+  mode: string
+  task: string
+  loops: number
+  risk: string
+  checks: string[]
+  trace: ClawdOrchestrationTrace[]
+  summary: {
+    status: string
+    nextAction: string
+    completionCriteria: string[]
+    generatedAt: number
+  }
+}
+
+export async function fetchClawdOrchestration(task: string, loops = 4): Promise<ClawdOrchestrationResponse> {
+  const params = new URLSearchParams({ task, loops: String(loops), market: 'true' })
+  const resp = await fetch(`${BACKROOM_URL}/clawd/orchestrate?${params.toString()}`)
+  if (!resp.ok) throw new Error(`CLAWD orchestration returned ${resp.status}`)
+  return resp.json()
+}
+
 export const AGENT_NAMES: Record<number, string> = {
   1: 'The Analyst',
   2: 'The Satirist',

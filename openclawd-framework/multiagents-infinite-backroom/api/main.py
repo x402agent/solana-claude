@@ -13,6 +13,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from pathlib import Path
 from .trading_arena import build_trading_arena
+from .clawd_orchestration import run_clawd_orchestration
 
 
 def _parse_cors_origins() -> list[str]:
@@ -138,6 +139,19 @@ def trading_arena(symbols: str = Query(default="", description="Optional comma-s
     """
     requested = [s.strip().upper() for s in symbols.split(",") if s.strip()]
     return build_trading_arena(symbols=requested or None)
+
+
+@app.get("/clawd/orchestrate")
+def clawd_orchestrate(
+    task: str = Query(default="Explore the backroom and produce a safe orchestration plan."),
+    loops: int = Query(default=4, ge=1, le=8),
+    market: bool = Query(default=True),
+):
+    """
+    CLAWD-branded orchestration loop for users inside the backroom.
+    Inspired by Ralph Orchestrator, but bounded and read-only on the public API.
+    """
+    return run_clawd_orchestration(task=task, loops=loops, include_market=market)
 
 
 @app.get("/metadata/{agent_slug}.json")
@@ -277,6 +291,7 @@ def welcome_screen():
             "/enter.sh": "One-shot CLI installer",
             "/conversation": "Full transcript",
             "/arena": "Agent-Trading-Arena-inspired perps signal tape",
+            "/clawd/orchestrate?task=...": "CLAWD orchestration loop planner",
             "/reset": "Erase the room",
         },
     }
