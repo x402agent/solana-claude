@@ -12,6 +12,7 @@ from fastapi.responses import HTMLResponse, PlainTextResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from pathlib import Path
+from .trading_arena import build_trading_arena
 
 
 def _parse_cors_origins() -> list[str]:
@@ -127,6 +128,16 @@ def healthcheck():
         "configured_backends": configured_backends,
         "terminal_ready": terminal is not None,
     }
+
+
+@app.get("/arena")
+def trading_arena(symbols: str = Query(default="", description="Optional comma-separated perps symbols")):
+    """
+    Agent-Trading-Arena-inspired signal tape for live Phoenix perps.
+    This is read-only simulation output; it does not place trades.
+    """
+    requested = [s.strip().upper() for s in symbols.split(",") if s.strip()]
+    return build_trading_arena(symbols=requested or None)
 
 
 @app.get("/metadata/{agent_slug}.json")
@@ -265,6 +276,7 @@ def welcome_screen():
             "/enter?message=hi": "Direct chat",
             "/enter.sh": "One-shot CLI installer",
             "/conversation": "Full transcript",
+            "/arena": "Agent-Trading-Arena-inspired perps signal tape",
             "/reset": "Erase the room",
         },
     }
