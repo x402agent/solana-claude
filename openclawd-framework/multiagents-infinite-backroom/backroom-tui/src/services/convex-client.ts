@@ -2,6 +2,7 @@
 // (no WebSocket subscription; polls for updates)
 
 const SITE_URL = process.env.CONVEX_SITE_URL ?? 'https://giddy-dragon-7.convex.site'
+const REQUEST_TIMEOUT_MS = 8000
 
 export interface Agent {
   agentId: string
@@ -42,6 +43,7 @@ async function apiCall(
     method,
     headers,
     body: body ? JSON.stringify(body) : undefined,
+    signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
   })
 
   if (!res.ok) {

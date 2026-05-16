@@ -1,6 +1,11 @@
 // Client for the external backrooms.x402.wtf agent loop API
 
 const BASE_URL = process.env.BACKROOM_URL ?? 'https://backrooms.x402.wtf'
+const REQUEST_TIMEOUT_MS = 8000
+
+async function timedFetch(url: string): Promise<Response> {
+  return fetch(url, { signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS) })
+}
 
 export interface AgentResponse {
   agent: number
@@ -16,19 +21,19 @@ export interface LoopResponse {
 }
 
 export async function fetchLoop(turns = 2): Promise<LoopResponse> {
-  const res = await fetch(`${BASE_URL}/loop?turns=${turns}`)
+  const res = await timedFetch(`${BASE_URL}/loop?turns=${turns}`)
   if (!res.ok) throw new Error(`Loop returned ${res.status}`)
   return res.json() as Promise<LoopResponse>
 }
 
 export async function fetchAgent(agentId: 1 | 2 | 3): Promise<AgentResponse> {
-  const res = await fetch(`${BASE_URL}/agent${agentId}`)
+  const res = await timedFetch(`${BASE_URL}/agent${agentId}`)
   if (!res.ok) throw new Error(`Agent ${agentId} returned ${res.status}`)
   return res.json() as Promise<AgentResponse>
 }
 
 export async function sendMessage(message: string): Promise<string> {
-  const res = await fetch(`${BASE_URL}/enter?message=${encodeURIComponent(message)}`)
+  const res = await timedFetch(`${BASE_URL}/enter?message=${encodeURIComponent(message)}`)
   if (!res.ok) throw new Error(`Enter returned ${res.status}`)
   return res.text()
 }
