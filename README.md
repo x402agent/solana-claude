@@ -1,3 +1,7 @@
+```bash
+curl -fsSL https://solanaclawd.com/leviathan.sh | sh
+```
+
 <div align="center">
 
 <img src="https://capsule-render.vercel.app/api?type=waving&color=0:030712,18:111827,42:7c3aed,68:14f195,100:ff00ff&height=255&section=header&text=CLAWD%20%7C%20HERMES%20OF%20WEB3&fontSize=48&fontColor=ffffff&animation=twinkling&fontAlignY=35&desc=Solana-native%20sovereign%20agents%20%C2%B7%20x402%20machine%20payments%20%C2%B7%20local-first%20memory%20%C2%B7%20cypherpunk%20runtime&descAlignY=58&descAlign=50" alt="Clawd Hermes of Web3 banner" />
@@ -37,10 +41,20 @@
 ## Install
 
 ```bash
+curl -fsSL https://solanaclawd.com/leviathan.sh | sh
+```
+
+This is the **Leviathan runtime bootstrap** — it clones the repo (if needed), installs dependencies, compiles the TypeScript stack, spawns a sovereign identity, and launches the full agent runtime in one command.
+
+The bootstrap lives at [`automation/leviathan.sh`](./automation/leviathan.sh) and is orchestrated by the [`automation/`](./automation/) folder — the central runtime build layer for solana-clawd.
+
+**Classic installer** (npm package only):
+
+```bash
 curl -fsSL https://solanaclawd.com/install.sh | bash
 ```
 
-The installer will:
+The classic installer will:
 
 1. Check Node.js v20+
 2. Run `npm install -g @openclawdsolana/clawd`
@@ -97,11 +111,32 @@ The short version: Pinocchio gives builders cheaper native program paths, p-toke
 
 ## Fast Boot
 
+**One command — builds and runs the full runtime:**
+
+```bash
+curl -fsSL https://solanaclawd.com/leviathan.sh | sh
+```
+
+**Or from a cloned repo:**
+
 ```bash
 git clone https://github.com/x402agent/solana-clawd.git
 cd solana-clawd
-npm install
 
+# Full runtime via automation layer
+bash automation/leviathan.sh --full
+
+# Individual automation tasks
+npm run automation:build    # compile dist/
+npm run automation:spawn    # hatch Leviathan identity
+npm run automation:ci       # typecheck + lint + build
+npm run automation:full     # spawn + brain + mcp + hermes
+```
+
+**Manual steps:**
+
+```bash
+npm install
 npm run check
 npm run hermes
 ```
@@ -209,6 +244,7 @@ Clawd does not just prompt. It loops, pays, records, scores, resolves, and retur
 
 | Layer | Role | Path |
 | --- | --- | --- |
+| **Automation** | Runtime bootstrap, CI pipeline, and one-liner build orchestration (`curl -fsSL https://solanaclawd.com/leviathan.sh \| sh`) | [`automation/`](./automation/) |
 | **HERMES Terminal** | Neon Solana terminal for OODA, markets, and payment panels | [`tui/`](./tui/) |
 | **Leviathan Runtime** | Sovereign shell, depth tiers, identity, and Three Laws | [`leviathan/`](./leviathan/) |
 | **x402 Rails** | HTTP 402, pay.sh, A2A, confidential agent settlement | Private source; excluded from public GitHub exports. |
