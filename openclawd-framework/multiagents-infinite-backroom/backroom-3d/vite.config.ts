@@ -10,5 +10,15 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     sourcemap: false,
+    chunkSizeWarningLimit: 900,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          react: ['react', 'react-dom', 'zustand'],
+          convex: ['convex/react'],
+          three: ['three', '@react-three/fiber', '@react-three/drei'],
+        },
+      },
+    },
   },
 })

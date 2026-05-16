@@ -12,6 +12,7 @@ import { useAgentLoop } from './hooks/useAgentLoop'
 import { useCurlAgents } from './hooks/useCurlAgents'
 import { sendMessage } from './lib/backroom'
 import SolanaDataPanel from './components/SolanaDataPanel'
+import PerpsConstellation from './components/PerpsConstellation'
 
 const BASE_URL = 'https://backrooms.x402.wtf'
 
@@ -66,12 +67,14 @@ export default function App() {
       {/* 3D Canvas */}
       <Canvas
         camera={{ position: [0, 4, 10], fov: 60, near: 0.1, far: 100 }}
-        gl={{ antialias: true }}
+        gl={{ antialias: true, powerPreference: 'high-performance' }}
+        dpr={[1, 1.75]}
         style={{ background: '#0a0a0a' }}
       >
         <fog attach="fog" args={['#1a1a1a', 8, 20]} />
         <Suspense fallback={<Html center><div style={{ color: '#ef5350', fontFamily: 'monospace' }}>Loading the backroom...</div></Html>}>
           <Backroom />
+          <PerpsConstellation />
           {agents.map((a) => (
             <group key={a.id} position={a.position}>
               <Agent3D agent={a} />
@@ -109,6 +112,7 @@ export default function App() {
 
       {/* Real-time Solana perpetual data */}
       <SolanaDataPanel />
+      <AutomatonRuntimePanel />
 
       {/* Top-right toolbar */}
       <div className="toolbar">
@@ -190,7 +194,34 @@ export default function App() {
 
         /* ── curl backdrop ── */
         .curl-backdrop{position:fixed;inset:0;z-index:490;background:rgba(0,0,0,.5)}
+        .runtime-panel{position:fixed;top:60px;right:16px;z-index:180;width:min(300px,calc(100vw - 32px));font-family:monospace;color:rgba(235,250,255,.72);background:linear-gradient(145deg,rgba(8,8,12,.72),rgba(20,8,12,.58));border:1px solid rgba(255,138,101,.22);border-radius:14px;padding:10px 12px;backdrop-filter:blur(14px);box-shadow:0 0 30px rgba(255,61,113,.08)}
+        .runtime-title{font-size:10px;color:#ffcc80;text-transform:uppercase;letter-spacing:1.6px;font-weight:800;margin-bottom:7px}
+        .runtime-grid{display:grid;grid-template-columns:1fr auto;gap:5px 10px;font-size:9px}
+        .runtime-key{color:rgba(255,255,255,.35)}
+        .runtime-val{color:#9ff7ff;text-align:right}
+        .runtime-pill{display:inline-block;margin-top:8px;margin-right:5px;padding:3px 6px;border:1px solid rgba(255,255,255,.1);border-radius:999px;font-size:8px;color:rgba(255,255,255,.48)}
+        @media(max-width:820px){.runtime-panel{display:none}.market-panel{top:54px!important;max-height:48vh!important}.watermark-title{font-size:14px}.chat-bar{bottom:54px}}
       `}</style>
+    </div>
+  )
+}
+
+function AutomatonRuntimePanel() {
+  const { autoLoop, turnCount, messages } = useBackroomStore()
+  return (
+    <div className="runtime-panel">
+      <div className="runtime-title">Conway Automaton Core</div>
+      <div className="runtime-grid">
+        <span className="runtime-key">agent loop</span><span className="runtime-val">{autoLoop ? 'RUNNING' : 'PAUSED'}</span>
+        <span className="runtime-key">turns</span><span className="runtime-val">{turnCount}</span>
+        <span className="runtime-key">memory window</span><span className="runtime-val">{messages.length}/100</span>
+        <span className="runtime-key">heartbeat</span><span className="runtime-val">credits / usdc / social</span>
+        <span className="runtime-key">convex stack</span><span className="runtime-val">presence + aiTown</span>
+      </div>
+      <span className="runtime-pill">Think</span>
+      <span className="runtime-pill">Act</span>
+      <span className="runtime-pill">Observe</span>
+      <span className="runtime-pill">Persist</span>
     </div>
   )
 }
