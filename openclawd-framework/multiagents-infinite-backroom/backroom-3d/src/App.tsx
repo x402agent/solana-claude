@@ -13,6 +13,7 @@ import { useCurlAgents } from './hooks/useCurlAgents'
 import { sendMessage } from './lib/backroom'
 import SolanaDataPanel from './components/SolanaDataPanel'
 import PerpsConstellation from './components/PerpsConstellation'
+import TradingArenaPanel from './components/TradingArenaPanel'
 
 const BASE_URL = 'https://backrooms.x402.wtf'
 
@@ -113,6 +114,7 @@ export default function App() {
       {/* Real-time Solana perpetual data */}
       <SolanaDataPanel />
       <AutomatonRuntimePanel />
+      <TradingArenaPanel />
 
       {/* Top-right toolbar */}
       <div className="toolbar">
@@ -200,7 +202,16 @@ export default function App() {
         .runtime-key{color:rgba(255,255,255,.35)}
         .runtime-val{color:#9ff7ff;text-align:right}
         .runtime-pill{display:inline-block;margin-top:8px;margin-right:5px;padding:3px 6px;border:1px solid rgba(255,255,255,.1);border-radius:999px;font-size:8px;color:rgba(255,255,255,.48)}
-        @media(max-width:820px){.runtime-panel{display:none}.market-panel{top:54px!important;max-height:48vh!important}.watermark-title{font-size:14px}.chat-bar{bottom:54px}}
+        .arena-panel{position:fixed;right:16px;top:238px;z-index:180;width:min(300px,calc(100vw - 32px));font-family:monospace;color:rgba(235,250,255,.7);background:linear-gradient(145deg,rgba(2,13,18,.78),rgba(17,5,15,.62));border:1px solid rgba(0,255,157,.2);border-radius:14px;padding:10px 12px;backdrop-filter:blur(14px);box-shadow:0 0 30px rgba(0,255,157,.08)}
+        .arena-title{font-size:10px;color:#00ff9d;text-transform:uppercase;letter-spacing:1.6px;font-weight:900}
+        .arena-subtitle{font-size:8px;color:rgba(255,255,255,.36);margin:2px 0 8px;text-transform:uppercase}
+        .arena-row{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;border-top:1px solid rgba(255,255,255,.06);padding:7px 0}
+        .arena-agent{font-size:9px;color:#e7fbff;font-weight:800}
+        .arena-rationale{font-size:7px;color:rgba(255,255,255,.38);line-height:1.35;margin-top:2px}
+        .arena-action{font-size:10px;text-align:right;font-weight:900;letter-spacing:.9px}
+        .arena-action span{display:block;font-size:8px;color:rgba(255,255,255,.45);margin-top:2px}
+        .arena-footer{font-size:8px;color:rgba(255,255,255,.32);margin-top:4px;text-align:right}
+        @media(max-width:820px){.runtime-panel,.arena-panel{display:none}.market-panel{top:54px!important;max-height:48vh!important}.watermark-title{font-size:14px}.chat-bar{bottom:54px}}
       `}</style>
     </div>
   )
