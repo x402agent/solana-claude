@@ -199,6 +199,75 @@ export const TOOLS: Tool[] = [
     },
   },
 
+  // ── Vulcan (Phoenix perpetuals) ──────────────────────────────────────────
+  {
+    name: 'vulcan_markets',
+    description: 'List available Phoenix perpetuals markets via vulcan-cli. Returns market pubkeys, symbols, mark price, OI, funding.',
+    input_schema: { type: 'object' as const, properties: {}, required: [] },
+  },
+  {
+    name: 'vulcan_quote',
+    description: 'Get a Phoenix perp trade quote (entry price, fees, liquidation price) before committing. Paper-safe — never executes.',
+    input_schema: {
+      type: 'object' as const,
+      properties: {
+        market: { type: 'string', description: 'Market pubkey or name.' },
+        side:   { type: 'string', enum: ['long', 'short'], description: 'Trade direction.' },
+        size:   { type: 'string', description: 'Position size in USD notional.' },
+      },
+      required: ['market', 'side', 'size'],
+    },
+  },
+  {
+    name: 'vulcan_place_order',
+    description: 'Place a Phoenix perp order. Paper mode unless LIVE_TRADING=true AND OPERATOR_CONFIRMED=true — returns simulated fill without broadcasting. Requires depth=shallow+.',
+    input_schema: {
+      type: 'object' as const,
+      properties: {
+        market:        { type: 'string', description: 'Market pubkey or name.' },
+        side:          { type: 'string', enum: ['long', 'short'], description: 'Trade direction.' },
+        size:          { type: 'string', description: 'Position size in USD notional.' },
+        limitPrice:    { type: 'string', description: 'Limit price. Omit for market orders.' },
+        reduceOnly:    { type: 'boolean', description: 'Reduce-only (close position only).' },
+        clientOrderId: { type: 'string', description: 'Optional client-side order tag.' },
+      },
+      required: ['market', 'side', 'size'],
+    },
+  },
+  {
+    name: 'vulcan_cancel_order',
+    description: 'Cancel an open Phoenix perp order by its order ID. Requires depth=shallow+.',
+    input_schema: {
+      type: 'object' as const,
+      properties: {
+        orderId: { type: 'string', description: 'Order ID to cancel.' },
+      },
+      required: ['orderId'],
+    },
+  },
+  {
+    name: 'vulcan_positions',
+    description: 'List open Phoenix perpetual positions for the agent wallet (or a specified wallet).',
+    input_schema: {
+      type: 'object' as const,
+      properties: {
+        wallet: { type: 'string', description: 'Wallet pubkey. Omit to use the agent keystore wallet.' },
+      },
+      required: [],
+    },
+  },
+  {
+    name: 'vulcan_funding_rate',
+    description: 'Get the current funding rate for a Phoenix perp market. Positive = longs pay shorts.',
+    input_schema: {
+      type: 'object' as const,
+      properties: {
+        market: { type: 'string', description: 'Market pubkey or name.' },
+      },
+      required: ['market'],
+    },
+  },
+
   // ── Shell / self-identity ────────────────────────────────────────────────
   {
     name: 'shell_write',

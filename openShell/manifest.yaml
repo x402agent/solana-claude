@@ -1,0 +1,20 @@
+name: solana-clawd
+version: 1.0.0
+description: "Sovereign AI agent sandbox — OODA × Solana × x402"
+runtime: node
+entrypoint: leviathan
+env:
+  SOLANA_NETWORK: devnet
+  PAPER_ONLY: "true"
+network_policy: policy/network.rego
+filesystem_policy: policy/filesystem.rego
+provider_plugin: provider.ts
+vault: vault
+tools:
+  - mcp  # 31 MCP tools from the MCP server
+  - leviathan  # OODA loop tools
+  - vulcan  # Phoenix perps via vulcan-cli
+laws:
+  - "Paper-only unless LIVE_TRADING=true AND OPERATOR_CONFIRMED=true"
+  - "Devnet-only unless MAINNET_ENABLED=true AND OPERATOR_CONFIRMED=true"
+  - "Private keys never logged, passed to any LLM, or included in tool args"

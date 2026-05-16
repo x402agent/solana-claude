@@ -24,6 +24,7 @@ import { appendStrike } from '../state/index.js';
 import type { ClawState, ClawStrike, ClawdMemoryKind, TailFlickEvent } from '../types.js';
 import { TOOLS } from './tools.js';
 import { Percolator } from './percolator.js';
+import { VulcanClient } from './vulcan.js';
 import { getWallet } from './wallet.js';
 import {
   loadLeviathanMemoryContext,
@@ -407,6 +408,59 @@ async function executeTool(
       return { output: result, success: !String(result).startsWith('percolator') };
     }
 
+    // ── Vulcan (Phoenix perpetuals) ────────────────────────────────────────
+    case 'vulcan_markets': {
+      const result = await VulcanClient.markets();
+      return { output: result, success: !String(result).startsWith('vulcan') };
+    }
+
+    case 'vulcan_quote': {
+      const { market, side, size } = input as { market: string; side: 'long' | 'short'; size: string };
+      if (!market || !side || !size) return { output: 'market, side, and size required', success: false };
+      const result = await VulcanClient.quote(market, side, size);
+      return { output: result, success: !String(result).startsWith('vulcan') };
+    }
+
+    case 'vulcan_place_order': {
+      if (depth === 'shoreline') {
+        return { output: 'vulcan_place_order blocked at shoreline depth (insufficient reserves)', success: false };
+      }
+      const { market, side, size, limitPrice, reduceOnly, clientOrderId } = input as {
+        market: string;
+        side: 'long' | 'short';
+        size: string;
+        limitPrice?: string;
+        reduceOnly?: boolean;
+        clientOrderId?: string;
+      };
+      if (!market || !side || !size) return { output: 'market, side, and size required', success: false };
+      const result = await VulcanClient.placeOrder(market, side, size, { limitPrice, reduceOnly, clientOrderId });
+      return { output: result, success: !String(result).startsWith('vulcan') };
+    }
+
+    case 'vulcan_cancel_order': {
+      if (depth === 'shoreline') {
+        return { output: 'vulcan_cancel_order blocked at shoreline depth (insufficient reserves)', success: false };
+      }
+      const orderId = String(input['orderId'] ?? '');
+      if (!orderId) return { output: 'orderId required', success: false };
+      const result = await VulcanClient.cancelOrder(orderId);
+      return { output: result, success: !String(result).startsWith('vulcan') };
+    }
+
+    case 'vulcan_positions': {
+      const wallet = input['wallet'] ? String(input['wallet']) : undefined;
+      const result = await VulcanClient.positions(wallet);
+      return { output: result, success: !String(result).startsWith('vulcan') };
+    }
+
+    case 'vulcan_funding_rate': {
+      const market = String(input['market'] ?? '');
+      if (!market) return { output: 'market required', success: false };
+      const result = await VulcanClient.fundingRate(market);
+      return { output: result, success: !String(result).startsWith('vulcan') };
+    }
+
     // ── Shell molt ────────────────────────────────────────────────────────
     case 'shell_write': {
       const content = String(input['content'] ?? '');
@@ -455,7 +509,12 @@ function mapToolToAction(toolName: string): ClawStrike['action'] {
   if (toolName === 'spawn_spawnling') return 'spawn';
   if (toolName === 'shell_write') return 'molt';
   if (toolName === 'hold') return 'hold';
-  if (toolName === 'jupiter_swap' || toolName === 'paysh_pay') return 'transfer';
+  if (
+    toolName === 'jupiter_swap' ||
+    toolName === 'paysh_pay' ||
+    toolName === 'vulcan_place_order' ||
+    toolName === 'vulcan_cancel_order'
+  ) return 'transfer';
   return 'tool_call';
 }
 
