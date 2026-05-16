@@ -1,34 +1,90 @@
 /**
- * @solanaclawd/sdk — Official Solana Clawd SDK
+ * sdk/src/index.ts — Official Solana Clawd SDK entry point
  *
- * Sovereign AI agents with wallets, memory, and payment rails on Solana.
+ * @solanaclawd/sdk — Canonical integration layer for the solana-clawd stack.
+ *
+ * Ties together:
+ *   leviathan     — Autonomous Solana agent runtime (@openclawd/leviathan)
+ *   agentwallet   — Encrypted keypair vault (agentwallet-vault)
+ *   deep-clawd    — DeepSeek OODA trading loop
+ *   MCP           — MCP orchestrator (31 tools)
+ *   OpenShell     — NVIDIA OpenShell sandbox
+ *   x402          — x402 payment rails
+ *
+ * Public exports are organised by submodule. All interfaces are exported
+ * so consumers have full TypeScript visibility into the SDK API surface.
+ *
+ * Usage:
+ *   import { createClawd, SDK_VERSION } from '@solanaclawd/sdk';
+ *   const { agent, wallet, tools } = await createClawd({ cluster: 'devnet' });
+ *
+ * Submodule imports (for tree-shaking):
+ *   import { createAgent }         from '@solanaclawd/sdk/agent';
+ *   import { createWallet }        from '@solanaclawd/sdk/wallet';
+ *   import { TOOLS, ToolRegistry } from '@solanaclawd/sdk/tools';
+ *   import { THREE_LAWS }          from '@solanaclawd/sdk/three-laws';
+ *   import { createMCPClient }     from '@solanaclawd/sdk/mcp';
+ *   import { createOpenShellRuntime } from '@solanaclawd/sdk/openShell';
+ *
  * Upstream: https://github.com/x402agent/Solana-Clawd-SDK
- *
- * Quick start:
- *   import { createClawd } from '@solanaclawd/sdk';
- *   const clawd = await createClawd({ paperOnly: true });
- *   const tick = await clawd.agent.tailFlick();
  */
 
-export const SDK_VERSION = '1.0.0';
-export const SDK_UPSTREAM = 'https://github.com/x402agent/Solana-Clawd-SDK';
+// ─── SDK version ──────────────────────────────────────────────────────────────
+
+/** Canonical SDK version. Matches package.json "version". */
+export const SDK_VERSION = '1.0.0' as const;
 
 // ─── Agent ────────────────────────────────────────────────────────────────────
-export { createAgent, AgentHandle } from './agent.js';
-export type { AgentConfig } from './agent.js';
+
+export {
+  createAgent,
+  ThreeLawsViolation,
+} from './agent.js';
+
+export type {
+  AgentConfig,
+  AgentHandle,
+  TickEvent,
+  TickHandler,
+} from './agent.js';
 
 // ─── Wallet ───────────────────────────────────────────────────────────────────
-export { createWallet, AgentWallet } from './wallet.js';
 
-// ─── Tools ───────────────────────────────────────────────────────────────────
-export { ToolRegistry, getDefaultRegistry, getToolsForDepth } from './tools.js';
+export {
+  AgentWallet,
+  createWallet,
+} from './wallet.js';
+
+export type {
+  WalletConfig,
+  TokenBalance,
+  SolanaCluster,
+} from './types.js';
+
+// ─── Tools ────────────────────────────────────────────────────────────────────
+
+export {
+  TOOLS,
+  getToolsForDepth,
+  registerTool,
+  ToolRegistry,
+  ToolNotFoundError,
+  ToolDepthError,
+} from './tools.js';
+
+export type {
+  ToolDefinition,
+  ToolExecutionContext,
+  DepthTier,
+} from './types.js';
+
 export type { ToolExecutor } from './tools.js';
 
 // ─── Three Laws ───────────────────────────────────────────────────────────────
+
 export {
   THREE_LAWS,
   LAW_SUMMARIES,
-  ThreeLawsViolation,
   constitutionHash,
   assertConstitutionIntact,
   verifyConstitution,
@@ -36,69 +92,140 @@ export {
   assertDevnetOnly,
 } from './three-laws.js';
 
-// ─── MCP ─────────────────────────────────────────────────────────────────────
-export { MCPClient, createMCPClient } from './mcp.js';
+export { ThreeLawsViolation as ThreeLawsViolationClass } from './three-laws.js';
 
-// ─── OpenShell ────────────────────────────────────────────────────────────────
-export { createOpenShellRuntime } from './openShell.js';
-export type { OpenShellRuntime, OpenShellRuntimeConfig } from './openShell.js';
+// ─── MCP ──────────────────────────────────────────────────────────────────────
 
-// ─── Types ───────────────────────────────────────────────────────────────────
+export {
+  createMCPClient,
+  MCPError,
+} from './mcp.js';
+
 export type {
-  SolanaCluster,
-  DepthTier,
-  AgentTick,
-  AgentState,
-  WalletConfig,
-  TokenBalance,
-  ToolDefinition,
-  ToolExecutionContext,
   MCPClientConfig,
   MCPToolResult,
 } from './types.js';
 
-// ─── createClawd (top-level factory) ─────────────────────────────────────────
+export type {
+  MCPClient,
+  MCPToolInfo,
+} from './mcp.js';
 
-import { createAgent, type AgentConfig } from './agent.js';
+// ─── OpenShell ────────────────────────────────────────────────────────────────
+
+export {
+  CredentialProvider,
+  createOpenShellRuntime,
+} from './openShell.js';
+
+export type {
+  CredentialName,
+} from './openShell.js';
+
+export type {
+  OpenShellConfig,
+  OpenShellRuntime,
+  OpenShellVaultInterface,
+  NemoClientInterface,
+} from './openShell.js';
+
+// ─── Shared types ─────────────────────────────────────────────────────────────
+
+export type {
+  AgentState,
+  AgentTick,
+} from './types.js';
+
+// ─── createClawd factory ──────────────────────────────────────────────────────
+
+import { createAgent } from './agent.js';
 import { createWallet } from './wallet.js';
-import { getDefaultRegistry } from './tools.js';
+import { ToolRegistry } from './tools.js';
 import type { AgentHandle } from './agent.js';
 import type { AgentWallet } from './wallet.js';
-import type { ToolRegistry } from './tools.js';
+import type { AgentConfig, WalletConfig, SolanaCluster } from './types.js';
 
+/** Combined config for the top-level createClawd() factory. */
+export interface ClawdConfig extends AgentConfig {
+  /**
+   * Wallet-specific overrides. If omitted, wallet uses the same
+   * cluster and keystorePath as the agent config.
+   */
+  wallet?: WalletConfig;
+}
+
+/** The three primary handles returned by createClawd(). */
 export interface ClawdInstance {
+  /** Live agent handle — call tailFlick() to run one OODA tick. */
   agent: AgentHandle;
+  /**
+   * Wallet adapter — call getBalance() or sign().
+   * Resolves async; null until createClawd() promise resolves.
+   */
   wallet: AgentWallet | null;
+  /**
+   * Tool registry for the resolved depth tier.
+   * Use registry.execute(name, input) to dispatch tools.
+   */
   tools: ToolRegistry;
+  /** The SDK version this instance was created with. */
+  readonly sdkVersion: typeof SDK_VERSION;
 }
 
 /**
- * The main entry point for @solanaclawd/sdk.
+ * Top-level factory — creates a fully wired Clawd instance.
  *
- * Creates a fully wired agent instance:
- *   - leviathan agent handle (OODA loop)
- *   - AgentWallet (if keystore is available)
- *   - Unified tool registry (all leviathan + vulcan tools)
+ * This is the recommended entrypoint for most SDK consumers.
+ * It wires together the agent, wallet, and tool registry with
+ * shared config and Three Laws enforcement.
  *
  * @example
- *   const clawd = await createClawd({ cluster: 'devnet', paperOnly: true });
- *   clawd.agent.onTick(t => console.log('tick', t.tick, t.action));
- *   await clawd.agent.tailFlick();
+ *   import { createClawd } from '@solanaclawd/sdk';
+ *
+ *   const { agent, wallet, tools } = await createClawd({
+ *     anthropicApiKey: process.env.ANTHROPIC_API_KEY,
+ *     cluster: 'devnet',
+ *     paperOnly: true,
+ *   });
+ *
+ *   const tick = await agent.tailFlick();
+ *   console.log('Tick:', tick.depth, tick.action);
+ *
+ *   if (wallet) {
+ *     const { sol, usdc } = await wallet.getBalance();
+ *     console.log('Balance:', sol, 'SOL /', usdc, 'USDC');
+ *   }
  */
-export async function createClawd(config: AgentConfig = {}): Promise<ClawdInstance> {
+export async function createClawd(config: ClawdConfig = {}): Promise<ClawdInstance> {
+  // Create agent handle (Three Laws guards fire here).
   const agent = createAgent(config);
 
+  // Create wallet adapter (async — may fail gracefully if no keystore).
   let wallet: AgentWallet | null = null;
   try {
     wallet = await createWallet({
-      cluster: config.cluster ?? 'devnet',
-      keystorePath: config.keystorePath,
+      cluster: (config.cluster as SolanaCluster | undefined) ?? 'devnet',
+      ...config.wallet,
     });
   } catch {
-    // No keystore available — wallet stays null
+    // Wallet is optional — agent can function without one (e.g., read-only mode).
+    wallet = null;
   }
 
-  const tools = await getDefaultRegistry();
+  // Create tool registry scoped to current depth.
+  const depth = agent.getDepth();
+  const tools = new ToolRegistry({
+    depth,
+    paperOnly: config.paperOnly ?? true,
+    devnetOnly: config.devnetOnly ?? true,
+    cluster: (config.cluster as SolanaCluster | undefined) ?? 'devnet',
+    walletPubkey: wallet?.pubkey,
+  });
 
-  return { agent, wallet, tools };
+  return {
+    agent,
+    wallet,
+    tools,
+    sdkVersion: SDK_VERSION,
+  };
 }
