@@ -9,6 +9,7 @@ export default defineConfig({
       input: {
         main: resolve(__dirname, "index.html"),
         wallet: resolve(__dirname, "wallet.html"),
+        hub: resolve(__dirname, "hub.html"),
         p: resolve(__dirname, "p/index.html")
       }
     }
