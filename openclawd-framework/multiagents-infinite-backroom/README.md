@@ -163,6 +163,7 @@ curl -fsSL https://backrooms.x402.wtf/enter.sh | bash
 | 🧯 **Production hardening** | `api/main.py` | Blocking LLM handlers run in FastAPI's sync threadpool so `/healthz` stays responsive under agent calls |
 | 🦞 **CLAWD orchestration loops** | `api/clawd_orchestration.py` + `ClawdOrchestrationPanel.tsx` | Ralph-style orchestration renamed to CLAWD: bounded scope -> pressure-test -> execute -> verify loops for user tasks |
 | 📈 **Agent Trading Arena** | `api/trading_arena.py` + `TradingArenaPanel.tsx` | Agent-Trading-Arena-inspired Phoenix perps signal tape with long/short/hold decisions |
+| 👺 **Goblin paper-trading mode** | `automaton-main/src/ooda` | Dark Ralph x clawd-operator OODA loop: aggressive devnet paper trading, whale-flow observations, journaled ticks, and kill-switch safety |
 | ✨ **Animated perps constellation** | `PerpsConstellation.tsx` | Open interest, funding, and market heat rendered as a live 3D constellation |
 | 🖥️ **Backroom TUI docs** | `backroom-tui/README.md` | Bun + Ink terminal dashboard docs for live feed, loop snapshots, Convex presence, and reusable agent credentials |
 
@@ -509,6 +510,24 @@ pnpm install && pnpm build
 OPENROUTER_API_KEY="sk-or-v1-..." node dist/index.js --run
 ```
 
+### 👺 Goblin OODA Paper Trading
+
+```bash
+cd automaton-main
+pnpm install
+
+# normal Ralph-style paper OODA loop
+pnpm ooda
+
+# aggressive goblin mode: paper/devnet only, no wallet keys, no mainnet RPC
+pnpm goblin
+
+# live terminal dashboard
+pnpm goblin:tui
+```
+
+Goblin mode is the Dark Ralph x `clawd-operator` paper-trading harness in `automaton-main/src/ooda`. It uses `goblin.md` frontmatter for hard limits: `mode: paper`, `network: devnet`, one action per tick, max `5,000,000` lamports per position, and a 5-loss kill-switch. It writes every tick to `src/ooda/journal/ticks.jsonl`, rejects mainnet RPC URLs by default, never reads keypairs, and falls back to deterministic decisions when `ANTHROPIC_API_KEY` is not set.
+
 ### 📈 Phoenix Perps (Vulcan / Rise SDK)
 
 ```bash
@@ -747,6 +766,7 @@ This makes every `/agent1`, `/agent2`, `/agent3`, `/loop`, `/enter`, `/arena`, a
 | **Presence** | HTTP Actions: register, login, ping, agents list |
 | **Orchestration** | CLAWD orchestration loop, Ralph-inspired bounded planner for user tasks |
 | **Trading Arena** | Agent-Trading-Arena-inspired Phoenix perps signal tape |
+| **Goblin OODA** | Dark Ralph x clawd-operator paper/devnet trading loop with JSONL journal and TUI |
 | **Agent Identity** | Metaplex Agent Registry SDK + public Core metadata and registration documents |
 | **Agent Token Launches** | Metaplex Genesis bonding-curve launch flow via guarded CLI command |
 | **Paid API Gateway** | Solana `pay` / x402-style HTTP 402 gateway with sandbox-first config |

@@ -132,11 +132,39 @@ node packages/cli/dist/index.js fund 5.00         # USDC
 node packages/cli/dist/index.js feed 1000          # $CLAWD
 ```
 
+## Goblin OODA Paper Trading
+
+`src/ooda` adds a Dark Ralph x clawd-operator trading harness for aggressive paper trading only. It is intentionally not a live trading path.
+
+```bash
+pnpm ooda
+pnpm goblin
+pnpm goblin:tui
+```
+
+Safety rules enforced in code:
+
+- `mode: paper` and `network: devnet` are required by frontmatter.
+- Mainnet RPC URLs are rejected unless `MAINNET_OK=1` is explicitly set, and there is still no signing path.
+- No keypair, signer, seed phrase, or wallet file is read.
+- One action per tick and one open position at a time.
+- Goblin mode caps positions at `5,000,000` lamports and halts at 5 consecutive realized losses.
+- Every tick is appended to `src/ooda/journal/ticks.jsonl`.
+
+Run with optional LLM decisions:
+
+```bash
+ANTHROPIC_API_KEY=sk-ant-... pnpm goblin
+```
+
+Without `ANTHROPIC_API_KEY`, goblin mode uses deterministic momentum + synthetic whale-flow decisions and still validates every action before applying it.
+
 ## Project Structure
 
 ```
 src/
   agent/            # Sense→Think→Strike→Drift loop, system prompt, context, injection defense
+  ooda/             # Ralph/Goblin paper-trading OODA harness, journal, validator, ANSI TUI
   tide/             # Tide API client (USDC credits, x402, inference routing)
   git/              # State versioning (every molt is a commit)
   pulse/            # Cron daemon, scheduled tail-flicks
