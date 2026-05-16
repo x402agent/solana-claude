@@ -1,0 +1,33 @@
+{
+  "name": "@solanaclawd/sdk",
+  "version": "1.0.0",
+  "description": "Official Solana Clawd SDK — sovereign AI agents with wallets, memory, and payment rails on Solana",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": { "import": "./dist/index.js", "types": "./dist/index.d.ts" },
+    "./agent": { "import": "./dist/agent.js", "types": "./dist/agent.d.ts" },
+    "./wallet": { "import": "./dist/wallet.js", "types": "./dist/wallet.d.ts" },
+    "./tools": { "import": "./dist/tools.js", "types": "./dist/tools.d.ts" },
+    "./three-laws": { "import": "./dist/three-laws.js", "types": "./dist/three-laws.d.ts" },
+    "./mcp": { "import": "./dist/mcp.js", "types": "./dist/mcp.d.ts" },
+    "./openShell": { "import": "./dist/openShell.js", "types": "./dist/openShell.d.ts" }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsc -p tsconfig.json --watch"
+  },
+  "peerDependencies": {
+    "@anthropic-ai/sdk": ">=0.39.0",
+    "@solana/web3.js": ">=1.95.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.8.3"
+  },
+  "keywords": ["solana", "clawd", "leviathan", "agent", "sovereign-ai", "x402", "defi", "mcp"],
+  "license": "MIT",
+  "repository": { "type": "git", "url": "https://github.com/x402agent/solana-clawd" },
+  "upstream": "https://github.com/x402agent/Solana-Clawd-SDK"
+}
