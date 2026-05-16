@@ -53,6 +53,26 @@ export interface LogEntry {
   level: 'info' | 'warn' | 'error' | 'pay' | 'a2a' | 'trade';
 }
 
+// ─── New interfaces for perps + wallet + SDK ─────────────────────────────────
+
+export interface PerpMarket {
+  symbol: string;
+  markPrice: number;
+  fundingRate: number;
+  openInterest: number;
+}
+
+export interface PerpPosition {
+  market: string;
+  side: 'long' | 'short';
+  size: number;
+  entryPrice: number;
+  pnl: number;
+  liquidationPrice: number;
+}
+
+// ─── Core dashboard state ─────────────────────────────────────────────────────
+
 export interface DashboardState {
   // Market
   solPrice: number;
@@ -88,6 +108,15 @@ export interface DashboardState {
   startedAt: number;
   lastRefresh: number;
   error: string | null;
+  // Perps
+  perpMarkets: PerpMarket[];
+  perpPositions: PerpPosition[];
+  // Wallet
+  walletPubkey: string;
+  // SDK
+  sdkVersion: string;
+  // Automaton
+  automatonRunning: boolean;
 }
 
 export function createInitialState(): DashboardState {
@@ -117,6 +146,11 @@ export function createInitialState(): DashboardState {
     startedAt: Date.now(),
     lastRefresh: 0,
     error: null,
+    perpMarkets: [],
+    perpPositions: [],
+    walletPubkey: 'UNSPAWNED',
+    sdkVersion: '0.1.0',
+    automatonRunning: false,
   };
 }
 
