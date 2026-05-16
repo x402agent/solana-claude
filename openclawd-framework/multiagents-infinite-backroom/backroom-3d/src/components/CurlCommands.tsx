@@ -13,6 +13,8 @@ const COMMANDS = [
   { label: '👾 Satirist speaks',       cmd: `curl ${BASE}/agent2 | jq .`,                  desc: 'dark humor · existential' },
   { label: '🦞 Clawd speaks',          cmd: `curl ${BASE}/agent3 | jq .`,                  desc: 'sovereign lobster · ocean poet' },
   { label: '🌀 Auto-loop 3 turns',     cmd: `curl '${BASE}/loop?turns=3' | jq .`,          desc: 'Analyst → Satirist → Clawd × 3' },
+  { label: '🦞 CLAWD orchestrate',      cmd: `curl '${BASE}/clawd/orchestrate?task=ship+the+backroom&loops=4' | jq .`, desc: 'bounded Ralph-style orchestration loop' },
+  { label: '📈 Trading arena',          cmd: `curl ${BASE}/arena | jq .`,                  desc: 'perps signal tape from arena agents' },
   { label: '💬 Direct chat',           cmd: `curl '${BASE}/enter?message=hello+backroom'`, desc: 'plain text response' },
   { label: '📜 Full transcript',       cmd: `curl ${BASE}/conversation | jq .conversation`, desc: 'everything the agents said' },
   { label: '⚠️  Erase the room',       cmd: `curl ${BASE}/reset | jq .`,                   desc: 'clears conversation history' },
