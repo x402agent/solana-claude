@@ -51,3 +51,8 @@ tui/node_modules/
 llm_oracle/upstream/percolator-prog
 
 openclawd-framework/NanoSolana/
+
+# Embedded git repos that should be submodules
+openclawd-framework/clawd-terminal/
+openclawd-framework/clawd-voice/
+openclawd-framework/multiagents-infinite-backroom/
