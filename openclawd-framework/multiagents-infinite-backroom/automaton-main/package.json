@@ -39,6 +39,10 @@
   "scripts": {
     "build": "tsc && pnpm -r build",
     "dev": "tsx watch src/index.ts",
+    "ooda": "tsx src/ooda/loop.ts",
+    "ooda:tui": "tsx src/ooda/loop.ts --tui | tsx src/ooda/tui.ts",
+    "goblin": "tsx src/ooda/loop.ts --goblin --fresh",
+    "goblin:tui": "tsx src/ooda/loop.ts --goblin --fresh --tui | tsx src/ooda/tui.ts",
     "test": "vitest run",
     "clean": "rm -rf dist && pnpm -r clean"
   },

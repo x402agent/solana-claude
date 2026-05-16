@@ -49,6 +49,7 @@ Usage:
   clawd --init         Initialize wallet and config directory
   clawd --provision    Provision API key via SIWE
   clawd --status       Show current automaton status
+  clawd --goblin       Run devnet-only paper Goblin OODA trading mode
   clawd --version      Show version
   clawd --help         Show this help
 
@@ -85,6 +86,11 @@ Environment:
   if (args.includes("--status")) {
     await showStatus();
     process.exit(0);
+  }
+
+  if (args.includes("--goblin")) {
+    await import("./ooda/loop.js");
+    return;
   }
 
   if (args.includes("--setup")) {
