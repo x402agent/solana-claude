@@ -3,5 +3,4 @@ package:   /Users/8bit/bots/Cladwbot-solana/solana-clawd/programs/p-token-launch
 workspace: /Users/8bit/bots/Cladwbot-solana/solana-clawd/programs/Cargo.toml
     Blocking waiting for file lock on package cache
     Blocking waiting for file lock on package cache
-    Blocking waiting for file lock on package cache
-    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.35s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 2.48s
