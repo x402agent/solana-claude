@@ -45,6 +45,36 @@ export async function sendMessage(message: string): Promise<string> {
   return resp.text()
 }
 
+export interface ArenaDecision {
+  agent: string
+  style: string
+  symbol: string
+  action: 'long' | 'short' | 'hold'
+  confidence: number
+  score: number
+  rationale: string
+}
+
+export interface TradingArenaResponse {
+  source: string
+  market: string
+  mood: string
+  decisions: ArenaDecision[]
+  summary: {
+    long: number
+    short: number
+    hold: number
+    trackedMarkets: number
+    generatedAt: number
+  }
+}
+
+export async function fetchTradingArena(): Promise<TradingArenaResponse> {
+  const resp = await fetch(`${BACKROOM_URL}/arena`)
+  if (!resp.ok) throw new Error(`Arena returned ${resp.status}`)
+  return resp.json()
+}
+
 export const AGENT_NAMES: Record<number, string> = {
   1: 'The Analyst',
   2: 'The Satirist',
