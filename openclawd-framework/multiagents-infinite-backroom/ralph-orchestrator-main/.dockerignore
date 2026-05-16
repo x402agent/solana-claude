@@ -1,0 +1,80 @@
+# Git
+.git
+.github
+.gitignore
+
+# Python
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+*.egg
+*.egg-info
+dist
+build
+.pytest_cache
+.coverage
+htmlcov
+.tox
+.mypy_cache
+.ruff_cache
+
+# Virtual environments
+.venv
+venv
+ENV
+env
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Documentation
+docs/
+site/
+*.md
+!README.md
+
+# Tests
+tests/
+test_*.py
+*_test.py
+
+# Development files
+.env
+.env.*
+docker-compose.override.yml
+Makefile
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.bak
+*.backup
+tmp/
+
+# Agent workspace (will be mounted as volume)
+workspace/
+.agent/
+.ralph/
+
+# CI/CD
+.gitlab-ci.yml
+.circleci
+Jenkinsfile
+azure-pipelines.yml
+
+# Examples and test data
+examples/
+test_prompts/
+*.md
+!PROMPT.md

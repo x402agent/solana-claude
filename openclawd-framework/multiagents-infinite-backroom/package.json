@@ -1,0 +1,51 @@
+{
+  "name": "clawd-infinite-backroom",
+  "version": "1.0.0",
+  "description": "🦞 CLAWD Multi-Agent Infinite Backroom — Two AI lobsters trapped in an infinite philosophical debate powered by DeepSeek v4 and Upstash Box",
+  "type": "module",
+  "scripts": {
+    "box": "tsx api/upstash-manager.ts",
+    "box:status": "tsx api/upstash-manager.ts --status",
+    "box:run": "tsx api/upstash-manager.ts --run",
+    "box:stream": "tsx api/upstash-manager.ts --stream",
+    "box:deploy": "tsx api/upstash-manager.ts --deploy",
+    "box:files": "tsx api/upstash-manager.ts --files",
+    "scrape": "python api/dreams_scraper.py",
+    "server": "uvicorn api.main:app --host 0.0.0.0 --port 8000 --reload",
+    "backroom-tui": "cd backroom-tui && bun run src/cli.tsx",
+    "backroom-tui:setup": "cd backroom-tui && bun run src/cli.tsx setup",
+    "backroom-tui:build": "cd backroom-tui && bun run build",
+    "ralph-orch": "cd ralph-orchestrator-main && python -m ralph_orchestrator.cli",
+    "ralph-orch:install": "cd ralph-orchestrator-main && uv pip install -e .",
+    "vulcan:build": "cd vulcan-cli-master && cargo build",
+    "backroom-3d:dev": "cd backroom-3d && npm run dev",
+    "backroom-3d:build": "cd backroom-3d && npm run build",
+    "healthcheck": "python3 -m py_compile api/main.py api/market_context.py api/agents.py api/openrouter_agents.py api/openai_agents.py"
+  },
+  "dependencies": {
+    "@openclawdsolana/leviathan": "^0.1.0",
+    "@upstash/box": "^0.4.1",
+    "convex": "^1.39.1",
+    "replicate": "^1.4.0",
+    "x402agent-nanoclawd-cli": "^1.3.0",
+    "zod": "^3.24.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "tsx": "^4.7.0",
+    "typescript": "^5.9.3"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "keywords": [
+    "ai",
+    "multi-agent",
+    "deepseek",
+    "backroom",
+    "clawd",
+    "solana",
+    "upstash",
+    "automaton"
+  ]
+}

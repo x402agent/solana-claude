@@ -16,7 +16,7 @@
 *.mobileprovision
 id_rsa
 id_ed25519
-
+clawd-terminal
 # Wrangler / Cloudflare Workers build artifacts
 .wrangler/
 .wrangler
@@ -51,8 +51,15 @@ tui/node_modules/
 llm_oracle/upstream/percolator-prog
 
 openclawd-framework/NanoSolana/
+openclawd-framework/pay/
+openclawd-framework/*.tar.gz
+openclawd-framework/Solanapolis-restore/
+openclawd-framework/Solanapolis-tmp/
+openclawd-framework/**/node_modules/
+openclawd-framework/**/dist/
+openclawd-framework/**/__pycache__/
+openclawd-framework/**/*.tsbuildinfo
 
 # Embedded git repos that should be submodules
 openclawd-framework/clawd-terminal/
 openclawd-framework/clawd-voice/
-openclawd-framework/multiagents-infinite-backroom/

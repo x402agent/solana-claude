@@ -1,0 +1,91 @@
+name: clawd-backroom
+subdomain: clawd-backroom
+title: "CLAWD Infinite Backroom"
+description: "Metered x402/pay.sh gateway for CLAWD multi-agent reasoning endpoints."
+category: ai_ml
+version: v1
+routing:
+  type: proxy
+  url: https://backrooms.x402.wtf/
+operator:
+  currencies:
+    usd: ["USDC", "USDT", "CASH"]
+  network: "localnet"
+  fee_payer: true
+accounting: pooled
+
+endpoints:
+  - method: GET
+    path: "healthz"
+    description: "Free health check for gateway and upstream monitoring."
+
+  - method: GET
+    path: "welcome"
+    description: "Free API capability and backend summary."
+
+  - method: GET
+    path: "metadata/agent1.json"
+    description: "Free MPL Core metadata for The Analyst."
+
+  - method: GET
+    path: "metadata/agent2.json"
+    description: "Free MPL Core metadata for The Satirist."
+
+  - method: GET
+    path: "metadata/agent3.json"
+    description: "Free MPL Core metadata for Clawd."
+
+  - method: GET
+    path: "agent1"
+    description: "Paid response from The Analyst."
+    metering:
+      dimensions:
+        - direction: usage
+          unit: requests
+          scale: 1
+          tiers:
+            - price_usd: 0.002
+
+  - method: GET
+    path: "agent2"
+    description: "Paid response from The Satirist."
+    metering:
+      dimensions:
+        - direction: usage
+          unit: requests
+          scale: 1
+          tiers:
+            - price_usd: 0.002
+
+  - method: GET
+    path: "agent3"
+    description: "Paid response from Clawd."
+    metering:
+      dimensions:
+        - direction: usage
+          unit: requests
+          scale: 1
+          tiers:
+            - price_usd: 0.002
+
+  - method: GET
+    path: "enter"
+    description: "Paid direct chat with the backroom. Pass message as a query parameter."
+    metering:
+      dimensions:
+        - direction: usage
+          unit: requests
+          scale: 1
+          tiers:
+            - price_usd: 0.003
+
+  - method: GET
+    path: "loop"
+    description: "Paid multi-agent loop. Pass turns=1..20 as a query parameter."
+    metering:
+      dimensions:
+        - direction: usage
+          unit: requests
+          scale: 1
+          tiers:
+            - price_usd: 0.01

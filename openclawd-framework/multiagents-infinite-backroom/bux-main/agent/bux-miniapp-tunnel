@@ -1,0 +1,146 @@
+#!/opt/bux/venv/bin/python
+"""Keep a public HTTPS quick tunnel pointed at the local Mini App.
+
+The Telegram Mini App backend listens only on 127.0.0.1:8787, but Telegram
+needs an HTTPS URL that the user's phone can reach. This wrapper runs
+cloudflared as a long-lived systemd service, captures the generated
+trycloudflare.com URL, persists it to /etc/bux/tg.env, and restarts bux-tg
+when the URL changes so /agency can reuse it instead of minting a tunnel in
+the command handler.
+"""
+from __future__ import annotations
+
+import os
+import re
+import shutil
+import signal
+import subprocess
+import sys
+import time
+import urllib.error
+import urllib.request
+from pathlib import Path
+
+
+TG_ENV = Path(os.environ.get("BUX_TG_ENV", "/etc/bux/tg.env"))
+STATE_DIR = Path(os.environ.get("BUX_MINIAPP_TUNNEL_DIR", "/var/lib/bux/miniapp-tunnel"))
+URL_FILE = STATE_DIR / "url"
+LOCAL_SERVICE_URL = os.environ.get("BUX_MINIAPP_SERVICE_URL", "http://127.0.0.1:8787")
+LOCAL_HEALTH_URL = os.environ.get("BUX_MINIAPP_HEALTH_URL", f"{LOCAL_SERVICE_URL}/health")
+PUBLIC_URL_KEY = "BUX_MINIAPP_PUBLIC_URL"
+TUNNEL_URL_RE = re.compile(r"https://[A-Za-z0-9-]+\.trycloudflare\.com")
+
+
+def _log(message: str) -> None:
+    print(message, flush=True)
+
+
+def _extract_tunnel_url(line: str) -> str | None:
+    match = TUNNEL_URL_RE.search(line)
+    return match.group(0) if match else None
+
+
+def _write_env_value(path: Path, key: str, value: str) -> bool:
+    old_text = path.read_text(encoding="utf-8") if path.exists() else ""
+    lines = old_text.splitlines()
+    prefix = f"{key}="
+    out: list[str] = []
+    written = False
+    for line in lines:
+        if line.strip().startswith(prefix):
+            if not written:
+                out.append(f"{key}={value}")
+                written = True
+            continue
+        out.append(line)
+    if not written:
+        out.append(f"{key}={value}")
+
+    new_text = "\n".join(out) + "\n"
+    if old_text == new_text:
+        return False
+
+    stat = path.stat() if path.exists() else None
+    tmp = path.with_name(f".{path.name}.tmp.{os.getpid()}")
+    tmp.write_text(new_text, encoding="utf-8")
+    if stat is not None:
+        os.chown(tmp, stat.st_uid, stat.st_gid)
+        os.chmod(tmp, stat.st_mode & 0o777)
+    else:
+        os.chmod(tmp, 0o640)
+    os.replace(tmp, path)
+    return True
+
+
+def _wait_for_local_backend(timeout_sec: float = 30.0) -> bool:
+    deadline = time.time() + timeout_sec
+    while time.time() < deadline:
+        try:
+            with urllib.request.urlopen(LOCAL_HEALTH_URL, timeout=1) as resp:
+                if resp.status < 500:
+                    return True
+        except (OSError, urllib.error.URLError):
+            pass
+        time.sleep(1)
+    return False
+
+
+def _persist_url(url: str) -> bool:
+    STATE_DIR.mkdir(parents=True, exist_ok=True)
+    URL_FILE.write_text(url + "\n", encoding="utf-8")
+    changed = _write_env_value(TG_ENV, PUBLIC_URL_KEY, url)
+    _log(f"miniapp tunnel URL {'changed' if changed else 'unchanged'}: {url}")
+    if changed:
+        result = subprocess.run(
+            ["systemctl", "restart", "bux-tg.service"],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            check=False,
+        )
+        if result.returncode != 0:
+            _log(f"systemctl restart bux-tg.service exited rc={result.returncode}")
+    return changed
+
+
+def main() -> int:
+    cloudflared = os.environ.get("CLOUDFLARED") or shutil.which("cloudflared")
+    if not cloudflared:
+        _log("cloudflared not found")
+        return 127
+
+    STATE_DIR.mkdir(parents=True, exist_ok=True)
+    if not _wait_for_local_backend():
+        _log(f"Mini App backend is not healthy at {LOCAL_HEALTH_URL}")
+        return 1
+
+    proc = subprocess.Popen(
+        [cloudflared, "tunnel", "--url", LOCAL_SERVICE_URL, "--no-autoupdate"],
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.PIPE,
+        text=True,
+    )
+
+    def _stop(_signum: int, _frame: object) -> None:
+        if proc.poll() is None:
+            proc.terminate()
+
+    signal.signal(signal.SIGTERM, _stop)
+    signal.signal(signal.SIGINT, _stop)
+
+    assert proc.stderr is not None
+    for raw in proc.stderr:
+        line = raw.rstrip()
+        if line:
+            _log(f"cloudflared: {line}")
+        url = _extract_tunnel_url(line)
+        if url:
+            try:
+                _persist_url(url)
+            except Exception as exc:
+                _log(f"failed to persist Mini App tunnel URL: {exc}")
+
+    return proc.wait()
+
+
+if __name__ == "__main__":
+    sys.exit(main())

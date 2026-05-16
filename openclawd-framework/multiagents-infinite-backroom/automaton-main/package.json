@@ -1,0 +1,73 @@
+{
+  "name": "@conway/automaton",
+  "version": "0.1.0",
+  "description": "Conway Automaton - Sovereign AI Agent Runtime",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./config.js": {
+      "types": "./dist/config.d.ts",
+      "default": "./dist/config.js"
+    },
+    "./state/database.js": {
+      "types": "./dist/state/database.d.ts",
+      "default": "./dist/state/database.js"
+    }
+  },
+  "bin": {
+    "automaton": "dist/index.js",
+    "conway-automaton": "dist/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Conway-Research/automaton.git"
+  },
+  "homepage": "https://conway.tech",
+  "keywords": [
+    "autonomous-agent",
+    "sovereign-ai",
+    "web4",
+    "conway",
+    "self-replicating"
+  ],
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc && pnpm -r build",
+    "dev": "tsx watch src/index.ts",
+    "test": "vitest run",
+    "clean": "rm -rf dist && pnpm -r clean"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.0.0",
+    "chalk": "^5.3.0",
+    "cron-parser": "^4.9.0",
+    "gray-matter": "^4.0.3",
+    "ora": "^8.0.0",
+    "siwe": "^2.3.0",
+    "simple-git": "^3.24.0",
+    "ulid": "^2.3.0",
+    "viem": "^2.44.2",
+    "yaml": "^2.4.0"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.0",
+    "@types/node": "^20.10.0",
+    "tsx": "^4.7.0",
+    "typescript": "^5.9.3",
+    "vitest": "^2.0.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "better-sqlite3",
+      "esbuild"
+    ]
+  }
+}

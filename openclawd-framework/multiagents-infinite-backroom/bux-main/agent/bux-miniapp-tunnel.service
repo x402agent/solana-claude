@@ -1,0 +1,21 @@
+[Unit]
+Description=bux Mini App public quick tunnel
+After=network-online.target bux-miniapp.service
+Wants=network-online.target bux-miniapp.service
+ConditionPathExists=/etc/bux/tg.env
+ConditionPathExists=/usr/local/bin/cloudflared
+
+[Service]
+Type=simple
+User=root
+Group=root
+EnvironmentFile=/etc/bux/tg.env
+WorkingDirectory=/opt/bux/agent
+ExecStart=/opt/bux/venv/bin/python /opt/bux/agent/bux-miniapp-tunnel
+Restart=always
+RestartSec=5
+StandardOutput=append:/var/log/bux/miniapp-tunnel.log
+StandardError=append:/var/log/bux/miniapp-tunnel.log
+
+[Install]
+WantedBy=multi-user.target

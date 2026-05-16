@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Browser Use Box</title>
+    <meta
+      name="description"
+      content="Browser Use Box is a 24/7 Claude Code agent with Browser Use Cloud, Telegram control, and a persistent real browser."
+    >
+    <link rel="canonical" href="https://browser-use.github.io/bux/">
+    <link rel="llms-txt" href="https://browser-use.github.io/bux/llms.txt">
+    <link rel="llms-full-txt" href="https://browser-use.github.io/bux/llms-full.txt">
+    <meta property="og:title" content="Browser Use Box">
+    <meta
+      property="og:description"
+      content="A 24/7 Claude Code agent with Browser Use Cloud, Telegram control, and a persistent real browser."
+    >
+    <meta property="og:url" content="https://browser-use.github.io/bux/">
+    <meta property="og:image" content="https://raw.githubusercontent.com/browser-use/bux/main/docs/tiktok-demo-thumbnail.jpg">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Browser Use Box">
+    <meta
+      name="twitter:description"
+      content="A 24/7 Claude Code agent with Browser Use Cloud, Telegram control, and a persistent real browser."
+    >
+    <meta name="twitter:image" content="https://raw.githubusercontent.com/browser-use/bux/main/docs/tiktok-demo-thumbnail.jpg">
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "Browser Use Box",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "Linux",
+        "description": "A 24/7 Claude Code agent with Browser Use Cloud, Telegram control, and a persistent real browser.",
+        "url": "https://browser-use.github.io/bux/",
+        "codeRepository": "https://github.com/browser-use/bux",
+        "image": "https://raw.githubusercontent.com/browser-use/bux/main/docs/tiktok-demo-thumbnail.jpg",
+        "sameAs": [
+          "https://www.tiktok.com/@browser_use/video/7639824093721758989",
+          "https://github.com/browser-use/bux"
+        ]
+      }
+    </script>
+    <style>
+      :root {
+        color-scheme: light;
+        --ink: #171b22;
+        --muted: #5e6875;
+        --line: #d8dee7;
+        --paper: #f8fafc;
+        --panel: #ffffff;
+        --accent: #006adc;
+        --accent-strong: #054da7;
+        --green: #16845b;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        color: var(--ink);
+        background: var(--paper);
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        line-height: 1.5;
+      }
+
+      a {
+        color: inherit;
+      }
+
+      .hero {
+        min-height: 72vh;
+        display: flex;
+        align-items: end;
+        background:
+          linear-gradient(90deg, rgba(10, 18, 28, .86), rgba(10, 18, 28, .46) 58%, rgba(10, 18, 28, .22)),
+          url("hero.jpg") center / cover no-repeat;
+        color: white;
+      }
+
+      .hero-inner,
+      .section-inner {
+        width: min(1120px, calc(100% - 40px));
+        margin: 0 auto;
+      }
+
+      .hero-inner {
+        padding: 72px 0 56px;
+      }
+
+      .eyebrow {
+        margin: 0 0 14px;
+        color: #a7f0cb;
+        font-size: 15px;
+        font-weight: 700;
+      }
+
+      h1 {
+        max-width: 780px;
+        margin: 0;
+        font-size: 58px;
+        line-height: 1.04;
+        letter-spacing: 0;
+      }
+
+      .hero-copy {
+        max-width: 660px;
+        margin: 22px 0 0;
+        color: #e8edf5;
+        font-size: 20px;
+      }
+
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 30px;
+      }
+
+      .button {
+        min-height: 44px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid rgba(255, 255, 255, .28);
+        border-radius: 8px;
+        padding: 11px 16px;
+        text-decoration: none;
+        font-weight: 700;
+        background: rgba(255, 255, 255, .1);
+      }
+
+      .button.primary {
+        border-color: white;
+        background: white;
+        color: #10151d;
+      }
+
+      main {
+        background: var(--paper);
+      }
+
+      section {
+        padding: 48px 0;
+      }
+
+      .demo {
+        display: grid;
+        grid-template-columns: minmax(260px, 420px) 1fr;
+        gap: 32px;
+        align-items: center;
+      }
+
+      .demo img {
+        width: 100%;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        display: block;
+        background: var(--panel);
+      }
+
+      h2 {
+        margin: 0 0 14px;
+        font-size: 30px;
+        line-height: 1.16;
+        letter-spacing: 0;
+      }
+
+      p {
+        margin: 0 0 18px;
+        color: var(--muted);
+      }
+
+      .command {
+        margin: 22px 0;
+        overflow-x: auto;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--panel);
+        padding: 14px;
+        color: #233044;
+        font: 15px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      }
+
+      .link-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 14px;
+      }
+
+      .link-tile {
+        min-height: 116px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--panel);
+        padding: 16px;
+        text-decoration: none;
+      }
+
+      .link-tile strong {
+        display: block;
+        margin-bottom: 8px;
+      }
+
+      .link-tile span {
+        color: var(--muted);
+      }
+
+      footer {
+        border-top: 1px solid var(--line);
+        padding: 24px 0 36px;
+        color: var(--muted);
+        font-size: 14px;
+      }
+
+      @media (max-width: 760px) {
+        .hero {
+          min-height: 68vh;
+          background:
+            linear-gradient(180deg, rgba(10, 18, 28, .44), rgba(10, 18, 28, .9)),
+            url("hero.jpg") center / cover no-repeat;
+        }
+
+        .hero-inner,
+        .section-inner {
+          width: min(100% - 28px, 1120px);
+        }
+
+        h1 {
+          font-size: 40px;
+        }
+
+        .hero-copy {
+          font-size: 18px;
+        }
+
+        .demo,
+        .link-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="hero">
+      <div class="hero-inner">
+        <p class="eyebrow">Browser Use Cloud + Telegram + Claude Code</p>
+        <h1>Browser Use Box</h1>
+        <p class="hero-copy">
+          A 24/7 agent on a Linux box with a persistent real browser, live login handoff, and Telegram control.
+        </p>
+        <div class="actions" aria-label="Primary links">
+          <a class="button primary" href="https://www.tiktok.com/@browser_use/video/7639824093721758989">Watch the 14s demo</a>
+          <a class="button" href="https://github.com/browser-use/bux">Open GitHub</a>
+          <a class="button" href="https://github.com/browser-use/bux/wiki">Read the wiki</a>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section>
+        <div class="section-inner demo">
+          <a href="https://www.tiktok.com/@browser_use/video/7639824093721758989" aria-label="Watch Browser Use Box on TikTok">
+            <img src="tiktok-demo-thumbnail.jpg" alt="Browser Use Box TikTok demo thumbnail">
+          </a>
+          <div>
+            <h2>Text your agent. Keep the browser alive.</h2>
+            <p>
+              Browser Use Box turns any Ubuntu VPS into an always-on Claude Code worker with a Browser Use Cloud session. Cookies persist, browser state survives, and login walls get handed back to you through a live browser URL.
+            </p>
+            <div class="command">curl -fsSL https://raw.githubusercontent.com/browser-use/bux/main/install.sh | sudo BROWSER_USE_API_KEY=bu_xxx bash</div>
+            <div class="actions">
+              <a class="button primary" href="https://www.tiktok.com/@browser_use/video/7639824093721758989">Watch TikTok demo</a>
+              <a class="button" style="border-color: var(--accent); color: var(--accent-strong); background: white;" href="https://github.com/browser-use/bux/blob/main/docs/playwright-automation.md">Playwright automation use case</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="section-inner link-grid">
+          <a class="link-tile" href="https://github.com/browser-use/bux/releases/tag/box-demo-2026-05-14">
+            <strong>Public demo release</strong>
+            <span>Launch notes, install path, and demo video.</span>
+          </a>
+          <a class="link-tile" href="https://github.com/browser-use/bux/discussions/181">
+            <strong>Pinned announcement</strong>
+            <span>Discussion thread for the public Browser Use Box demo.</span>
+          </a>
+          <a class="link-tile" href="https://github.com/browser-use/bux/wiki/Playwright-automation">
+            <strong>Automation workflow</strong>
+            <span>Run logged-in browser automation from a persistent box.</span>
+          </a>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="section-inner">
+        Open source at <a href="https://github.com/browser-use/bux">github.com/browser-use/bux</a>.
+      </div>
+    </footer>
+  </body>
+</html>

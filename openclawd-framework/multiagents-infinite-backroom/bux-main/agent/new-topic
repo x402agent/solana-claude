@@ -1,0 +1,170 @@
+#!/opt/bux/venv/bin/python
+"""new-topic <title> [--heartbeat INTERVAL] <prompt>
+
+Spawn a fresh Telegram forum topic and drop the prompt in as its first
+agent turn. Synchronous — the topic appears immediately, no at(1) delay.
+
+The new topic uses the box's default behavior: draft + ask before
+anything visible. Use `/goal <X>` from the user side to launch
+autopilot (act end-to-end, no approvals).
+
+**No heartbeat by default.** Re-firing the same prompt every hour is
+noise — the agent inside the new topic schedules its own check-ins via
+`tg-schedule` only when there's something concrete to come back to (a
+reply, CI completion, an event). Pass `--heartbeat <interval>` only
+when the caller has a genuine reason for a recurring fixed-cadence
+ping, like "scan this Slack channel every 30 min for new threads".
+
+Arguments:
+  <title>             topic name (≤128 chars; Telegram truncates).
+  --heartbeat INT     opt-in recurring heartbeat at this at(1) interval
+                      (e.g. "+1 hour"). Omit for no heartbeat (default).
+  <prompt>            initial prompt to dispatch as the topic's first turn.
+
+Examples:
+  new-topic "100k Reddit views" "research the top subreddits for this product, draft 3 candidate posts, ask which I should ship"
+  new-topic "metrics monitor" --heartbeat "+30 minutes" "scan datadog for error spikes and alert me"
+"""
+from __future__ import annotations
+
+import json
+import os
+import subprocess
+import sys
+from pathlib import Path
+
+REPO_AGENT = Path(__file__).resolve().parent
+sys.path.insert(0, str(REPO_AGENT))
+
+import httpx  # noqa: E402
+
+from telegram_bot import Bot  # noqa: E402
+
+TG_ENV = Path("/etc/bux/tg.env")
+TG_ALLOWED = Path("/etc/bux/tg-allowed.txt")
+
+
+def _load_dotenv(path: Path) -> dict[str, str]:
+    out: dict[str, str] = {}
+    if not path.is_file():
+        return out
+    for line in path.read_text().splitlines():
+        line = line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        k, v = line.split("=", 1)
+        out[k.strip()] = v.strip().strip('"').strip("'")
+    return out
+
+
+def _resolve_chat_id() -> int:
+    raw = os.environ.get("TG_CHAT_ID", "").strip()
+    if raw:
+        return int(raw)
+    try:
+        for line in TG_ALLOWED.read_text().splitlines():
+            line = line.strip()
+            if line:
+                return int(line)
+    except Exception:
+        pass
+    sys.exit("new-topic: no chat_id (set TG_CHAT_ID, or run after /start)")
+
+
+def _create_forum_topic(token: str, chat_id: int, name: str) -> int:
+    r = httpx.post(
+        f"https://api.telegram.org/bot{token}/createForumTopic",
+        json={"chat_id": chat_id, "name": name[:128]},
+        timeout=15,
+    )
+    r.raise_for_status()
+    body = r.json()
+    if not body.get("ok"):
+        raise RuntimeError(f"createForumTopic failed: {body}")
+    return int(body["result"]["message_thread_id"])
+
+
+def _parse_args(argv: list[str]) -> tuple[str, str, str]:
+    """Returns (title, heartbeat, prompt). heartbeat="" when not opted in."""
+    title: str | None = None
+    heartbeat = ""
+    prompt_parts: list[str] = []
+    it = iter(argv)
+    for arg in it:
+        if arg in ("-h", "--help"):
+            sys.stdout.write(__doc__)
+            sys.exit(0)
+        if arg == "--heartbeat":
+            heartbeat = next(it, "").strip()
+            if heartbeat.lower() == "none":
+                heartbeat = ""
+            continue
+        if title is None:
+            title = arg
+            continue
+        prompt_parts.append(arg)
+    if not title or not prompt_parts:
+        sys.exit("usage: new-topic <title> [--heartbeat INTERVAL] <prompt>")
+    return title, heartbeat, " ".join(prompt_parts)
+
+
+def main() -> int:
+    title, heartbeat, prompt = _parse_args(sys.argv[1:])
+
+    env = _load_dotenv(TG_ENV)
+    token = env.get("TG_BOT_TOKEN") or os.environ.get("TG_BOT_TOKEN", "")
+    setup_token = env.get("TG_SETUP_TOKEN", "") or os.environ.get("TG_SETUP_TOKEN", "")
+    if not token:
+        sys.exit("new-topic: TG_BOT_TOKEN missing")
+
+    chat_id = _resolve_chat_id()
+
+    try:
+        thread_id = _create_forum_topic(token, chat_id, title)
+    except Exception as e:
+        sys.exit(f"new-topic: couldn't create topic: {e}")
+
+    sender = {"user_id": "agent", "username": "agent", "name": "Agent"}
+    bot = Bot(token, setup_token)
+    bot.run_task((chat_id, thread_id), prompt, reply_to=None, sender=sender)
+
+    # Queue a recurring heartbeat for the new topic unless --heartbeat none.
+    if heartbeat:
+        env_for_schedule = os.environ.copy()
+        env_for_schedule["TG_CHAT_ID"] = str(chat_id)
+        env_for_schedule["TG_THREAD_ID"] = str(thread_id)
+        heartbeat_prompt = (
+            f"[heartbeat] Continue working on this topic ({title}). "
+            "Scan connected sources for changes, consult agency.db, "
+            "surface the next concrete action and propose it as a card."
+        )
+        try:
+            subprocess.run(
+                [
+                    "/usr/local/bin/tg-schedule",
+                    heartbeat,
+                    "--repeat", heartbeat,
+                    heartbeat_prompt,
+                ],
+                env=env_for_schedule,
+                check=False,
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+            )
+        except Exception as exc:
+            print(f"new-topic: heartbeat queue failed: {exc}", file=sys.stderr)
+
+    # Tell the caller what happened so the agent can include the link in
+    # whatever it's posting back to the user.
+    print(json.dumps({
+        "ok": True,
+        "chat_id": chat_id,
+        "thread_id": thread_id,
+        "title": title,
+        "heartbeat": heartbeat or None,
+    }))
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

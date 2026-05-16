@@ -1,0 +1,12 @@
+name = "clawd-install-sh"
+main = "worker.js"
+compatibility_date = "2024-01-01"
+account_id = "18ed6c94a5311ad325315a5cd8bee8cd"
+
+[[routes]]
+pattern = "x402.wtf/install.sh"
+zone_id = "989486af08fbdf7613c5efef9b5f1459"
+
+[[routes]]
+pattern = "solanaclawd.com/install.sh"
+zone_name = "solanaclawd.com"
