@@ -14,6 +14,7 @@ import { sendMessage } from './lib/backroom'
 import SolanaDataPanel from './components/SolanaDataPanel'
 import PerpsConstellation from './components/PerpsConstellation'
 import TradingArenaPanel from './components/TradingArenaPanel'
+import ClawdOrchestrationPanel from './components/ClawdOrchestrationPanel'
 
 const BASE_URL = 'https://backrooms.x402.wtf'
 
@@ -115,6 +116,7 @@ export default function App() {
       <SolanaDataPanel />
       <AutomatonRuntimePanel />
       <TradingArenaPanel />
+      <ClawdOrchestrationPanel />
 
       {/* Top-right toolbar */}
       <div className="toolbar">
@@ -211,6 +213,22 @@ export default function App() {
         .arena-action{font-size:10px;text-align:right;font-weight:900;letter-spacing:.9px}
         .arena-action span{display:block;font-size:8px;color:rgba(255,255,255,.45);margin-top:2px}
         .arena-footer{font-size:8px;color:rgba(255,255,255,.32);margin-top:4px;text-align:right}
+        .clawd-orchestrator{position:fixed;right:16px;bottom:96px;z-index:180;width:min(360px,calc(100vw - 32px));font-family:monospace;color:rgba(235,250,255,.72);background:linear-gradient(145deg,rgba(10,4,8,.82),rgba(5,18,22,.7));border:1px solid rgba(239,83,80,.26);border-radius:14px;padding:10px 12px;backdrop-filter:blur(14px);box-shadow:0 0 36px rgba(239,83,80,.08)}
+        .clawd-orch-title{font-size:10px;color:#ff8a65;text-transform:uppercase;letter-spacing:1.8px;font-weight:900}
+        .clawd-orch-subtitle{font-size:8px;color:rgba(255,255,255,.34);margin:2px 0 8px}
+        .clawd-orch-input-row{display:flex;gap:6px}
+        .clawd-orch-input-row input{flex:1;min-width:0;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:8px;color:#e7fbff;font-family:monospace;font-size:10px;padding:7px 8px;outline:none}
+        .clawd-orch-input-row input:focus{border-color:rgba(255,138,101,.45);box-shadow:0 0 12px rgba(255,138,101,.08)}
+        .clawd-orch-input-row button{background:rgba(239,83,80,.12);border:1px solid rgba(239,83,80,.35);border-radius:8px;color:#ff8a65;font-family:monospace;font-size:10px;font-weight:800;padding:0 10px;cursor:pointer}
+        .clawd-orch-input-row button:disabled{opacity:.45;cursor:not-allowed}
+        .clawd-orch-error{margin-top:7px;font-size:8px;color:#ff3d71}
+        .clawd-orch-meta{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px}
+        .clawd-orch-meta span{border:1px solid rgba(255,255,255,.1);border-radius:999px;padding:2px 6px;font-size:8px;color:rgba(255,255,255,.42)}
+        .clawd-orch-trace{margin-top:7px;max-height:210px;overflow-y:auto;padding-right:2px}
+        .clawd-orch-step{border-top:1px solid rgba(255,255,255,.06);padding:6px 0}
+        .clawd-orch-step-head{display:flex;justify-content:space-between;gap:8px;font-size:8px;color:#ffcc80;text-transform:uppercase;letter-spacing:.6px}
+        .clawd-orch-step-output{font-size:8px;color:rgba(255,255,255,.48);line-height:1.38;margin-top:3px}
+        @media(max-width:1100px){.clawd-orchestrator{display:none}}
         @media(max-width:820px){.runtime-panel,.arena-panel{display:none}.market-panel{top:54px!important;max-height:48vh!important}.watermark-title{font-size:14px}.chat-bar{bottom:54px}}
       `}</style>
     </div>
