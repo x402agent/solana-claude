@@ -12,8 +12,22 @@ from fastapi.responses import HTMLResponse, PlainTextResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from pathlib import Path
+from pydantic import BaseModel, Field
 from .trading_arena import build_trading_arena
 from .clawd_orchestration import run_clawd_orchestration
+from .solana_trading import (
+    dflow_prediction_markets,
+    dflow_prediction_order,
+    integration_status,
+    phoenix_market_list,
+    phoenix_market_ticker,
+    vulcan_live_order,
+    vulcan_market_list,
+    vulcan_market_ticker,
+    vulcan_paper_init,
+    vulcan_paper_order,
+    vulcan_status,
+)
 
 
 def _parse_cors_origins() -> list[str]:
@@ -52,12 +66,44 @@ else:
 app = FastAPI(title="Multi-Agent Infinite Backroom", version="2.1.0")
 CORS_ORIGINS = _parse_cors_origins()
 
+
+class VulcanPaperInitRequest(BaseModel):
+    balance: float = Field(default=10000.0, gt=0)
+    currency: str = "USDC"
+    fee_bps: float | None = Field(default=None, ge=0)
+
+
+class VulcanOrderRequest(BaseModel):
+    symbol: str
+    side: str
+    order_type: str = "market"
+    size: float | None = Field(default=None, gt=0)
+    tokens: float | None = Field(default=None, gt=0)
+    notional_usdc: float | None = Field(default=None, gt=0)
+    price: float | None = Field(default=None, gt=0)
+    tp: float | None = Field(default=None, gt=0)
+    sl: float | None = Field(default=None, gt=0)
+    isolated: bool = False
+    collateral: float | None = Field(default=None, gt=0)
+    reduce_only: bool = False
+    dry_run: bool = True
+
+
+class DflowPredictionOrderRequest(BaseModel):
+    input_mint: str
+    output_mint: str
+    amount: int = Field(gt=0)
+    slippage_bps: int = Field(default=50, ge=0, le=10000)
+    owner: str | None = None
+    referral_fee_bps: int | None = Field(default=None, ge=0, le=10000)
+    destination_token_account: str | None = None
+
 # CORS — allow the 3D frontend and any tool
 app.add_middleware(
     CORSMiddleware,
     allow_origins=CORS_ORIGINS,
     allow_credentials=False,
-    allow_methods=["GET"],
+    allow_methods=["GET", "POST"],
     allow_headers=["*"],
 )
 
@@ -128,7 +174,91 @@ def healthcheck():
         "model": model_name,
         "configured_backends": configured_backends,
         "terminal_ready": terminal is not None,
+        "solana": integration_status(),
     }
+
+
+@app.get("/solana/status")
+def solana_status():
+    """Show Solana, Vulcan, Phoenix, and DFlow integration readiness."""
+    status = integration_status()
+    status["vulcanStatus"] = vulcan_status()
+    return status
+
+
+@app.get("/perps/markets")
+def perps_markets(source: str = Query(default="vulcan", pattern="^(vulcan|phoenix)$")):
+    """List Phoenix perpetual markets via Vulcan or direct Phoenix HTTP."""
+    return vulcan_market_list() if source == "vulcan" else phoenix_market_list()
+
+
+@app.get("/perps/ticker/{symbol}")
+def perps_ticker(symbol: str, source: str = Query(default="vulcan", pattern="^(vulcan|phoenix)$")):
+    """Read perps ticker data for one market."""
+    return vulcan_market_ticker(symbol) if source == "vulcan" else phoenix_market_ticker(symbol)
+
+
+@app.post("/perps/paper/init")
+def perps_paper_init(req: VulcanPaperInitRequest):
+    """Initialize a local Vulcan paper account for perpetuals testing."""
+    return vulcan_paper_init(balance=req.balance, currency=req.currency, fee_bps=req.fee_bps)
+
+
+@app.post("/perps/paper/order")
+def perps_paper_order(req: VulcanOrderRequest):
+    """Place a paper-mode Vulcan perpetual order."""
+    return vulcan_paper_order(
+        symbol=req.symbol,
+        side=req.side,
+        order_type=req.order_type,
+        size=req.size,
+        tokens=req.tokens,
+        notional_usdc=req.notional_usdc,
+        price=req.price,
+    )
+
+
+@app.post("/perps/order")
+def perps_order(req: VulcanOrderRequest):
+    """Run a Vulcan perpetual order as dry-run by default, or live when dry_run=false."""
+    return vulcan_live_order(
+        symbol=req.symbol,
+        side=req.side,
+        order_type=req.order_type,
+        size=req.size,
+        tokens=req.tokens,
+        notional_usdc=req.notional_usdc,
+        price=req.price,
+        tp=req.tp,
+        sl=req.sl,
+        isolated=req.isolated,
+        collateral=req.collateral,
+        reduce_only=req.reduce_only,
+        dry_run=req.dry_run,
+    )
+
+
+@app.get("/prediction/markets")
+def prediction_markets(
+    limit: int = Query(default=25, ge=1, le=100),
+    status: str | None = Query(default=None),
+):
+    """Discover DFlow prediction markets."""
+    return dflow_prediction_markets(limit=limit, status=status)
+
+
+@app.post("/prediction/order")
+def prediction_order(req: DflowPredictionOrderRequest):
+    """Build a DFlow prediction market order route/transaction payload."""
+    return dflow_prediction_order(
+        input_mint=req.input_mint,
+        output_mint=req.output_mint,
+        amount=req.amount,
+        slippage_bps=req.slippage_bps,
+        owner=req.owner,
+        referral_fee_bps=req.referral_fee_bps,
+        destination_token_account=req.destination_token_account,
+    )
 
 
 @app.get("/arena")
