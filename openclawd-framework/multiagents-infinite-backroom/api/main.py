@@ -326,7 +326,7 @@ def enter_backroom(
 ):
     """
     CLI-friendly endpoint for the backroom chat.
-    Use: curl clawd-backrooms.fly.dev/enter?message=hello
+    Use: curl https://backrooms.x402.wtf/enter?message=hello
     """
     if terminal is None:
         return PlainTextResponse("Error: No API key configured\n")
@@ -357,18 +357,30 @@ def enter_backroom(
         return PlainTextResponse(f"Error: {e}\n")
 
 
+def _enter_sh_headers() -> dict[str, str]:
+    return {
+        "content-type": "text/plain; charset=utf-8",
+        "cache-control": "public, max-age=300",
+    }
+
+
+@app.head("/enter.sh", response_class=PlainTextResponse)
+def enter_sh_head():
+    return PlainTextResponse("", headers=_enter_sh_headers())
+
+
 @app.get("/enter.sh", response_class=PlainTextResponse)
 def enter_sh_script():
     """
     One-shot curl installer for the 'enter' CLI command.
-    Usage: curl -fsSL https://clawd-backrooms.fly.dev/enter.sh | bash
+    Usage: curl -fsSL https://backrooms.x402.wtf/enter.sh | bash
     """
     script = r"""#!/usr/bin/env bash
 # enter — SSHH into the Infinite Backroom from your terminal
-# Installed via: curl -fsSL https://clawd-backrooms.fly.dev/enter.sh | bash
+# Installed via: curl -fsSL https://backrooms.x402.wtf/enter.sh | bash
 set -euo pipefail
 
-BACKROOM_URL="${BACKROOM_URL:-https://clawd-backrooms.fly.dev}"
+BACKROOM_URL="${BACKROOM_URL:-https://backrooms.x402.wtf}"
 ENTER_CMD="${ENTER_CMD:-enter}"
 
 RESET="\033[0m"
@@ -393,7 +405,7 @@ cat > "$INSTALL_DIR/$ENTER_CMD" << 'ENTRY'
 #!/usr/bin/env bash
 set -euo pipefail
 
-BACKROOM_URL="${BACKROOM_URL:-https://clawd-backrooms.fly.dev}"
+BACKROOM_URL="${BACKROOM_URL:-https://backrooms.x402.wtf}"
 RESET="\033[0m"; BOLD="\033[1m"; CYAN="\033[36m"
 GREEN="\033[32m"; YELLOW="\033[33m"; RED="\033[31m"; DIM="\033[2m"
 
@@ -485,8 +497,5 @@ echo ""
 
     return PlainTextResponse(
         script,
-        headers={
-            "content-type": "text/plain; charset=utf-8",
-            "cache-control": "public, max-age=300",
-        },
+        headers=_enter_sh_headers(),
     )

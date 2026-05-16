@@ -38,8 +38,8 @@ app = "clawd-backrooms"
   LOG_LEVEL = "info"
   DFLOW_QUOTE_API_URL = "https://d.quote-api.dflow.net"
   DFLOW_MARKETS_API_URL = "https://d.prediction-markets-api.dflow.net"
-  CONVEX_URL = "https://giddy-dragon-7.convex.cloud"
-  CONVEX_SITE_URL = "https://giddy-dragon-7.convex.site"
+  CONVEX_URL = "https://original-vulture-742.convex.cloud"
+  CONVEX_SITE_URL = "https://original-vulture-742.convex.site"
   CORS_ORIGINS = "https://backrooms.x402.wtf,https://backroom-3d.fly.dev"
 
 [checks]
