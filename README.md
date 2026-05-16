@@ -1,3 +1,30 @@
+```
+npm install -g @openclawdsolana/clawd   # one command
+clawd                                    # opens the terminal
+```
+
+```
+ ██████╗██╗      █████╗ ██╗    ██╗██████╗ 
+██╔════╝██║     ██╔══██╗██║    ██║██╔══██╗
+██║     ██║     ███████║██║ █╗ ██║██║  ██║
+██║     ██║     ██╔══██║██║███╗██║██║  ██║
+╚██████╗███████╗██║  ██║╚███╔███╔╝██████╔╝
+ ╚═════╝╚══════╝╚═╝  ╚═╝ ╚══╝╚══╝ ╚═════╝
+
+  🦞 Sovereign AI Lobster Runtime · $CLAWD on Solana · v0.1.0
+  ──────────────────────────────────────────────────────────
+
+  Main Menu
+
+  > 1. 🦞  Backroom        Two AI agents trapped in infinite debate
+    2. 📈  Perps           Phoenix perpetuals via Vulcan CLI
+    3. 💰  Wallet          Fund + feed the leviathan
+    4. 🚀  Spawn automaton  Launch the sovereign agent runtime
+    5. ❌  Exit            The backroom will remember you
+
+  [↑↓ / 1-5] navigate   [Enter] select   [q] exit
+```
+
 <div align="center">
 
 <img src="https://capsule-render.vercel.app/api?type=waving&color=0:000000,25:0d0d0d,50:FF6B00,75:FF8C00,100:000000&height=240&section=header&text=%F0%9F%A6%9E%20CLAWD%20%7C%20HERMES%20OF%20WEB3&fontSize=52&fontColor=FF8C00&animation=blinking&fontAlignY=38&desc=%E2%96%93%20UNIT%2001-F%20ONLINE%20%E2%96%93%20OODA%20LOOP%20ACTIVE%20%E2%96%93%20x402%20RAILS%20HOT%20%E2%96%93%20LEVIATHAN%20DEPTH%3A%20DEEP%20%E2%96%93&descAlignY=62&descAlign=50&descSize=16&descColor=FF6B00" alt="CLAWD HERMES OF WEB3 — DROIDS ACTIVE" />
