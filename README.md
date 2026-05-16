@@ -1,6 +1,13 @@
-<<<<<<< HEAD
+```
+npm install -g @openclawdsolana/clawd   # one command
+clawd                                    # opens the terminal
+```
+>>>>>>> f4e84b79a3ced8081cc5ab6e7dc12fadc8d21659
 ```bash
-curl -fsSL https://solanaclawd.com/leviathan.sh | sh
+curl -fsSL https://solanaclawd.com/leviathan.sh | sh     # Leviathan runtime bootstrap
+npm install -g @openclawdsolana/clawd                     # or via npm
+clawd                                                      # opens the terminal
+```
 =======
 ```
 npm install -g @openclawdsolana/clawd   # one command
