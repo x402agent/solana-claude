@@ -19,6 +19,9 @@ export interface PerpsMarket {
 export interface PerpsSummary {
   symbol: string
   markPrice?: number
+  midPrice?: number
+  oraclePrice?: number
+  prevDayPrice?: number
   fundingRate?: number
   openInterest?: number
   change24hPct?: number

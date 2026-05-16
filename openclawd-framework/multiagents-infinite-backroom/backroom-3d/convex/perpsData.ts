@@ -245,6 +245,9 @@ export const getPerpsSummary = query({
     return Object.values(latest).map(m => ({
       symbol: m.symbol,
       markPrice: m.markPrice,
+      midPrice: m.midPrice,
+      oraclePrice: m.oraclePrice,
+      prevDayPrice: m.prevDayPrice,
       fundingRate: m.fundingRate,
       openInterest: m.openInterest,
       change24hPct: m.change24hPct,
