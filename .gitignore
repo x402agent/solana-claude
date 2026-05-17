@@ -55,6 +55,10 @@ wallet.json
 
 # Nested repositories and release noise
 **/.git
+UltraThink-SKill/
+skills/UltraThink-SKill/
+skills/dflow-phantom-connect-skill/
+skills/dflow-skills/
 tui/dist/
 tui/node_modules/
 llm_oracle/upstream/percolator-prog
