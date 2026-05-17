@@ -39,10 +39,10 @@
   ],
   "license": "MIT",
   "scripts": {
-    "build": "tsc && pnpm -r build",
+    "build": "tsc",
     "dev": "tsx watch src/index.ts",
     "test": "vitest run",
-    "clean": "rm -rf dist && pnpm -r clean"
+    "clean": "rm -rf dist"
   },
   "dependencies": {
     "better-sqlite3": "^11.0.0",

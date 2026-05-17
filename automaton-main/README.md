@@ -158,6 +158,27 @@ pnpm goblin
 pnpm goblin:tui
 ```
 
+## Verification Matrix
+
+These are the package checks used for this workspace:
+
+| Package / surface | Command | Expected result |
+| --- | --- | --- |
+| `clawd-automaton` runtime | `pnpm test` | Vitest heartbeat and agent-loop suites pass. |
+| `clawd-automaton` runtime + workspace packages | `pnpm build` | TypeScript compiles and `clawd-dashboard` production build completes. |
+| `clawd-dashboard` | `pnpm dashboard:build` | Vite production bundle is emitted under `packages/dashboard/dist/`. |
+| `automation/` direct package | `cd automation && pnpm test` | Mirrored heartbeat and loop suites pass. |
+| `automation/` direct package | `cd automation && pnpm build` | TypeScript compiles to `automation/dist/`. |
+
+Direct package setup for the migrated automation control plane:
+
+```bash
+cd automation
+pnpm install
+pnpm build
+pnpm test
+```
+
 ## Publish
 
 Publish the runtime package:
