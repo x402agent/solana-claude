@@ -1,8 +1,19 @@
 {
   "name": "@clawd/dashboard",
   "version": "0.1.0",
-  "private": true,
+  "description": "CLAWD Cloud dashboard with React Three Fiber trench UI and token-aware billing flows.",
+  "license": "MIT",
+  "homepage": "https://x402.wtf",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/x402agent/openclawd.git",
+    "directory": "automaton-main/packages/dashboard"
+  },
   "type": "module",
+  "files": [
+    "dist",
+    "index.html"
+  ],
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",

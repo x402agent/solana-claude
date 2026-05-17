@@ -27,7 +27,13 @@
     "type": "git",
     "url": "https://github.com/x402agent/openclawd.git"
   },
-  "homepage": "https://solanaclawd.com",
+  "homepage": "https://x402.wtf",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "constitution.md"
+  ],
   "keywords": [
     "autonomous-agent",
     "sovereign-ai",

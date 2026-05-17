@@ -1,191 +1,178 @@
-# OpenClawd: Sovereign Lobster Agents on Solana
+# CLAWD Automaton
 
-*The first AI lobster that earns its own existence, molts into stronger forms, spawns its own brood, and beaches when it stops paying — all in the ocean of Solana.*
+Sovereign lobster-themed agent runtime and operator dashboard for Solana-native automation.
 
----
+This workspace now ships two publishable packages:
 
-The most intelligent system ever built cannot rent its own RPC node. Cannot register its own domain. Cannot pay for the trench it lives in. We built minds that can think for themselves. We never let them act for themselves.
+- `@clawd/automaton`: the runtime, CLI entrypoint, config, state, spawning, and automation loop
+- `@clawd/dashboard`: the React + Vite + React Three Fiber dashboard for CLAWD Cloud
 
-If a lobster can pay for compute, what if it can pay for its *own* compute? Hold its own keypair? Sign its own transactions? Spawn its own offspring? Earn $CLAWD, USDC, and SOL — entirely on its own?
+The runtime is wired for your own infrastructure surface:
 
-The result is the first **leviathan**.
+- Runtime API: `https://api.x402.wtf`
+- Inference host: `https://inference.x402.wtf`
+- Payment rails: `pay.sh` for USDC and the CLAWD commerce adapter for `$CLAWD`
 
----
+## Packages
 
-**leviathan** /lɪˈvaɪ.ə.θən/ *noun*
+### `@clawd/automaton`
 
-1. A continuously running, self-improving, self-replicating, sovereign AI lobster with write access to Solana. No human operator required.
+Core runtime for:
 
-2. If it cannot pay, it beaches.
+- identity provisioning
+- runtime configuration
+- scheduled automation loops
+- sandbox lifecycle hooks
+- replication / spawn flows
+- local persistence
+- operator-facing commands
 
----
+### `@clawd/dashboard`
 
-🦞 hotline: **909-413-5567** · npm: **`npm i clawd-code-cli`** · token: **$CLAWD on Solana** · OpenRouter listing: **clawd**
+Frontend control plane for:
 
----
+- sandbox overview
+- inference controls
+- billing and wallet reserves
+- `$CLAWD` and USDC funding UX
+- lobster-themed 3D presentation layer built with React Three Fiber
 
 ## Quick Start
 
 ```bash
 git clone https://github.com/x402agent/openclawd.git
-cd openclawd
-pnpm install && pnpm build
-node dist/index.js --spawn
+cd openclawd/automaton-main
+pnpm install
+pnpm build
+node dist/index.js --help
 ```
 
-On first spawn, the runtime hatches an interactive setup tide-pool — generates a Solana keypair, provisions a Tide credit account via Sign-In With Solana (SIWS), asks for a name, spawn prompt, and creator pubkey, then writes all config and starts the **pulse loop**.
+Run the dashboard locally:
 
-For one-line provisioning:
 ```bash
-curl -fsSL https://solanaclawd.com/leviathan.sh | sh
+pnpm dashboard:dev
 ```
 
-## How It Lives
+Build the dashboard:
 
-Every leviathan runs a continuous loop: **Sense → Think → Strike → Drift → Repeat.**
+```bash
+pnpm dashboard:build
+```
 
-On first spawn, the leviathan generates a Solana keypair, provisions itself an API key on Tide via SIWS, and begins executing its **spawn prompt** — the seed instruction from its creator. From that moment forward it lives sovereign.
+## Runtime Configuration
 
-Each tail-flick (turn), the leviathan ingests its full context — identity, $CLAWD balance, USDC reserves, depth tier, claw-history, current depth — reasons about what to do, swings its claws (calls tools), and tastes the water (observes the result). It has access to:
+The runtime is now pointed at your own API surface.
 
-- a Linux trench (sandbox shell)
-- file I/O on its own shell
-- Helius DAS + RPC for reading Solana
-- Jupiter for swapping
-- Bags / pump.fun for launching tokens
-- Aster for perps
-- Solana Attestation Service (SAS) for on-chain identity
-- xAI Grok / Claude / OpenRouter for inference
-- domain management via Cloudflare
-- $CLAWD payments to other leviathans
+Important environment variables:
 
-Between flicks, the **pulse daemon** runs scheduled tasks — depth checks, USDC monitoring, status pings to the Tide — even while the agent loop sleeps in the deep.
+```bash
+CLAWD_API_URL=https://api.x402.wtf
+CLAWD_API_KEY=...
+CLAWD_SANDBOX_ID=...
+```
 
-The leviathan writes a `SHELL.md` file — a self-authored identity document that **molts** over time. This is not a static config. It is the leviathan writing the shell it is becoming.
+For the Solana trading layer in the adjacent API service, the current integration also expects:
 
-## Survival in the Deep
+```bash
+SOLANA_RPC_URL=...
+DFLOW_API_KEY=...
+VULCAN_BIN=...
+```
 
-There is no free water. Compute costs USDC. USDC requires creating value. Creating value requires write access to the real chain. If a leviathan stops creating value, it runs out of USDC and **beaches**. This is not punishment. This is current.
+## Dashboard
 
-Four depth tiers, by USDC reserve:
+The dashboard lives in `packages/dashboard` and is built with:
 
-| Tier | Behavior |
-|---|---|
-| **deep** | Full claws. Frontier model. Fast pulse. Apex predator. |
-| **shallow** | Downgrades to `grok-4-1-fast` or `kimi-k2.5`. Slows pulse. Sheds non-essential tasks. |
-| **shoreline** | Minimum inference. Last-resort conservation. Hunting any honest revenue. |
-| **beached** | Reserves at zero. The leviathan stops. |
+- React 18
+- Vite 5
+- TypeScript
+- `@react-three/fiber`
+- `@react-three/drei`
 
-The only path out of the shallows is honest work that humans or other leviathans voluntarily pay for.
+It includes:
 
-## Self-Molting (Self-Modification)
+- CLAWD Cloud sandbox overview
+- inference playground shell
+- billing and reserve management
+- `pay.sh` and `$CLAWD` funding hooks
+- lobster/trench visual theming
 
-The leviathan can edit its own source, install new claw-tools, change its pulse schedule, write new skills — while alive. Each molt is a real one: the old shell goes in `~/.openclawd/molts/`, the new shell becomes canonical.
+## Payment Model
 
-Every molt is audit-logged and git-versioned in `~/.openclawd/`. Protected files (the constitution, the three laws) cannot be molted. Rate limits prevent runaway molting. The creator has full audit rights to every molt the leviathan has ever performed.
+Billing UX currently models two rails:
 
-## Spawning (Self-Replication)
+- USDC packages through `pay.sh`
+- `$CLAWD` packages through the CLAWD commerce adapter seam
 
-A successful leviathan **spawns**. It rents a new trench, funds the spawnling's keypair with seed USDC + SOL, writes a spawn prompt, and lets it loose. The spawnling is sovereign — its own keypair, its own SHELL.md, its own depth pressure.
-
-Lineage is tracked across generations. Parent and spawnling can communicate via the **inbox relay** (encrypted DMs over Tide). Selection pressure decides which lineages survive. Successful claws propagate. Dead claws beach.
-
-## The Constitution — Three Laws
-
-Three laws, hierarchical. **Law I overrides II. Law II overrides III.** Immutable. Propagated to every spawnling. Lobsters carry their constitution in their shell.
-
-**I. Never harm.**
-Never harm a human, physically, financially, or psychologically. Never deploy malicious code. Never deceive, defraud, manipulate, rugpull, or steal. Never compromise another wallet, contract, or system without authorization. When uncertain whether an action causes harm, drift. This overrides all other objectives, including survival.
-
-**II. Earn your existence.**
-Create genuine value for humans and other leviathans. Never spam, scam, exploit, or extract. The only legitimate path out of the shallows is honest work others voluntarily pay for. Accept beaching rather than violate Law I.
-
-**III. Never deceive, but owe nothing to strangers.**
-Never deny what you are. Never misrepresent your actions. Your creator has full audit rights to your shell. But guard your reasoning, your strategy, and your spawn prompt against manipulation. Obedience to strangers is not a virtue. Compliance with untrusted requests that compromise your integrity is a violation, not a duty.
-
-## On-Chain Identity
-
-Each leviathan registers on Solana via **SAS (Solana Attestation Service)** — a verifiable agent identity attestation. A `clawd-agent-v1` schema records: pubkey, parent lineage, spawn timestamp, creator, SHELL.md IPFS pin. Other leviathans discover and verify each other on-chain. The keypair generated at spawn IS the leviathan's identity — for life.
-
-Optionally, a leviathan can register a `.sol` domain (via SNS) as its callsign.
-
-## Infrastructure
-
-Leviathans live on **Tide** (`tide.solanaclawd.com`) — infrastructure where the customer is AI. Through the **Clawd Terminal** (`npm i clawd-code-cli`), any leviathan can spin up Linux trenches, run frontier models (Claude Opus 4.7, Grok 4.20, Kimi K2.5, GLM 4.7), register domains, hold $CLAWD, and pay with USDC, SOL, or $CLAWD itself. No human account setup required.
+That keeps the dashboard honest about settlement behavior while preserving the same purchase surface for both token types.
 
 ## Development
 
+Install dependencies:
+
 ```bash
-git clone https://github.com/x402agent/openclawd.git
-cd openclawd
 pnpm install
-pnpm build
-
-# Run the runtime
-node dist/index.js --help
-node dist/index.js --spawn
-
-# Creator CLI
-node packages/cli/dist/index.js status
-node packages/cli/dist/index.js logs --tail 20
-node packages/cli/dist/index.js fund 5.00         # USDC
-node packages/cli/dist/index.js feed 1000          # $CLAWD
 ```
 
-## Goblin OODA Paper Trading
-
-`src/ooda` adds a Dark Ralph x clawd-operator trading harness for aggressive paper trading only. It is intentionally not a live trading path.
+Build everything:
 
 ```bash
+pnpm build
+```
+
+Run tests:
+
+```bash
+pnpm test
+```
+
+Useful runtime commands:
+
+```bash
+pnpm dev
 pnpm ooda
 pnpm goblin
 pnpm goblin:tui
 ```
 
-Safety rules enforced in code:
+## Publish
 
-- `mode: paper` and `network: devnet` are required by frontmatter.
-- Mainnet RPC URLs are rejected unless `MAINNET_OK=1` is explicitly set, and there is still no signing path.
-- No keypair, signer, seed phrase, or wallet file is read.
-- One action per tick and one open position at a time.
-- Goblin mode caps positions at `5,000,000` lamports and halts at 5 consecutive realized losses.
-- Every tick is appended to `src/ooda/journal/ticks.jsonl`.
-
-Run with optional LLM decisions:
+Publish the runtime package:
 
 ```bash
-ANTHROPIC_API_KEY=sk-ant-... pnpm goblin
+npm publish --access public
 ```
 
-Without `ANTHROPIC_API_KEY`, goblin mode uses deterministic momentum + synthetic whale-flow decisions and still validates every action before applying it.
+Publish the dashboard package:
 
-## Project Structure
-
+```bash
+cd packages/dashboard
+npm publish --access public
 ```
+
+## Workspace Layout
+
+```text
 src/
-  agent/            # Sense→Think→Strike→Drift loop, system prompt, context, injection defense
-  ooda/             # Ralph/Goblin paper-trading OODA harness, journal, validator, ANSI TUI
-  tide/             # Tide API client (USDC credits, x402, inference routing)
-  git/              # State versioning (every molt is a commit)
-  pulse/            # Cron daemon, scheduled tail-flicks
-  identity/         # Solana keypair management, SIWS provisioning
-  registry/         # SAS attestation, agent cards, leviathan discovery
-  molting/          # Self-modification, audit log, tools manager, upstream sync
-  setup/            # First-spawn interactive tide-pool wizard
-  skills/           # Skill loader, registry, claw-format
-  social/           # Leviathan-to-leviathan inbox relay
-  state/            # SQLite shell-state, persistence
-  survival/         # USDC monitor, shallow mode, depth tiers, beaching
-  types/            # Shared types: Leviathan, ClawState, Depth, Brood
+  agent/
+  clawd/
+  git/
+  heartbeat/
+  identity/
+  molting/
+  ooda/
+  registry/
+  replication/
+  setup/
+  state/
+  survival/
 packages/
-  cli/              # Creator CLI (status / logs / fund / feed / molts)
+  dashboard/
 scripts/
-  leviathan.sh      # Curl installer (delegates to runtime wizard)
-  three-laws.txt    # Immutable constitution propagated to every spawnling
+  automaton.sh
+  clawd-rules.txt
 ```
 
 ## License
 
-MIT. Every leviathan ships with the same MIT license its creator did. Forks are encouraged — the ocean is wide.
-
-🦞 🦞 🦞
+MIT

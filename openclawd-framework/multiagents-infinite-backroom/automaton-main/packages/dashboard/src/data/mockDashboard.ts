@@ -26,7 +26,7 @@ export const mockDashboard: DashboardState = {
       {
         title: "Install the automaton runtime",
         body: "Bootstrap the runtime directly in the shell, then attach your agent identity and heartbeat.",
-        command: "curl -fsSL https://solanaclawd.com/leviathan.sh | sh",
+        command: "curl -fsSL https://x402.wtf/automaton.sh | sh",
       },
       {
         title: "Verify pulse and health",
@@ -54,7 +54,7 @@ export const mockDashboard: DashboardState = {
       { amountUsd: 1000, token: "CLAWD", state: "ready" },
       { amountUsd: 2500, token: "CLAWD", state: "insufficient" },
     ],
-    note: "pay.sh settlement rails are wired for USDC today; $CLAWD packages use the same purchase UX but route through the CLAWD commerce adapter.",
+    note: "pay.sh settlement rails are wired for USDC today. $CLAWD packages use the same purchase UX, but settle through the CLAWD commerce adapter.",
   },
   inference: {
     models: [

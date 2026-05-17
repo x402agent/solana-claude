@@ -17,7 +17,7 @@ export function SandboxPage({ state }: SandboxPageProps) {
   return (
     <section className="page-grid">
       <div className="top-actions">
-        <button className="ghost-button" type="button">Runtime Repo ↗</button>
+        <button className="ghost-button" type="button">CLAWD Repo ↗</button>
         <button className="primary-button" type="button">
           <Plus size={18} />
           <span>New Sandbox</span>
