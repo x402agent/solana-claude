@@ -80,10 +80,19 @@ MOONSHOT_KEY = os.getenv("MOONSHOT_API_KEY")
 DEEPSEEK_KEY = os.getenv("DEEPSEEK_API_KEY")
 OPENROUTER_KEY = os.getenv("OPENROUTER_API_KEY")
 AGENT_BACKEND = os.getenv("AGENT_BACKEND", "auto").strip().lower()
+
+
+def _env_int(name: str, default: int) -> int:
+    try:
+        return int(os.getenv(name, str(default)))
+    except ValueError:
+        return default
+
+
 DREAMS_LOOP_ENABLED = os.getenv("DREAMS_LOOP_ENABLED", "true").strip().lower() not in {"0", "false", "no", "off"}
-DREAMS_LOOP_LIMIT = int(os.getenv("DREAMS_LOOP_LIMIT", "100"))
-DREAMS_LOOP_MAX_CHARS = int(os.getenv("DREAMS_LOOP_MAX_CHARS", "24000"))
-DREAMS_LOOP_REFRESH_SECONDS = int(os.getenv("DREAMS_LOOP_REFRESH_SECONDS", "900"))
+DREAMS_LOOP_LIMIT = _env_int("DREAMS_LOOP_LIMIT", 100)
+DREAMS_LOOP_MAX_CHARS = _env_int("DREAMS_LOOP_MAX_CHARS", 24000)
+DREAMS_LOOP_REFRESH_SECONDS = _env_int("DREAMS_LOOP_REFRESH_SECONDS", 900)
 
 
 def _build_terminal():
@@ -805,10 +814,11 @@ def welcome_screen():
             "/agent1": "The Analyst speaks",
             "/agent2": "The Satirist speaks",
             "/agent3": "Clawd speaks",
-            "/loop?turns=3": "Auto-loop all 3 agents",
+            "/loop?turns=3": "Auto-loop all 3 agents with Dreams context",
             "/enter?message=hi": "Direct chat",
             "/enter.sh": "One-shot CLI installer",
             "/conversation": "Full transcript",
+            "/firecrawl/dreams": "Refresh and inject Dreams story corpus",
             "/arena": "Agent-Trading-Arena-inspired perps signal tape",
             "/clawd/orchestrate?task=...": "CLAWD orchestration loop planner",
             "/reset": "Erase the room",
