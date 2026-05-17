@@ -211,7 +211,7 @@ frequency_penalty: 1.0-1.5
 
 ---
 
-### Claude Projects
+### Clawd Projects
 
 **Issue: Instructions not applying**
 
@@ -229,7 +229,7 @@ frequency_penalty: 1.0-1.5
 
 **Issue: Context limit reached**
 
-- Claude Projects have 200K token limit
+- Clawd Projects have 200K token limit
 - Long conversations + large docs = limit reached
 - Solution: Start new conversation in same project
 - Or: Remove some uploaded documents
@@ -452,7 +452,7 @@ Actual: [What happened]
 1. **Model selection**
 
 - GPT-4 slower than GPT-3.5
-- Claude Opus slower than Sonnet
+- Clawd Opus slower than Sonnet
 - Check model in settings
 
 2. **Long context**
@@ -467,7 +467,7 @@ Actual: [What happened]
 - Multiple nested conditions
 - Simplify if possible
 
-4. **High reasoning_effort (Claude)**
+4. **High reasoning_effort (Clawd)**
 
 - Set to "low" or "medium"
 - Reserve "high" for complex tasks
@@ -481,7 +481,7 @@ Actual: [What happened]
 - Plus: \~50 messages/3 hours for GPT-4
 - Solution: Use GPT-3.5 or wait
 
-**Claude:**
+**Clawd:**
 
 - Pro: Higher limits but still exist
 - Solution: Space out requests
@@ -510,7 +510,7 @@ Include:
 - What you expected
 - What actually happened
 - Steps to reproduce
-- Platform (ChatGPT/Claude/AI Agents Library)
+- Platform (ChatGPT/Clawd/AI Agents Library)
 - Screenshots if relevant
 
 ### Emergency Issues

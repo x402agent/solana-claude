@@ -1,0 +1,98 @@
+{
+  "schemaVersion": "erc-8004-agent-registration-v1",
+  "protocol": "metaplex-agent-registry",
+  "name": "Pay Agent",
+  "description": "pay.sh workflow agent for sandbox-first HTTP 402 calls, Pay MCP setup, provider discovery, and payment gateway specs.",
+  "image": "https://www.x402.wtf/nich.jpg",
+  "external_url": "https://www.x402.wtf/agents/pay-agent",
+  "active": true,
+  "createdAt": "2026-05-06",
+  "updatedAt": "2026-05-06T12:33:34.118Z",
+  "tags": [
+    "pay",
+    "pay-sh",
+    "mcp",
+    "x402",
+    "mpp",
+    "http-402",
+    "usdc",
+    "sandbox",
+    "gateway",
+    "codex",
+    "claude",
+    "clawd"
+  ],
+  "categories": [
+    "dev-tools"
+  ],
+  "owner": {
+    "organization": "OpenClawd",
+    "website": "https://www.x402.wtf",
+    "token": {
+      "symbol": "CLAWD",
+      "chain": "solana",
+      "mint": "8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump"
+    }
+  },
+  "services": [
+    {
+      "name": "web",
+      "endpoint": "https://www.x402.wtf/agents/pay-agent"
+    },
+    {
+      "name": "A2A",
+      "endpoint": "https://www.x402.wtf/api/agents/a2a",
+      "version": "0.3.0"
+    },
+    {
+      "name": "catalog",
+      "endpoint": "https://www.x402.wtf/api/agents/catalog/pay-agent.json"
+    },
+    {
+      "name": "registration",
+      "endpoint": "https://www.x402.wtf/api/agents/registry/pay-agent.json"
+    }
+  ],
+  "registrations": [
+    {
+      "agentId": "openclawd:pay-agent",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/pay-agent.json"
+    }
+  ],
+  "supportedTrust": [
+    "reputation",
+    "crypto-economic",
+    "token-gated"
+  ],
+  "metaplex": {
+    "programs": [
+      "agent-registry"
+    ],
+    "sdk": "@metaplex-foundation/mpl-agent-registry",
+    "expectedIdentity": {
+      "asset": null,
+      "agentIdentityPda": null,
+      "assetSignerPda": null,
+      "executiveProfilePda": null
+    },
+    "registrationFlow": [
+      "mint MPL Core agent asset",
+      "register AgentIdentity with this registrationUri",
+      "optionally register an executive profile",
+      "delegate execution only after operator review"
+    ]
+  },
+  "openclawd": {
+    "identifier": "pay-agent",
+    "capabilities": [
+      "payment-gated",
+      "x402",
+      "read-only",
+      "a2a-message"
+    ],
+    "payment": null,
+    "agentToken": null
+  }
+}

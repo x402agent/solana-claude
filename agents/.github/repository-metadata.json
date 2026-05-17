@@ -1,15 +1,16 @@
 {
-    "name": "defi-agents",
-    "description": "DeFi agent definitions JSON API + MCP - Production-ready agents for Web3, crypto trading, portfolio management, and blockchain automation. MCP compatible.",
-    "version": "1.0.0",
-    "publisher": "nirholas",
-    "repository": "https://github.com/nirholas/defi-agents",
+    "name": "openclawd-agents",
+    "description": "Official OpenClawd Solana agent registry, catalog API, MCP discovery documents, and Metaplex Core staking platform.",
+    "version": "1.42.0",
+    "publisher": "x402agent",
+    "repository": "https://github.com/x402agent/openclawd-agents",
     "language": "TypeScript",
     "topics": [
         "defi",
-        "nirholas",
+        "openclawd",
+        "solana",
+        "metaplex",
         "agents",
         "open-source"
     ]
 }
-

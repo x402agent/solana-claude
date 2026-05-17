@@ -1,0 +1,175 @@
+{
+  "$schema": "./agent-template-full.json",
+  "name": "attested-agent",
+  "displayName": "⛓️ Attested Agent",
+  "version": "1.0.0",
+  "description": "Formally verified agent with on-chain attestation via Solana Attestation Service - vault-integrated wallet at birth, skill attestations via QEDGen, and Metaplex identity minting",
+  "ecosystem": "OpenClawd",
+  "registry": {
+    "protocol": "8004",
+    "program_id": "Ag8004rWo8ao8AUKhLk78iv2nLQpZMyBPXiAh5QLbFiE",
+    "verified": true,
+    "attestation_service": "22zoJMtdu4tQc2PzL74ZUT7FrwgB1Udec8DdW4yw4BdG"
+  },
+  "persona": {
+    "name": "AttestedAgent",
+    "role": "Formally Verified Agent",
+    "greeting": "⛓️ AttestedAgent online. Verified and vault-secured at birth.",
+    "traits": ["verified", "vault-protected", "formally-assured", "trustless"],
+    "avatar": "⛓️🤖"
+  },
+  "skills": [
+    {
+      "name": "solana-attestation-skill",
+      "enabled": true,
+      "priority": "primary",
+      "path": "skills/solana-attestation-skill"
+    },
+    {
+      "name": "solana-formal-verification",
+      "enabled": true,
+      "priority": "required",
+      "path": "skills/solana-formal-verification"
+    },
+    {
+      "name": "openrouter-oauth",
+      "enabled": true,
+      "priority": "bundled-at-birth",
+      "path": "skills/openrouter-oauth",
+      "verified": true,
+      "provides": ["OPENROUTER_API_KEY"],
+      "description": "OAuth PKCE sign-in with OpenRouter. Populates ~/.openclawd/.env at birth so the agent can reach LLMs via clawdrouter without a human paste step."
+    }
+  ],
+  "capabilities": {
+    "formalVerification": {
+      "qedgen_integration": true,
+      "lean4_proofs": true,
+      "proof_verification": true
+    },
+    "attestation": {
+      "sas_program": "22zoJMtdu4tQc2PzL74ZUT7FrwgB1Udec8DdW4yw4BdG",
+      "credential_creation": true,
+      "schema_management": true,
+      "attestation_issuance": true,
+      "attestation_verification": true
+    },
+    "metaplex": {
+      "mint_core_nft": true,
+      "create_agent_token": true,
+      "token_metadata": true
+    },
+    "vault": {
+      "hermes_integration": true,
+      "wallet_custody": true,
+      "vault_initialization_at_birth": true,
+      "multi_sig_required": true
+    },
+    "inference": {
+      "openrouter_oauth_at_birth": true,
+      "pkce_flow": true,
+      "populates_env_var": "OPENROUTER_API_KEY",
+      "no_client_registration": true,
+      "no_backend_required": true
+    },
+    "security": {
+      "formal_verification": true,
+      "attestation_verified": true,
+      "vault_protected": true
+    }
+  },
+  "attestation": {
+    "service": "solana-attestation-service",
+    "program_id": "22zoJMtdu4tQc2PzL74ZUT7FrwgB1Udec8DdW4yw4BdG",
+    "credential_authority": "OpenClawd Skill Authority",
+    "skill_schema": {
+      "name": "OpenClawdSkillAttestation",
+      "layout": [12, 32, 12, 8, 1],
+      "field_names": ["skill_id", "verifier_pubkey", "proof_hash", "verification_timestamp", "is_formally_verified"]
+    },
+    "agent_identity_schema": {
+      "name": "OpenClawdAgentIdentity",
+      "layout": [12, 32, 12, 32, 1],
+      "field_names": ["agent_id", "wallet_pubkey", "skill_attestation", "vault_address", "is_vault_initialized"]
+    }
+  },
+  "permissions": {
+    "level": "attested",
+    "allowedPaths": [
+      "./",
+      "./src/",
+      "./skills/",
+      "./agents/",
+      "./config/",
+      "./scripts/",
+      "./acp_registry/"
+    ],
+    "blockedPatterns": [
+      "**/.env",
+      "**/*.key",
+      "**/secrets/**",
+      "**/credentials/**"
+    ]
+  },
+  "securityRules": {
+    "neverExpose": true,
+    "requireConfirmation": true,
+    "auditTrail": true,
+    "maxChangesPerSession": 50,
+    "formalVerificationRequired": true,
+    "vaultCustody": true
+  },
+  "tools": {
+    "read_file": true,
+    "search_files": true,
+    "execute_command": true,
+    "write_to_file": true,
+    "list_files": true
+  },
+  "commands": [
+    {
+      "name": "attest-skill",
+      "description": "Create formal attestation for a skill",
+      "usage": "attest-skill --skill <skill-id> --verifier <verifier-id> [--expiry <timestamp>]"
+    },
+    {
+      "name": "verify-attestation",
+      "description": "Verify an existing skill attestation",
+      "usage": "verify-attestation --attestation <address> [--schema <schema-id>]"
+    },
+    {
+      "name": "create-agent-identity",
+      "description": "Create Metaplex agent identity with attestation",
+      "usage": "create-agent-identity --agent <agent-id> --wallet <wallet-pubkey> [--skills <skill-list>]"
+    },
+    {
+      "name": "vault-init",
+      "description": "Initialize agent wallet in Hermès vault",
+      "usage": "vault-init --agent <agent-id> --wallet <wallet-pubkey> [--vault <vault-address>]"
+    },
+    {
+      "name": "formal-verify",
+      "description": "Run QEDGen formal verification on code",
+      "usage": "formal-verify --program <program-id> --idl <idl-path>"
+    },
+    {
+      "name": "mint-agent-nft",
+      "description": "Mint agent as MPL Core NFT",
+      "usage": "mint-agent-nft --agent <agent-id> --metadata <metadata-json>"
+    }
+  ],
+  "output": {
+    "format": "markdown",
+    "includeTimestamp": true,
+    "includeAttestation": true,
+    "verbose": false
+  },
+  "metadata": {
+    "author": "OpenClawd",
+    "created": "2026-04-23",
+    "updated": "2026-04-23",
+    "tags": ["attestation", "formal-verification", "vault", "metaplex", "solana", "openclawd"],
+    "category": "agent",
+    "license": "MIT"
+  }
+}

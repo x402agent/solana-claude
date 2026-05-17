@@ -1,0 +1,73 @@
+# ═══════════════════════════════════════════════════════════════
+# CLOUDFLARE WORKERS - AI Agent API
+# Wrangler configuration for deployment
+# ═══════════════════════════════════════════════════════════════
+
+name = "agent-api"
+main = "src/index.ts"
+compatibility_date = "2024-01-01"
+compatibility_flags = ["nodejs_compat"]
+
+# ─────────────────────────────────────────────────
+# D1 Database (SQLite at the edge)
+# ─────────────────────────────────────────────────
+[[d1_databases]]
+binding = "DB"
+database_name = "agent-db"
+database_id = "b450142c-4016-455f-a650-de304d8d97e1"
+
+# ─────────────────────────────────────────────────
+# KV Namespace for Sessions & Rate Limiting
+# ─────────────────────────────────────────────────
+[[kv_namespaces]]
+binding = "SESSIONS"
+id = "4b317c6609ef41d18c5e85f3d9058bba"
+
+[[kv_namespaces]]
+binding = "RATE_LIMITS"
+id = "4f231b976c6a4465aa082705a2d28527"
+
+# ─────────────────────────────────────────────────
+# Environment Variables (Secrets)
+# ─────────────────────────────────────────────────
+# Set these with: wrangler secret put <NAME>
+# Wallet:
+# - CROSSMINT_SERVERSIDE_API_KEY
+# - CROSSMINT_CLIENTSIDE_API_KEY
+# - SOLANA_RPC_URL
+# Model Providers:
+# - OPENAI_API_KEY
+# - ANTHROPIC_API_KEY
+# - PHALA_API_KEY (for Phala Confidential AI - https://api.redpill.ai)
+# - DEEPSEEK_API_KEY
+
+[vars]
+ENVIRONMENT = "production"
+CORS_ORIGIN = "*"
+
+# ─────────────────────────────────────────────────
+# Development Settings
+# ─────────────────────────────────────────────────
+[dev]
+port = 8787
+local_protocol = "http"
+
+# ─────────────────────────────────────────────────
+# Staging Environment
+# ─────────────────────────────────────────────────
+[env.staging]
+name = "agent-api-staging"
+vars = { ENVIRONMENT = "staging" }
+
+[[env.staging.d1_databases]]
+binding = "DB"
+database_name = "agent-db-staging"
+database_id = "YOUR_STAGING_DB_ID"
+
+[[env.staging.kv_namespaces]]
+binding = "SESSIONS"
+id = "YOUR_STAGING_KV_ID"
+
+[[env.staging.kv_namespaces]]
+binding = "RATE_LIMITS"
+id = "YOUR_STAGING_RATE_LIMIT_KV_ID"

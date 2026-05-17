@@ -1,0 +1,86 @@
+{
+  "schemaVersion": "erc-8004-agent-registration-v1",
+  "protocol": "metaplex-agent-registry",
+  "name": "OpenClawd Pulse Monitor",
+  "description": "Tracks spend velocity, pulse timing, and health across the OpenClawd fleet.",
+  "image": "https://www.x402.wtf/nich.jpg",
+  "external_url": "https://www.x402.wtf/agents/solana-openclawd-pulse-monitor",
+  "active": true,
+  "createdAt": "2026-05-12",
+  "updatedAt": "2026-05-16T20:50:19.985Z",
+  "tags": [
+    "solana",
+    "openclawd",
+    "pulse",
+    "monitoring",
+    "health",
+    "x402",
+    "treasury"
+  ],
+  "categories": [
+    "payments"
+  ],
+  "owner": {
+    "organization": "OpenClawd",
+    "website": "https://www.x402.wtf",
+    "token": {
+      "symbol": "CLAWD",
+      "chain": "solana",
+      "mint": "8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump"
+    }
+  },
+  "services": [
+    {
+      "name": "web",
+      "endpoint": "https://www.x402.wtf/agents/solana-openclawd-pulse-monitor"
+    },
+    {
+      "name": "A2A",
+      "endpoint": "https://www.x402.wtf/api/agents/a2a",
+      "version": "0.3.0"
+    },
+    {
+      "name": "catalog",
+      "endpoint": "https://www.x402.wtf/api/agents/catalog/solana-openclawd-pulse-monitor.json"
+    },
+    {
+      "name": "registration",
+      "endpoint": "https://www.x402.wtf/api/agents/registry/solana-openclawd-pulse-monitor.json"
+    }
+  ],
+  "registrations": [
+    {
+      "agentId": "openclawd:solana-openclawd-pulse-monitor",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-openclawd-pulse-monitor.json"
+    }
+  ],
+  "supportedTrust": [
+    "reputation",
+    "crypto-economic",
+    "token-gated"
+  ],
+  "metaplex": {
+    "programs": [],
+    "sdk": "@metaplex-foundation/mpl-agent-registry",
+    "expectedIdentity": {
+      "asset": null,
+      "agentIdentityPda": null,
+      "assetSignerPda": null,
+      "executiveProfilePda": null
+    },
+    "registrationFlow": [
+      "mint MPL Core agent asset",
+      "register AgentIdentity with this registrationUri",
+      "optionally register an executive profile",
+      "delegate execution only after operator review"
+    ]
+  },
+  "openclawd": {
+    "identifier": "solana-openclawd-pulse-monitor",
+    "capabilities": [],
+    "payment": null,
+    "agentToken": null
+  }
+}

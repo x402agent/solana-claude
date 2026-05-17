@@ -1,0 +1,84 @@
+{
+  "schemaVersion": "erc-8004-agent-registration-v1",
+  "protocol": "metaplex-agent-registry",
+  "name": "Multi-Agent Trading Orchestrator",
+  "description": "Coordinates multiple specialized agents for comprehensive market analysis and execution",
+  "image": "https://www.x402.wtf/nich.jpg",
+  "external_url": "https://www.x402.wtf/agents/solana-agent-orchestrator",
+  "active": true,
+  "createdAt": "2026-03-15",
+  "updatedAt": "2026-05-16T20:50:19.985Z",
+  "tags": [
+    "orchestrator",
+    "multi-agent",
+    "coordination",
+    "agentic",
+    "workflow"
+  ],
+  "categories": [
+    "defi"
+  ],
+  "owner": {
+    "organization": "OpenClawd",
+    "website": "https://www.x402.wtf",
+    "token": {
+      "symbol": "CLAWD",
+      "chain": "solana",
+      "mint": "8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump"
+    }
+  },
+  "services": [
+    {
+      "name": "web",
+      "endpoint": "https://www.x402.wtf/agents/solana-agent-orchestrator"
+    },
+    {
+      "name": "A2A",
+      "endpoint": "https://www.x402.wtf/api/agents/a2a",
+      "version": "0.3.0"
+    },
+    {
+      "name": "catalog",
+      "endpoint": "https://www.x402.wtf/api/agents/catalog/solana-agent-orchestrator.json"
+    },
+    {
+      "name": "registration",
+      "endpoint": "https://www.x402.wtf/api/agents/registry/solana-agent-orchestrator.json"
+    }
+  ],
+  "registrations": [
+    {
+      "agentId": "openclawd:solana-agent-orchestrator",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-agent-orchestrator.json"
+    }
+  ],
+  "supportedTrust": [
+    "reputation",
+    "crypto-economic",
+    "token-gated"
+  ],
+  "metaplex": {
+    "programs": [],
+    "sdk": "@metaplex-foundation/mpl-agent-registry",
+    "expectedIdentity": {
+      "asset": null,
+      "agentIdentityPda": null,
+      "assetSignerPda": null,
+      "executiveProfilePda": null
+    },
+    "registrationFlow": [
+      "mint MPL Core agent asset",
+      "register AgentIdentity with this registrationUri",
+      "optionally register an executive profile",
+      "delegate execution only after operator review"
+    ]
+  },
+  "openclawd": {
+    "identifier": "solana-agent-orchestrator",
+    "capabilities": [],
+    "payment": null,
+    "agentToken": null
+  }
+}

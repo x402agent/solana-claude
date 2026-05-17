@@ -15,7 +15,6 @@ tmp
 # dependencies
 node_modules
 *.log
-*.lock
 package-lock.json
 
 # ci
@@ -40,7 +39,6 @@ test-output
 
 # misc
 # add other ignore file below
-public
 .env
 # extracted archives
 clawd-ai-agents 2/
@@ -51,3 +49,4 @@ __MACOSX
 
 
 
+.vercel

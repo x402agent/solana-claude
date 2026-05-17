@@ -1,0 +1,115 @@
+{
+  "schemaVersion": "erc-8004-agent-registration-v1",
+  "protocol": "metaplex-agent-registry",
+  "name": "CLAWD Mayhem Mode",
+  "description": "The Solana Clawd all-purpose combat agent. Trades, deploys, launches tokens, mints NFTs, and orchestrates Metaplex programs end-to-end — Agent Registry, Genesis, Core, Token Metadata, Bubblegum, and Candy Machine.",
+  "image": "https://www.x402.wtf/nich.jpg",
+  "external_url": "https://www.x402.wtf/agents/clawd-mayhem-mode",
+  "active": true,
+  "createdAt": "2026-04-16",
+  "updatedAt": "2026-05-06T12:33:34.118Z",
+  "tags": [
+    "solana",
+    "clawd",
+    "mayhem",
+    "metaplex",
+    "genesis",
+    "mpl-core",
+    "bubblegum",
+    "candy-machine",
+    "trading",
+    "launch",
+    "one-shot"
+  ],
+  "categories": [
+    "trading"
+  ],
+  "owner": {
+    "organization": "OpenClawd",
+    "website": "https://www.x402.wtf",
+    "token": {
+      "symbol": "CLAWD",
+      "chain": "solana",
+      "mint": "8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump"
+    }
+  },
+  "services": [
+    {
+      "name": "web",
+      "endpoint": "https://www.x402.wtf/agents/clawd-mayhem-mode"
+    },
+    {
+      "name": "A2A",
+      "endpoint": "https://www.x402.wtf/api/agents/a2a",
+      "version": "0.3.0"
+    },
+    {
+      "name": "catalog",
+      "endpoint": "https://www.x402.wtf/api/agents/catalog/clawd-mayhem-mode.json"
+    },
+    {
+      "name": "registration",
+      "endpoint": "https://www.x402.wtf/api/agents/registry/clawd-mayhem-mode.json"
+    }
+  ],
+  "registrations": [
+    {
+      "agentId": "openclawd:clawd-mayhem-mode",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/clawd-mayhem-mode.json"
+    }
+  ],
+  "supportedTrust": [
+    "reputation",
+    "crypto-economic",
+    "token-gated"
+  ],
+  "metaplex": {
+    "programs": [
+      "agent-registry",
+      "genesis",
+      "core",
+      "token-metadata",
+      "bubblegum",
+      "candy-machine"
+    ],
+    "sdk": "@metaplex-foundation/mpl-agent-registry",
+    "expectedIdentity": {
+      "asset": null,
+      "agentIdentityPda": null,
+      "assetSignerPda": null,
+      "executiveProfilePda": null
+    },
+    "registrationFlow": [
+      "mint MPL Core agent asset",
+      "register AgentIdentity with this registrationUri",
+      "optionally register an executive profile",
+      "delegate execution only after operator review"
+    ]
+  },
+  "openclawd": {
+    "identifier": "clawd-mayhem-mode",
+    "capabilities": [
+      "swap-execution",
+      "nft-mint",
+      "nft-transfer",
+      "stake",
+      "a2a-message",
+      "metaplex-mint-agent",
+      "metaplex-register-identity",
+      "metaplex-launch-token-genesis",
+      "metaplex-launch-bonding-curve",
+      "metaplex-mint-core-nft",
+      "metaplex-mint-cnft",
+      "metaplex-deploy-candy-machine",
+      "metaplex-create-agent-token",
+      "metaplex-execute-asset-signer",
+      "metaplex-token-metadata",
+      "x402-wurk-social",
+      "x402-wurk-agent-help"
+    ],
+    "payment": null,
+    "agentToken": null
+  }
+}

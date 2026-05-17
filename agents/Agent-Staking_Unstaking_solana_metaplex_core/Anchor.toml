@@ -1,0 +1,30 @@
+[toolchain]
+
+[features]
+resolution = true
+skip-lint = false
+
+[programs.localnet]
+openclawd_agent_staking = "D5MLxrKAnppBVLuukKQzQGTMSfEwBqWCDPGAhGhthdLP"
+
+[programs.devnet]
+openclawd_agent_staking = "D5MLxrKAnppBVLuukKQzQGTMSfEwBqWCDPGAhGhthdLP"
+
+# Mainnet program ID is intentionally absent until devnet review is complete.
+# To enable mainnet:
+#   1. Run `anchor keys list` to read the keypair-derived program ID
+#   2. Add `[programs.mainnet]` block here with that ID
+#   3. Manually switch [provider].cluster to "mainnet"
+#   4. Confirm wallet path points to your mainnet upgrade authority (ideally a Squads multisig)
+#   5. Run `anchor deploy --provider.cluster mainnet`
+
+[registry]
+url = "https://api.apr.dev"
+
+[provider]
+# Default: devnet. Do NOT change to mainnet without completing the Gate 4 review.
+cluster = "https://api.devnet.solana.com"
+wallet = "~/.config/solana/id.json"
+
+[scripts]
+test = "yarn run ts-mocha -p ./tsconfig.json -t 1000000 tests/**/*.ts"

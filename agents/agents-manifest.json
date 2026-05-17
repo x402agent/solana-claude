@@ -8,9 +8,16 @@
   },
   "agents": {
     "clawd": {
-      "count": 23,
+      "count": 24,
       "description": "CLAWD ecosystem agents for portfolio management, trading, analytics, and DeFi",
       "agents": [
+        {
+          "id": "solana-pumpfun-bot",
+          "name": "Solana PumpFun/PumpSwap Copy Trading Bot",
+          "description": "High-performance Rust-based copy trading bot for PumpFun bonding curves, PumpSwap AMM, and Raydium",
+          "category": "trading",
+          "tags": ["solana", "pumpfun", "pumpswap", "copy-trading", "trading-bot", "rust"]
+        },
         {
           "id": "clawd-dashboard",
           "name": "CLAWD Portfolio Dashboard",
@@ -175,7 +182,7 @@
       ]
     },
     "defi": {
-      "count": 37,
+      "count": 35,
       "description": "DeFi and crypto analysis agents for yield, risk, security, and trading",
       "subcategories": {
         "yield": {
@@ -229,7 +236,6 @@
             "liquidity-pool-analyzer",
             "nft-liquidity-advisor",
             "portfolio-rebalancing-advisor",
-            "pinocchio-p-token-builder",
             "pump-fun-sdk-expert",
             "spa-tokenomics-analyst",
             "token-unlock-tracker",
@@ -248,7 +254,7 @@
   },
   "apiVersion": "1.0",
   "categories": ["trading", "defi", "portfolio", "security", "education"],
-  "description": "Production-ready AI agent definitions API - 60 specialized agents for DeFi, portfolio management, trading, and Web3 workflows",
+  "description": "Production-ready AI agent definitions API - 59 specialized agents for DeFi, portfolio management, trading, and Web3 workflows",
   "documentation": "https://clawd.click/docs/API.md",
   "endpoints": {
     "allAgentsEnglish": "https://clawd.click/index.json",
@@ -259,7 +265,7 @@
     "schema": "https://clawd.click/schema/clawdAgentSchema_v1.json"
   },
   "features": [
-    "60 specialized AI agents",
+    "59 specialized AI agents",
     "18 language translations",
     "RESTful JSON API",
     "No rate limiting",
@@ -282,8 +288,8 @@
     "totalAgents": 60,
     "supportedLanguages": 18,
     "categories": 5,
-    "clawdAgents": 23,
-    "defiAgents": 37
+    "clawdAgents": 24,
+    "defiAgents": 36
   },
   "supportedLanguages": [
     "en-US",
@@ -314,3 +320,5 @@
   },
   "version": "1.0.0"
 }
+
+

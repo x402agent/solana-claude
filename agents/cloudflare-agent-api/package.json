@@ -1,0 +1,26 @@
+{
+  "name": "agent-api",
+  "version": "1.0.0",
+  "description": "AI Agent Authentication & Wallet API - Cloudflare Workers",
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "deploy:staging": "wrangler deploy --env staging",
+    "db:create": "wrangler d1 create agent-db",
+    "db:create:staging": "wrangler d1 create agent-db-staging",
+    "db:migrate": "wrangler d1 execute agent-db --remote --file=./schema.sql",
+    "db:migrate:staging": "wrangler d1 execute agent-db-staging --remote --file=./schema.sql",
+    "db:migrate:local": "wrangler d1 execute agent-db --local --file=./schema.sql",
+    "kv:create:sessions": "wrangler kv namespace create SESSIONS",
+    "kv:create:rate-limits": "wrangler kv namespace create RATE_LIMITS",
+    "secret:crossmint": "wrangler secret put CROSSMINT_SERVERSIDE_API_KEY",
+    "tail": "wrangler tail",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20240208.0",
+    "typescript": "^5.3.3",
+    "wrangler": "^4.64.0"
+  }
+}

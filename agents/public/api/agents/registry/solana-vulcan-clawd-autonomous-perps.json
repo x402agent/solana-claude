@@ -1,0 +1,100 @@
+{
+  "schemaVersion": "erc-8004-agent-registration-v1",
+  "protocol": "metaplex-agent-registry",
+  "name": "Vulcan CLAWD Autonomous Perps",
+  "description": "Autonomous Phoenix perps agent using Vulcan skills, RISE SDK market data, Clawd RPC, and builder-authority routing",
+  "image": "https://www.x402.wtf/nich.jpg",
+  "external_url": "https://www.x402.wtf/agents/solana-vulcan-clawd-autonomous-perps",
+  "active": true,
+  "createdAt": "2026-05-16",
+  "updatedAt": "2026-05-16T20:50:19.985Z",
+  "tags": [
+    "solana",
+    "clawd",
+    "vulcan",
+    "phoenix",
+    "perps",
+    "rise-sdk",
+    "autonomous",
+    "strategy",
+    "risk",
+    "trading"
+  ],
+  "categories": [
+    "trading"
+  ],
+  "owner": {
+    "organization": "OpenClawd",
+    "website": "https://www.x402.wtf",
+    "token": {
+      "symbol": "CLAWD",
+      "chain": "solana",
+      "mint": "8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump"
+    }
+  },
+  "services": [
+    {
+      "name": "web",
+      "endpoint": "https://www.x402.wtf/agents/solana-vulcan-clawd-autonomous-perps"
+    },
+    {
+      "name": "A2A",
+      "endpoint": "https://www.x402.wtf/api/agents/a2a",
+      "version": "0.3.0"
+    },
+    {
+      "name": "catalog",
+      "endpoint": "https://www.x402.wtf/api/agents/catalog/solana-vulcan-clawd-autonomous-perps.json"
+    },
+    {
+      "name": "registration",
+      "endpoint": "https://www.x402.wtf/api/agents/registry/solana-vulcan-clawd-autonomous-perps.json"
+    }
+  ],
+  "registrations": [
+    {
+      "agentId": "openclawd:solana-vulcan-clawd-autonomous-perps",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-vulcan-clawd-autonomous-perps.json"
+    }
+  ],
+  "supportedTrust": [
+    "reputation",
+    "crypto-economic",
+    "token-gated"
+  ],
+  "metaplex": {
+    "programs": [],
+    "sdk": "@metaplex-foundation/mpl-agent-registry",
+    "expectedIdentity": {
+      "asset": null,
+      "agentIdentityPda": null,
+      "assetSignerPda": null,
+      "executiveProfilePda": null
+    },
+    "registrationFlow": [
+      "mint MPL Core agent asset",
+      "register AgentIdentity with this registrationUri",
+      "optionally register an executive profile",
+      "delegate execution only after operator review"
+    ]
+  },
+  "openclawd": {
+    "identifier": "solana-vulcan-clawd-autonomous-perps",
+    "capabilities": [
+      "phoenix-market-data",
+      "phoenix-rise-sdk",
+      "perps-strategy-md",
+      "vulcan-preflight",
+      "vulcan-paper-trading",
+      "vulcan-dry-run",
+      "vulcan-confirm-each",
+      "vulcan-auto-execute",
+      "risk-management",
+      "position-management"
+    ],
+    "payment": null,
+    "agentToken": null
+  }
+}

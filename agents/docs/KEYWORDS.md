@@ -132,7 +132,7 @@ This repository provides solutions for:
 ### AI & Machine Learning
 
 - OpenAI GPT-4 integration
-- Claude AI compatibility
+- Clawd AI compatibility
 - LangChain agent frameworks
 - AutoGPT patterns
 - Multi-agent architectures
@@ -193,7 +193,7 @@ This repository provides **the most comprehensive collection of AI agent definit
 
 The **agent marketplace index** at clawd.click serves as a **universal agent registry** for discovering, exploring, and integrating specialized AI assistants covering portfolio management, yield farming, trading automation, smart contract auditing, risk assessment, and DeFi education.
 
-Built with **LLM compatibility** in mind, all agent definitions follow a **standardized JSON schema** that works with ChatGPT, Claude, Grok, and other AI systems. The **machine-readable manifest** enables automated discovery and integration, while the **open source MIT license** ensures portability and freedom from vendor lock-in.
+Built with **LLM compatibility** in mind, all agent definitions follow a **standardized JSON schema** that works with ChatGPT, Clawd, Grok, and other AI systems. The **machine-readable manifest** enables automated discovery and integration, while the **open source MIT license** ensures portability and freedom from vendor lock-in.
 
 Whether building a crypto trading bot, DeFi dashboard, Web3 chatbot, or multi-agent orchestration system, this repository provides the **foundation for AI-powered blockchain applications**.
 

@@ -1,0 +1,29 @@
+[package]
+name = "openclawd-agent-staking"
+version = "0.1.0"
+description = "OpenClawd agent staking protocol for Metaplex Core assets"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "lib"]
+name = "openclawd_agent_staking"
+
+[features]
+default = []
+cpi = ["no-entrypoint"]
+no-entrypoint = []
+no-idl = []
+no-log-ix-name = []
+idl-build = [
+    "anchor-lang/idl-build",
+]
+
+[dependencies]
+# Pinned trio that compiles together cleanly. Each version has been verified to
+# avoid the known mpl-core ⇄ anchor-lang ⇄ solana-pubkey type-mismatch trap and
+# the kaigan borsh-v1/anchor feature conflict.
+#
+# If you bump any of these, run `cargo tree -p mpl-core | grep -E 'anchor-lang|borsh|solana-pubkey'`
+# first and confirm the resolved versions don't fork the Pubkey type.
+anchor-lang = { version = "0.30.1", features = ["init-if-needed"] }
+mpl-core = { version = "=0.7.2", features = ["anchor"] }

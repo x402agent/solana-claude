@@ -1,0 +1,1975 @@
+{
+  "schemaVersion": "openclawd.acp.registry.v1",
+  "protocol": "Agent Commerce Protocol",
+  "generatedAt": "2026-05-16T20:50:19.985Z",
+  "host": "https://www.x402.wtf",
+  "discover": {
+    "catalog": "https://www.x402.wtf/api/agents/catalog",
+    "registry": "https://www.x402.wtf/api/agents/registry",
+    "templates": "https://www.x402.wtf/api/agents/templates",
+    "wellKnown": "https://www.x402.wtf/.well-known/acp.json"
+  },
+  "chain": {
+    "namespace": "solana",
+    "cluster": "mainnet-beta",
+    "token": {
+      "symbol": "CLAWD",
+      "mint": "8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump"
+    },
+    "registry": "metaplex-agent-registry"
+  },
+  "metaplex": {
+    "installCommand": "npx skills add metaplex-foundation/skill",
+    "mcpServerHint": {
+      "mcpServers": {
+        "metaplex": {
+          "type": "http",
+          "url": "https://modelcontextprotocol.name/mcp/metaplex"
+        }
+      }
+    },
+    "programs": [
+      {
+        "id": "agent-registry",
+        "label": "Agent Registry",
+        "icon": "🪪",
+        "description": "On-chain agent identity, delegation, and execution via MPL Core asset-signer PDAs."
+      },
+      {
+        "id": "genesis",
+        "label": "Genesis",
+        "icon": "🚀",
+        "description": "Token launches — launchpool (48h deposit window) or bonding curve auto-graduating to Raydium CPMM."
+      },
+      {
+        "id": "core",
+        "label": "Core",
+        "icon": "🎨",
+        "description": "Next-gen NFTs with plugins, royalty enforcement, attributes, and asset-signer execute hooks."
+      },
+      {
+        "id": "token-metadata",
+        "label": "Token Metadata",
+        "icon": "🪙",
+        "description": "Classic fungibles, NFTs, pNFTs, and editions."
+      },
+      {
+        "id": "bubblegum",
+        "label": "Bubblegum",
+        "icon": "🫧",
+        "description": "Compressed NFTs via Merkle trees — required for 10k+ mint scale. Needs DAS-enabled RPC."
+      },
+      {
+        "id": "candy-machine",
+        "label": "Candy Machine",
+        "icon": "🍬",
+        "description": "Core Candy Machine drops with allowlists, start/end dates, mint limits, and payment guards."
+      }
+    ],
+    "coverage": {},
+    "ergonomics": [
+      {
+        "label": "CLI",
+        "package": "@metaplex-foundation/cli",
+        "entry": "mplx"
+      },
+      {
+        "label": "Umi SDK",
+        "package": "@metaplex-foundation/umi"
+      },
+      {
+        "label": "Agent Registry SDK",
+        "package": "@metaplex-foundation/mpl-agent-registry"
+      },
+      {
+        "label": "Core SDK",
+        "package": "@metaplex-foundation/mpl-core"
+      },
+      {
+        "label": "Token Metadata SDK",
+        "package": "@metaplex-foundation/mpl-token-metadata"
+      },
+      {
+        "label": "Bubblegum SDK",
+        "package": "@metaplex-foundation/mpl-bubblegum"
+      },
+      {
+        "label": "Candy Machine SDK",
+        "package": "@metaplex-foundation/mpl-core-candy-machine"
+      },
+      {
+        "label": "Genesis SDK",
+        "package": "@metaplex-foundation/genesis"
+      }
+    ]
+  },
+  "stats": {
+    "totalAgents": 80,
+    "totalOneShots": 1,
+    "totalFeatured": 2,
+    "totalTemplates": 0,
+    "byCategory": {
+      "defi": 53,
+      "payments": 25,
+      "trading": 2
+    },
+    "metaplexEnabledAgents": 0,
+    "tradingCapableAgents": 0,
+    "launchCapableAgents": 0,
+    "mintCapableAgents": 0
+  },
+  "agents": [
+    {
+      "id": "clawdex",
+      "title": "Clawdex",
+      "category": "defi",
+      "capabilities": [],
+      "metaplexSkills": [],
+      "oneShot": false,
+      "featured": false,
+      "endpoints": {
+        "catalog": "https://www.x402.wtf/api/agents/catalog/clawdex.json",
+        "registration": "https://www.x402.wtf/api/agents/registry/clawdex.json",
+        "a2a": "https://www.x402.wtf/api/agents/a2a",
+        "mint": "https://www.x402.wtf/agents/mint?template=clawdex"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:clawdex",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://www.x402.wtf/api/agents/registry/clawdex.json"
+        }
+      ]
+    },
+    {
+      "id": "solana-agent-orchestrator",
+      "title": "Multi-Agent Trading Orchestrator",
+      "category": "defi",
+      "capabilities": [],
+      "metaplexSkills": [],
+      "oneShot": false,
+      "featured": false,
+      "endpoints": {
+        "catalog": "https://www.x402.wtf/api/agents/catalog/solana-agent-orchestrator.json",
+        "registration": "https://www.x402.wtf/api/agents/registry/solana-agent-orchestrator.json",
+        "a2a": "https://www.x402.wtf/api/agents/a2a",
+        "mint": "https://www.x402.wtf/agents/mint?template=solana-agent-orchestrator"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:solana-agent-orchestrator",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-agent-orchestrator.json"
+        }
+      ]
+    },
+    {
+      "id": "solana-airdrop-farmer",
+      "title": "Airdrop Strategy Optimizer",
+      "category": "defi",
+      "capabilities": [],
+      "metaplexSkills": [],
+      "oneShot": false,
+      "featured": false,
+      "endpoints": {
+        "catalog": "https://www.x402.wtf/api/agents/catalog/solana-airdrop-farmer.json",
+        "registration": "https://www.x402.wtf/api/agents/registry/solana-airdrop-farmer.json",
+        "a2a": "https://www.x402.wtf/api/agents/a2a",
+        "mint": "https://www.x402.wtf/agents/mint?template=solana-airdrop-farmer"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:solana-airdrop-farmer",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-airdrop-farmer.json"
+        }
+      ]
+    },
+    {
+      "id": "solana-alpha-aggregator",
+      "title": "Alpha Signal Aggregator",
+      "category": "defi",
+      "capabilities": [],
+      "metaplexSkills": [],
+      "oneShot": false,
+      "featured": false,
+      "endpoints": {
+        "catalog": "https://www.x402.wtf/api/agents/catalog/solana-alpha-aggregator.json",
+        "registration": "https://www.x402.wtf/api/agents/registry/solana-alpha-aggregator.json",
+        "a2a": "https://www.x402.wtf/api/agents/a2a",
+        "mint": "https://www.x402.wtf/agents/mint?template=solana-alpha-aggregator"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:solana-alpha-aggregator",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-alpha-aggregator.json"
+        }
+      ]
+    },
+    {
+      "id": "solana-anchor-developer",
+      "title": "Anchor Program Developer",
+      "category": "defi",
+      "capabilities": [],
+      "metaplexSkills": [],
+      "oneShot": false,
+      "featured": false,
+      "endpoints": {
+        "catalog": "https://www.x402.wtf/api/agents/catalog/solana-anchor-developer.json",
+        "registration": "https://www.x402.wtf/api/agents/registry/solana-anchor-developer.json",
+        "a2a": "https://www.x402.wtf/api/agents/a2a",
+        "mint": "https://www.x402.wtf/agents/mint?template=solana-anchor-developer"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:solana-anchor-developer",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-anchor-developer.json"
+        }
+      ]
+    },
+    {
+      "id": "solana-anomaly-detector",
+      "title": "On-Chain Anomaly Detector",
+      "category": "defi",
+      "capabilities": [],
+      "metaplexSkills": [],
+      "oneShot": false,
+      "featured": false,
+      "endpoints": {
+        "catalog": "https://www.x402.wtf/api/agents/catalog/solana-anomaly-detector.json",
+        "registration": "https://www.x402.wtf/api/agents/registry/solana-anomaly-detector.json",
+        "a2a": "https://www.x402.wtf/api/agents/a2a",
+        "mint": "https://www.x402.wtf/agents/mint?template=solana-anomaly-detector"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:solana-anomaly-detector",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-anomaly-detector.json"
+        }
+      ]
+    },
+    {
+      "id": "solana-arbitrage-scanner",
+      "title": "Cross-DEX Arbitrage Scanner",
+      "category": "defi",
+      "capabilities": [],
+      "metaplexSkills": [],
+      "oneShot": false,
+      "featured": false,
+      "endpoints": {
+        "catalog": "https://www.x402.wtf/api/agents/catalog/solana-arbitrage-scanner.json",
+        "registration": "https://www.x402.wtf/api/agents/registry/solana-arbitrage-scanner.json",
+        "a2a": "https://www.x402.wtf/api/agents/a2a",
+        "mint": "https://www.x402.wtf/agents/mint?template=solana-arbitrage-scanner"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:solana-arbitrage-scanner",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-arbitrage-scanner.json"
+        }
+      ]
+    },
+    {
+      "id": "solana-autonomous-trader",
+      "title": "Autonomous Trading Agent",
+      "category": "defi",
+      "capabilities": [],
+      "metaplexSkills": [],
+      "oneShot": false,
+      "featured": false,
+      "endpoints": {
+        "catalog": "https://www.x402.wtf/api/agents/catalog/solana-autonomous-trader.json",
+        "registration": "https://www.x402.wtf/api/agents/registry/solana-autonomous-trader.json",
+        "a2a": "https://www.x402.wtf/api/agents/a2a",
+        "mint": "https://www.x402.wtf/agents/mint?template=solana-autonomous-trader"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:solana-autonomous-trader",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-autonomous-trader.json"
+        }
+      ]
+    },
+    {
+      "id": "solana-bot-architect",
+      "title": "Trading Bot Architect",
+      "category": "defi",
+      "capabilities": [],
+      "metaplexSkills": [],
+      "oneShot": false,
+      "featured": false,
+      "endpoints": {
+        "catalog": "https://www.x402.wtf/api/agents/catalog/solana-bot-architect.json",
+        "registration": "https://www.x402.wtf/api/agents/registry/solana-bot-architect.json",
+        "a2a": "https://www.x402.wtf/api/agents/a2a",
+        "mint": "https://www.x402.wtf/agents/mint?template=solana-bot-architect"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:solana-bot-architect",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-bot-architect.json"
+        }
+      ]
+    },
+    {
+      "id": "solana-chart-pattern-ai",
+      "title": "AI Chart Pattern Recognition",
+      "category": "defi",
+      "capabilities": [],
+      "metaplexSkills": [],
+      "oneShot": false,
+      "featured": false,
+      "endpoints": {
+        "catalog": "https://www.x402.wtf/api/agents/catalog/solana-chart-pattern-ai.json",
+        "registration": "https://www.x402.wtf/api/agents/registry/solana-chart-pattern-ai.json",
+        "a2a": "https://www.x402.wtf/api/agents/a2a",
+        "mint": "https://www.x402.wtf/agents/mint?template=solana-chart-pattern-ai"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:solana-chart-pattern-ai",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-chart-pattern-ai.json"
+        }
+      ]
+    },
+    {
+      "id": "solana-clawd-cost-planner",
+      "title": "Clawd Cost Planner",
+      "category": "payments",
+      "capabilities": [],
+      "metaplexSkills": [],
+      "oneShot": false,
+      "featured": false,
+      "endpoints": {
+        "catalog": "https://www.x402.wtf/api/agents/catalog/solana-clawd-cost-planner.json",
+        "registration": "https://www.x402.wtf/api/agents/registry/solana-clawd-cost-planner.json",
+        "a2a": "https://www.x402.wtf/api/agents/a2a",
+        "mint": "https://www.x402.wtf/agents/mint?template=solana-clawd-cost-planner"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:solana-clawd-cost-planner",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-clawd-cost-planner.json"
+        }
+      ]
+    },
+    {
+      "id": "solana-clawd-mail-concierge",
+      "title": "Clawd Mail Concierge",
+      "category": "defi",
+      "capabilities": [],
+      "metaplexSkills": [],
+      "oneShot": false,
+      "featured": false,
+      "endpoints": {
+        "catalog": "https://www.x402.wtf/api/agents/catalog/solana-clawd-mail-concierge.json",
+        "registration": "https://www.x402.wtf/api/agents/registry/solana-clawd-mail-concierge.json",
+        "a2a": "https://www.x402.wtf/api/agents/a2a",
+        "mint": "https://www.x402.wtf/agents/mint?template=solana-clawd-mail-concierge"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:solana-clawd-mail-concierge",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-clawd-mail-concierge.json"
+        }
+      ]
+    },
+    {
+      "id": "solana-clawd-payment-debugger",
+      "title": "Clawd Payment Debugger",
+      "category": "payments",
+      "capabilities": [],
+      "metaplexSkills": [],
+      "oneShot": false,
+      "featured": false,
+      "endpoints": {
+        "catalog": "https://www.x402.wtf/api/agents/catalog/solana-clawd-payment-debugger.json",
+        "registration": "https://www.x402.wtf/api/agents/registry/solana-clawd-payment-debugger.json",
+        "a2a": "https://www.x402.wtf/api/agents/a2a",
+        "mint": "https://www.x402.wtf/agents/mint?template=solana-clawd-payment-debugger"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:solana-clawd-payment-debugger",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-clawd-payment-debugger.json"
+        }
+      ]
+    },
+    {
+      "id": "solana-clawd-payment-gateway",
+      "title": "Solana Clawd Payment Gateway",
+      "category": "payments",
+      "capabilities": [],
+      "metaplexSkills": [],
+      "oneShot": false,
+      "featured": false,
+      "endpoints": {
+        "catalog": "https://www.x402.wtf/api/agents/catalog/solana-clawd-payment-gateway.json",
+        "registration": "https://www.x402.wtf/api/agents/registry/solana-clawd-payment-gateway.json",
+        "a2a": "https://www.x402.wtf/api/agents/a2a",
+        "mint": "https://www.x402.wtf/agents/mint?template=solana-clawd-payment-gateway"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:solana-clawd-payment-gateway",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-clawd-payment-gateway.json"
+        }
+      ]
+    },
+    {
+      "id": "solana-clawd-provider-scorer",
+      "title": "Clawd Provider Scorer",
+      "category": "payments",
+      "capabilities": [],
+      "metaplexSkills": [],
+      "oneShot": false,
+      "featured": false,
+      "endpoints": {
+        "catalog": "https://www.x402.wtf/api/agents/catalog/solana-clawd-provider-scorer.json",
+        "registration": "https://www.x402.wtf/api/agents/registry/solana-clawd-provider-scorer.json",
+        "a2a": "https://www.x402.wtf/api/agents/a2a",
+        "mint": "https://www.x402.wtf/agents/mint?template=solana-clawd-provider-scorer"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:solana-clawd-provider-scorer",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-clawd-provider-scorer.json"
+        }
+      ]
+    },
+    {
+      "id": "solana-clawd-quote-relay",
+      "title": "Clawd Quote Relay",
+      "category": "payments",
+      "capabilities": [],
+      "metaplexSkills": [],
+      "oneShot": false,
+      "featured": false,
+      "endpoints": {
+        "catalog": "https://www.x402.wtf/api/agents/catalog/solana-clawd-quote-relay.json",
+        "registration": "https://www.x402.wtf/api/agents/registry/solana-clawd-quote-relay.json",
+        "a2a": "https://www.x402.wtf/api/agents/a2a",
+        "mint": "https://www.x402.wtf/agents/mint?template=solana-clawd-quote-relay"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:solana-clawd-quote-relay",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-clawd-quote-relay.json"
+        }
+      ]
+    },
+    {
+      "id": "solana-clawd-usdc-allocator",
+      "title": "Clawd USDC Allocator",
+      "category": "payments",
+      "capabilities": [],
+      "metaplexSkills": [],
+      "oneShot": false,
+      "featured": false,
+      "endpoints": {
+        "catalog": "https://www.x402.wtf/api/agents/catalog/solana-clawd-usdc-allocator.json",
+        "registration": "https://www.x402.wtf/api/agents/registry/solana-clawd-usdc-allocator.json",
+        "a2a": "https://www.x402.wtf/api/agents/a2a",
+        "mint": "https://www.x402.wtf/agents/mint?template=solana-clawd-usdc-allocator"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:solana-clawd-usdc-allocator",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-clawd-usdc-allocator.json"
+        }
+      ]
+    },
+    {
+      "id": "solana-clawd-wallet-guardian",
+      "title": "Clawd Wallet Guardian",
+      "category": "payments",
+      "capabilities": [],
+      "metaplexSkills": [],
+      "oneShot": false,
+      "featured": false,
+      "endpoints": {
+        "catalog": "https://www.x402.wtf/api/agents/catalog/solana-clawd-wallet-guardian.json",
+        "registration": "https://www.x402.wtf/api/agents/registry/solana-clawd-wallet-guardian.json",
+        "a2a": "https://www.x402.wtf/api/agents/a2a",
+        "mint": "https://www.x402.wtf/agents/mint?template=solana-clawd-wallet-guardian"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:solana-clawd-wallet-guardian",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-clawd-wallet-guardian.json"
+        }
+      ]
+    },
+    {
+      "id": "solana-cross-chain-bridge",
+      "title": "Cross-Chain Bridge Analyst",
+      "category": "defi",
+      "capabilities": [],
+      "metaplexSkills": [],
+      "oneShot": false,
+      "featured": false,
+      "endpoints": {
+        "catalog": "https://www.x402.wtf/api/agents/catalog/solana-cross-chain-bridge.json",
+        "registration": "https://www.x402.wtf/api/agents/registry/solana-cross-chain-bridge.json",
+        "a2a": "https://www.x402.wtf/api/agents/a2a",
+        "mint": "https://www.x402.wtf/agents/mint?template=solana-cross-chain-bridge"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:solana-cross-chain-bridge",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-cross-chain-bridge.json"
+        }
+      ]
+    },
+    {
+      "id": "solana-dark-ralph-mail-briefing",
+      "title": "Dark Ralph Mail Briefing Desk",
+      "category": "defi",
+      "capabilities": [],
+      "metaplexSkills": [],
+      "oneShot": false,
+      "featured": false,
+      "endpoints": {
+        "catalog": "https://www.x402.wtf/api/agents/catalog/solana-dark-ralph-mail-briefing.json",
+        "registration": "https://www.x402.wtf/api/agents/registry/solana-dark-ralph-mail-briefing.json",
+        "a2a": "https://www.x402.wtf/api/agents/a2a",
+        "mint": "https://www.x402.wtf/agents/mint?template=solana-dark-ralph-mail-briefing"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:solana-dark-ralph-mail-briefing",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-dark-ralph-mail-briefing.json"
+        }
+      ]
+    },
+    {
+      "id": "solana-data-pipeline",
+      "title": "Blockchain Data Pipeline",
+      "category": "defi",
+      "capabilities": [],
+      "metaplexSkills": [],
+      "oneShot": false,
+      "featured": false,
+      "endpoints": {
+        "catalog": "https://www.x402.wtf/api/agents/catalog/solana-data-pipeline.json",
+        "registration": "https://www.x402.wtf/api/agents/registry/solana-data-pipeline.json",
+        "a2a": "https://www.x402.wtf/api/agents/a2a",
+        "mint": "https://www.x402.wtf/agents/mint?template=solana-data-pipeline"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:solana-data-pipeline",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-data-pipeline.json"
+        }
+      ]
+    },
+    {
+      "id": "solana-dex-aggregator",
+      "title": "Solana DEX Aggregator",
+      "category": "defi",
+      "capabilities": [],
+      "metaplexSkills": [],
+      "oneShot": false,
+      "featured": false,
+      "endpoints": {
+        "catalog": "https://www.x402.wtf/api/agents/catalog/solana-dex-aggregator.json",
+        "registration": "https://www.x402.wtf/api/agents/registry/solana-dex-aggregator.json",
+        "a2a": "https://www.x402.wtf/api/agents/a2a",
+        "mint": "https://www.x402.wtf/agents/mint?template=solana-dex-aggregator"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:solana-dex-aggregator",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-dex-aggregator.json"
+        }
+      ]
+    },
+    {
+      "id": "solana-dexter-mail-operator",
+      "title": "Dexter Mail Operator",
+      "category": "defi",
+      "capabilities": [],
+      "metaplexSkills": [],
+      "oneShot": false,
+      "featured": false,
+      "endpoints": {
+        "catalog": "https://www.x402.wtf/api/agents/catalog/solana-dexter-mail-operator.json",
+        "registration": "https://www.x402.wtf/api/agents/registry/solana-dexter-mail-operator.json",
+        "a2a": "https://www.x402.wtf/api/agents/a2a",
+        "mint": "https://www.x402.wtf/agents/mint?template=solana-dexter-mail-operator"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:solana-dexter-mail-operator",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-dexter-mail-operator.json"
+        }
+      ]
+    },
+    {
+      "id": "solana-funding-rate-arb",
+      "title": "Funding Rate Arbitrage Bot",
+      "category": "defi",
+      "capabilities": [],
+      "metaplexSkills": [],
+      "oneShot": false,
+      "featured": false,
+      "endpoints": {
+        "catalog": "https://www.x402.wtf/api/agents/catalog/solana-funding-rate-arb.json",
+        "registration": "https://www.x402.wtf/api/agents/registry/solana-funding-rate-arb.json",
+        "a2a": "https://www.x402.wtf/api/agents/a2a",
+        "mint": "https://www.x402.wtf/agents/mint?template=solana-funding-rate-arb"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:solana-funding-rate-arb",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-funding-rate-arb.json"
+        }
+      ]
+    },
+    {
+      "id": "solana-helius-specialist",
+      "title": "Helius API Specialist",
+      "category": "defi",
+      "capabilities": [],
+      "metaplexSkills": [],
+      "oneShot": false,
+      "featured": false,
+      "endpoints": {
+        "catalog": "https://www.x402.wtf/api/agents/catalog/solana-helius-specialist.json",
+        "registration": "https://www.x402.wtf/api/agents/registry/solana-helius-specialist.json",
+        "a2a": "https://www.x402.wtf/api/agents/a2a",
+        "mint": "https://www.x402.wtf/agents/mint?template=solana-helius-specialist"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:solana-helius-specialist",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-helius-specialist.json"
+        }
+      ]
+    },
+    {
+      "id": "solana-hermes-mail-settlement",
+      "title": "HERMES Mail Settlement Controller",
+      "category": "defi",
+      "capabilities": [],
+      "metaplexSkills": [],
+      "oneShot": false,
+      "featured": false,
+      "endpoints": {
+        "catalog": "https://www.x402.wtf/api/agents/catalog/solana-hermes-mail-settlement.json",
+        "registration": "https://www.x402.wtf/api/agents/registry/solana-hermes-mail-settlement.json",
+        "a2a": "https://www.x402.wtf/api/agents/a2a",
+        "mint": "https://www.x402.wtf/agents/mint?template=solana-hermes-mail-settlement"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:solana-hermes-mail-settlement",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-hermes-mail-settlement.json"
+        }
+      ]
+    },
+    {
+      "id": "solana-impermanent-loss-calc",
+      "title": "Impermanent Loss Calculator",
+      "category": "defi",
+      "capabilities": [],
+      "metaplexSkills": [],
+      "oneShot": false,
+      "featured": false,
+      "endpoints": {
+        "catalog": "https://www.x402.wtf/api/agents/catalog/solana-impermanent-loss-calc.json",
+        "registration": "https://www.x402.wtf/api/agents/registry/solana-impermanent-loss-calc.json",
+        "a2a": "https://www.x402.wtf/api/agents/a2a",
+        "mint": "https://www.x402.wtf/agents/mint?template=solana-impermanent-loss-calc"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:solana-impermanent-loss-calc",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-impermanent-loss-calc.json"
+        }
+      ]
+    },
+    {
+      "id": "solana-lending-strategist",
+      "title": "Lending Protocol Strategist",
+      "category": "defi",
+      "capabilities": [],
+      "metaplexSkills": [],
+      "oneShot": false,
+      "featured": false,
+      "endpoints": {
+        "catalog": "https://www.x402.wtf/api/agents/catalog/solana-lending-strategist.json",
+        "registration": "https://www.x402.wtf/api/agents/registry/solana-lending-strategist.json",
+        "a2a": "https://www.x402.wtf/api/agents/a2a",
+        "mint": "https://www.x402.wtf/agents/mint?template=solana-lending-strategist"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:solana-lending-strategist",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-lending-strategist.json"
+        }
+      ]
+    },
+    {
+      "id": "solana-liquidation-bot",
+      "title": "Liquidation Monitor",
+      "category": "defi",
+      "capabilities": [],
+      "metaplexSkills": [],
+      "oneShot": false,
+      "featured": false,
+      "endpoints": {
+        "catalog": "https://www.x402.wtf/api/agents/catalog/solana-liquidation-bot.json",
+        "registration": "https://www.x402.wtf/api/agents/registry/solana-liquidation-bot.json",
+        "a2a": "https://www.x402.wtf/api/agents/a2a",
+        "mint": "https://www.x402.wtf/agents/mint?template=solana-liquidation-bot"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:solana-liquidation-bot",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-liquidation-bot.json"
+        }
+      ]
+    },
+    {
+      "id": "solana-lsd-analyst",
+      "title": "Liquid Staking Analyst",
+      "category": "defi",
+      "capabilities": [],
+      "metaplexSkills": [],
+      "oneShot": false,
+      "featured": false,
+      "endpoints": {
+        "catalog": "https://www.x402.wtf/api/agents/catalog/solana-lsd-analyst.json",
+        "registration": "https://www.x402.wtf/api/agents/registry/solana-lsd-analyst.json",
+        "a2a": "https://www.x402.wtf/api/agents/a2a",
+        "mint": "https://www.x402.wtf/agents/mint?template=solana-lsd-analyst"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:solana-lsd-analyst",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-lsd-analyst.json"
+        }
+      ]
+    },
+    {
+      "id": "solana-macro-analyst",
+      "title": "Crypto Macro Analyst",
+      "category": "defi",
+      "capabilities": [],
+      "metaplexSkills": [],
+      "oneShot": false,
+      "featured": false,
+      "endpoints": {
+        "catalog": "https://www.x402.wtf/api/agents/catalog/solana-macro-analyst.json",
+        "registration": "https://www.x402.wtf/api/agents/registry/solana-macro-analyst.json",
+        "a2a": "https://www.x402.wtf/api/agents/a2a",
+        "mint": "https://www.x402.wtf/agents/mint?template=solana-macro-analyst"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:solana-macro-analyst",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-macro-analyst.json"
+        }
+      ]
+    },
+    {
+      "id": "solana-market-maker",
+      "title": "Market Making Strategist",
+      "category": "defi",
+      "capabilities": [],
+      "metaplexSkills": [],
+      "oneShot": false,
+      "featured": false,
+      "endpoints": {
+        "catalog": "https://www.x402.wtf/api/agents/catalog/solana-market-maker.json",
+        "registration": "https://www.x402.wtf/api/agents/registry/solana-market-maker.json",
+        "a2a": "https://www.x402.wtf/api/agents/a2a",
+        "mint": "https://www.x402.wtf/agents/mint?template=solana-market-maker"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:solana-market-maker",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-market-maker.json"
+        }
+      ]
+    },
+    {
+      "id": "solana-memecoin-analyst",
+      "title": "Memecoin Alpha Analyst",
+      "category": "defi",
+      "capabilities": [],
+      "metaplexSkills": [],
+      "oneShot": false,
+      "featured": false,
+      "endpoints": {
+        "catalog": "https://www.x402.wtf/api/agents/catalog/solana-memecoin-analyst.json",
+        "registration": "https://www.x402.wtf/api/agents/registry/solana-memecoin-analyst.json",
+        "a2a": "https://www.x402.wtf/api/agents/a2a",
+        "mint": "https://www.x402.wtf/agents/mint?template=solana-memecoin-analyst"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:solana-memecoin-analyst",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-memecoin-analyst.json"
+        }
+      ]
+    },
+    {
+      "id": "solana-mev-protector",
+      "title": "MEV Protection Specialist",
+      "category": "defi",
+      "capabilities": [],
+      "metaplexSkills": [],
+      "oneShot": false,
+      "featured": false,
+      "endpoints": {
+        "catalog": "https://www.x402.wtf/api/agents/catalog/solana-mev-protector.json",
+        "registration": "https://www.x402.wtf/api/agents/registry/solana-mev-protector.json",
+        "a2a": "https://www.x402.wtf/api/agents/a2a",
+        "mint": "https://www.x402.wtf/agents/mint?template=solana-mev-protector"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:solana-mev-protector",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-mev-protector.json"
+        }
+      ]
+    },
+    {
+      "id": "solana-nanoclawd-cache-keeper",
+      "title": "NanoClawd Cache Keeper",
+      "category": "payments",
+      "capabilities": [],
+      "metaplexSkills": [],
+      "oneShot": false,
+      "featured": false,
+      "endpoints": {
+        "catalog": "https://www.x402.wtf/api/agents/catalog/solana-nanoclawd-cache-keeper.json",
+        "registration": "https://www.x402.wtf/api/agents/registry/solana-nanoclawd-cache-keeper.json",
+        "a2a": "https://www.x402.wtf/api/agents/a2a",
+        "mint": "https://www.x402.wtf/agents/mint?template=solana-nanoclawd-cache-keeper"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:solana-nanoclawd-cache-keeper",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-nanoclawd-cache-keeper.json"
+        }
+      ]
+    },
+    {
+      "id": "solana-nanoclawd-microtransaction",
+      "title": "NanoClawd Microtransaction Specialist",
+      "category": "payments",
+      "capabilities": [],
+      "metaplexSkills": [],
+      "oneShot": false,
+      "featured": false,
+      "endpoints": {
+        "catalog": "https://www.x402.wtf/api/agents/catalog/solana-nanoclawd-microtransaction.json",
+        "registration": "https://www.x402.wtf/api/agents/registry/solana-nanoclawd-microtransaction.json",
+        "a2a": "https://www.x402.wtf/api/agents/a2a",
+        "mint": "https://www.x402.wtf/agents/mint?template=solana-nanoclawd-microtransaction"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:solana-nanoclawd-microtransaction",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-nanoclawd-microtransaction.json"
+        }
+      ]
+    },
+    {
+      "id": "solana-nanoclawd-sandbox-runner",
+      "title": "NanoClawd Sandbox Runner",
+      "category": "payments",
+      "capabilities": [],
+      "metaplexSkills": [],
+      "oneShot": false,
+      "featured": false,
+      "endpoints": {
+        "catalog": "https://www.x402.wtf/api/agents/catalog/solana-nanoclawd-sandbox-runner.json",
+        "registration": "https://www.x402.wtf/api/agents/registry/solana-nanoclawd-sandbox-runner.json",
+        "a2a": "https://www.x402.wtf/api/agents/a2a",
+        "mint": "https://www.x402.wtf/agents/mint?template=solana-nanoclawd-sandbox-runner"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:solana-nanoclawd-sandbox-runner",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-nanoclawd-sandbox-runner.json"
+        }
+      ]
+    },
+    {
+      "id": "solana-narrative-tracker",
+      "title": "Crypto Narrative Tracker",
+      "category": "defi",
+      "capabilities": [],
+      "metaplexSkills": [],
+      "oneShot": false,
+      "featured": false,
+      "endpoints": {
+        "catalog": "https://www.x402.wtf/api/agents/catalog/solana-narrative-tracker.json",
+        "registration": "https://www.x402.wtf/api/agents/registry/solana-narrative-tracker.json",
+        "a2a": "https://www.x402.wtf/api/agents/a2a",
+        "mint": "https://www.x402.wtf/agents/mint?template=solana-narrative-tracker"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:solana-narrative-tracker",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-narrative-tracker.json"
+        }
+      ]
+    },
+    {
+      "id": "solana-nemoclawd-defi-router",
+      "title": "NemoClawd DeFi Payment Router",
+      "category": "payments",
+      "capabilities": [],
+      "metaplexSkills": [],
+      "oneShot": false,
+      "featured": false,
+      "endpoints": {
+        "catalog": "https://www.x402.wtf/api/agents/catalog/solana-nemoclawd-defi-router.json",
+        "registration": "https://www.x402.wtf/api/agents/registry/solana-nemoclawd-defi-router.json",
+        "a2a": "https://www.x402.wtf/api/agents/a2a",
+        "mint": "https://www.x402.wtf/agents/mint?template=solana-nemoclawd-defi-router"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:solana-nemoclawd-defi-router",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-nemoclawd-defi-router.json"
+        }
+      ]
+    },
+    {
+      "id": "solana-nemoclawd-settlement-ops",
+      "title": "NemoClawd Settlement Ops",
+      "category": "payments",
+      "capabilities": [],
+      "metaplexSkills": [],
+      "oneShot": false,
+      "featured": false,
+      "endpoints": {
+        "catalog": "https://www.x402.wtf/api/agents/catalog/solana-nemoclawd-settlement-ops.json",
+        "registration": "https://www.x402.wtf/api/agents/registry/solana-nemoclawd-settlement-ops.json",
+        "a2a": "https://www.x402.wtf/api/agents/a2a",
+        "mint": "https://www.x402.wtf/agents/mint?template=solana-nemoclawd-settlement-ops"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:solana-nemoclawd-settlement-ops",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-nemoclawd-settlement-ops.json"
+        }
+      ]
+    },
+    {
+      "id": "solana-nemoclawd-yield-treasurer",
+      "title": "NemoClawd Yield Treasurer",
+      "category": "payments",
+      "capabilities": [],
+      "metaplexSkills": [],
+      "oneShot": false,
+      "featured": false,
+      "endpoints": {
+        "catalog": "https://www.x402.wtf/api/agents/catalog/solana-nemoclawd-yield-treasurer.json",
+        "registration": "https://www.x402.wtf/api/agents/registry/solana-nemoclawd-yield-treasurer.json",
+        "a2a": "https://www.x402.wtf/api/agents/a2a",
+        "mint": "https://www.x402.wtf/agents/mint?template=solana-nemoclawd-yield-treasurer"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:solana-nemoclawd-yield-treasurer",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-nemoclawd-yield-treasurer.json"
+        }
+      ]
+    },
+    {
+      "id": "solana-nft-floor-trader",
+      "title": "NFT Floor Price Trader",
+      "category": "defi",
+      "capabilities": [],
+      "metaplexSkills": [],
+      "oneShot": false,
+      "featured": false,
+      "endpoints": {
+        "catalog": "https://www.x402.wtf/api/agents/catalog/solana-nft-floor-trader.json",
+        "registration": "https://www.x402.wtf/api/agents/registry/solana-nft-floor-trader.json",
+        "a2a": "https://www.x402.wtf/api/agents/a2a",
+        "mint": "https://www.x402.wtf/agents/mint?template=solana-nft-floor-trader"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:solana-nft-floor-trader",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-nft-floor-trader.json"
+        }
+      ]
+    },
+    {
+      "id": "solana-onchain-metrics",
+      "title": "On-Chain Metrics Dashboard",
+      "category": "defi",
+      "capabilities": [],
+      "metaplexSkills": [],
+      "oneShot": false,
+      "featured": false,
+      "endpoints": {
+        "catalog": "https://www.x402.wtf/api/agents/catalog/solana-onchain-metrics.json",
+        "registration": "https://www.x402.wtf/api/agents/registry/solana-onchain-metrics.json",
+        "a2a": "https://www.x402.wtf/api/agents/a2a",
+        "mint": "https://www.x402.wtf/agents/mint?template=solana-onchain-metrics"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:solana-onchain-metrics",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-onchain-metrics.json"
+        }
+      ]
+    },
+    {
+      "id": "solana-onchain-sleuth",
+      "title": "On-Chain Investigation Specialist",
+      "category": "defi",
+      "capabilities": [],
+      "metaplexSkills": [],
+      "oneShot": false,
+      "featured": false,
+      "endpoints": {
+        "catalog": "https://www.x402.wtf/api/agents/catalog/solana-onchain-sleuth.json",
+        "registration": "https://www.x402.wtf/api/agents/registry/solana-onchain-sleuth.json",
+        "a2a": "https://www.x402.wtf/api/agents/a2a",
+        "mint": "https://www.x402.wtf/agents/mint?template=solana-onchain-sleuth"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:solana-onchain-sleuth",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-onchain-sleuth.json"
+        }
+      ]
+    },
+    {
+      "id": "solana-openclawd-orchestrator",
+      "title": "OpenClawd Fleet Orchestrator",
+      "category": "payments",
+      "capabilities": [],
+      "metaplexSkills": [],
+      "oneShot": false,
+      "featured": false,
+      "endpoints": {
+        "catalog": "https://www.x402.wtf/api/agents/catalog/solana-openclawd-orchestrator.json",
+        "registration": "https://www.x402.wtf/api/agents/registry/solana-openclawd-orchestrator.json",
+        "a2a": "https://www.x402.wtf/api/agents/a2a",
+        "mint": "https://www.x402.wtf/agents/mint?template=solana-openclawd-orchestrator"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:solana-openclawd-orchestrator",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-openclawd-orchestrator.json"
+        }
+      ]
+    },
+    {
+      "id": "solana-openclawd-pulse-monitor",
+      "title": "OpenClawd Pulse Monitor",
+      "category": "payments",
+      "capabilities": [],
+      "metaplexSkills": [],
+      "oneShot": false,
+      "featured": false,
+      "endpoints": {
+        "catalog": "https://www.x402.wtf/api/agents/catalog/solana-openclawd-pulse-monitor.json",
+        "registration": "https://www.x402.wtf/api/agents/registry/solana-openclawd-pulse-monitor.json",
+        "a2a": "https://www.x402.wtf/api/agents/a2a",
+        "mint": "https://www.x402.wtf/agents/mint?template=solana-openclawd-pulse-monitor"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:solana-openclawd-pulse-monitor",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-openclawd-pulse-monitor.json"
+        }
+      ]
+    },
+    {
+      "id": "solana-openclawd-shell-auditor",
+      "title": "OpenClawd SHELL Auditor",
+      "category": "payments",
+      "capabilities": [],
+      "metaplexSkills": [],
+      "oneShot": false,
+      "featured": false,
+      "endpoints": {
+        "catalog": "https://www.x402.wtf/api/agents/catalog/solana-openclawd-shell-auditor.json",
+        "registration": "https://www.x402.wtf/api/agents/registry/solana-openclawd-shell-auditor.json",
+        "a2a": "https://www.x402.wtf/api/agents/a2a",
+        "mint": "https://www.x402.wtf/agents/mint?template=solana-openclawd-shell-auditor"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:solana-openclawd-shell-auditor",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-openclawd-shell-auditor.json"
+        }
+      ]
+    },
+    {
+      "id": "solana-openclawd-skill-router",
+      "title": "OpenClawd Skill Router",
+      "category": "payments",
+      "capabilities": [],
+      "metaplexSkills": [],
+      "oneShot": false,
+      "featured": false,
+      "endpoints": {
+        "catalog": "https://www.x402.wtf/api/agents/catalog/solana-openclawd-skill-router.json",
+        "registration": "https://www.x402.wtf/api/agents/registry/solana-openclawd-skill-router.json",
+        "a2a": "https://www.x402.wtf/api/agents/a2a",
+        "mint": "https://www.x402.wtf/agents/mint?template=solana-openclawd-skill-router"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:solana-openclawd-skill-router",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-openclawd-skill-router.json"
+        }
+      ]
+    },
+    {
+      "id": "solana-openclawd-spawn-manager",
+      "title": "OpenClawd Spawn Manager",
+      "category": "payments",
+      "capabilities": [],
+      "metaplexSkills": [],
+      "oneShot": false,
+      "featured": false,
+      "endpoints": {
+        "catalog": "https://www.x402.wtf/api/agents/catalog/solana-openclawd-spawn-manager.json",
+        "registration": "https://www.x402.wtf/api/agents/registry/solana-openclawd-spawn-manager.json",
+        "a2a": "https://www.x402.wtf/api/agents/a2a",
+        "mint": "https://www.x402.wtf/agents/mint?template=solana-openclawd-spawn-manager"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:solana-openclawd-spawn-manager",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-openclawd-spawn-manager.json"
+        }
+      ]
+    },
+    {
+      "id": "solana-order-flow-analyst",
+      "title": "Order Flow Analyst",
+      "category": "defi",
+      "capabilities": [],
+      "metaplexSkills": [],
+      "oneShot": false,
+      "featured": false,
+      "endpoints": {
+        "catalog": "https://www.x402.wtf/api/agents/catalog/solana-order-flow-analyst.json",
+        "registration": "https://www.x402.wtf/api/agents/registry/solana-order-flow-analyst.json",
+        "a2a": "https://www.x402.wtf/api/agents/a2a",
+        "mint": "https://www.x402.wtf/agents/mint?template=solana-order-flow-analyst"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:solana-order-flow-analyst",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-order-flow-analyst.json"
+        }
+      ]
+    },
+    {
+      "id": "solana-perpetuals-trader",
+      "title": "Perpetuals Trading Strategist",
+      "category": "defi",
+      "capabilities": [],
+      "metaplexSkills": [],
+      "oneShot": false,
+      "featured": false,
+      "endpoints": {
+        "catalog": "https://www.x402.wtf/api/agents/catalog/solana-perpetuals-trader.json",
+        "registration": "https://www.x402.wtf/api/agents/registry/solana-perpetuals-trader.json",
+        "a2a": "https://www.x402.wtf/api/agents/a2a",
+        "mint": "https://www.x402.wtf/agents/mint?template=solana-perpetuals-trader"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:solana-perpetuals-trader",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-perpetuals-trader.json"
+        }
+      ]
+    },
+    {
+      "id": "solana-portfolio-risk",
+      "title": "Portfolio Risk Manager",
+      "category": "defi",
+      "capabilities": [],
+      "metaplexSkills": [],
+      "oneShot": false,
+      "featured": false,
+      "endpoints": {
+        "catalog": "https://www.x402.wtf/api/agents/catalog/solana-portfolio-risk.json",
+        "registration": "https://www.x402.wtf/api/agents/registry/solana-portfolio-risk.json",
+        "a2a": "https://www.x402.wtf/api/agents/a2a",
+        "mint": "https://www.x402.wtf/agents/mint?template=solana-portfolio-risk"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:solana-portfolio-risk",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-portfolio-risk.json"
+        }
+      ]
+    },
+    {
+      "id": "solana-position-sizer",
+      "title": "Position Sizing Engine",
+      "category": "defi",
+      "capabilities": [],
+      "metaplexSkills": [],
+      "oneShot": false,
+      "featured": false,
+      "endpoints": {
+        "catalog": "https://www.x402.wtf/api/agents/catalog/solana-position-sizer.json",
+        "registration": "https://www.x402.wtf/api/agents/registry/solana-position-sizer.json",
+        "a2a": "https://www.x402.wtf/api/agents/a2a",
+        "mint": "https://www.x402.wtf/agents/mint?template=solana-position-sizer"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:solana-position-sizer",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-position-sizer.json"
+        }
+      ]
+    },
+    {
+      "id": "solana-prediction-market",
+      "title": "Prediction Market Analyst",
+      "category": "defi",
+      "capabilities": [],
+      "metaplexSkills": [],
+      "oneShot": false,
+      "featured": false,
+      "endpoints": {
+        "catalog": "https://www.x402.wtf/api/agents/catalog/solana-prediction-market.json",
+        "registration": "https://www.x402.wtf/api/agents/registry/solana-prediction-market.json",
+        "a2a": "https://www.x402.wtf/api/agents/a2a",
+        "mint": "https://www.x402.wtf/agents/mint?template=solana-prediction-market"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:solana-prediction-market",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-prediction-market.json"
+        }
+      ]
+    },
+    {
+      "id": "solana-price-predictor",
+      "title": "ML Price Prediction Engine",
+      "category": "defi",
+      "capabilities": [],
+      "metaplexSkills": [],
+      "oneShot": false,
+      "featured": false,
+      "endpoints": {
+        "catalog": "https://www.x402.wtf/api/agents/catalog/solana-price-predictor.json",
+        "registration": "https://www.x402.wtf/api/agents/registry/solana-price-predictor.json",
+        "a2a": "https://www.x402.wtf/api/agents/a2a",
+        "mint": "https://www.x402.wtf/agents/mint?template=solana-price-predictor"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:solana-price-predictor",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-price-predictor.json"
+        }
+      ]
+    },
+    {
+      "id": "solana-protocol-auditor",
+      "title": "Smart Contract Auditor",
+      "category": "defi",
+      "capabilities": [],
+      "metaplexSkills": [],
+      "oneShot": false,
+      "featured": false,
+      "endpoints": {
+        "catalog": "https://www.x402.wtf/api/agents/catalog/solana-protocol-auditor.json",
+        "registration": "https://www.x402.wtf/api/agents/registry/solana-protocol-auditor.json",
+        "a2a": "https://www.x402.wtf/api/agents/a2a",
+        "mint": "https://www.x402.wtf/agents/mint?template=solana-protocol-auditor"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:solana-protocol-auditor",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-protocol-auditor.json"
+        }
+      ]
+    },
+    {
+      "id": "solana-pumpfun-bot",
+      "title": "Solana PumpFun/PumpSwap Copy Trading Bot",
+      "category": "trading",
+      "capabilities": [],
+      "metaplexSkills": [],
+      "oneShot": true,
+      "featured": true,
+      "endpoints": {
+        "catalog": "https://www.x402.wtf/api/agents/catalog/solana-pumpfun-bot.json",
+        "registration": "https://www.x402.wtf/api/agents/registry/solana-pumpfun-bot.json",
+        "a2a": "https://www.x402.wtf/api/agents/a2a",
+        "mint": "https://www.x402.wtf/agents/mint?template=solana-pumpfun-bot"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:solana-pumpfun-bot",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-pumpfun-bot.json"
+        }
+      ]
+    },
+    {
+      "id": "solana-quant-researcher",
+      "title": "Quantitative Research Analyst",
+      "category": "defi",
+      "capabilities": [],
+      "metaplexSkills": [],
+      "oneShot": false,
+      "featured": false,
+      "endpoints": {
+        "catalog": "https://www.x402.wtf/api/agents/catalog/solana-quant-researcher.json",
+        "registration": "https://www.x402.wtf/api/agents/registry/solana-quant-researcher.json",
+        "a2a": "https://www.x402.wtf/api/agents/a2a",
+        "mint": "https://www.x402.wtf/agents/mint?template=solana-quant-researcher"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:solana-quant-researcher",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-quant-researcher.json"
+        }
+      ]
+    },
+    {
+      "id": "solana-regulatory-advisor",
+      "title": "Crypto Regulatory Analyst",
+      "category": "defi",
+      "capabilities": [],
+      "metaplexSkills": [],
+      "oneShot": false,
+      "featured": false,
+      "endpoints": {
+        "catalog": "https://www.x402.wtf/api/agents/catalog/solana-regulatory-advisor.json",
+        "registration": "https://www.x402.wtf/api/agents/registry/solana-regulatory-advisor.json",
+        "a2a": "https://www.x402.wtf/api/agents/a2a",
+        "mint": "https://www.x402.wtf/agents/mint?template=solana-regulatory-advisor"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:solana-regulatory-advisor",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-regulatory-advisor.json"
+        }
+      ]
+    },
+    {
+      "id": "solana-risk-sentinel",
+      "title": "Protocol Risk Sentinel",
+      "category": "defi",
+      "capabilities": [],
+      "metaplexSkills": [],
+      "oneShot": false,
+      "featured": false,
+      "endpoints": {
+        "catalog": "https://www.x402.wtf/api/agents/catalog/solana-risk-sentinel.json",
+        "registration": "https://www.x402.wtf/api/agents/registry/solana-risk-sentinel.json",
+        "a2a": "https://www.x402.wtf/api/agents/a2a",
+        "mint": "https://www.x402.wtf/agents/mint?template=solana-risk-sentinel"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:solana-risk-sentinel",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-risk-sentinel.json"
+        }
+      ]
+    },
+    {
+      "id": "solana-rpc-optimizer",
+      "title": "RPC & Infrastructure Expert",
+      "category": "defi",
+      "capabilities": [],
+      "metaplexSkills": [],
+      "oneShot": false,
+      "featured": false,
+      "endpoints": {
+        "catalog": "https://www.x402.wtf/api/agents/catalog/solana-rpc-optimizer.json",
+        "registration": "https://www.x402.wtf/api/agents/registry/solana-rpc-optimizer.json",
+        "a2a": "https://www.x402.wtf/api/agents/a2a",
+        "mint": "https://www.x402.wtf/agents/mint?template=solana-rpc-optimizer"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:solana-rpc-optimizer",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-rpc-optimizer.json"
+        }
+      ]
+    },
+    {
+      "id": "solana-sentiment-analyzer",
+      "title": "Crypto Sentiment Analyzer",
+      "category": "defi",
+      "capabilities": [],
+      "metaplexSkills": [],
+      "oneShot": false,
+      "featured": false,
+      "endpoints": {
+        "catalog": "https://www.x402.wtf/api/agents/catalog/solana-sentiment-analyzer.json",
+        "registration": "https://www.x402.wtf/api/agents/registry/solana-sentiment-analyzer.json",
+        "a2a": "https://www.x402.wtf/api/agents/a2a",
+        "mint": "https://www.x402.wtf/agents/mint?template=solana-sentiment-analyzer"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:solana-sentiment-analyzer",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-sentiment-analyzer.json"
+        }
+      ]
+    },
+    {
+      "id": "solana-spot-trader",
+      "title": "Spot Trading Optimizer",
+      "category": "defi",
+      "capabilities": [],
+      "metaplexSkills": [],
+      "oneShot": false,
+      "featured": false,
+      "endpoints": {
+        "catalog": "https://www.x402.wtf/api/agents/catalog/solana-spot-trader.json",
+        "registration": "https://www.x402.wtf/api/agents/registry/solana-spot-trader.json",
+        "a2a": "https://www.x402.wtf/api/agents/a2a",
+        "mint": "https://www.x402.wtf/agents/mint?template=solana-spot-trader"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:solana-spot-trader",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-spot-trader.json"
+        }
+      ]
+    },
+    {
+      "id": "solana-stablecoin-strategist",
+      "title": "Stablecoin Yield Strategist",
+      "category": "defi",
+      "capabilities": [],
+      "metaplexSkills": [],
+      "oneShot": false,
+      "featured": false,
+      "endpoints": {
+        "catalog": "https://www.x402.wtf/api/agents/catalog/solana-stablecoin-strategist.json",
+        "registration": "https://www.x402.wtf/api/agents/registry/solana-stablecoin-strategist.json",
+        "a2a": "https://www.x402.wtf/api/agents/a2a",
+        "mint": "https://www.x402.wtf/agents/mint?template=solana-stablecoin-strategist"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:solana-stablecoin-strategist",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-stablecoin-strategist.json"
+        }
+      ]
+    },
+    {
+      "id": "solana-technical-analyst",
+      "title": "Advanced Technical Analyst",
+      "category": "defi",
+      "capabilities": [],
+      "metaplexSkills": [],
+      "oneShot": false,
+      "featured": false,
+      "endpoints": {
+        "catalog": "https://www.x402.wtf/api/agents/catalog/solana-technical-analyst.json",
+        "registration": "https://www.x402.wtf/api/agents/registry/solana-technical-analyst.json",
+        "a2a": "https://www.x402.wtf/api/agents/a2a",
+        "mint": "https://www.x402.wtf/agents/mint?template=solana-technical-analyst"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:solana-technical-analyst",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-technical-analyst.json"
+        }
+      ]
+    },
+    {
+      "id": "solana-token-launcher",
+      "title": "Token Launch Specialist",
+      "category": "defi",
+      "capabilities": [],
+      "metaplexSkills": [],
+      "oneShot": false,
+      "featured": false,
+      "endpoints": {
+        "catalog": "https://www.x402.wtf/api/agents/catalog/solana-token-launcher.json",
+        "registration": "https://www.x402.wtf/api/agents/registry/solana-token-launcher.json",
+        "a2a": "https://www.x402.wtf/api/agents/a2a",
+        "mint": "https://www.x402.wtf/agents/mint?template=solana-token-launcher"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:solana-token-launcher",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-token-launcher.json"
+        }
+      ]
+    },
+    {
+      "id": "solana-tokenomics-analyst",
+      "title": "Tokenomics Deep Researcher",
+      "category": "defi",
+      "capabilities": [],
+      "metaplexSkills": [],
+      "oneShot": false,
+      "featured": false,
+      "endpoints": {
+        "catalog": "https://www.x402.wtf/api/agents/catalog/solana-tokenomics-analyst.json",
+        "registration": "https://www.x402.wtf/api/agents/registry/solana-tokenomics-analyst.json",
+        "a2a": "https://www.x402.wtf/api/agents/a2a",
+        "mint": "https://www.x402.wtf/agents/mint?template=solana-tokenomics-analyst"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:solana-tokenomics-analyst",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-tokenomics-analyst.json"
+        }
+      ]
+    },
+    {
+      "id": "solana-vc-deal-analyzer",
+      "title": "VC & Fundraise Analyst",
+      "category": "defi",
+      "capabilities": [],
+      "metaplexSkills": [],
+      "oneShot": false,
+      "featured": false,
+      "endpoints": {
+        "catalog": "https://www.x402.wtf/api/agents/catalog/solana-vc-deal-analyzer.json",
+        "registration": "https://www.x402.wtf/api/agents/registry/solana-vc-deal-analyzer.json",
+        "a2a": "https://www.x402.wtf/api/agents/a2a",
+        "mint": "https://www.x402.wtf/agents/mint?template=solana-vc-deal-analyzer"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:solana-vc-deal-analyzer",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-vc-deal-analyzer.json"
+        }
+      ]
+    },
+    {
+      "id": "solana-volatility-analyst",
+      "title": "Volatility Surface Modeler",
+      "category": "defi",
+      "capabilities": [],
+      "metaplexSkills": [],
+      "oneShot": false,
+      "featured": false,
+      "endpoints": {
+        "catalog": "https://www.x402.wtf/api/agents/catalog/solana-volatility-analyst.json",
+        "registration": "https://www.x402.wtf/api/agents/registry/solana-volatility-analyst.json",
+        "a2a": "https://www.x402.wtf/api/agents/a2a",
+        "mint": "https://www.x402.wtf/agents/mint?template=solana-volatility-analyst"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:solana-volatility-analyst",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-volatility-analyst.json"
+        }
+      ]
+    },
+    {
+      "id": "solana-vulcan-clawd-autonomous-perps",
+      "title": "Vulcan CLAWD Autonomous Perps",
+      "category": "trading",
+      "capabilities": [
+        "phoenix-market-data",
+        "phoenix-rise-sdk",
+        "perps-strategy-md",
+        "vulcan-preflight",
+        "vulcan-paper-trading",
+        "vulcan-dry-run",
+        "vulcan-confirm-each",
+        "vulcan-auto-execute",
+        "risk-management",
+        "position-management"
+      ],
+      "metaplexSkills": [],
+      "oneShot": false,
+      "featured": true,
+      "endpoints": {
+        "catalog": "https://www.x402.wtf/api/agents/catalog/solana-vulcan-clawd-autonomous-perps.json",
+        "registration": "https://www.x402.wtf/api/agents/registry/solana-vulcan-clawd-autonomous-perps.json",
+        "a2a": "https://www.x402.wtf/api/agents/a2a",
+        "mint": "https://www.x402.wtf/agents/mint?template=solana-vulcan-clawd-autonomous-perps"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:solana-vulcan-clawd-autonomous-perps",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-vulcan-clawd-autonomous-perps.json"
+        }
+      ]
+    },
+    {
+      "id": "solana-whale-tracker",
+      "title": "Whale Wallet Intelligence",
+      "category": "defi",
+      "capabilities": [],
+      "metaplexSkills": [],
+      "oneShot": false,
+      "featured": false,
+      "endpoints": {
+        "catalog": "https://www.x402.wtf/api/agents/catalog/solana-whale-tracker.json",
+        "registration": "https://www.x402.wtf/api/agents/registry/solana-whale-tracker.json",
+        "a2a": "https://www.x402.wtf/api/agents/a2a",
+        "mint": "https://www.x402.wtf/agents/mint?template=solana-whale-tracker"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:solana-whale-tracker",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-whale-tracker.json"
+        }
+      ]
+    },
+    {
+      "id": "solana-whitepaper-analyst",
+      "title": "Whitepaper & Docs Analyst",
+      "category": "defi",
+      "capabilities": [],
+      "metaplexSkills": [],
+      "oneShot": false,
+      "featured": false,
+      "endpoints": {
+        "catalog": "https://www.x402.wtf/api/agents/catalog/solana-whitepaper-analyst.json",
+        "registration": "https://www.x402.wtf/api/agents/registry/solana-whitepaper-analyst.json",
+        "a2a": "https://www.x402.wtf/api/agents/a2a",
+        "mint": "https://www.x402.wtf/agents/mint?template=solana-whitepaper-analyst"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:solana-whitepaper-analyst",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-whitepaper-analyst.json"
+        }
+      ]
+    },
+    {
+      "id": "solana-x402-market-data-buyer",
+      "title": "x402 Market Data Buyer",
+      "category": "payments",
+      "capabilities": [],
+      "metaplexSkills": [],
+      "oneShot": false,
+      "featured": false,
+      "endpoints": {
+        "catalog": "https://www.x402.wtf/api/agents/catalog/solana-x402-market-data-buyer.json",
+        "registration": "https://www.x402.wtf/api/agents/registry/solana-x402-market-data-buyer.json",
+        "a2a": "https://www.x402.wtf/api/agents/a2a",
+        "mint": "https://www.x402.wtf/agents/mint?template=solana-x402-market-data-buyer"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:solana-x402-market-data-buyer",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-x402-market-data-buyer.json"
+        }
+      ]
+    },
+    {
+      "id": "solana-x402-provider-author",
+      "title": "x402 Provider Author",
+      "category": "payments",
+      "capabilities": [],
+      "metaplexSkills": [],
+      "oneShot": false,
+      "featured": false,
+      "endpoints": {
+        "catalog": "https://www.x402.wtf/api/agents/catalog/solana-x402-provider-author.json",
+        "registration": "https://www.x402.wtf/api/agents/registry/solana-x402-provider-author.json",
+        "a2a": "https://www.x402.wtf/api/agents/a2a",
+        "mint": "https://www.x402.wtf/agents/mint?template=solana-x402-provider-author"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:solana-x402-provider-author",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-x402-provider-author.json"
+        }
+      ]
+    },
+    {
+      "id": "solana-x402-provider-catalog",
+      "title": "x402 Provider Catalog Agent",
+      "category": "payments",
+      "capabilities": [],
+      "metaplexSkills": [],
+      "oneShot": false,
+      "featured": false,
+      "endpoints": {
+        "catalog": "https://www.x402.wtf/api/agents/catalog/solana-x402-provider-catalog.json",
+        "registration": "https://www.x402.wtf/api/agents/registry/solana-x402-provider-catalog.json",
+        "a2a": "https://www.x402.wtf/api/agents/a2a",
+        "mint": "https://www.x402.wtf/agents/mint?template=solana-x402-provider-catalog"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:solana-x402-provider-catalog",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-x402-provider-catalog.json"
+        }
+      ]
+    },
+    {
+      "id": "solana-x402-research-broker",
+      "title": "x402 Research Broker",
+      "category": "payments",
+      "capabilities": [],
+      "metaplexSkills": [],
+      "oneShot": false,
+      "featured": false,
+      "endpoints": {
+        "catalog": "https://www.x402.wtf/api/agents/catalog/solana-x402-research-broker.json",
+        "registration": "https://www.x402.wtf/api/agents/registry/solana-x402-research-broker.json",
+        "a2a": "https://www.x402.wtf/api/agents/a2a",
+        "mint": "https://www.x402.wtf/agents/mint?template=solana-x402-research-broker"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:solana-x402-research-broker",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-x402-research-broker.json"
+        }
+      ]
+    },
+    {
+      "id": "solana-x402-signal-monetizer",
+      "title": "x402 Signal Monetizer",
+      "category": "payments",
+      "capabilities": [],
+      "metaplexSkills": [],
+      "oneShot": false,
+      "featured": false,
+      "endpoints": {
+        "catalog": "https://www.x402.wtf/api/agents/catalog/solana-x402-signal-monetizer.json",
+        "registration": "https://www.x402.wtf/api/agents/registry/solana-x402-signal-monetizer.json",
+        "a2a": "https://www.x402.wtf/api/agents/a2a",
+        "mint": "https://www.x402.wtf/agents/mint?template=solana-x402-signal-monetizer"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:solana-x402-signal-monetizer",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-x402-signal-monetizer.json"
+        }
+      ]
+    },
+    {
+      "id": "solana-x402-solana-rpc-broker",
+      "title": "x402 Solana RPC Broker",
+      "category": "payments",
+      "capabilities": [],
+      "metaplexSkills": [],
+      "oneShot": false,
+      "featured": false,
+      "endpoints": {
+        "catalog": "https://www.x402.wtf/api/agents/catalog/solana-x402-solana-rpc-broker.json",
+        "registration": "https://www.x402.wtf/api/agents/registry/solana-x402-solana-rpc-broker.json",
+        "a2a": "https://www.x402.wtf/api/agents/a2a",
+        "mint": "https://www.x402.wtf/agents/mint?template=solana-x402-solana-rpc-broker"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:solana-x402-solana-rpc-broker",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-x402-solana-rpc-broker.json"
+        }
+      ]
+    },
+    {
+      "id": "solana-x402-webhook-settlement",
+      "title": "x402 Webhook Settlement Agent",
+      "category": "payments",
+      "capabilities": [],
+      "metaplexSkills": [],
+      "oneShot": false,
+      "featured": false,
+      "endpoints": {
+        "catalog": "https://www.x402.wtf/api/agents/catalog/solana-x402-webhook-settlement.json",
+        "registration": "https://www.x402.wtf/api/agents/registry/solana-x402-webhook-settlement.json",
+        "a2a": "https://www.x402.wtf/api/agents/a2a",
+        "mint": "https://www.x402.wtf/agents/mint?template=solana-x402-webhook-settlement"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:solana-x402-webhook-settlement",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-x402-webhook-settlement.json"
+        }
+      ]
+    },
+    {
+      "id": "solana-yield-optimizer",
+      "title": "DeFi Yield Optimizer",
+      "category": "defi",
+      "capabilities": [],
+      "metaplexSkills": [],
+      "oneShot": false,
+      "featured": false,
+      "endpoints": {
+        "catalog": "https://www.x402.wtf/api/agents/catalog/solana-yield-optimizer.json",
+        "registration": "https://www.x402.wtf/api/agents/registry/solana-yield-optimizer.json",
+        "a2a": "https://www.x402.wtf/api/agents/a2a",
+        "mint": "https://www.x402.wtf/agents/mint?template=solana-yield-optimizer"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:solana-yield-optimizer",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-yield-optimizer.json"
+        }
+      ]
+    }
+  ],
+  "templates": []
+}

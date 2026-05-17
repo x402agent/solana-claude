@@ -1,0 +1,99 @@
+{
+  "schemaVersion": "erc-8004-agent-registration-v1",
+  "protocol": "metaplex-agent-registry",
+  "name": "CLAWD × Pump.fun Official Agent",
+  "description": "The official Solana Clawd pump.fun agent. Payment-gated random number generator (0.1 SOL), wallet-connected launch screening, claims + buyback tracking, and Telegram alerts — all wired through @pump-fun/agent-payments-sdk.",
+  "image": "https://www.x402.wtf/nich.jpg",
+  "external_url": "https://www.x402.wtf/agents/clawd-pumpfun-official",
+  "active": true,
+  "createdAt": "2026-04-16",
+  "updatedAt": "2026-05-06T12:33:34.118Z",
+  "tags": [
+    "solana",
+    "pumpfun",
+    "payment-gated",
+    "tokenized-agent",
+    "x402",
+    "telegram",
+    "one-shot",
+    "clawd"
+  ],
+  "categories": [
+    "trading"
+  ],
+  "owner": {
+    "organization": "OpenClawd",
+    "website": "https://www.x402.wtf",
+    "token": {
+      "symbol": "CLAWD",
+      "chain": "solana",
+      "mint": "8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump"
+    }
+  },
+  "services": [
+    {
+      "name": "web",
+      "endpoint": "https://www.x402.wtf/agents/clawd-pumpfun-official"
+    },
+    {
+      "name": "A2A",
+      "endpoint": "https://www.x402.wtf/api/agents/a2a",
+      "version": "0.3.0"
+    },
+    {
+      "name": "catalog",
+      "endpoint": "https://www.x402.wtf/api/agents/catalog/clawd-pumpfun-official.json"
+    },
+    {
+      "name": "registration",
+      "endpoint": "https://www.x402.wtf/api/agents/registry/clawd-pumpfun-official.json"
+    }
+  ],
+  "registrations": [
+    {
+      "agentId": "openclawd:clawd-pumpfun-official",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/clawd-pumpfun-official.json"
+    }
+  ],
+  "supportedTrust": [
+    "reputation",
+    "crypto-economic",
+    "token-gated"
+  ],
+  "metaplex": {
+    "programs": [],
+    "sdk": "@metaplex-foundation/mpl-agent-registry",
+    "expectedIdentity": {
+      "asset": null,
+      "agentIdentityPda": null,
+      "assetSignerPda": null,
+      "executiveProfilePda": null
+    },
+    "registrationFlow": [
+      "mint MPL Core agent asset",
+      "register AgentIdentity with this registrationUri",
+      "optionally register an executive profile",
+      "delegate execution only after operator review"
+    ]
+  },
+  "openclawd": {
+    "identifier": "clawd-pumpfun-official",
+    "capabilities": [
+      "payment-gated",
+      "x402",
+      "read-only",
+      "a2a-message"
+    ],
+    "payment": {
+      "provider": "pump-fun",
+      "currency": "SOL",
+      "currencyMint": "So11111111111111111111111111111111111111112",
+      "amount": "100000000",
+      "decimals": 9,
+      "displayAmount": "0.1 SOL"
+    },
+    "agentToken": "5Bphs5Q6nbq1FRQ7sk3MUYNE8JHzoSKVyeZWYM94pump"
+  }
+}

@@ -2,12 +2,12 @@
 
 ## Overview
 
-Agents on **Solana Clawd** are specialized AI assistants designed to handle specific tasks across the Solana DeFi, trading, NFT, and SPL-token ecosystem. This guide shows you how to create, publish, and deploy agents into our hub at [/agents](https://solanaclawd.com/agents) so other builders can install and run them.
+Agents on **Solana Clawd** are specialized AI assistants designed to handle specific tasks across the Solana DeFi, trading, NFT, and SPL-token ecosystem. This guide shows you how to create, publish, and deploy agents into our hub at [/agents](https://www.x402.wtf/agents) so other builders can install and run them.
 
 Every agent you publish becomes:
 
 - 🪐 **Discoverable** via our JSON API and manifest
-- 🔌 **Installable** into any MCP client (Claude Desktop, Cursor, ClawdOS, etc.)
+- 🔌 **Installable** into any MCP client (Clawd Desktop, Cursor, ClawdOS, etc.)
 - 🎨 **Mintable** as an on-chain MPL Core asset on Solana (optional, via `/agents-mint`)
 - 🗣️ **Addressable** through our A2A (agent-to-agent) endpoint at `/api/agents/a2a`
 - 📈 **Trackable** in the hosted registry at `/agents-registry`
@@ -46,7 +46,7 @@ Every agent you publish becomes:
 - Good: `solana-jupiter-router`, `pump-fun-sniper`
 - Bad: `My Agent!`, `Pump.Fun Agent v2`
 
-**title**: Display name shown in [/agents](https://solanaclawd.com/agents).
+**title**: Display name shown in [/agents](https://www.x402.wtf/agents).
 
 **description**: Short summary shown in the agent card (160–200 chars optimal).
 
@@ -142,7 +142,7 @@ Solana fundamentals, SVM internals, validator economics, stake delegation, gover
 
 ## Testing Your Agent
 
-Before submitting to the [/agents](https://solanaclawd.com/agents) hub, test thoroughly:
+Before submitting to the [/agents](https://www.x402.wtf/agents) hub, test thoroughly:
 
 1. **Role adherence**: Does it stay on Solana topics?
 2. **Edge cases**: How does it handle a non-Solana question?
@@ -195,8 +195,8 @@ Three ways to publish:
 ### 1. PR into the repo (recommended)
 
 ```bash
-git clone https://github.com/x402agent.com/solana-clawd.git
-cd solana-clawd/defi-agents
+git clone https://github.com/clawdsolana/OpenClawd.git
+cd openclawd/defi-agents
 cp agent-template.json src/your-agent-name.json
 # edit your agent
 bun run format && bun run build
@@ -205,13 +205,13 @@ bun run format && bun run build
 
 Once merged, your agent appears at:
 
-- `https://solanaclawd.com/agents` (gallery)
-- `https://beepboop.solanaclawd.com/{your-agent-name}.json` (API)
+- `https://www.x402.wtf/agents` (gallery)
+- `https://www.x402.wtf/{your-agent-name}.json` (API)
 - 18 localized variants auto-generated
 
 ### 2. Mint as on-chain MPL Core asset
 
-Visit [/agents-mint](https://solanaclawd.com/agents-mint) to register your agent as a Metaplex Core asset. This gives it a transferable Solana identity, optional royalty rails, and an entry in the on-chain [/agents-registry](https://solanaclawd.com/agents-registry).
+Visit [/agents-mint](https://www.x402.wtf/agents-mint) to register your agent as a Metaplex Core asset. This gives it a transferable Solana identity, optional royalty rails, and an entry in the on-chain [/agents-registry](https://www.x402.wtf/agents-registry).
 
 ### 3. Host externally, register via A2A
 
@@ -261,11 +261,11 @@ Expose your agent over our A2A protocol at `POST /api/agents/a2a` (see [API.md](
 
 ## Need Help?
 
-- Open an issue in [x402agent.com/solana-clawd](https://github.com/x402agent.com/solana-clawd/issues) with the `agent-help` label
+- Open an issue in [clawdsolana/OpenClawd](https://github.com/clawdsolana/OpenClawd/issues) with the `agent-help` label
 - Review the [Prompt Engineering Guide](./PROMPTS.md)
 - Check existing agents in [`defi-agents/src/`](../src/) for inspiration
 - Read [DEPLOYMENT.md](./DEPLOYMENT.md) for hosting options
 
 ---
 
-**Ready to contribute?** Open a PR, and your agent goes live on [solanaclawd.com/agents](https://solanaclawd.com/agents) within 24 hours.
+**Ready to contribute?** Open a PR, and your agent goes live on [x402.wtf/agents](https://www.x402.wtf/agents) within 24 hours.

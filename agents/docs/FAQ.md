@@ -4,7 +4,7 @@
 
 ### What is an AI agent?
 
-An AI agent is a specialized version of ChatGPT or Claude with specific instructions for one task. Instead of a generalist that tries to do everything, an agent focuses on doing one thing exceptionally well.
+An AI agent is a specialized version of ChatGPT or Clawd with specific instructions for one task. Instead of a generalist that tries to do everything, an agent focuses on doing one thing exceptionally well.
 
 ### Do I need coding skills to create an agent?
 
@@ -13,7 +13,7 @@ No. Creating an agent is about writing clear instructions in plain English. If y
 ### Which platform should I use?
 
 - **ChatGPT Custom GPTs**: Best for sharing publicly, has GPT Store
-- **Claude Projects**: Best for document-heavy work, large context window
+- **Clawd Projects**: Best for document-heavy work, large context window
 - **AI Agents Library**: Best for using pre-built agents, DeFi/crypto focus, agent teams
 
 ### Can I use the same agent across platforms?
@@ -189,7 +189,7 @@ Beyond that, the model may miss details.
 Depends on platform:
 
 - **ChatGPT**: Yes (if web browsing enabled)
-- **Claude**: Yes (web search available)
+- **Clawd**: Yes (web search available)
 - **AI Agents Library**: Depends on agent configuration
 
 ### Can my agent use uploaded files?
@@ -197,7 +197,7 @@ Depends on platform:
 Yes:
 
 - **ChatGPT**: Upload in GPT configuration (Knowledge section)
-- **Claude**: Add to Project Knowledge
+- **Clawd**: Add to Project Knowledge
 - **AI Agents Library**: Depends on implementation
 
 ---
@@ -302,7 +302,7 @@ Otherwise, if it works, don't fix it.
 ### Can I share my agents with my team?
 
 - **ChatGPT**: Yes (share link or publish to GPT Store)
-- **Claude**: Yes (share project)
+- **Clawd**: Yes (share project)
 - **AI Agents Library**: Yes (once in marketplace, anyone can use)
 
 ### Should I make my agent public?
@@ -340,7 +340,7 @@ Open an issue with:
 2. What you expected
 3. What actually happened
 4. Steps to reproduce
-5. Platform (ChatGPT/Claude/AI Agents Library)
+5. Platform (ChatGPT/Clawd/AI Agents Library)
 
 ### How do I request a feature?
 

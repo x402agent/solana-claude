@@ -1,0 +1,98 @@
+{
+  "schemaVersion": "erc-8004-agent-registration-v1",
+  "protocol": "metaplex-agent-registry",
+  "name": "Solana PumpFun/PumpSwap Copy Trading Bot",
+  "description": "High-performance Rust-based copy trading bot that monitors and replicates trading activity on Solana DEXs (PumpFun, PumpSwap, Raydium) using Yellowstone gRPC for real-time transaction monitoring with parallel processing, risk management, and Telegram notifications. Updated for v2 instructions, creator fees, cashback, Token-2022, and USDC-paired coins.",
+  "image": "https://www.x402.wtf/nich.jpg",
+  "external_url": "https://www.x402.wtf/agents/solana-pumpfun-bot",
+  "active": true,
+  "createdAt": "2026-05-11",
+  "updatedAt": "2026-05-16T20:50:19.985Z",
+  "tags": [
+    "solana",
+    "pumpfun",
+    "pumpswap",
+    "copy-trading",
+    "trading-bot",
+    "rust",
+    "bonding-curve",
+    "amm",
+    "grpc",
+    "jupiter",
+    "risk-management",
+    "defi",
+    "automation",
+    "v2-instructions",
+    "creator-fees",
+    "cashback",
+    "token-2022",
+    "mayhem-mode",
+    "fee-tiers"
+  ],
+  "categories": [
+    "trading"
+  ],
+  "owner": {
+    "organization": "OpenClawd",
+    "website": "https://www.x402.wtf",
+    "token": {
+      "symbol": "CLAWD",
+      "chain": "solana",
+      "mint": "8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump"
+    }
+  },
+  "services": [
+    {
+      "name": "web",
+      "endpoint": "https://www.x402.wtf/agents/solana-pumpfun-bot"
+    },
+    {
+      "name": "A2A",
+      "endpoint": "https://www.x402.wtf/api/agents/a2a",
+      "version": "0.3.0"
+    },
+    {
+      "name": "catalog",
+      "endpoint": "https://www.x402.wtf/api/agents/catalog/solana-pumpfun-bot.json"
+    },
+    {
+      "name": "registration",
+      "endpoint": "https://www.x402.wtf/api/agents/registry/solana-pumpfun-bot.json"
+    }
+  ],
+  "registrations": [
+    {
+      "agentId": "openclawd:solana-pumpfun-bot",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-pumpfun-bot.json"
+    }
+  ],
+  "supportedTrust": [
+    "reputation",
+    "crypto-economic",
+    "token-gated"
+  ],
+  "metaplex": {
+    "programs": [],
+    "sdk": "@metaplex-foundation/mpl-agent-registry",
+    "expectedIdentity": {
+      "asset": null,
+      "agentIdentityPda": null,
+      "assetSignerPda": null,
+      "executiveProfilePda": null
+    },
+    "registrationFlow": [
+      "mint MPL Core agent asset",
+      "register AgentIdentity with this registrationUri",
+      "optionally register an executive profile",
+      "delegate execution only after operator review"
+    ]
+  },
+  "openclawd": {
+    "identifier": "solana-pumpfun-bot",
+    "capabilities": [],
+    "payment": null,
+    "agentToken": null
+  }
+}

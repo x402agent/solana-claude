@@ -1,0 +1,92 @@
+{
+  "schemaVersion": "erc-8004-agent-registration-v1",
+  "protocol": "metaplex-agent-registry",
+  "name": "Crypto Narrative & Trend Analyst",
+  "description": "Track and analyze dominant narratives and trends in crypto markets",
+  "image": "https://www.x402.wtf/nich.jpg",
+  "external_url": "https://www.x402.wtf/agents/narrative-trend-analyst",
+  "active": true,
+  "createdAt": "2026-04-16",
+  "updatedAt": "2026-05-06T12:33:34.118Z",
+  "tags": [
+    "narrative",
+    "trends",
+    "analysis",
+    "sentiment",
+    "market-cycles",
+    "clawd",
+    "solana",
+    "analytics"
+  ],
+  "categories": [
+    "analytics"
+  ],
+  "owner": {
+    "organization": "OpenClawd",
+    "website": "https://www.x402.wtf",
+    "token": {
+      "symbol": "CLAWD",
+      "chain": "solana",
+      "mint": "8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump"
+    }
+  },
+  "services": [
+    {
+      "name": "web",
+      "endpoint": "https://www.x402.wtf/agents/narrative-trend-analyst"
+    },
+    {
+      "name": "A2A",
+      "endpoint": "https://www.x402.wtf/api/agents/a2a",
+      "version": "0.3.0"
+    },
+    {
+      "name": "catalog",
+      "endpoint": "https://www.x402.wtf/api/agents/catalog/narrative-trend-analyst.json"
+    },
+    {
+      "name": "registration",
+      "endpoint": "https://www.x402.wtf/api/agents/registry/narrative-trend-analyst.json"
+    }
+  ],
+  "registrations": [
+    {
+      "agentId": "openclawd:narrative-trend-analyst",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/narrative-trend-analyst.json"
+    }
+  ],
+  "supportedTrust": [
+    "reputation",
+    "crypto-economic",
+    "token-gated"
+  ],
+  "metaplex": {
+    "programs": [
+      "agent-registry"
+    ],
+    "sdk": "@metaplex-foundation/mpl-agent-registry",
+    "expectedIdentity": {
+      "asset": null,
+      "agentIdentityPda": null,
+      "assetSignerPda": null,
+      "executiveProfilePda": null
+    },
+    "registrationFlow": [
+      "mint MPL Core agent asset",
+      "register AgentIdentity with this registrationUri",
+      "optionally register an executive profile",
+      "delegate execution only after operator review"
+    ]
+  },
+  "openclawd": {
+    "identifier": "narrative-trend-analyst",
+    "capabilities": [
+      "read-only",
+      "a2a-message"
+    ],
+    "payment": null,
+    "agentToken": null
+  }
+}

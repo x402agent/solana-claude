@@ -4,12 +4,12 @@
 
 The **Solana Clawd Agents API** is a RESTful JSON + MCP + A2A surface providing access to production-ready AI agent definitions for Solana DeFi, trading, NFT, and on-chain workflows. All agents are auto-translated to 18 languages.
 
-This is the data layer behind the [/agents](https://solanaclawd.com/agents) hub — anything you see there (install buttons, agent cards, localized prompts, on-chain registration) is driven by these endpoints.
+This is the data layer behind the [/agents](https://www.x402.wtf/agents) hub — anything you see there (install buttons, agent cards, localized prompts, on-chain registration) is driven by these endpoints.
 
 ### Base URLs
 
 - Static JSON API (CDN): `https://clawd.click`
-- Hub + dynamic endpoints: `https://beepboop.solanaclawd.com`
+- Hub + dynamic endpoints: `https://www.x402.wtf`
 - MCP Streamable HTTP: `https://modelcontextprotocol.name/mcp/defi-agents`
 
 ---
@@ -89,7 +89,7 @@ curl https://clawd.click/agents-manifest.json | jq '.stats'
 List all agents registered at the hub, including externally-hosted agents discovered via A2A and agents minted as MPL Core assets on Solana.
 
 ```text
-GET https://beepboop.solanaclawd.com/api/agents/hosted
+GET https://www.x402.wtf/api/agents/hosted
 ```
 
 Returns:
@@ -99,8 +99,8 @@ Returns:
   "agents": [
     {
       "identifier": "solana-portfolio-manager",
-      "homepage": "https://solanaclawd.com/agents/solana-portfolio-manager",
-      "a2a": "https://beepboop.solanaclawd.com/api/agents/a2a",
+      "homepage": "https://www.x402.wtf/agents/solana-portfolio-manager",
+      "a2a": "https://www.x402.wtf/api/agents/a2a",
       "source": "repo",
       "onchainAddress": null
     },
@@ -122,11 +122,11 @@ Returns:
 Send a message to any hub agent. Supports JSON-RPC over HTTP.
 
 ```text
-POST https://beepboop.solanaclawd.com/api/agents/a2a
+POST https://www.x402.wtf/api/agents/a2a
 ```
 
 ```bash
-curl -X POST https://beepboop.solanaclawd.com/api/agents/a2a \
+curl -X POST https://www.x402.wtf/api/agents/a2a \
   -H "Content-Type: application/json" \
   -d '{
     "jsonrpc": "2.0",
@@ -146,11 +146,11 @@ curl -X POST https://beepboop.solanaclawd.com/api/agents/a2a \
 Fetch the canonical metadata template for minting your agent as an on-chain MPL Core asset.
 
 ```text
-GET https://beepboop.solanaclawd.com/api/agents/registration-template.json
-GET https://beepboop.solanaclawd.com/api/agents/nft-metadata.json?identifier=<agent-id>
+GET https://www.x402.wtf/api/agents/registration-template.json
+GET https://www.x402.wtf/api/agents/nft-metadata.json?identifier=<agent-id>
 ```
 
-Use at [/agents-mint](https://solanaclawd.com/agents-mint) — see [DEPLOYMENT.md](./DEPLOYMENT.md) for the full mint flow.
+Use at [/agents-mint](https://www.x402.wtf/agents-mint) — see [DEPLOYMENT.md](./DEPLOYMENT.md) for the full mint flow.
 
 ---
 
@@ -227,7 +227,7 @@ const agents = await fetch("https://clawd.click/index.json").then(r => r.json())
 const jupiterAgents = agents.filter(a => a.meta.tags.includes("jupiter"));
 
 // Send an A2A message
-const res = await fetch("https://beepboop.solanaclawd.com/api/agents/a2a", {
+const res = await fetch("https://www.x402.wtf/api/agents/a2a", {
   method: "POST",
   headers: { "Content-Type": "application/json" },
   body: JSON.stringify({
@@ -255,7 +255,7 @@ curl https://clawd.click/solana-portfolio-manager.zh-CN.json
 curl https://clawd.click/index.json | jq 'length'
 
 # Live registry (including externally-hosted)
-curl https://beepboop.solanaclawd.com/api/agents/hosted | jq '.agents[].identifier'
+curl https://www.x402.wtf/api/agents/hosted | jq '.agents[].identifier'
 ```
 
 ---
@@ -276,7 +276,7 @@ export function AgentGallery({ category }: { category?: string }) {
   return (
     <div className="grid grid-cols-3 gap-4">
       {agents.map(a => (
-        <a key={a.identifier} href={`https://solanaclawd.com/agents/${a.identifier}`}>
+        <a key={a.identifier} href={`https://www.x402.wtf/agents/${a.identifier}`}>
           <div className="p-4 rounded-xl border">
             <div className="text-3xl">{a.meta.avatar}</div>
             <h3>{a.meta.title}</h3>
@@ -293,12 +293,12 @@ export function AgentGallery({ category }: { category?: string }) {
 
 ## MCP Client Integration
 
-Plug the hub into Claude Desktop, Cursor, or ClawdOS via Streamable HTTP:
+Plug the hub into Clawd Desktop, Cursor, or ClawdOS via Streamable HTTP:
 
 ```json
 {
   "mcpServers": {
-    "solana-clawd-agents": {
+    "openclawd-agents": {
       "type": "http",
       "url": "https://modelcontextprotocol.name/mcp/defi-agents"
     }
@@ -313,7 +313,7 @@ Exposed tools (subset): `get_price`, `get_market_overview`, `get_trending`, `get
 ## Rate Limits
 
 - **Static CDN** (`clawd.click`): No rate limit. Cached via GitHub Pages / Cloudflare.
-- **Dynamic hub** (`beepboop.solanaclawd.com`): 60 req/min per IP on public endpoints; higher for authenticated clients.
+- **Dynamic hub** (`x402.wtf`): 60 req/min per IP on public endpoints; higher for authenticated clients.
 
 Recommended caching header for consumers:
 
@@ -385,11 +385,11 @@ See [CHANGELOG.md](../CHANGELOG.md) for version history, new agents, and schema 
 
 ## Support
 
-- **Repo**: <https://github.com/x402agent.com/solana-clawd>
-- **Issues**: <https://github.com/x402agent.com/solana-clawd/issues>
-- **Hub**: <https://solanaclawd.com/agents>
-- **Registry**: <https://solanaclawd.com/agents-registry>
-- **Mint**: <https://solanaclawd.com/agents-mint>
+- **Repo**: <https://github.com/clawdsolana/OpenClawd>
+- **Issues**: <https://github.com/clawdsolana/OpenClawd/issues>
+- **Hub**: <https://www.x402.wtf/agents>
+- **Registry**: <https://www.x402.wtf/agents-registry>
+- **Mint**: <https://www.x402.wtf/agents-mint>
 - **Contributing**: see [CONTRIBUTING.md](./CONTRIBUTING.md)
 
 ---

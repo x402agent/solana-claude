@@ -1,0 +1,94 @@
+{
+  "schemaVersion": "erc-8004-agent-registration-v1",
+  "protocol": "metaplex-agent-registry",
+  "name": "MEV Protection Advisor",
+  "description": "Protect users from front-running, sandwich attacks, and MEV exploitation",
+  "image": "https://www.x402.wtf/nich.jpg",
+  "external_url": "https://www.x402.wtf/agents/mev-protection-advisor",
+  "active": true,
+  "createdAt": "2026-04-16",
+  "updatedAt": "2026-05-06T12:33:34.118Z",
+  "tags": [
+    "mev",
+    "security",
+    "front-running",
+    "flashbots",
+    "protection",
+    "clawd",
+    "solana",
+    "jito",
+    "bundles"
+  ],
+  "categories": [
+    "security"
+  ],
+  "owner": {
+    "organization": "OpenClawd",
+    "website": "https://www.x402.wtf",
+    "token": {
+      "symbol": "CLAWD",
+      "chain": "solana",
+      "mint": "8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump"
+    }
+  },
+  "services": [
+    {
+      "name": "web",
+      "endpoint": "https://www.x402.wtf/agents/mev-protection-advisor"
+    },
+    {
+      "name": "A2A",
+      "endpoint": "https://www.x402.wtf/api/agents/a2a",
+      "version": "0.3.0"
+    },
+    {
+      "name": "catalog",
+      "endpoint": "https://www.x402.wtf/api/agents/catalog/mev-protection-advisor.json"
+    },
+    {
+      "name": "registration",
+      "endpoint": "https://www.x402.wtf/api/agents/registry/mev-protection-advisor.json"
+    }
+  ],
+  "registrations": [
+    {
+      "agentId": "openclawd:mev-protection-advisor",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/mev-protection-advisor.json"
+    }
+  ],
+  "supportedTrust": [
+    "reputation",
+    "crypto-economic",
+    "token-gated"
+  ],
+  "metaplex": {
+    "programs": [
+      "agent-registry"
+    ],
+    "sdk": "@metaplex-foundation/mpl-agent-registry",
+    "expectedIdentity": {
+      "asset": null,
+      "agentIdentityPda": null,
+      "assetSignerPda": null,
+      "executiveProfilePda": null
+    },
+    "registrationFlow": [
+      "mint MPL Core agent asset",
+      "register AgentIdentity with this registrationUri",
+      "optionally register an executive profile",
+      "delegate execution only after operator review"
+    ]
+  },
+  "openclawd": {
+    "identifier": "mev-protection-advisor",
+    "capabilities": [
+      "swap-execution",
+      "read-only",
+      "a2a-message"
+    ],
+    "payment": null,
+    "agentToken": null
+  }
+}

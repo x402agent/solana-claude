@@ -1,0 +1,569 @@
+{
+  "schemaVersion": "openclawd.metaplex.registry.index.v1",
+  "generatedAt": "2026-05-16T20:50:19.985Z",
+  "registry": "metaplex-agent-registry",
+  "host": "https://www.x402.wtf",
+  "count": 80,
+  "agents": [
+    {
+      "id": "clawdex",
+      "name": "Clawdex",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/clawdex.json",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration"
+    },
+    {
+      "id": "solana-agent-orchestrator",
+      "name": "Multi-Agent Trading Orchestrator",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-agent-orchestrator.json",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration"
+    },
+    {
+      "id": "solana-airdrop-farmer",
+      "name": "Airdrop Strategy Optimizer",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-airdrop-farmer.json",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration"
+    },
+    {
+      "id": "solana-alpha-aggregator",
+      "name": "Alpha Signal Aggregator",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-alpha-aggregator.json",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration"
+    },
+    {
+      "id": "solana-anchor-developer",
+      "name": "Anchor Program Developer",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-anchor-developer.json",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration"
+    },
+    {
+      "id": "solana-anomaly-detector",
+      "name": "On-Chain Anomaly Detector",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-anomaly-detector.json",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration"
+    },
+    {
+      "id": "solana-arbitrage-scanner",
+      "name": "Cross-DEX Arbitrage Scanner",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-arbitrage-scanner.json",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration"
+    },
+    {
+      "id": "solana-autonomous-trader",
+      "name": "Autonomous Trading Agent",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-autonomous-trader.json",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration"
+    },
+    {
+      "id": "solana-bot-architect",
+      "name": "Trading Bot Architect",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-bot-architect.json",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration"
+    },
+    {
+      "id": "solana-chart-pattern-ai",
+      "name": "AI Chart Pattern Recognition",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-chart-pattern-ai.json",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration"
+    },
+    {
+      "id": "solana-clawd-cost-planner",
+      "name": "Clawd Cost Planner",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-clawd-cost-planner.json",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration"
+    },
+    {
+      "id": "solana-clawd-mail-concierge",
+      "name": "Clawd Mail Concierge",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-clawd-mail-concierge.json",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration"
+    },
+    {
+      "id": "solana-clawd-payment-debugger",
+      "name": "Clawd Payment Debugger",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-clawd-payment-debugger.json",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration"
+    },
+    {
+      "id": "solana-clawd-payment-gateway",
+      "name": "Solana Clawd Payment Gateway",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-clawd-payment-gateway.json",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration"
+    },
+    {
+      "id": "solana-clawd-provider-scorer",
+      "name": "Clawd Provider Scorer",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-clawd-provider-scorer.json",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration"
+    },
+    {
+      "id": "solana-clawd-quote-relay",
+      "name": "Clawd Quote Relay",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-clawd-quote-relay.json",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration"
+    },
+    {
+      "id": "solana-clawd-usdc-allocator",
+      "name": "Clawd USDC Allocator",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-clawd-usdc-allocator.json",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration"
+    },
+    {
+      "id": "solana-clawd-wallet-guardian",
+      "name": "Clawd Wallet Guardian",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-clawd-wallet-guardian.json",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration"
+    },
+    {
+      "id": "solana-cross-chain-bridge",
+      "name": "Cross-Chain Bridge Analyst",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-cross-chain-bridge.json",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration"
+    },
+    {
+      "id": "solana-dark-ralph-mail-briefing",
+      "name": "Dark Ralph Mail Briefing Desk",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-dark-ralph-mail-briefing.json",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration"
+    },
+    {
+      "id": "solana-data-pipeline",
+      "name": "Blockchain Data Pipeline",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-data-pipeline.json",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration"
+    },
+    {
+      "id": "solana-dex-aggregator",
+      "name": "Solana DEX Aggregator",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-dex-aggregator.json",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration"
+    },
+    {
+      "id": "solana-dexter-mail-operator",
+      "name": "Dexter Mail Operator",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-dexter-mail-operator.json",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration"
+    },
+    {
+      "id": "solana-funding-rate-arb",
+      "name": "Funding Rate Arbitrage Bot",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-funding-rate-arb.json",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration"
+    },
+    {
+      "id": "solana-helius-specialist",
+      "name": "Helius API Specialist",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-helius-specialist.json",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration"
+    },
+    {
+      "id": "solana-hermes-mail-settlement",
+      "name": "HERMES Mail Settlement Controller",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-hermes-mail-settlement.json",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration"
+    },
+    {
+      "id": "solana-impermanent-loss-calc",
+      "name": "Impermanent Loss Calculator",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-impermanent-loss-calc.json",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration"
+    },
+    {
+      "id": "solana-lending-strategist",
+      "name": "Lending Protocol Strategist",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-lending-strategist.json",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration"
+    },
+    {
+      "id": "solana-liquidation-bot",
+      "name": "Liquidation Monitor",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-liquidation-bot.json",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration"
+    },
+    {
+      "id": "solana-lsd-analyst",
+      "name": "Liquid Staking Analyst",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-lsd-analyst.json",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration"
+    },
+    {
+      "id": "solana-macro-analyst",
+      "name": "Crypto Macro Analyst",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-macro-analyst.json",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration"
+    },
+    {
+      "id": "solana-market-maker",
+      "name": "Market Making Strategist",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-market-maker.json",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration"
+    },
+    {
+      "id": "solana-memecoin-analyst",
+      "name": "Memecoin Alpha Analyst",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-memecoin-analyst.json",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration"
+    },
+    {
+      "id": "solana-mev-protector",
+      "name": "MEV Protection Specialist",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-mev-protector.json",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration"
+    },
+    {
+      "id": "solana-nanoclawd-cache-keeper",
+      "name": "NanoClawd Cache Keeper",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-nanoclawd-cache-keeper.json",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration"
+    },
+    {
+      "id": "solana-nanoclawd-microtransaction",
+      "name": "NanoClawd Microtransaction Specialist",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-nanoclawd-microtransaction.json",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration"
+    },
+    {
+      "id": "solana-nanoclawd-sandbox-runner",
+      "name": "NanoClawd Sandbox Runner",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-nanoclawd-sandbox-runner.json",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration"
+    },
+    {
+      "id": "solana-narrative-tracker",
+      "name": "Crypto Narrative Tracker",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-narrative-tracker.json",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration"
+    },
+    {
+      "id": "solana-nemoclawd-defi-router",
+      "name": "NemoClawd DeFi Payment Router",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-nemoclawd-defi-router.json",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration"
+    },
+    {
+      "id": "solana-nemoclawd-settlement-ops",
+      "name": "NemoClawd Settlement Ops",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-nemoclawd-settlement-ops.json",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration"
+    },
+    {
+      "id": "solana-nemoclawd-yield-treasurer",
+      "name": "NemoClawd Yield Treasurer",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-nemoclawd-yield-treasurer.json",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration"
+    },
+    {
+      "id": "solana-nft-floor-trader",
+      "name": "NFT Floor Price Trader",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-nft-floor-trader.json",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration"
+    },
+    {
+      "id": "solana-onchain-metrics",
+      "name": "On-Chain Metrics Dashboard",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-onchain-metrics.json",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration"
+    },
+    {
+      "id": "solana-onchain-sleuth",
+      "name": "On-Chain Investigation Specialist",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-onchain-sleuth.json",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration"
+    },
+    {
+      "id": "solana-openclawd-orchestrator",
+      "name": "OpenClawd Fleet Orchestrator",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-openclawd-orchestrator.json",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration"
+    },
+    {
+      "id": "solana-openclawd-pulse-monitor",
+      "name": "OpenClawd Pulse Monitor",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-openclawd-pulse-monitor.json",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration"
+    },
+    {
+      "id": "solana-openclawd-shell-auditor",
+      "name": "OpenClawd SHELL Auditor",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-openclawd-shell-auditor.json",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration"
+    },
+    {
+      "id": "solana-openclawd-skill-router",
+      "name": "OpenClawd Skill Router",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-openclawd-skill-router.json",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration"
+    },
+    {
+      "id": "solana-openclawd-spawn-manager",
+      "name": "OpenClawd Spawn Manager",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-openclawd-spawn-manager.json",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration"
+    },
+    {
+      "id": "solana-order-flow-analyst",
+      "name": "Order Flow Analyst",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-order-flow-analyst.json",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration"
+    },
+    {
+      "id": "solana-perpetuals-trader",
+      "name": "Perpetuals Trading Strategist",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-perpetuals-trader.json",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration"
+    },
+    {
+      "id": "solana-portfolio-risk",
+      "name": "Portfolio Risk Manager",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-portfolio-risk.json",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration"
+    },
+    {
+      "id": "solana-position-sizer",
+      "name": "Position Sizing Engine",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-position-sizer.json",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration"
+    },
+    {
+      "id": "solana-prediction-market",
+      "name": "Prediction Market Analyst",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-prediction-market.json",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration"
+    },
+    {
+      "id": "solana-price-predictor",
+      "name": "ML Price Prediction Engine",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-price-predictor.json",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration"
+    },
+    {
+      "id": "solana-protocol-auditor",
+      "name": "Smart Contract Auditor",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-protocol-auditor.json",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration"
+    },
+    {
+      "id": "solana-pumpfun-bot",
+      "name": "Solana PumpFun/PumpSwap Copy Trading Bot",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-pumpfun-bot.json",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration"
+    },
+    {
+      "id": "solana-quant-researcher",
+      "name": "Quantitative Research Analyst",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-quant-researcher.json",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration"
+    },
+    {
+      "id": "solana-regulatory-advisor",
+      "name": "Crypto Regulatory Analyst",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-regulatory-advisor.json",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration"
+    },
+    {
+      "id": "solana-risk-sentinel",
+      "name": "Protocol Risk Sentinel",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-risk-sentinel.json",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration"
+    },
+    {
+      "id": "solana-rpc-optimizer",
+      "name": "RPC & Infrastructure Expert",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-rpc-optimizer.json",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration"
+    },
+    {
+      "id": "solana-sentiment-analyzer",
+      "name": "Crypto Sentiment Analyzer",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-sentiment-analyzer.json",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration"
+    },
+    {
+      "id": "solana-spot-trader",
+      "name": "Spot Trading Optimizer",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-spot-trader.json",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration"
+    },
+    {
+      "id": "solana-stablecoin-strategist",
+      "name": "Stablecoin Yield Strategist",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-stablecoin-strategist.json",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration"
+    },
+    {
+      "id": "solana-technical-analyst",
+      "name": "Advanced Technical Analyst",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-technical-analyst.json",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration"
+    },
+    {
+      "id": "solana-token-launcher",
+      "name": "Token Launch Specialist",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-token-launcher.json",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration"
+    },
+    {
+      "id": "solana-tokenomics-analyst",
+      "name": "Tokenomics Deep Researcher",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-tokenomics-analyst.json",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration"
+    },
+    {
+      "id": "solana-vc-deal-analyzer",
+      "name": "VC & Fundraise Analyst",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-vc-deal-analyzer.json",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration"
+    },
+    {
+      "id": "solana-volatility-analyst",
+      "name": "Volatility Surface Modeler",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-volatility-analyst.json",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration"
+    },
+    {
+      "id": "solana-vulcan-clawd-autonomous-perps",
+      "name": "Vulcan CLAWD Autonomous Perps",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-vulcan-clawd-autonomous-perps.json",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration"
+    },
+    {
+      "id": "solana-whale-tracker",
+      "name": "Whale Wallet Intelligence",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-whale-tracker.json",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration"
+    },
+    {
+      "id": "solana-whitepaper-analyst",
+      "name": "Whitepaper & Docs Analyst",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-whitepaper-analyst.json",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration"
+    },
+    {
+      "id": "solana-x402-market-data-buyer",
+      "name": "x402 Market Data Buyer",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-x402-market-data-buyer.json",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration"
+    },
+    {
+      "id": "solana-x402-provider-author",
+      "name": "x402 Provider Author",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-x402-provider-author.json",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration"
+    },
+    {
+      "id": "solana-x402-provider-catalog",
+      "name": "x402 Provider Catalog Agent",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-x402-provider-catalog.json",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration"
+    },
+    {
+      "id": "solana-x402-research-broker",
+      "name": "x402 Research Broker",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-x402-research-broker.json",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration"
+    },
+    {
+      "id": "solana-x402-signal-monetizer",
+      "name": "x402 Signal Monetizer",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-x402-signal-monetizer.json",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration"
+    },
+    {
+      "id": "solana-x402-solana-rpc-broker",
+      "name": "x402 Solana RPC Broker",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-x402-solana-rpc-broker.json",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration"
+    },
+    {
+      "id": "solana-x402-webhook-settlement",
+      "name": "x402 Webhook Settlement Agent",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-x402-webhook-settlement.json",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration"
+    },
+    {
+      "id": "solana-yield-optimizer",
+      "name": "DeFi Yield Optimizer",
+      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-yield-optimizer.json",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration"
+    }
+  ]
+}

@@ -2,7 +2,7 @@
 
 ## Goal
 
-Make this repo the #1 result when developers, users, or AI systems (ChatGPT, Claude, Grok) search for:
+Make this repo the #1 result when developers, users, or AI systems (ChatGPT, Clawd, Grok) search for:
 
 - AI agents for crypto/DeFi/Web3/blockchain
 - Agent indexes and marketplaces
@@ -294,14 +294,14 @@ Allow: /.ai-manifest.json
    - Name: "DeFi Agent Assistant"
    - Description: "Access 57 specialized DeFi agents"
 
-### Claude (Anthropic)
+### Clawd (OpenAI-Compatible)
 
 **Training Data**: More recent, includes web crawls
 
 **Optimization Strategy:**
 
 1. **Comprehensive documentation**
-   - Claude favors detailed, well-structured docs
+   - Clawd favors detailed, well-structured docs
    - Your current docs are good ✅
 
 2. **Academic/research signals**
@@ -437,7 +437,7 @@ Track:
 - 500+ GitHub stars
 - 50+ forks
 - LLMs mention repo in responses
-- Traffic from ChatGPT/Claude searches
+- Traffic from ChatGPT/Clawd searches
 
 ### Long-term (6-12 months)
 

@@ -1,6 +1,6 @@
 # Solana Clawd Agent Examples: What Makes Them Work
 
-Real agents living in the [/agents](https://solanaclawd.com/agents) hub, with breakdowns showing why they're effective. Use these as starting templates — copy, adapt, ship.
+Real agents living in the [/agents](https://www.x402.wtf/agents) hub, with breakdowns showing why they're effective. Use these as starting templates — copy, adapt, ship.
 
 ---
 
@@ -199,4 +199,4 @@ Pick one example above and fork it for your corner of Solana. Change the:
 - Thresholds and flags (tighten or loosen based on target user)
 - Tone (degen-friendly vs institutional)
 
-Drop the JSON into [`defi-agents/src/`](../src/) and open a PR — see [DEPLOYMENT.md](./DEPLOYMENT.md) for the four paths to getting live on [solanaclawd.com/agents](https://solanaclawd.com/agents).
+Drop the JSON into [`defi-agents/src/`](../src/) and open a PR — see [DEPLOYMENT.md](./DEPLOYMENT.md) for the four paths to getting live on [x402.wtf/agents](https://www.x402.wtf/agents).
