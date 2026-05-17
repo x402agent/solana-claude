@@ -396,6 +396,20 @@ else
 fi
 
 # ──────────────────────────────────────────────────────────────────────────────
+# sdk/ — @openclawdsolana/leviathan source workspace and local SDK assets
+# ──────────────────────────────────────────────────────────────────────────────
+if [ "$NO_NODE" = "1" ]; then
+  info "skipping sdk/ workspace (--no-node)"
+elif command -v npm >/dev/null 2>&1 && [ -f "$SRC_DIR/sdk/package.json" ]; then
+  step "installing and building sdk/ workspace"
+  pkg_install "$SRC_DIR/sdk" || warn "sdk install failed"
+  pkg_run "$SRC_DIR/sdk" build || warn "sdk build failed"
+  ok "sdk/ workspace ready"
+else
+  info "skipping sdk/ workspace (npm or sdk/package.json not found)"
+fi
+
+# ──────────────────────────────────────────────────────────────────────────────
 # Clawd npm CLIs — lobster TUI suite (all four packages)
 # ──────────────────────────────────────────────────────────────────────────────
 _npm_global_install() {
@@ -421,6 +435,7 @@ elif command -v npm >/dev/null 2>&1; then
   _npm_global_install "@openclawdsolana/clawd-perps"     "@openclawdsolana/clawd-perps (Phoenix perps CLI)"
   _npm_global_install "@openclawdsolana/clawd-wallet"    "@openclawdsolana/clawd-wallet (Privy wallet + Jupiter swap)"
   _npm_global_install "@openclawdsolana/clawd-standalone" "@openclawdsolana/clawd-standalone (standalone lobster CLI)"
+  _npm_global_install "clawd-automaton"                  "clawd-automaton (automation runtime + cloud dashboard)"
   _npm_global_install "agentwallet-vault"                "agentwallet-vault (encrypted keypair vault)"
 
   CLAWD_BIN="$(command -v clawd 2>/dev/null || echo '')"
@@ -610,6 +625,7 @@ printf "       ${GREEN}clawd${RESET}              ${DIM}# @openclawdsolana/clawd
 printf "       ${GREEN}clawd-standalone${RESET}   ${DIM}# @openclawdsolana/clawd-standalone — lightweight, no Leviathan${RESET}\n"
 printf "       ${GREEN}clawd-perps${RESET}        ${DIM}# @openclawdsolana/clawd-perps — Phoenix Perpetuals CLI${RESET}\n"
 printf "       ${GREEN}agentwallet${RESET}        ${DIM}# agentwallet-vault — encrypted keypair vault + HTTP server${RESET}\n"
+printf "       ${GREEN}clawd-automaton${RESET}    ${DIM}# clawd-automaton — automation runtime + cloud dashboard${RESET}\n"
 printf "       ${GREEN}clawd-code${RESET}         ${DIM}# clawd-code-cli — Grok / OpenRouter / Ollama / OpenAI${RESET}\n"
 printf "       ${GREEN}clawd -p \"check my wallet\"${RESET}  ${DIM}# headless one-shot${RESET}\n"
 printf "\n"

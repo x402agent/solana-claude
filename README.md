@@ -11,21 +11,32 @@ Node packages are wired through npm workspaces and the `packages:install` /
 `packages:build` scripts. The Rust on-chain program is built by the installer
 when `cargo` is available.
 
-| Path | Package | Build/install role |
-| --- | --- | --- |
-| `packages/agentwallet` | `agentwallet-vault` | Encrypted Solana/EVM keypair vault, HTTP server, E2B and Cloudflare deployment helpers. Installs CLI as `agentwallet`. |
-| `packages/clawd` | `@openclawdsolana/clawd` | Main terminal agent package. Built from TypeScript and linked by the installer as `clawd-pkg` to avoid clobbering the root `clawd` binary. |
-| `packages/clawd-perps` | `@openclawdsolana/clawd-perps` | Phoenix perpetuals CLI. Built from TypeScript and linked as `clawd-perps`. |
-| `packages/clawd-protocol` | Rust/Anchor workspace | On-chain Solana program. Installer runs `cargo build` when the Rust toolchain is present. |
-| `packages/clawd-sdk` | `@openclawdsolana/clawd-sdk` | TypeScript SDK for protocol IDL, bonding curves, token launches, vaults, and agent bindings. |
-| `packages/clawd-wallet` | `@openclawdsolana/clawd-wallet` | Wallet SDK with agentic trading guardrails and swap helpers. |
-| `packages/cli-standalone` | `@openclawdsolana/clawd-standalone` | Prebuilt standalone CLI with no compile step. Installed globally by the one-shot installer. |
+| Path | Package | Version | Install | Build/install role |
+| --- | --- | --- | --- | --- |
+| `packages/agentwallet` | `agentwallet-vault` | `0.1.0` | `npm i -g agentwallet-vault` | Encrypted Solana/EVM keypair vault, HTTP server, E2B and Cloudflare deployment helpers. Installs CLI as `agentwallet`. |
+| `packages/clawd` | `@openclawdsolana/clawd` | `1.3.0` | `npm i -g @openclawdsolana/clawd` | Main terminal agent package. Built from TypeScript and linked by the installer as `clawd-pkg` to avoid clobbering the root `clawd` binary. |
+| `packages/clawd-perps` | `@openclawdsolana/clawd-perps` | `1.0.0` | `npm i -g @openclawdsolana/clawd-perps` | Phoenix perpetuals CLI. Built from TypeScript and linked as `clawd-perps`. |
+| `packages/clawd-protocol` | Rust/Anchor workspace | local | `cargo build` | On-chain Solana program. Installer runs `cargo build` when the Rust toolchain is present. |
+| `packages/clawd-sdk` | `@openclawdsolana/clawd-sdk` | `0.1.0` | `npm i @openclawdsolana/clawd-sdk` | TypeScript SDK for protocol IDL, bonding curves, token launches, vaults, and agent bindings. |
+| `packages/clawd-wallet` | `@openclawdsolana/clawd-wallet` | `1.0.0` | `npm i @openclawdsolana/clawd-wallet` | Wallet SDK with agentic trading guardrails and swap helpers. |
+| `packages/cli-standalone` | `@openclawdsolana/clawd-standalone` | `1.3.0` | `npm i -g @openclawdsolana/clawd-standalone` | Prebuilt standalone CLI with no compile step. Installed globally by the one-shot installer. |
+| npm registry | `clawd-automaton` | `0.2.0` | `npm i -g clawd-automaton` | Automation runtime and cloud dashboard. `clawd-automat` is not a published npm package. |
+
+The root `sdk/` workspace is also installed and built by the one-shot installer.
+It contains the local `@openclawdsolana/leviathan` source, assets, automation,
+characters, examples, goals, knowledge, library, LiveKit agent, MCP server,
+pay, scripts, skills, vendor code, x402 integrations, and compiled `dist/`
+output. Use `npm run sdk:install`, `npm run sdk:build`, or `npm run sdk:check`
+from the repo root when working on it directly.
 
 Useful root commands:
 
 ```bash
 npm run packages:install
 npm run packages:build
+npm run sdk:install
+npm run sdk:build
+npm run sdk:check
 npm run agentwallet:build
 npm run clawd:build
 npm run clawd-perps:build
@@ -149,11 +160,11 @@ npm install -g clawd-code-cli               # 🤖 Grok · OpenRouter · Ollama 
 # Runtime + perps
 npm install -g @openclawdsolana/leviathan   # 🐙 sovereign OODA runtime
 npm install -g @openclawdsolana/clawd-perps # 📈 Phoenix perpetuals CLI + library
-npm install   clawd-automaton               # ⚡ automaton runtime + CLAWD Cloud dashboard
+npm install -g clawd-automaton              # ⚡ automaton runtime + CLAWD Cloud dashboard
 
 # Libraries
-npm install @openclawd/wallet               # 💳 Privy + AgenticWallet + Jupiter swap
-npm install @openclawd/solana-sdk           # 🔗 on-chain SDK — bonding curves, vault, Token2022
+npm install @openclawdsolana/clawd-wallet   # 💳 Privy + AgenticWallet + Jupiter swap
+npm install @openclawdsolana/clawd-sdk      # 🔗 on-chain SDK — bonding curves, vault, Token2022
 npm install @solanaclawd/x402-client        # 💸 drop-in fetch that auto-pays x402 on Solana
 ```
 
@@ -190,7 +201,7 @@ clawd-perps perps order place BTC-PERP --side buy --size 0.1 --type market
 
 | Package | npm | Binaries | Description |
 | ------- | --- | -------- | ----------- |
-| `@openclawdsolana/clawd` | `npm i -g @openclawdsolana/clawd` | `clawd`, `clawd-code`, `clawd-leviathan` | Backroom TUI — Grok/OpenRouter/Ollama/OpenAI, Solana tools, MCP, voice |
+| `@openclawdsolana/clawd` `v1.3.0` | `npm i -g @openclawdsolana/clawd` | `clawd`, `clawd-code`, `clawd-leviathan` | Backroom TUI — Grok/OpenRouter/Ollama/OpenAI, Solana tools, MCP, voice |
 | `@openclawdsolana/clawd-tui` | `npm i -g @openclawdsolana/clawd-tui` | `clawd`, `clawd-tui` | Solana-aware TUI with OpenRouter PKCE auth + Birdeye + Helius slash commands |
 | `clawd-code-cli` | `npm i -g clawd-code-cli` | `clawd-code`, `claw` | Multi-provider AI terminal — Grok · OpenRouter · Ollama · OpenAI, live `/search`, `/voice` |
 
@@ -199,15 +210,15 @@ clawd-perps perps order place BTC-PERP --side buy --size 0.1 --type market
 | Package | npm | Description |
 | ------- | --- | ----------- |
 | `@openclawdsolana/leviathan` | `npm i -g @openclawdsolana/leviathan` | Sovereign OODA runtime — identity, x402, pulse, Metaplex on-chain |
-| `clawd-automaton` | `npm i clawd-automaton` | Automaton runtime: identity, scheduled loops, spawn, sandbox hooks + CLAWD Cloud dashboard (R3F) |
-| `@openclawdsolana/clawd-perps` | `npm i -g @openclawdsolana/clawd-perps` | Phoenix perpetuals — CLI + `ClaWDPerps` library, market data, order building |
+| `clawd-automaton` `v0.2.0` | `npm i -g clawd-automaton` | Automaton runtime: identity, scheduled loops, spawn, sandbox hooks + CLAWD Cloud dashboard (R3F). `clawd-automat` is not published. |
+| `@openclawdsolana/clawd-perps` `v1.0.0` | `npm i -g @openclawdsolana/clawd-perps` | Phoenix perpetuals — CLI + `ClaWDPerps` library, market data, order building |
 
 ### Libraries + SDKs
 
 | Package | npm | Description |
 | ------- | --- | ----------- |
-| `@openclawd/wallet` | `npm i @openclawd/wallet` | `ClawdWallet` (Privy), `AgenticWallet` (Grok-gated trading), `SwapService` (Jupiter) |
-| `@openclawd/solana-sdk` | `npm i @openclawd/solana-sdk` | On-chain SDK — bonding curves, Token2022, vault, agent capability flags |
+| `@openclawdsolana/clawd-wallet` `v1.0.0` | `npm i @openclawdsolana/clawd-wallet` | `ClawdWallet` (Privy), `AgenticWallet` (Grok-gated trading), `SwapService` (Jupiter) |
+| `@openclawdsolana/clawd-sdk` `v0.1.0` | `npm i @openclawdsolana/clawd-sdk` | On-chain SDK — bonding curves, Token2022, vault, agent capability flags |
 | `@solanaclawd/x402-client` | `npm i @solanaclawd/x402-client` | `clawdFetch` — drop-in fetch that auto-pays Solana x402/MPP/AP2 challenges |
 | `@pump-fun/mcp-server` | `npx @pump-fun/mcp-server` | MCP tools for Claude / any model — token launches, wallet ops, pump.fun |
 
@@ -248,10 +259,10 @@ clawd-perps perps order place BTC-PERP --side buy --size 0.1 --type market
 clawd-perps perps position tpsl BTC-PERP --tp 120000 --sl 90000 --side long
 ```
 
-**@openclawd/wallet — AI-gated trading:**
+**@openclawdsolana/clawd-wallet — AI-gated trading:**
 
 ```typescript
-import { ClawdWallet, AgenticWallet, SwapService } from "@openclawd/wallet";
+import { ClawdWallet, AgenticWallet, SwapService } from "@openclawdsolana/clawd-wallet";
 
 const agent = new AgenticWallet({
   permissions: { maxSwapUsd: 100, maxSolTransfer: 1.0, permissionLevel: "ask" }
