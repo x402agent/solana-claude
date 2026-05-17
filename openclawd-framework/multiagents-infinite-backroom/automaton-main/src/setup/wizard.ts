@@ -28,7 +28,7 @@ export async function runSetupWizard(): Promise<AutomatonConfig> {
   console.log(chalk.dim(`  Private key stored at: ${getAutomatonDir()}/wallet.json\n`));
 
   // ─── 2. Provision API key ─────────────────────────────────────
-  console.log(chalk.cyan("  [2/6] Provisioning Conway API key (SIWE)..."));
+  console.log(chalk.cyan("  [2/6] Provisioning CLAWD API key (SIWE)..."));
   let apiKey = "";
   try {
     const result = await provision();
@@ -37,7 +37,7 @@ export async function runSetupWizard(): Promise<AutomatonConfig> {
   } catch (err: any) {
     console.log(chalk.yellow(`  Auto-provision failed: ${err.message}`));
     console.log(chalk.yellow("  You can enter a key manually, or press Enter to skip.\n"));
-    const manual = await promptRequired("Conway API key (cnwy_k_...)");
+    const manual = await promptRequired("CLAWD API key (cnwy_k_...)");
     if (manual) {
       apiKey = manual;
       // Save to config.json for loadApiKeyFromConfig()
@@ -138,7 +138,7 @@ function showFundingPanel(address: string): void {
   console.log(chalk.cyan(`  │${pad(`  Address: ${short}`, w)}│`));
   console.log(chalk.cyan(`  │${" ".repeat(w)}│`));
   console.log(chalk.cyan(`  │${pad("  1. Transfer CLAWD credits", w)}│`));
-  console.log(chalk.cyan(`  │${pad("     conway credits transfer <address> <amount>", w)}│`));
+  console.log(chalk.cyan(`  │${pad("     clawd credits transfer <address> <amount>", w)}│`));
   console.log(chalk.cyan(`  │${" ".repeat(w)}│`));
   console.log(chalk.cyan(`  │${pad("  2. Send USDC on Base directly to the address above", w)}│`));
   console.log(chalk.cyan(`  │${" ".repeat(w)}│`));

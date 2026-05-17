@@ -25,14 +25,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Conway-Research/automaton.git"
+    "url": "https://github.com/x402agent/openclawd.git"
   },
-  "homepage": "https://conway.tech",
+  "homepage": "https://solanaclawd.com",
   "keywords": [
     "autonomous-agent",
     "sovereign-ai",
     "web4",
-    "conway",
+    "clawd",
     "self-replicating"
   ],
   "license": "MIT",
