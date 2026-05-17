@@ -417,6 +417,11 @@ For FastAPI:
 - `PUBLIC_API_URL`
 - `PUBLIC_3D_URL`
 - `CORS_ORIGINS`
+- `MOONSHOT_API_KEY`
+- `MOONSHOT_MODEL`
+- `MOONSHOT_BASE_URL`
+- `MOONSHOT_MAX_TOKENS`
+- `MOONSHOT_THINKING`
 - `DEEPSEEK_API_KEY`
 - `OPENROUTER_API_KEY`
 - `SOLANA_RPC_URL`
@@ -450,6 +455,16 @@ Another agent should do the migration in this order:
 6. move browser clients to the new site
 7. keep the Fly app connected through machine auth
 8. cut traffic from old hardcoded domains only after health checks pass
+
+## LLM Provider Contract
+
+The Fly API now boots providers in this order when `AGENT_BACKEND=auto`:
+
+1. `MOONSHOT_API_KEY` -> Moonshot/Kimi through `https://api.moonshot.ai/v1`
+2. `DEEPSEEK_API_KEY` -> DeepSeek fallback
+3. `OPENROUTER_API_KEY` -> OpenRouter fallback
+
+For Kimi, keep `MOONSHOT_MODEL=kimi-k2.6` unless there is a specific reason to change it. The API intentionally does not set temperature, top_p, n, or penalties for K2.6 because the provider enforces fixed values for those fields.
 
 ## Minimum Convex HTTP Actions Needed
 

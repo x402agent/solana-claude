@@ -17,5 +17,5 @@ COPY . .
 EXPOSE 8000
 
 # Command to run the application
-# DEEPSEEK_API_KEY or OPENROUTER_API_KEY must be set via fly secrets
+# MOONSHOT_API_KEY, DEEPSEEK_API_KEY, or OPENROUTER_API_KEY must be set via fly secrets
 CMD ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8000"]

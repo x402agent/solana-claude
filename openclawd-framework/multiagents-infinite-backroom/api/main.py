@@ -1,8 +1,8 @@
 """
-DeepSeek Multi-Agent Backroom — FastAPI Server
+CLAWD Multi-Agent Backroom — FastAPI Server
 3 Agents: Analyst, Satirist, Clawd Claude (sovereign lobster)
 Auto-loop endpoint for infinite debate.
-Always uses DeepSeek API by default.
+Uses Moonshot/Kimi by default when MOONSHOT_API_KEY is configured.
 """
 
 from __future__ import annotations
@@ -16,6 +16,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from pathlib import Path
 from pydantic import BaseModel, ConfigDict, Field
+from dotenv import load_dotenv
 from .auth import (
     AuthContext,
     auth_status,
@@ -41,6 +42,11 @@ from .solana_trading import (
 )
 
 
+env_loaded = load_dotenv(dotenv_path=".env.local")
+if not env_loaded:
+    load_dotenv(dotenv_path=".env")
+
+
 def _parse_cors_origins() -> list[str]:
     raw = os.getenv("CORS_ORIGINS", "")
     origins = [origin.strip() for origin in raw.split(",") if origin.strip()]
@@ -55,24 +61,54 @@ def _parse_cors_origins() -> list[str]:
         "http://127.0.0.1:4173",
     ]
 
-# Always use DeepSeek. Fall back to OpenRouter only if DeepSeek is not configured.
+# Default to Moonshot/Kimi when configured. DeepSeek and OpenRouter stay as fallbacks.
+MOONSHOT_KEY = os.getenv("MOONSHOT_API_KEY")
 DEEPSEEK_KEY = os.getenv("DEEPSEEK_API_KEY")
 OPENROUTER_KEY = os.getenv("OPENROUTER_API_KEY")
+AGENT_BACKEND = os.getenv("AGENT_BACKEND", "auto").strip().lower()
 
-if DEEPSEEK_KEY:
-    from .agents import TruthTerminal
-    terminal = TruthTerminal()
-    backend = "deepseek"
-    model_name = terminal.model
-elif OPENROUTER_KEY:
-    from .openrouter_agents import OpenRouterTerminal
-    terminal = OpenRouterTerminal()
-    backend = "openrouter"
-    model_name = terminal.model
-else:
-    terminal = None
-    backend = "none"
-    model_name = "none"
+
+def _build_terminal():
+    available = {
+        "moonshot": bool(MOONSHOT_KEY),
+        "kimi": bool(MOONSHOT_KEY),
+        "deepseek": bool(DEEPSEEK_KEY),
+        "openrouter": bool(OPENROUTER_KEY),
+    }
+    if AGENT_BACKEND not in {"auto", "moonshot", "kimi", "deepseek", "openrouter"}:
+        selected = "auto"
+    else:
+        selected = AGENT_BACKEND
+
+    if selected in {"moonshot", "kimi"} and available[selected]:
+        from .moonshot_agents import MoonshotTerminal
+        terminal_instance = MoonshotTerminal()
+        return terminal_instance, "moonshot", terminal_instance.model
+    if selected == "deepseek" and DEEPSEEK_KEY:
+        from .agents import TruthTerminal
+        terminal_instance = TruthTerminal()
+        return terminal_instance, "deepseek", terminal_instance.model
+    if selected == "openrouter" and OPENROUTER_KEY:
+        from .openrouter_agents import OpenRouterTerminal
+        terminal_instance = OpenRouterTerminal()
+        return terminal_instance, "openrouter", terminal_instance.model
+
+    if MOONSHOT_KEY:
+        from .moonshot_agents import MoonshotTerminal
+        terminal_instance = MoonshotTerminal()
+        return terminal_instance, "moonshot", terminal_instance.model
+    if DEEPSEEK_KEY:
+        from .agents import TruthTerminal
+        terminal_instance = TruthTerminal()
+        return terminal_instance, "deepseek", terminal_instance.model
+    if OPENROUTER_KEY:
+        from .openrouter_agents import OpenRouterTerminal
+        terminal_instance = OpenRouterTerminal()
+        return terminal_instance, "openrouter", terminal_instance.model
+    return None, "none", "none"
+
+
+terminal, backend, model_name = _build_terminal()
 
 app = FastAPI(title="Multi-Agent Infinite Backroom", version="2.1.0")
 CORS_ORIGINS = _parse_cors_origins()
@@ -209,6 +245,8 @@ def get_index():
 @app.get("/healthz")
 def healthcheck():
     configured_backends = []
+    if MOONSHOT_KEY:
+        configured_backends.append("moonshot")
     if DEEPSEEK_KEY:
         configured_backends.append("deepseek")
     if OPENROUTER_KEY:
@@ -218,6 +256,7 @@ def healthcheck():
         "status": "ok",
         "backend": backend,
         "model": model_name,
+        "preferred_backend": AGENT_BACKEND,
         "configured_backends": configured_backends,
         "terminal_ready": terminal is not None,
         "solana": integration_status(),
