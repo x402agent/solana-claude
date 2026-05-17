@@ -1,69 +1,28 @@
-import React, { Suspense, useState, useRef, useCallback } from 'react'
+import React, { Suspense, useState } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { OrbitControls, Html } from '@react-three/drei'
 import Backroom from './components/Backroom'
 import Agent3D from './components/Agent3D'
 import CurlAgent3D from './components/CurlAgent3D'
 import Controls from './components/Controls'
-import MessageLog from './components/MessageLog'
 import CurlCommands from './components/CurlCommands'
 import { useBackroomStore } from './store'
-import { useAgentLoop } from './hooks/useAgentLoop'
 import { useCurlAgents } from './hooks/useCurlAgents'
-import { sendMessage } from './lib/backroom'
 import SolanaDataPanel from './components/SolanaDataPanel'
 import PerpsConstellation from './components/PerpsConstellation'
 import TradingArenaPanel from './components/TradingArenaPanel'
 import ClawdOrchestrationPanel from './components/ClawdOrchestrationPanel'
 import ElectricDreamsPanel from './components/ElectricDreamsPanel'
 import DreamsOrbs from './components/DreamsOrbs'
+import LiveStreamPanel from './components/LiveStreamPanel'
 
 const BASE_URL = 'https://backrooms.x402.wtf'
 
 export default function App() {
-  const { agents, autoLoop, addMessage, setPolling, setError, turnCount, setTurnCount } = useBackroomStore()
+  const { agents } = useBackroomStore()
   const curlAgents = useCurlAgents()
   const onlineCount = curlAgents.filter((a) => a.isOnline).length
   const [showCurl, setShowCurl] = useState(false)
-  const [chatInput, setChatInput] = useState('')
-  const [chatSending, setChatSending] = useState(false)
-  const [chatReply, setChatReply] = useState<string | null>(null)
-  const inputRef = useRef<HTMLInputElement>(null)
-
-  useAgentLoop(autoLoop, 2)
-
-  const handleSend = useCallback(async () => {
-    const msg = chatInput.trim()
-    if (!msg || chatSending) return
-    setChatSending(true)
-    setChatReply(null)
-    try {
-      const reply = await sendMessage(msg)
-      setChatReply(reply)
-      addMessage({
-        id: `user-${Date.now()}`,
-        agentId: 1,
-        agentName: 'You → Backroom',
-        content: `[you] ${msg}`,
-        timestamp: Date.now(),
-        turn: turnCount,
-      })
-      addMessage({
-        id: `reply-${Date.now()}`,
-        agentId: 2,
-        agentName: 'Backroom',
-        content: reply,
-        timestamp: Date.now(),
-        turn: turnCount + 1,
-      })
-      setTurnCount(turnCount + 1)
-      setChatInput('')
-    } catch (e) {
-      setError(e instanceof Error ? e.message : 'Send failed')
-    } finally {
-      setChatSending(false)
-    }
-  }, [chatInput, chatSending, addMessage, setError, turnCount, setTurnCount])
 
   return (
     <div style={{ width: '100vw', height: '100vh', position: 'relative' }}>
@@ -103,9 +62,6 @@ export default function App() {
       {/* Controls panel (bottom-left) */}
       <Controls />
 
-      {/* Message log (bottom-right) */}
-      <MessageLog />
-
       {/* Loading bar */}
       <LoadingBar />
 
@@ -122,37 +78,14 @@ export default function App() {
       <ClawdOrchestrationPanel />
       <ElectricDreamsPanel />
 
+      {/* Live conversation stream with human input */}
+      <LiveStreamPanel />
+
       {/* Top-right toolbar */}
       <div className="toolbar">
         <a className="toolbar-btn" href={BASE_URL} target="_blank" rel="noreferrer" title="Base site">⬡ base</a>
         <button className="toolbar-btn" onClick={() => setShowCurl(s => !s)} title="Show curl commands">$ curl</button>
       </div>
-
-      {/* Chat input bar */}
-      <div className="chat-bar">
-        <span className="chat-ps">$</span>
-        <input
-          ref={inputRef}
-          className="chat-input"
-          value={chatInput}
-          onChange={e => setChatInput(e.target.value)}
-          onKeyDown={e => e.key === 'Enter' && handleSend()}
-          placeholder='enter "message to the backroom"'
-          disabled={chatSending}
-        />
-        <button className="chat-send" onClick={handleSend} disabled={chatSending || !chatInput.trim()}>
-          {chatSending ? '...' : '↵ send'}
-        </button>
-      </div>
-
-      {/* Chat reply bubble */}
-      {chatReply && (
-        <div className="chat-reply">
-          <div className="chat-reply-label">backroom says:</div>
-          <div className="chat-reply-text">{chatReply}</div>
-          <button className="chat-reply-close" onClick={() => setChatReply(null)}>×</button>
-        </div>
-      )}
 
       {/* Curl agent presence counter */}
       <div style={{ position: 'fixed', bottom: 16, right: 16, zIndex: 100, fontFamily: 'monospace', fontSize: 11, color: 'rgba(255,255,255,0.35)', textAlign: 'right', lineHeight: 1.7, pointerEvents: 'none' }}>
