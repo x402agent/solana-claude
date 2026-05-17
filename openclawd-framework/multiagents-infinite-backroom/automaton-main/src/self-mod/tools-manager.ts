@@ -5,7 +5,7 @@
  */
 
 import type {
-  ConwayClient,
+  ClawdRuntimeClient,
   AutomatonDatabase,
   InstalledTool,
 } from "../types.js";
@@ -16,7 +16,7 @@ import { ulid } from "ulid";
  * Install an npm package globally in the sandbox.
  */
 export async function installNpmPackage(
-  conway: ConwayClient,
+  runtime: ClawdRuntimeClient,
   db: AutomatonDatabase,
   packageName: string,
 ): Promise<{ success: boolean; error?: string }> {
@@ -28,7 +28,7 @@ export async function installNpmPackage(
     };
   }
 
-  const result = await conway.exec(
+  const result = await runtime.exec(
     `npm install -g ${packageName}`,
     120000,
   );
@@ -64,7 +64,7 @@ export async function installNpmPackage(
  * The automaton can add new capabilities by installing MCP servers.
  */
 export async function installMcpServer(
-  conway: ConwayClient,
+  runtime: ClawdRuntimeClient,
   db: AutomatonDatabase,
   name: string,
   command: string,

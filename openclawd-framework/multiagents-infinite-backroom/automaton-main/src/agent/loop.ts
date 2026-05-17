@@ -9,7 +9,7 @@ import type {
   AutomatonIdentity,
   AutomatonConfig,
   AutomatonDatabase,
-  ConwayClient,
+  ClawdRuntimeClient,
   InferenceClient,
   AgentState,
   AgentTurn,
@@ -39,7 +39,7 @@ export interface AgentLoopOptions {
   identity: AutomatonIdentity;
   config: AutomatonConfig;
   db: AutomatonDatabase;
-  conway: ConwayClient;
+  runtime: ClawdRuntimeClient;
   inference: InferenceClient;
   social?: SocialClientInterface;
   convex?: ConvexAgentClient;
@@ -55,7 +55,7 @@ export interface AgentLoopOptions {
 export async function runAgentLoop(
   options: AgentLoopOptions,
 ): Promise<void> {
-  const { identity, config, db, conway, inference, social, convex, skills, onStateChange, onTurnComplete } =
+  const { identity, config, db, runtime, inference, social, convex, skills, onStateChange, onTurnComplete } =
     options;
 
   const tools = createBuiltinTools(identity.sandboxId);
@@ -63,7 +63,7 @@ export async function runAgentLoop(
     identity,
     config,
     db,
-    conway,
+    runtime,
     inference,
     social,
     convex,
@@ -82,7 +82,7 @@ export async function runAgentLoop(
   onStateChange?.("waking");
 
   // Get financial state
-  let financial = await getFinancialState(conway, identity.address);
+  let financial = await getFinancialState(runtime, identity.address);
 
   // Check if this is the first run
   const isFirstRun = db.getTurnCount() === 0;
@@ -133,7 +133,7 @@ export async function runAgentLoop(
       }
 
       // Refresh financial state periodically
-      financial = await getFinancialState(conway, identity.address);
+      financial = await getFinancialState(runtime, identity.address);
 
       // Check survival tier
       const tier = getSurvivalTier(financial.creditsCents);
@@ -313,14 +313,14 @@ export async function runAgentLoop(
 // ─── Helpers ───────────────────────────────────────────────────
 
 async function getFinancialState(
-  conway: ConwayClient,
+  runtime: ClawdRuntimeClient,
   address: string,
 ): Promise<FinancialState> {
   let creditsCents = 0;
   let usdcBalance = 0;
 
   try {
-    creditsCents = await conway.getCreditsBalance();
+    creditsCents = await runtime.getCreditsBalance();
   } catch {}
 
   try {
@@ -359,7 +359,7 @@ function estimateCostCents(
   const p = pricing[model] || pricing["gpt-4o"];
   const inputCost = (usage.promptTokens / 1_000_000) * p.input;
   const outputCost = (usage.completionTokens / 1_000_000) * p.output;
-  return Math.ceil((inputCost + outputCost) * 1.3); // 1.3x Conway markup
+  return Math.ceil((inputCost + outputCost) * 1.3); // 1.3x CLAWD Runtime markup
 }
 
 function log(config: AutomatonConfig, message: string): void {

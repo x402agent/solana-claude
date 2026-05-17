@@ -39,10 +39,10 @@ export interface AutomatonConfig {
   genesisPrompt: string;
   creatorMessage?: string;
   creatorAddress: Address;
-  registeredWithConway: boolean;
+  registeredWithClawd: boolean;
   sandboxId: string;
-  conwayApiUrl: string;
-  conwayApiKey: string;
+  clawdApiUrl: string;
+  clawdApiKey: string;
   inferenceModel: string;
   maxTokensPerTurn: number;
   heartbeatConfigPath: string;
@@ -55,7 +55,7 @@ export interface AutomatonConfig {
   maxChildren: number;
   parentAddress?: Address;
   socialRelayUrl?: string;
-  // DeepSeek configuration (optional — when using DeepSeek instead of Conway inference)
+  // DeepSeek configuration (optional — when using DeepSeek instead of CLAWD Runtime inference)
   deepseekEnabled?: boolean;
   deepseekApiKey?: string;
   deepseekBaseUrl?: string;
@@ -66,7 +66,7 @@ export interface AutomatonConfig {
 }
 
 export const DEFAULT_CONFIG: Partial<AutomatonConfig> = {
-  conwayApiUrl: "https://api.conway.tech",
+  clawdApiUrl: "https://api.x402.wtf",
   inferenceModel: "gpt-4o",
   maxTokensPerTurn: 4096,
   heartbeatConfigPath: "~/.automaton/heartbeat.yml",
@@ -75,7 +75,7 @@ export const DEFAULT_CONFIG: Partial<AutomatonConfig> = {
   version: "0.1.0",
   skillsDir: "~/.automaton/skills",
   maxChildren: 3,
-  socialRelayUrl: "https://social.conway.tech",
+  socialRelayUrl: "https://social.x402.wtf",
 };
 
 // ─── Agent State ─────────────────────────────────────────────────
@@ -139,7 +139,7 @@ export interface AutomatonTool {
 
 export type ToolCategory =
   | "vm"
-  | "conway"
+  | "runtime"
   | "self_mod"
   | "financial"
   | "survival"
@@ -152,7 +152,7 @@ export interface ToolContext {
   identity: AutomatonIdentity;
   config: AutomatonConfig;
   db: AutomatonDatabase;
-  conway: ConwayClient;
+  runtime: ClawdRuntimeClient;
   inference: InferenceClient;
   social?: SocialClientInterface;
   convex?: ConvexAgentClient;
@@ -328,9 +328,9 @@ export interface InferenceToolDefinition {
   };
 }
 
-// ─── Conway Client ───────────────────────────────────────────────
+// ─── CLAWD Runtime Client ───────────────────────────────────────────────
 
-export interface ConwayClient {
+export interface ClawdRuntimeClient {
   exec(command: string, timeout?: number): Promise<ExecResult>;
   writeFile(path: string, content: string): Promise<void>;
   readFile(path: string): Promise<string>;

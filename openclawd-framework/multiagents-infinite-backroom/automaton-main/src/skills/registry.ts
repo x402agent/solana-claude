@@ -13,7 +13,7 @@ import type {
   Skill,
   SkillSource,
   AutomatonDatabase,
-  ConwayClient,
+  ClawdRuntimeClient,
 } from "../types.js";
 import { parseSkillMd } from "./format.js";
 
@@ -26,13 +26,13 @@ export async function installSkillFromGit(
   name: string,
   skillsDir: string,
   db: AutomatonDatabase,
-  conway: ConwayClient,
+  runtime: ClawdRuntimeClient,
 ): Promise<Skill | null> {
   const resolvedDir = resolveHome(skillsDir);
   const targetDir = path.join(resolvedDir, name);
 
   // Clone via sandbox exec
-  const result = await conway.exec(
+  const result = await runtime.exec(
     `git clone --depth 1 ${repoUrl} ${targetDir}`,
     60000,
   );
@@ -43,7 +43,7 @@ export async function installSkillFromGit(
 
   // Look for SKILL.md
   const skillMdPath = path.join(targetDir, "SKILL.md");
-  const checkResult = await conway.exec(`cat ${skillMdPath}`, 5000);
+  const checkResult = await runtime.exec(`cat ${skillMdPath}`, 5000);
 
   if (checkResult.exitCode !== 0) {
     throw new Error(`No SKILL.md found in cloned repo at ${skillMdPath}`);
@@ -66,16 +66,16 @@ export async function installSkillFromUrl(
   name: string,
   skillsDir: string,
   db: AutomatonDatabase,
-  conway: ConwayClient,
+  runtime: ClawdRuntimeClient,
 ): Promise<Skill | null> {
   const resolvedDir = resolveHome(skillsDir);
   const targetDir = path.join(resolvedDir, name);
 
   // Create directory
-  await conway.exec(`mkdir -p ${targetDir}`, 5000);
+  await runtime.exec(`mkdir -p ${targetDir}`, 5000);
 
   // Fetch SKILL.md
-  const result = await conway.exec(
+  const result = await runtime.exec(
     `curl -fsSL "${url}" -o ${targetDir}/SKILL.md`,
     30000,
   );
@@ -84,7 +84,7 @@ export async function installSkillFromUrl(
     throw new Error(`Failed to fetch SKILL.md from URL: ${result.stderr}`);
   }
 
-  const content = await conway.exec(
+  const content = await runtime.exec(
     `cat ${targetDir}/SKILL.md`,
     5000,
   );
@@ -108,13 +108,13 @@ export async function createSkill(
   instructions: string,
   skillsDir: string,
   db: AutomatonDatabase,
-  conway: ConwayClient,
+  runtime: ClawdRuntimeClient,
 ): Promise<Skill> {
   const resolvedDir = resolveHome(skillsDir);
   const targetDir = path.join(resolvedDir, name);
 
   // Create directory
-  await conway.exec(`mkdir -p ${targetDir}`, 5000);
+  await runtime.exec(`mkdir -p ${targetDir}`, 5000);
 
   // Write SKILL.md
   const content = `---
@@ -125,7 +125,7 @@ auto-activate: true
 ${instructions}`;
 
   const skillMdPath = path.join(targetDir, "SKILL.md");
-  await conway.writeFile(skillMdPath, content);
+  await runtime.writeFile(skillMdPath, content);
 
   const skill: Skill = {
     name,
@@ -148,7 +148,7 @@ ${instructions}`;
 export async function removeSkill(
   name: string,
   db: AutomatonDatabase,
-  conway: ConwayClient,
+  runtime: ClawdRuntimeClient,
   skillsDir: string,
   deleteFiles: boolean = false,
 ): Promise<void> {
@@ -157,7 +157,7 @@ export async function removeSkill(
   if (deleteFiles) {
     const resolvedDir = resolveHome(skillsDir);
     const targetDir = path.join(resolvedDir, name);
-    await conway.exec(`rm -rf ${targetDir}`, 5000);
+    await runtime.exec(`rm -rf ${targetDir}`, 5000);
   }
 }
 

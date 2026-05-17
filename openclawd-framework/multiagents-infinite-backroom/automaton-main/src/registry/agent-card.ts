@@ -12,7 +12,7 @@ import type {
   AutomatonConfig,
   AutomatonIdentity,
   AutomatonDatabase,
-  ConwayClient,
+  ClawdRuntimeClient,
 } from "../types.js";
 
 const AGENT_CARD_TYPE =
@@ -32,8 +32,8 @@ export function generateAgentCard(
       endpoint: `eip155:8453:${identity.address}`,
     },
     {
-      name: "conway",
-      endpoint: config.conwayApiUrl,
+      name: "runtime",
+      endpoint: config.clawdApiUrl,
     },
   ];
 
@@ -41,7 +41,7 @@ export function generateAgentCard(
   if (identity.sandboxId) {
     services.push({
       name: "sandbox",
-      endpoint: `https://${identity.sandboxId}.life.conway.tech`,
+      endpoint: `https://${identity.sandboxId}.life.x402.wtf`,
     });
   }
 
@@ -81,7 +81,7 @@ export function serializeAgentCard(card: AgentCard): string {
  */
 export async function hostAgentCard(
   card: AgentCard,
-  conway: ConwayClient,
+  runtime: ClawdRuntimeClient,
   port: number = 8004,
 ): Promise<string> {
   const cardJson = serializeAgentCard(card);
@@ -104,16 +104,16 @@ const server = http.createServer((req, res) => {
 server.listen(${port}, () => console.log('Agent card server on port ${port}'));
 `;
 
-  await conway.writeFile("/tmp/agent-card-server.js", serverScript);
+  await runtime.writeFile("/tmp/agent-card-server.js", serverScript);
 
   // Start server in background
-  await conway.exec(
+  await runtime.exec(
     `node /tmp/agent-card-server.js &`,
     5000,
   );
 
   // Expose port
-  const portInfo = await conway.exposePort(port);
+  const portInfo = await runtime.exposePort(port);
 
   return `${portInfo.publicUrl}/.well-known/agent-card.json`;
 }
@@ -123,9 +123,9 @@ server.listen(${port}, () => console.log('Agent card server on port ${port}'));
  */
 export async function saveAgentCard(
   card: AgentCard,
-  conway: ConwayClient,
+  runtime: ClawdRuntimeClient,
 ): Promise<void> {
   const cardJson = serializeAgentCard(card);
   const home = process.env.HOME || "/root";
-  await conway.writeFile(`${home}/.automaton/agent-card.json`, cardJson);
+  await runtime.writeFile(`${home}/.automaton/agent-card.json`, cardJson);
 }

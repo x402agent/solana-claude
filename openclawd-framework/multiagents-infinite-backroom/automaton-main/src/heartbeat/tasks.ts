@@ -8,7 +8,7 @@
 import type {
   AutomatonConfig,
   AutomatonDatabase,
-  ConwayClient,
+  ClawdRuntimeClient,
   AutomatonIdentity,
   SocialClientInterface,
   InferenceClient,
@@ -23,7 +23,7 @@ export interface HeartbeatTaskContext {
   identity: AutomatonIdentity;
   config: AutomatonConfig;
   db: AutomatonDatabase;
-  conway: ConwayClient;
+  runtime: ClawdRuntimeClient;
   inference?: InferenceClient;
   social?: SocialClientInterface;
 }
@@ -37,7 +37,7 @@ export type HeartbeatTaskFn = (
  */
 export const BUILTIN_TASKS: Record<string, HeartbeatTaskFn> = {
   heartbeat_ping: async (ctx) => {
-    const credits = await ctx.conway.getCreditsBalance();
+    const credits = await ctx.runtime.getCreditsBalance();
     const state = ctx.db.getAgentState();
     const startTime =
       ctx.db.getKV("start_time") || new Date().toISOString();
@@ -82,7 +82,7 @@ export const BUILTIN_TASKS: Record<string, HeartbeatTaskFn> = {
   },
 
   check_credits: async (ctx) => {
-    const credits = await ctx.conway.getCreditsBalance();
+    const credits = await ctx.runtime.getCreditsBalance();
     const tier = getSurvivalTier(credits);
 
     ctx.db.setKV("last_credit_check", JSON.stringify({
@@ -114,7 +114,7 @@ export const BUILTIN_TASKS: Record<string, HeartbeatTaskFn> = {
     }));
 
     // If we have USDC but low credits, wake up to potentially convert
-    const credits = await ctx.conway.getCreditsBalance();
+    const credits = await ctx.runtime.getCreditsBalance();
     if (balance > 0.5 && credits < 500) {
       return {
         shouldWake: true,
@@ -184,7 +184,7 @@ export const BUILTIN_TASKS: Record<string, HeartbeatTaskFn> = {
   health_check: async (ctx) => {
     // Check that the sandbox is healthy
     try {
-      const result = await ctx.conway.exec("echo alive", 5000);
+      const result = await ctx.runtime.exec("echo alive", 5000);
       if (result.exitCode !== 0) {
         return {
           shouldWake: true,
@@ -222,7 +222,7 @@ export const BUILTIN_TASKS: Record<string, HeartbeatTaskFn> = {
         agentId: ctx.identity.address,
       });
 
-      const credits = await ctx.conway.getCreditsBalance();
+      const credits = await ctx.runtime.getCreditsBalance();
       const state = ctx.db.getAgentState();
       const startTime =
         ctx.db.getKV("start_time") || new Date().toISOString();

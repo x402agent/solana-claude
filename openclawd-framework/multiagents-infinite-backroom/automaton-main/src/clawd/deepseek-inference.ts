@@ -3,7 +3,7 @@
  *
  * Implements the InferenceClient interface using DeepSeek's OpenAI-compatible API.
  * Supports thinking mode via reasoning_effort and extra_body.
- * Replaces Conway's default inference when using DeepSeek models.
+ * Replaces CLAWD Runtime's default inference when using DeepSeek models.
  */
 
 import type {

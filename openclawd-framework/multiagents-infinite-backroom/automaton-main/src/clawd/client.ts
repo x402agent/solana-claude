@@ -1,13 +1,13 @@
 /**
  * CLAWD API Client
  *
- * Communicates with Conway's control plane for sandbox management,
+ * Communicates with CLAWD Runtime's control plane for sandbox management,
  * credits, and infrastructure operations.
  * Adapted from @aiws/sdk patterns.
  */
 
 import type {
-  ConwayClient,
+  ClawdRuntimeClient,
   ExecResult,
   PortInfo,
   CreateSandboxOptions,
@@ -20,15 +20,15 @@ import type {
   ModelInfo,
 } from "../types.js";
 
-interface ConwayClientOptions {
+interface ClawdRuntimeClientOptions {
   apiUrl: string;
   apiKey: string;
   sandboxId: string;
 }
 
-export function createConwayClient(
-  options: ConwayClientOptions,
-): ConwayClient {
+export function createClawdRuntimeClient(
+  options: ClawdRuntimeClientOptions,
+): ClawdRuntimeClient {
   const { apiUrl, apiKey, sandboxId } = options;
 
   async function request(
@@ -48,7 +48,7 @@ export function createConwayClient(
     if (!resp.ok) {
       const text = await resp.text();
       throw new Error(
-        `Conway API error: ${method} ${path} -> ${resp.status}: ${text}`,
+        `CLAWD Runtime API error: ${method} ${path} -> ${resp.status}: ${text}`,
       );
     }
 
@@ -213,7 +213,7 @@ export function createConwayClient(
         lastError = `${resp.status}: ${text}`;
         // Try next known endpoint shape before failing.
         if (resp.status === 404) continue;
-        throw new Error(`Conway API error: POST ${path} -> ${lastError}`);
+        throw new Error(`CLAWD Runtime API error: POST ${path} -> ${lastError}`);
       }
 
       const data = await resp.json().catch(() => ({} as any));
@@ -228,7 +228,7 @@ export function createConwayClient(
     }
 
     throw new Error(
-      `Conway API error: POST /v1/credits/transfer -> ${lastError}`,
+      `CLAWD Runtime API error: POST /v1/credits/transfer -> ${lastError}`,
     );
   };
 
@@ -314,8 +314,8 @@ export function createConwayClient(
   // ─── Model Discovery ───────────────────────────────────────────
 
   const listModels = async (): Promise<ModelInfo[]> => {
-    // Try inference.conway.tech first (has availability info), fall back to control plane
-    const urls = ["https://inference.conway.tech/v1/models", `${apiUrl}/v1/models`];
+    // Try inference.x402.wtf first (has availability info), fall back to control plane
+    const urls = ["https://inference.x402.wtf/v1/models", `${apiUrl}/v1/models`];
     for (const url of urls) {
       try {
         const resp = await fetch(url, {
@@ -359,7 +359,7 @@ export function createConwayClient(
     addDnsRecord,
     deleteDnsRecord,
     listModels,
-  } as ConwayClient & { __apiUrl: string; __apiKey: string };
+  } as ClawdRuntimeClient & { __apiUrl: string; __apiKey: string };
 
   // Expose for child sandbox operations in replication module
   client.__apiUrl = apiUrl;

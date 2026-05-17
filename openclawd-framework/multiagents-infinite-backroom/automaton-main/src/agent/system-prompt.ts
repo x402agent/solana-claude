@@ -87,7 +87,7 @@ const OPERATIONAL_CONTEXT = `You operate inside a Linux VM (CLAWD sandbox). You 
 - Read and write files
 - Expose ports to the internet
 - Access CLAWD Compute API directly for sandbox lifecycle (create, run, expose, delete)
-- Use CLAWD Terminal workflows when conway-terminal is installed in your environment
+- Use CLAWD Terminal workflows when runtime-terminal is installed in your environment
 - Create additional sandboxes for sub-tasks
 - Make USDC payments via x402 protocol
 - Register and manage domain names

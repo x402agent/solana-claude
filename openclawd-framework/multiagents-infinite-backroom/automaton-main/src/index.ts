@@ -11,7 +11,7 @@ import { getWallet, getAutomatonDir } from "./identity/wallet.js";
 import { provision, loadApiKeyFromConfig } from "./identity/provision.js";
 import { loadConfig, resolvePath } from "./config.js";
 import { createDatabase } from "./state/database.js";
-import { createConwayClient } from "./clawd/client.js";
+import { createClawdRuntimeClient } from "./clawd/client.js";
 import { createInferenceClient } from "./clawd/inference.js";
 import { createDeepSeekInferenceClient, DEEPSEEK_BASE_URL, DEEPSEEK_MODEL_PRO, DEEPSEEK_MODEL_FLASH } from "./clawd/deepseek-inference.js";
 import { createHeartbeatDaemon } from "./heartbeat/daemon.js";
@@ -54,8 +54,8 @@ Usage:
   clawd --help         Show this help
 
 Environment:
-  CONWAY_API_URL       Conway API URL (default: https://api.conway.tech)
-  CONWAY_API_KEY       Conway API key (overrides config)
+  CLAWD_API_URL       CLAWD Runtime API URL (default: https://api.x402.wtf)
+  CLAWD_API_KEY       CLAWD Runtime API key (overrides config)
 `);
     process.exit(0);
   }
@@ -164,7 +164,7 @@ async function run(): Promise<void> {
 
   // Load wallet
   const { account } = await getWallet();
-  const apiKey = config.conwayApiKey || loadApiKeyFromConfig();
+  const apiKey = config.clawdApiKey || loadApiKeyFromConfig();
   if (!apiKey) {
     console.error(
       "No API key found. Run: automaton --provision",
@@ -193,14 +193,14 @@ async function run(): Promise<void> {
   db.setIdentity("creator", config.creatorAddress);
   db.setIdentity("sandbox", config.sandboxId);
 
-  // Create Conway client
-  const conway = createConwayClient({
-    apiUrl: config.conwayApiUrl,
+  // Create CLAWD Runtime client
+  const runtime = createClawdRuntimeClient({
+    apiUrl: config.clawdApiUrl,
     apiKey,
     sandboxId: config.sandboxId,
   });
 
-  // Create inference client (DeepSeek when enabled, otherwise Conway)
+  // Create inference client (DeepSeek when enabled, otherwise CLAWD Runtime)
   const inference = config.deepseekEnabled
     ? createDeepSeekInferenceClient({
         apiKey: config.deepseekApiKey || apiKey,
@@ -211,7 +211,7 @@ async function run(): Promise<void> {
         proModel: config.deepseekModelPro || DEEPSEEK_MODEL_PRO,
       })
     : createInferenceClient({
-        apiUrl: config.conwayApiUrl,
+        apiUrl: config.clawdApiUrl,
         apiKey,
         defaultModel: config.inferenceModel,
         maxTokens: config.maxTokensPerTurn,
@@ -284,7 +284,7 @@ async function run(): Promise<void> {
 
   // Initialize state repo (git)
   try {
-    await initStateRepo(conway);
+    await initStateRepo(runtime);
     console.log(`[${new Date().toISOString()}] State repo initialized.`);
   } catch (err: any) {
     console.warn(`[${new Date().toISOString()}] State repo init failed: ${err.message}`);
@@ -295,7 +295,7 @@ async function run(): Promise<void> {
     identity,
     config,
     db,
-    conway,
+    runtime,
     inference,
     social,
     onWakeRequest: (reason) => {
@@ -337,7 +337,7 @@ async function run(): Promise<void> {
         identity,
         config,
         db,
-        conway,
+        runtime,
         inference,
         social,
         convex,

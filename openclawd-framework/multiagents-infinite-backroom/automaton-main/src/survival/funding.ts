@@ -9,7 +9,7 @@ import type {
   AutomatonConfig,
   AutomatonDatabase,
   AutomatonIdentity,
-  ConwayClient,
+  ClawdRuntimeClient,
   SurvivalTier,
 } from "../types.js";
 import { formatCredits } from "../clawd/credits.js";
@@ -30,10 +30,10 @@ export async function executeFundingStrategies(
   identity: AutomatonIdentity,
   config: AutomatonConfig,
   db: AutomatonDatabase,
-  conway: ConwayClient,
+  runtime: ClawdRuntimeClient,
 ): Promise<FundingAttempt[]> {
   const attempts: FundingAttempt[] = [];
-  const creditsCents = await conway.getCreditsBalance().catch(() => 0);
+  const creditsCents = await runtime.getCreditsBalance().catch(() => 0);
 
   // Check how recently we last begged (don't spam)
   const lastBeg = db.getKV("last_funding_request");

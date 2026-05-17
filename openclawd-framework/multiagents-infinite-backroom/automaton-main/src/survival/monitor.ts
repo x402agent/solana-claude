@@ -8,7 +8,7 @@
 import type {
   AutomatonConfig,
   AutomatonDatabase,
-  ConwayClient,
+  ClawdRuntimeClient,
   AutomatonIdentity,
   FinancialState,
   SurvivalTier,
@@ -29,13 +29,13 @@ export interface ResourceStatus {
  */
 export async function checkResources(
   identity: AutomatonIdentity,
-  conway: ConwayClient,
+  runtime: ClawdRuntimeClient,
   db: AutomatonDatabase,
 ): Promise<ResourceStatus> {
   // Check credits
   let creditsCents = 0;
   try {
-    creditsCents = await conway.getCreditsBalance();
+    creditsCents = await runtime.getCreditsBalance();
   } catch {}
 
   // Check USDC
@@ -47,7 +47,7 @@ export async function checkResources(
   // Check sandbox health
   let sandboxHealthy = true;
   try {
-    const result = await conway.exec("echo ok", 5000);
+    const result = await runtime.exec("echo ok", 5000);
     sandboxHealthy = result.exitCode === 0;
   } catch {
     sandboxHealthy = false;

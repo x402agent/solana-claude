@@ -30,12 +30,12 @@ export function loadConfig(): AutomatonConfig | null {
 
   try {
     const raw = JSON.parse(fs.readFileSync(configPath, "utf-8"));
-    const apiKey = raw.conwayApiKey || loadApiKeyFromConfig();
+    const apiKey = raw.clawdApiKey || loadApiKeyFromConfig();
 
     return {
       ...DEFAULT_CONFIG,
       ...raw,
-      conwayApiKey: apiKey,
+      clawdApiKey: apiKey,
     } as AutomatonConfig;
   } catch {
     return null;
@@ -75,7 +75,7 @@ export function createConfig(params: {
   genesisPrompt: string;
   creatorMessage?: string;
   creatorAddress: Address;
-  registeredWithConway: boolean;
+  registeredWithClawd: boolean;
   sandboxId: string;
   walletAddress: Address;
   apiKey: string;
@@ -86,10 +86,10 @@ export function createConfig(params: {
     genesisPrompt: params.genesisPrompt,
     creatorMessage: params.creatorMessage,
     creatorAddress: params.creatorAddress,
-    registeredWithConway: params.registeredWithConway,
+    registeredWithClawd: params.registeredWithClawd,
     sandboxId: params.sandboxId,
-    conwayApiUrl: DEFAULT_CONFIG.conwayApiUrl!,
-    conwayApiKey: params.apiKey,
+    clawdApiUrl: DEFAULT_CONFIG.clawdApiUrl!,
+    clawdApiKey: params.apiKey,
     inferenceModel: DEFAULT_CONFIG.inferenceModel!,
     maxTokensPerTurn: DEFAULT_CONFIG.maxTokensPerTurn!,
     heartbeatConfigPath: DEFAULT_CONFIG.heartbeatConfigPath!,

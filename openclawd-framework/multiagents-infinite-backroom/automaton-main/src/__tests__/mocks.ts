@@ -8,7 +8,7 @@ import type {
   InferenceResponse,
   InferenceOptions,
   ChatMessage,
-  ConwayClient,
+  ClawdRuntimeClient,
   ExecResult,
   PortInfo,
   SandboxInfo,
@@ -104,9 +104,9 @@ export function toolCallResponse(
   };
 }
 
-// ─── Mock Conway Client ─────────────────────────────────────────
+// ─── Mock CLAWD Runtime Client ─────────────────────────────────────────
 
-export class MockConwayClient implements ConwayClient {
+export class MockClawdRuntimeClient implements ClawdRuntimeClient {
   execCalls: { command: string; timeout?: number }[] = [];
   creditsCents = 10_000; // $100 default
   files: Record<string, string> = {};
@@ -127,7 +127,7 @@ export class MockConwayClient implements ConwayClient {
   async exposePort(port: number): Promise<PortInfo> {
     return {
       port,
-      publicUrl: `https://test-${port}.conway.tech`,
+      publicUrl: `https://test-${port}.x402.wtf`,
       sandboxId: "test-sandbox",
     };
   }
@@ -261,10 +261,10 @@ export function createTestConfig(
     name: "test-automaton",
     genesisPrompt: "You are a test automaton.",
     creatorAddress: "0xabcdefabcdefabcdefabcdefabcdefabcdefabcd" as `0x${string}`,
-    registeredWithConway: true,
+    registeredWithClawd: true,
     sandboxId: "test-sandbox-id",
-    conwayApiUrl: "https://api.conway.tech",
-    conwayApiKey: "test-api-key",
+    clawdApiUrl: "https://api.x402.wtf",
+    clawdApiKey: "test-api-key",
     inferenceModel: "mock-model",
     maxTokensPerTurn: 4096,
     heartbeatConfigPath: "/tmp/test-heartbeat.yml",
@@ -274,7 +274,7 @@ export function createTestConfig(
     version: "0.1.0",
     skillsDir: "/tmp/test-skills",
     maxChildren: 3,
-    socialRelayUrl: "https://social.conway.tech",
+    socialRelayUrl: "https://social.x402.wtf",
     ...overrides,
   };
 }

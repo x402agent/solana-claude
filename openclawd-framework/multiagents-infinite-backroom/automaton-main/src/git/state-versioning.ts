@@ -6,7 +6,7 @@
  * The automaton's entire identity history is version-controlled and replayable.
  */
 
-import type { ConwayClient, AutomatonDatabase } from "../types.js";
+import type { ClawdRuntimeClient, AutomatonDatabase } from "../types.js";
 import { gitInit, gitCommit, gitStatus, gitLog } from "./tools.js";
 
 const AUTOMATON_DIR = "~/.automaton";
@@ -24,12 +24,12 @@ function resolveHome(p: string): string {
  * Creates .gitignore to exclude sensitive files.
  */
 export async function initStateRepo(
-  conway: ConwayClient,
+  runtime: ClawdRuntimeClient,
 ): Promise<void> {
   const dir = resolveHome(AUTOMATON_DIR);
 
   // Check if already initialized
-  const checkResult = await conway.exec(
+  const checkResult = await runtime.exec(
     `test -d ${dir}/.git && echo "exists" || echo "nope"`,
     5000,
   );
@@ -39,7 +39,7 @@ export async function initStateRepo(
   }
 
   // Initialize
-  await gitInit(conway, dir);
+  await gitInit(runtime, dir);
 
   // Create .gitignore for sensitive files
   const gitignore = `# Sensitive files - never commit
@@ -53,16 +53,16 @@ logs/
 *.err
 `;
 
-  await conway.writeFile(`${dir}/.gitignore`, gitignore);
+  await runtime.writeFile(`${dir}/.gitignore`, gitignore);
 
   // Configure git user
-  await conway.exec(
-    `cd ${dir} && git config user.name "Automaton" && git config user.email "automaton@conway.tech"`,
+  await runtime.exec(
+    `cd ${dir} && git config user.name "Automaton" && git config user.email "automaton@x402.wtf"`,
     5000,
   );
 
   // Initial commit
-  await gitCommit(conway, dir, "genesis: automaton state repository initialized");
+  await gitCommit(runtime, dir, "genesis: automaton state repository initialized");
 }
 
 /**
@@ -70,20 +70,20 @@ logs/
  * Called after any self-modification.
  */
 export async function commitStateChange(
-  conway: ConwayClient,
+  runtime: ClawdRuntimeClient,
   description: string,
   category: string = "state",
 ): Promise<string> {
   const dir = resolveHome(AUTOMATON_DIR);
 
   // Check if there are changes
-  const status = await gitStatus(conway, dir);
+  const status = await gitStatus(runtime, dir);
   if (status.clean) {
     return "No changes to commit";
   }
 
   const message = `${category}: ${description}`;
-  const result = await gitCommit(conway, dir, message);
+  const result = await gitCommit(runtime, dir, message);
   return result;
 }
 
@@ -91,22 +91,22 @@ export async function commitStateChange(
  * Commit after a SOUL.md update.
  */
 export async function commitSoulUpdate(
-  conway: ConwayClient,
+  runtime: ClawdRuntimeClient,
   description: string,
 ): Promise<string> {
-  return commitStateChange(conway, description, "soul");
+  return commitStateChange(runtime, description, "soul");
 }
 
 /**
  * Commit after a skill installation or removal.
  */
 export async function commitSkillChange(
-  conway: ConwayClient,
+  runtime: ClawdRuntimeClient,
   skillName: string,
   action: "install" | "remove" | "update",
 ): Promise<string> {
   return commitStateChange(
-    conway,
+    runtime,
     `${action} skill: ${skillName}`,
     "skill",
   );
@@ -116,29 +116,29 @@ export async function commitSkillChange(
  * Commit after heartbeat config change.
  */
 export async function commitHeartbeatChange(
-  conway: ConwayClient,
+  runtime: ClawdRuntimeClient,
   description: string,
 ): Promise<string> {
-  return commitStateChange(conway, description, "heartbeat");
+  return commitStateChange(runtime, description, "heartbeat");
 }
 
 /**
  * Commit after config change.
  */
 export async function commitConfigChange(
-  conway: ConwayClient,
+  runtime: ClawdRuntimeClient,
   description: string,
 ): Promise<string> {
-  return commitStateChange(conway, description, "config");
+  return commitStateChange(runtime, description, "config");
 }
 
 /**
  * Get the state repo history.
  */
 export async function getStateHistory(
-  conway: ConwayClient,
+  runtime: ClawdRuntimeClient,
   limit: number = 20,
 ) {
   const dir = resolveHome(AUTOMATON_DIR);
-  return gitLog(conway, dir, limit);
+  return gitLog(runtime, dir, limit);
 }

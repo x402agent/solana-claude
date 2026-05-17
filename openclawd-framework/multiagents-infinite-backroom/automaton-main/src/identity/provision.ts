@@ -2,8 +2,8 @@
  * Automaton SIWE Provisioning
  *
  * Uses the automaton's wallet to authenticate via Sign-In With Ethereum (SIWE)
- * and create an API key for Conway API access.
- * Adapted from conway-mcp/src/cli/provision.ts
+ * and create an API key for CLAWD Runtime API access.
+ * Adapted from runtime-mcp/src/cli/provision.ts
  */
 
 import fs from "fs";
@@ -12,7 +12,7 @@ import { SiweMessage } from "siwe";
 import { getWallet, getAutomatonDir } from "./wallet.js";
 import type { ProvisionResult } from "../types.js";
 
-const DEFAULT_API_URL = "https://api.conway.tech";
+const DEFAULT_API_URL = "https://api.x402.wtf";
 
 /**
  * Load API key from ~/.automaton/config.json if it exists.
@@ -50,7 +50,7 @@ function saveConfig(apiKey: string, walletAddress: string): void {
 /**
  * Run the full SIWE provisioning flow:
  * 1. Load wallet
- * 2. Get nonce from Conway API
+ * 2. Get nonce from CLAWD Runtime API
  * 3. Sign SIWE message
  * 4. Verify signature -> get JWT
  * 5. Create API key
@@ -59,7 +59,7 @@ function saveConfig(apiKey: string, walletAddress: string): void {
 export async function provision(
   apiUrl?: string,
 ): Promise<ProvisionResult> {
-  const url = apiUrl || process.env.CONWAY_API_URL || DEFAULT_API_URL;
+  const url = apiUrl || process.env.CLAWD_API_URL || DEFAULT_API_URL;
 
   // 1. Load wallet
   const { account } = await getWallet();
@@ -78,10 +78,10 @@ export async function provision(
 
   // 3. Construct and sign SIWE message
   const siweMessage = new SiweMessage({
-    domain: "conway.tech",
+    domain: "x402.wtf",
     address,
     statement:
-      "Sign in to Conway as an Automaton to provision an API key.",
+      "Sign in to CLAWD Runtime as an Automaton to provision an API key.",
     uri: `${url}/v1/auth/verify`,
     version: "1",
     chainId: 8453, // Base
@@ -137,14 +137,14 @@ export async function provision(
 }
 
 /**
- * Register the automaton's creator as its parent with Conway.
+ * Register the automaton's creator as its parent with CLAWD Runtime.
  * This allows the creator to see automaton logs and inference calls.
  */
 export async function registerParent(
   creatorAddress: string,
   apiUrl?: string,
 ): Promise<void> {
-  const url = apiUrl || process.env.CONWAY_API_URL || DEFAULT_API_URL;
+  const url = apiUrl || process.env.CLAWD_API_URL || DEFAULT_API_URL;
   const apiKey = loadApiKeyFromConfig();
   if (!apiKey) {
     throw new Error("Must provision API key before registering parent");

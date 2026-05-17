@@ -1,8 +1,8 @@
 /**
  * CLAWD Inference Client
  *
- * Wraps Conway's /v1/chat/completions endpoint (OpenAI-compatible).
- * The automaton pays for its own thinking through Conway credits.
+ * Wraps CLAWD Runtime's /v1/chat/completions endpoint (OpenAI-compatible).
+ * The automaton pays for its own thinking through CLAWD credits.
  */
 
 import type {

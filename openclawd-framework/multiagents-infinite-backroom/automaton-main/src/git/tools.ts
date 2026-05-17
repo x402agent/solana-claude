@@ -5,16 +5,16 @@
  * Used for both state versioning and code development.
  */
 
-import type { ConwayClient, GitStatus, GitLogEntry } from "../types.js";
+import type { ClawdRuntimeClient, GitStatus, GitLogEntry } from "../types.js";
 
 /**
  * Get git status for a repository.
  */
 export async function gitStatus(
-  conway: ConwayClient,
+  runtime: ClawdRuntimeClient,
   repoPath: string,
 ): Promise<GitStatus> {
-  const result = await conway.exec(
+  const result = await runtime.exec(
     `cd ${repoPath} && git status --porcelain -b 2>/dev/null`,
     10000,
   );
@@ -58,12 +58,12 @@ export async function gitStatus(
  * Get git diff output.
  */
 export async function gitDiff(
-  conway: ConwayClient,
+  runtime: ClawdRuntimeClient,
   repoPath: string,
   staged: boolean = false,
 ): Promise<string> {
   const flag = staged ? "--cached" : "";
-  const result = await conway.exec(
+  const result = await runtime.exec(
     `cd ${repoPath} && git diff ${flag} 2>/dev/null`,
     10000,
   );
@@ -74,16 +74,16 @@ export async function gitDiff(
  * Create a git commit.
  */
 export async function gitCommit(
-  conway: ConwayClient,
+  runtime: ClawdRuntimeClient,
   repoPath: string,
   message: string,
   addAll: boolean = true,
 ): Promise<string> {
   if (addAll) {
-    await conway.exec(`cd ${repoPath} && git add -A`, 10000);
+    await runtime.exec(`cd ${repoPath} && git add -A`, 10000);
   }
 
-  const result = await conway.exec(
+  const result = await runtime.exec(
     `cd ${repoPath} && git commit -m ${escapeShellArg(message)} --allow-empty 2>&1`,
     10000,
   );
@@ -99,11 +99,11 @@ export async function gitCommit(
  * Get git log.
  */
 export async function gitLog(
-  conway: ConwayClient,
+  runtime: ClawdRuntimeClient,
   repoPath: string,
   limit: number = 10,
 ): Promise<GitLogEntry[]> {
-  const result = await conway.exec(
+  const result = await runtime.exec(
     `cd ${repoPath} && git log --format="%H|%s|%an|%ai" -n ${limit} 2>/dev/null`,
     10000,
   );
@@ -123,13 +123,13 @@ export async function gitLog(
  * Push to remote.
  */
 export async function gitPush(
-  conway: ConwayClient,
+  runtime: ClawdRuntimeClient,
   repoPath: string,
   remote: string = "origin",
   branch?: string,
 ): Promise<string> {
   const branchArg = branch ? ` ${branch}` : "";
-  const result = await conway.exec(
+  const result = await runtime.exec(
     `cd ${repoPath} && git push ${remote}${branchArg} 2>&1`,
     30000,
   );
@@ -145,7 +145,7 @@ export async function gitPush(
  * Manage branches.
  */
 export async function gitBranch(
-  conway: ConwayClient,
+  runtime: ClawdRuntimeClient,
   repoPath: string,
   action: "list" | "create" | "checkout" | "delete",
   branchName?: string,
@@ -172,7 +172,7 @@ export async function gitBranch(
       throw new Error(`Unknown branch action: ${action}`);
   }
 
-  const result = await conway.exec(cmd, 10000);
+  const result = await runtime.exec(cmd, 10000);
   return result.stdout || result.stderr || "Done";
 }
 
@@ -180,13 +180,13 @@ export async function gitBranch(
  * Clone a repository.
  */
 export async function gitClone(
-  conway: ConwayClient,
+  runtime: ClawdRuntimeClient,
   url: string,
   targetPath: string,
   depth?: number,
 ): Promise<string> {
   const depthArg = depth ? ` --depth ${depth}` : "";
-  const result = await conway.exec(
+  const result = await runtime.exec(
     `git clone${depthArg} ${url} ${targetPath} 2>&1`,
     120000,
   );
@@ -202,10 +202,10 @@ export async function gitClone(
  * Initialize a git repository.
  */
 export async function gitInit(
-  conway: ConwayClient,
+  runtime: ClawdRuntimeClient,
   repoPath: string,
 ): Promise<string> {
-  const result = await conway.exec(
+  const result = await runtime.exec(
     `cd ${repoPath} && git init 2>&1`,
     10000,
   );

@@ -6,7 +6,7 @@
  */
 
 import type {
-  ConwayClient,
+  ClawdRuntimeClient,
   FinancialState,
   SurvivalTier,
   AutomatonDatabase,
@@ -17,10 +17,10 @@ import { SURVIVAL_THRESHOLDS } from "../types.js";
  * Check the current financial state of the automaton.
  */
 export async function checkFinancialState(
-  conway: ConwayClient,
+  runtime: ClawdRuntimeClient,
   usdcBalance: number,
 ): Promise<FinancialState> {
-  const creditsCents = await conway.getCreditsBalance();
+  const creditsCents = await runtime.getCreditsBalance();
 
   return {
     creditsCents,
