@@ -183,7 +183,7 @@ leviathan --run                # start OODA pulse loop
 leviathan --status             # depth + balances
 
 # Automaton
-node dist/index.js --help      # clawd-automaton runtime ops
+clawd-automaton --help         # clawd-automaton runtime ops
 pnpm ooda                      # OODA loop
 pnpm goblin                    # goblin mode automation
 
