@@ -203,6 +203,8 @@ class MapRequest(BaseModel):
 
 
 class DreamsSyncRequest(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
+
     limit: int = Field(default=100, ge=1, le=200)
     inject: bool = True
     async_mode: bool = Field(default=False, alias="async")
@@ -523,21 +525,113 @@ def firecrawl_crawl_status(job_id: str):
 
 
 @app.post("/firecrawl/dreams", dependencies=[Depends(require_scope("agents:loop"))])
-def firecrawl_dreams(
-    limit: int = Query(default=30, ge=1, le=200),
+def firecrawl_dreams(req: DreamsSyncRequest):
+    """
+    Sync the Dreams corpus from Firecrawl, persist normalized story records,
+    and optionally inject the corpus into the active backroom conversation.
+    """
+    if req.inject and terminal is None:
+        return JSONResponse({"error": "No agent terminal initialized"}, status_code=503)
+    try:
+        if req.async_mode:
+            job_id = async_sync_dreams_and_inject(
+                terminal=terminal if req.inject else None,
+                limit=req.limit,
+                inject=req.inject,
+            )
+            return {
+                "job_id": job_id,
+                "status": "running",
+                "source": "https://dreams-of-an-electric-mind.webflow.io",
+                "inject": req.inject,
+                "limit": req.limit,
+                "poll": f"/firecrawl/jobs/{job_id}",
+            }
+
+        result = sync_dreams_site(
+            terminal=terminal if req.inject else None,
+            limit=req.limit,
+            inject=req.inject,
+            max_chars=req.max_chars,
+        )
+        return {
+            "job_id": result.get("job_id"),
+            "source": result.get("source"),
+            "story_count": result.get("story_count"),
+            "injected": result.get("injected"),
+            "injected_chars": result.get("injected_chars"),
+            "credits_used": result.get("credits_used"),
+            "last_sync_at": (result.get("state") or {}).get("last_sync_at"),
+            "stories": result.get("stories"),
+        }
+    except Exception as e:
+        return JSONResponse({"error": str(e)}, status_code=502)
+
+
+@app.get("/firecrawl/dreams/status", dependencies=[Depends(require_scope("chat:read"))])
+def firecrawl_dreams_status():
+    """Return cached Dreams sync metadata."""
+    cache = load_dreams_cache()
+    return {
+        "source": "https://dreams-of-an-electric-mind.webflow.io",
+        "story_count": len(cache["stories"]),
+        "state": cache["state"],
+    }
+
+
+@app.get("/firecrawl/dreams/stories", dependencies=[Depends(require_scope("chat:read"))])
+def firecrawl_dreams_stories(
+    limit: int = Query(default=25, ge=1, le=200),
+    full_text: bool = Query(default=False),
 ):
-    """
-    Crawl the Dreams of an Electric Mind site in real-time and inject
-    all stories/conversations directly into the agent backroom as context.
-    Blocks until the crawl finishes (≤ 120 s) then returns a summary.
-    """
+    """List cached Dreams stories, optionally including the full scraped markdown/html."""
+    cache = load_dreams_cache()
+    stories = cache["stories"][:limit]
+    if not full_text:
+        stories = [
+            {
+                "slug": story.get("slug"),
+                "url": story.get("url"),
+                "title": story.get("title"),
+                "description": story.get("description"),
+                "scenario": story.get("scenario"),
+                "scraped_at": story.get("scraped_at"),
+                "content_chars": story.get("content_chars"),
+            }
+            for story in stories
+        ]
+    return {
+        "source": "https://dreams-of-an-electric-mind.webflow.io",
+        "story_count": len(cache["stories"]),
+        "returned": len(stories),
+        "stories": stories,
+    }
+
+
+@app.get("/firecrawl/dreams/context", dependencies=[Depends(require_scope("chat:read"))])
+def firecrawl_dreams_context(max_chars: int = Query(default=24000, ge=1000, le=120000)):
+    """Return the bounded agent-ready context block built from cached Dreams stories."""
+    return get_dreams_context(max_chars=max_chars)
+
+
+@app.post("/firecrawl/dreams/inject", dependencies=[Depends(require_scope("agents:loop"))])
+def firecrawl_dreams_inject(max_chars: int = Query(default=24000, ge=1000, le=120000)):
+    """Inject the cached Dreams corpus into the active terminal without re-scraping."""
     if terminal is None:
         return JSONResponse({"error": "No agent terminal initialized"}, status_code=503)
     try:
-        result = crawl_dreams_and_inject(terminal=terminal, limit=limit)
-        return result
+        return inject_cached_dreams_context(terminal=terminal, max_chars=max_chars)
     except Exception as e:
         return JSONResponse({"error": str(e)}, status_code=502)
+
+
+@app.get("/firecrawl/jobs/{job_id}", dependencies=[Depends(require_scope("chat:read"))])
+def firecrawl_job_status(job_id: str):
+    """Read local job state for async generic crawls or Dreams sync runs."""
+    job = get_job_info(job_id)
+    if job is None:
+        return JSONResponse({"error": "unknown job"}, status_code=404)
+    return {"job_id": job_id, "job": job}
 
 
 @app.get("/clawd/orchestrate", dependencies=[Depends(require_scope("agents:loop"))])

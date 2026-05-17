@@ -15,7 +15,6 @@ from urllib.parse import urlparse
 
 import requests
 
-FIRECRAWL_API_KEY = os.getenv("FIRECRAWL_API_KEY", "")
 FIRECRAWL_BASE = "https://api.firecrawl.dev/v2"
 DREAMS_URL = "https://dreams-of-an-electric-mind.webflow.io"
 
@@ -34,10 +33,11 @@ def _utcnow_iso() -> str:
 
 
 def _headers() -> dict[str, str]:
-    if not FIRECRAWL_API_KEY:
+    api_key = os.getenv("FIRECRAWL_API_KEY", "")
+    if not api_key:
         raise RuntimeError("FIRECRAWL_API_KEY is not configured")
     return {
-        "Authorization": f"Bearer {FIRECRAWL_API_KEY}",
+        "Authorization": f"Bearer {api_key}",
         "Content-Type": "application/json",
     }
 
@@ -410,7 +410,7 @@ def get_job_info(job_id: str) -> dict[str, Any] | None:
 def firecrawl_status() -> dict[str, Any]:
     cache = load_dreams_cache()
     return {
-        "configured": bool(FIRECRAWL_API_KEY),
+        "configured": bool(os.getenv("FIRECRAWL_API_KEY", "")),
         "active_jobs": len(_crawl_jobs) + len(_dreams_sync_jobs),
         "dreams_url": DREAMS_URL,
         "dreams_cached_stories": len(cache["stories"]),
