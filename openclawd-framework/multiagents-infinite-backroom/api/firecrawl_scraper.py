@@ -32,6 +32,15 @@ def _utcnow_iso() -> str:
     return datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
 
 
+def _parse_utc(value: str | None) -> datetime | None:
+    if not value:
+        return None
+    try:
+        return datetime.fromisoformat(value.replace("Z", "+00:00"))
+    except ValueError:
+        return None
+
+
 def _headers() -> dict[str, str]:
     api_key = os.getenv("FIRECRAWL_API_KEY", "")
     if not api_key:
@@ -122,7 +131,15 @@ def _inject_into_terminal(terminal: Any, context_block: str, label: str) -> int:
     if terminal is None or not context_block:
         return 0
     injection = f"\n\n[{label}]\n{context_block}\n[END {label}]\n\n"
-    terminal.conversation += injection
+    start_marker = f"[{label}]"
+    end_marker = f"[END {label}]"
+    conversation = getattr(terminal, "conversation", "")
+    start = conversation.find(start_marker)
+    end = conversation.find(end_marker, start + len(start_marker)) if start != -1 else -1
+    if start != -1 and end != -1:
+        end += len(end_marker)
+        conversation = conversation[:start].rstrip() + "\n" + conversation[end:].lstrip()
+    terminal.conversation = conversation + injection
     return len(injection)
 
 
@@ -311,6 +328,49 @@ def inject_cached_dreams_context(terminal: Any, max_chars: int = 24000) -> dict[
     context["injected_chars"] = injected_chars
     context["injected"] = bool(injected_chars)
     return context
+
+
+def ensure_dreams_context_for_loop(
+    terminal: Any,
+    limit: int = 100,
+    max_chars: int = 24000,
+    refresh_after_seconds: int = 900,
+) -> dict[str, Any]:
+    cache = load_dreams_cache()
+    stories = cache["stories"]
+    state = cache["state"]
+    last_sync = _parse_utc(state.get("last_sync_at"))
+    is_stale = (
+        not stories
+        or last_sync is None
+        or (datetime.now(timezone.utc) - last_sync).total_seconds() >= refresh_after_seconds
+    )
+
+    if is_stale:
+        result = sync_dreams_site(
+            terminal=terminal,
+            limit=limit,
+            inject=True,
+            max_chars=max_chars,
+        )
+        return {
+            "mode": "refreshed",
+            "source": DREAMS_URL,
+            "story_count": result.get("story_count", 0),
+            "injected_chars": result.get("injected_chars", 0),
+            "last_sync_at": (result.get("state") or {}).get("last_sync_at"),
+            "credits_used": result.get("credits_used"),
+        }
+
+    context = inject_cached_dreams_context(terminal=terminal, max_chars=max_chars)
+    return {
+        "mode": "cached",
+        "source": DREAMS_URL,
+        "story_count": context.get("story_count", 0),
+        "injected_chars": context.get("injected_chars", 0),
+        "last_sync_at": (context.get("state") or {}).get("last_sync_at"),
+        "credits_used": (context.get("state") or {}).get("credits_used"),
+    }
 
 
 def crawl_dreams_and_inject(terminal: Any, limit: int = 30) -> dict[str, Any]:
