@@ -4,6 +4,42 @@ npm install -g solana-clawd                               # published CLI packag
 clawd                                                      # opens the terminal
 ```
 
+## Integrated Package Map
+
+The root build and one-shot installer now include every package under `packages/`.
+Node packages are wired through npm workspaces and the `packages:install` /
+`packages:build` scripts. The Rust on-chain program is built by the installer
+when `cargo` is available.
+
+| Path | Package | Build/install role |
+| --- | --- | --- |
+| `packages/agentwallet` | `agentwallet-vault` | Encrypted Solana/EVM keypair vault, HTTP server, E2B and Cloudflare deployment helpers. Installs CLI as `agentwallet`. |
+| `packages/clawd` | `@openclawdsolana/clawd` | Main terminal agent package. Built from TypeScript and linked by the installer as `clawd-pkg` to avoid clobbering the root `clawd` binary. |
+| `packages/clawd-perps` | `@openclawdsolana/clawd-perps` | Phoenix perpetuals CLI. Built from TypeScript and linked as `clawd-perps`. |
+| `packages/clawd-protocol` | Rust/Anchor workspace | On-chain Solana program. Installer runs `cargo build` when the Rust toolchain is present. |
+| `packages/clawd-sdk` | `@openclawdsolana/clawd-sdk` | TypeScript SDK for protocol IDL, bonding curves, token launches, vaults, and agent bindings. |
+| `packages/clawd-wallet` | `@openclawdsolana/clawd-wallet` | Wallet SDK with agentic trading guardrails and swap helpers. |
+| `packages/cli-standalone` | `@openclawdsolana/clawd-standalone` | Prebuilt standalone CLI with no compile step. Installed globally by the one-shot installer. |
+
+Useful root commands:
+
+```bash
+npm run packages:install
+npm run packages:build
+npm run agentwallet:build
+npm run clawd:build
+npm run clawd-perps:build
+npm run clawd-sdk:build
+npm run clawd-wallet:build
+npm run cli-standalone:start
+```
+
+Secret handling: the installer creates `~/.openclawdsolana/.env` with `chmod
+0600`, and package code reads sensitive values from environment variables such
+as `XAI_API_KEY`, `HELIUS_API_KEY`, `VAULT_PASSPHRASE`, and
+`SOLANA_PRIVATE_KEY`. Do not commit plaintext private keys, wallet exports,
+seed phrases, `.env` files, or generated key material.
+
 ```
  ██████╗██╗      █████╗ ██╗    ██╗██████╗ 
 ██╔════╝██║     ██╔══██╗██║    ██║██╔══██╗
