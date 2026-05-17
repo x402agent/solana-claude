@@ -30,7 +30,6 @@ from .clawd_orchestration import run_clawd_orchestration
 from .firecrawl_scraper import (
     async_crawl_and_inject,
     async_sync_dreams_and_inject,
-    crawl_dreams_and_inject,
     firecrawl_status,
     get_crawl_status,
     get_dreams_context,
