@@ -30,6 +30,7 @@ from .clawd_orchestration import run_clawd_orchestration
 from .firecrawl_scraper import (
     async_crawl_and_inject,
     async_sync_dreams_and_inject,
+    ensure_dreams_context_for_loop,
     firecrawl_status,
     get_crawl_status,
     get_dreams_context,
@@ -79,6 +80,10 @@ MOONSHOT_KEY = os.getenv("MOONSHOT_API_KEY")
 DEEPSEEK_KEY = os.getenv("DEEPSEEK_API_KEY")
 OPENROUTER_KEY = os.getenv("OPENROUTER_API_KEY")
 AGENT_BACKEND = os.getenv("AGENT_BACKEND", "auto").strip().lower()
+DREAMS_LOOP_ENABLED = os.getenv("DREAMS_LOOP_ENABLED", "true").strip().lower() not in {"0", "false", "no", "off"}
+DREAMS_LOOP_LIMIT = int(os.getenv("DREAMS_LOOP_LIMIT", "100"))
+DREAMS_LOOP_MAX_CHARS = int(os.getenv("DREAMS_LOOP_MAX_CHARS", "24000"))
+DREAMS_LOOP_REFRESH_SECONDS = int(os.getenv("DREAMS_LOOP_REFRESH_SECONDS", "900"))
 
 
 def _build_terminal():
@@ -731,7 +736,13 @@ def get_agent_3_response():
 
 
 @app.get("/loop", dependencies=[Depends(require_scope("agents:loop"))])
-def run_agent_loop(turns: int = Query(default=3, ge=1, le=20)):
+def run_agent_loop(
+    turns: int = Query(default=3, ge=1, le=20),
+    dreams: bool = Query(default=DREAMS_LOOP_ENABLED),
+    dreams_limit: int = Query(default=DREAMS_LOOP_LIMIT, ge=1, le=200),
+    dreams_max_chars: int = Query(default=DREAMS_LOOP_MAX_CHARS, ge=1000, le=120000),
+    dreams_refresh_seconds: int = Query(default=DREAMS_LOOP_REFRESH_SECONDS, ge=0, le=86400),
+):
     """
     Run an automated 3-agent debate loop.
     Order: Analyst → Satirist → Clawd → repeat
@@ -741,14 +752,30 @@ def run_agent_loop(turns: int = Query(default=3, ge=1, le=20)):
         return {"error": "No API key configured"}
     if not hasattr(terminal, "run_loop"):
         return {"error": "Loop mode not available on this backend"}
+    dreams_context = None
+    if dreams:
+        try:
+            dreams_context = ensure_dreams_context_for_loop(
+                terminal=terminal,
+                limit=dreams_limit,
+                max_chars=dreams_max_chars,
+                refresh_after_seconds=dreams_refresh_seconds,
+            )
+        except Exception as e:
+            dreams_context = {"mode": "error", "error": str(e)}
     try:
         results = terminal.run_loop(turns=turns)
-        return {"turns": turns, "agents": 3, "responses": results}
+        return {"turns": turns, "agents": 3, "dreams_context": dreams_context, "responses": results}
     except Exception as e:
         err_str = str(e)
         if "402" in err_str or "Insufficient credits" in err_str:
-            return {"turns": 0, "agents": 3, "error": "OpenRouter credits depleted. Replenish at https://openrouter.ai/settings/credits"}
-        return {"turns": 0, "agents": 3, "error": str(e)}
+            return {
+                "turns": 0,
+                "agents": 3,
+                "dreams_context": dreams_context,
+                "error": "OpenRouter credits depleted. Replenish at https://openrouter.ai/settings/credits",
+            }
+        return {"turns": 0, "agents": 3, "dreams_context": dreams_context, "error": str(e)}
 
 
 @app.get("/conversation", dependencies=[Depends(require_scope("chat:read"))])

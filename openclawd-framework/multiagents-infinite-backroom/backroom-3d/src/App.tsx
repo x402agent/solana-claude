@@ -15,6 +15,7 @@ import SolanaDataPanel from './components/SolanaDataPanel'
 import PerpsConstellation from './components/PerpsConstellation'
 import TradingArenaPanel from './components/TradingArenaPanel'
 import ClawdOrchestrationPanel from './components/ClawdOrchestrationPanel'
+import ElectricDreamsPanel from './components/ElectricDreamsPanel'
 
 const BASE_URL = 'https://backrooms.x402.wtf'
 
