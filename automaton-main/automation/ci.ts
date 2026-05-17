@@ -12,10 +12,12 @@
  */
 
 import { execSync } from 'node:child_process';
+import { join } from 'node:path';
 import chalk from 'chalk';
 
 const GREEN  = chalk.hex('#14F195');
 const RED    = chalk.red;
+const REPO_ROOT = join(import.meta.dirname, '..', '..');
 
 export interface CiOptions {
   quiet?: boolean;
@@ -41,7 +43,11 @@ export async function runCi(opts: CiOptions = {}): Promise<void> {
     const t0 = Date.now();
     let passed = false;
     try {
-      execSync(s.cmd, { stdio: quiet ? 'pipe' : 'inherit', encoding: 'utf8' });
+      execSync(s.cmd, {
+        stdio: quiet ? 'pipe' : 'inherit',
+        encoding: 'utf8',
+        cwd: REPO_ROOT,
+      });
       passed = true;
     } catch {
       // fall through
