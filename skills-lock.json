@@ -396,6 +396,11 @@
       "sourceType": "github",
       "computedHash": "70ddab53decdbf5a97e1e9dc05c54eace9701ac706428ac0cef5a1a9ba0ef2be"
     },
+    "ultrathink-blockchain": {
+      "source": "x402agent/solana-clawd",
+      "sourceType": "github",
+      "computedHash": "467941184609ee9e0c8e89e37eba3d4ff96ccfb668033ae57597723fec5463cd"
+    },
     "video-frames": {
       "source": "x402agent/solana-clawd",
       "sourceType": "github",
