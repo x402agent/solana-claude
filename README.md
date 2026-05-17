@@ -30,6 +30,33 @@ x402 integrations, and compiled `dist/` output. Use `npm run sdk:install`,
 `npm run sdk:build`, or `npm run sdk:check` from the repo root when working on
 it directly.
 
+### SDK Control Plane
+
+The `sdk/` folder is now a major public surface of this repository, not a
+sidecar. It is the working OpenClawd SDK, runtime knowledge base, automation
+layer, demo bench, and Lobster Library agent catalog.
+
+| SDK surface | Path | What it does |
+| --- | --- | --- |
+| **Lobster Library** | [`sdk/library/`](./sdk/library/) | `@x402agent/lobster-library` catalog with 73 Solana, research, trading, treasury, x402, pay, MPP, NanoClawd, NemoClawd, and OpenClawd agents. Ships schemas, localized public indexes, docs, templates, metadata, and generated `llms.txt`/`llms-full.txt` files. |
+| **Goals** | [`sdk/goals/`](./sdk/goals/) | Active mission files for agent execution. Current high-priority goal: Percolator bounty keeper/research workflow with market, oracle, opportunity, and strike phases. |
+| **Knowledge** | [`sdk/knowledge/`](./sdk/knowledge/) | Agent memory and operating facts: architecture notes, codebase facts, API behavior, decisions, anti-patterns, gotchas, patterns, character docs, OpenClawd memory, and sovereign research. |
+| **Automation** | [`sdk/automation/`](./sdk/automation/) | Leviathan bootstrap scripts, quickstart flow, CI/runtime orchestration, and Three Laws integrity checks. |
+| **Examples** | [`sdk/examples/`](./sdk/examples/) | Runnable demos for OODA loops, wallet monitoring, Blockchain Buddies, Jupiter wallet patterns, x402 payments, Solana x402, auto-research, orchestrator clients, and lobster trading simulations. |
+| **Dynamic Bonding Curve** | [`sdk/dynamic-bonding-curve-main/`](./sdk/dynamic-bonding-curve-main/) | DBC program and SDK source used by token launch, virtual pool, swap, migration, fee, and bonding-curve mechanics. |
+| **Runtime Source** | [`sdk/src/`](./sdk/src/) | `@openclawdsolana/leviathan` runtime source for identity, state, x402 services, setup, survival monitoring, skills, and agent system prompts. |
+
+SDK commands:
+
+```bash
+npm run sdk:install
+npm run sdk:build
+npm run sdk:check
+npm run sdk:library:build
+npm run sdk:library:test
+npm run sdk:library:typecheck
+```
+
 Useful root commands:
 
 ```bash
@@ -38,6 +65,8 @@ npm run packages:build
 npm run sdk:install
 npm run sdk:build
 npm run sdk:check
+npm run sdk:library:build
+npm run sdk:library:test
 npm run agentwallet:build
 npm run clawd:build
 npm run clawd-perps:build
@@ -559,6 +588,7 @@ Clawd does not just prompt. It **loops, pays, records, scores, resolves, and ret
 | --- | --- | --- |
 | **🦞 HERMES Terminal** | Neon Solana terminal for OODA, markets, and payment panels | [`tui/`](./tui/) |
 | **⚙ Leviathan Runtime** | Sovereign shell, depth tiers, identity, Three Laws | [`leviathan/`](./leviathan/) |
+| **🦞 OpenClawd SDK** | Public SDK control plane: Lobster Library, goals, knowledge, examples, automation, dynamic bonding curves, x402 services | [`sdk/`](./sdk/), [`sdk/library/`](./sdk/library/), [`sdk/knowledge/`](./sdk/knowledge/), [`sdk/goals/`](./sdk/goals/), [`sdk/automation/`](./sdk/automation/), [`sdk/examples/`](./sdk/examples/) |
 | **⚡ x402 Rails** | HTTP 402, pay.sh, A2A, confidential agent settlement | Private source; excluded from public GitHub exports. |
 | **🔁 Deep Clawd** | DeepSeek V4 trading agent with dFlow routing | [`deep-clawd/`](./deep-clawd/) |
 | **🔁 Dark Ralph OODA** | Observe-orient-decide-act loop and trading lab | [`ooda/`](./ooda/) |
