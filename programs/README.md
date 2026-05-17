@@ -20,10 +20,12 @@ Treat this directory as a program lab. Some programs are active Anchor crates, s
 | [`llm_oracle/`](./llm_oracle/) | Off-chain Rust worker | N/A | Watches `solana-gpt-oracle` interactions, calls an LLM, and submits callback transactions. | Bridges off-chain model execution into on-chain callback semantics with retry/memory handling. |
 | [`mpl-corenft-staking/`](./mpl-corenft-staking/) | Anchor program | `7AFH2R2vAowRbYxLJnS5eRazZxQyHcMD9VTJKEFsjpdZ` | Lightweight staking registry for Metaplex Core-style agent assets. | Minimal Core asset stake registry for agent ownership and collection tracking. |
 | [`mpl-token-metadata-main/`](./mpl-token-metadata-main/) | Upstream Metaplex reference | `metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s` | Token metadata program reference used by launch/mint flows. | Canonical metadata PDA system for fungible and non-fungible tokens on Solana. |
+| [`p-token-launchpad/`](./p-token-launchpad/) | Anchor program | deploy-time ID | Self-hosted p-token launchpad with agent bonding curves, agent registry, buy/sell flow, fee distribution, and DEX graduation. | Combines p-token transfer-cost savings with launchpad curves and agent-token registry semantics. |
 | [`solana-ai-inference/`](./solana-ai-inference/) | Anchor program | `3xFBRCtk5hxeLWzHvwyDg2B67RHoA9JFTKmHPzzccBVc` | Model registry, inference requests, validators, staking, data submissions, DNA generation records. | Full on-chain AI inference market primitive with staking, validation, fees, and slashing. |
 | [`solana-contracts/`](./solana-contracts/) | TypeScript transaction builder | `TLaunDAP1sZks8dGmcNWHxdAgzMuiYzKg87mfjHRFzM` | Demonstration launchpad transaction builder for token launch flows. | Shows client-side construction for launchpad, mint, funding, and liquidity setup flows. |
 | [`solana-gpt-oracle/`](./solana-gpt-oracle/) | Anchor program | `LLMrieZMpbJFwN52WgmBNMxYojrpRVYXdC1RCweEbab` | Stores LLM context/interactions and calls back into target programs with oracle responses. | Generic callback oracle pattern for agent programs that need off-chain LLM inference. |
 | [`token-launcher/`](./token-launcher/) | Anchor program | `funvWGBmpr8N7pTNqpxkWPgWnQbL3Yr5vzCHNJT2YkL` | Minimal token launchpad: initializes global config and creates mints + metadata. | Practical launch primitive that pairs SPL minting with Metaplex metadata creation. |
+| [`../packages/clawd-protocol/`](../packages/clawd-protocol/) | Anchor package | `CLAWDpRoToCoLv1pRoGRaM111111111111111111111` | Package-scoped protocol layer for vaults, conviction staking, milestone locks, burn engines, adaptive curves, pToken hooks, and agent-token bindings. | Consolidates agent-token mechanics and vault economics into a reusable package workspace. |
 | [`target/`](./target/) | Build output | N/A | Generated artifacts from Rust/Anchor builds. | Do not edit manually; rebuild from source. |
 
 ## Install
@@ -97,10 +99,12 @@ These IDs are declared in source or config and must stay synchronized with deplo
 | `clawd-stake` | `5bp3bDnWYdjiYyB99XWWi6h8ga2wnB1TxuRUb4VNJrTn` |
 | `mpl-corenft-staking` | `7AFH2R2vAowRbYxLJnS5eRazZxQyHcMD9VTJKEFsjpdZ` |
 | `mpl-token-metadata-main` | `metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s` |
+| `p-token-launchpad` | deploy-time ID |
 | `solana-ai-inference` | `3xFBRCtk5hxeLWzHvwyDg2B67RHoA9JFTKmHPzzccBVc` |
 | `solana-contracts` | `TLaunDAP1sZks8dGmcNWHxdAgzMuiYzKg87mfjHRFzM` |
 | `solana-gpt-oracle` | `LLMrieZMpbJFwN52WgmBNMxYojrpRVYXdC1RCweEbab` |
 | `token-launcher` | `funvWGBmpr8N7pTNqpxkWPgWnQbL3Yr5vzCHNJT2YkL` |
+| `packages/clawd-protocol` | `CLAWDpRoToCoLv1pRoGRaM111111111111111111111` |
 
 ## Deploy Pattern
 

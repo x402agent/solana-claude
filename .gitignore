@@ -50,6 +50,8 @@ tui/dist/
 tui/node_modules/
 llm_oracle/upstream/percolator-prog
 
+# Private framework workspace — keep local only, never publish to public GitHub
+openclawd-framework/
 openclawd-framework/NanoSolana/
 openclawd-framework/pay/
 openclawd-framework/*.tar.gz

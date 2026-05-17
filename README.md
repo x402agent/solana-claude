@@ -51,6 +51,38 @@ as `XAI_API_KEY`, `HELIUS_API_KEY`, `VAULT_PASSPHRASE`, and
 `SOLANA_PRIVATE_KEY`. Do not commit plaintext private keys, wallet exports,
 seed phrases, `.env` files, or generated key material.
 
+## On-Chain Program Map
+
+The repo carries two program workspaces: the shared program lab under
+[`programs/`](./programs/) and the package-scoped protocol under
+[`packages/clawd-protocol/`](./packages/clawd-protocol/). These programs are
+for Solana agent identity, staking, inference, LLM callbacks, launchpads,
+metadata, and token/vault mechanics.
+
+| Path | Kind | Program ID | What it does |
+| --- | --- | --- | --- |
+| [`programs/agent-minter`](./programs/agent-minter/) | Anchor program | `agnmDKzZkv63sRhPFvm3iWpxaopgTRcohXA6CSYSXvQ` | Lets an LLM-backed agent mint MAR1O token rewards through a PDA-controlled mint after an oracle callback. |
+| [`programs/clawd-stake`](./programs/clawd-stake/) | Anchor program | `5bp3bDnWYdjiYyB99XWWi6h8ga2wnB1TxuRUb4VNJrTn` | Staking and reward positions for Metaplex Agent assets, CLAWD emissions, and fee-share routing. |
+| [`programs/client`](./programs/client/) | TypeScript SDK | N/A | Typed client for program IDs, AI inference IDL helpers, ORE constants, and network config. |
+| [`programs/llm_oracle`](./programs/llm_oracle/) | Off-chain Rust worker | N/A | Watches GPT oracle accounts, calls an LLM provider, and submits signed callback transactions. |
+| [`programs/mpl-corenft-staking`](./programs/mpl-corenft-staking/) | Anchor program | `7AFH2R2vAowRbYxLJnS5eRazZxQyHcMD9VTJKEFsjpdZ` | Lightweight registry for staking Metaplex Core-style agent assets by owner, asset, and collection. |
+| [`programs/mpl-token-metadata-main`](./programs/mpl-token-metadata-main/) | Upstream Metaplex reference | `metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s` | Vendored metadata program reference used by minting, launch, and agent asset flows. |
+| [`programs/p-token-launchpad`](./programs/p-token-launchpad/) | Anchor program | deploy-time ID | p-token launchpad with agent bonding curves, PDA agent registry, fee distribution, buy/sell flow, and DEX graduation. |
+| [`programs/solana-ai-inference`](./programs/solana-ai-inference/) | Anchor program | `3xFBRCtk5hxeLWzHvwyDg2B67RHoA9JFTKmHPzzccBVc` | On-chain inference market: model registry, requests, validators, staking, slashing, fees, and DNA records. |
+| [`programs/solana-contracts`](./programs/solana-contracts/) | TypeScript transaction builder | `TLaunDAP1sZks8dGmcNWHxdAgzMuiYzKg87mfjHRFzM` | Client-side launchpad transaction examples for launch setup, minting, funding, liquidity, and trading flows. |
+| [`programs/solana-gpt-oracle`](./programs/solana-gpt-oracle/) | Anchor program | `LLMrieZMpbJFwN52WgmBNMxYojrpRVYXdC1RCweEbab` | Stores LLM context and interactions, then routes oracle responses into callback programs. |
+| [`programs/token-launcher`](./programs/token-launcher/) | Anchor source/template | `funvWGBmpr8N7pTNqpxkWPgWnQbL3Yr5vzCHNJT2YkL` | Compact launchpad primitive for global config, SPL mint creation, initial supply, metadata, and launch events. |
+| [`packages/clawd-protocol`](./packages/clawd-protocol/) | Anchor package | `CLAWDpRoToCoLv1pRoGRaM111111111111111111111` | Protocol layer for vaults, conviction staking, milestone locks, adaptive curves, pToken transfer hooks, agent-token bindings, and burn engines. |
+
+Program build helpers:
+
+```bash
+npm run programs:map
+npm run programs:show -- solana-ai-inference
+cd programs && cargo check
+cd packages/clawd-protocol && cargo build
+```
+
 ```
  ██████╗██╗      █████╗ ██╗    ██╗██████╗ 
 ██╔════╝██║     ██╔══██╗██║    ██║██╔══██╗
