@@ -1,0 +1,23 @@
+{
+  "name": "@solana-clawd/agent-kit-workspace",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Solana Clawd agent-kit workspace for local agent catalog, templates, and runtime metadata.",
+  "type": "module",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "pnpm -r build",
+    "clean": "pnpm -r clean",
+    "type-check": "pnpm -r type-check",
+    "validate": "node scripts/validate-agent-kit.mjs",
+    "agents:catalog": "node ../agents/build-catalog.cjs"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.2"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

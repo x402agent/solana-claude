@@ -15,6 +15,7 @@
     "public"
   ],
   "scripts": {
+    "agent-kit:validate": "node ../solana-clawd-agent-kit/scripts/validate-agent-kit.mjs",
     "awesome": "bun scripts/commands/build.ts && bun scripts/commands/update-awesome.ts",
     "build": "bun scripts/commands/build.ts",
     "format": "bun scripts/commands/format.ts",
@@ -30,6 +31,10 @@
     "test": "bun scripts/commands/test.ts",
     "test:locale": "bun scripts/commands/test-locale.ts",
     "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@solana-clawd/agent-kit": "file:../solana-clawd-agent-kit/packages/agent-kit",
+    "@solana-clawd/agent-registry": "file:../solana-clawd-agent-kit/packages/agent-registry"
   },
   "devDependencies": {
     "@lobehub/lint": "^1.25.5",
@@ -62,5 +67,4 @@
     "registry": "https://registry.npmjs.org"
   }
 }
-
 

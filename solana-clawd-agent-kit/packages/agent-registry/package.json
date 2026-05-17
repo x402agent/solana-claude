@@ -1,0 +1,26 @@
+{
+  "name": "@solana-clawd/agent-registry",
+  "version": "0.1.0",
+  "description": "Registry document helpers for Solana Clawd agents.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "clean": "rm -rf dist",
+    "type-check": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@solana-clawd/agent-kit": "workspace:*"
+  },
+  "devDependencies": {}
+}

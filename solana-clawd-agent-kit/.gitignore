@@ -1,0 +1,16 @@
+dist
+node_modules
+.env
+
+# VSCode
+.vscode
+
+.DS_Store
+
+.husky
+.turbo
+.turbo/
+.rollup.*/
+.rollup/
+drizzle/
+tsconfig.tsbuildinfo
