@@ -84,12 +84,37 @@ usage() {
 banner() {
   [ "$NO_BANNER" = "1" ] && return 0
   [ "$QUIET" = "1" ] && return 0
+
+  # Animated lobster rise (skip in non-interactive / CI)
+  if [ -t 1 ]; then
+    printf "\033[2J\033[H"
+    # Frame 1
+    printf "${PURPLE}  ┌─────────────────────────────────────────────────────────────┐${RESET}\n"
+    printf "${PURPLE}  │                        🦞                                   │${RESET}\n"
+    printf "${PURPLE}  └─────────────────────────────────────────────────────────────┘${RESET}\n"
+    sleep 0.10 2>/dev/null || true
+    printf "\033[H"
+    # Frame 2
+    printf "${PURPLE}  ┌─────────────────────────────────────────────────────────────┐${RESET}\n"
+    printf "${PURPLE}  │               🦞        🦀        🦞                        │${RESET}\n"
+    printf "${PURPLE}  └─────────────────────────────────────────────────────────────┘${RESET}\n"
+    sleep 0.10 2>/dev/null || true
+    printf "\033[H"
+  fi
+
   printf "\n"
-  printf "${PURPLE}     ___                   ${GREEN} ___ _                _${RESET}\n"
-  printf "${PURPLE}    /   \\ _ __  ___ _ _    ${GREEN}/ __| |__ ___ __ ____| |${RESET}\n"
-  printf "${PURPLE}   | () | '_ \\/ -_) ' \\   ${GREEN}| (__| / _\\ V  V / _\\ |${RESET}\n"
-  printf "${PURPLE}    \\___/| .__/\\___|_||_|  ${GREEN}\\___|_\\__|\\_/\\_/\\__,_|${RESET}\n"
-  printf "${PURPLE}         |_|                                ${RESET}${DIM}🦞 Solana-native AI agents${RESET}\n"
+  printf "${PURPLE}   ██████╗██╗      █████╗ ██╗    ██╗██████╗ ${RESET}\n"
+  printf "${GREEN}  ██╔════╝██║     ██╔══██╗██║    ██║██╔══██╗${RESET}\n"
+  printf "${PURPLE}  ██║     ██║     ███████║██║ █╗ ██║██║  ██║${RESET}\n"
+  printf "${GREEN}  ██║     ██║     ██╔══██║██║███╗██║██║  ██║${RESET}\n"
+  printf "${PURPLE}  ╚██████╗███████╗██║  ██║╚███╔███╔╝██████╔╝${RESET}\n"
+  printf "${DIM}   ╚═════╝╚══════╝╚═╝  ╚═╝ ╚══╝╚══╝ ╚═════╝  🦞 Solana-native AI agents${RESET}\n"
+  printf "\n"
+  printf "${DIM}  ┌────────────────────────────────────────────────────────────┐${RESET}\n"
+  printf "${DIM}  │${RESET}  ${GREEN}◉${RESET} SDK     ${PURPLE}▸${RESET}  @openclawdsolana/clawd + leviathan     ${DIM}│${RESET}\n"
+  printf "${DIM}  │${RESET}  ${GREEN}◉${RESET} CHAIN   ${PURPLE}▸${RESET}  Metaplex • Token2022 • Anchor          ${DIM}│${RESET}\n"
+  printf "${DIM}  │${RESET}  ${GREEN}◉${RESET} PAYMENTS${PURPLE}▸${RESET}  x402 USDC rails on Solana             ${DIM}│${RESET}\n"
+  printf "${DIM}  └────────────────────────────────────────────────────────────┘${RESET}\n"
   printf "\n"
 }
 
@@ -315,39 +340,37 @@ else
 fi
 
 # ──────────────────────────────────────────────────────────────────────────────
-# Dark Ralph TUI — install from npm when published, otherwise build the bundled
-# workspace and expose dark-ralph / ralph / ralph-tui from $BIN_DIR.
+# Clawd npm CLIs — lobster TUI suite (all four packages)
 # ──────────────────────────────────────────────────────────────────────────────
+_npm_global_install() {
+  local pkg="$1" label="$2"
+  step "installing $label"
+  if npm i -g "$pkg" --no-audit --no-fund 2>/dev/null; then
+    ok "installed $label"
+  elif sudo npm i -g "$pkg" --no-audit --no-fund 2>/dev/null; then
+    ok "installed $label (sudo)"
+  else
+    warn "$label install failed — fallback: npx $pkg"
+  fi
+}
+
 if [ "$NO_NODE" = "1" ]; then
-  info "skipping dark-ralph TUI (--no-node)"
-elif command -v npm >/dev/null 2>&1 && npm view @darkralph/tui version >/dev/null 2>&1; then
-  step "installing dark-ralph TUI from npm"
-  npm i -g @darkralph/tui --no-audit --no-fund || warn "dark-ralph npm install failed"
-elif [ -d "$SRC_DIR/dark-ralph" ] && command -v bun >/dev/null 2>&1; then
-  step "building bundled dark-ralph TUI"
-  (
-    cd "$SRC_DIR/dark-ralph"
-    bun install --frozen-lockfile
-    bun run build
-    bun run build:lib
-  ) || warn "dark-ralph TUI build failed"
-  if [ -f "$SRC_DIR/dark-ralph/dist/cli.js" ]; then
-    install -m 0755 "$SRC_DIR/dark-ralph/dist/cli.js" "$BIN_DIR/dark-ralph"
-    if [ -f "$SRC_DIR/dark-ralph/node_modules/yoga-wasm-web/dist/yoga.wasm" ]; then
-      install -m 0644 "$SRC_DIR/dark-ralph/node_modules/yoga-wasm-web/dist/yoga.wasm" "$BIN_DIR/yoga.wasm"
-    fi
-    ln -sf "$BIN_DIR/dark-ralph" "$BIN_DIR/ralph-tui"
-    rm -f "$BIN_DIR/ralph"
-    if printf ':%s:' "$PATH" | grep -q ":$HOME/.local/bin:"; then
-      mkdir -p "$HOME/.local/bin"
-      ln -sf "$BIN_DIR/dark-ralph" "$HOME/.local/bin/dark-ralph"
-      ln -sf "$BIN_DIR/dark-ralph" "$HOME/.local/bin/ralph-tui"
-      rm -f "$HOME/.local/bin/ralph"
-    fi
-    ok "installed dark-ralph TUI (alias: ralph-tui)"
+  info "skipping clawd npm CLIs (--no-node)"
+elif command -v npm >/dev/null 2>&1; then
+  _npm_global_install "@openclawdsolana/clawd"        "@openclawdsolana/clawd (backroom TUI)"
+  _npm_global_install "@openclawdsolana/leviathan"    "@openclawdsolana/leviathan (sovereign runtime)"
+  _npm_global_install "@openclawdsolana/clawd-tui"    "@openclawdsolana/clawd-tui (Solana-aware TUI + OpenRouter)"
+  _npm_global_install "clawd-code-cli"                "clawd-code-cli (multi-provider: Grok/OpenRouter/Ollama)"
+
+  CLAWD_BIN="$(command -v clawd 2>/dev/null || echo '')"
+  if [ -n "$CLAWD_BIN" ]; then
+    ok "clawd TUI ready at $CLAWD_BIN"
+    ln -sf "$CLAWD_BIN" "$BIN_DIR/clawd" 2>/dev/null || true
+  else
+    warn "clawd not on PATH — add npm global bin to PATH (see quickstart below)"
   fi
 else
-  warn "dark-ralph TUI skipped — install Bun or publish @darkralph/tui"
+  warn "clawd npm CLIs skipped — npm not found"
 fi
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -504,38 +527,50 @@ case "$SHELL_NAME" in
   *)    RC_FILE="your shell rc" ;;
 esac
 
-cat <<EOF
-
-${GREEN}${BOLD}🦞 OpenClawd installed${RESET}
-
-  ${BOLD}Workspace${RESET} : $WORKSPACE
-  ${BOLD}Binaries${RESET}  : $BIN_DIR
-  ${BOLD}Config${RESET}    : $CFG_PATH
-  ${BOLD}Secrets${RESET}   : $ENV_PATH  ${DIM}(0600)${RESET}
-
-  ${PURPLE}1.${RESET} Add to PATH (append to $RC_FILE):
-       export PATH="$BIN_DIR:\$PATH"
-
-  ${PURPLE}2.${RESET} Set your Grok key for voice + reasoning:
-       echo "XAI_API_KEY=sk-..." >> $ENV_PATH
-
-  ${PURPLE}3.${RESET} Smoke tests:
-       openclawd version
-       openclawd solana health
-       openclawd voice test           ${DIM}# wss://api.x.ai/v1/realtime${RESET}
-
-  ${PURPLE}4.${RESET} Launch the autonomous pAGENT (trade • launch • track):
-       openclawd daemon
-       openclawd pagent gui           ${DIM}# http://localhost:7423${RESET}
-
-  ${PURPLE}5.${RESET} Pair a Seeker / Telegram channel:
-       openclawd gateway start
-       openclawd gateway setup-code
-
-  ${PURPLE}6.${RESET} Launch the Dark Ralph TUI:
-       dark-ralph run
-
-${DIM}  Star us: https://solanaclawd.com${RESET}
-${DIM}  Share:   curl -fsSL https://install.solanaclawd.com | bash${RESET}
-
-EOF
+printf "\n"
+printf "${GREEN}${BOLD}  ╔══════════════════════════════════════════════════════════════╗${RESET}\n"
+printf "${GREEN}${BOLD}  ║  🦞 OpenClawd installed — The claw is live                  ║${RESET}\n"
+printf "${GREEN}${BOLD}  ╠══════════════════════════════════════════════════════════════╣${RESET}\n"
+printf "${GREEN}${BOLD}  ║${RESET}  Workspace  :  ${PURPLE}$WORKSPACE${RESET}  ${GREEN}${BOLD}║${RESET}\n"
+printf "${GREEN}${BOLD}  ║${RESET}  Binaries   :  ${DIM}$BIN_DIR${RESET}   ${GREEN}${BOLD}║${RESET}\n"
+printf "${GREEN}${BOLD}  ║${RESET}  Config     :  ${DIM}$CFG_PATH${RESET}   ${GREEN}${BOLD}║${RESET}\n"
+printf "${GREEN}${BOLD}  ║${RESET}  Secrets    :  ${DIM}$ENV_PATH  (0600)${RESET}  ${GREEN}${BOLD}║${RESET}\n"
+printf "${GREEN}${BOLD}  ╚══════════════════════════════════════════════════════════════╝${RESET}\n"
+printf "\n"
+printf "  ${PURPLE}1.${RESET}  Add to PATH (append to $RC_FILE):\n"
+printf "       ${DIM}export PATH=\"$BIN_DIR:\$PATH\"${RESET}\n"
+printf "\n"
+printf "  ${PURPLE}2.${RESET}  Set API keys:\n"
+printf "       ${DIM}echo \"XAI_API_KEY=xai-...\" >> $ENV_PATH${RESET}\n"
+printf "       ${DIM}echo \"HELIUS_API_KEY=...\"  >> $ENV_PATH${RESET}\n"
+printf "\n"
+printf "  ${PURPLE}3.${RESET}  Launch a TUI (pick your surface):\n"
+printf "       ${GREEN}clawd${RESET}          ${DIM}# @openclawdsolana/clawd-tui — Solana + OpenRouter + Birdeye${RESET}\n"
+printf "       ${GREEN}clawd-code${RESET}     ${DIM}# clawd-code-cli — Grok / OpenRouter / Ollama / OpenAI${RESET}\n"
+printf "       ${GREEN}claw${RESET}           ${DIM}# alias for clawd-code-cli${RESET}\n"
+printf "       ${GREEN}clawd -p \"check my wallet\"${RESET}  ${DIM}# headless one-shot${RESET}\n"
+printf "\n"
+printf "  ${PURPLE}4.${RESET}  Run the sovereign runtime:\n"
+printf "       ${GREEN}leviathan --spawn${RESET}   ${DIM}# first-time identity wizard${RESET}\n"
+printf "       ${GREEN}leviathan --run${RESET}     ${DIM}# start OODA pulse loop${RESET}\n"
+printf "       ${GREEN}leviathan --status${RESET}  ${DIM}# depth + balances${RESET}\n"
+printf "\n"
+printf "  ${PURPLE}5.${RESET}  Solana slash commands (inside clawd-tui):\n"
+printf "       ${DIM}/trending 10           # top Birdeye tokens${RESET}\n"
+printf "       ${DIM}/asset <mint>          # Helius DAS deep-dive${RESET}\n"
+printf "       ${DIM}/wallet <address>      # portfolio${RESET}\n"
+printf "       ${DIM}/holders <mint>        # whale list${RESET}\n"
+printf "\n"
+printf "  ${PURPLE}6.${RESET}  Multi-provider model switching (inside clawd-code):\n"
+printf "       ${DIM}/models               # interactive model picker${RESET}\n"
+printf "       ${DIM}/config grok key xai-...${RESET}\n"
+printf "       ${DIM}/search solana price  # live Grok web search${RESET}\n"
+printf "       ${DIM}/voice say hello      # xAI TTS${RESET}\n"
+printf "\n"
+printf "  ${DIM}Hub      : https://solanaclawd.com${RESET}\n"
+printf "  ${DIM}x402     : https://x402.wtf${RESET}\n"
+printf "  ${DIM}CA       : 8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump${RESET}\n"
+printf "  ${DIM}One-shot : curl -fsSL https://solanaclawd.com/leviathan.sh | sh${RESET}\n"
+printf "\n"
+printf "${DIM}  The shell molts. The laws do not. 🦞${RESET}\n"
+printf "\n"

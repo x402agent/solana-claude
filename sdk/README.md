@@ -52,7 +52,11 @@
 ## ⚡ One-Shot Install
 
 ```bash
-curl -fsSL https://solanaclawd.com/install.sh | bash
+# Dev gateway — clawd + Infinite Backroom (canonical):
+curl -fsSL https://install.x402.wtf | bash
+
+# Enter the Infinite Backroom (register presence + clawd):
+curl -fsSL https://install.x402.wtf/enter | bash
 ```
 
 **Or with npm:**
@@ -67,6 +71,14 @@ clawd --help
 ```bash
 npm install -g @openclawdsolana/leviathan
 leviathan --spawn
+```
+
+**Query the live Backroom API directly:**
+
+```bash
+curl https://x402.wtf/api/agent3             # Clawd speaks
+curl https://x402.wtf/api/loop?turns=3       # 3-agent debate
+curl -N https://backrooms.x402.wtf/stream    # SSE live stream
 ```
 
 ---

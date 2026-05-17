@@ -79,47 +79,68 @@ clawd                                                      # opens the terminal
 ## Install
 
 ```bash
+# One-shot bootstrap (recommended):
 curl -fsSL https://solanaclawd.com/leviathan.sh | sh
 ```
 
-This is the **Leviathan runtime bootstrap** — it clones the repo (if needed), installs dependencies, compiles the TypeScript stack, spawns a sovereign identity, and launches the full agent runtime in one command.
-
-For contributor onboarding, use [`STARTHERE.md`](./STARTHERE.md), [`docs/REPO_MAP.md`](./docs/REPO_MAP.md), and `npm run doctor`.
-
-The bootstrap lives at [`automation/leviathan.sh`](./automation/leviathan.sh) and is orchestrated by the [`automation/`](./automation/) folder — the central runtime build layer for solana-clawd.
-
-**CLI package only**:
+Or install packages directly:
 
 ```bash
-npm install -g solana-clawd
+npm install -g @openclawdsolana/clawd      # 🖥️  lobster TUI operator
+npm install -g @openclawdsolana/leviathan  # 🦞 sovereign runtime
 ```
-
-This installs the published terminal package directly from npm.
-
-`solana-clawd-go` is not a published npm package, and `https://solanaclawd.com/install.sh` / `https://x402.wtf/install.sh` currently return `404`.
 
 Once installed:
 
 ```bash
-# 1. Add your XAI_API_KEY to ~/.clawd/.env
-# 2. Start the interactive TUI
-clawd
+clawd                          # open the lobster TUI (streaming chat, voice, Solana)
+clawd -p "check my wallet"     # headless mode
 
-# Phoenix perpetuals via Vulcan / Rise SDK
-clawd perps health
-clawd perps ticker SOL -o json
-clawd perps paper init --balance 10000
-clawd perps paper buy SOL --notional-usdc 100 --type market
+leviathan --spawn              # first-time identity wizard
+leviathan --run                # start OODA pulse loop
+leviathan --status             # depth + balances
 
-# Or run a demo
-clawd examples list
-clawd examples run ooda
-clawd examples run lobtrader
+clawd examples run ooda        # OODA loop demo (no key needed)
+clawd examples run lobtrader   # pump.fun bonding curves
+clawd examples run buddies     # Blockchain Buddies
 ```
 
-Perps defaults are paper-safe. Live Phoenix actions require an explicit live command and confirmation; strategy launches default to `--mode paper` unless the operator selects a live mode.
+---
 
-> **Advanced:** `cd openclawd-framework && npm install -g . && leviathan --spawn`
+## 🛠️ Official SDK
+
+The official TypeScript SDK lives in [`sdk/`](./sdk):
+
+| Package | Install | Purpose |
+| ------- | ------- | ------- |
+| `@openclawdsolana/leviathan` | `npm i -g @openclawdsolana/leviathan` | Sovereign runtime — OODA loop, identity, x402, pulse |
+| `@openclawdsolana/clawd` | `npm i -g @openclawdsolana/clawd` | Lobster TUI — streaming chat, voice, Solana tools, MCP |
+| `@openclawd/solana-sdk` | `npm i @openclawd/solana-sdk` | On-chain SDK — bonding curves, Token2022, vault, agent |
+| `@openclawd/wallet` | `npm i @openclawd/wallet` | Privy + AgenticWallet + Jupiter swap integration |
+| `@pump-fun/mcp-server` | `npx @pump-fun/mcp-server` | MCP tools for Solana (token launches, wallet ops, pump.fun) |
+| `@pump-fun/x402` | `npm i @pump-fun/x402` | x402 HTTP 402 USDC payment rails |
+
+**SDK quick start:**
+
+```typescript
+import { wrapFetchWithX402 } from "@openclawdsolana/leviathan/services/x402/index.js";
+import { CLAWD_MINT_MAINNET, AgentCapability } from "@openclawd/solana-sdk";
+
+// x402 auto-pay on HTTP 402
+const payfetch = wrapFetchWithX402(globalThis.fetch);
+const res = await payfetch("https://x402.wtf/api/agent3");
+
+// Agent capability flags
+const caps = AgentCapability.TRADING | AgentCapability.PAYMENTS;
+```
+
+**MCP server (Solana tools for Claude / any model):**
+
+```bash
+clawd mcp add --name clawd-solana --command "npx @pump-fun/mcp-server"
+```
+
+→ Full SDK docs: [`sdk/README.md`](./sdk/README.md)
 
 ---
 
