@@ -1,5 +1,5 @@
 {
-  "name": "@clawd/automaton",
+  "name": "clawd-automaton",
   "version": "0.1.0",
   "description": "CLAWD Automaton - Sovereign AI Agent Runtime",
   "type": "module",
@@ -44,8 +44,8 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc && pnpm -r build",
-    "dashboard:dev": "pnpm --filter @clawd/dashboard dev",
-    "dashboard:build": "pnpm --filter @clawd/dashboard build",
+    "dashboard:dev": "pnpm --filter clawd-dashboard dev",
+    "dashboard:build": "pnpm --filter clawd-dashboard build",
     "dev": "tsx watch src/index.ts",
     "ooda": "tsx src/ooda/loop.ts",
     "ooda:tui": "tsx src/ooda/loop.ts --tui | tsx src/ooda/tui.ts",

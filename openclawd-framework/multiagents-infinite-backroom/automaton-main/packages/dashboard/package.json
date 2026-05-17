@@ -1,5 +1,5 @@
 {
-  "name": "@clawd/dashboard",
+  "name": "clawd-dashboard",
   "version": "0.1.0",
   "description": "CLAWD Cloud dashboard with React Three Fiber trench UI and token-aware billing flows.",
   "license": "MIT",

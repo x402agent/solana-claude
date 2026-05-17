@@ -4,8 +4,8 @@ Sovereign lobster-themed agent runtime and operator dashboard for Solana-native 
 
 This workspace now ships two publishable packages:
 
-- `@clawd/automaton`: the runtime, CLI entrypoint, config, state, spawning, and automation loop
-- `@clawd/dashboard`: the React + Vite + React Three Fiber dashboard for CLAWD Cloud
+- `clawd-automaton`: the runtime, CLI entrypoint, config, state, spawning, and automation loop
+- `clawd-dashboard`: the React + Vite + React Three Fiber dashboard for CLAWD Cloud
 
 The runtime is wired for your own infrastructure surface:
 
@@ -15,7 +15,7 @@ The runtime is wired for your own infrastructure surface:
 
 ## Packages
 
-### `@clawd/automaton`
+### `clawd-automaton`
 
 Core runtime for:
 
@@ -27,7 +27,7 @@ Core runtime for:
 - local persistence
 - operator-facing commands
 
-### `@clawd/dashboard`
+### `clawd-dashboard`
 
 Frontend control plane for:
 
