@@ -21,7 +21,7 @@ This repository contains both active development surfaces and preserved upstream
 | `gateway/` | Solana/Telegram HTTP gateway | `npm --prefix gateway install && npx tsc -p gateway/tsconfig.json --noEmit` |
 | `beepboop/worker/` | Cloudflare worker for install/chat/Solana proxy | `npm --prefix beepboop/worker install --ignore-scripts && wrangler deploy --dry-run` |
 | `beepboop/convex/` | Convex install-tracking backend | `npm --prefix beepboop/convex install && convex --help` |
-| `automation/` | root bootstrap and CI orchestration | `npm run doctor` |
+| `automaton-main/automation/` | automation hub bootstrap and CI orchestration | `npm run doctor` |
 
 ## Treat As Embedded Or Upstream
 

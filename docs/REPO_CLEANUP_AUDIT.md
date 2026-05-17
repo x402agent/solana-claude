@@ -17,7 +17,7 @@ These are regenerable and not source of truth:
 ```sh
 rm -rf .wrangler
 rm -rf node_modules
-rm -rf automation/node_modules automation/dist
+rm -rf automaton-main/automation/node_modules automaton-main/automation/dist
 rm -rf MCP/node_modules MCP/dist
 rm -rf sdk/node_modules sdk/dist
 rm -rf gateway/node_modules gateway/dist
@@ -79,7 +79,7 @@ These are referenced by root scripts, repo-doctor, builds, lint, docs, or recent
 
 | Folder | Evidence |
 | --- | --- |
-| `automation` | root scripts `automation:*`; build/test passed |
+| `automaton-main/automation` | root scripts `automation:*`; build/test passed |
 | `beepboop` | required by `scripts/repo-doctor.mjs`; Convex/Worker verification |
 | `clawdrouter` | root typecheck/lint target |
 | `docs` | repo map and current audit docs |

@@ -3,7 +3,8 @@
 #
 # Surfaces it brings up:
 #   • openclawd / clawd Go binary             — daemon, gateway, solana ops
-#   • openclawd-framework (Node)              — @openclawdsolana/leviathan runtime
+#   • sdk/ (Node)                             — @openclawdsolana/leviathan runtime
+#   • automaton-main (pnpm)                   — clawd-automaton + x402.wtf/automation dashboard
 #   • gateway (Node)                          — Telegram + Birdeye/Helius control plane
 #   • plugin.delivery (Node)                  — public plugin SDK + edge gateway
 #   • dark-ralph TUI                          — Bloomberg-style Solana intelligence terminal
@@ -15,7 +16,7 @@
 #   • npm/openclawd-computer/bin/install.mjs   (npx @openclawdsolana/computer)
 #   • npm/openclawd-installer/bin/install.mjs  (npx @openclawdsolana/installer)
 #   • Direct curl:
-#       curl -fsSL https://install.solanaclawd.com | bash
+#       curl -fsSL https://x402.wtf/automation/install.sh | bash
 #
 # Flags:
 #   --with-web           Also build the local web console launcher.
@@ -35,11 +36,11 @@ umask 022
 # ──────────────────────────────────────────────────────────────────────────────
 # Defaults
 # ──────────────────────────────────────────────────────────────────────────────
-REPO_URL="https://github.com/clawdsolana/OpenClawd.git"
+REPO_URL="https://github.com/x402agent/solana-clawd.git"
 WORKSPACE="${OPENCLAWD_HOME:-$HOME/.openclawdsolana}"
-OPENCLAWD_BASE_URL="${OPENCLAWD_BASE_URL:-https://solanaclawd.com/openclawd}"
-OPENCLAWD_GATEWAY_URL="${OPENCLAWD_GATEWAY_URL:-https://solanaclawd.com/gateway}"
-OPENCLAWD_SITE_URL="${OPENCLAWD_SITE_URL:-https://solanaclawd.com}"
+OPENCLAWD_BASE_URL="${OPENCLAWD_BASE_URL:-https://x402.wtf}"
+OPENCLAWD_GATEWAY_URL="${OPENCLAWD_GATEWAY_URL:-https://x402.wtf/api}"
+OPENCLAWD_SITE_URL="${OPENCLAWD_SITE_URL:-https://x402.wtf/automation}"
 BIN_DIR_DEFAULT="$WORKSPACE/bin"
 BIN_DIR=""
 BUILD_DIR_NAME="build"
@@ -205,14 +206,13 @@ trap 'rm -f "$LOCK_FILE"' EXIT INT TERM
 #
 # When piped via `curl | bash`, BASH_SOURCE is empty and we must NOT fall back
 # to the caller's git root — that could be any unrelated repo. We validate the
-# checkout by looking for a known OpenClawd marker (install.sh + SOUL.md or
-# openclawd-framework/).
+# checkout by looking for known Solana Clawd markers.
 # ──────────────────────────────────────────────────────────────────────────────
 is_openclawd_checkout() {
   local dir="$1"
   [ -d "$dir/.git" ] || return 1
   # At least one OpenClawd-specific marker must exist alongside package.json
-  { [ -f "$dir/SOUL.md" ] || [ -d "$dir/openclawd-framework" ] || [ -f "$dir/install.sh" ] && grep -q "openclawdsolana" "$dir/install.sh" 2>/dev/null; } \
+  { [ -f "$dir/SOUL.md" ] || [ -d "$dir/automaton-main" ] || [ -d "$dir/sdk" ] || [ -f "$dir/install.sh" ] && grep -q "openclawdsolana" "$dir/install.sh" 2>/dev/null; } \
     && { [ -f "$dir/go.mod" ] || [ -f "$dir/package.json" ]; }
 }
 
@@ -244,7 +244,7 @@ cd "$SRC_DIR"
 # ──────────────────────────────────────────────────────────────────────────────
 GO_PKG=""
 if [ "$NO_BUILD" = "0" ]; then
-  for candidate in "./cli" "./cmd/openclawd" "./cmd/clawd" "./openclawd-framework/cli" "."; do
+  for candidate in "./cli" "./cmd/openclawd" "./cmd/clawd" "."; do
     if [ -d "$candidate" ] && ls "$candidate"/*.go >/dev/null 2>&1; then
       if grep -ql "^package main" "$candidate"/*.go; then
         GO_PKG="$candidate"
@@ -271,7 +271,7 @@ else
 fi
 
 # ──────────────────────────────────────────────────────────────────────────────
-# Node workspaces — framework, gateway, plugin.delivery, pAGENT
+# Node workspaces — root packages, SDK, automaton, gateway, plugin.delivery, pAGENT
 # ──────────────────────────────────────────────────────────────────────────────
 has_cmd() { command -v "$1" >/dev/null 2>&1; }
 
@@ -299,7 +299,6 @@ if [ "$NO_NODE" = "1" ]; then
 elif [ -f "$SRC_DIR/package.json" ] && command -v npm >/dev/null 2>&1; then
   step "installing Node workspaces"
   pkg_install "$SRC_DIR" || warn "root workspace install had warnings"
-  [ -d "$SRC_DIR/openclawd-framework" ] && pkg_install "$SRC_DIR/openclawd-framework" || warn "framework install skipped"
   [ -d "$SRC_DIR/gateway" ] && pkg_install "$SRC_DIR/gateway" || warn "gateway install skipped"
   ( cd "$SRC_DIR" && node scripts/install-plugin-delivery.mjs ) || warn "plugin.delivery install skipped"
   if has_cmd pnpm; then
@@ -309,7 +308,6 @@ elif [ -f "$SRC_DIR/package.json" ] && command -v npm >/dev/null 2>&1; then
   fi
 
   step "building TypeScript surfaces"
-  [ -d "$SRC_DIR/openclawd-framework" ] && pkg_run "$SRC_DIR/openclawd-framework" build || warn "framework build failed"
   [ -d "$SRC_DIR/gateway" ] && pkg_run "$SRC_DIR/gateway" build || warn "gateway build failed"
   ( cd "$SRC_DIR" && node scripts/build-plugin-delivery.mjs ) || warn "plugin.delivery build failed"
   if has_cmd pnpm; then
@@ -407,6 +405,30 @@ elif command -v npm >/dev/null 2>&1 && [ -f "$SRC_DIR/sdk/package.json" ]; then
   ok "sdk/ workspace ready"
 else
   info "skipping sdk/ workspace (npm or sdk/package.json not found)"
+fi
+
+# ──────────────────────────────────────────────────────────────────────────────
+# automaton-main/ — clawd-automaton runtime and x402.wtf/automation dashboard
+# ──────────────────────────────────────────────────────────────────────────────
+if [ "$NO_NODE" = "1" ]; then
+  info "skipping automaton-main workspace (--no-node)"
+elif [ -f "$SRC_DIR/automaton-main/package.json" ]; then
+  if command -v pnpm >/dev/null 2>&1; then
+    step "installing and building automaton-main workspace"
+    ( cd "$SRC_DIR/automaton-main" && pnpm install --frozen-lockfile=false && pnpm build ) \
+      && ok "automaton-main ready" \
+      || warn "automaton-main build failed"
+    if [ -f "$SRC_DIR/automaton-main/dist/index.js" ]; then
+      chmod +x "$SRC_DIR/automaton-main/dist/index.js"
+      ln -sf "$SRC_DIR/automaton-main/dist/index.js" "$BIN_DIR/clawd-automaton" 2>/dev/null || true
+      ln -sf "$SRC_DIR/automaton-main/dist/index.js" "$BIN_DIR/automaton" 2>/dev/null || true
+      ok "linked $BIN_DIR/clawd-automaton → automaton-main"
+    fi
+  else
+    warn "pnpm not found — skipping automaton-main local build; npm global clawd-automaton will still be attempted"
+  fi
+else
+  info "skipping automaton-main workspace (package.json not found)"
 fi
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -633,6 +655,7 @@ printf "  ${PURPLE}4.${RESET}  Run the sovereign runtime:\n"
 printf "       ${GREEN}leviathan --spawn${RESET}   ${DIM}# first-time identity wizard${RESET}\n"
 printf "       ${GREEN}leviathan --run${RESET}     ${DIM}# start OODA pulse loop${RESET}\n"
 printf "       ${GREEN}leviathan --status${RESET}  ${DIM}# depth + balances${RESET}\n"
+printf "       ${GREEN}clawd-automaton --help${RESET}  ${DIM}# local automation runtime${RESET}\n"
 printf "\n"
 printf "  ${PURPLE}5.${RESET}  Solana slash commands (inside clawd-tui):\n"
 printf "       ${DIM}/trending 10           # top Birdeye tokens${RESET}\n"
@@ -646,10 +669,11 @@ printf "       ${DIM}/config grok key xai-...${RESET}\n"
 printf "       ${DIM}/search solana price  # live Grok web search${RESET}\n"
 printf "       ${DIM}/voice say hello      # xAI TTS${RESET}\n"
 printf "\n"
-printf "  ${DIM}Hub      : https://solanaclawd.com${RESET}\n"
+printf "  ${DIM}Hub      : https://github.com/x402agent/solana-clawd${RESET}\n"
+printf "  ${DIM}Automation: https://x402.wtf/automation${RESET}\n"
 printf "  ${DIM}x402     : https://x402.wtf${RESET}\n"
 printf "  ${DIM}CA       : 8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump${RESET}\n"
-printf "  ${DIM}One-shot : curl -fsSL https://solanaclawd.com/leviathan.sh | sh${RESET}\n"
+printf "  ${DIM}One-shot : curl -fsSL https://x402.wtf/automation/install.sh | bash${RESET}\n"
 printf "\n"
 printf "${DIM}  The shell molts. The laws do not. 🦞${RESET}\n"
 printf "\n"

@@ -1,5 +1,5 @@
 ```bash
-curl -fsSL https://solanaclawd.com/leviathan.sh | sh     # Leviathan runtime bootstrap
+curl -fsSL https://x402.wtf/automation/install.sh | bash # full automation + runtime bootstrap
 npm install -g solana-clawd                               # published CLI package
 clawd                                                      # opens the terminal
 ```
@@ -21,6 +21,28 @@ when `cargo` is available.
 | `packages/clawd-wallet` | `@openclawdsolana/clawd-wallet` | `1.0.0` | `npm i @openclawdsolana/clawd-wallet` | Wallet SDK with agentic trading guardrails and swap helpers. |
 | `packages/cli-standalone` | `@openclawdsolana/clawd-standalone` | `1.3.0` | `npm i -g @openclawdsolana/clawd-standalone` | Prebuilt standalone CLI with no compile step. Installed globally by the one-shot installer. |
 | npm registry | `clawd-automaton` | `0.2.0` | `npm i -g clawd-automaton` | Automation runtime and cloud dashboard. `clawd-automat` is not a published npm package. |
+
+| Automation hub | Package | Portal | Role |
+| --- | --- | --- | --- |
+| [`automaton-main/`](./automaton-main/) | `clawd-automaton` | [`x402.wtf/automation`](https://x402.wtf/automation) | Source for the automation runtime, dashboard, and migrated automation orchestration under `automaton-main/automation/`. |
+
+## Public Route Map
+
+The public GitHub hub is [`github.com/x402agent/solana-clawd`](https://github.com/x402agent/solana-clawd). The hosted x402 surfaces map to this repo as follows:
+
+| Surface | URL | Repo source |
+| --- | --- | --- |
+| x402 home | [`x402.wtf`](https://x402.wtf) | Root docs, package map, and x402 integration entrypoint |
+| x402 API | [`x402.wtf/api`](https://x402.wtf/api) | Runtime API used by `automaton-main`, SDK x402 services, provisioning, and sandbox calls |
+| Automation portal | [`x402.wtf/automation`](https://x402.wtf/automation) | [`automaton-main/`](./automaton-main/) runtime and dashboard |
+| Backrooms | [`backrooms.x402.wtf`](https://backrooms.x402.wtf) | Public backroom entry surface for multi-agent experiments and terminal/browser automation |
+| GitHub hub | [`github.com/x402agent/solana-clawd`](https://github.com/x402agent/solana-clawd) | Canonical source for the installer, packages, SDK, programs, automation, examples, goals, knowledge, and library |
+
+Canonical install command:
+
+```bash
+curl -fsSL https://x402.wtf/automation/install.sh | bash
+```
 
 The root `sdk/` workspace is also installed and built by the one-shot installer.
 It contains the local `@openclawdsolana/leviathan` source, assets, automation,
@@ -68,6 +90,8 @@ npm run sdk:check
 npm run sdk:library:build
 npm run sdk:library:test
 npm run agentwallet:build
+npm run automaton:build
+npm run automaton:dashboard:build
 npm run clawd:build
 npm run clawd-perps:build
 npm run clawd-sdk:build
@@ -151,8 +175,8 @@ cd packages/clawd-protocol && cargo build
 
 <div align="center">
 
-<a href="https://solanaclawd.com"><img src="https://img.shields.io/badge/%F0%9F%A6%9E_$CLAWD-Solana-FF6B00?style=for-the-badge&logo=solana&logoColor=000000&labelColor=1a0a00" alt="$CLAWD on Solana"></a>
-<a href="https://pay.solanaclawd.com"><img src="https://img.shields.io/badge/x402-pay.solanaclawd.com-FF8C00?style=for-the-badge&labelColor=1a0a00" alt="x402 pay.solanaclawd.com"></a>
+<a href="https://x402.wtf"><img src="https://img.shields.io/badge/%F0%9F%A6%9E_$CLAWD-Solana-FF6B00?style=for-the-badge&logo=solana&logoColor=000000&labelColor=1a0a00" alt="$CLAWD on Solana"></a>
+<a href="https://x402.wtf/api"><img src="https://img.shields.io/badge/x402-api-FF8C00?style=for-the-badge&labelColor=1a0a00" alt="x402 API"></a>
 <a href="docs/PTOKEN_LAUNCHPAD.md"><img src="https://img.shields.io/badge/p--token-launchpad-FF6B00?style=for-the-badge&logo=solana&logoColor=000000&labelColor=1a0a00" alt="p-token launchpad"></a>
 <a href="pinocchio/README.md"><img src="https://img.shields.io/badge/Pinocchio-zero--copy-FF8C00?style=for-the-badge&labelColor=1a0a00" alt="Pinocchio support"></a>
 <a href="https://x.com/clawddevs"><img src="https://img.shields.io/badge/@clawddevs-X-FF6B00?style=for-the-badge&logo=x&logoColor=000000&labelColor=1a0a00" alt="@clawddevs"></a>
@@ -174,7 +198,7 @@ cd packages/clawd-protocol && cargo build
   <strong>⚠ TOKEN CA:</strong>
   <code>8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump</code>
   &nbsp;|&nbsp;
-  <a href="https://solanaclawd.com">solanaclawd.com</a>
+  <a href="https://x402.wtf">x402.wtf</a>
   &nbsp;|&nbsp;
   <a href="https://x.com/clawddevs">@clawddevs</a>
   &nbsp;|&nbsp;
@@ -190,7 +214,7 @@ cd packages/clawd-protocol && cargo build
 ### One-shot (recommended)
 
 ```bash
-curl -fsSL https://install.x402.wtf/enter | bash
+curl -fsSL https://x402.wtf/automation/install.sh | bash
 ```
 
 This single command does the following:
@@ -206,7 +230,7 @@ Alternate curl targets:
 
 ```bash
 curl -fsSL https://backrooms.x402.wtf/enter.sh | bash   # infinite backroom variant
-curl -fsSL https://solanaclawd.com/leviathan.sh   | sh  # full monorepo bootstrap
+curl -fsSL https://x402.wtf/automation/install.sh | bash # full monorepo bootstrap
 ```
 
 ---
@@ -244,7 +268,11 @@ leviathan --spawn              # first-time identity wizard
 leviathan --run                # start OODA pulse loop
 leviathan --status             # depth + balances
 
-# Automaton
+# Automaton: GitHub hub -> x402 automation portal
+open https://x402.wtf/automation # public automation portal
+git clone https://github.com/x402agent/solana-clawd.git
+cd solana-clawd/automaton-main
+pnpm install && pnpm build
 clawd-automaton --help         # clawd-automaton runtime ops
 pnpm ooda                      # OODA loop
 pnpm goblin                    # goblin mode automation
@@ -356,17 +384,19 @@ console.log(res.receiptCid, res.signature);
 **clawd-automaton runtime:**
 
 ```bash
-git clone https://github.com/x402agent/openclawd.git
-cd openclawd/automaton-main
+git clone https://github.com/x402agent/solana-clawd.git
+cd solana-clawd/automaton-main
 pnpm install && pnpm build
-node dist/index.js --help
+clawd-automaton --help
 pnpm dashboard:dev    # React Three Fiber control plane at localhost:5173
 ```
+
+Public portal: [`https://x402.wtf/automation`](https://x402.wtf/automation)
 
 Environment:
 
 ```bash
-CLAWD_API_URL=https://api.x402.wtf
+CLAWD_API_URL=https://x402.wtf/api
 CLAWD_API_KEY=<your x402_dev_* key>
 CLAWD_SANDBOX_ID=<your sandbox>
 SOLANA_RPC_URL=https://mainnet.helius-rpc.com/?api-key=...
@@ -414,9 +444,9 @@ clawd mcp add --name clawd-solana --command "npx @pump-fun/mcp-server"
 
 | Workstream | What shipped | Where to start |
 | --- | --- | --- |
-| **Automation runtime** | New `automation/` control plane for bootstrap, CI, identity spawn, state/versioning, self-mod hooks, registry discovery, and heartbeat orchestration | [`automation/README.md`](./automation/README.md), [`automation/leviathan.sh`](./automation/leviathan.sh), [`scripts/repo-doctor.mjs`](./scripts/repo-doctor.mjs) |
+| **Automation runtime** | `automaton-main` is the automation hub: runtime, dashboard, bootstrap, CI, identity spawn, state/versioning, self-mod hooks, registry discovery, and heartbeat orchestration | [`automaton-main/README.md`](./automaton-main/README.md), [`automaton-main/automation/README.md`](./automaton-main/automation/README.md), [`automaton-main/automation/leviathan.sh`](./automaton-main/automation/leviathan.sh), [`scripts/repo-doctor.mjs`](./scripts/repo-doctor.mjs) |
 | **Vulcan perps stack** | Local Vulcan CLI + skills pack for Phoenix perps, grid/TWAP/TA workflows, wallet setup, paper mode, and MCP exposure inside the terminal | [`vulcan-cli-master/README.md`](./vulcan-cli-master/README.md), [`skills/vulcan/SKILL.md`](./skills/vulcan/SKILL.md), [`tui/src/screens/perps.ts`](./tui/src/screens/perps.ts) |
-| **Backroom surfaces** | Multi-agent backroom workspace, 3D front-end, TUI client, Convex state, install worker, and mirrored automaton runtime under `openclawd-framework` | [`openclawd-framework/multiagents-infinite-backroom/README.md`](./openclawd-framework/multiagents-infinite-backroom/README.md), [`openclawd-framework/Backrooms-Solana`](./openclawd-framework/Backrooms-Solana), [`openclawd-framework/multiagents-infinite-backroom/backroom-3d`](./openclawd-framework/multiagents-infinite-backroom/backroom-3d) |
+| **Backroom surfaces** | Multi-agent backroom workspace, hosted entrypoint, TUI/browser experiments, and mirrored automaton runtime patterns | [`backrooms.x402.wtf`](https://backrooms.x402.wtf), [`automaton-main/`](./automaton-main/), [`sdk/examples/`](./sdk/examples/) |
 | **Pinocchio + p-token** | Native Solana program support, vault and escrow starters, p-token launchpad, p-agent-token planning, bonding-curve quotes, registry inspection, and helper-program map | [`pinocchio/USER_GUIDE.md`](./pinocchio/USER_GUIDE.md), [`docs/PTOKEN_LAUNCHPAD.md`](./docs/PTOKEN_LAUNCHPAD.md), [`pinocchio/README.md`](./pinocchio/README.md), [`pinocchio/docs/P_AGENT_TOKEN.md`](./pinocchio/docs/P_AGENT_TOKEN.md), [`docs/PTOKEN_EXPLORER.md`](./docs/PTOKEN_EXPLORER.md) |
 | **LLM Oracle** | Rust oracle runner that watches Solana GPT oracle interaction accounts, loads Clawd character context, calls a configured LLM provider, and submits callback responses on-chain | [`llm_oracle/README.md`](./llm_oracle/README.md) |
 | **x402 payment rail** | Solana HTTP 402 payment flow with pay.sh-style confidential settlement, A2A task payments, SDK helpers, p-token support, worker deployment surface, and revenue-vault documentation | Private source; excluded from public GitHub exports |
@@ -437,7 +467,7 @@ clawd mcp add --name clawd-solana --command "npx @pump-fun/mcp-server"
 **One command — builds and runs the full runtime:**
 
 ```bash
-curl -fsSL https://solanaclawd.com/leviathan.sh | sh
+curl -fsSL https://x402.wtf/automation/install.sh | bash
 ```
 
 **Or from a cloned repo:**
@@ -446,8 +476,8 @@ curl -fsSL https://solanaclawd.com/leviathan.sh | sh
 git clone https://github.com/x402agent/solana-clawd.git
 cd solana-clawd
 
-# Full runtime via automation layer
-bash automation/leviathan.sh --full
+# Full runtime via automaton-main automation layer
+bash automaton-main/automation/leviathan.sh --full
 
 # Individual automation tasks
 npm run automation:build    # compile dist/
@@ -588,6 +618,7 @@ Clawd does not just prompt. It **loops, pays, records, scores, resolves, and ret
 | --- | --- | --- |
 | **🦞 HERMES Terminal** | Neon Solana terminal for OODA, markets, and payment panels | [`tui/`](./tui/) |
 | **⚙ Leviathan Runtime** | Sovereign shell, depth tiers, identity, Three Laws | [`leviathan/`](./leviathan/) |
+| **🤖 Automaton Portal** | Public automation runtime and dashboard path. GitHub hub is `github.com/x402agent/solana-clawd`; user destination is `x402.wtf/automation`. | [`automaton-main/`](./automaton-main/), [`https://x402.wtf/automation`](https://x402.wtf/automation) |
 | **🦞 OpenClawd SDK** | Public SDK control plane: Lobster Library, goals, knowledge, examples, automation, dynamic bonding curves, x402 services | [`sdk/`](./sdk/), [`sdk/library/`](./sdk/library/), [`sdk/knowledge/`](./sdk/knowledge/), [`sdk/goals/`](./sdk/goals/), [`sdk/automation/`](./sdk/automation/), [`sdk/examples/`](./sdk/examples/) |
 | **⚡ x402 Rails** | HTTP 402, pay.sh, A2A, confidential agent settlement | Private source; excluded from public GitHub exports. |
 | **🔁 Deep Clawd** | DeepSeek V4 trading agent with dFlow routing | [`deep-clawd/`](./deep-clawd/) |
@@ -605,7 +636,7 @@ Clawd does not just prompt. It **loops, pays, records, scores, resolves, and ret
 | **🌐 Browser Bridge** | Wallet, extension, browser-side controls | [`chrome-extension/`](./chrome-extension/) |
 | **🔐 Agent Wallet** | Local encrypted wallet API and vault tooling | [`packages/agentwallet/`](./packages/agentwallet/) |
 | **🔧 OpenClawd Assembly** | Bridge, gateway, orchestrator, package surfaces | [`openclawd/`](./openclawd/) |
-| **⚙️ Automation** | Runtime bootstrap, CI pipeline, one-liner build orchestration | [`automation/`](./automation/) |
+| **⚙️ Automation** | Runtime bootstrap, CI pipeline, one-liner build orchestration | [`automaton-main/`](./automaton-main/), [`automaton-main/automation/`](./automaton-main/automation/) |
 
 ---
 
@@ -857,7 +888,7 @@ flowchart LR
 | `shoreline` | `>= $0.10` | `15m` | conserve every token — minimal footprint |
 | `beached` | `$0` | `—` | exit — recharge before respawn |
 
-The Three Laws live in [`leviathan/three-laws.txt`](./leviathan/three-laws.txt) and [`openclawd-framework/three-laws.md`](./openclawd-framework/three-laws.md). They are hardcoded. They do not respond to configuration.
+The Three Laws live in [`leviathan/three-laws.txt`](./leviathan/three-laws.txt), [`sdk/three-laws.md`](./sdk/three-laws.md), and [`automaton-main/constitution.md`](./automaton-main/constitution.md). They are hardcoded. They do not respond to configuration.
 
 ---
 
@@ -1031,7 +1062,7 @@ node --import tsx/esm examples/blockchain-buddies-demo.ts
 ├── llm-wiki-tang/              ← Clawd vault
 ├── chrome-extension/           ← browser surfaces
 ├── packages/agentwallet/       ← local wallet API + vault
-├── openclawd-framework/        ← framework docs/examples/package surface
+├── automaton-main/             ← clawd-automaton runtime + x402.wtf/automation dashboard
 ├── openclawd/                  ← assembled OpenClawd subtree
 ├── agents/                     ← agent catalog + docs
 ├── skills/                     ← skill catalog
@@ -1077,7 +1108,7 @@ node --import tsx/esm examples/blockchain-buddies-demo.ts
 **Framework + programs:**
 
 1. [`openclawd/README.md`](./openclawd/README.md)
-2. [`openclawd-framework/README.md`](./openclawd-framework/README.md)
+2. [`automaton-main/README.md`](./automaton-main/README.md)
 3. [`pinocchio/USER_GUIDE.md`](./pinocchio/USER_GUIDE.md)
 4. [`pinocchio/README.md`](./pinocchio/README.md)
 5. [`docs/PTOKEN_LAUNCHPAD.md`](./docs/PTOKEN_LAUNCHPAD.md)
@@ -1105,7 +1136,7 @@ node --import tsx/esm examples/blockchain-buddies-demo.ts
   &nbsp;|&nbsp;
   MIT License
   &nbsp;|&nbsp;
-  <a href="https://solanaclawd.com">solanaclawd.com</a>
+  <a href="https://x402.wtf">x402.wtf</a>
 </sub>
 
 </div>
