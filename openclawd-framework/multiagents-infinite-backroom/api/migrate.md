@@ -27,9 +27,29 @@ Important current assumptions:
 - public origin is hardcoded around `https://backrooms.x402.wtf`
 - 3D frontend origin is currently allowed as `https://backroom-3d.fly.dev`
 - the API assumes DeepSeek or OpenRouter env vars at process boot
-- no first-class user auth exists
-- no first-class API key issuance exists
+- FastAPI now has an opt-in API key auth layer in [auth.py](/Users/8bit/bots/Cladwbot-solana/solana-clawd/openclawd-framework/multiagents-infinite-backroom/api/auth.py:1)
+- API key issuance is proxied through Convex at `POST /v1/keys`
 - no persistent app database exists inside `api/`
+
+## Implemented In This Repo
+
+The FastAPI side now includes:
+
+- [auth.py](/Users/8bit/bots/Cladwbot-solana/solana-clawd/openclawd-framework/multiagents-infinite-backroom/api/auth.py:1) for bearer-token extraction, SHA-256 token hashing, Convex verification, admin bootstrap auth, and usage logging
+- `GET /v1/auth/status` to inspect auth readiness
+- `POST /v1/keys` to forward admin key creation to Convex
+- `POST /v1/machines/handshake` for Fly or other machine clients
+- scoped protection on chat, loop, perps, prediction, arena, and orchestration routes
+
+Auth is intentionally opt-in for migration safety:
+
+```bash
+CLAWD_API_AUTH_REQUIRED=true
+CONVEX_SITE_URL=https://your-convex-site.convex.site
+CLAWD_ADMIN_API_KEY=use-a-long-random-bootstrap-secret
+```
+
+With `CLAWD_API_AUTH_REQUIRED=false`, the dependency still records intended scopes but does not reject unauthenticated calls. This lets the current demo behavior keep running while Convex and the new site are being built.
 
 ## Existing Touchpoints To Respect
 
@@ -239,34 +259,42 @@ Scopes should at least include:
 - `machine:connect`
 - `admin:keys`
 
-## FastAPI Changes Another Agent Should Make
+## FastAPI Changes Already Started
 
-### 1. Add auth middleware / dependency
+### 1. Auth middleware / dependency
 
-Create a new Python module like:
+Implemented module:
 
 - `api/auth.py`
 
-It should:
+It already:
 
 - read bearer token
 - support public routes separately
 - call Convex to validate key
 - attach auth context to request
+- log usage to Convex when configured
 
 Public routes can remain public:
 
 - `/`
 - `/healthz`
-- maybe readonly metadata routes
+- `/v1/auth/status`
+- metadata routes
+- installer routes
 
 Protected routes should require scopes:
 
-- `/loop`
-- `/enter`
-- `/perps/*`
-- `/prediction/*`
-- orchestration execution/planning routes if exposed to users
+- `/loop`: `agents:loop`
+- `/enter`: `chat:write`
+- `/conversation`: `chat:read`
+- `/agent1`, `/agent2`, `/agent3`, `/reset`: `chat:write`
+- `/perps/markets`, `/perps/ticker/*`, `/arena`: `perps:read`
+- `/perps/paper/*`: `perps:paper`
+- `/perps/order`: `perps:live`
+- `/prediction/markets`: `prediction:read`
+- `/prediction/order`: `prediction:trade`
+- `/clawd/orchestrate`: `agents:loop`
 
 ### 2. Replace hardcoded external URLs
 
@@ -433,6 +461,48 @@ If the next agent wants a concrete minimum:
 - `POST /clawd/machines/handshake`
 - `POST /clawd/usage/log`
 - `GET /clawd/projects/:id`
+
+The FastAPI implementation expects:
+
+### `POST /clawd/keys/verify`
+
+Request:
+
+```json
+{
+  "tokenHash": "sha256 hex",
+  "tokenPrefix": "clawd_live_xxxx",
+  "requiredScopes": ["chat:write"],
+  "route": "/enter",
+  "method": "GET",
+  "machineId": "optional"
+}
+```
+
+Response:
+
+```json
+{
+  "valid": true,
+  "subject": "user-or-project-id",
+  "projectId": "project id",
+  "apiKeyId": "key id",
+  "machineId": "machine id if applicable",
+  "scopes": ["chat:write", "agents:loop"]
+}
+```
+
+### `POST /clawd/keys/create`
+
+Called by `POST /v1/keys` after `admin:keys` auth. Convex should generate the raw key, store only its hash, and return the raw key exactly once.
+
+### `POST /clawd/machines/handshake`
+
+Called by `POST /v1/machines/handshake` after `machine:connect` auth. It should register or refresh the Fly machine record and return machine config for the client.
+
+### `POST /clawd/usage/log`
+
+Best-effort usage logging. It should never be required for request success.
 
 ## Hard Rules
 
