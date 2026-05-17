@@ -1,0 +1,70 @@
+{
+  "name": "@openclawdsolana/clawd-sdk",
+  "version": "0.1.0",
+  "description": "OpenClawd Solana SDK — Agent & token launches with adaptive bonding curves, Token2022, pTokens, and intelligent vault mechanics",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./idl": {
+      "types": "./dist/idl/index.d.ts",
+      "import": "./dist/idl/index.js"
+    },
+    "./bonding-curve": {
+      "types": "./dist/bonding-curve/index.d.ts",
+      "import": "./dist/bonding-curve/index.js"
+    },
+    "./token": {
+      "types": "./dist/token/index.d.ts",
+      "import": "./dist/token/index.js"
+    },
+    "./vault": {
+      "types": "./dist/vault/index.d.ts",
+      "import": "./dist/vault/index.js"
+    },
+    "./agent": {
+      "types": "./dist/agent/index.d.ts",
+      "import": "./dist/agent/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "vitest run",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "solana",
+    "sdk",
+    "bonding-curve",
+    "token2022",
+    "agent-launch",
+    "defi",
+    "vault",
+    "openclawd"
+  ],
+  "license": "MIT",
+  "files": ["dist", "src"],
+  "dependencies": {
+    "@coral-xyz/anchor": "^0.31.0",
+    "@solana/spl-token": "^0.4.14",
+    "@solana/web3.js": "^1.98.4",
+    "bn.js": "^5.2.1",
+    "bs58": "^6.0.0"
+  },
+  "devDependencies": {
+    "@types/bn.js": "^5.1.5",
+    "@types/node": "^20.10.0",
+    "tsx": "^4.7.0",
+    "typescript": "^5.9.3",
+    "vitest": "^2.0.0"
+  },
+  "peerDependencies": {
+    "@solana/web3.js": "^1.98.0"
+  }
+}

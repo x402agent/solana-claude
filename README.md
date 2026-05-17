@@ -180,6 +180,7 @@ clawd-perps perps order place BTC-PERP --side buy --size 0.1 --type market
 ### Quick-start snippets
 
 **Solana-aware TUI slash commands:**
+
 ```bash
 clawd-tui
 # Inside the TUI:
@@ -192,6 +193,7 @@ clawd-tui
 ```
 
 **clawd-code multi-provider:**
+
 ```bash
 clawd-code
 # Inside the CLI:
@@ -203,6 +205,7 @@ clawd-code
 ```
 
 **clawd-perps Phoenix perps:**
+
 ```bash
 clawd-perps perps market ticker BTC-PERP
 clawd-perps perps order place BTC-PERP --side buy --size 0.1 --type market
@@ -210,6 +213,7 @@ clawd-perps perps position tpsl BTC-PERP --tp 120000 --sl 90000 --side long
 ```
 
 **@openclawd/wallet — AI-gated trading:**
+
 ```typescript
 import { ClawdWallet, AgenticWallet, SwapService } from "@openclawd/wallet";
 
@@ -226,6 +230,7 @@ const quote = await swap.getQuote({
 ```
 
 **@solanaclawd/x402-client — auto-pay 402:**
+
 ```typescript
 import { clawdFetch } from "@solanaclawd/x402-client";
 
@@ -240,6 +245,7 @@ console.log(res.receiptCid, res.signature);
 ```
 
 **clawd-automaton runtime:**
+
 ```bash
 git clone https://github.com/x402agent/openclawd.git
 cd openclawd/automaton-main
@@ -247,7 +253,9 @@ pnpm install && pnpm build
 node dist/index.js --help
 pnpm dashboard:dev    # React Three Fiber control plane at localhost:5173
 ```
+
 Environment:
+
 ```bash
 CLAWD_API_URL=https://api.x402.wtf
 CLAWD_API_KEY=<your x402_dev_* key>
@@ -256,6 +264,7 @@ SOLANA_RPC_URL=https://mainnet.helius-rpc.com/?api-key=...
 ```
 
 **MCP server (Solana tools for Claude / any model):**
+
 ```bash
 clawd mcp add --name clawd-solana --command "npx @pump-fun/mcp-server"
 ```

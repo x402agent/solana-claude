@@ -1,0 +1,47 @@
+{
+  "name": "@openclawdsolana/clawd-wallet",
+  "version": "1.0.0",
+  "description": "🦞 @openclawd/wallet — Privy-embedded Solana wallet + AgenticWallet (Grok-gated trading) + Jupiter SwapService",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./react": {
+      "import": "./dist/react/index.js",
+      "types": "./dist/react/index.d.ts"
+    }
+  },
+  "files": ["dist", "README.md", "LICENSE"],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "clawd", "openclawd", "solana", "wallet", "privy",
+    "grok", "jupiter", "swap", "agentic", "trading"
+  ],
+  "author": "8bit",
+  "license": "MIT",
+  "homepage": "https://solanaclawd.com",
+  "repository": {
+    "type": "git",
+    "url": "https://solanaclawd.com",
+    "directory": "openclawd-framework/packages/clawd-wallet"
+  },
+  "dependencies": {
+    "@solana/web3.js": "^1.98.0",
+    "bs58": "^6.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.8.0",
+    "typescript": "^5.9.3"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}
