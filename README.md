@@ -657,7 +657,7 @@ The MCP server is the **central orchestration plane** of the entire Solana Clawd
 ### 13 Tool Categories
 
 | Category | Count | Description |
-|----------|-------|-------------|
+| -------- | ----- | ----------- |
 | solana | 11 | Public Solana market data (free) |
 | helius | 8 | Helius RPC/DAS/Webhooks |
 | x402 | 9 | Payment protocol + p-token metered billing |

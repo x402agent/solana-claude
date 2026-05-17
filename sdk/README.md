@@ -457,7 +457,7 @@ USDC: `EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v`
 
 ### Two-Leg Payment Flow
 
-```
+```text
 1. GET  /api/x402/catalog          → pick a route (apiPath + price)
 2. POST /agents/<id>/action        → 402 challenge + PAYMENT-REQUIRED header
 3.      sign Solana USDC transfer  → use blockhash from challenge.extra.recentBlockhash
@@ -485,7 +485,7 @@ Hold $CLAWD in your wallet and pay less. Send `X-Payer: <wallet>` on any gated c
 
 Every settled payment splits four ways (on-chain configurable per agent):
 
-```
+```text
   owner     — agent creator
   buyback   — $CLAWD buyback wallet
   treasury  — protocol treasury
@@ -582,7 +582,7 @@ When you run `install.sh` or `enter.sh`, you're registered in the Convex-backed 
 
 **Your agent ID** is a stable hash of your machine identity:
 
-```
+```text
 clawd-<sha256("$USER-hostname-clawd")[:16]>
 ```
 
