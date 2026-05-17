@@ -29,12 +29,17 @@ from .trading_arena import build_trading_arena
 from .clawd_orchestration import run_clawd_orchestration
 from .firecrawl_scraper import (
     async_crawl_and_inject,
+    async_sync_dreams_and_inject,
     crawl_dreams_and_inject,
     firecrawl_status,
     get_crawl_status,
+    get_dreams_context,
     get_job_info,
+    inject_cached_dreams_context,
+    load_dreams_cache,
     map_site,
     scrape_url,
+    sync_dreams_site,
 )
 from .solana_trading import (
     dflow_prediction_markets,
@@ -195,6 +200,13 @@ class MapRequest(BaseModel):
     url: str
     limit: int = Field(default=100, ge=1, le=5000)
     search: str | None = None
+
+
+class DreamsSyncRequest(BaseModel):
+    limit: int = Field(default=100, ge=1, le=200)
+    inject: bool = True
+    async_mode: bool = Field(default=False, alias="async")
+    max_chars: int = Field(default=24000, ge=1000, le=120000)
 
 
 # CORS — allow the 3D frontend and any tool
