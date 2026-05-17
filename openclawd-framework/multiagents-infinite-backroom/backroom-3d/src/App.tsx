@@ -118,6 +118,7 @@ export default function App() {
       <AutomatonRuntimePanel />
       <TradingArenaPanel />
       <ClawdOrchestrationPanel />
+      <ElectricDreamsPanel />
 
       {/* Top-right toolbar */}
       <div className="toolbar">
