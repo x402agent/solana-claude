@@ -16,6 +16,7 @@ import PerpsConstellation from './components/PerpsConstellation'
 import TradingArenaPanel from './components/TradingArenaPanel'
 import ClawdOrchestrationPanel from './components/ClawdOrchestrationPanel'
 import ElectricDreamsPanel from './components/ElectricDreamsPanel'
+import DreamsOrbs from './components/DreamsOrbs'
 
 const BASE_URL = 'https://backrooms.x402.wtf'
 
@@ -77,6 +78,7 @@ export default function App() {
         <fog attach="fog" args={['#1a1a1a', 8, 20]} />
         <Suspense fallback={<Html center><div style={{ color: '#ef5350', fontFamily: 'monospace' }}>Loading the backroom...</div></Html>}>
           <Backroom />
+          <DreamsOrbs />
           <PerpsConstellation />
           {agents.map((a) => (
             <group key={a.id} position={a.position}>
