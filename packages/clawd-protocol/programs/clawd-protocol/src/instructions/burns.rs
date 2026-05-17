@@ -47,6 +47,7 @@ pub struct EntropyBurn<'info> {
 }
 
 pub fn entropy_burn(ctx: Context<EntropyBurn>) -> Result<()> {
+    let vault_account_info = ctx.accounts.vault.to_account_info();
     let vault = &mut ctx.accounts.vault;
     let dbc_data = ctx.accounts.dbc_pool.try_borrow_data()?;
 
@@ -74,7 +75,7 @@ pub fn entropy_burn(ctx: Context<EntropyBurn>) -> Result<()> {
             BurnChecked {
                 mint: ctx.accounts.base_mint.to_account_info(),
                 from: ctx.accounts.inflation_reserve_account.to_account_info(),
-                authority: ctx.accounts.vault.to_account_info(),
+                authority: vault_account_info,
             },
             signer_seeds,
         ),
