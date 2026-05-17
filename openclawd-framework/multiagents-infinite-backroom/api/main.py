@@ -621,7 +621,7 @@ def firecrawl_dreams_stories(
     }
 
 
-@app.get("/firecrawl/dreams/context", dependencies=[Depends(require_scope("chat:read"))])
+@app.get("/firecrawl/dreams/context")
 def firecrawl_dreams_context(max_chars: int = Query(default=24000, ge=1000, le=120000)):
     """Return the bounded agent-ready context block built from cached Dreams stories."""
     return get_dreams_context(max_chars=max_chars)
