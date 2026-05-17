@@ -66,7 +66,8 @@ def integration_status() -> dict[str, Any]:
         except Exception:
             binary_source = "unknown"
     return {
-        "solanaRpcUrl": DEFAULT_SOLANA_RPC_URL,
+        "solanaRpcConfigured": bool(DEFAULT_SOLANA_RPC_URL),
+        "solanaRpcProvider": "helius" if "helius" in DEFAULT_SOLANA_RPC_URL.lower() else "custom",
         "phoenixApiBase": PHOENIX_API_BASE,
         "dflowMarketsApiUrl": DFLOW_MARKETS_API_URL,
         "dflowConfigured": bool(DFLOW_API_KEY),
