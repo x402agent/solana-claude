@@ -1,4 +1,7 @@
 warning: profiles for the non root package will be ignored, specify profiles at the workspace root:
 package:   /Users/8bit/bots/Cladwbot-solana/solana-clawd/programs/p-token-launchpad/Cargo.toml
 workspace: /Users/8bit/bots/Cladwbot-solana/solana-clawd/programs/Cargo.toml
-    Finished `dev` profile [unoptimized + debuginfo] target(s) in 1.21s
+    Blocking waiting for file lock on package cache
+    Blocking waiting for file lock on package cache
+    Blocking waiting for file lock on package cache
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.62s

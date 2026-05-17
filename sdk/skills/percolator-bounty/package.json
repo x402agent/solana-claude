@@ -1,0 +1,26 @@
+{
+  "name": "percolator-bounty",
+  "version": "0.1.0",
+  "description": "Leviathan skill — Percolator bounty4 STOXX50/SOL keeper + oracle monitor",
+  "type": "module",
+  "bin": {
+    "percolator-bounty": "./dist/cli.js"
+  },
+  "main": "./dist/cli.js",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx src/cli.ts"
+  },
+  "dependencies": {
+    "@solana/web3.js": "^1.95.4",
+    "@solana/spl-token": "^0.3.11"
+  },
+  "devDependencies": {
+    "@types/node": "^20.17.10",
+    "tsx": "^4.21.0",
+    "typescript": "^5.7.2"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

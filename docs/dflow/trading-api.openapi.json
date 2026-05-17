@@ -1,0 +1,3286 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "DFlow Aggregator",
+    "description": "DFlow Aggregator API",
+    "license": {
+      "name": "BUSL-1.1"
+    },
+    "version": "0.1.0"
+  },
+  "servers": [
+    {
+      "url": "https://quote-api.dflow.net"
+    }
+  ],
+  "paths": {
+    "/health-check": {
+      "get": {
+        "tags": [
+          "admin"
+        ],
+        "operationId": "handler_health_check",
+        "responses": {
+          "200": {
+            "description": "Healthy",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Unhealthy",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthCheckServiceUnavailableResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/intent": {
+      "get": {
+        "tags": [
+          "intent"
+        ],
+        "summary": "Returns a quote for a declarative swap",
+        "operationId": "intent_handler",
+        "parameters": [
+          {
+            "name": "userPublicKey",
+            "in": "query",
+            "description": "Base58-encoded address of the swapper's wallet. If specified, the response will include a\ntransaction allowing the user to submit the intent.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "inputMint",
+            "in": "query",
+            "description": "Base58-encoded input mint address",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "outputMint",
+            "in": "query",
+            "description": "Base58-encoded output mint address",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "amount",
+            "in": "query",
+            "description": "Input amount as a scaled integer. For example, 1 SOL is 1000000000.",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "slippageBps",
+            "in": "query",
+            "description": "Max allowed slippage for the swap. Allowed values are:\n- a u16 which specifies the maximum allowed slippage in basis points\n- the string value \"auto\", where the server determines the maximum allowed slippage\n  automatically",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/SlippageTolerance"
+            }
+          },
+          {
+            "name": "priceImpactTolerancePct",
+            "in": "query",
+            "description": "If specified, the API will return an error if the price impact of the route is greater than\nthe specified percentage. If unspecified, the server will determine the threshold. For\nexample, 10 is 10% and 100 is 100%.",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "platformFeeBps",
+            "in": "query",
+            "description": "Optional platform fee in basis points. This is taken out of the output of the swap.",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "feeAccount",
+            "in": "query",
+            "description": "Base58-encoded address of the token account that will receive the platform fee if a platform\nfee applies to the swap. If specified, this account's mint must match the output mint for\nthe swap.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "referralAccount",
+            "in": "query",
+            "description": "Base58-encoded address of the referral account associated with the fee account.\nIf the fee account isn't a referral token account derived from the seeds\n`[\"referral_ata\", referral_account, mint]` and the Referral program ID\n`REFER4ZgmyYx9c6He5XfaTMiGfdLwRnkV4RPp9t9iF3`, this should be unspecified. If specified, the\nthe intent opening transaction will create the `fee_account` if it doesn't already exist.\nThe user pays for the creation of the fee account. Ignored if `fee_account` is unspecified.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "wrapAndUnwrapSol",
+            "in": "query",
+            "description": "If false, the intent will use wrapped SOL",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "feeBudget",
+            "in": "query",
+            "description": "Maximum amount that the user is willing to pay to have the intent processed in lamports.\nThis includes all transaction fees and tips for the open transaction and all transaction\nfees and tips for the fill and close transactions. If unspecified, the server will determine\nthe fee budget.",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "maxAutoFeeBudget",
+            "in": "query",
+            "description": "Limit on the automatically-determined maximum fee budget in lamports. If the `fee_budget` is\nunspecified, then the server's automatically-determined fee budget will be capped at this\nvalue. If unspecified, the limit defaults to 0.002 SOL. The final fee budget used is\n`min(max_auto_fee_budget, auto_fee_budget_determined_by_server)`.",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64",
+              "minimum": 0
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Declarative swap quote",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IntentQuoteResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IntentBadRequestResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IntentInternalServerErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Service unavailable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IntentServiceUnavailableResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/order": {
+      "get": {
+        "tags": [
+          "order"
+        ],
+        "summary": "Returns a quote and optionally a transaction",
+        "operationId": "order_handler",
+        "parameters": [
+          {
+            "name": "userPublicKey",
+            "in": "query",
+            "description": "Base58-encoded address of the swapper's wallet. If specified, the response will include a\ntransaction allowing the user to submit the order.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "inputMint",
+            "in": "query",
+            "description": "Base58-encoded input mint address",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "outputMint",
+            "in": "query",
+            "description": "Base58-encoded output mint address",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "amount",
+            "in": "query",
+            "description": "Input amount as a scaled integer. For example, 1 SOL is 1000000000.",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "slippageBps",
+            "in": "query",
+            "description": "Max allowed slippage for the swap. Default is \"auto\". Allowed values are:\n- a u16 which specifies the maximum allowed slippage in basis points\n- the string value \"auto\", where the server determines the maximum allowed slippage\n  automatically",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/SlippageTolerance"
+            }
+          },
+          {
+            "name": "perLegSlippage",
+            "in": "query",
+            "description": "If true or unspecified, per-leg slippage checks are enabled. If false, per-leg slippage\nchecks are disabled.",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "predictionMarketSlippageBps",
+            "in": "query",
+            "description": "Max allowed slippage for prediction market orders. Allowed values are:\n- a u16 which specifies the maximum allowed slippage in basis points\n- the string value \"auto\", where the server determines the maximum allowed slippage\n  automatically\n\nIf specified as a u16:\n - must be greater than or equal to `slippage_bps`\n - this value will be used as the slippage for prediction market orders\n\nIf unspecified or \"auto\":\n - the server determines the maximum allowed slippage for prediction market orders\n\nThis will be the slippage value included in the created Prediction Order. This parameter is\nnot used in routing, but only affects the minimum amount of Outcome mint that a prediction\norder must produce to fill successfully.",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/SlippageTolerance"
+            }
+          },
+          {
+            "name": "priceImpactTolerancePct",
+            "in": "query",
+            "description": "If specified, the API will return an error if the price impact of the route is greater than\nthe specified percentage. If unspecified, the server will determine the threshold. For\nexample, 10 is 10% and 100 is 100%.",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "dexes",
+            "in": "query",
+            "description": "Comma-separated list of DEXes to include. If not specified, all DEXes will be included.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "excludeDexes",
+            "in": "query",
+            "description": "Comma-separated list of DEXes to exclude. If not specified, all DEXes will be included.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "onlyDirectRoutes",
+            "in": "query",
+            "description": "If true, only use single-leg routes",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "maxRouteLength",
+            "in": "query",
+            "description": "If specified, the route will be limited to the specified number of legs. Ignored if\n`only_direct_routes` is true.",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "onlyJitRoutes",
+            "in": "query",
+            "description": "If true, only use JIT routes. Every leg in the route will use the JIT router.",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "forJitoBundle",
+            "in": "query",
+            "description": "If true, only use routes that are compatible with Jito bundles. This should only be\nspecified as true if the swap will be executed in a Jito bundle. Default is false.",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "allowSyncExec",
+            "in": "query",
+            "description": "If true, allow synchronous execution. Default is true.",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "allowAsyncExec",
+            "in": "query",
+            "description": "If true, allow asynchronous execution. Default is true.",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "restrictRevertMint",
+            "in": "query",
+            "description": "If true, enforces that the input mint must be the revert mint for orders that use\nasynchronous execution.\nDefault is false.",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "platformFeeMode",
+            "in": "query",
+            "description": "Optional platform fee mode. If not specified, the default is `outputMint`. For async\nprediction market swaps, this is ignored, and the platform fee is paid in the stablecoin\nmint.",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/PlatformFeeMode"
+            }
+          },
+          {
+            "name": "platformFeeBps",
+            "in": "query",
+            "description": "Optional platform fee in basis points. This should only be nonzero if the swap will collect\nthe platform fee. The fee account must be able to collect the fee mint at execution time.",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "platformFeeScale",
+            "in": "query",
+            "description": "Optional platform fee scale for native prediction market swaps and async prediction market\nswaps, with 3 decimals. This should only be nonzero if the swap will collect the platform\nfee. The fee account must be able to collect the fee mint at fill time. Must be\n>= 0 and < 1000. For example, a value of 50 means 0.050.",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "feeAccount",
+            "in": "query",
+            "description": "Base58-encoded address of the token account that will receive the platform fee if a platform\nfee applies to the swap. If specified, this account's mint must match the fee mint for the\nswap. This must be specified if the platform fee is nonzero.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "positiveSlippageFeeAccount",
+            "in": "query",
+            "description": "Base58-encoded address of the token account that will receive the positive slippage fee.\nThis must be a token account for the output mint, regardless of the platform fee mode. If at\nswap execution time this account can't receive the positive slippage fee, then the positive\nslippage fee transfer is skipped. If the platform fee mode is `outputMint` and the platform\nfee account is specified, then this must be unspecified (in which case the platform fee\naccount will be used) or match the platform fee account. Otherwise, this must be specified.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "positiveSlippageLimitPct",
+            "in": "query",
+            "description": "Limit on the positive slippage fee in percent. The positive slippage fee is limited to the\nlesser of (1) the excess actual out amount above the quoted amount and (2) this percentage\nof the actual out amount after platform fee.",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "sponsor",
+            "in": "query",
+            "description": "Base58-encoded address of the sponsor's wallet. If specified, the sponsor will pay the\ntransaction fee and for token account creation, and both the user and the sponsor must sign\nthe swap transaction. This can be used to implement gasless swaps.\n\nCannot be specified alongside `predictionMarketInitPayer` parameter.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sponsorExec",
+            "in": "query",
+            "description": "If true, the sponsor will be the executor of the swap for sponsored swaps. If false, the\nuser will be the executor of the swap for sponsored swaps. Default is true.",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "destinationTokenAccount",
+            "in": "query",
+            "description": "Base58-encoded address of the account that will receive the output token. This is either the\naddress of the destination token account, or, if the output is native SOL, the address of\nthe destination wallet. If both `destinationTokenAccount` and `destinationWallet` are\nunspecified, the user's associated token account for the output mint will be used if the\noutput isn't native SOL, and the user's wallet will be used if the output is native SOL.\nIf the output isn't native SOL, the specified account must exist before the swap executes,\nor else the swap will fail.\nMutually exclusive with `destinationWallet`.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "destinationWallet",
+            "in": "query",
+            "description": "Base58-encoded address of the wallet that will receive the output token. Mutually exclusive\nwith `destinationTokenAccount`. If specified:\n1. If the swap outputs native SOL, the transaction will output native SOL to the specified\n   wallet.\n2. If the swap outputs wrapped SOL or an SPL token, the transaction will send output to the\n   specified wallet's associated token account for the output mint, creating the associated\n   token account if it doesn't exist at execution time.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "outputCloseAuthority",
+            "in": "query",
+            "description": "Base58-encoded address of the close authority to assign to the output token account. If\nspecified, the swap instruction will idempotently initialize the output token account and\nset its close authority to the specified address. The action is a no-op if the output\ntoken account already exists at execution time.\n\nCannot be used when the output mint is SOL (wrapped or native). Cannot be used with\n`destinationTokenAccount` or `destinationWallet`.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "revertWallet",
+            "in": "query",
+            "description": "Base58-encoded address of the wallet that will receive the revert mint if the order is an\nasynchronous order and it reverts.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "wrapAndUnwrapSol",
+            "in": "query",
+            "description": "If false, the order will use wrapped SOL",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "prioritizationFeeLamports",
+            "in": "query",
+            "description": "Prioritization fee in lamports. Mutually exclusive with `computeUnitPriceMicroLamports`.\nIf both `prioritizationFeeLamports` and `computeUnitPriceMicroLamports` are unspecified, the\ndefault of `prioritizationFeeLamports=\"auto\"` will be used.\nAllowed values are:\n- an unsigned 32-bit integer which specifies the prioritization fee in lamports\n- the string value \"auto\", where the server determines the fee automatically\n- the string value \"medium\", where the server determines the fee automatically\n- the string value \"high\", where the server determines the fee automatically\n- the string value \"veryHigh\", where the server determines the fee automatically\n- the string value \"disabled\", where the server leaves the prioritization fee unspecified",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/OrderPrioritizationFeeLamports"
+            }
+          },
+          {
+            "name": "prioritizationFeeMaxLamports",
+            "in": "query",
+            "description": "Maximum lamports to cap the prioritization fee determined by the server",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "computeUnitPriceMicroLamports",
+            "in": "query",
+            "description": "Compute unit price in micro-lamports. Mutually exclusive with `prioritizationFeeLamports`.",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "dynamicComputeUnitLimit",
+            "in": "query",
+            "description": "If true, the server will simulate the transaction to determine its compute unit limit. If\nunspecified or false, the transaction will use the default compute unit limit.",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "includeJitoSandwichMitigationAccount",
+            "in": "query",
+            "description": "If specified, the transaction will include a Jito sandwich mitigation account in the swap\ninstruction. Allowed values are:\n- `true` - uses the default Jito sandwich mitigation account\n- `false` - does not include the account\n- A base58-encoded account address - uses the specified account\n\nIf unspecified, the account is not included.\nSee https://docs.jito.wtf/lowlatencytxnsend/#sandwich-mitigation for more details.",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/IncludeJitoSandwichMitigationAccount"
+            }
+          },
+          {
+            "name": "predictionMarketInitPayer",
+            "in": "query",
+            "description": "Base58-encoded address of the account that will pay for market initialization if the market\nis uninitialized. If specified and the market is uninitialized, this account must sign the\ntransaction, and the transaction will initialize the market if it is uninitialized at\nexecution time. If this account differs from `userPublicKey`, the transaction will have\ntwo signers.\n\nCannot be specified alongside `sponsor` parameter.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "outcomeAccountRentRecipient",
+            "in": "query",
+            "description": "Base58-encoded address of the account that will receive the rent from closing the outcome\ntoken account if it is empty after sale/redemption. If unspecified, the user's public key\nwill be used.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "skipPumpfunCashbackClaim",
+            "in": "query",
+            "description": "If true, Pump.fun cashback will not be claimed for cashback-eligible coins. When set, sell\nquotes include the full creator fee, and execution skips Pump.fun cashback claiming. Default\nis false. Cannot be used with sponsor-executed swaps (`sponsorExec` is true or defaulted to\ntrue).",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "allowBondingCurveUnderconsumption",
+            "in": "query",
+            "description": "If true, allow buys on bonding curves to succeed even when the bonding curve cannot fully\nconsume the input (for example, when the curve is near completion). Default is false. Cannot\nbe used with sponsor-executed swaps (`sponsorExec` is true or defaulted to true).",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "includeAddressLookupTables",
+            "in": "query",
+            "description": "If true, the response will include the address lookup tables used in the transaction,\nwith only the entries referenced by the transaction, enabling clients to deserialize and\nrecompile the transaction with additional instructions without fetching ALTs from RPC.\nDefault is false.",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "maxAccounts",
+            "in": "query",
+            "description": "Maximum allowed number of accounts that the transaction can use. Mutually exclusive with\n`reserveAccounts`.",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "maxTransactionSize",
+            "in": "query",
+            "description": "Maximum allowed size of the transaction in bytes. Mutually exclusive with\n`reserveTransactionSize`.",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "reserveAccounts",
+            "in": "query",
+            "description": "Number of accounts to leave unused in the transaction. The server will ensure that\nthe transaction uses at most `TRANSACTION_MAX_ACCOUNTS - reserveAccounts` accounts. Mutually\nexclusive with `maxAccounts`. If you add instructions to the transaction, use this parameter\nto specify the number of unique accounts that you will add to the transaction. Note that you\nshould not count accounts that are already included in the transaction.",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "reserveTransactionSize",
+            "in": "query",
+            "description": "Number of bytes to leave unused in the transaction. The server will ensure that the\ntransaction size is at most `TRANSACTION_MAX_SIZE - reserveTransactionSize` bytes. Mutually\nexclusive with `maxTransactionSize`. If you add instructions to the transaction, use this\nparameter to specify the number of bytes that your modifications will add to the\ntransaction.",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 0
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Order response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderBadRequestResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderInternalServerErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Service unavailable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderServiceUnavailableResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/order-status": {
+      "get": {
+        "tags": [
+          "order"
+        ],
+        "summary": "Returns the status of an order. Only prediction market orders are supported.",
+        "operationId": "order_status_handler",
+        "parameters": [
+          {
+            "name": "signature",
+            "in": "query",
+            "description": "Base58-encoded transaction signature of the transaction received from the order endpoint.\nOnly prediction market order signatures are supported.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "lastValidBlockHeight",
+            "in": "query",
+            "description": "Last block height at which the transaction is valid",
+            "required": false,
+            "schema": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "format": "int64",
+              "minimum": 0
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Order status",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderStatusResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderStatusBadRequestResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Order not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderStatusNotFoundResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderStatusInternalServerErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/prediction-market-init": {
+      "get": {
+        "tags": [
+          "prediction_market"
+        ],
+        "summary": "Returns a transaction to initialize a prediction market idempotently",
+        "operationId": "prediction_market_init_handler",
+        "parameters": [
+          {
+            "name": "payer",
+            "in": "query",
+            "description": "Base58-encoded address of the payer",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "outcomeMint",
+            "in": "query",
+            "description": "Base58-encoded mint address of either outcome mint for the market to be initialized",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Prediction market init response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PredictionMarketInitResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PredictionMarketInitBadRequestResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PredictionMarketInitInternalServerErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Service unavailable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PredictionMarketInitServiceUnavailableResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/priority-fees": {
+      "get": {
+        "tags": [
+          "swap"
+        ],
+        "summary": "Returns the latest global priority fee estimates for each priority level",
+        "operationId": "priority_fees_handler",
+        "responses": {
+          "200": {
+            "description": "Priority fee estimates",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PriorityFeesResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/priority-fees/stream": {
+      "get": {
+        "tags": [
+          "swap"
+        ],
+        "summary": "Streams priority fee estimate updates over a WebSocket connection",
+        "operationId": "priority_fee_stream_handler",
+        "responses": {
+          "101": {
+            "description": "WebSocket upgrade"
+          }
+        }
+      }
+    },
+    "/quote": {
+      "get": {
+        "tags": [
+          "swap"
+        ],
+        "summary": "Returns a quote for an imperative swap",
+        "operationId": "quote_handler",
+        "parameters": [
+          {
+            "name": "inputMint",
+            "in": "query",
+            "description": "Base58-encoded input mint address",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "outputMint",
+            "in": "query",
+            "description": "Base58-encoded output mint address",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "amount",
+            "in": "query",
+            "description": "Input amount as a scaled integer. For example, 1 SOL is 1000000000.",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "slippageBps",
+            "in": "query",
+            "description": "Max allowed slippage for the swap. Allowed values are:\n- a u16 which specifies the maximum allowed slippage in basis points\n- the string value \"auto\", where the server determines the maximum allowed slippage\n  automatically",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/SlippageTolerance"
+            }
+          },
+          {
+            "name": "priceImpactTolerancePct",
+            "in": "query",
+            "description": "If specified, the API will return an error if the price impact of the route is greater than\nthe specified percentage. If unspecified, the server will determine the threshold. For\nexample, 10 is 10% and 100 is 100%.",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "dexes",
+            "in": "query",
+            "description": "Comma-separated list of DEXes to include. If not specified, all DEXes will be included.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "excludeDexes",
+            "in": "query",
+            "description": "Comma-separated list of DEXes to exclude. If not specified, all DEXes will be included.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "platformFeeBps",
+            "in": "query",
+            "description": "Optional platform fee in basis points. This should only be nonzero if the swap will collect\nthe platform fee. The swap must specify a valid fee account and that fee account must be\nable to collect the fee mint at execution time.",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "platformFeeMode",
+            "in": "query",
+            "description": "Optional platform fee mode. If not specified, the default is `outputMint`.",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/PlatformFeeMode"
+            }
+          },
+          {
+            "name": "sponsoredSwap",
+            "in": "query",
+            "description": "This should be specified as true if and only if the quote will be used for a sponsored swap.\nIf true, then the quote will account for any additional token 2022 transfer fees that apply\nto the input and output mints for a sponsored swap.",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "sponsorExec",
+            "in": "query",
+            "description": "The execution mode that will be used for the sponsored swap. This parameter is only relevant\nwhen `sponsoredSwap` is true. True indicates that the sponsor will be the executor of the\nswap. False indicates that the user will be the executor of the swap. Default is true.",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "destinationSwap",
+            "in": "query",
+            "description": "This should be specified as true if and only if the quote will be used for a destination\ntoken account swap. If true, then the quote will account for any additional token 2022\ntransfer fees that apply to the output mint for a destination token account swap.",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "onlyDirectRoutes",
+            "in": "query",
+            "description": "If true, only use single-leg routes",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "maxRouteLength",
+            "in": "query",
+            "description": "If specified, the route will be limited to the specified number of legs. Ignored if\n`only_direct_routes` is true.",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "onlyJitRoutes",
+            "in": "query",
+            "description": "If true, only use JIT routes. Every leg in the route will use the JIT router.",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "forJitoBundle",
+            "in": "query",
+            "description": "If true, only use routes that are compatible with Jito bundles. This should only be\nspecified as true if the swap will be executed in a Jito bundle. Default is false.",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "skipPumpfunCashbackClaim",
+            "in": "query",
+            "description": "If true, Pump.fun cashback will not be claimed for cashback-eligible coins. When set, sell\nquotes include the full creator fee, and execution skips Pump.fun cashback claiming. Default\nis false. Cannot be used with sponsor-executed swaps (`sponsorExec` is true or defaulted to\ntrue).",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Imperative swap quote",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QuoteResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QuoteBadRequestResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QuoteInternalServerErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Service unavailable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QuoteServiceUnavailableResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/submit-intent": {
+      "post": {
+        "tags": [
+          "intent"
+        ],
+        "summary": "Submits a declarative swap transaction for processing",
+        "operationId": "submit_intent_handler",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IntentSwapRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Declarative swap submitted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IntentSwapResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SubmitIntentBadRequestResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/swap": {
+      "post": {
+        "tags": [
+          "swap"
+        ],
+        "summary": "Returns an imperative swap transaction for the given quote",
+        "operationId": "swap_handler",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SwapRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Imperative swap transaction",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SwapResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SwapBadRequestResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SwapInternalServerErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/swap-instructions": {
+      "post": {
+        "tags": [
+          "swap"
+        ],
+        "summary": "Returns an imperative swap transaction for the given quote",
+        "operationId": "swap_instructions_handler",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SwapRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Imperative swap transaction",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SwapInstructionsResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SwapBadRequestResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SwapInternalServerErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tokens": {
+      "get": {
+        "tags": [
+          "tokens"
+        ],
+        "summary": "Returns a list of supported token mints, specically any mints that a pool for trading was\navailable atleast once in the lifetime of the server.",
+        "operationId": "tokens_handler",
+        "responses": {
+          "200": {
+            "description": "List of supported token mints",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Vec"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Service unavailable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokensServiceUnavailableResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tokens-with-decimals": {
+      "get": {
+        "tags": [
+          "tokens"
+        ],
+        "summary": "Returns a list of supported token mints and their decimals, specically any mints that a pool for trading was\navailable atleast once in the lifetime of the server.",
+        "operationId": "tokens_with_decimals_handler",
+        "responses": {
+          "200": {
+            "description": "List of supported token mints with decimals",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokensWithDecimalsDoc"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Service unavailable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokensServiceUnavailableResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/venues": {
+      "get": {
+        "tags": [
+          "venues"
+        ],
+        "summary": "Returns a list of venues supported for swapping.",
+        "operationId": "venues_handler",
+        "responses": {
+          "200": {
+            "description": "List of supported venues",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Vec"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AccountMetaResponse": {
+        "type": "object",
+        "required": [
+          "pubkey",
+          "isSigner",
+          "isWritable"
+        ],
+        "properties": {
+          "isSigner": {
+            "type": "boolean",
+            "description": "Is the account a signer?"
+          },
+          "isWritable": {
+            "type": "boolean",
+            "description": "Is the account writable?"
+          },
+          "pubkey": {
+            "type": "string",
+            "description": "Pubkey of the account"
+          }
+        }
+      },
+      "AddressLookupTableResponse": {
+        "type": "object",
+        "required": [
+          "address",
+          "addresses"
+        ],
+        "properties": {
+          "address": {
+            "type": "string",
+            "description": "Base58-encoded address of the lookup table account"
+          },
+          "addresses": {
+            "type": "object",
+            "description": "Map of index to base58-encoded address for each entry in the lookup table that is used by\nthe transaction. Key is the index of the address in the lookup table and value is the\naddress.",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "propertyNames": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        }
+      },
+      "BlockhashWithMetadata": {
+        "type": "object",
+        "required": [
+          "blockhash",
+          "lastValidBlockHeight"
+        ],
+        "properties": {
+          "blockhash": {
+            "type": "string",
+            "description": "Base58-encoded blockhash"
+          },
+          "lastValidBlockHeight": {
+            "type": "integer",
+            "format": "int64",
+            "description": "The last block height at which a transaction that uses the blockhash is valid",
+            "minimum": 0
+          }
+        }
+      },
+      "CreateFeeAccountParams": {
+        "type": "object",
+        "required": [
+          "referralAccount"
+        ],
+        "properties": {
+          "referralAccount": {
+            "type": "string",
+            "description": "Base58-encoded address of the referral account associated with the fee account"
+          }
+        }
+      },
+      "DestinationTokenAccountParam": {
+        "oneOf": [
+          {
+            "type": "object",
+            "description": "Use the specified owner's associated token account for the output mint as the destination\ntoken account. If the destination token account is uninitialized at swap execution time, the\nswap will create it. This cannot be used if the output is native SOL.",
+            "required": [
+              "associatedTokenAccount"
+            ],
+            "properties": {
+              "associatedTokenAccount": {
+                "type": "object",
+                "description": "Use the specified owner's associated token account for the output mint as the destination\ntoken account. If the destination token account is uninitialized at swap execution time, the\nswap will create it. This cannot be used if the output is native SOL.",
+                "required": [
+                  "owner"
+                ],
+                "properties": {
+                  "owner": {
+                    "type": "string",
+                    "description": "Base58-encoded address of the owner of the destination token account"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "object",
+            "description": "Use the specified base58-encoded address as the destination token account. The account must\nalready be initialized at swap execution time or else the transaction will fail.",
+            "required": [
+              "address"
+            ],
+            "properties": {
+              "address": {
+                "type": "string",
+                "description": "Use the specified base58-encoded address as the destination token account. The account must\nalready be initialized at swap execution time or else the transaction will fail."
+              }
+            }
+          }
+        ]
+      },
+      "DynamicRoutePlanLeg": {
+        "type": "object",
+        "required": [
+          "venue",
+          "marketKey",
+          "data",
+          "inputMint",
+          "outputMint",
+          "inAmount",
+          "outAmount",
+          "inputMintDecimals",
+          "outputMintDecimals"
+        ],
+        "properties": {
+          "data": {
+            "type": "string",
+            "description": "Data for the leg"
+          },
+          "inAmount": {
+            "type": "string",
+            "description": "Maximum input amount for the leg as a scaled integer. For example, 1 SOL is 1000000000."
+          },
+          "inputMint": {
+            "type": "string",
+            "description": "Base58-encoded input mint address"
+          },
+          "inputMintDecimals": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Decimals for the input mint",
+            "minimum": 0
+          },
+          "marketKey": {
+            "type": "string",
+            "description": "Key identifying the market on the venue"
+          },
+          "outAmount": {
+            "type": "string",
+            "description": "Expected output amount for the leg as a scaled integer. For example, 1 SOL is 1000000000."
+          },
+          "outputMint": {
+            "type": "string",
+            "description": "Base58-encoded output mint address"
+          },
+          "outputMintDecimals": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Decimals for the output mint",
+            "minimum": 0
+          },
+          "venue": {
+            "type": "string",
+            "description": "Venue for the leg"
+          }
+        }
+      },
+      "ExecutionMode": {
+        "type": "string",
+        "enum": [
+          "sync",
+          "async"
+        ]
+      },
+      "Fill": {
+        "type": "object",
+        "required": [
+          "signature",
+          "inputMint",
+          "inAmount",
+          "outputMint",
+          "outAmount"
+        ],
+        "properties": {
+          "inAmount": {
+            "type": "string",
+            "description": "Input amount including fees, as a scaled integer. For example, 1 SOL is 1000000000."
+          },
+          "inputMint": {
+            "type": "string",
+            "description": "Input mint for the fill"
+          },
+          "outAmount": {
+            "type": "string",
+            "description": "Output amount including fees, as a scaled integer. For example, 1 SOL is 1000000000."
+          },
+          "outputMint": {
+            "type": "string",
+            "description": "Output mint for the fill"
+          },
+          "signature": {
+            "type": "string",
+            "description": "Base58-encoded signature of the fill transaction"
+          }
+        }
+      },
+      "HealthCheckServiceUnavailableCode": {
+        "type": "string",
+        "enum": [
+          "amm_map_not_initialized",
+          "amm_map_lagging",
+          "mint_info_not_initialized",
+          "reference_price_map_not_initialized",
+          "blockhash_unavailable",
+          "internal"
+        ]
+      },
+      "HealthCheckServiceUnavailableResponse": {
+        "type": "object",
+        "required": [
+          "msg",
+          "code"
+        ],
+        "properties": {
+          "code": {
+            "$ref": "#/components/schemas/HealthCheckServiceUnavailableCode"
+          },
+          "msg": {
+            "type": "string"
+          }
+        },
+        "example": {
+          "code": "<enum<string>>",
+          "msg": "<string>"
+        }
+      },
+      "IncludeJitoSandwichMitigationAccount": {
+        "oneOf": [
+          {
+            "type": "boolean"
+          },
+          {
+            "type": "string"
+          }
+        ]
+      },
+      "InstructionResponse": {
+        "type": "object",
+        "required": [
+          "programId",
+          "accounts",
+          "data"
+        ],
+        "properties": {
+          "accounts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AccountMetaResponse"
+            },
+            "description": "Metadata describing accounts that should be passed to the program."
+          },
+          "data": {
+            "type": "string",
+            "description": "Opaque data passed to the program for its own interpretation."
+          },
+          "programId": {
+            "type": "string",
+            "description": "Pubkey of the program that executes this instruction."
+          }
+        }
+      },
+      "IntentBadRequestCode": {
+        "type": "string",
+        "enum": [
+          "requested_input_amount_is_zero",
+          "invalid_input_mint",
+          "invalid_output_mint",
+          "invalid_slippage_bps",
+          "invalid_platform_fee_bps",
+          "invalid_user_public_key",
+          "same_input_and_output_mint",
+          "invalid_fee_account",
+          "invalid_referral_account",
+          "requested_fee_budget_too_low",
+          "invalid_max_auto_fee_budget",
+          "route_not_found",
+          "price_impact_too_high",
+          "invalid_price_impact_tolerance_pct"
+        ]
+      },
+      "IntentBadRequestResponse": {
+        "type": "object",
+        "required": [
+          "msg",
+          "code"
+        ],
+        "properties": {
+          "code": {
+            "$ref": "#/components/schemas/IntentBadRequestCode"
+          },
+          "msg": {
+            "type": "string"
+          }
+        },
+        "example": {
+          "code": "<enum<string>>",
+          "msg": "<string>"
+        }
+      },
+      "IntentExpiry": {
+        "oneOf": [
+          {
+            "type": "object",
+            "description": "The intent will expire after the specified number of slots have passed since the open\ntransaction was processed. For example, if the open transaction was processed in slot 100, a\nvalue of 10 means the intent will be fillable through slot 110. After slot 110, the intent\nwill no longer be fillable.",
+            "required": [
+              "slotsAfterOpen"
+            ],
+            "properties": {
+              "slotsAfterOpen": {
+                "type": "integer",
+                "format": "int32",
+                "description": "The intent will expire after the specified number of slots have passed since the open\ntransaction was processed. For example, if the open transaction was processed in slot 100, a\nvalue of 10 means the intent will be fillable through slot 110. After slot 110, the intent\nwill no longer be fillable.",
+                "minimum": 0
+              }
+            }
+          }
+        ]
+      },
+      "IntentInternalServerErrorCode": {
+        "type": "string",
+        "enum": [
+          "failed_to_compute_route",
+          "failed_to_construct_intent"
+        ]
+      },
+      "IntentInternalServerErrorResponse": {
+        "type": "object",
+        "required": [
+          "msg",
+          "code"
+        ],
+        "properties": {
+          "code": {
+            "$ref": "#/components/schemas/IntentInternalServerErrorCode"
+          },
+          "msg": {
+            "type": "string"
+          }
+        },
+        "example": {
+          "code": "<enum<string>>",
+          "msg": "<string>"
+        }
+      },
+      "IntentPlatformFee": {
+        "type": "object",
+        "required": [
+          "amount",
+          "feeBps",
+          "segmenterFeeAmount",
+          "segmenterFeePct",
+          "feeAccount"
+        ],
+        "properties": {
+          "amount": {
+            "type": "string",
+            "description": "Platform fee as a scaled integer. For example, 1 SOL is 1000000000."
+          },
+          "feeAccount": {
+            "type": "string",
+            "description": "Token account that will receive the platform fee"
+          },
+          "feeBps": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Platform fee in basis points",
+            "minimum": 0
+          },
+          "segmenterFeeAmount": {
+            "type": "string",
+            "description": "Segmenter fee as a scaled integer. For example, 1 SOL is 1000000000."
+          },
+          "segmenterFeePct": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Segmenter fee in percent",
+            "minimum": 0
+          }
+        }
+      },
+      "IntentQuoteResponse": {
+        "type": "object",
+        "required": [
+          "inputMint",
+          "inAmount",
+          "outputMint",
+          "outAmount",
+          "otherAmountThreshold",
+          "minOutAmount",
+          "slippageBps",
+          "feeBudget",
+          "priceImpactPct"
+        ],
+        "properties": {
+          "expiry": {
+            "$ref": "#/components/schemas/IntentExpiry",
+            "description": "The expiry of the intent. After expiry, the intent cannot be filled and can only be closed.\nSpecified if and only if the request included the user's public key."
+          },
+          "feeBudget": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Maximum amount that the user is willing to pay to have the intent processed in lamports.\nThis includes all transaction fees and tips for the open transaction and all transaction\nfees and tips for the fill and close transactions.",
+            "minimum": 0
+          },
+          "inAmount": {
+            "type": "string",
+            "description": "Maximum input amount as a scaled integer. For example, 1 SOL is 1000000000."
+          },
+          "inputMint": {
+            "type": "string",
+            "description": "Base58-encoded input mint address"
+          },
+          "lastValidBlockHeight": {
+            "type": "integer",
+            "format": "int64",
+            "description": "The last block height at which the blockhash assigned to the open transaction is valid.\nUseful to determine whether the open transaction has expired. Specified if and only if the\nrequest included the user's public key.",
+            "minimum": 0
+          },
+          "minOutAmount": {
+            "type": "string",
+            "description": "Same as `other_amount_threshold`"
+          },
+          "openTransaction": {
+            "type": "string",
+            "description": "Base64-encoded intent opening transaction. The user must sign before sending it via the\nswap endpoint. Specified if and only if the request included the user's public key."
+          },
+          "otherAmountThreshold": {
+            "type": "string",
+            "description": "Minimum output amount after all fees as a scaled integer. If the swap transaction doesn't\nproduce at least this amount of the output token, the transaction will fail."
+          },
+          "outAmount": {
+            "type": "string",
+            "description": "Expected output amount after all fees as a scaled integer. For example, 1 SOL is 1000000000."
+          },
+          "outputMint": {
+            "type": "string",
+            "description": "Base58-encoded output mint address"
+          },
+          "platformFee": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/IntentPlatformFee",
+                "description": "Platform fee that was applied to the quote, if any"
+              }
+            ]
+          },
+          "priceImpactPct": {
+            "type": "string",
+            "description": "Price impact of the swap. This is an estimate of the percentage difference between the\nexpected price for the swap and the price for the same swap with the smallest input amount\npossible. For example, \"0.01\" means 1% price impact."
+          },
+          "slippageBps": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Max allowed slippage % in basis points",
+            "minimum": 0
+          }
+        }
+      },
+      "IntentServiceUnavailableCode": {
+        "type": "string",
+        "enum": [
+          "amm_map_not_initialized",
+          "amm_map_lagging"
+        ]
+      },
+      "IntentServiceUnavailableResponse": {
+        "type": "object",
+        "required": [
+          "msg",
+          "code"
+        ],
+        "properties": {
+          "code": {
+            "$ref": "#/components/schemas/IntentServiceUnavailableCode"
+          },
+          "msg": {
+            "type": "string"
+          }
+        },
+        "example": {
+          "code": "<enum<string>>",
+          "msg": "<string>"
+        }
+      },
+      "IntentSwapRequest": {
+        "type": "object",
+        "required": [
+          "quoteResponse",
+          "signedOpenTransaction"
+        ],
+        "properties": {
+          "quoteResponse": {
+            "$ref": "#/components/schemas/IntentQuoteResponse",
+            "description": "The response from the quote endpoint"
+          },
+          "signedOpenTransaction": {
+            "type": "string",
+            "description": "Base64-encoded intent opening transaction, signed by the user"
+          }
+        }
+      },
+      "IntentSwapResponse": {
+        "type": "object",
+        "required": [
+          "programId",
+          "orderAddress",
+          "openTransactionSignature"
+        ],
+        "properties": {
+          "openTransactionSignature": {
+            "type": "string",
+            "description": "Base58-encoded open transaction signature"
+          },
+          "orderAddress": {
+            "type": "string",
+            "description": "Base58-encoded order address"
+          },
+          "programId": {
+            "type": "string",
+            "description": "Base58-encoded program ID of the program that facilitates the swap"
+          }
+        }
+      },
+      "OrderBadRequestCode": {
+        "type": "string",
+        "enum": [
+          "invalid_user_public_key",
+          "invalid_sponsor",
+          "invalid_revert_wallet",
+          "invalid_prediction_market_init_payer",
+          "requested_input_amount_is_zero",
+          "invalid_input_mint",
+          "invalid_output_mint",
+          "same_input_and_output_mint",
+          "invalid_slippage_bps",
+          "prediction_slippage_bps_above_max",
+          "prediction_slippage_bps_below_routing_slippage",
+          "invalid_platform_fee_bps",
+          "invalid_platform_fee_scale",
+          "invalid_fee_account",
+          "platform_fee_account_not_specified",
+          "platform_fee_account_not_specified_for_platform_fee_scale",
+          "invalid_positive_slippage_fee_account",
+          "cannot_disable_sync_and_async_execution",
+          "invalid_dex",
+          "invalid_max_route_length_for_jit_route",
+          "cannot_exclude_jit_router_for_jit_route",
+          "route_not_found",
+          "zero_out_amount",
+          "price_impact_too_high",
+          "both_priority_fee_params_specified",
+          "both_destination_params_specified",
+          "both_sponsor_and_prediction_market_init_payer_specified",
+          "invalid_destination_token_account",
+          "invalid_destination_wallet",
+          "destination_token_account_not_supported",
+          "invalid_output_close_authority",
+          "output_close_authority_with_native_sol_output",
+          "output_close_authority_with_destination_token_account",
+          "invalid_input_mint_for_restrict_revert_mint",
+          "invalid_jito_sandwich_mitigation_account",
+          "invalid_outcome_account_rent_recipient",
+          "unverified_wallet_not_allowed",
+          "unsupported_prediction_market_sponsor_mode",
+          "invalid_price_impact_tolerance_pct",
+          "skip_pumpfun_cashback_claim_with_sponsor_executor",
+          "allow_bonding_curve_underconsumption_with_sponsor_executor",
+          "both_max_accounts_and_reserve_accounts_specified",
+          "both_max_transaction_size_and_reserve_transaction_size_specified",
+          "max_accounts_too_small",
+          "max_transaction_size_too_small",
+          "reserve_accounts_too_large",
+          "reserve_transaction_size_too_large"
+        ]
+      },
+      "OrderBadRequestResponse": {
+        "type": "object",
+        "required": [
+          "msg",
+          "code"
+        ],
+        "properties": {
+          "code": {
+            "$ref": "#/components/schemas/OrderBadRequestCode"
+          },
+          "msg": {
+            "type": "string"
+          }
+        },
+        "example": {
+          "code": "<enum<string>>",
+          "msg": "<string>"
+        }
+      },
+      "OrderInternalServerErrorCode": {
+        "type": "string",
+        "enum": [
+          "failed_to_compute_route",
+          "failed_to_construct_order"
+        ]
+      },
+      "OrderInternalServerErrorResponse": {
+        "type": "object",
+        "required": [
+          "msg",
+          "code"
+        ],
+        "properties": {
+          "code": {
+            "$ref": "#/components/schemas/OrderInternalServerErrorCode"
+          },
+          "msg": {
+            "type": "string"
+          }
+        },
+        "example": {
+          "code": "<enum<string>>",
+          "msg": "<string>"
+        }
+      },
+      "OrderPrioritizationFeeLamports": {
+        "oneOf": [
+          {
+            "type": "string",
+            "enum": [
+              "auto",
+              "medium",
+              "high",
+              "veryHigh",
+              "disabled"
+            ]
+          },
+          {
+            "type": "integer",
+            "format": "int32",
+            "minimum": 0
+          }
+        ]
+      },
+      "OrderResponse": {
+        "type": "object",
+        "required": [
+          "inputMint",
+          "inAmount",
+          "outputMint",
+          "outAmount",
+          "otherAmountThreshold",
+          "minOutAmount",
+          "slippageBps",
+          "priceImpactPct",
+          "contextSlot",
+          "executionMode"
+        ],
+        "properties": {
+          "addressLookupTables": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AddressLookupTableResponse"
+            },
+            "description": "Address lookup tables used in the transaction. Each entry contains the table's address and\na map of index to address for each entry in the table that is used by the transaction.\nSpecified if and only if the request included `includeAddressLookupTables=true` and the\nrequest included the user's public key."
+          },
+          "computeUnitLimit": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Compute unit limit assigned to the transaction. Specified if and only if the request included\nthe user's public key.",
+            "minimum": 0
+          },
+          "contextSlot": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Slot at which the request was evaluated",
+            "minimum": 0
+          },
+          "executionMode": {
+            "$ref": "#/components/schemas/ExecutionMode",
+            "description": "Order execution mode"
+          },
+          "inAmount": {
+            "type": "string",
+            "description": "Maximum input amount as a scaled integer. For example, 1 SOL is 1000000000."
+          },
+          "initPredictionMarketCost": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Cost in lamports to initialize a prediction market. Specified if and only if the transaction\nwill initialize the prediction market.",
+            "minimum": 0
+          },
+          "inputMint": {
+            "type": "string",
+            "description": "Base58-encoded input mint address"
+          },
+          "isNativePredictionMarketOutput": {
+            "type": "boolean",
+            "description": "True if and only if the output mint is a native prediction market outcome mint."
+          },
+          "lastValidBlockHeight": {
+            "type": "integer",
+            "format": "int64",
+            "description": "The last block height at which the blockhash assigned to the transaction is valid. Useful to\ndetermine whether the transaction has expired. Specified if and only if the request included\nthe user's public key.",
+            "minimum": 0
+          },
+          "minOutAmount": {
+            "type": "string",
+            "description": "Same as `other_amount_threshold`"
+          },
+          "otherAmountThreshold": {
+            "type": "string",
+            "description": "Minimum output amount after all fees as a scaled integer. If the swap transaction doesn't\nproduce at least this amount of the output token, the transaction will fail."
+          },
+          "outAmount": {
+            "type": "string",
+            "description": "Expected output amount after all fees as a scaled integer. For example, 1 SOL is 1000000000."
+          },
+          "outputMint": {
+            "type": "string",
+            "description": "Base58-encoded output mint address"
+          },
+          "platformFee": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/PlatformFee",
+                "description": "Platform fee that was applied to the quote, if any"
+              }
+            ]
+          },
+          "predictionMarketInitPayerMustSign": {
+            "type": "boolean",
+            "description": "Whether the `predictionMarketInitPayer` must sign the transaction. Specified if and only if\nthe request included `predictionMarketInitPayer` and the market is uninitialized."
+          },
+          "predictionMarketSlippageBps": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Max allowed slippage for prediction market orders in basis points.\nOnly specified for prediction market orders.",
+            "minimum": 0
+          },
+          "priceImpactPct": {
+            "type": "string",
+            "description": "Price impact of the swap. This is an estimate of the percentage difference between the\nexpected price for the swap and the price for the same swap with the smallest input amount\npossible. For example, \"0.01\" means 1% price impact."
+          },
+          "prioritizationFeeLamports": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Prioritization fee in lamports. Specified if and only if the request included the user's\npublic key.",
+            "minimum": 0
+          },
+          "prioritizationType": {
+            "$ref": "#/components/schemas/PrioritizationType",
+            "description": "Prioritization fee type for the transaction. Specified if and only if the request included\nthe user's public key."
+          },
+          "revertMint": {
+            "type": "string",
+            "description": "Base58-encoded mint address of the token that will be returned to the user if the order is\nan asynchronous order and the order reverts after it is successfully opened. Specified if\nand only if the order is an asynchronous order."
+          },
+          "routePlan": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RoutePlanLeg"
+            },
+            "description": "Route that the swap will take. Specified if and only if the route plan is known at order\nopening time. This will be specified for all synchronous orders."
+          },
+          "slippageBps": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Max allowed slippage % in basis points",
+            "minimum": 0
+          },
+          "transaction": {
+            "type": "string",
+            "description": "Base64-encoded transaction. The user must sign before sending it to Solana. Specified\nif and only if the request included the user's public key."
+          }
+        }
+      },
+      "OrderServiceUnavailableCode": {
+        "type": "string",
+        "enum": [
+          "amm_map_not_initialized",
+          "amm_map_lagging"
+        ]
+      },
+      "OrderServiceUnavailableResponse": {
+        "type": "object",
+        "required": [
+          "msg",
+          "code"
+        ],
+        "properties": {
+          "code": {
+            "$ref": "#/components/schemas/OrderServiceUnavailableCode"
+          },
+          "msg": {
+            "type": "string"
+          }
+        },
+        "example": {
+          "code": "<enum<string>>",
+          "msg": "<string>"
+        }
+      },
+      "OrderStatus": {
+        "type": "string",
+        "enum": [
+          "pending",
+          "expired",
+          "failed",
+          "open",
+          "pendingClose",
+          "closed"
+        ]
+      },
+      "OrderStatusBadRequestCode": {
+        "type": "string",
+        "enum": [
+          "invalid_signature"
+        ]
+      },
+      "OrderStatusBadRequestResponse": {
+        "type": "object",
+        "required": [
+          "msg",
+          "code"
+        ],
+        "properties": {
+          "code": {
+            "$ref": "#/components/schemas/OrderStatusBadRequestCode"
+          },
+          "msg": {
+            "type": "string"
+          }
+        },
+        "example": {
+          "code": "<enum<string>>",
+          "msg": "<string>"
+        }
+      },
+      "OrderStatusInternalServerErrorCode": {
+        "type": "string",
+        "enum": [
+          "internal_server_error"
+        ]
+      },
+      "OrderStatusInternalServerErrorResponse": {
+        "type": "object",
+        "required": [
+          "msg",
+          "code"
+        ],
+        "properties": {
+          "code": {
+            "$ref": "#/components/schemas/OrderStatusInternalServerErrorCode"
+          },
+          "msg": {
+            "type": "string"
+          }
+        },
+        "example": {
+          "code": "<enum<string>>",
+          "msg": "<string>"
+        }
+      },
+      "OrderStatusNotFoundCode": {
+        "type": "string",
+        "enum": [
+          "not_found"
+        ]
+      },
+      "OrderStatusNotFoundResponse": {
+        "type": "object",
+        "required": [
+          "msg",
+          "code"
+        ],
+        "properties": {
+          "code": {
+            "$ref": "#/components/schemas/OrderStatusNotFoundCode"
+          },
+          "msg": {
+            "type": "string"
+          }
+        },
+        "example": {
+          "code": "<enum<string>>",
+          "msg": "<string>"
+        }
+      },
+      "OrderStatusResponse": {
+        "type": "object",
+        "required": [
+          "status",
+          "inAmount",
+          "outAmount"
+        ],
+        "properties": {
+          "fills": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Fill"
+            },
+            "description": "Fills for the order. Specified if and only if the order has at least one fill."
+          },
+          "inAmount": {
+            "type": "string",
+            "description": "Total input amount filled, as a scaled integer. For example, 1 SOL is 1000000000."
+          },
+          "outAmount": {
+            "type": "string",
+            "description": "Total output amount filled, as a scaled integer. For example, 1 SOL is 1000000000."
+          },
+          "reverts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Revert"
+            },
+            "description": "Reverts for the order. Specified if and only if the order has at least one revert."
+          },
+          "status": {
+            "$ref": "#/components/schemas/OrderStatus",
+            "description": "Status of the order"
+          }
+        }
+      },
+      "PlatformFee": {
+        "type": "object",
+        "required": [
+          "amount",
+          "feeBps",
+          "mode"
+        ],
+        "properties": {
+          "amount": {
+            "type": "string",
+            "description": "Platform fee as a scaled integer. For example, 1 SOL is 1000000000. For output mint fees,\nthis is the expected amount that will be paid, but the exact amount will vary depending on\nhow much output the swap produces. For input mint fees, this is the exact amount that will\nbe paid."
+          },
+          "feeBps": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Platform fee in basis points",
+            "minimum": 0
+          },
+          "mode": {
+            "$ref": "#/components/schemas/PlatformFeeMode",
+            "description": "Mode for the platform fee"
+          }
+        }
+      },
+      "PlatformFeeMode": {
+        "type": "string",
+        "enum": [
+          "outputMint",
+          "inputMint"
+        ]
+      },
+      "PositiveSlippageParams": {
+        "type": "object",
+        "required": [
+          "limitPct"
+        ],
+        "properties": {
+          "feeAccount": {
+            "type": "string",
+            "description": "Base58-encoded address of the token account that will receive the positive slippage fee.\nThis must be a token account for the output mint, regardless of the platform fee mode. If at\nswap execution time this account can't receive the positive slippage fee, then the positive\nslippage fee transfer is skipped. If the platform fee mode is `outputMint` and the platform\nfee account is specified, then this must be unspecified (in which case the platform fee\naccount will be used) or match the platform fee account. Otherwise, this must be specified."
+          },
+          "limitPct": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Limit on the positive slippage fee in percent. The positive slippage fee is limited to the\nlesser of (1) the excess actual out amount above the quoted amount and (2) this percentage\nof the actual out amount after platform fee.",
+            "minimum": 0
+          }
+        }
+      },
+      "PredictionMarketInitBadRequestCode": {
+        "type": "string",
+        "enum": [
+          "invalid_payer",
+          "invalid_outcome_mint",
+          "prediction_market_already_initialized",
+          "unknown_outcome_mint"
+        ]
+      },
+      "PredictionMarketInitBadRequestResponse": {
+        "type": "object",
+        "required": [
+          "msg",
+          "code"
+        ],
+        "properties": {
+          "code": {
+            "$ref": "#/components/schemas/PredictionMarketInitBadRequestCode"
+          },
+          "msg": {
+            "type": "string"
+          }
+        },
+        "example": {
+          "code": "<enum<string>>",
+          "msg": "<string>"
+        }
+      },
+      "PredictionMarketInitInternalServerErrorCode": {
+        "type": "string",
+        "enum": [
+          "failed_to_construct_transaction"
+        ]
+      },
+      "PredictionMarketInitInternalServerErrorResponse": {
+        "type": "object",
+        "required": [
+          "msg",
+          "code"
+        ],
+        "properties": {
+          "code": {
+            "$ref": "#/components/schemas/PredictionMarketInitInternalServerErrorCode"
+          },
+          "msg": {
+            "type": "string"
+          }
+        },
+        "example": {
+          "code": "<enum<string>>",
+          "msg": "<string>"
+        }
+      },
+      "PredictionMarketInitResponse": {
+        "type": "object",
+        "required": [
+          "transaction",
+          "lastValidBlockHeight",
+          "computeUnitLimit"
+        ],
+        "properties": {
+          "computeUnitLimit": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Compute unit limit assigned to the transaction",
+            "minimum": 0
+          },
+          "lastValidBlockHeight": {
+            "type": "integer",
+            "format": "int64",
+            "description": "The last block height at which the blockhash assigned to the transaction is valid. Useful to\ndetermine whether the transaction has expired.",
+            "minimum": 0
+          },
+          "transaction": {
+            "type": "string",
+            "description": "Base64-encoded transaction to initialize the market for the requested outcome mint. The\npayer must sign before sending it to Solana."
+          }
+        }
+      },
+      "PredictionMarketInitServiceUnavailableCode": {
+        "type": "string",
+        "enum": [
+          "not_ready",
+          "lagging"
+        ]
+      },
+      "PredictionMarketInitServiceUnavailableResponse": {
+        "type": "object",
+        "required": [
+          "msg",
+          "code"
+        ],
+        "properties": {
+          "code": {
+            "$ref": "#/components/schemas/PredictionMarketInitServiceUnavailableCode"
+          },
+          "msg": {
+            "type": "string"
+          }
+        },
+        "example": {
+          "code": "<enum<string>>",
+          "msg": "<string>"
+        }
+      },
+      "PrioritizationFeeLamports": {
+        "oneOf": [
+          {
+            "type": "object",
+            "description": "A multiplier applied to the automatically-determined fee. The total is capped at 0.005 SOL.",
+            "required": [
+              "autoMultiplier"
+            ],
+            "properties": {
+              "autoMultiplier": {
+                "type": "integer",
+                "format": "int32",
+                "description": "A multiplier applied to the automatically-determined fee. The total is capped at 0.005 SOL.",
+                "minimum": 0
+              }
+            }
+          },
+          {
+            "type": "object",
+            "description": "A variable prioritization fee determined by the server based on the specified priority level",
+            "required": [
+              "priorityLevelWithMaxLamports"
+            ],
+            "properties": {
+              "priorityLevelWithMaxLamports": {
+                "type": "object",
+                "description": "A variable prioritization fee determined by the server based on the specified priority level",
+                "required": [
+                  "priorityLevel",
+                  "maxLamports"
+                ],
+                "properties": {
+                  "maxLamports": {
+                    "type": "integer",
+                    "format": "int32",
+                    "description": "Maximum lamports to cap the prioritization fee determined by the server",
+                    "minimum": 0
+                  },
+                  "priorityLevel": {
+                    "$ref": "#/components/schemas/PriorityLevel",
+                    "description": "Priority level for the prioritization fee"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "string",
+            "description": "A variable prioritization fee determined by the server. The total is capped at 0.005 SOL.",
+            "enum": [
+              "auto"
+            ]
+          },
+          {
+            "type": "object",
+            "description": "A fixed prioritization fee in lamports",
+            "required": [
+              "lamports"
+            ],
+            "properties": {
+              "lamports": {
+                "type": "integer",
+                "format": "int32",
+                "description": "A fixed prioritization fee in lamports",
+                "minimum": 0
+              }
+            }
+          },
+          {
+            "type": "string",
+            "description": "Prioritization fee should be left unspecified",
+            "enum": [
+              "disabled"
+            ]
+          }
+        ]
+      },
+      "PrioritizationType": {
+        "oneOf": [
+          {
+            "type": "object",
+            "description": "Prioritization fee specified via the compute budget program",
+            "required": [
+              "computeBudget"
+            ],
+            "properties": {
+              "computeBudget": {
+                "type": "object",
+                "description": "Prioritization fee specified via the compute budget program",
+                "required": [
+                  "microLamports"
+                ],
+                "properties": {
+                  "estimatedMicroLamports": {
+                    "type": [
+                      "integer",
+                      "null"
+                    ],
+                    "format": "int64",
+                    "description": "Compute unit price estimated by the server for the transaction",
+                    "minimum": 0
+                  },
+                  "microLamports": {
+                    "type": "integer",
+                    "format": "int64",
+                    "description": "Compute unit price assigned to the transaction",
+                    "minimum": 0
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "PriorityFeesResponse": {
+        "type": "object",
+        "description": "Global priority fee estimates (in micro-lamports per compute unit) for each priority level.",
+        "required": [
+          "mediumMicroLamports",
+          "highMicroLamports",
+          "veryHighMicroLamports"
+        ],
+        "properties": {
+          "highMicroLamports": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Estimated micro-lamports per compute unit for the high priority level",
+            "minimum": 0
+          },
+          "mediumMicroLamports": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Estimated micro-lamports per compute unit for the medium priority level",
+            "minimum": 0
+          },
+          "veryHighMicroLamports": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Estimated micro-lamports per compute unit for the very high priority level",
+            "minimum": 0
+          }
+        }
+      },
+      "PriorityLevel": {
+        "type": "string",
+        "enum": [
+          "medium",
+          "high",
+          "veryHigh"
+        ]
+      },
+      "QuoteBadRequestCode": {
+        "type": "string",
+        "enum": [
+          "requested_input_amount_is_zero",
+          "invalid_input_mint",
+          "invalid_output_mint",
+          "same_input_and_output_mint",
+          "invalid_slippage_bps",
+          "invalid_platform_fee_bps",
+          "invalid_dex",
+          "invalid_max_route_length_for_jit_route",
+          "cannot_exclude_jit_router_for_jit_route",
+          "route_not_found",
+          "use_order_endpoint_for_prediction_markets",
+          "price_impact_too_high",
+          "invalid_price_impact_tolerance_pct"
+        ]
+      },
+      "QuoteBadRequestResponse": {
+        "type": "object",
+        "required": [
+          "msg",
+          "code"
+        ],
+        "properties": {
+          "code": {
+            "$ref": "#/components/schemas/QuoteBadRequestCode"
+          },
+          "contextSlot": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int64",
+            "minimum": 0
+          },
+          "msg": {
+            "type": "string"
+          },
+          "routingSlot": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int64",
+            "minimum": 0
+          }
+        },
+        "example": {
+          "code": "<enum<string>>",
+          "msg": "<string>"
+        }
+      },
+      "QuoteInternalServerErrorCode": {
+        "type": "string",
+        "enum": [
+          "failed_to_compute_route"
+        ]
+      },
+      "QuoteInternalServerErrorResponse": {
+        "type": "object",
+        "required": [
+          "msg",
+          "code"
+        ],
+        "properties": {
+          "code": {
+            "$ref": "#/components/schemas/QuoteInternalServerErrorCode"
+          },
+          "contextSlot": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int64",
+            "minimum": 0
+          },
+          "msg": {
+            "type": "string"
+          },
+          "routingSlot": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int64",
+            "minimum": 0
+          }
+        },
+        "example": {
+          "code": "<enum<string>>",
+          "msg": "<string>"
+        }
+      },
+      "QuoteResponse": {
+        "type": "object",
+        "required": [
+          "inputMint",
+          "inAmount",
+          "outputMint",
+          "outAmount",
+          "otherAmountThreshold",
+          "minOutAmount",
+          "slippageBps",
+          "priceImpactPct",
+          "routePlan",
+          "contextSlot"
+        ],
+        "properties": {
+          "contextSlot": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Slot at which the request was evaluated",
+            "minimum": 0
+          },
+          "forJitoBundle": {
+            "type": "boolean",
+            "description": "True if and only if the request was for a Jito bundle"
+          },
+          "inAmount": {
+            "type": "string",
+            "description": "Maximum input amount as a scaled integer. For example, 1 SOL is 1000000000."
+          },
+          "inputMint": {
+            "type": "string",
+            "description": "Base58-encoded input mint address"
+          },
+          "minOutAmount": {
+            "type": "string",
+            "description": "Same as `other_amount_threshold`"
+          },
+          "otherAmountThreshold": {
+            "type": "string",
+            "description": "Minimum output amount after all fees as a scaled integer. If the swap transaction doesn't\nproduce at least this amount of the output token, the transaction will fail."
+          },
+          "outAmount": {
+            "type": "string",
+            "description": "Expected output amount after all fees as a scaled integer. For example, 1 SOL is 1000000000."
+          },
+          "outTransferFee": {
+            "type": "string",
+            "description": "Transfer fee amount that was applied to the quote, if any"
+          },
+          "outputMint": {
+            "type": "string",
+            "description": "Base58-encoded output mint address"
+          },
+          "platformFee": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/PlatformFee",
+                "description": "Platform fee that was applied to the quote, if any"
+              }
+            ]
+          },
+          "priceImpactPct": {
+            "type": "string",
+            "description": "Price impact of the swap. This is an estimate of the percentage difference between the\nexpected price for the swap and the price for the same swap with the smallest input amount\npossible. For example, \"0.01\" means 1% price impact."
+          },
+          "requestId": {
+            "type": "string",
+            "description": "Identifier for the request"
+          },
+          "routePlan": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RoutePlanLeg"
+            },
+            "description": "Route that the swap will take"
+          },
+          "routingSlot": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Slot of the market state used to compute the quote",
+            "minimum": 0
+          },
+          "simulatedComputeUnits": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Compute units consumed by quote simulation",
+            "minimum": 0
+          },
+          "skipPumpfunCashbackClaim": {
+            "type": "boolean",
+            "description": "True if and only if Pump.fun cashback claiming was skipped for this quote"
+          },
+          "slippageBps": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Max allowed slippage % in basis points",
+            "minimum": 0
+          }
+        }
+      },
+      "QuoteServiceUnavailableCode": {
+        "type": "string",
+        "enum": [
+          "amm_map_not_initialized",
+          "amm_map_lagging"
+        ]
+      },
+      "QuoteServiceUnavailableResponse": {
+        "type": "object",
+        "required": [
+          "msg",
+          "code"
+        ],
+        "properties": {
+          "code": {
+            "$ref": "#/components/schemas/QuoteServiceUnavailableCode"
+          },
+          "msg": {
+            "type": "string"
+          }
+        },
+        "example": {
+          "code": "<enum<string>>",
+          "msg": "<string>"
+        }
+      },
+      "Revert": {
+        "type": "object",
+        "required": [
+          "signature",
+          "mint",
+          "amount"
+        ],
+        "properties": {
+          "amount": {
+            "type": "string",
+            "description": "Amount returned to the user, as a scaled integer. For example, 1 SOL is 1000000000."
+          },
+          "mint": {
+            "type": "string",
+            "description": "Mint returned to the user"
+          },
+          "signature": {
+            "type": "string",
+            "description": "Base58-encoded signature of the revert transaction"
+          }
+        }
+      },
+      "RoutePlanLeg": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/DynamicRoutePlanLeg"
+          },
+          {
+            "$ref": "#/components/schemas/SingleMarketRoutePlanLeg"
+          }
+        ]
+      },
+      "SingleMarketRoutePlanLeg": {
+        "type": "object",
+        "required": [
+          "venue",
+          "marketKey",
+          "inputMint",
+          "outputMint",
+          "inAmount",
+          "outAmount",
+          "inputMintDecimals",
+          "outputMintDecimals"
+        ],
+        "properties": {
+          "inAmount": {
+            "type": "string",
+            "description": "Maximum input amount for the leg as a scaled integer. For example, 1 SOL is 1000000000."
+          },
+          "inputMint": {
+            "type": "string",
+            "description": "Base58-encoded input mint address"
+          },
+          "inputMintDecimals": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Decimals for the input mint",
+            "minimum": 0
+          },
+          "marketKey": {
+            "type": "string",
+            "description": "Key identifying the market on the venue"
+          },
+          "outAmount": {
+            "type": "string",
+            "description": "Expected output amount for the leg as a scaled integer. For example, 1 SOL is 1000000000."
+          },
+          "outputMint": {
+            "type": "string",
+            "description": "Base58-encoded output mint address"
+          },
+          "outputMintDecimals": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Decimals for the output mint",
+            "minimum": 0
+          },
+          "venue": {
+            "type": "string",
+            "description": "Venue for the leg"
+          }
+        }
+      },
+      "SlippageTolerance": {
+        "oneOf": [
+          {
+            "type": "integer",
+            "format": "int32",
+            "description": "Slippage tolerance specified in basis points",
+            "minimum": 0
+          },
+          {
+            "type": "string",
+            "description": "Slippage tolerance will be determined by the server",
+            "enum": [
+              "auto"
+            ]
+          }
+        ]
+      },
+      "SubmitIntentBadRequestCode": {
+        "type": "string",
+        "enum": [
+          "invalid_input_mint",
+          "invalid_output_mint",
+          "same_input_and_output_mint",
+          "invalid_in_amount",
+          "invalid_out_amount",
+          "invalid_fee_account",
+          "invalid_open_instruction_fee_budget_too_low",
+          "invalid_open_transaction",
+          "invalid_open_instruction_data",
+          "failed_to_simulate_open_transaction",
+          "open_transaction_simulation_failed"
+        ]
+      },
+      "SubmitIntentBadRequestResponse": {
+        "type": "object",
+        "required": [
+          "msg",
+          "code"
+        ],
+        "properties": {
+          "code": {
+            "$ref": "#/components/schemas/SubmitIntentBadRequestCode"
+          },
+          "msg": {
+            "type": "string"
+          }
+        },
+        "example": {
+          "code": "<enum<string>>",
+          "msg": "<string>"
+        }
+      },
+      "SwapBadRequestCode": {
+        "type": "string",
+        "enum": [
+          "invalid_out_amount",
+          "invalid_user_public_key",
+          "invalid_sponsor",
+          "sponsored_swap_cannot_create_fee_account",
+          "invalid_platform_fee_amount",
+          "invalid_fee_account",
+          "invalid_positive_slippage_fee_account",
+          "invalid_referral_account",
+          "invalid_destination_token_account",
+          "invalid_destination_token_account_for_native_sol",
+          "invalid_output_close_authority",
+          "output_close_authority_with_native_sol_output",
+          "output_close_authority_with_destination_token_account",
+          "both_priority_fee_params_specified",
+          "route_is_empty",
+          "route_too_long",
+          "invalid_route_plan_leg",
+          "invalid_jito_sandwich_mitigation_account",
+          "skip_pumpfun_cashback_claim_with_sponsor_executor"
+        ]
+      },
+      "SwapBadRequestResponse": {
+        "type": "object",
+        "required": [
+          "msg",
+          "code"
+        ],
+        "properties": {
+          "code": {
+            "$ref": "#/components/schemas/SwapBadRequestCode"
+          },
+          "msg": {
+            "type": "string"
+          }
+        },
+        "example": {
+          "code": "<enum<string>>",
+          "msg": "<string>"
+        }
+      },
+      "SwapInstructionsResponse": {
+        "type": "object",
+        "required": [
+          "computeBudgetInstructions",
+          "setupInstructions",
+          "swapInstruction",
+          "cleanupInstructions",
+          "otherInstructions",
+          "addressLookupTableAddresses",
+          "prioritizationFeeLamports",
+          "computeUnitLimit",
+          "blockhashWithMetadata"
+        ],
+        "properties": {
+          "addressLookupTableAddresses": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "The lookup table addresses"
+          },
+          "blockhashWithMetadata": {
+            "$ref": "#/components/schemas/BlockhashWithMetadata",
+            "description": "A blockhash that can be used to construct the transaction"
+          },
+          "cleanupInstructions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/InstructionResponse"
+            },
+            "description": "Instructions that should be included after the swap instruction"
+          },
+          "computeBudgetInstructions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/InstructionResponse"
+            },
+            "description": "Instructions that determine the compute budget and prioritization fee for the transaction"
+          },
+          "computeUnitLimit": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Compute unit limit assigned to the transaction",
+            "minimum": 0
+          },
+          "otherInstructions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/InstructionResponse"
+            },
+            "description": "Other instructions that should be included in the transaction. The indices of these\ninstructions in the transaction are not important."
+          },
+          "prioritizationFeeLamports": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Prioritization fee in lamports",
+            "minimum": 0
+          },
+          "prioritizationType": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/PrioritizationType",
+                "description": "Prioritization fee type for the transaction"
+              }
+            ]
+          },
+          "setupInstructions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/InstructionResponse"
+            },
+            "description": "Instructions that should be included before the swap instruction"
+          },
+          "swapInstruction": {
+            "$ref": "#/components/schemas/InstructionResponse",
+            "description": "The instruction that performs the swap"
+          }
+        }
+      },
+      "SwapInternalServerErrorCode": {
+        "type": "string",
+        "enum": [
+          "failed_to_compute_swap"
+        ]
+      },
+      "SwapInternalServerErrorResponse": {
+        "type": "object",
+        "required": [
+          "msg",
+          "code"
+        ],
+        "properties": {
+          "code": {
+            "$ref": "#/components/schemas/SwapInternalServerErrorCode"
+          },
+          "msg": {
+            "type": "string"
+          }
+        },
+        "example": {
+          "code": "<enum<string>>",
+          "msg": "<string>"
+        }
+      },
+      "SwapRequest": {
+        "type": "object",
+        "required": [
+          "userPublicKey",
+          "quoteResponse"
+        ],
+        "properties": {
+          "computeUnitPriceMicroLamports": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Compute unit price in micro-lamports. Mutually exclusive with `prioritizationFeeLamports`.",
+            "minimum": 0
+          },
+          "createFeeAccount": {
+            "$ref": "#/components/schemas/CreateFeeAccountParams",
+            "description": "If the fee account isn't a referral token account derived from the seeds\n`[\"referral_ata\", referral_account, mint]` and the Referral program ID\n`REFER4ZgmyYx9c6He5XfaTMiGfdLwRnkV4RPp9t9iF3`, this should be unspecified. If specified, the\ntransaction will create the `fee_account` if it doesn't already exist. The user pays for the\ncreation of the fee account. Ignored if `fee_account` is unspecified."
+          },
+          "destinationTokenAccount": {
+            "$ref": "#/components/schemas/DestinationTokenAccountParam",
+            "description": "The account that will receive the output token. If not specified, the user's associated\ntoken account for the output mint will be used. Allowed values are:\n- A base58-encoded address, which specifies the address of the destination token account or,\n  if the output is native SOL, the destination wallet. If the output isn't native SOL, the\n  specified account must exist before the swap executes, or else the swap will fail.\n- An object which specifies the owner of the destination token account. In this case, the\n  owner's associated token account for the output mint will be used as the destination token\n  account. Note that this cannot be used if the output is native SOL. The object contains\n  the following:\n    - `associatedTokenAccount` - object\n        - `owner` - base58-encoded address of the owner of the destination token account"
+          },
+          "dynamicComputeUnitLimit": {
+            "type": "boolean",
+            "description": "If true, the server will simulate the transaction to determine its compute unit limit. If\nunspecified or false, the transaction will use the default compute unit limit."
+          },
+          "feeAccount": {
+            "type": "string",
+            "description": "Base58-encoded address of the token account that will receive the platform fee if a platform\nfee applies to the swap. If specified, this account's mint must match the fee mint for the\nswap."
+          },
+          "includeJitoSandwichMitigationAccount": {
+            "$ref": "#/components/schemas/IncludeJitoSandwichMitigationAccount",
+            "description": "If specified, the transaction will include a Jito sandwich mitigation account in the swap\ninstruction. Allowed values are:\n- `true` - uses the default Jito sandwich mitigation account\n- `false` - does not include the account\n- A base58-encoded account address - uses the specified account\n\nIf unspecified, the account is not included.\nSee https://docs.jito.wtf/lowlatencytxnsend/#sandwich-mitigation for more details."
+          },
+          "outputCloseAuthority": {
+            "type": "string",
+            "description": "Base58-encoded address of the close authority to assign to the output token account. If\nspecified, the swap instruction will idempotently initialize the output token account and\nset its close authority to the specified address. The action is a no-op if the output\ntoken account already exists at execution time.\n\nCannot be used when the output mint is SOL (wrapped or native). Cannot be used with\n`destinationTokenAccount`."
+          },
+          "perLegSlippage": {
+            "type": "boolean",
+            "description": "If true or unspecified, per-leg slippage checks are enabled. If false, per-leg slippage\nchecks are disabled."
+          },
+          "positiveSlippage": {
+            "$ref": "#/components/schemas/PositiveSlippageParams",
+            "description": "Positive slippage fee parameters. If specified, then the swap will pay some or all positive\nslippage to the specified account."
+          },
+          "prioritizationFeeLamports": {
+            "$ref": "#/components/schemas/PrioritizationFeeLamports",
+            "description": "Prioritization fee in lamports. Mutually exclusive with `computeUnitPriceMicroLamports`.\nIf both `computeUnitPriceMicroLamports` and `prioritizationFeeLamports` are unspecified, the\ndefault of `prioritizationFeeLamports=\"auto\"` will be used.\nAllowed values are:\n- a u32 which specifies the lamports\n- the string value \"auto\", where the server determines the fee automatically, capped at\n  0.005 SOL\n- the string value \"disabled\", where the server leaves the prioritization fee unspecified\n- an object containing the following\n    - `priorityLevelWithMaxLamports` - object\n        - `priorityLevel` - string, either `medium`, `high`, or `veryHigh`\n        - `maxLamports` - integer, a cap on the prioritization fee\n- an object containing the following\n    - `autoMultiplier` - a u32 which specifies how much to multiply the automatically\n      determined fee by. The total prioritization fee will be capped at 0.005 SOL."
+          },
+          "quoteResponse": {
+            "$ref": "#/components/schemas/QuoteResponse",
+            "description": "The response from the quote endpoint"
+          },
+          "sponsor": {
+            "type": "string",
+            "description": "Base58-encoded address of the sponsor's wallet. If specified, the sponsor will pay the\ntransaction fee and for token account creation, and both the user and the sponsor must sign\nthe swap transaction. This can be used to implement gasless swaps."
+          },
+          "sponsorExec": {
+            "type": "boolean",
+            "description": "If true, the sponsor will be the executor of the swap for sponsored swaps. If false, the\nuser will be the executor of the swap for sponsored swaps. Default is true."
+          },
+          "userPublicKey": {
+            "type": "string",
+            "description": "Base58-encoded address of the swapper's wallet"
+          },
+          "wrapAndUnwrapSol": {
+            "type": "boolean",
+            "description": "If false, the transaction will use wrapped SOL"
+          }
+        }
+      },
+      "SwapResponse": {
+        "type": "object",
+        "required": [
+          "swapTransaction",
+          "lastValidBlockHeight",
+          "prioritizationFeeLamports",
+          "computeUnitLimit"
+        ],
+        "properties": {
+          "computeUnitLimit": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Compute unit limit assigned to the transaction",
+            "minimum": 0
+          },
+          "lastValidBlockHeight": {
+            "type": "integer",
+            "format": "int64",
+            "description": "The last block height at which the transaction is valid",
+            "minimum": 0
+          },
+          "prioritizationFeeLamports": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Prioritization fee in lamports",
+            "minimum": 0
+          },
+          "prioritizationType": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/PrioritizationType",
+                "description": "Prioritization fee type for the transaction"
+              }
+            ]
+          },
+          "swapTransaction": {
+            "type": "string",
+            "description": "Base64-encoded swap transaction. The user must sign before sending it to Solana."
+          }
+        }
+      },
+      "TokensServiceUnavailableCode": {
+        "type": "string",
+        "enum": [
+          "mint_info_not_initialized"
+        ]
+      },
+      "TokensServiceUnavailableResponse": {
+        "type": "object",
+        "required": [
+          "msg",
+          "code"
+        ],
+        "properties": {
+          "code": {
+            "$ref": "#/components/schemas/TokensServiceUnavailableCode"
+          },
+          "msg": {
+            "type": "string"
+          }
+        },
+        "example": {
+          "code": "<enum<string>>",
+          "msg": "<string>"
+        }
+      },
+      "TokensWithDecimalsDoc": {
+        "type": "array",
+        "items": {
+          "type": "array",
+          "items": {},
+          "prefixItems": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "integer"
+            }
+          ],
+          "maxItems": 2,
+          "minItems": 2
+        },
+        "examples": [
+          [
+            [
+              "So11111111111111111111111111111111111111112",
+              9
+            ],
+            [
+              "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+              6
+            ]
+          ]
+        ]
+      },
+      "Vec": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "securitySchemes": {
+      "api_key": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "x-api-key",
+        "description": "API key for authentication. Contact hello@dflow.net to obtain an API key."
+      }
+    }
+  },
+  "security": [
+    {
+      "api_key": []
+    }
+  ],
+  "tags": [
+    {
+      "name": "order",
+      "description": "Order API endpoints"
+    },
+    {
+      "name": "swap",
+      "description": "Swap API endpoints"
+    },
+    {
+      "name": "intent",
+      "description": "Intent trading endpoints"
+    },
+    {
+      "name": "prediction_market",
+      "description": "Prediction market endpoints"
+    },
+    {
+      "name": "venues",
+      "description": "Venue endpoints"
+    },
+    {
+      "name": "tokens",
+      "description": "Token endpoints"
+    }
+  ]
+}

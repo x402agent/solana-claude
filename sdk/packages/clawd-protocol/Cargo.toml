@@ -1,0 +1,8 @@
+[workspace]
+members = ["programs/clawd-protocol"]
+resolver = "2"
+
+[workspace.dependencies]
+anchor-lang = { version = "0.31.0", features = ["init-if-needed"] }
+anchor-spl = "0.31.0"
+bytemuck = { version = "1.20.0", features = ["derive"] }

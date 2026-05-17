@@ -1,0 +1,198 @@
+node_modules
+.next
+.env.local
+.env
+.vercel
+# ----------------------------------------------------------------------------
+# Secrets — NEVER commit
+# ----------------------------------------------------------------------------
+# Env files (any name pattern, any depth)
+.env
+.env.*
+!.env.example
+!.env.template
+!.env.sample
+client_secret_2_1013652097839-o9prcoaccqaet6akkqb4regfgffo9bsm.apps.googleusercontent.com
+# Private keys / certs / wallets
+*.pem
+*.key
+*.p12
+*.pfx
+*.keystore
+*.jks
+*.asc
+*.gpg
+id_rsa
+id_rsa.*
+id_ed25519
+id_ed25519.*
+id_ecdsa
+id_ecdsa.*
+*.ppk
+known_hosts
+
+# Wallet / keypair files
+wallet.json
+*-wallet.json
+keypair.json
+*-keypair.json
+solana-keygen.json
+phantom-export.json
+
+# Service account / cloud credentials
+service-account*.json
+gcp-credentials*.json
+google-credentials*.json
+firebase-adminsdk*.json
+aws-credentials
+credentials.json
+
+# Coinbase / CDP specific
+cdp_private_key.pem
+cdp_*.pem
+
+# Privy / other secret files seen in this repo
+privy-private-key.pem
+fly.toml.local
+*api_key*.txt
+*secret*.txt
+
+# ----------------------------------------------------------------------------
+# Node / pnpm / bun
+# ----------------------------------------------------------------------------
+node_modules/
+.pnpm-store/
+.pnp.*
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+
+# ----------------------------------------------------------------------------
+# Python (clawd-operator etc.)
+# ----------------------------------------------------------------------------
+.venv/
+venv/
+env/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+.Python
+pip-log.txt
+pip-delete-this-directory.txt
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# ----------------------------------------------------------------------------
+# Build / dist artifacts
+# ----------------------------------------------------------------------------
+dist/
+build/
+out/
+.next/
+.next*/
+.turbo/
+.cache/
+.parcel-cache/
+.swc/
+.tsbuildinfo
+*.tsbuildinfo
+coverage/
+.nyc_output/
+
+# ----------------------------------------------------------------------------
+# Mobile / iOS / Android
+# ----------------------------------------------------------------------------
+# iOS
+*.xcuserstate
+xcuserdata/
+DerivedData/
+Pods/
+*.mobileprovision
+*.p8
+*.ipa
+*.dSYM.zip
+
+# Android
+.gradle/
+local.properties
+*.apk
+*.aab
+*.iml
+captures/
+google-services.json
+
+# Expo / React Native
+.expo/
+.expo-shared/
+
+# ----------------------------------------------------------------------------
+# macOS / Windows / Linux junk
+# ----------------------------------------------------------------------------
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+
+# ----------------------------------------------------------------------------
+# Editors / IDEs
+# ----------------------------------------------------------------------------
+.vscode/
+!.vscode/extensions.json
+.idea/
+*.swp
+*.swo
+*~
+.project
+.classpath
+.settings/
+
+# ----------------------------------------------------------------------------
+# Logs / runtime / temp
+# ----------------------------------------------------------------------------
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+.npm/
+.eslintcache
+.stylelintcache
+*.pid
+*.seed
+*.pid.lock
+
+# ----------------------------------------------------------------------------
+# Test / generated data
+# ----------------------------------------------------------------------------
+generated/
+tmp/
+temp/
+.tmp/
+
+# ----------------------------------------------------------------------------
+# Repo-specific
+# ----------------------------------------------------------------------------
+# Old/duplicate working folders — keep on disk but exclude from git
+extensions copy/
+
+# Local sessions / user state
+.clawdbot/
+sessions/
+*.session
+
+# Sentry / sourcemaps
+.sentryclirc
+
+# Claude Code / agent local state
+.claude/
+.cursor/

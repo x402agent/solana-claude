@@ -58,6 +58,22 @@
       "types": "./dist/agent/system-prompt.d.ts",
       "default": "./dist/agent/system-prompt.js"
     },
+    "./ore/index.js": {
+      "types": "./dist/ore/index.d.ts",
+      "default": "./dist/ore/index.js"
+    },
+    "./ore/agent.js": {
+      "types": "./dist/ore/agent.d.ts",
+      "default": "./dist/ore/agent.js"
+    },
+    "./ore/client.js": {
+      "types": "./dist/ore/client.d.ts",
+      "default": "./dist/ore/client.js"
+    },
+    "./ore/tools.js": {
+      "types": "./dist/ore/tools.d.ts",
+      "default": "./dist/ore/tools.js"
+    },
     "./types/index.js": {
       "types": "./dist/types/index.d.ts",
       "default": "./dist/types/index.js"

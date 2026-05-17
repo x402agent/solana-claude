@@ -23,6 +23,9 @@ import { readBalances } from './identity/balances.js';
 import { depthFor } from './survival/monitor.js';
 import { getLeviathan, listSpawnlings } from './state/database.js';
 import { DEFAULT_RPC, CLAWD_MINT } from './config.js';
+import { OreMiningAgent } from './ore/agent.js';
+import { inspectOre, runOreCli, type OreCommand, type OreReadCommand } from './ore/client.js';
+import { createOreClawTools } from './ore/tools.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PKG = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'package.json'), 'utf8'));
@@ -84,6 +87,64 @@ if (flag('--status')) {
   process.exit(0);
 }
 
+if (flag('--ore-status')) {
+  await oreStatusCmd();
+  process.exit(0);
+}
+
+if (flag('--ore-command')) {
+  const command = opt('--ore-command') as OreCommand | undefined;
+  if (!command) throw new Error('Missing value for --ore-command');
+  if (isOreWriteCommand(command) && !flag('--execute')) {
+    throw new Error(`Refusing to run write command "${command}" without --execute`);
+  }
+  const result = await runOreCli({
+    command,
+    rpcUrl: RPC,
+    env: oreEnvFromArgs(),
+  });
+  if (result.stdout) console.log(result.stdout);
+  if (result.stderr) console.error(result.stderr);
+  process.exit(0);
+}
+
+if (flag('--ore-automate')) {
+  const agent = new OreMiningAgent({
+    rpcUrl: RPC,
+    policy: {
+      execute: flag('--execute'),
+      deploySol: numOpt('--ore-deploy-sol', 0.001),
+      maxSessionDeploySol: numOpt('--ore-max-session-sol', 0.01),
+      minSolReserve: numOpt('--ore-min-reserve-sol', 0.02),
+    },
+  });
+  const result = await agent.configureAutomation({
+    amountSol: numOpt('--ore-deploy-sol', 0.001),
+    depositSol: numOpt('--ore-deposit-sol', numOpt('--ore-max-session-sol', 0.01)),
+    mask: intOpt('--ore-mask', 1),
+    reload: !flag('--no-ore-reload'),
+  });
+  console.log(JSON.stringify(result, null, 2));
+  process.exit(0);
+}
+
+if (flag('--ore-mine-once')) {
+  const agent = new OreMiningAgent({ rpcUrl: RPC, policy: orePolicyFromArgs() });
+  const result = await agent.mineOnce();
+  console.log(JSON.stringify(result, null, 2));
+  process.exit(0);
+}
+
+if (flag('--ore-run')) {
+  const controller = new AbortController();
+  process.on('SIGINT', () => controller.abort());
+  process.on('SIGTERM', () => controller.abort());
+  const agent = new OreMiningAgent({ rpcUrl: RPC, policy: orePolicyFromArgs() });
+  console.log(`ORE mining agent started (${flag('--execute') ? 'execute' : 'dry-run'} mode)`);
+  await agent.runUntilStopped(controller.signal);
+  process.exit(0);
+}
+
 if (flag('--spawnling')) {
   const lev = getLeviathan();
   if (!lev) throw new Error('No parent leviathan. Spawn one first.');
@@ -114,7 +175,7 @@ if (flag('--run')) {
       // Inject a placeholder inference provider; a real runtime wires xAI / Claude / OpenRouter here.
       await tailFlick({
         rpcUrl: RPC,
-        tools: [],
+        tools: flag('--ore-tools') ? createOreClawTools(RPC, { execute: flag('--execute') }) : [],
         infer: {
           think: async () => '(placeholder — wire an inference provider in src/agent/loop.ts)',
           costFor: () => 0,
@@ -139,6 +200,12 @@ USAGE
   openclawd --run
   openclawd --status
   openclawd --spawnling [--name X --prompt "..."]
+  openclawd --ore-status
+  openclawd --ore-mine-once [--execute --ore-deploy-sol 0.001 --ore-square 0]
+  openclawd --ore-run [--execute --ore-interval-ms 60000]
+  openclawd --ore-automate [--execute --ore-deploy-sol 0.001 --ore-deposit-sol 0.01]
+  openclawd --ore-command <board|miner|treasury|claim|checkpoint|deploy|...>
+  openclawd --run --ore-tools [--execute]
   openclawd --version
   openclawd --help
 
@@ -146,6 +213,7 @@ ENV
   HELIUS_RPC_URL  preferred Solana RPC
   SOLANA_RPC_URL  fallback RPC
   CREATOR_PUBKEY  required for --spawn unless --creator is passed
+  OPENCLAWD_ORE_DIR optional path to the ore-master checkout
 
 ON-CHAIN
   Leviathans register via Metaplex Agent Registry: https://developers.metaplex.com/agents
@@ -175,6 +243,64 @@ async function statusCmd() {
   console.log(`   $clawd:        ${balances.clawd.toFixed(2)}`);
   console.log(`   spawnlings:    ${spawnlings.length} (${spawnlings.filter((s) => !s.beached_at).length} alive)`);
   console.log(`   spawned:       ${new Date(meta.spawnedAt).toISOString()}`);
+}
+
+async function oreStatusCmd() {
+  const readCommands: OreReadCommand[] = ['board', 'miner', 'treasury'];
+  for (const command of readCommands) {
+    const result = await inspectOre(command, RPC);
+    console.log(`\n[ore:${command}]`);
+    if (result.stdout) console.log(result.stdout);
+    if (result.stderr) console.error(result.stderr);
+  }
+}
+
+function orePolicyFromArgs() {
+  return {
+    execute: flag('--execute'),
+    deploySol: numOpt('--ore-deploy-sol', 0.001),
+    maxSessionDeploySol: numOpt('--ore-max-session-sol', 0.01),
+    minSolReserve: numOpt('--ore-min-reserve-sol', 0.02),
+    intervalMs: intOpt('--ore-interval-ms', 60_000),
+    square: opt('--ore-square') === undefined ? undefined : intOpt('--ore-square', 0),
+    claimBeforeDeploy: !flag('--no-ore-claim'),
+    checkpointBeforeDeploy: !flag('--no-ore-checkpoint'),
+  };
+}
+
+function oreEnvFromArgs() {
+  return {
+    AMOUNT: opt('--amount'),
+    SQUARE: opt('--square') ?? opt('--ore-square'),
+    AUTHORITY: opt('--authority'),
+    ID: opt('--id'),
+    DEPOSIT: opt('--deposit'),
+    EXECUTOR: opt('--executor'),
+    FEE: opt('--fee'),
+    MASK: opt('--mask'),
+    STRATEGY: opt('--strategy'),
+    RELOAD: opt('--reload'),
+  };
+}
+
+function isOreWriteCommand(command: OreCommand): boolean {
+  return ['automate', 'checkpoint', 'checkpoint_all', 'claim', 'close_all', 'deploy', 'deploy_all', 'reset'].includes(command);
+}
+
+function numOpt(name: string, fallback: number): number {
+  const value = opt(name);
+  if (value === undefined) return fallback;
+  const parsed = Number(value);
+  if (!Number.isFinite(parsed)) throw new Error(`Invalid number for ${name}: ${value}`);
+  return parsed;
+}
+
+function intOpt(name: string, fallback: number): number {
+  const value = opt(name);
+  if (value === undefined) return fallback;
+  const parsed = Number.parseInt(value, 10);
+  if (!Number.isInteger(parsed)) throw new Error(`Invalid integer for ${name}: ${value}`);
+  return parsed;
 }
 
 function requireEnv(key: string): string {

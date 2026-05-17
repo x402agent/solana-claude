@@ -1,0 +1,158 @@
+{
+  "version": "0.2.0",
+  "updatedAt": "2026-05-16T17:00:00Z",
+  "network": "mainnet",
+  "programs": {
+    "clawd-protocol": {
+      "name": "Clawd Protocol",
+      "programId": "CLAWDpRoToCoLv1pRoGRaM111111111111111111111",
+      "network": "devnet",
+      "language": "rust",
+      "framework": "anchor-0.31",
+      "description": "Adaptive bonding curves, Token2022 pTokens, vault mechanics, sentiment engine, and agent capability bitmask",
+      "source": "packages/clawd-protocol/programs/clawd-protocol",
+      "features": [
+        "bonding-curves",
+        "p-token",
+        "token2022",
+        "vault",
+        "sentiment",
+        "agent-capabilities"
+      ]
+    },
+    "p-token-launchpad": {
+      "name": "P-Token Launchpad",
+      "language": "rust",
+      "framework": "anchor",
+      "source": "programs/p-token-launchpad",
+      "description": "Agent token launches: constant-product curves, PDA registry, fee distribution, DEX graduation",
+      "features": [
+        "bonding-curves",
+        "agent-registry",
+        "agent-token-binding",
+        "fee-distribution",
+        "dex-graduation"
+      ]
+    },
+    "solana-gpt-oracle": {
+      "name": "Solana GPT Oracle",
+      "language": "rust",
+      "source": "agents/solana-gpt-oracle",
+      "description": "On-chain LLM oracle: watches interaction accounts, calls LLM, submits callback responses",
+      "features": [
+        "llm-oracle",
+        "callback",
+        "on-chain-ai"
+      ]
+    },
+    "dynamic-bonding-curve": {
+      "name": "Dynamic Bonding Curve",
+      "programId": "dbcij3LWUppWqq96dh6gJWwBifmcGfLSB5D4DuSMaqN",
+      "network": "devnet",
+      "language": "rust",
+      "framework": "anchor",
+      "source": "dynamic-bonding-curve-main",
+      "description": "Dynamic AMM bonding curves with Meteora DLMM migration",
+      "features": [
+        "dynamic-curves",
+        "meteora-migration",
+        "virtual-pools"
+      ]
+    },
+    "metaplex-agent-registry": {
+      "name": "Metaplex Agent Registry",
+      "programId": "TBD",
+      "network": "mainnet",
+      "description": "Metaplex agent identity registration and management",
+      "features": [
+        "agent-identity",
+        "core-assets",
+        "asset-signer"
+      ]
+    }
+  },
+  "agents": {
+    "deep-clawd": {
+      "name": "Deep Clawd",
+      "type": "trading-agent",
+      "model": "deepseek-v4",
+      "routing": "dFlow",
+      "source": "deep-clawd/",
+      "description": "DeepSeek V4 trading agent with dFlow routing across OODA phases"
+    },
+    "clawd-router": {
+      "name": "ClawdRouter",
+      "type": "model-router",
+      "source": "clawdrouter/",
+      "description": "Model routing and agent economics"
+    },
+    "dark-ralph": {
+      "name": "Dark Ralph OODA",
+      "type": "ooda-loop",
+      "source": "ooda/",
+      "description": "Observe-orient-decide-act loop and trading lab"
+    }
+  },
+  "tokens": {
+    "CLAWD": {
+      "symbol": "CLAWD",
+      "mint": "8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump",
+      "decimals": 6,
+      "network": "mainnet",
+      "type": "pump-fun",
+      "website": "https://solanaclawd.com",
+      "social": {
+        "x": "@clawddevs",
+        "telegram": "t.me/clawdtoken"
+      }
+    },
+    "USDC": {
+      "symbol": "USDC",
+      "mint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+      "decimals": 6,
+      "network": "mainnet",
+      "type": "spl"
+    }
+  },
+  "p-tokens": [],
+  "infrastructure": {
+    "hermes-x402": {
+      "name": "HERMES x402",
+      "type": "payment-rail",
+      "description": "HTTP 402 machine payments, pay.sh-style confidential settlement, A2A task flow, Solana USDC rails"
+    },
+    "mcp-orchestrator": {
+      "name": "MCP Orchestrator",
+      "type": "c2-plane",
+      "description": "73 tools, 14 resources, 13 prompts — pay-per-use tool dispatch, session metering, Leviathan bridge"
+    },
+    "clawd-memory": {
+      "name": "Clawd Memory",
+      "type": "agent-brain",
+      "description": "Local-first agent brain: markdown vault, Solana/OODA metadata, deterministic recall, Mnemosyne SQLite substrate"
+    }
+  },
+  "stackMap": {
+    "hermes-terminal": "tui/",
+    "leviathan-runtime": "leviathan/",
+    "x402-rails": "x402/",
+    "deep-clawd": "deep-clawd/",
+    "dark-ralph-ooda": "ooda/",
+    "clawd-router": "clawdrouter/",
+    "clawd-memory-vault": "llm-wiki-tang/",
+    "mnemosyne-brain": "MemeBRain/",
+    "llm-oracle": "llm_oracle/",
+    "percolator-ops": "llm_oracle/percolator-cli-master/",
+    "pinocchio-support": "pinocchio/",
+    "program-workspace": "programs/",
+    "p-token-explorer": "scripts/ptoken-explorer.mjs",
+    "p-token-launchpad": "programs/p-token-launchpad/",
+    "risk-engine": "docs/risk-engine-spec.md",
+    "mcp-orchestrator": "MCP/",
+    "browser-bridge": "chrome-extension/",
+    "agent-wallet": "packages/agentwallet/",
+    "openclawd-assembly": "openclawd/",
+    "automation": "automation/",
+    "openclawd-framework": "openclawd-framework/"
+  }
+}

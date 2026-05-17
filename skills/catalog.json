@@ -18,10 +18,178 @@
     "category": "DevOps / Infrastructure"
   },
   {
+    "slug": "dflow-docs",
+    "name": "dflow-docs",
+    "description": "Discover and use DFlow documentation, Agent CLI, Trading API, Metadata API, Proof KYC, prediction markets, and the hosted DFlow docs MCP. Use before implementing DFlow features or when field-level endpoint details are needed.",
+    "category": "DFlow / Trading"
+  },
+  {
+    "slug": "dflow-kalshi-market-data",
+    "name": "dflow-kalshi-market-data",
+    "description": "Read market data for a known Kalshi prediction market on DFlow — orderbook, trades, top-of-book prices, candlesticks, forecast-percentile history, and Kalshi in-game live data — via one-shot REST snapshots, historical ranges, or live WebSocket streams. Use when the user asks \"show me the orderbook for X\", \"get last hour of trades\", \"build a live price ticker\", \"stream orderbook depth\", \"pull 1-minute candles for the last day\", \"watch in-game scores for this sports market\", or \"alert me when the orderbook moves\". Do NOT use to discover markets matching a criterion (use `dflow-kalshi-market-scanner`), to place orders (use `dflow-kalshi-trading`), or to read a user's own positions/P&L (use `dflow-kalshi-portfolio`).",
+    "category": "DFlow / Trading"
+  },
+  {
+    "slug": "dflow-kalshi-market-scanner",
+    "name": "dflow-kalshi-market-scanner",
+    "description": "Find Kalshi prediction markets on DFlow that match a criterion — arbitrage (YES+NO<$1), cheap long-shots, near-certain short-dated plays, biggest movers, widest spreads, highest volume, closing soonest, and series/event-level scans. Use when the user asks \"where's the free money?\", \"any mispriced markets?\", \"cheap YES with volume\", \"what moved today?\", \"markets closing soon\", \"cheapest YES in this event\", \"top markets by volume\", or \"alert me when X happens\" (streaming). Do NOT use to place orders (use `dflow-kalshi-trading`), to view a user's own positions (use `dflow-kalshi-portfolio`), or for general live-data plumbing unrelated to a scan (use `dflow-kalshi-market-data`).",
+    "category": "DFlow / Trading"
+  },
+  {
+    "slug": "dflow-kalshi-portfolio",
+    "name": "dflow-kalshi-portfolio",
+    "description": "View what a wallet holds on DFlow's Kalshi prediction markets — current positions, unrealized mark-to-market, realized P&L, activity history, and redeemable winners. Use when the user asks \"what are my positions?\", \"what do I own?\", \"am I up or down?\", \"what's my fill history?\", \"what can I redeem?\", \"mark my portfolio to market\", or \"show me this wallet's DFlow activity\". Read-only. Do NOT use to place sells or redemptions (use `dflow-kalshi-trading`), for market-wide data unrelated to a wallet (use `dflow-kalshi-market-data`), or to discover new markets (use `dflow-kalshi-market-scanner`).",
+    "category": "DFlow / Trading"
+  },
+  {
+    "slug": "dflow-kalshi-trading",
+    "name": "dflow-kalshi-trading",
+    "description": "Buy, sell, or redeem YES/NO outcome tokens on Kalshi prediction markets via DFlow. Use when the user wants to bet on an event, place a Kalshi order, take a YES or NO position, exit a Kalshi position, redeem winning outcome tokens after a market resolves, tune priority fees on a PM trade, or build a gasless / sponsored PM flow where the app pays tx / ATA / market-init costs. Covers both the `dflow` CLI and the DFlow Trading API. Do NOT use to discover markets, view positions, stream prices, complete Proof KYC, or for non-Kalshi spot swaps.",
+    "category": "DFlow / Trading"
+  },
+  {
+    "slug": "dflow-phantom-connect",
+    "name": "dflow-phantom-connect",
+    "description": "Build Solana wallet-connected apps with Phantom Connect SDKs and DFlow trading. Use when user asks to connect a Phantom wallet, integrate Phantom in React, React Native, or vanilla JS, sign messages or transactions, build token-gated pages, mint NFTs, accept crypto payments, swap tokens with DFlow, trade prediction markets, or integrate Proof KYC verification. Covers @phantom/react-sdk, @phantom/react-native-sdk, @phantom/browser-sdk, DFlow spot trading, DFlow prediction markets, and DFlow Proof identity verification. Do NOT use for Ethereum or EVM wallet integrations, or non-DFlow DEX routing.",
+    "category": "DFlow / Trading"
+  },
+  {
+    "slug": "dflow-platform-fees",
+    "name": "dflow-platform-fees",
+    "description": "Monetize a DFlow integration by collecting a builder-defined fee on trades your app routes through the Trade API — either a fixed percentage (spot + PM) via `platformFeeBps`, or a probability-weighted dynamic fee (PM outcome tokens only) via `platformFeeScale`. Use when the user asks \"how do I take a cut of trades?\", \"add a builder fee\", \"monetize my swap UI\", \"charge a platform fee\", \"how does platformFeeBps / platformFeeScale work?\", or \"where do my fees get paid?\". Do NOT use to run a trade itself (use `dflow-spot-trading` or `dflow-kalshi-trading` — both also cover priority fees and sponsored / gasless flows).",
+    "category": "DFlow / Trading"
+  },
+  {
+    "slug": "dflow-proof-kyc",
+    "name": "dflow-proof-kyc",
+    "description": "Integrate DFlow Proof — a Solana wallet identity-verification primitive (Stripe Identity under the hood) — for either (a) gating your own app's features behind KYC, or (b) completing the mandatory verification step for Kalshi prediction-market buys on DFlow. Use when the user asks \"how do I KYC a wallet?\", \"check if a wallet is verified\", \"add KYC to my DeFi app\", \"handle unverified_wallet_not_allowed / PROOF_NOT_VERIFIED\", \"redirect to dflow.net/proof\", or \"gate a feature by jurisdiction or identity\". Do NOT use to actually place trades (use `dflow-kalshi-trading`), for geoblocking (separate concern, handled inline in the trading skill), for age gating (Proof doesn't currently verify age), or for spot swaps (no KYC required).",
+    "category": "DFlow / Trading"
+  },
+  {
+    "slug": "dflow-spot-trading",
+    "name": "dflow-spot-trading",
+    "description": "Swap any pair of Solana tokens via DFlow. Use when the user wants to trade, swap, or convert tokens on Solana, get a price quote, build a swap UI, tune priority fees so a swap lands under congestion, or build a gasless / sponsored swap where the app pays fees. Covers both the `dflow` CLI and the DFlow Trading API. Do NOT use for Kalshi prediction-market YES/NO trades or builder-side platform fees.",
+    "category": "DFlow / Trading"
+  },
+  {
+    "slug": "phantom-wallet-mcp",
+    "name": "phantom-wallet-mcp",
+    "description": ">",
+    "category": "DFlow / Trading"
+  },
+  {
     "slug": "canvas",
     "name": "Canvas Skill",
     "description": "Display HTML content on connected SolanaOS nodes (Mac app, iOS, Android).",
     "category": "Media"
+  },
+  {
+    "slug": "vulcan",
+    "name": "vulcan",
+    "description": "Entry-point skill for Phoenix perpetuals through Vulcan/Rise SDK inside solana-clawd. Use before answering or acting on Vulcan, Phoenix DEX, Solana perps, paper trading, live trading, margin, TP/SL, TWAP, grid, TA strategies, or perps agent setup.",
+    "category": "Other"
+  },
+  {
+    "slug": "vulcan-error-recovery",
+    "name": "vulcan-error-recovery",
+    "description": "Error category routing and recovery for Vulcan/Phoenix perps. Use on failed CLI/MCP calls, tx failures, auth/config/API/network/rate-limit errors, and strategy recovery.",
+    "category": "Other"
+  },
+  {
+    "slug": "vulcan-execution-modes",
+    "name": "vulcan-execution-modes",
+    "description": "Canonical Vulcan execution mode taxonomy: Observe, Paper, Dry-Run, Confirm-Each, Auto-Execute. Use before launching strategies or live-capable perps flows.",
+    "category": "Other"
+  },
+  {
+    "slug": "vulcan-grid-trading",
+    "name": "vulcan-grid-trading",
+    "description": "Grid trading with layered limit orders on Phoenix perpetuals. Use for grid setup, monitoring, pausing/stopping, and live/paper grid strategy safety.",
+    "category": "Other"
+  },
+  {
+    "slug": "vulcan-lot-size-calculator",
+    "name": "vulcan-lot-size-calculator",
+    "description": "Convert desired token/notional amounts to Phoenix base lots. Use whenever a Vulcan command requires size/base lots.",
+    "category": "Other"
+  },
+  {
+    "slug": "vulcan-margin-operations",
+    "name": "vulcan-margin-operations",
+    "description": "Vulcan/Phoenix collateral, deposits, withdrawals, transfers, isolated margin, leverage tiers, and margin health.",
+    "category": "Other"
+  },
+  {
+    "slug": "vulcan-market-intel",
+    "name": "vulcan-market-intel",
+    "description": "Phoenix market data, tickers, orderbooks, candles, funding, spreads, liquidity, and pre-trade market context.",
+    "category": "Other"
+  },
+  {
+    "slug": "vulcan-onboarding",
+    "name": "vulcan-onboarding",
+    "description": "First-run Vulcan setup for paper trading, wallet, registration, collateral, MCP skills, and live readiness.",
+    "category": "Other"
+  },
+  {
+    "slug": "vulcan-portfolio-intel",
+    "name": "vulcan-portfolio-intel",
+    "description": "Phoenix portfolio snapshots: margin, positions, resting orders, funding exposure, PnL, and account reporting.",
+    "category": "Other"
+  },
+  {
+    "slug": "vulcan-position-management",
+    "name": "vulcan-position-management",
+    "description": "List, show, close, reduce Phoenix positions and attach/cancel TP/SL.",
+    "category": "Other"
+  },
+  {
+    "slug": "vulcan-quickstart",
+    "name": "vulcan-quickstart",
+    "description": "Five-minute Vulcan quickstart for install, health check, first market read, and first paper trade.",
+    "category": "Other"
+  },
+  {
+    "slug": "vulcan-risk-management",
+    "name": "vulcan-risk-management",
+    "description": "Risk checks for Phoenix perps: margin health, leverage tiers, liquidation distance, notional caps, exposure, stops, and strategy guardrails.",
+    "category": "Other"
+  },
+  {
+    "slug": "vulcan-skills-index",
+    "name": "vulcan-skills-index",
+    "description": "Index for the bundled Vulcan skill pack exposed through solana-clawd. Use to discover the correct focused Vulcan skill.",
+    "category": "Other"
+  },
+  {
+    "slug": "vulcan-ta-strategy",
+    "name": "vulcan-ta-strategy",
+    "description": "Technical-analysis-driven Phoenix strategy runner using declarative rules and Vulcan strategy ledgers.",
+    "category": "Other"
+  },
+  {
+    "slug": "vulcan-technical-analysis",
+    "name": "vulcan-technical-analysis",
+    "description": "Technical indicators and trigger evaluation for Phoenix markets: RSI, MACD, BBands, ATR, ADX, VWAP, Stoch, SMA, EMA.",
+    "category": "Other"
+  },
+  {
+    "slug": "vulcan-tpsl-management",
+    "name": "vulcan-tpsl-management",
+    "description": "Take-profit and stop-loss setup, cancellation, laddered exits, position-side rules, and verification for Vulcan/Phoenix.",
+    "category": "Other"
+  },
+  {
+    "slug": "vulcan-trade-execution",
+    "name": "vulcan-trade-execution",
+    "description": "Safe Phoenix order execution via Vulcan: pre-trade checks, market/limit orders, paper/dry-run/live gates, and post-trade verification.",
+    "category": "Other"
+  },
+  {
+    "slug": "vulcan-twap-execution",
+    "name": "vulcan-twap-execution",
+    "description": "TWAP strategy execution on Phoenix perps using Vulcan's first-class runner, tick logs, ledgers, status/monitor/finalize controls.",
+    "category": "Other"
   },
   {
     "slug": "pumpfun-analytics",
@@ -48,9 +216,27 @@
     "category": "Pump.fun / Token Launch"
   },
   {
+    "slug": "solana-clawd",
+    "name": "solana-clawd",
+    "description": "One-shot setup and operation guide for the solana-clawd agentic engine. Use when: cloning the repo, setting up MCP tools, starting the Telegram bot, deploying to Fly.io/Netlify, hatching blockchain buddies, running OODA loops, configuring voice mode (ElevenLabs + Grok), minting Metaplex agents, managing the vault, running the worker swarm, or contributing to the project. Covers all 31 MCP tools, 18 buddy species, 9 spinners, 60+ Telegram commands, 95 skills, and the full repo structure.",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "solana-clawd-agentic-commerce",
+    "name": "solana-clawd-agentic-commerce",
+    "description": "Build and operate Solana CLAWD agents that spend through Pay CLI, expose paid stores, mint Metaplex-readable identities, and launch Genesis agent tokens.",
+    "category": "Solana / Blockchain"
+  },
+  {
     "slug": "solana-formal-verification",
     "name": "qedgen",
     "description": "Formally verify programs by writing Lean 4 proofs. Trigger this skill whenever the user wants to formally verify code, generate Lean 4 proofs, prove properties about algorithms or smart contracts, verify invariants, convert program logic into formal specifications, or anything involving Lean 4 and formal verification. Also trigger when the user mentions \"qedgen\", \"lean proof\", \"formal proof\", \"verify my code\", \"prove correctness\", \"formal verification\", or wants mathematical guarantees about their implementation.",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "solanaos",
+    "name": "solanaos",
+    "description": ">",
     "category": "Solana / Blockchain"
   }
 ]

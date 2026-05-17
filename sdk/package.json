@@ -1,33 +1,217 @@
 {
-  "name": "@solanaclawd/sdk",
-  "version": "1.0.0",
-  "description": "Official Solana Clawd SDK — sovereign AI agents with wallets, memory, and payment rails on Solana",
+  "name": "@openclawdsolana/leviathan",
+  "version": "0.2.0",
+  "description": "OpenClawd — Sovereign AI Lobster Runtime on Solana — $CLAWD: 8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "exports": {
-    ".": { "import": "./dist/index.js", "types": "./dist/index.d.ts" },
-    "./agent": { "import": "./dist/agent.js", "types": "./dist/agent.d.ts" },
-    "./wallet": { "import": "./dist/wallet.js", "types": "./dist/wallet.d.ts" },
-    "./tools": { "import": "./dist/tools.js", "types": "./dist/tools.d.ts" },
-    "./three-laws": { "import": "./dist/three-laws.js", "types": "./dist/three-laws.d.ts" },
-    "./mcp": { "import": "./dist/mcp.js", "types": "./dist/mcp.d.ts" },
-    "./openShell": { "import": "./dist/openShell.js", "types": "./dist/openShell.d.ts" }
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./config.js": {
+      "types": "./dist/config.d.ts",
+      "default": "./dist/config.js"
+    },
+    "./state/database.js": {
+      "types": "./dist/state/database.d.ts",
+      "default": "./dist/state/database.js"
+    },
+    "./identity/wallet.js": {
+      "types": "./dist/identity/wallet.d.ts",
+      "default": "./dist/identity/wallet.js"
+    },
+    "./identity/balances.js": {
+      "types": "./dist/identity/balances.d.ts",
+      "default": "./dist/identity/balances.js"
+    },
+    "./identity/spawn-onchain.js": {
+      "types": "./dist/identity/spawn-onchain.d.ts",
+      "default": "./dist/identity/spawn-onchain.js"
+    },
+    "./setup/wizard.js": {
+      "types": "./dist/setup/wizard.d.ts",
+      "default": "./dist/setup/wizard.js"
+    },
+    "./molting/spawn.js": {
+      "types": "./dist/molting/spawn.d.ts",
+      "default": "./dist/molting/spawn.js"
+    },
+    "./survival/monitor.js": {
+      "types": "./dist/survival/monitor.d.ts",
+      "default": "./dist/survival/monitor.js"
+    },
+    "./agent/system-prompt.js": {
+      "types": "./dist/agent/system-prompt.d.ts",
+      "default": "./dist/agent/system-prompt.js"
+    },
+    "./types/index.js": {
+      "types": "./dist/types/index.d.ts",
+      "default": "./dist/types/index.js"
+    },
+    "./state/app-state.js": {
+      "types": "./dist/state/app-state.d.ts",
+      "default": "./dist/state/app-state.js"
+    },
+    "./helius/index.js": {
+      "types": "./dist/helius/index.d.ts",
+      "default": "./dist/helius/index.js"
+    },
+    "./services/x402/index.js": {
+      "types": "./dist/services/x402/index.d.ts",
+      "default": "./dist/services/x402/index.js"
+    },
+    "./services/x402/types.js": {
+      "types": "./dist/services/x402/types.d.ts",
+      "default": "./dist/services/x402/types.js"
+    },
+    "./buddy/index.js": {
+      "types": "./dist/buddy/index.d.ts",
+      "default": "./dist/buddy/index.js"
+    }
   },
+  "bin": {
+    "leviathan": "dist/index.js",
+    "openclawd": "dist/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/x402agent/openclawd.git"
+  },
+  "homepage": "https://solanaclawd.com",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "keywords": [
+    "autonomous-agent",
+    "sovereign-ai",
+    "solana",
+    "openclawd",
+    "lobster",
+    "self-replicating",
+    "clawd",
+    "$CLAWD",
+    "x402",
+    "hermes",
+    "leviathan",
+    "ooda",
+    "p-token",
+    "metaplex",
+    "agent-runtime"
+  ],
+  "license": "MIT",
+  "files": [
+    "dist",
+    "scripts",
+    "three-laws.md",
+    "README.md"
+  ],
   "scripts": {
-    "build": "tsc -p tsconfig.json",
-    "dev": "tsc -p tsconfig.json --watch"
+    "build": "tsc",
+    "build:all": "tsc && (cd packages/clawd && npm run build) && (cd packages/cli-standalone && npm run build)",
+    "dev": "tsx watch src/index.ts",
+    "test": "vitest run \"src/**/*.{test,spec}.ts\" --passWithNoTests",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "npm run build",
+    "check": "tsc --noEmit",
+
+    "hermes": "echo '🦞 HERMES Terminal — launch via: clawd (TUI) or node dist/index.js --run' && node dist/index.js --run",
+    "start": "node dist/index.js",
+
+    "demo:ooda": "npx tsx examples/ooda-loop.ts",
+    "demo:paysh": "npx tsx examples/x402-payment-demo.ts",
+    "demo:a2a": "npx tsx examples/x402-solana.ts",
+    "demo:dark-defi": "npx tsx examples/blockchain-buddies-demo.ts",
+    "demo:buddies": "npx tsx examples/blockchain-buddies-demo.ts",
+    "demo:lobtrader": "npx tsx examples/lobster-trader.ts",
+    "demo:listen": "npx tsx examples/listen-wallet.ts",
+    "demo:wallet": "npx tsx examples/clawd-wallet-demo.ts",
+    "demo:orch": "npx tsx examples/orchestrator-client.ts",
+    "demo:research": "npx tsx examples/auto-research-client.ts",
+
+    "ooda": "npx tsx examples/ooda-loop.ts",
+    "ooda:llm": "XAI_API_KEY=${XAI_API_KEY:-} npx tsx examples/ooda-loop.ts",
+
+    "leviathan:spawn": "node dist/index.js --spawn",
+    "leviathan:run": "node dist/index.js --run",
+    "leviathan:status": "node dist/index.js --status",
+    "leviathan:spawnling": "node dist/index.js --spawnling",
+
+    "brain:init": "node dist/index.js --spawn",
+    "brain:status": "node dist/index.js --status",
+    "brain:mcp": "node dist/index.js --run",
+
+    "mcp:build": "cd mcp-server && npm install && npm run build",
+    "mcp:start": "node mcp-server/dist/index.js",
+
+    "x402:build": "cd x402 && npm install && npm run build",
+    "x402:demo:server": "npx tsx x402/examples/server-example.ts",
+    "x402:demo:client": "npx tsx x402/examples/client-example.ts",
+    "x402:demo:facilitator": "npx tsx x402/examples/facilitator-example.ts",
+
+    "pay:build": "cd pay/typescript/packages/solana-pay/core && npm install && npm run build",
+    "pay:pdb:dev": "cd pay/pdb && npm run dev",
+    "pay:pdb:build": "cd pay/pdb && npm run build",
+
+    "clawd:build": "cd packages/clawd && npm run build",
+    "clawd:start": "cd packages/clawd && node dist/index.js",
+    "clawd:dev": "cd packages/clawd && npx tsx src/index.ts",
+
+    "backrooms:dev": "cd livekit-agent && python backrooms.py dev",
+    "backrooms:start": "cd livekit-agent && python backrooms.py start",
+
+    "sdk:build": "cd packages/clawd-sdk && npm run build",
+
+    "wallet:build": "cd packages/clawd-wallet && npm run build",
+
+    "protocol:build": "cd packages/clawd-protocol && anchor build",
+
+    "automation:build": "npm run build",
+    "automation:spawn": "node dist/index.js --spawn",
+    "automation:ci": "npm run check && npm run build",
+    "automation:full": "npm run build && node dist/index.js --spawn && node dist/index.js --run",
+
+    "examples:list": "npx tsx -e \"console.log('Available examples: ooda, paysh, a2a, dark-defi, buddies, lobtrader, listen, wallet, orch, research');\"",
+    "examples:run": "echo 'Usage: npm run demo:<name>  e.g. npm run demo:ooda'"
   },
-  "peerDependencies": {
-    "@anthropic-ai/sdk": ">=0.39.0",
-    "@solana/web3.js": ">=1.95.0"
+  "dependencies": {
+    "@metaplex-foundation/mpl-agent-registry": "^0.2.5",
+    "@metaplex-foundation/mpl-core": "^1.8.0",
+    "@metaplex-foundation/umi": "^1.5.1",
+    "@metaplex-foundation/umi-bundle-defaults": "^1.5.1",
+    "@solana/web3.js": "^1.98.4",
+    "better-sqlite3": "^11.0.0",
+    "bs58": "^6.0.0",
+    "chalk": "^5.3.0",
+    "cron-parser": "^4.9.0",
+    "gray-matter": "^4.0.3",
+    "ora": "^8.0.0",
+    "simple-git": "^3.24.0",
+    "tweetnacl": "^1.0.3",
+    "ulid": "^2.3.0",
+    "ws": "^8.18.0",
+    "yaml": "^2.4.0"
   },
   "devDependencies": {
-    "@types/node": "^22.0.0",
-    "typescript": "^5.8.3"
+    "@types/better-sqlite3": "^7.6.0",
+    "@types/node": "^20.10.0",
+    "@types/ws": "^8.5.12",
+    "tsx": "^4.7.0",
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.6"
   },
-  "keywords": ["solana", "clawd", "leviathan", "agent", "sovereign-ai", "x402", "defi", "mcp"],
-  "license": "MIT",
-  "repository": { "type": "git", "url": "https://github.com/x402agent/solana-clawd" },
-  "upstream": "https://github.com/x402agent/Solana-Clawd-SDK"
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "better-sqlite3",
+      "bigint-buffer",
+      "bufferutil",
+      "esbuild",
+      "utf-8-validate"
+    ]
+  }
 }

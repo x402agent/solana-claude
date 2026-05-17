@@ -1,0 +1,27 @@
+# 🦞 Lobster Library
+
+> The nano Solana financial trading, deep research, ML prediction market & agentic vision AI agent library
+
+## Overview
+73 Solana and x402 payment agents for Solana DeFi, perpetuals, quantitative trading, and autonomous market analysis.
+
+## Categories
+- Trading & DEX (Jupiter, Drift, Raydium, MEV protection)
+- ML & Prediction (price prediction, sentiment analysis, anomaly detection)
+- DeFi & Yield (yield optimization, liquid staking, lending)
+- Risk Management (portfolio VaR, position sizing, protocol risk)
+- Deep Research (tokenomics, audits, whitepapers, narrative tracking)
+- Technical Analysis (indicators, chart pattern recognition)
+- Infrastructure (RPC, Anchor, bots, data pipelines)
+- Strategies (memecoins, airdrops, NFTs, market making)
+- Macro (economics, regulation, forensics)
+- Agentic (multi-agent orchestration, autonomous trading)
+
+## API
+- Index: https://x402agent.github.io/LobsterLibrary/index.json
+- Agent: https://x402agent.github.io/LobsterLibrary/{agent-id}.json
+
+## Docs
+- [README](https://github.com/x402agent/LobsterLibrary/blob/main/README.md)
+- [API](https://github.com/x402agent/LobsterLibrary/blob/main/docs/API.md)
+- [Contributing](https://github.com/x402agent/LobsterLibrary/blob/main/CONTRIBUTING.md)

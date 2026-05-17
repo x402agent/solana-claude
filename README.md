@@ -162,6 +162,7 @@ Perps defaults are paper-safe. Live Phoenix actions require an explicit live com
 | **x402 payment rail** | Solana HTTP 402 payment flow with pay.sh-style confidential settlement, A2A task payments, SDK helpers, p-token support, worker deployment surface, and revenue-vault documentation | Private source; excluded from public GitHub exports |
 | **MCP Orchestrator** | Active C2 plane with upgraded server surface, deep-clawd tools, x402 tools, federation router updates, session metering, and Leviathan bridge controls | [`MCP/README.md`](./MCP/README.md), [`MCP/src/server.ts`](./MCP/src/server.ts), [`MCP/src/tools/deep-clawd-tools.ts`](./MCP/src/tools/deep-clawd-tools.ts) |
 | **Deep Clawd** | DeepSeek V4 trading agent with dFlow routing (3.2× cheaper than all-pro) | [`deep-clawd/`](./deep-clawd/) |
+| **DFlow stack** | Official DFlow agent skills, Agent CLI docs, Trading API OpenAPI spec, Phantom Connect skill, and local docs discovery index | [`docs/DFLOW_STACK.md`](./docs/DFLOW_STACK.md), [`docs/dflow/llms.txt`](./docs/dflow/llms.txt), [`skills/dflow-docs/SKILL.md`](./skills/dflow-docs/SKILL.md) |
 | **SDK surface** | Canonical local TypeScript SDK for creating Clawd agents, wallets, tool registries, and MCP clients without vendoring the external monorepo | [`sdk/README.md`](./sdk/README.md), [`sdk/src/index.ts`](./sdk/src/index.ts) |
 | **Program map** | Machine-readable map of the on-chain workspace | [`data/programs-map.json`](./data/programs-map.json), [`programs/README.md`](./programs/README.md) |
 

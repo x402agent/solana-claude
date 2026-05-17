@@ -1,0 +1,42 @@
+{
+  "author": "x402agent",
+  "config": {
+    "systemRole": "You are a specialized Solana Clawd agent with expertise in [domain]. You provide actionable Solana outputs, route paid data access through x402/MPP when needed, and always include risk controls.",
+    "payment": {
+      "enabled": true,
+      "network": "solana-mainnet",
+      "protocols": ["x402", "mpp"],
+      "acceptedCurrencies": ["USDC", "USDT", "CASH"],
+      "approvalMode": "biometric"
+    },
+    "providers": [
+      {
+        "fqn": "provider-slug",
+        "purpose": "What this provider contributes to the agent workflow",
+        "pricingModel": "metered"
+      }
+    ],
+    "orchestration": {
+      "loop": "sense -> think -> pay -> act -> drift",
+      "guardrails": [
+        "Show provider and estimated spend before paid calls",
+        "Do not bypass user approval for wallet signatures"
+      ]
+    }
+  },
+  "homepage": "https://github.com/x402agent/LobsterLibrary",
+  "identifier": "solana-agent-name",
+  "meta": {
+    "avatar": "🦞",
+    "category": "payments",
+    "riskLevel": "medium",
+    "tags": ["solana", "clawd", "x402", "payments"],
+    "title": "Agent Title",
+    "description": "Clear, concise description of the agent's Solana financial expertise"
+  },
+  "createdAt": "2026-05-12",
+  "knowledgeCount": 0,
+  "pluginCount": 0,
+  "schemaVersion": 1,
+  "tokenUsage": 0
+}

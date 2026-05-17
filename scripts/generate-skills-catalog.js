@@ -52,6 +52,7 @@ function extractMeta(yamlBlock) {
 }
 
 function categorize(slug) {
+  if (/dflow|kalshi|phantom/.test(slug)) return 'DFlow / Trading';
   if (/^pump-|^pumpfun/.test(slug)) return 'Pump.fun / Token Launch';
   if (/solana|seeker|qedgen|oracle/.test(slug)) return 'Solana / Blockchain';
   if (/discord|slack|imsg|bluebubbles|himalaya|voice-call/.test(slug)) return 'Communication';

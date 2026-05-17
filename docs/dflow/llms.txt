@@ -1,0 +1,120 @@
+# DFlow
+
+## Docs
+
+- [Agent CLI](https://pond.dflow.net/ai/agent-cli.md): Agent-first CLI for executing trades on Solana via DFlow
+- [Agent Skills](https://pond.dflow.net/ai/agent-skills.md): Pre-built Claude Code Skills for DFlow
+- [Introduction](https://pond.dflow.net/ai/introduction.md): Tools and files for building with and for AI agents on DFlow
+- [llms-full.txt](https://pond.dflow.net/ai/llms-full-txt.md)
+- [llms.txt](https://pond.dflow.net/ai/llms-txt.md)
+- [MCP Server](https://pond.dflow.net/ai/mcp.md): Connect AI tools to DFlow documentation and API references with our hosted MCP server.
+- [skill.md](https://pond.dflow.net/ai/skill-md.md)
+- [API Keys](https://pond.dflow.net/build/api-key.md): How to request an API key for production use
+- [Endpoints](https://pond.dflow.net/build/endpoints.md): DFlow endpoints for Trading and Metadata APIs
+- [Error Codes](https://pond.dflow.net/build/error-codes.md): Understanding and resolving error codes
+- [FAQs](https://pond.dflow.net/build/faqs.md): Answers to common questions about building with DFlow
+- [Introduction](https://pond.dflow.net/build/introduction.md): How to get started building with DFlow
+- [Get Event](https://pond.dflow.net/build/metadata-api/events/event.md): API reference for GET /api/v1/event/{event_id}
+- [Get Event Candlesticks](https://pond.dflow.net/build/metadata-api/events/event-candlesticks.md): API reference for GET /api/v1/event/{ticker}/candlesticks
+- [Get Events](https://pond.dflow.net/build/metadata-api/events/events.md): API reference for GET /api/v1/events
+- [Get Event Forecast Percentile History](https://pond.dflow.net/build/metadata-api/events/forecast-percentile-history.md): API reference for GET /api/v1/event/{series_ticker}/{event_id}/forecast_percentile_history
+- [Get Event Forecast Percentile History by Mint](https://pond.dflow.net/build/metadata-api/events/forecast-percentile-history-by-mint.md): API reference for GET /api/v1/event/by-mint/{mint_address}/forecast_percentile_history
+- [Introduction](https://pond.dflow.net/build/metadata-api/introduction.md): How to discover crypto and prediction market metadata.
+- [Get Live Data](https://pond.dflow.net/build/metadata-api/live-data/live-data.md): API reference for GET /api/v1/live_data
+- [Get Live Data by Event](https://pond.dflow.net/build/metadata-api/live-data/live-data-by-event.md): API reference for GET /api/v1/live_data/by-event/{event_ticker}
+- [Get Live Data by Mint](https://pond.dflow.net/build/metadata-api/live-data/live-data-by-mint.md): API reference for GET /api/v1/live_data/by-mint/{mint_address}
+- [Live Data Response Details](https://pond.dflow.net/build/metadata-api/live-data/live-data-details.md): Reference for the details field in live data responses
+- [Filter Outcome Mints](https://pond.dflow.net/build/metadata-api/markets/filter-outcome-mints.md): API reference for POST /api/v1/filter_outcome_mints
+- [Get Market](https://pond.dflow.net/build/metadata-api/markets/market.md): API reference for GET /api/v1/market/{market_id}
+- [Get Market by Mint](https://pond.dflow.net/build/metadata-api/markets/market-by-mint.md): API reference for GET /api/v1/market/by-mint/{mint_address}
+- [Get Market Candlesticks](https://pond.dflow.net/build/metadata-api/markets/market-candlesticks.md): API reference for GET /api/v1/market/{ticker}/candlesticks
+- [Get Market Candlesticks by Mint](https://pond.dflow.net/build/metadata-api/markets/market-candlesticks-by-mint.md): API reference for GET /api/v1/market/by-mint/{mint_address}/candlesticks
+- [Get Markets](https://pond.dflow.net/build/metadata-api/markets/markets.md): API reference for GET /api/v1/markets
+- [Get Markets Batch](https://pond.dflow.net/build/metadata-api/markets/markets-batch.md): API reference for POST /api/v1/markets/batch
+- [Get Outcome Mints](https://pond.dflow.net/build/metadata-api/markets/outcome-mints.md): API reference for GET /api/v1/outcome_mints
+- [Get Orderbook by Mint Address](https://pond.dflow.net/build/metadata-api/orderbook/orderbook-by-mint.md): API reference for GET /api/v1/orderbook/by-mint/{mint_address}
+- [Get Orderbook](https://pond.dflow.net/build/metadata-api/orderbook/orderbook-by-ticker.md): API reference for GET /api/v1/orderbook/{market_ticker}
+- [Search Events](https://pond.dflow.net/build/metadata-api/search/search.md): API reference for GET /api/v1/search
+- [Get Series](https://pond.dflow.net/build/metadata-api/series/series.md): API reference for GET /api/v1/series
+- [Get Series by Ticker](https://pond.dflow.net/build/metadata-api/series/series-by-ticker.md): API reference for GET /api/v1/series/{series_ticker}
+- [Get Filters by Sports](https://pond.dflow.net/build/metadata-api/sports/filters-by-sports.md): API reference for GET /api/v1/filters_by_sports
+- [Get Tags by Categories](https://pond.dflow.net/build/metadata-api/tags/tags-by-categories.md): API reference for GET /api/v1/tags_by_categories
+- [Get Onchain Trades](https://pond.dflow.net/build/metadata-api/trades/onchain-trades.md): API reference for GET /api/v1/onchain-trades
+- [Get Onchain Trades by Event](https://pond.dflow.net/build/metadata-api/trades/onchain-trades-by-event.md): API reference for GET /api/v1/onchain-trades/by-event/{event_ticker}
+- [Get Onchain Trades by Market](https://pond.dflow.net/build/metadata-api/trades/onchain-trades-by-market.md): API reference for GET /api/v1/onchain-trades/by-market/{market_ticker}
+- [Get Trades](https://pond.dflow.net/build/metadata-api/trades/trades.md): API reference for GET /api/v1/trades
+- [Get Trades by Mint](https://pond.dflow.net/build/metadata-api/trades/trades-by-mint.md): API reference for GET /api/v1/trades/by-mint/{mint_address}
+- [Orderbook Channel](https://pond.dflow.net/build/metadata-api/websockets/orderbook.md): Subscribe to real-time orderbook updates for prediction markets
+- [Websockets Overview](https://pond.dflow.net/build/metadata-api/websockets/overview.md): Stream real-time price, trade, and orderbook updates via WebSocket
+- [Prices Channel](https://pond.dflow.net/build/metadata-api/websockets/prices.md): Subscribe to real-time bid/ask price updates for prediction markets
+- [Trades Channel](https://pond.dflow.net/build/metadata-api/websockets/trades.md): Subscribe to real-time trade execution updates
+- [Transaction Fee Sponsorship](https://pond.dflow.net/build/prediction-markets/fee-sponsorship.md): How to sponsor user transaction fees and prediction market initialization costs
+- [Understanding KYC for Prediction Markets](https://pond.dflow.net/build/prediction-markets/kyc.md): How Proof verification affects prediction market trading and how to handle unverified users
+- [Prediction Market Lifecycle](https://pond.dflow.net/build/prediction-markets/market-lifecycle.md): How prediction markets progress from creation through settlement and finalization
+- [Parse Onchain Trades](https://pond.dflow.net/build/prediction-markets/onchain-trade-parsing.md): How to parse prediction market trades, detect order fills, and calculate volume and fees onchain
+- [Prediction Market Data Model](https://pond.dflow.net/build/prediction-markets/prediction-market-data-model.md): How prediction market data is structured across events, markets, and trades
+- [Prediction Market Fees and Rebates](https://pond.dflow.net/build/prediction-markets/prediction-market-fees.md): How prediction market fees and rebates are calculated
+- [Introduction](https://pond.dflow.net/build/proof-api/introduction.md): API for wallet verification and identity
+- [Verify Address](https://pond.dflow.net/build/proof-api/verify-address.md): Check if a wallet address has been verified
+- [Proof KYC Introduction](https://pond.dflow.net/build/proof/introduction.md): Identity verification service linking verified identities to Solana wallets
+- [Proof KYC Partner Integration](https://pond.dflow.net/build/proof/partner-integration.md): How to integrate Proof into your application with deep linking and the verification API
+- [Proof KYC User Journeys](https://pond.dflow.net/build/proof/user-journeys.md): Verification flows for direct users, partner app users, and returning users
+- [Authenticating Requests](https://pond.dflow.net/build/recipes/api-keys.md): How to authenticate requests with DFlow API keys
+- [Close Outcome Token Accounts](https://pond.dflow.net/build/recipes/prediction-markets/close-outcome-token-accounts.md): How to close empty outcome token accounts to reclaim rent
+- [Decrease a Position](https://pond.dflow.net/build/recipes/prediction-markets/decrease-position.md): How to decrease a prediction market position
+- [Discover Prediction Markets](https://pond.dflow.net/build/recipes/prediction-markets/discover-markets.md): How to discover prediction markets and outcome tokens
+- [Handle Fees](https://pond.dflow.net/build/recipes/prediction-markets/fees-and-settlement.md): How to handle prediction market fees
+- [Increase a Position](https://pond.dflow.net/build/recipes/prediction-markets/increase-position.md): How to increase a prediction market position
+- [Monitor Market Lifecycle](https://pond.dflow.net/build/recipes/prediction-markets/monitor-market-lifecycle.md): How to monitor market status changes and redemption availability
+- [Query Onchain Trades](https://pond.dflow.net/build/recipes/prediction-markets/query-onchain-trades.md): How to query onchain fills by wallet, by event, and by market
+- [Redeem Outcome Tokens](https://pond.dflow.net/build/recipes/prediction-markets/redeem-outcome-tokens.md): How to redeem determined outcome tokens
+- [Track User Positions](https://pond.dflow.net/build/recipes/prediction-markets/track-positions.md): How to track user prediction market positions
+- [From Spot Tokens to Prediction Market Positions](https://pond.dflow.net/build/recipes/prediction-markets/trade-into-position.md): Understanding how trades route from spot tokens to outcome tokens
+- [Declarative Trade](https://pond.dflow.net/build/recipes/trading/declarative-trade.md): How to execute declarative trades with the DFlow Trading API
+- [Imperative Trade](https://pond.dflow.net/build/recipes/trading/imperative-trade.md): How to execute imperative trades with the DFlow Trading API
+- [Implement Platform Fees](https://pond.dflow.net/build/recipes/trading/platform-fees.md): How to implement platform fees with the DFlow Trading API
+- [Use Priority Fees](https://pond.dflow.net/build/recipes/trading/priority-fees.md): How to set priority fees for Trading API requests
+- [Trade a Prediction Market Outcome Token](https://pond.dflow.net/build/recipes/trading/trade-tokens.md): Swap USDC for a YES or NO outcome token using the DFlow Trade API
+- [Introduction](https://pond.dflow.net/build/recipes/wallets/introduction.md): How to add wallets to your app
+- [Phantom Connect](https://pond.dflow.net/build/recipes/wallets/phantom-connect.md): How to add Phantom Connect to a Next.js + React app
+- [Privy](https://pond.dflow.net/build/recipes/wallets/privy.md): How to add Privy to a Next.js + React app
+- [Turnkey](https://pond.dflow.net/build/recipes/wallets/turnkey.md): How to add Turnkey to a Next.js + React app
+- [Get Intent Quote](https://pond.dflow.net/build/trading-api/declarative/quote.md): API reference for GET /intent
+- [Submit Intent Swap](https://pond.dflow.net/build/trading-api/declarative/submit.md): API reference for POST /submit-intent
+- [Get Quote](https://pond.dflow.net/build/trading-api/imperative/quote.md): API reference for GET /quote
+- [Create Swap](https://pond.dflow.net/build/trading-api/imperative/swap.md): API reference for POST /swap
+- [Create Swap Instructions](https://pond.dflow.net/build/trading-api/imperative/swap-instructions.md): API reference for POST /swap-instructions
+- [Introduction](https://pond.dflow.net/build/trading-api/introduction.md): How to use the Trading API to trade crypto and prediction market outcomes.
+- [Get Order](https://pond.dflow.net/build/trading-api/order/order.md): API reference for GET /order
+- [Get Order Status](https://pond.dflow.net/build/trading-api/order/order-status.md): API reference for GET /order-status
+- [Initialize Prediction Market](https://pond.dflow.net/build/trading-api/prediction-market/prediction-market-init.md): API reference for GET /prediction-market-init
+- [Get Priority Fees](https://pond.dflow.net/build/trading-api/priority-fees/priority-fees.md): API reference for GET /priority-fees
+- [Get Token List](https://pond.dflow.net/build/trading-api/token/tokens.md): API reference for GET /tokens
+- [Get Token List with Decimals](https://pond.dflow.net/build/trading-api/token/tokens-with-decimals.md): API reference for GET /tokens-with-decimals
+- [Get Venue List](https://pond.dflow.net/build/trading-api/venues/venues.md): API reference for GET /venues
+- [Websockets Overview](https://pond.dflow.net/build/trading-api/websockets/overview.md): Stream real-time Trading API updates via WebSocket
+- [Priority Fees Stream](https://pond.dflow.net/build/trading-api/websockets/priority-fees-stream.md): Stream Trading API priority fee estimates over WebSocket
+- [Platform Fees](https://pond.dflow.net/build/trading/platform-fees.md): How to apply platform fees to trades
+- [Priority Fees](https://pond.dflow.net/build/trading/priority-fees.md): How priority fees affect trade execution
+- [Slippage Tolerance](https://pond.dflow.net/build/trading/slippage-tolerance.md): How slippage works and how to control it in Trading API requests
+- [Sponsored Swaps](https://pond.dflow.net/build/trading/sponsored-swaps.md): How to implement gasless swaps where a sponsor covers transaction fees
+- [Trading Data Model](https://pond.dflow.net/build/trading/trade-api-data-model.md): How trading data is structured around `/order` requests
+- [Contact](https://pond.dflow.net/contact.md): Get in touch with the DFlow team
+- [Welcome to DFlow](https://pond.dflow.net/introduction.md): DFlow is a trading protocol that enables traders to exchange value across spot and prediction markets natively on Solana.
+- [Concurrent Liquidity Programs](https://pond.dflow.net/learn/clp.md): How Concurrent Liquidity Programs enable offchain liquidity
+- [Declarative Trades](https://pond.dflow.net/learn/declarative-trades.md): How declarative trades work and why they improve execution
+- [How Trading Works on DFlow](https://pond.dflow.net/learn/how-trading-works.md): How trading works on DFlow
+- [Imperative Trades](https://pond.dflow.net/learn/imperative-trades.md): How to execute imperative trades with full routing control
+- [JIT Routing](https://pond.dflow.net/learn/jit-routing.md): How JIT routing updates trade execution onchain
+- [Liquidity and Venues](https://pond.dflow.net/learn/liquidity-venues.md): How DFlow routes liquidity across venues
+- [Prediction Markets](https://pond.dflow.net/learn/prediction-markets.md): How prediction markets work on DFlow
+- [Identity Verification with Proof (KYC)](https://pond.dflow.net/learn/proof.md): How identity verification works with Proof
+- [Trading Different Asset Types](https://pond.dflow.net/learn/trading-different-asset-types.md): How to trade different asset types with DFlow
+- [What is DFlow](https://pond.dflow.net/learn/what-is-dflow.md): Overview of DFlow's trading infrastructure on Solana
+- [Prediction Market Compliance](https://pond.dflow.net/legal/prediction-market-compliance.md): Regulatory and compliance requirements for Kalshi markets
+- [Privacy Policy](https://pond.dflow.net/privacy.md)
+- [Terms of Service](https://pond.dflow.net/terms-of-service.md)
+
+## OpenAPI Specs
+
+- [openapi](https://pond.dflow.net/build/trading-api/openapi.json)

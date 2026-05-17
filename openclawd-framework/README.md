@@ -128,6 +128,42 @@ node --import tsx/esm examples/agent-commerce.ts
 
 Metaplex commerce helpers live in `src/commerce/metaplex-agent-commerce.ts` and cover mint/read, executive registration, execution delegation, and Genesis agent-token launch. Use devnet and `setToken: false` until the final canonical token launch; `setToken: true` is permanent.
 
+## ORE Mining Agent
+
+OpenClawd includes an ORE protocol bridge at `src/ore/`. It uses the bundled Rust `ore-master` checkout for protocol instructions, while the Leviathan runtime owns policy, spending limits, wallet loading, status collection, and local event recording.
+
+```bash
+cd openclawd-framework
+npm run build
+
+# Read ORE state through the bundled Rust CLI.
+node dist/index.js --ore-status --rpc <SOLANA_RPC_URL>
+
+# Dry-run one autonomous deploy decision. This never submits a transaction.
+node dist/index.js --ore-mine-once --ore-deploy-sol 0.001
+
+# Execute one deploy with explicit spend caps.
+node dist/index.js --ore-mine-once --execute --ore-deploy-sol 0.001 --ore-max-session-sol 0.01 --ore-min-reserve-sol 0.02
+
+# Configure ORE's on-chain automation account.
+node dist/index.js --ore-automate --execute --ore-deploy-sol 0.001 --ore-deposit-sol 0.01 --ore-mask 1
+
+# Run the autonomous ORE loop. It is dry-run unless --execute is present.
+node dist/index.js --ore-run --ore-interval-ms 60000
+```
+
+The agent refuses to submit deploys unless `--execute` is passed. In execute mode it still enforces `--ore-max-session-sol` and `--ore-min-reserve-sol`, optionally claims/checkpoints before deploying, and records `ore-*` events in `~/.openclawd/shell.db`.
+
+Low-level protocol commands are also exposed:
+
+```bash
+node dist/index.js --ore-command board
+node dist/index.js --ore-command miner
+node dist/index.js --ore-command deploy --amount 1000000 --square 0 --execute
+```
+
+`OPENCLAWD_ORE_DIR` can point at a different ORE checkout; otherwise the bundled `openclawd-framework/ore-master` directory is used.
+
 ### Storage
 
 ```

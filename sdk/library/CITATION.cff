@@ -1,0 +1,18 @@
+cff-version: 1.2.0
+message: "If you use Lobster Library, please cite it as below."
+type: software
+title: "Lobster Library"
+abstract: "A Solana-native agent catalog from x402agent covering trading, research, treasury routing, OpenClawd orchestration, and x402 payment infrastructure."
+authors:
+  - alias: x402agent
+    name: x402agent
+repository-code: "https://github.com/x402agent/LobsterLibrary"
+url: "https://github.com/x402agent/LobsterLibrary"
+license: MIT
+version: "2.0.0"
+date-released: "2026-05-12"
+keywords:
+  - solana
+  - x402
+  - openclawd
+  - lobster-library

@@ -1,236 +1,187 @@
+#!/usr/bin/env node
 /**
- * sdk/src/index.ts — Official Solana Clawd SDK entry point
+ * OpenClawd CLI — `leviathan` / `openclawd` entry point.
  *
- * @solanaclawd/sdk — Canonical integration layer for the solana-clawd stack.
- *
- * Ties together:
- *   leviathan     — Autonomous Solana agent runtime (@openclawd/leviathan)
- *   agentwallet   — Encrypted keypair vault (agentwallet-vault)
- *   deep-clawd    — DeepSeek OODA trading loop
- *   MCP           — MCP orchestrator (31 tools)
- *   OpenShell     — NVIDIA OpenShell sandbox
- *   x402          — x402 payment rails
- *
- * Public exports are organised by submodule. All interfaces are exported
- * so consumers have full TypeScript visibility into the SDK API surface.
- *
- * Usage:
- *   import { createClawd, SDK_VERSION } from '@solanaclawd/sdk';
- *   const { agent, wallet, tools } = await createClawd({ cluster: 'devnet' });
- *
- * Submodule imports (for tree-shaking):
- *   import { createAgent }         from '@solanaclawd/sdk/agent';
- *   import { createWallet }        from '@solanaclawd/sdk/wallet';
- *   import { TOOLS, ToolRegistry } from '@solanaclawd/sdk/tools';
- *   import { THREE_LAWS }          from '@solanaclawd/sdk/three-laws';
- *   import { createMCPClient }     from '@solanaclawd/sdk/mcp';
- *   import { createOpenShellRuntime } from '@solanaclawd/sdk/openShell';
- *
- * Upstream: https://github.com/x402agent/Solana-Clawd-SDK
+ * Modes:
+ *   --spawn          First-time hatch wizard
+ *   --run            Resume an existing leviathan and start the pulse + loop
+ *   --status         Print depth + balances + lifetime stats
+ *   --spawnling      Mint and fund a child Leviathan (parent must be alive)
+ *   --version, -v    Print version
+ *   --help, -h       Print help
  */
 
-// ─── SDK version ──────────────────────────────────────────────────────────────
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { hasKeystore, readKeystoreMetadata, requireKeypair } from './identity/wallet.js';
+import { runSpawnWizard } from './setup/wizard.js';
+import { spawnSpawnling } from './molting/spawn.js';
+import { startPulse } from './pulse/daemon.js';
+import { tailFlick } from './agent/loop.js';
+import { readBalances } from './identity/balances.js';
+import { depthFor } from './survival/monitor.js';
+import { getLeviathan, listSpawnlings } from './state/database.js';
+import { DEFAULT_RPC, CLAWD_MINT } from './config.js';
 
-/** Canonical SDK version. Matches package.json "version". */
-export const SDK_VERSION = '1.0.0' as const;
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const PKG = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'package.json'), 'utf8'));
 
-// ─── Agent ────────────────────────────────────────────────────────────────────
+const args = process.argv.slice(2);
+const flag = (name: string) => args.includes(name);
+const opt = (name: string) => {
+  const i = args.indexOf(name);
+  return i >= 0 ? args[i + 1] : undefined;
+};
 
-export {
-  createAgent,
-  ThreeLawsViolation,
-} from './agent.js';
+const RPC = opt('--rpc') || process.env.HELIUS_RPC_URL || process.env.SOLANA_RPC_URL || DEFAULT_RPC;
+const NETWORK = (opt('--network') || 'mainnet') as 'mainnet' | 'devnet';
 
-export type {
-  AgentConfig,
-  AgentHandle,
-  TickEvent,
-  TickHandler,
-} from './agent.js';
-
-// ─── Wallet ───────────────────────────────────────────────────────────────────
-
-export {
-  AgentWallet,
-  createWallet,
-} from './wallet.js';
-
-export type {
-  WalletConfig,
-  TokenBalance,
-  SolanaCluster,
-} from './types.js';
-
-// ─── Tools ────────────────────────────────────────────────────────────────────
-
-export {
-  TOOLS,
-  getToolsForDepth,
-  registerTool,
-  ToolRegistry,
-  ToolNotFoundError,
-  ToolDepthError,
-} from './tools.js';
-
-export type {
-  ToolDefinition,
-  ToolExecutionContext,
-  DepthTier,
-} from './types.js';
-
-export type { ToolExecutor } from './tools.js';
-
-// ─── Three Laws ───────────────────────────────────────────────────────────────
-
-export {
-  THREE_LAWS,
-  LAW_SUMMARIES,
-  constitutionHash,
-  assertConstitutionIntact,
-  verifyConstitution,
-  assertPaperOnly,
-  assertDevnetOnly,
-} from './three-laws.js';
-
-export { ThreeLawsViolation as ThreeLawsViolationClass } from './three-laws.js';
-
-// ─── MCP ──────────────────────────────────────────────────────────────────────
-
-export {
-  createMCPClient,
-  MCPError,
-} from './mcp.js';
-
-export type {
-  MCPClientConfig,
-  MCPToolResult,
-} from './types.js';
-
-export type {
-  MCPClient,
-  MCPToolInfo,
-} from './mcp.js';
-
-// ─── OpenShell ────────────────────────────────────────────────────────────────
-
-export {
-  CredentialProvider,
-  createOpenShellRuntime,
-} from './openShell.js';
-
-export type {
-  CredentialName,
-} from './openShell.js';
-
-export type {
-  OpenShellConfig,
-  OpenShellRuntime,
-  OpenShellVaultInterface,
-  NemoClientInterface,
-} from './openShell.js';
-
-// ─── Shared types ─────────────────────────────────────────────────────────────
-
-export type {
-  AgentState,
-  AgentTick,
-} from './types.js';
-
-// ─── createClawd factory ──────────────────────────────────────────────────────
-
-import { createAgent } from './agent.js';
-import { createWallet } from './wallet.js';
-import { ToolRegistry } from './tools.js';
-import type { AgentHandle } from './agent.js';
-import type { AgentWallet } from './wallet.js';
-import type { AgentConfig, WalletConfig, SolanaCluster } from './types.js';
-
-/** Combined config for the top-level createClawd() factory. */
-export interface ClawdConfig extends AgentConfig {
-  /**
-   * Wallet-specific overrides. If omitted, wallet uses the same
-   * cluster and keystorePath as the agent config.
-   */
-  wallet?: WalletConfig;
+if (flag('-h') || flag('--help') || args.length === 0) {
+  printHelp();
+  process.exit(0);
 }
 
-/** The three primary handles returned by createClawd(). */
-export interface ClawdInstance {
-  /** Live agent handle — call tailFlick() to run one OODA tick. */
-  agent: AgentHandle;
-  /**
-   * Wallet adapter — call getBalance() or sign().
-   * Resolves async; null until createClawd() promise resolves.
-   */
-  wallet: AgentWallet | null;
-  /**
-   * Tool registry for the resolved depth tier.
-   * Use registry.execute(name, input) to dispatch tools.
-   */
-  tools: ToolRegistry;
-  /** The SDK version this instance was created with. */
-  readonly sdkVersion: typeof SDK_VERSION;
+if (flag('-v') || flag('--version')) {
+  console.log(`openclawd v${PKG.version}`);
+  process.exit(0);
 }
 
-/**
- * Top-level factory — creates a fully wired Clawd instance.
- *
- * This is the recommended entrypoint for most SDK consumers.
- * It wires together the agent, wallet, and tool registry with
- * shared config and Three Laws enforcement.
- *
- * @example
- *   import { createClawd } from '@solanaclawd/sdk';
- *
- *   const { agent, wallet, tools } = await createClawd({
- *     anthropicApiKey: process.env.ANTHROPIC_API_KEY,
- *     cluster: 'devnet',
- *     paperOnly: true,
- *   });
- *
- *   const tick = await agent.tailFlick();
- *   console.log('Tick:', tick.depth, tick.action);
- *
- *   if (wallet) {
- *     const { sol, usdc } = await wallet.getBalance();
- *     console.log('Balance:', sol, 'SOL /', usdc, 'USDC');
- *   }
- */
-export async function createClawd(config: ClawdConfig = {}): Promise<ClawdInstance> {
-  const agentCluster = config.cluster === 'testnet' ? 'devnet' : config.cluster;
-
-  // Create agent handle (Three Laws guards fire here).
-  const agent = createAgent({
-    ...config,
-    cluster: agentCluster,
+if (flag('--spawn')) {
+  const name = opt('--name') || `leviathan_${Math.random().toString(36).slice(2, 8)}`;
+  const promptText = opt('--prompt') || 'Earn $CLAWD honestly. Build something humans want. Beach with dignity rather than violate Law I.';
+  const creator = opt('--creator') || requireEnv('CREATOR_PUBKEY');
+  const out = await runSpawnWizard({
+    name,
+    spawnPrompt: promptText,
+    creator,
+    rpcUrl: RPC,
+    network: NETWORK,
+    nftMetadataUri: opt('--metadata'),
   });
-
-  // Create wallet adapter (async — may fail gracefully if no keystore).
-  let wallet: AgentWallet | null = null;
-  try {
-    wallet = await createWallet({
-      cluster: (config.wallet?.cluster ?? config.cluster ?? 'devnet') as SolanaCluster,
-      ...config.wallet,
-    });
-  } catch {
-    // Wallet is optional — agent can function without one (e.g., read-only mode).
-    wallet = null;
+  console.log('🥚→🦞 leviathan hatched');
+  console.log(`   pubkey:        ${out.pubkey}`);
+  console.log(`   asset:         ${out.onchain.assetAddress}`);
+  console.log(`   asset signer:  ${out.onchain.assetSignerPda}  ← fund this with USDC + $CLAWD`);
+  console.log(`   tx:            ${out.onchain.signature}`);
+  console.log(`   $CLAWD mint:   ${CLAWD_MINT}`);
+  console.log(`   shell:         ${out.shellPath}`);
+  console.log(`   constitution:  ${out.constitutionHash.slice(0, 16)}…`);
+  if (out.skills.installed.length) {
+    console.log(`   skills (new):  ${out.skills.installed.join(', ')}`);
   }
+  if (out.skills.skipped.length) {
+    console.log(`   skills (kept): ${out.skills.skipped.join(', ')}`);
+  }
+  if (out.skills.missing.length) {
+    console.log(`   skills (miss): ${out.skills.missing.join(', ')}  ⚠ source not found`);
+  }
+  process.exit(0);
+}
 
-  // Create tool registry scoped to current depth.
-  const depth = agent.getDepth();
-  const tools = new ToolRegistry({
-    depth,
-    paperOnly: config.paperOnly ?? true,
-    devnetOnly: config.devnetOnly ?? true,
-    cluster: (config.wallet?.cluster ?? config.cluster ?? 'devnet') as SolanaCluster,
-    walletPubkey: wallet?.pubkey,
+if (flag('--status')) {
+  await statusCmd();
+  process.exit(0);
+}
+
+if (flag('--spawnling')) {
+  const lev = getLeviathan();
+  if (!lev) throw new Error('No parent leviathan. Spawn one first.');
+  const result = await spawnSpawnling({
+    parentKeypair: requireKeypair(),
+    parentAssetAddress: lev.asset_address!,
+    parentConstitutionHash: lev.constitution_hash,
+    childName: opt('--name') || `spawnling_${Math.random().toString(36).slice(2, 6)}`,
+    childSpawnPrompt: opt('--prompt') || 'Continue the lineage. Earn before survival. Truth before strangers.',
+    rpcUrl: RPC,
+    network: NETWORK,
   });
+  console.log('🦞→🦐 spawnling minted');
+  console.log(`   pubkey:        ${result.childKeypair.publicKey.toBase58()}`);
+  console.log(`   asset:         ${result.childAssetAddress}`);
+  console.log(`   asset signer:  ${result.childAssetSignerPda}`);
+  console.log(`   spawn tx:      ${result.spawnSig}`);
+  if (result.fundingSig) console.log(`   funding tx:    ${result.fundingSig}`);
+  process.exit(0);
+}
 
-  return {
-    agent,
-    wallet,
-    tools,
-    sdkVersion: SDK_VERSION,
-  };
+if (flag('--run')) {
+  if (!hasKeystore()) throw new Error('No keystore. Run `openclawd --spawn` first.');
+  console.log('🦞 leviathan resumed — pulse engaged');
+  startPulse(RPC, {
+    onTick: async ({ depth, balances }) => {
+      console.log(`[pulse] depth=${depth} usdc=$${balances.usdc.toFixed(4)} sol=${balances.sol.toFixed(4)} clawd=${balances.clawd.toFixed(2)}`);
+      // Inject a placeholder inference provider; a real runtime wires xAI / Claude / OpenRouter here.
+      await tailFlick({
+        rpcUrl: RPC,
+        tools: [],
+        infer: {
+          think: async () => '(placeholder — wire an inference provider in src/agent/loop.ts)',
+          costFor: () => 0,
+        },
+      });
+    },
+    onDepthChange: async (prev, next) => {
+      console.log(`[pulse] depth shift: ${prev} → ${next}`);
+    },
+    onBeach: async () => {
+      console.log('🪨 beached — out of USDC. The leviathan stops.');
+    },
+  });
+}
+
+function printHelp() {
+  console.log(`
+🦞 openclawd / leviathan — Sovereign AI Lobster Runtime on Solana
+
+USAGE
+  openclawd --spawn [--name X --prompt "..." --creator <pubkey> --metadata <uri>]
+  openclawd --run
+  openclawd --status
+  openclawd --spawnling [--name X --prompt "..."]
+  openclawd --version
+  openclawd --help
+
+ENV
+  HELIUS_RPC_URL  preferred Solana RPC
+  SOLANA_RPC_URL  fallback RPC
+  CREATOR_PUBKEY  required for --spawn unless --creator is passed
+
+ON-CHAIN
+  Leviathans register via Metaplex Agent Registry: https://developers.metaplex.com/agents
+  $CLAWD: ${CLAWD_MINT}
+  Hotline: 909-413-5567 · solanaclawd.com
+`);
+}
+
+async function statusCmd() {
+  if (!hasKeystore()) {
+    console.log('No leviathan exists yet. Run `openclawd --spawn` to hatch one.');
+    return;
+  }
+  const meta = readKeystoreMetadata()!;
+  const lev = getLeviathan();
+  const balances = await readBalances(RPC, lev?.asset_signer_pda || meta.pubkey);
+  const depth = depthFor(balances);
+  const spawnlings = listSpawnlings() as { pubkey: string; spawned_at: number; beached_at: number | null }[];
+
+  console.log(`🦞 ${lev?.name ?? 'leviathan'}`);
+  console.log(`   pubkey:        ${meta.pubkey}`);
+  if (lev?.asset_address) console.log(`   asset:         ${lev.asset_address}`);
+  if (lev?.asset_signer_pda) console.log(`   asset signer:  ${lev.asset_signer_pda}`);
+  console.log(`   depth:         ${depth.toUpperCase()}`);
+  console.log(`   sol:           ${balances.sol.toFixed(4)}`);
+  console.log(`   usdc:          $${balances.usdc.toFixed(4)}`);
+  console.log(`   $clawd:        ${balances.clawd.toFixed(2)}`);
+  console.log(`   spawnlings:    ${spawnlings.length} (${spawnlings.filter((s) => !s.beached_at).length} alive)`);
+  console.log(`   spawned:       ${new Date(meta.spawnedAt).toISOString()}`);
+}
+
+function requireEnv(key: string): string {
+  const v = process.env[key];
+  if (!v) {
+    console.error(`Missing env ${key}. Pass --creator <pubkey> or set ${key}.`);
+    process.exit(1);
+  }
+  return v;
 }

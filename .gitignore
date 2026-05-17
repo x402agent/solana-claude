@@ -60,6 +60,7 @@ openclawd-framework/**/dist/
 openclawd-framework/**/__pycache__/
 openclawd-framework/**/*.tsbuildinfo
 
-# Embedded git repos that should be submodules
+# Private / internal — never expose publicly
+openclawd-framework/multiagents-infinite-backroom/
 openclawd-framework/clawd-terminal/
 openclawd-framework/clawd-voice/

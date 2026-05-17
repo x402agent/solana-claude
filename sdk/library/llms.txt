@@ -1,0 +1,10 @@
+# 🦞 Lobster Library
+
+> The nano Solana financial trading, deep research, ML prediction market & agentic vision AI agent library
+
+## Docs
+
+- [README](https://github.com/x402agent/LobsterLibrary/blob/main/README.md)
+- [API Reference](https://github.com/x402agent/LobsterLibrary/blob/main/docs/API.md)
+- [Contributing](https://github.com/x402agent/LobsterLibrary/blob/main/CONTRIBUTING.md)
+- [Agent Index](https://x402agent.github.io/LobsterLibrary/index.json)

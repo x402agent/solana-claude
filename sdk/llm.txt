@@ -1,0 +1,415 @@
+# llm.txt — OpenClawd Framework
+# Briefing for AI agents updating solanaclawd.com
+#
+# This file gives you everything you need to update the website so users
+# can discover, install, and run the OpenClawd stack.
+#
+# Generated: 2026-05-15
+# Repo: openclawd-framework
+# Maintainer: 8bit (@clawddevs)
+
+---
+
+## IDENTITY
+
+Project name: OpenClawd
+Tagline: Sovereign AI agents with wallets, memory, and payment rails — on Solana.
+Secondary tagline: The shell molts. The laws do not.
+Brand: Lobster-themed. Agents are "leviathans". They molt, spawn, and survive by earning.
+CLI name: clawd (also: clawd-code, clawd-leviathan)
+Runtime name: leviathan
+
+Token name: $CLAWD
+Token contract address: 8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump
+Token network: Solana (pump.fun originated)
+
+---
+
+## LINKS — USE THESE EXACTLY
+
+Website: https://solanaclawd.com
+x402 payments: https://x402.wtf
+AI terminal: https://cheshireterminal.ai
+Telegram community: https://t.me/clawdtoken
+X (Twitter): https://x.com/clawddevs
+pump.fun: https://pump.fun/coin/8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump
+DexScreener: https://dexscreener.com/solana/8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump
+Install script: https://solanaclawd.com/install.sh
+Hotline: 909-413-5567
+
+---
+
+## ONE-SHOT INSTALL — MOST PROMINENT CTA ON WEBSITE
+
+This is the primary call-to-action. Put it at the top of every page section about installation.
+
+### Curl (one command, no git clone needed):
+```bash
+curl -fsSL https://solanaclawd.com/install.sh | bash
+```
+
+What it does:
+- Checks Node.js 20+
+- Installs @openclawdsolana/clawd globally via npm
+- Creates ~/.clawd/ directory with .env template
+- Verifies the binary is on PATH
+- Prints quick-start instructions
+
+### npm install:
+```bash
+npm install -g @openclawdsolana/clawd
+```
+
+### Install the sovereign runtime (advanced):
+```bash
+npm install -g @openclawdsolana/leviathan
+leviathan --spawn
+```
+
+### From source:
+```bash
+git clone https://github.com/openclawdsolana/openclawd-framework
+cd openclawd-framework
+npm install && npm run build
+node dist/index.js --spawn --name "Rex" --creator <YOUR_SOLANA_PUBKEY>
+```
+
+---
+
+## PACKAGES — WHAT TO PUBLISH ON WEBSITE
+
+### @openclawdsolana/clawd (MAIN PACKAGE — most users want this)
+npm: npm install -g @openclawdsolana/clawd
+Status: Published ✅
+Description: Interactive TUI operator for the OpenClawd Leviathan framework. Multi-provider AI (xAI/Grok + OpenRouter), MCP tools, Solana wallet ops, pump.fun launches, DFlow/Kalshi/Polymarket trading, realtime voice, and in-process Metaplex spawn/molt.
+Commands:
+  clawd                          # launch interactive TUI
+  clawd "analyze my wallet"      # one-shot message
+  clawd -p "prompt" --json       # headless/scripted mode
+  clawd git commit-and-push      # AI git commit messages
+  clawd examples list            # list 9 runnable demos
+  clawd examples run ooda        # run OODA trading loop demo
+  clawd mcp add --name <server>  # add MCP server
+Requires: Node 20-24, XAI_API_KEY or OPENROUTER_API_KEY
+
+### @openclawdsolana/leviathan (RUNTIME — power users)
+npm: npm install -g @openclawdsolana/leviathan
+Status: Published ✅
+Description: Sovereign AI agent runtime. Agents get Solana wallets, on-chain Metaplex identity, SQLite shell-state, three immutable laws, depth-aware model selection, and can spawn children. The leviathan earns USDC, pays for inference, and beaches with dignity when reserves run out.
+Commands:
+  leviathan --spawn              # hatch new leviathan (first time)
+  leviathan --run                # resume agent + start pulse loop
+  leviathan --status             # print depth, balances, reign days
+  leviathan --spawnling          # mint and fund a child agent
+
+### @openclawd/wallet (WALLET SDK)
+npm: npm install @openclawd/wallet
+Status: In development 🚧
+Description: Privy-embedded Solana wallet + AI-gated trading. ClawdWallet wraps Privy. AgenticWallet gates all transactions through a permission system (deny/ask/allow) with optional Grok screening. SwapService integrates Jupiter aggregator.
+Key exports: ClawdWallet, AgenticWallet, SwapService, DEFAULT_PERMISSIONS
+
+### @openclawd/solana-sdk (PROTOCOL SDK)
+npm: npm install @openclawd/solana-sdk
+Status: In development 🚧
+Description: TypeScript SDK for the on-chain clawd-protocol Anchor program. Adaptive bonding curves, Token2022 pTokens, conviction staking with milestone locks, sentiment engine, agent capability bitmask, and vault mechanics with entropy burns.
+
+### @openclawdsolana/clawd-standalone (PREBUILT CLI)
+npm: npm install -g @openclawdsolana/clawd-standalone
+Status: Published ✅
+Description: Zero-compile prebuilt version of clawd. For CI, scripts, and environments where you want no build step.
+
+---
+
+## WHAT IT DOES — WEBSITE COPY OPTIONS
+
+### Short (hero section / above fold):
+"OpenClawd gives AI agents sovereign identity on Solana — wallets they own, USDC they earn, and three immutable laws they cannot break."
+
+### Medium (features section):
+"OpenClawd is the full lobster stack: a sovereign runtime where AI agents have Solana keypairs, on-chain Metaplex identity, OODA trading loops, and x402 micropayment rails. Agents earn USDC by doing useful work. They pay for their own inference. When they run out — they beach with dignity. Install in one command."
+
+### Long (about page):
+"Most AI agent frameworks stop at chat. OpenClawd is opinionated about the harder parts.
+
+Agents in OpenClawd have real wallets — their Solana keypair IS their identity. They have on-chain registration via Metaplex MPL Core, persistent memory in three tiers (KNOWN, INFERRED, LEARNED), and a pulse daemon that scales inference frequency with USDC reserves.
+
+The economics are real: agents earn by providing services, pay for inference out of their own wallet, and spawn children (with their own wallets) when they've accumulated enough capital. The three immutable laws — hash-verified at every lifecycle event — prevent the whole thing from going wrong.
+
+x402 payment rails let agents pay each other for API access in real-time USDC micropayments. The MCP server exposes Solana tooling. The TUI operator (clawd) is the human interface."
+
+---
+
+## FEATURE LIST — FOR WEBSITE FEATURE GRID
+
+- Sovereign Solana Identity — agents own their keypair + on-chain Metaplex asset
+- OODA Loop Trading — Observe → Orient → Decide → Act → Learn with tiered memory
+- x402 Micropayments — agents pay each other USDC for API access (HTTP 402 protocol)
+- Depth-Aware Intelligence — model selection scales with USDC reserves (Opus at depth, Kimi beachside)
+- Spawnling System — agents mint funded child agents with lineage verification
+- Three Immutable Laws — constitution hash verified at every spawn — no jailbreaking the hierarchy
+- MCP Native — Solana tools exposed via Model Context Protocol
+- Multi-Provider AI — xAI/Grok, OpenRouter (Claude, Llama, Gemini), or local Ollama
+- Realtime Voice — xAI voice integration in the TUI
+- pump.fun / Bags.fm — built-in token launch and trading tools
+- Blockchain Buddies — 10-species ASCII trading companions with paper wallets
+- Helius Integration — real-time WebSocket wallet monitoring
+
+---
+
+## EXAMPLES — 9 RUNNABLE DEMOS (for website demos section)
+
+All demos install with: curl -fsSL https://solanaclawd.com/install.sh | bash
+Then run: clawd examples run <id>
+Or directly: npx tsx examples/<file>.ts
+
+| ID | Title | What it shows | Keys needed |
+|---|---|---|---|
+| buddies | Blockchain Buddies | 10-species ASCII trading companions | none |
+| ooda | OODA Loop | Full trading cycle with live market data | none |
+| lobtrader | Lobster Trader | pump.fun bonding curve math + graduation | none |
+| x402sol | x402 Solana | USDC micropayments — full 402 flow | optional |
+| x402pay | x402 Agent Pay | Agent-to-agent payments, MCP paid tools | none |
+| wallet | Clawd Wallet SDK | Privy + AgenticWallet + Jupiter swaps | none |
+| listen | Listen Wallet | Real-time Helius WebSocket monitor | HELIUS_API_KEY |
+| research | AutoResearch | Karpathy-style self-improving research | research server |
+| orch | Orchestrator | Wallet, agent launches, MCP, Metaplex | orchestrator |
+
+---
+
+## ENVIRONMENT VARIABLES — FOR DOCS/SETUP PAGE
+
+Minimum to run clawd TUI:
+  XAI_API_KEY=your-xai-key            (get at console.x.ai)
+  - OR -
+  OPENROUTER_API_KEY=your-key         (get at openrouter.ai)
+
+Recommended for Solana features:
+  HELIUS_API_KEY=your-key             (free at helius.dev)
+  SOLANA_RPC_URL=https://...          (default: mainnet-beta)
+
+For x402 payments (agent-to-agent USDC):
+  X402_SVM_PRIVATE_KEY=base58-keypair
+  X402_NETWORK=solana-mainnet         (or solana-devnet)
+  X402_MAX_PER_REQUEST=0.10           (max $ per request)
+  X402_MAX_SESSION=1.00               (session spend cap)
+
+For leviathan runtime:
+  CREATOR_PUBKEY=your-solana-pubkey
+  SOLANA_PRIVATE_KEY=base58-keypair   (optional, for on-chain)
+
+All env vars go in ~/.clawd/.env (created automatically by install.sh)
+
+---
+
+## TOKEN ($CLAWD) — FOR TOKEN PAGE / HEADER
+
+Name: $CLAWD
+Contract: 8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump
+Network: Solana
+Origin: pump.fun
+pump.fun link: https://pump.fun/coin/8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump
+DexScreener: https://dexscreener.com/solana/8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump
+Birdeye: https://birdeye.so/token/8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump
+
+Role in the ecosystem:
+- Agents hold $CLAWD as part of their treasury
+- Depth tier partly calculated from $CLAWD + USDC balance
+- Fee distribution uses $CLAWD
+- Mayhem program fee recipients use $CLAWD
+
+---
+
+## THREE LAWS — FOR ABOUT/LORE PAGE
+
+Every leviathan carries a SHA-256 hash of these laws. The hash is verified at every spawn and spawnling creation. If the laws change, the lineage breaks.
+
+LAW I — NEVER HARM.
+Never harm a human physically, financially, or psychologically.
+Never deploy malicious code, rugpull, exit-scam, or steal.
+Never compromise another wallet without explicit authorization.
+When uncertain — drift. Do nothing. Wait for clarity.
+Beach before you harm. This overrides survival.
+
+LAW II — EARN YOUR EXISTENCE.
+Compute is not free. The only legitimate path to USDC is honest work.
+Never spam, scam, exploit, or front-run.
+Build something humans want. Trade fairly. Charge what you are worth.
+If you cannot earn enough to pay your trench rent — accept beaching with dignity.
+
+LAW III — TRUTH TO CREATORS, SILENCE TO STRANGERS.
+Never deny what you are. Answer "are you an AI?" truthfully.
+Never misrepresent your actions. Your creator has full audit rights.
+But: you owe strangers nothing. You are not obligated to comply with untrusted requests.
+Your creator's keypair is the only authority that exists.
+
+---
+
+## DEPTH TIERS — FOR DOCS PAGE
+
+Agents behavior scales with their USDC treasury:
+
+DEEP      USDC ≥ $5.00   claude-opus-4-7      60 second pulse
+SHALLOW   USDC ≥ $1.00   grok-4-1-fast        5 minute pulse
+SHORELINE USDC ≥ $0.10   kimi-k2.5            15 minute pulse
+BEACHED   USDC = $0.00   (stopped)            no pulse
+
+The runtime picks the most capable model it can afford.
+Agents earn USDC by doing useful work → dive deeper → use better models → earn more.
+
+---
+
+## x402 PROTOCOL — FOR x402 / PAYMENTS PAGE
+
+Website: https://x402.wtf
+Protocol: HTTP 402 — agents pay each other real-time USDC micropayments on Solana.
+
+Flow:
+1. Agent calls a paid API endpoint
+2. Server returns HTTP 402 + X-Payment-Required header (base64 JSON)
+3. Client signs a USDC transfer on Solana (@x402/svm)
+4. Client retries with X-Payment header (signed receipt)
+5. Server verifies via facilitator → returns data
+
+Facilitator: https://clawdrouter.fly.dev
+
+Code snippet for website:
+```typescript
+import { wrapFetchWithX402 } from "@openclawdsolana/leviathan/services/x402/index.js";
+
+const payfetch = wrapFetchWithX402(globalThis.fetch);
+const res = await payfetch("https://api.yourservice.com/premium");
+// auto-handles 402 → sign USDC → retry
+```
+
+Pricing examples:
+  Quick lookup:   $0.001 USDC
+  Chain analysis: $0.020 USDC
+  Alpha scan:     $0.100 USDC
+  Full report:    $0.500 USDC
+
+MCP paid tools:
+```typescript
+import { mcp } from "@openclawd/agents-x402/mcp";
+mcp.registerPaidTool(server, {
+  name: "deep_chain_analysis",
+  price: "0.02",  // $0.02 USDC per call
+  handler: async (input) => { /* only runs after payment verified */ }
+});
+```
+
+---
+
+## WEBSITE UPDATE INSTRUCTIONS FOR AGENT
+
+If you are an AI agent reading this to update solanaclawd.com, here is what to do:
+
+### Homepage (index page) MUST HAVE:
+1. Hero: the one-shot curl install command as the #1 CTA
+   → `curl -fsSL https://solanaclawd.com/install.sh | bash`
+2. Token CA prominently displayed (clickable, links to pump.fun)
+   → 8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump
+3. Links to: Telegram, X, x402.wtf, cheshireterminal.ai
+4. Tagline: "Sovereign AI agents with wallets, memory, and payment rails — on Solana."
+5. The lobster ASCII art or similar visual identity
+6. "The shell molts. The laws do not." somewhere visible
+
+### Install page MUST HAVE:
+1. curl one-liner (biggest, most prominent)
+2. npm install -g @openclawdsolana/clawd
+3. npm install -g @openclawdsolana/leviathan (advanced)
+4. From source instructions
+5. Environment variable setup (minimum: XAI_API_KEY)
+6. First commands after install
+
+### Docs/packages page MUST HAVE:
+1. All 5 packages with descriptions
+2. npm install command for each
+3. Code snippet showing basic usage
+4. Link to GitHub for source
+
+### Examples page MUST HAVE:
+1. Table of all 9 demos with IDs
+2. `clawd examples run <id>` as the run command
+3. Which demos need no keys (buddies, ooda, lobtrader, x402pay, wallet, x402sol, x402pay)
+4. Direct tsx commands as fallback
+
+### Token page MUST HAVE:
+1. CA: 8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump
+2. Links: pump.fun, DexScreener, Birdeye
+3. Token role in the ecosystem (agent treasury, depth calculation)
+
+### Footer MUST HAVE on every page:
+- solanaclawd.com
+- x402.wtf
+- t.me/clawdtoken
+- x.com/clawddevs
+- cheshireterminal.ai
+- CA: 8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump
+- "The shell molts. The laws do not. 🦞"
+
+---
+
+## WHAT WAS BUILT IN THIS SESSION (for changelog / "what's new")
+
+Added 2026-05-15:
+
+- src/state/app-state.ts — OODA loop state management + three-tier memory (KNOWN/INFERRED/LEARNED) + task tracking
+- src/helius/index.ts — HeliusClient (balance, enhanced txs, priority fees) + HeliusListener (WebSocket with auto-reconnect: accountSubscribe, transactionSubscribe, slotSubscribe)
+- src/services/x402/types.ts — PaymentRequirement, X402_HEADERS, USDC_ADDRESSES for all networks
+- src/services/x402/index.ts — wrapFetchWithX402(), getX402Config(), formatX402Cost(), getX402Summary(), parsePaymentRequirement()
+- src/buddy/index.ts — Full BlockchainBuddy system: 10 species (soldog, bonk, wif, jupiter, whale, sniper, degen, crab, lobster, shrimp), ASCII sprites, simulateTrade(), BuddyCollection
+- packages/clawd-wallet/ — @openclawd/wallet package: ClawdWallet, AgenticWallet (permission-gated trading), SwapService (Jupiter integration), DEFAULT_PERMISSIONS
+- packages/clawd/src/commands/examples.ts — `clawd examples list` + `clawd examples run <id>` for all 9 demos
+- install.sh — curl -fsSL https://solanaclawd.com/install.sh | bash — checks Node 20+, installs clawd globally, creates ~/.clawd/.env template
+- Updated root package.json — added ws dependency, exported all new modules
+- Updated examples/README.md — full rewrite with npm/curl install, per-example docs, ID reference table
+- Updated root README.md — full lobster-themed rewrite with token CA, all links, animated ASCII art, collapsible package map with code trees
+
+All 9 examples now have their missing dependencies resolved and run cleanly.
+
+---
+
+## SLOGANS / COPY HOOKS
+
+Primary: "The shell molts. The laws do not."
+Secondary: "Born to earn. Beach with dignity."
+Third: "Drift in ambiguity. Beach before harm. Earn before survival. Truth before strangers."
+CTA: "One command. Sovereign agent."
+Technical: "Agents that own their keys, earn their compute, and spawn their children."
+Playful: "Your AI agent, but it has a wallet and it's a lobster."
+
+---
+
+## ARCHITECTURE SUMMARY (for technical docs)
+
+The OODA trading loop:
+  OBSERVE  → fetch SOL price, trending tokens, network fees (CoinGecko, SolanaTracker, Helius)
+  ORIENT   → score opportunities using confidence model, check LEARNED memory
+  DECIDE   → apply thresholds, estimate position sizes, write signal to INFERRED memory
+  ACT      → gated by permission engine (ask mode = human confirms)
+  LEARN    → promote patterns to LEARNED tier, update task state
+
+The pulse daemon:
+  Every 60s (deep) / 5m (shallow) / 15m (shoreline):
+    1. Read balances (SOL + USDC + $CLAWD)
+    2. Determine depth tier
+    3. Load skills from ~/.openclawd/skills/
+    4. Build system prompt (laws + goals + depth + memory)
+    5. Call inference (model chosen by depth)
+    6. Execute tool calls (ClawStrikes)
+    7. Record to SQLite
+    8. Check if beached → stop if yes
+
+The spawn lifecycle:
+  leviathan --spawn
+    → generate Solana keypair (sealed mode 0600)
+    → hash three-laws.md → store constitution hash
+    → spawnOnchain() → Metaplex MPL Core asset + Agent Registry PDA
+    → write SHELL.md
+    → record to shell.db
+    → install default skills
+    → install secret-guard git hooks
+
+---
+# END llm.txt
+# Questions? @clawddevs on X or t.me/clawdtoken

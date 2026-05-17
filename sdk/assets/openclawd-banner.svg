@@ -1,0 +1,70 @@
+<svg width="1200" height="420" viewBox="0 0 1200 420" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="420" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#07131F"/>
+      <stop offset="0.5" stop-color="#0F2A3F"/>
+      <stop offset="1" stop-color="#031018"/>
+    </linearGradient>
+    <linearGradient id="glow" x1="230" y1="70" x2="950" y2="340" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#15D1C5"/>
+      <stop offset="1" stop-color="#F06A3A"/>
+    </linearGradient>
+    <filter id="blur" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="18"/>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="420" rx="28" fill="url(#bg)"/>
+
+  <g opacity="0.14" stroke="#7EE7E1" stroke-width="2">
+    <path d="M0 315C120 270 240 270 360 315C480 360 600 360 720 315C840 270 960 270 1080 315C1120 330 1160 338 1200 340">
+      <animate attributeName="d" dur="8s" repeatCount="indefinite"
+        values="M0 315C120 270 240 270 360 315C480 360 600 360 720 315C840 270 960 270 1080 315C1120 330 1160 338 1200 340;
+                M0 300C120 340 240 340 360 300C480 260 600 260 720 300C840 340 960 340 1080 300C1120 286 1160 280 1200 278;
+                M0 315C120 270 240 270 360 315C480 360 600 360 720 315C840 270 960 270 1080 315C1120 330 1160 338 1200 340"/>
+    </path>
+    <path d="M0 345C140 300 280 300 420 345C560 390 700 390 840 345C980 300 1090 308 1200 330">
+      <animate attributeName="d" dur="10s" repeatCount="indefinite"
+        values="M0 345C140 300 280 300 420 345C560 390 700 390 840 345C980 300 1090 308 1200 330;
+                M0 332C140 370 280 370 420 332C560 295 700 295 840 332C980 370 1090 362 1200 344;
+                M0 345C140 300 280 300 420 345C560 390 700 390 840 345C980 300 1090 308 1200 330"/>
+    </path>
+  </g>
+
+  <circle cx="850" cy="122" r="88" fill="#15D1C5" opacity="0.12" filter="url(#blur)">
+    <animate attributeName="opacity" values="0.08;0.18;0.08" dur="4s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="910" cy="170" r="110" fill="#F06A3A" opacity="0.1" filter="url(#blur)">
+    <animate attributeName="opacity" values="0.08;0.14;0.08" dur="5s" repeatCount="indefinite"/>
+  </circle>
+
+  <g transform="translate(875 214)">
+    <g>
+      <animateTransform attributeName="transform" type="translate" values="875 214;875 208;875 214" dur="3.8s" repeatCount="indefinite"/>
+      <ellipse cx="0" cy="0" rx="78" ry="46" fill="#F06A3A"/>
+      <ellipse cx="4" cy="-4" rx="56" ry="28" fill="#FF8A59" opacity="0.85"/>
+      <circle cx="-22" cy="-10" r="6" fill="#07131F"/>
+      <circle cx="4" cy="-10" r="6" fill="#07131F"/>
+      <path d="M-108 -18C-136 -40 -142 -72 -120 -86C-98 -100 -74 -80 -62 -58" stroke="#F06A3A" stroke-width="16" stroke-linecap="round"/>
+      <path d="M108 -18C136 -40 142 -72 120 -86C98 -100 74 -80 62 -58" stroke="#F06A3A" stroke-width="16" stroke-linecap="round"/>
+      <path d="M-122 -92L-150 -122L-118 -126" stroke="#F06A3A" stroke-width="14" stroke-linecap="round" stroke-linejoin="round">
+        <animateTransform attributeName="transform" type="rotate" values="-8 -122 -92;8 -122 -92;-8 -122 -92" dur="2.6s" repeatCount="indefinite"/>
+      </path>
+      <path d="M122 -92L150 -122L118 -126" stroke="#F06A3A" stroke-width="14" stroke-linecap="round" stroke-linejoin="round">
+        <animateTransform attributeName="transform" type="rotate" values="8 122 -92;-8 122 -92;8 122 -92" dur="2.6s" repeatCount="indefinite"/>
+      </path>
+      <path d="M-48 42L-62 84" stroke="#FF8A59" stroke-width="10" stroke-linecap="round"/>
+      <path d="M-20 44L-30 90" stroke="#FF8A59" stroke-width="10" stroke-linecap="round"/>
+      <path d="M20 44L30 90" stroke="#FF8A59" stroke-width="10" stroke-linecap="round"/>
+      <path d="M48 42L62 84" stroke="#FF8A59" stroke-width="10" stroke-linecap="round"/>
+    </g>
+  </g>
+
+  <g font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">
+    <text x="74" y="118" fill="#7EE7E1" font-size="18" letter-spacing="4">OPENCLAWD FRAMEWORK</text>
+    <text x="72" y="188" fill="white" font-size="58" font-weight="700">Sovereign AI agents,</text>
+    <text x="72" y="252" fill="white" font-size="58" font-weight="700">payments, wallets, and MCP.</text>
+    <text x="74" y="300" fill="#B8D6E8" font-size="24">Build lobster-brained Solana agents that can think, charge, spawn, and ship.</text>
+    <text x="74" y="345" fill="url(#glow)" font-size="22">runtime • CLI • x402 • MCP server • library • examples</text>
+  </g>
+</svg>
