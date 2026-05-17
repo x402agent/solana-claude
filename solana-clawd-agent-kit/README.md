@@ -1,6 +1,6 @@
 # Solana Clawd Agent Kit
 
-Local TypeScript packages for working with the Solana Clawd agent registry in this repository.
+Local TypeScript packages for working with the Solana Clawd agent registry in this repository. This workspace is part of the main codebase: it is wired into the root workspace, referenced by `agents/package.json`, and used to keep `agents/`, the public x402 catalog, and gateway registry documents aligned.
 
 This is not the upstream Solana Agent Kit plugin bundle. The imported plugin packages, examples, generated docs, and third-party package metadata were removed so this directory only contains Solana Clawd-owned code.
 
@@ -15,6 +15,7 @@ This is not the upstream Solana Agent Kit plugin bundle. The imported plugin pac
 - Builds runtime profiles for Solana Clawd agents
 - Produces registry documents for catalog/API publishing
 - Validates that this workspace stays scoped to `@solana-clawd/*`
+- Supports the free and gasless agent path documented at `https://x402.wtf/agents`
 
 ## Packages
 
@@ -33,6 +34,13 @@ pnpm validate
 ```
 
 The main `agents` codebase references the kit with local `file:` dependencies, so package changes are consumed without publishing.
+
+From the repository root:
+
+```bash
+npm run agent-kit:build
+npm run agent-kit:validate
+```
 
 ## Usage
 
@@ -69,3 +77,24 @@ pnpm agents:catalog
 ```
 
 This delegates to `../agents/build-catalog.cjs`, which remains the source of truth for the public catalog output.
+
+## Public Agent Path
+
+The public hub lets anyone discover agents and mint/register Solana agent identities without paying SOL for transaction fees:
+
+```text
+https://x402.wtf/agents
+```
+
+Gateway routes used by that flow:
+
+```bash
+curl https://x402.wtf/registry | jq .
+curl https://x402.wtf/identity | jq .
+curl https://x402.wtf/metadata/agent1.json | jq .
+curl https://x402.wtf/sas/agent1.json | jq .
+
+curl -X POST https://x402.wtf/api/mint/agent \
+  -H 'Content-Type: application/json' \
+  -d '{"agentId":1,"ownerPubkey":"<YOUR_SOLANA_PUBKEY>"}'
+```

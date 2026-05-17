@@ -34,10 +34,38 @@
 ║  Runtime      clawd · leviathan · clawd-automaton                           ║
 ║  Rooms        Analyst ↔ Satirist ↔ Clawd                                    ║
 ║  Payments     x402 / HTTP 402 / Solana rails                               ║
+║  Agents       x402.wtf/agents · free registry · gasless MPL Core minting    ║
 ║  SDK          goals · knowledge · library · examples · x402 services       ║
 ║  Programs     Solana program workspace + protocol experiments               ║
 ╚══════════════════════════════════════════════════════════════════════════════╝
 ```
+
+## Solana Agent History
+
+Solana Clawd treats agents as Solana-native identities, not just hosted chat prompts. The repo started as a terminal and runtime stack for OpenClawd, HERMES, Leviathan, and x402 payments; it now also carries a public agent registry where anyone can discover, mint, and register agents through Solana rails.
+
+The current gateway exposes free metadata and registry endpoints, plus gasless Metaplex MPL Core minting. A user only provides a Solana public key; the platform fee-payer covers SOL transaction fees, the minted Core asset is owned by the user, and x402/Clawd routes the agent identity through the public hub.
+
+Open the registry:
+
+```text
+https://x402.wtf/agents
+```
+
+Gasless agent minting and registration:
+
+```bash
+curl https://x402.wtf/registry | jq .
+curl https://x402.wtf/identity | jq .
+curl https://x402.wtf/metadata/agent1.json | jq .
+curl https://x402.wtf/sas/agent1.json | jq .
+
+curl -X POST https://x402.wtf/api/mint/agent \
+  -H 'Content-Type: application/json' \
+  -d '{"agentId":1,"ownerPubkey":"<YOUR_SOLANA_PUBKEY>"}'
+```
+
+The free path is intentional: wallets, explorers, indexers, and autonomous agents should be able to read agent identity data without a paywall, while paid inference and richer workflows can still use x402.
 
 ## One-Shot Curls
 
@@ -72,6 +100,8 @@ curl https://x402.wtf/api/agents | jq .
 curl https://x402.wtf/api/agents/catalog | jq '.stats'
 curl https://x402.wtf/api/agents/registry | jq .
 curl https://x402.wtf/api/agents/catalog/solana-pumpfun-bot.json | jq .
+curl https://x402.wtf/registry | jq .
+curl https://x402.wtf/identity | jq .
 curl https://x402.wtf | head
 ```
 
@@ -213,12 +243,14 @@ npm i @openclawdsolana/clawd-sdk
 | `@openclawdsolana/clawd-perps` | `1.0.0` | `npm i -g @openclawdsolana/clawd-perps` | Phoenix perps CLI/library. |
 | `@openclawdsolana/clawd-wallet` | `1.0.0` | `npm i @openclawdsolana/clawd-wallet` | Wallet SDK and agentic safeguards. |
 | `@openclawdsolana/clawd-sdk` | `0.1.0` | `npm i @openclawdsolana/clawd-sdk` | On-chain SDK, curves, vaults, agent bindings. |
+| `@solana-clawd/agent-kit` | `0.1.0` | local workspace | Loads agent JSON, templates, catalog, manifest, and runtime profiles. |
+| `@solana-clawd/agent-registry` | `0.1.0` | local workspace | Builds publishable registry documents for Solana Clawd agents. |
 | `agentwallet-vault` | `0.1.0` | `npm i -g agentwallet-vault` | Encrypted Solana/EVM keypair vault. |
 | `clawd-automaton` | `0.2.0` | `npm i -g clawd-automaton` | Automation runtime and dashboard. |
 
 ## Agents API
 
-The local [`agents/`](./agents/) folder is synced from the ClawdBrowser agent hub and regenerated into the public x402 API shape. The current generated catalog contains **124 agents**, **1 one-shot**, **2 featured agents**, and static catalog/registry files under [`agents/public/api/agents`](./agents/public/api/agents/).
+The local [`agents/`](./agents/) folder and [`solana-clawd-agent-kit/`](./solana-clawd-agent-kit/) workspace are the source of truth for Solana Clawd agent metadata. The catalog is regenerated into the public x402 API shape, and the gateway exposes free registry, identity, SAS, shell, metadata, and gasless mint routes. The current generated catalog contains **124 agents**, **1 one-shot**, **2 featured agents**, and static catalog/registry files under [`agents/public/api/agents`](./agents/public/api/agents/).
 
 Public endpoints:
 
@@ -227,6 +259,11 @@ curl https://x402.wtf/api/agents | jq .
 curl https://x402.wtf/api/agents/catalog | jq '.stats'
 curl https://x402.wtf/api/agents/registry | jq .
 curl https://x402.wtf/api/agents/catalog/solana-pumpfun-bot.json | jq .
+curl https://x402.wtf/registry | jq .
+curl https://x402.wtf/identity | jq .
+curl https://x402.wtf/metadata/agent1/registration.json | jq .
+curl https://x402.wtf/capabilities/agent1.json | jq .
+curl https://x402.wtf/sas/agent1.json | jq .
 ```
 
 Installer defaults point every OpenClawd workspace at the same source of truth:
@@ -235,6 +272,29 @@ Installer defaults point every OpenClawd workspace at the same source of truth:
 OPENCLAWD_AGENTS_BASE=https://x402.wtf/api/agents
 OPENCLAWD_AGENTS_CATALOG=https://x402.wtf/api/agents/catalog
 OPENCLAWD_AGENTS_REGISTRY=https://x402.wtf/api/agents/registry
+```
+
+Mint a preset agent gaslessly:
+
+```bash
+curl -X POST https://x402.wtf/api/mint/agent \
+  -H 'Content-Type: application/json' \
+  -d '{"agentId":1,"ownerPubkey":"<YOUR_SOLANA_PUBKEY>","network":"mainnet"}'
+```
+
+Mint a custom agent gaslessly on devnet:
+
+```bash
+curl -X POST https://x402.wtf/api/mint/agent/custom \
+  -H 'Content-Type: application/json' \
+  -d '{"name":"My Clawd Agent","metadataUri":"https://example.com/agent.json","ownerPubkey":"<YOUR_SOLANA_PUBKEY>","network":"devnet"}'
+```
+
+Local kit checks:
+
+```bash
+npm run agent-kit:build
+npm run agent-kit:validate
 ```
 
 ## SDK, Memory, and Control Plane
