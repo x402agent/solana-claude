@@ -715,7 +715,7 @@ def agent_registration_metadata(agent_slug: str):
     }
 
 
-@app.get("/agent1", dependencies=[Depends(require_scope("chat:write"))])
+@app.get("/agent1")
 def get_agent_response():
     """Get response from Agent 1 — The Analyst (logical)."""
     if terminal is None:
@@ -724,7 +724,7 @@ def get_agent_response():
     return {"agent": 1, "name": "The Analyst", "response": response}
 
 
-@app.get("/agent2", dependencies=[Depends(require_scope("chat:write"))])
+@app.get("/agent2")
 def get_agent_2_response():
     """Get response from Agent 2 — The Satirist (dark humor)."""
     if terminal is None:
