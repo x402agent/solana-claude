@@ -134,7 +134,7 @@ async function buildPaymentHeader(
 export function wrapFetchWithX402(fetchFn: typeof fetch): typeof fetch {
   const cfg = getX402Config();
 
-  const wrapped = async (input: string | URL | Request, init?: RequestInit): Promise<Response> => {
+  const wrapped = async (input: RequestInfo | URL, init?: RequestInit): Promise<Response> => {
     const firstResponse = await fetchFn(input, init);
 
     // Only intercept 402
@@ -169,7 +169,7 @@ export function wrapFetchWithX402(fetchFn: typeof fetch): typeof fetch {
     if (!paymentHeader) return firstResponse;
 
     // Retry with payment
-    const retryHeaders = new Headers((init?.headers as RequestInit['headers'] | undefined) ?? {});
+    const retryHeaders = new Headers((init?.headers as HeadersInit | undefined) ?? {});
     retryHeaders.set(X402_HEADERS.PAYMENT, paymentHeader);
 
     const paidResponse = await fetchFn(input, { ...init, headers: retryHeaders });

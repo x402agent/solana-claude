@@ -1,0 +1,161 @@
+import { NATIVE_MINT } from "@solana/spl-token";
+import { Keypair, LAMPORTS_PER_SOL } from "@solana/web3.js";
+import { BN } from "bn.js";
+import { LiteSVM } from "litesvm";
+import {
+  BaseFee,
+  ConfigParameters,
+  createConfig,
+  CreateConfigParams,
+  createPoolWithSplToken,
+  SwapMode,
+  SwapParams,
+  swapSimulate,
+} from "./instructions";
+import {
+  createVirtualCurveProgram,
+  generateAndFund,
+  getVirtualPool,
+  MAX_SQRT_PRICE,
+  MIN_SQRT_PRICE,
+  startSvm,
+  U64_MAX,
+} from "./utils";
+import { VirtualCurveProgram } from "./utils/types";
+
+describe("Simulate CU swap", () => {
+  let svm: LiteSVM;
+  let user: Keypair;
+  let program: VirtualCurveProgram;
+
+  beforeEach(async () => {
+    svm = startSvm();
+    user = generateAndFund(svm);
+    program = createVirtualCurveProgram();
+  });
+
+  it("Simulate CU Swap", async () => {
+    const result = [];
+    for (let curve_size = 1; curve_size <= 16; curve_size++) {
+      let curves = [];
+      for (let i = 1; i <= curve_size; i++) {
+        curves.push({
+          sqrtPrice: MIN_SQRT_PRICE.muln(i + 1),
+          liquidity: U64_MAX.shln(10),
+        });
+      }
+
+      curves[curves.length - 1].sqrtPrice = MAX_SQRT_PRICE;
+
+      const baseFee: BaseFee = {
+        cliffFeeNumerator: new BN(2_500_000),
+        firstFactor: 0,
+        secondFactor: new BN(0),
+        thirdFactor: new BN(0),
+        baseFeeMode: 0,
+      };
+
+      const instructionParams: ConfigParameters = {
+        poolFees: {
+          baseFee,
+          dynamicFee: null,
+        },
+        activationType: 0,
+        collectFeeMode: 0,
+        migrationOption: 0,
+        tokenType: 0, // spl_token
+        tokenDecimal: 6,
+        migrationQuoteThreshold: new BN(50_000 * 10 ** 6),
+        partnerLiquidityPercentage: 0,
+        creatorLiquidityPercentage: 0,
+        partnerPermanentLockedLiquidityPercentage: 95,
+        creatorPermanentLockedLiquidityPercentage: 5,
+        sqrtStartPrice: MIN_SQRT_PRICE,
+        lockedVesting: {
+          amountPerPeriod: new BN(0),
+          cliffDurationFromMigrationTime: new BN(0),
+          frequency: new BN(0),
+          numberOfPeriod: new BN(0),
+          cliffUnlockAmount: new BN(0),
+        },
+        migrationFeeOption: 0,
+        tokenSupply: null,
+        creatorTradingFeePercentage: 0,
+        tokenUpdateAuthority: 0,
+        migrationFee: {
+          feePercentage: 0,
+          creatorFeePercentage: 0,
+        },
+        migratedPoolFee: {
+          collectFeeMode: 0,
+          dynamicFee: 0,
+          poolFeeBps: 0,
+        },
+        poolCreationFee: new BN(0),
+        curve: curves,
+        creatorLiquidityVestingInfo: {
+          vestingPercentage: 0,
+          cliffDurationFromMigrationTime: 0,
+          bpsPerPeriod: 0,
+          numberOfPeriods: 0,
+          frequency: 0,
+        },
+        partnerLiquidityVestingInfo: {
+          vestingPercentage: 0,
+          cliffDurationFromMigrationTime: 0,
+          bpsPerPeriod: 0,
+          numberOfPeriods: 0,
+          frequency: 0,
+        },
+        enableFirstSwapWithMinFee: false,
+        compoundingFeeBps: 0,
+        migratedPoolBaseFeeMode: 0,
+        migratedPoolMarketCapFeeSchedulerParams: null,
+      };
+      const createConfigParams: CreateConfigParams<ConfigParameters> = {
+        payer: user,
+        leftoverReceiver: user.publicKey,
+        feeClaimer: user.publicKey,
+        quoteMint: NATIVE_MINT,
+        instructionParams,
+      };
+      const config = await createConfig(svm, program, createConfigParams);
+
+      const pool = await createPoolWithSplToken(svm, program, {
+        poolCreator: user,
+        payer: user,
+        quoteMint: NATIVE_MINT,
+        config,
+        instructionParams: {
+          name: "test token spl",
+          symbol: "TEST",
+          uri: "abc.com",
+        },
+      });
+
+      const poolState = getVirtualPool(svm, program, pool);
+      const params: SwapParams = {
+        config,
+        payer: user,
+        pool,
+        inputTokenMint: NATIVE_MINT,
+        outputTokenMint: poolState.baseMint,
+        amountIn: new BN(LAMPORTS_PER_SOL * 550),
+        minimumAmountOut: new BN(0),
+        swapMode: SwapMode.PartialFill,
+        referralTokenAccount: null,
+      };
+
+      const { computeUnitsConsumed, numInstructions, completed, message } =
+        await swapSimulate(svm, program, params);
+      result.push({
+        curveSize: curves.length,
+        completed,
+        CU: computeUnitsConsumed,
+        instruction: numInstructions,
+        // message,
+      });
+    }
+    console.log(result);
+  });
+});

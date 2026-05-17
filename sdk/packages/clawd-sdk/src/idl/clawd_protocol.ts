@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * IDL for the clawd_protocol Anchor program.
  *
@@ -744,11 +745,11 @@ export const CLAWD_PROTOCOL_IDL = {
       type: {
         kind: "enum",
         variants: [
-          { name: "HolderCount" },
-          { name: "MarketCapQuote" },
-          { name: "CumulativeVolume" },
-          { name: "GraduationAchieved" },
-          { name: "AgentTasksCompleted" },
+          { name: "HolderCount", docs: ["Verified via attestation from authority"] },
+          { name: "MarketCapQuote", docs: ["Derived from DBC pool quote_reserve (proxy for mcap)"] },
+          { name: "CumulativeVolume", docs: ["Derived from DBC pool metrics.total_trading_fee_paid"] },
+          { name: "GraduationAchieved", docs: ["Pool has migrated to permanent AMM"] },
+          { name: "AgentTasksCompleted", docs: ["Agent has completed N lifetime tasks"] },
         ],
       },
     },
@@ -772,9 +773,6 @@ export const CLAWD_PROTOCOL_IDL = {
     { code: 6014, name: "MaxMilestonesExceeded", msg: "Maximum of 8 milestones per lock" },
     { code: 6015, name: "BehaviorScoreUpdateTooSoon", msg: "Behavior score was updated too recently" },
   ],
-} as const;
+} as const satisfies Idl;
 
 export type ClawdProtocol = typeof CLAWD_PROTOCOL_IDL;
-
-// Re-export as typed Idl for use with Program<>
-export const CLAWD_PROTOCOL_IDL_TYPED = CLAWD_PROTOCOL_IDL as unknown as Idl;

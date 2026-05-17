@@ -1,4 +1,4 @@
-# @openclawd/solana-sdk
+# @openclawdsolana/clawd-sdk
 
 Solana SDK and IDL for AI agent and token launches. Built on top of Meteora's Dynamic Bonding Curve (DBC) with a new adaptive intelligence layer, Token2022/pToken support, and a vault with novel burn and lock mechanics.
 
@@ -92,9 +92,9 @@ Every token launch can register an `AgentBinding` PDA that:
 ## Install
 
 ```bash
-npm install @openclawd/solana-sdk
+npm install @openclawdsolana/clawd-sdk
 # or
-pnpm add @openclawd/solana-sdk
+pnpm add @openclawdsolana/clawd-sdk
 ```
 
 ---
@@ -108,7 +108,7 @@ import { Connection, Keypair } from "@solana/web3.js";
 import {
   defaultAgentLaunchParams,
   buildAgentLaunchInstructions,
-} from "@openclawd/solana-sdk";
+} from "@openclawdsolana/clawd-sdk";
 
 const connection = new Connection("https://api.mainnet-beta.solana.com");
 const agentWallet = Keypair.generate();
@@ -136,7 +136,7 @@ const result = await buildAgentLaunchInstructions(
 ### Get an adaptive swap quote
 
 ```typescript
-import { AdaptiveCurve, designDefaultAgentCurve } from "@openclawd/solana-sdk/bonding-curve";
+import { AdaptiveCurve, designDefaultAgentCurve } from "@openclawdsolana/clawd-sdk/bonding-curve";
 
 const config = designDefaultAgentCurve({ startPrice: 0.000001, migrationPrice: 0.001 });
 const curve = new AdaptiveCurve(config, dbcPoolPubkey);
@@ -155,7 +155,7 @@ console.log(quote.outputAmount, quote.sentimentLabel, quote.effectiveFeeNumerato
 ### Trigger an entropy burn
 
 ```typescript
-import { estimateEntropyBurn, buildEntropyBurnInstruction } from "@openclawd/solana-sdk/vault";
+import { estimateEntropyBurn, buildEntropyBurnInstruction } from "@openclawdsolana/clawd-sdk/vault";
 
 const estimate = estimateEntropyBurn(vaultState, currentVolatilityAccumulator);
 
@@ -174,7 +174,7 @@ import {
   buildConvictionStakeInstruction,
   estimateConvictionScore,
   slotsUntilFreeUnlock,
-} from "@openclawd/solana-sdk/vault";
+} from "@openclawdsolana/clawd-sdk/vault";
 
 const score = estimateConvictionScore(
   1_000_000n,     // 1M tokens
@@ -191,7 +191,7 @@ const { instructions } = buildConvictionStakeInstruction(
 ### Milestone-gated dev lock
 
 ```typescript
-import { defaultDevMilestones, buildCreateMilestoneLockInstruction } from "@openclawd/solana-sdk/vault";
+import { defaultDevMilestones, buildCreateMilestoneLockInstruction } from "@openclawdsolana/clawd-sdk/vault";
 
 const milestones = defaultDevMilestones(10_000_000n); // lock 10M tokens
 
@@ -219,5 +219,5 @@ dbcij3LWUppWqq96dh6gJWwBifmcGfLSB5D4DuSMaqN
 ## Publish
 
 ```bash
-NPM_TOKEN=$NPM_TOKEN npm publish --access public
+NPM_TOKEN=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 npm publish --access public
 ```

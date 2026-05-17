@@ -103,7 +103,7 @@ export function defaultAgentTokenConfig(opts: {
         ),
       },
       metadataPointer: { authority: null, metadataAddress: null }, // self-referential
-      ...(opts.mintCloseAuthority !== undefined ? { mintCloseAuthority: opts.mintCloseAuthority } : {}),
+      mintCloseAuthority: opts.mintCloseAuthority,
     },
   };
 }

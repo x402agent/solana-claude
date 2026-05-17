@@ -1,0 +1,21 @@
+[features]
+seeds = false
+skip-lint = false
+
+[programs.localnet]
+dynamic_bonding_curve = "dbcij3LWUppWqq96dh6gJWwBifmcGfLSB5D4DuSMaqN"
+
+[registry]
+url = "https://api.apr.dev"
+
+[provider]
+cluster = "Localnet"
+wallet = "keys/local/admin-bossj3JvwiNK7pvjr149DqdtJxf2gdygbcmEPTkb2F1.json"
+
+[scripts]
+test = "yarn run ts-mocha -p ./tsconfig.json -t 1000000 tests/**/*.ts"
+ixdata = "yarn run tsx --tsconfig ./tsconfig.json ./scripts/generate_ix_data_for_tests.ts"
+
+[toolchain]
+anchor_version = "0.31.0"
+solana_version = "2.3.13"

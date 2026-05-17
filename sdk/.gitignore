@@ -72,6 +72,7 @@ coverage/
 secrets.json
 credentials.json
 keystore.json
+keypair.json
 *.cred
 
 # ─── Coding agents ────────────────────────────────────────────

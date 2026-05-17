@@ -193,11 +193,10 @@ export async function fetchVaultState(
   const r16 = () => { const v = d.readUInt16LE(o); o += 2; return v; };
   const rOpt = <T>(read: () => T): T | undefined => { const has = d.readUInt8(o); o += 1; return has ? read() : undefined; };
 
-  const agentBindingVal = rOpt(rk);
   return {
     baseMint: rk(),
     dbcPool: rk(),
-    ...(agentBindingVal !== undefined ? { agentBinding: agentBindingVal } : {}),
+    agentBinding: rOpt(rk),
     vaultTokenAccount: rk(),
     feeReserveAccount: rk(),
     inflationReserveAmount: r64(),
@@ -213,7 +212,7 @@ export async function fetchVaultState(
     transferFeeBps: r16(),
     epochDurationSlots: r64(),
     epochBurnRateBps: r16(),
-  } as VaultState;
+  };
 }
 
 export async function fetchLockPosition(
@@ -234,16 +233,14 @@ export async function fetchLockPosition(
   const rOpt8 = () => { const has = d.readUInt8(o); o += 1; return has ? r8() : undefined; };
   const lockTypeMap = ["time", "milestone", "hybrid", "conviction"] as const;
 
-  const unlockSlotVal = rOpt64();
-  const milestoneIndexVal = rOpt8();
   return {
     owner: rk(),
     vault: rk(),
     lockedAmount: r64(),
     lockType: lockTypeMap[r8()] ?? "time",
     lockedAtSlot: r64(),
-    ...(unlockSlotVal !== undefined ? { unlockSlot: unlockSlotVal } : {}),
-    ...(milestoneIndexVal !== undefined ? { milestoneIndex: milestoneIndexVal } : {}),
+    unlockSlot: rOpt64(),
+    milestoneIndex: rOpt8(),
     isUnlocked: r8() === 1,
-  } as LockPosition;
+  };
 }

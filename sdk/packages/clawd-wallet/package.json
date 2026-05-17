@@ -1,5 +1,5 @@
 {
-  "name": "@openclawd/wallet",
+  "name": "@openclawdsolana/clawd-wallet",
   "version": "1.0.0",
   "description": "🦞 @openclawd/wallet — Privy-embedded Solana wallet + AgenticWallet (Grok-gated trading) + Jupiter SwapService",
   "type": "module",

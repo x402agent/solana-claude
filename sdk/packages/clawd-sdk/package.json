@@ -1,5 +1,5 @@
 {
-  "name": "@openclawd/solana-sdk",
+  "name": "@openclawdsolana/clawd-sdk",
   "version": "0.1.0",
   "description": "OpenClawd Solana SDK — Agent & token launches with adaptive bonding curves, Token2022, pTokens, and intelligent vault mechanics",
   "type": "module",
