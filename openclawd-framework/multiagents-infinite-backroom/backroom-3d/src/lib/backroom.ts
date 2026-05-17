@@ -109,6 +109,98 @@ export async function fetchClawdOrchestration(task: string, loops = 4): Promise<
   return resp.json()
 }
 
+// ─── Electric Dreams ──────────────────────────────────────────────────────────
+
+export interface DreamsStory {
+  slug: string
+  url: string
+  title: string
+  description: string
+  scenario: string
+  scraped_at: string
+  content_chars: number
+  markdown?: string
+}
+
+export interface DreamsStoriesResponse {
+  source: string
+  story_count: number
+  returned: number
+  stories: DreamsStory[]
+}
+
+export interface DreamsStatusResponse {
+  source: string
+  story_count: number
+  state: {
+    last_sync_at: string | null
+    story_count: number
+    last_job_id: string | null
+  }
+}
+
+export interface DreamsSyncResult {
+  job_id: string
+  source: string
+  story_count: number
+  injected: boolean
+  injected_chars: number
+  credits_used: number
+  stories: DreamsStory[]
+}
+
+const CONVEX_URL = import.meta.env.VITE_CONVEX_SITE_URL || ''
+
+export async function fetchDreamsStories(limit = 25, fullText = false): Promise<DreamsStoriesResponse> {
+  // First try Convex for persisted data
+  if (CONVEX_URL) {
+    try {
+      const resp = await fetch(`${CONVEX_URL}/crawl/pages?source=dreams&limit=${limit}`)
+      if (resp.ok) {
+        const data = await resp.json()
+        const pages = data.pages || []
+        const stories: DreamsStory[] = pages.map((p: any) => ({
+          slug: p.url?.split('/').filter(Boolean).pop() || 'unknown',
+          url: p.sourceUrl || p.url || '',
+          title: p.title || '',
+          description: '',
+          scenario: '',
+          scraped_at: new Date(p.timestamp).toISOString(),
+          content_chars: (p.markdown || '').length,
+          markdown: fullText ? p.markdown : undefined,
+        }))
+        if (stories.length > 0) {
+          return { source: 'dreams', story_count: stories.length, returned: stories.length, stories }
+        }
+      }
+    } catch {
+      // fall through to FastAPI
+    }
+  }
+  // Fallback: FastAPI cached stories
+  const resp = await fetch(
+    `${BACKROOM_URL}/firecrawl/dreams/stories?limit=${limit}&full_text=${fullText}`
+  )
+  if (!resp.ok) throw new Error(`Dreams stories returned ${resp.status}`)
+  return resp.json()
+}
+
+export async function fetchDreamsStatus(): Promise<DreamsStatusResponse> {
+  const resp = await fetch(`${BACKROOM_URL}/firecrawl/dreams/status`)
+  if (!resp.ok) throw new Error(`Dreams status returned ${resp.status}`)
+  return resp.json()
+}
+
+export async function triggerDreamsSync(limit = 50): Promise<DreamsSyncResult> {
+  const resp = await fetch(`${BACKROOM_URL}/firecrawl/dreams`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ limit, inject: true }),
+  })
+  if (!resp.ok) throw new Error(`Dreams sync returned ${resp.status}`)
+  return resp.json()
+}
+
 export const AGENT_NAMES: Record<number, string> = {
   1: 'The Analyst',
   2: 'The Satirist',
