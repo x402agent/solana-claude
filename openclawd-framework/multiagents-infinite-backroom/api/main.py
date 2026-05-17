@@ -581,7 +581,7 @@ def firecrawl_dreams(req: DreamsSyncRequest):
         return JSONResponse({"error": str(e)}, status_code=502)
 
 
-@app.get("/firecrawl/dreams/status", dependencies=[Depends(require_scope("chat:read"))])
+@app.get("/firecrawl/dreams/status")
 def firecrawl_dreams_status():
     """Return cached Dreams sync metadata."""
     cache = load_dreams_cache()
@@ -592,7 +592,7 @@ def firecrawl_dreams_status():
     }
 
 
-@app.get("/firecrawl/dreams/stories", dependencies=[Depends(require_scope("chat:read"))])
+@app.get("/firecrawl/dreams/stories")
 def firecrawl_dreams_stories(
     limit: int = Query(default=25, ge=1, le=200),
     full_text: bool = Query(default=False),
