@@ -13,7 +13,7 @@ from fastapi.responses import HTMLResponse, PlainTextResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from pathlib import Path
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 from .auth import (
     AuthContext,
     auth_status,
@@ -109,25 +109,23 @@ class DflowPredictionOrderRequest(BaseModel):
 
 
 class CreateApiKeyRequest(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
+
     project_id: str = Field(alias="projectId")
     name: str
     scopes: list[str] = Field(default_factory=list)
     expires_at: int | None = Field(default=None, alias="expiresAt")
     machine_id: str | None = Field(default=None, alias="machineId")
 
-    class Config:
-        allow_population_by_field_name = True
-
 
 class MachineHandshakeRequest(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
+
     machine_id: str = Field(alias="machineId")
     provider: str = "fly"
     environment: str = "production"
     version: str | None = None
     metadata: dict | None = None
-
-    class Config:
-        allow_population_by_field_name = True
 
 # CORS — allow the 3D frontend and any tool
 app.add_middleware(

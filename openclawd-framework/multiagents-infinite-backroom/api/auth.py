@@ -118,7 +118,7 @@ def require_scope(*required_scopes: str) -> Callable[..., AuthContext]:
         authorization: str | None = Header(default=None),
         x_clawd_machine_id: str | None = Header(default=None),
     ) -> AuthContext:
-        if not AUTH_REQUIRED:
+        if not AUTH_REQUIRED and "admin:keys" not in required:
             ctx = _auth_disabled_context()
             request.state.auth = ctx
             request.state.required_scopes = required
