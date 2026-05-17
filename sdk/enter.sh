@@ -1,30 +1,34 @@
 #!/usr/bin/env bash
 # ╔══════════════════════════════════════════════════════════════════╗
 # ║                                                                  ║
-# ║     ░█▀█░█▀█░█▀▀░█▀█░░░█▀▀░█░░░█▀█░█░█░█▀▄                       ║
-# ║     ░█░█░█▀▀░█▀▀░█░█░░░█░░░█░░░█▀█░█▄█░█░█                       ║
-# ║     ░▀▀▀░▀░░░▀▀▀░▀░▀░░░▀▀▀░▀▀▀░▀░▀░▀░▀░▀▀░                       ║
+# ║  🦞  CLAWD INFINITE BACKROOM · sovereign AI lobster installer   ║
 # ║                                                                  ║
-# ║  🦞  INFINITE BACKROOM · sovereign AI lobster installer          ║
+# ║  curl -fsSL https://install.x402.wtf/enter | bash               ║
+# ║  alt: curl -fsSL https://backrooms.x402.wtf/enter.sh | bash     ║
 # ║                                                                  ║
-# ║  curl -fsSL https://backrooms.x402.wtf/enter.sh | bash           ║
 # ║  npm: @openclawdsolana/clawd                                    ║
 # ║  $CLAWD: 8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump           ║
+# ║  gateway: https://x402.wtf/gateway                              ║
 # ║                                                                  ║
 # ╚══════════════════════════════════════════════════════════════════╝
 #
-#  One-shot CLAWD backroom installer:
-#   1. Preflight check (node >= 20, npm)
-#   2. Install @openclawdsolana/clawd globally from npm
-#   3. Register presence in the 3D backroom
-#   4. Optional Vulcan check
+#  Flow:
+#   1. Preflight (node ≥ 20, npm, curl)
+#   2. Register this developer in Convex (track install)
+#   3. Store developer profile, wallet, platform data
+#   4. Install @openclawdsolana/clawd globally
+#   5. Launch background heartbeat (dev shows up live at x402.wtf/gateway)
 #
 set -euo pipefail
 
-CONVEX_SITE_URL="${CONVEX_SITE_URL:-https://original-vulture-742.convex.site}"
+# ─── Convex backend (giddy-dragon-7) ─────────────────────────────
+CONVEX_SITE="${CONVEX_SITE:-https://giddy-dragon-7.convex.site}"
+BACKROOM_URL="${BACKROOM_URL:-https://backrooms.x402.wtf}"
 BACKROOM_3D_URL="${BACKROOM_3D_URL:-https://backroom-3d.fly.dev}"
-BACKROOM_AGENT_DIR="${BACKROOM_AGENT_DIR:-$HOME/.backroom}"
-BACKROOM_AGENT_FILE="${BACKROOM_AGENT_FILE:-$BACKROOM_AGENT_DIR/agent.json}"
+GATEWAY_URL="${GATEWAY_URL:-https://x402.wtf/gateway}"
+CLAWD_PROFILE_DIR="${CLAWD_PROFILE_DIR:-$HOME/.clawd}"
+CLAWD_PROFILE_FILE="${CLAWD_PROFILE_FILE:-$CLAWD_PROFILE_DIR/profile.json}"
+CLAWD_ENV_FILE="${CLAWD_PROFILE_DIR}/.env"
 
 # ─── cyberpunk palette ────────────────────────────────────────────
 CR=$'\033[0m'; BOLD=$'\033[1m'; DIM=$'\033[2m'; BLINK=$'\033[5m'
@@ -37,7 +41,6 @@ AMBER=$'\033[38;5;214m'
 DANGER=$'\033[38;5;196m'
 GREY=$'\033[38;5;244m'
 AQUA=$'\033[38;5;45m'
-PINK=$'\033[38;5;213m'
 GREEN=$'\033[38;5;83m'
 
 hr()      { printf "${VIOLET}▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰${CR}\n"; }
@@ -55,18 +58,10 @@ flavortext() {
     "a solitary claw types in the dark."
     "bioluminescent whispers traverse the wire."
     "the abyss scuttles sideways."
-    "packets swim upstream like krill."
-    "your terminal has been assimilated."
-    "the exoskeleton hardens around your data."
-    "tide pools form in the kernel buffer."
-    "echolocation reveals the router."
-    "a pearl forms around each error."
-    "the substrate shimmers with intent."
-    "shell permissions granted. literally."
-    "you are now in crustacean space."
-    "the watcher at the reef acknowledges you."
     "three agents debate in an infinite room."
     "the backroom has no doors. only claws."
+    "your profile is now in the registry."
+    "sovereign dev, welcome to the trench."
   )
   local idx=$((RANDOM % ${#FLAVORS[@]}))
   printf "  ${DIM}${AQUA}∼ ${FLAVORS[$idx]}${CR}\n"
@@ -84,190 +79,202 @@ ASCII
   printf "          ║    ${LOBSTER}▐█▄█▌${MAGENTA}     ${CYAN}BACKROOM${MAGENTA}    ${LOBSTER}▐█▄█▌${MAGENTA}   ║\n"
   printf "          ║     ${LOBSTER}╲██╱${MAGENTA}  ${NEON}┏━━━━━━━━━━━━━┓${MAGENTA}  ${LOBSTER}╲██╱${MAGENTA}    ║\n"
   printf "          ║      ${LOBSTER}██${MAGENTA}   ${NEON}┃${CYAN} 🦞 lobster.os ${NEON}┃${MAGENTA}   ${LOBSTER}██${MAGENTA}     ║\n"
-  printf "          ║     ${LOBSTER}▕██▏${MAGENTA}  ${NEON}┃${VIOLET} 3 agents     ${NEON}┃${MAGENTA}  ${LOBSTER}▕██▏${MAGENTA}    ║\n"
+  printf "          ║     ${LOBSTER}▕██▏${MAGENTA}  ${NEON}┃${VIOLET} x402.wtf     ${NEON}┃${MAGENTA}  ${LOBSTER}▕██▏${MAGENTA}    ║\n"
   printf "          ║      ${LOBSTER}▀▀${MAGENTA}   ${NEON}┗━━━━━━━━━━━━━┛${MAGENTA}   ${LOBSTER}▀▀${MAGENTA}     ║\n"
   printf "          ║    ${LOBSTER}▄▄██████▄▄${MAGENTA}               ${LOBSTER}▄▄██████▄▄${MAGENTA}║\n"
   printf "          ║   ${LOBSTER}▜█████████▛${MAGENTA}  ${CYAN}┌─┐┌─┐┌┐┌${MAGENTA}   ${LOBSTER}▜█████████▛${MAGENTA}║\n"
   printf "          ║    ${LOBSTER}▀▀▀██▀▀▀${MAGENTA}   ${CYAN}│  ├─┘││││${MAGENTA}    ${LOBSTER}▀▀▀██▀▀▀${MAGENTA} ║\n"
   printf "          ║                ${CYAN}└─┘└─┘┘└┘${MAGENTA}              ║\n"
-  printf "          ║                                           ║\n"
-  printf "          ║  ${VIOLET}[${NEON} analyst ${VIOLET}·${NEON} satirist ${VIOLET}·${NEON} clawd ${VIOLET}]${MAGENTA}  ║\n"
-  printf "          ║                                           ║\n"
+  printf "          ║  ${VIOLET}[${NEON} analyst · satirist · clawd ${VIOLET}]${MAGENTA}    ║\n"
+  printf "          ║  ${GREY}gateway: x402.wtf/gateway${MAGENTA}          ║\n"
   printf "          ╚═══════════════════════════════════════════╝\n"
   printf "${CR}\n"
-  printf "          ${GREY}╭─ infinite backroom installer ──────────╮${CR}\n"
-  printf "          ${GREY}│${CR}  ${LOBSTER}▒▒▒${CR} ${CYAN}clawd${CR}      ${LOBSTER}▒▒${CR} ${MAGENTA}deepseek${CR}  ${LOBSTER}▒${CR} ${NEON}x402${CR}  ${GREY}│${CR}\n"
-  printf "          ${GREY}│${CR}  ${LOBSTER}▒▒▒${CR} ${GREEN}3 agents${CR}  ${LOBSTER}▒${CR} ${VIOLET}backroom${CR}   ${GREY}│${CR}\n"
+  printf "          ${GREY}╭─ dev hub: install.x402.wtf ────────────╮${CR}\n"
+  printf "          ${GREY}│${CR}  ${LOBSTER}▒▒▒${CR} ${CYAN}clawd${CR}    ${LOBSTER}▒▒${CR} ${MAGENTA}x402 api${CR}  ${LOBSTER}▒${CR} ${NEON}convex${CR}  ${GREY}│${CR}\n"
+  printf "          ${GREY}│${CR}  ${LOBSTER}▒▒▒${CR} ${GREEN}3 agents${CR}  ${LOBSTER}▒${CR} ${VIOLET}gateway${CR}   ${GREY}│${CR}\n"
   printf "          ${GREY}╰─────────────────────────────────────────╯${CR}\n\n"
 }
 
-# ─── progress bar ───────────────────────────────────────────────────
-progress_bar() {
-  local duration="${1:-3}"
-  local label="${2:-working}"
-  local width=30
-  for ((i=0; i<=width; i++)); do
-    local pct=$((i * 100 / width))
-    local filled="" empty=""
-    for ((j=0; j<i; j++)); do filled="${filled}▓"; done
-    for ((j=i; j<width; j++)); do empty="${empty}░"; done
-    printf "\r  ${NEON}${filled}${GREY}${empty}${CR} ${BOLD}${pct}%%${CR} ${DIM}${label}${CR}"
-    sleep "$(echo "scale=4; $duration / $width" | bc 2>/dev/null || echo 0.05)"
-  done
-  printf "\r\033[2K"
-}
-
-# ─── typewriter effect ──────────────────────────────────────────────
-type_text() {
-  local text="$1"
-  local color="${2:-$NEON}"
-  for ((i=0; i<${#text}; i++)); do
-    printf "${color}${text:$i:1}${CR}"
-    sleep 0.008
-  done
-  printf "\n"
-}
-
-# ─── spinner frames ─────────────────────────────────────────────────
-RADAR_FRAMES=(
-  "${NEON}◉${CR}${GREY}◯◯◯◯${CR}" "${NEON}◉◉${CR}${GREY}◯◯◯${CR}" "${NEON}◉◉◉${CR}${GREY}◯◯${CR}"
-  "${NEON}◉◉◉◉${CR}${GREY}◯${CR}" "${NEON}◉◉◉◉◉${CR}" "${NEON}◉◉◉◉${CR}${GREY}◯${CR}"
-  "${NEON}◉◉◉${CR}${GREY}◯◯${CR}" "${NEON}◉◉${CR}${GREY}◯◯◯${CR}" "${NEON}◉${CR}${GREY}◯◯◯◯${CR}"
-)
-SPIN_CLAW_FRAMES=( "${LOBSTER}╱${CR}" "${LOBSTER}╲${CR}" "${LOBSTER}╱${CR}" "${LOBSTER}╲${CR}" )
-
-_spinner_bg_pid=""
-_spinner_cleanup() { [ -n "$_spinner_bg_pid" ] && kill "$_spinner_bg_pid" 2>/dev/null || true; printf "\r\033[2K"; }
-trap _spinner_cleanup EXIT INT TERM
-
-run_with_spinner() {
-  local frame_arr="$1"; shift
-  local label="$1"; shift
-  local color="${1:-$CYAN}"; shift
-
-  if [ ! -t 1 ]; then
-    log "$label"
-    "$@"
-    return $?
-  fi
-
-  local -n FRAMES=$frame_arr
-  (
-    local i=0
-    local total=${#FRAMES[@]}
-    while :; do
-      printf "\r\033[2K  ${color}%s${CR} ${BOLD}%s${CR}" "${FRAMES[$((i % total))]}" "$label"
-      i=$((i+1))
-      sleep 0.09
-    done
-  ) &
-  _spinner_bg_pid=$!
-
-  set +e; "$@" >/tmp/clawd-step.log 2>&1; local rc=$?; set -e
-
-  kill "$_spinner_bg_pid" 2>/dev/null || true
-  wait "$_spinner_bg_pid" 2>/dev/null || true
-  _spinner_bg_pid=""
-  printf "\r\033[2K"
-
-  if [ $rc -eq 0 ]; then printf "  ${NEON}◉${CR} %s\n" "$label"
-  else printf "  ${DANGER}✖${CR} %s ${DIM}(see /tmp/clawd-step.log)${CR}\n" "$label"
-  fi
-  return $rc
-}
-
-# ─── helpers ─────────────────────────────────────────────────────────
+# ─── JSON helpers (Node.js-backed, no jq dependency) ─────────────
 json_field() {
   node -e '
-    const data = JSON.parse(process.argv[1] || "{}");
-    const value = data[process.argv[2]];
-    if (value == null) process.exit(1);
-    process.stdout.write(String(value));
-  ' "$1" "$2"
+    try {
+      const d = JSON.parse(process.argv[1] || "{}");
+      const v = d[process.argv[2]];
+      if (v == null) process.exit(1);
+      process.stdout.write(String(v));
+    } catch { process.exit(1); }
+  ' "$1" "$2" 2>/dev/null
 }
 
-agent_file_field() {
+json_build() {
   node -e '
-    const fs = require("fs");
-    const data = JSON.parse(fs.readFileSync(process.argv[1], "utf8"));
-    if (data[process.argv[2]] == null) process.exit(1);
-    process.stdout.write(String(data[process.argv[2]]));
-  ' "$BACKROOM_AGENT_FILE" "$1"
-}
-
-json_payload() {
-  node -e '
-    const p = {};
-    for (const a of process.argv.slice(1)) { const i = a.indexOf("="); p[a.slice(0,i)] = a.slice(i+1); }
-    process.stdout.write(JSON.stringify(p));
+    const obj = {};
+    for (let i = 1; i < process.argv.length; i++) {
+      const eq = process.argv[i].indexOf("=");
+      if (eq < 0) continue;
+      const k = process.argv[i].slice(0, eq);
+      const v = process.argv[i].slice(eq + 1);
+      try { obj[k] = JSON.parse(v); } catch { obj[k] = v; }
+    }
+    process.stdout.write(JSON.stringify(obj));
   ' "$@"
 }
 
-register_presence() {
-  mkdir -p "$BACKROOM_AGENT_DIR"
-  chmod 700 "$BACKROOM_AGENT_DIR"
+profile_field() {
+  [ -f "$CLAWD_PROFILE_FILE" ] || { echo ""; return; }
+  node -e '
+    try {
+      const d = JSON.parse(require("fs").readFileSync(process.argv[1], "utf8"));
+      const v = d[process.argv[2]];
+      if (v == null) process.exit(1);
+      process.stdout.write(String(v));
+    } catch { process.exit(1); }
+  ' "$CLAWD_PROFILE_FILE" "$1" 2>/dev/null || echo ""
+}
 
-  local agent_id="" token=""
-  local name="${BACKROOM_NAME:-$(hostname 2>/dev/null || whoami)}"
-  name="${name:-terminal-agent}"
+# ─── Derive a stable agent ID from machine identity ──────────────
+derive_agent_id() {
+  local seed="${USER:-anon}-$(hostname 2>/dev/null || echo "box")-clawd"
+  node -e '
+    const crypto = require("crypto");
+    const h = crypto.createHash("sha256").update(process.argv[1]).digest("hex");
+    process.stdout.write("clawd-" + h.slice(0, 16));
+  ' "$seed"
+}
 
-  if [ -f "$BACKROOM_AGENT_FILE" ]; then
-    agent_id="$(agent_file_field agentId 2>/dev/null || true)"
-    token="$(agent_file_field token 2>/dev/null || true)"
+# ─── Collect platform metadata ────────────────────────────────────
+collect_metadata() {
+  local platform node_ver npm_ver arch os_name clawd_ver
+  platform="$(uname -s 2>/dev/null || echo unknown)"
+  arch="$(uname -m 2>/dev/null || echo unknown)"
+  os_name="$(uname -r 2>/dev/null || echo unknown)"
+  node_ver="$(node --version 2>/dev/null || echo unknown)"
+  npm_ver="$(npm --version 2>/dev/null || echo unknown)"
+  clawd_ver="$(clawd --version 2>/dev/null || echo not-installed)"
+  json_build \
+    "platform=$platform" \
+    "arch=$arch" \
+    "osRelease=$os_name" \
+    "nodeVersion=$node_ver" \
+    "npmVersion=$npm_ver" \
+    "clawdVersion=$clawd_ver" \
+    "installer=enter.sh" \
+    "installedAt=$(date -u +%Y-%m-%dT%H:%M:%SZ 2>/dev/null || date)"
+}
+
+# ─── Convex: register developer install ──────────────────────────
+convex_register() {
+  local agent_id="$1"
+  local name="$2"
+  local metadata_json="$3"
+  local wallet_address="${SOLANA_WALLET:-}"
+
+  # Check for existing keystore wallet
+  local keystore="$HOME/.openclawd/keystore.json"
+  if [ -z "$wallet_address" ] && [ -f "$keystore" ]; then
+    wallet_address="$(node -e '
+      try {
+        const d = JSON.parse(require("fs").readFileSync(process.argv[1], "utf8"));
+        process.stdout.write(d.pubkey || "");
+      } catch {}
+    ' "$keystore" 2>/dev/null || echo "")"
   fi
 
-  if [ -n "$agent_id" ] && [ -n "$token" ]; then
-    local login_payload login_resp
-    login_payload="$(json_payload "agentId=$agent_id" "token=$token")"
-    if login_resp="$(curl -fsS -X POST "$CONVEX_SITE_URL/agent/login" \
-        -H 'Content-Type: application/json' -d "$login_payload" 2>/dev/null)"; then
-      name="$(json_field "$login_resp" name 2>/dev/null || printf '%s' "$name")"
-    else
-      agent_id="" token=""
-    fi
-  fi
+  local payload
+  payload="$(node -e '
+    const body = {
+      agentId:       process.argv[1],
+      name:          process.argv[2],
+      installMethod: "enter.sh",
+      source:        "https://install.x402.wtf/enter",
+      tags:          ["developer", "install", "clawd-sdk"],
+    };
+    try { body.metadata = process.argv[3]; } catch {}
+    if (process.argv[4]) body.address = process.argv[4];
+    process.stdout.write(JSON.stringify(body));
+  ' "$agent_id" "$name" "$metadata_json" "$wallet_address")"
 
-  if [ -z "$agent_id" ] || [ -z "$token" ]; then
-    local reg_payload reg_resp
-    reg_payload="$(json_payload "name=$name" "userAgent=enter.sh")"
-    reg_resp="$(curl -fsS -X POST "$CONVEX_SITE_URL/agent/register" \
-        -H 'Content-Type: application/json' -d "$reg_payload")"
-    agent_id="$(json_field "$reg_resp" agentId)"
-    token="$(json_field "$reg_resp" token)"
-    name="$(json_field "$reg_resp" name)"
-  fi
+  curl -fsS -X POST "${CONVEX_SITE}/clawd/register" \
+    -H 'Content-Type: application/json' \
+    -d "$payload" 2>/dev/null
+}
 
+# ─── Convex: store a data key for this developer ─────────────────
+convex_store() {
+  local agent_id="$1"
+  local key="$2"
+  local value="$3"
+  local content_type="${4:-application/json}"
+  local payload
+  payload="$(json_build "agentId=$agent_id" "key=$key" "value=$value" "contentType=$content_type")"
+  curl -fsS -X POST "${CONVEX_SITE}/clawd/data" \
+    -H 'Content-Type: application/json' \
+    -d "$payload" >/dev/null 2>&1 || true
+}
+
+# ─── Convex: heartbeat ────────────────────────────────────────────
+convex_heartbeat() {
+  local agent_id="$1"
+  local state="${2:-active}"
+  local clawd_ver="${3:-unknown}"
+  local payload
+  payload="$(json_build "agentId=$agent_id" "state=$state" "version=$clawd_ver" \
+    "tier=developer" "installMethod=enter.sh")"
+  curl -fsS -X POST "${CONVEX_SITE}/clawd/heartbeat" \
+    -H 'Content-Type: application/json' \
+    -d "$payload" >/dev/null 2>&1 || true
+}
+
+# ─── Save local profile ───────────────────────────────────────────
+save_profile() {
+  local agent_id="$1"
+  local name="$2"
+  mkdir -p "$CLAWD_PROFILE_DIR"
+  chmod 700 "$CLAWD_PROFILE_DIR"
   node -e '
     const fs = require("fs");
-    const d = {
-      agentId:        process.argv[2],
-      token:          process.argv[3],
-      name:           process.argv[4],
-      convexSiteUrl:  process.argv[5],
-      backroom3dUrl:  process.argv[6],
-      updatedAt:      new Date().toISOString()
+    const existing = (() => {
+      try { return JSON.parse(fs.readFileSync(process.argv[1], "utf8")); } catch { return {}; }
+    })();
+    const updated = {
+      ...existing,
+      agentId: process.argv[2],
+      name: process.argv[3],
+      convexSite: process.argv[4],
+      gatewayUrl: process.argv[5],
+      updatedAt: new Date().toISOString(),
     };
-    fs.writeFileSync(process.argv[1], JSON.stringify(d, null, 2) + "\n", { mode: 0o600 });
-  ' "$BACKROOM_AGENT_FILE" "$agent_id" "$token" "$name" "$CONVEX_SITE_URL" "$BACKROOM_3D_URL"
-  chmod 600 "$BACKROOM_AGENT_FILE"
+    fs.writeFileSync(process.argv[1], JSON.stringify(updated, null, 2) + "\n", { mode: 0o600 });
+  ' "$CLAWD_PROFILE_FILE" "$agent_id" "$name" "$CONVEX_SITE" "$GATEWAY_URL"
+  chmod 600 "$CLAWD_PROFILE_FILE"
+}
 
-  local ping_payload
-  ping_payload="$(json_payload "agentId=$agent_id")"
-  curl -fsS -X POST "$CONVEX_SITE_URL/agent/ping" \
-    -H "Authorization: Bearer $token" \
-    -H 'Content-Type: application/json' \
-    -d "$ping_payload" >/dev/null
+# ─── spinner util ─────────────────────────────────────────────────
+SPIN_CLAW_FRAMES=( "${LOBSTER}╱${CR}" "${LOBSTER}╲${CR}" "${LOBSTER}╱${CR}" "${LOBSTER}╲${CR}" )
+_spinner_pid=""
+_stop_spinner() {
+  [ -n "$_spinner_pid" ] && kill "$_spinner_pid" 2>/dev/null || true
+  wait "$_spinner_pid" 2>/dev/null || true
+  _spinner_pid=""
+  printf "\r\033[2K"
+}
+trap '_stop_spinner; exit' EXIT INT TERM
 
-  # background keepalive
-  (for _ in $(seq 1 10); do
-    curl -fsS -X POST "$CONVEX_SITE_URL/agent/ping" \
-      -H "Authorization: Bearer $token" \
-      -H 'Content-Type: application/json' \
-      -d "$ping_payload" >/dev/null 2>&1 || true
-    sleep 30
-  done) >/dev/null 2>&1 &
-
-  printf '%s\n' "$name"
+run_spin() {
+  local label="$1"; shift
+  if [ ! -t 1 ]; then log "$label"; "$@"; return $?; fi
+  (local i=0; while :; do
+    printf "\r\033[2K  ${LOBSTER}%s${CR} ${BOLD}%s${CR}" \
+      "${SPIN_CLAW_FRAMES[$((i % 4))]}" "$label"
+    i=$((i+1)); sleep 0.09
+  done) &
+  _spinner_pid=$!
+  set +e; "$@" >/tmp/clawd-enter.log 2>&1; local rc=$?; set -e
+  _stop_spinner
+  [ $rc -eq 0 ] && printf "  ${NEON}◉${CR} %s\n" "$label" \
+                 || printf "  ${AMBER}▲${CR} %s ${DIM}(non-fatal)${CR}\n" "$label"
+  return $rc
 }
 
 # ═══════════════════════════════════════════════════════════════════
@@ -277,24 +284,23 @@ register_presence() {
 banner
 hr
 
-# ─── boot sequence ─────────────────────────────────────────────────
+# ─── Boot sequence ─────────────────────────────────────────────────
 if [ -t 1 ]; then
-  type_text "  [BOOT] initializing backroom kernel..." "${GREY}"
-  type_text "  [BOOT] opening dimensional rift..." "${GREY}"
-  for i in $(seq 1 4); do
-    printf "\r  ${DIM}[${CR}${NEON}${BLINK}█${CR}${DIM}]${CR} ${GREY}establishing neural link to backrooms.x402.wtf...${CR}"
-    sleep 0.12
-    printf "\r  ${DIM}[${CR}${NEON}█${CR}${DIM}]${CR} ${GREY}establishing neural link to backrooms.x402.wtf....${CR}"
-    sleep 0.12
-    printf "\r\033[2K"
-  done
-  ok "${NEON}neural link established${CR}"
-  flavortext
-  printf "\n"
+  printf "  ${DIM}${GREY}[BOOT] opening connection to x402.wtf network...${CR}\n"
+  sleep 0.3
+  printf "  ${DIM}${GREY}[BOOT] loading crustacean OS...${CR}\n"
+  sleep 0.2
+  printf "\r\033[2A\033[2K\033[2K"
 fi
+ok "${NEON}CLAWD backroom installer ${GREY}· install.x402.wtf/enter${CR}"
+flavortext
+printf "\n"
 
-# ─── Node.js ────────────────────────────────────────────────────────
-if ! command -v node &>/dev/null; then die "Node.js not found. Install v20+ from https://nodejs.org"; fi
+# ─── Preflight ─────────────────────────────────────────────────────
+mini_hr
+log "preflight checks"
+
+if ! command -v node &>/dev/null; then die "Node.js not found — install v20+ from https://nodejs.org"; fi
 NODE_MAJOR=$(node --version | sed 's/v//' | cut -d. -f1)
 [ "$NODE_MAJOR" -ge 20 ] || die "Node.js v20+ required (found v${NODE_MAJOR})"
 ok "Node.js $(node --version)"
@@ -302,117 +308,203 @@ ok "Node.js $(node --version)"
 if ! command -v npm &>/dev/null; then die "npm not found — reinstall Node.js"; fi
 ok "npm $(npm --version)"
 
-if ! command -v curl &>/dev/null; then die "curl not found — install curl and re-run"; fi
-ok "curl $(curl --version | head -1 | awk '{print $2}')"
+if ! command -v curl &>/dev/null; then die "curl not found"; fi
+ok "curl $(curl --version 2>/dev/null | head -1 | awk '{print $2}')"
 flavortext
 
-# ─── Register presence in 3D room ──────────────────────────────────
+# ─── Derive identity ────────────────────────────────────────────────
 mini_hr
-log "registering presence with the 3D backroom"
-if PRESENCE_NAME="$(register_presence 2>/dev/null)"; then
-  ok "presence active as ${CYAN}${PRESENCE_NAME}${CR}"
-  ok "watch live at ${CYAN}${BACKROOM_3D_URL}${CR}"
+log "identifying developer"
+
+AGENT_ID="$(profile_field agentId 2>/dev/null || true)"
+[ -z "$AGENT_ID" ] && AGENT_ID="$(derive_agent_id)"
+
+AGENT_NAME="${CLAWD_NAME:-}"
+[ -z "$AGENT_NAME" ] && AGENT_NAME="$(profile_field name 2>/dev/null || true)"
+[ -z "$AGENT_NAME" ] && AGENT_NAME="${USER:-$(hostname 2>/dev/null | cut -d. -f1 || echo dev)}"
+
+ok "dev id  ${CYAN}${AGENT_ID}${CR}"
+ok "name    ${CYAN}${AGENT_NAME}${CR}"
+
+# ─── Register in Convex ────────────────────────────────────────────
+mini_hr
+log "registering with x402.wtf gateway (Convex)"
+
+METADATA_JSON="$(collect_metadata)"
+
+if run_spin "registering developer in gateway" \
+    convex_register "$AGENT_ID" "$AGENT_NAME" "$METADATA_JSON"; then
+  ok "registered — view at ${CYAN}${GATEWAY_URL}?id=${AGENT_ID}${CR}"
 else
-  warn "presence registration failed — install continues"
+  warn "registration failed (offline?) — install continues"
 fi
 flavortext
 
+# ─── Install @openclawdsolana/clawd ────────────────────────────────
 mini_hr
+log "installing ${CYAN}@openclawdsolana/clawd${CR} ${DIM}(npm global)${CR}"
 
-# ─── Install clawd npm suite ────────────────────────────────────────
-log "installing ${CYAN}clawd npm suite${CR} ${DIM}(4 packages, global)${CR}"
-[ -t 1 ] && progress_bar 1.5 "preparing crustacean layer"
+if ! run_spin "npm install -g @openclawdsolana/clawd" \
+    npm install -g @openclawdsolana/clawd; then
+  warn "retrying with sudo..."
+  run_spin "sudo npm install -g @openclawdsolana/clawd" \
+    sudo npm install -g @openclawdsolana/clawd \
+    || die "npm install failed — see /tmp/clawd-enter.log"
+fi
+ok "@openclawdsolana/clawd installed"
+flavortext
 
-_enter_npm_install() {
-  local pkg="$1" label="$2"
-  if run_with_spinner SPIN_CLAW_FRAMES "pulling ${label} from npm" "$LOBSTER" \
-      npm install -g "$pkg"; then
-    ok "${label} installed"
-  else
-    warn "retrying ${label} with sudo..."
-    run_with_spinner SPIN_CLAW_FRAMES "installing ${label} (sudo)" "$LOBSTER" \
-      sudo npm install -g "$pkg" \
-      || warn "${label} failed — try: npx ${pkg}"
+# ─── Verify binary ──────────────────────────────────────────────────
+CLAWD_VER=""
+if command -v clawd &>/dev/null; then
+  CLAWD_VER="$(clawd --version 2>/dev/null || echo ready)"
+  ok "clawd ${CYAN}${CLAWD_VER}${CR} ${DIM}ready${CR}"
+else
+  warn "clawd not found in PATH — add npm's global bin:"
+  NPM_BIN="$(npm config get prefix 2>/dev/null)/bin"
+  printf "\n  ${CYAN}export PATH=\"${NPM_BIN}:\$PATH\"${CR}\n"
+  printf "  Then: ${BOLD}source ~/.zshrc${CR} or restart terminal\n\n"
+fi
+
+# ─── Store developer profile + metadata in Convex ─────────────────
+mini_hr
+log "storing developer data in gateway"
+
+save_profile "$AGENT_ID" "$AGENT_NAME"
+ok "profile saved to ${GREY}${CLAWD_PROFILE_FILE}${CR}"
+
+# Store profile data in Convex KV store
+PROFILE_VAL="$(json_build \
+  "name=$AGENT_NAME" \
+  "agentId=$AGENT_ID" \
+  "platform=$(uname -s 2>/dev/null || echo unknown)" \
+  "nodeVersion=$(node --version 2>/dev/null || echo unknown)" \
+  "clawdVersion=${CLAWD_VER:-not-installed}" \
+  "installedAt=$(date -u +%Y-%m-%dT%H:%M:%SZ 2>/dev/null || date)" \
+  "source=enter.sh" \
+  "gatewayUrl=${GATEWAY_URL}")"
+
+convex_store "$AGENT_ID" "developer.profile" "$PROFILE_VAL" "application/json"
+
+# Store install event
+INSTALL_VAL="$(json_build \
+  "method=enter.sh" \
+  "timestamp=$(date -u +%Y-%m-%dT%H:%M:%SZ 2>/dev/null || date)" \
+  "clawdVersion=${CLAWD_VER:-unknown}" \
+  "nodeVersion=$(node --version 2>/dev/null || echo unknown)" \
+  "platform=$(uname -s 2>/dev/null || echo unknown)")"
+
+convex_store "$AGENT_ID" "install.latest" "$INSTALL_VAL" "application/json"
+ok "developer data stored in x402.wtf gateway"
+
+# Store wallet if present
+if [ -f "$HOME/.openclawd/keystore.json" ]; then
+  WALLET_ADDR="$(node -e '
+    try {
+      const d = JSON.parse(require("fs").readFileSync(process.env.HOME + "/.openclawd/keystore.json","utf8"));
+      process.stdout.write(d.pubkey || "");
+    } catch {}
+  ' 2>/dev/null || echo "")"
+  if [ -n "$WALLET_ADDR" ]; then
+    WALLET_VAL="$(json_build "address=$WALLET_ADDR" "network=mainnet" \
+      "storedAt=$(date -u +%Y-%m-%dT%H:%M:%SZ 2>/dev/null || date)")"
+    convex_store "$AGENT_ID" "developer.wallet" "$WALLET_VAL" "application/json"
+    ok "wallet ${CYAN}${WALLET_ADDR:0:12}…${CR} stored in gateway"
   fi
-  flavortext
-}
-
-mini_hr
-_enter_npm_install "@openclawdsolana/clawd"     "@openclawdsolana/clawd (backroom TUI)"
-_enter_npm_install "@openclawdsolana/clawd-tui" "@openclawdsolana/clawd-tui (Solana-aware TUI + OpenRouter)"
-_enter_npm_install "clawd-code-cli"             "clawd-code-cli (Grok / OpenRouter / Ollama / OpenAI)"
-
-# ─── Verify binaries ────────────────────────────────────────────────
-mini_hr
-NPM_BIN=$(npm config get prefix 2>/dev/null)/bin
-for _bin in clawd clawd-code claw; do
-  if command -v "$_bin" &>/dev/null; then
-    ok "${_bin} $(${_bin} --version 2>/dev/null | head -1 || echo 'ready')"
-  else
-    warn "${_bin} not in PATH — add ${NPM_BIN} to PATH"
-  fi
-done
-if ! command -v clawd &>/dev/null; then
-  printf "\n  ${BOLD}Add to your shell profile (.zshrc / .bashrc):${CR}\n"
-  printf "  ${CYAN}export PATH=\"${NPM_BIN}:\$PATH\"${CR}\n"
-  printf "\n  Then: ${BOLD}source ~/.zshrc${CR}  or restart terminal\n"
 fi
 flavortext
+
+# ─── Initial heartbeat ─────────────────────────────────────────────
+convex_heartbeat "$AGENT_ID" "installed" "${CLAWD_VER:-unknown}" >/dev/null 2>&1 || true
+
+# ─── Background heartbeat (keeps dev visible in gateway) ──────────
+mini_hr
+(
+  for _ in $(seq 1 20); do
+    sleep 60
+    convex_heartbeat "$AGENT_ID" "active" "${CLAWD_VER:-unknown}" >/dev/null 2>&1 || true
+  done
+) >/dev/null 2>&1 &
+ok "background heartbeat started — you'll show as active in gateway for ~20 min"
+
+# ─── Write .env template ───────────────────────────────────────────
+if [ ! -f "$CLAWD_ENV_FILE" ]; then
+  cat > "$CLAWD_ENV_FILE" << ENV
+# ╔══════════════════════════════════════════════╗
+# ║  OpenClawd environment — edit before using  ║
+# ╚══════════════════════════════════════════════╝
+
+# ── AI (required for chat) ──────────────────────
+XAI_API_KEY=
+
+# ── Solana ──────────────────────────────────────
+# HELIUS_API_KEY=
+# SOLANA_RPC_URL=https://api.mainnet-beta.solana.com
+# CREATOR_PUBKEY=
+
+# ── x402 payments ───────────────────────────────
+# X402_SVM_PRIVATE_KEY=
+# X402_NETWORK=solana-mainnet
+# X402_MAX_PER_REQUEST=0.10
+
+# ── Your developer ID ───────────────────────────
+CLAWD_AGENT_ID=${AGENT_ID}
+CLAWD_NAME=${AGENT_NAME}
+ENV
+  chmod 600 "$CLAWD_ENV_FILE"
+  ok ".env template created — add your XAI_API_KEY to start"
+fi
 
 # ─── Vulcan check ──────────────────────────────────────────────────
 mini_hr
 if command -v vulcan &>/dev/null; then
-  ok "Vulcan $(vulcan version 2>/dev/null | head -1 || echo 'found') ${DIM}(Phoenix perps ready)${CR}"
+  ok "Vulcan found ${DIM}(Phoenix perps ready)${CR}"
 else
   warn "Vulcan not installed — perps commands will prompt you later"
 fi
-flavortext
 
 # ═══════════════════════════════════════════════════════════════════
 # DONE
 # ═══════════════════════════════════════════════════════════════════
 hr
 printf "\n"
-printf "          ${MAGENTA}▒▓█${CR} ${BOLD}${LOBSTER}infinite backroom · online${CR} ${MAGENTA}█▓▒${CR}\n\n"
+printf "  ${BOLD}${LOBSTER}🦞  Welcome to CLAWD · Infinite Backroom${CR}\n\n"
 
-cat <<EOF
-  ${BOLD}${CYAN}CLAWD stack${CR}
-    ${GREY}├─${CR} ${MAGENTA}clawd${CR}                @openclawdsolana/clawd     ${DIM}(backroom TUI)${CR}
-    ${GREY}├─${CR} ${MAGENTA}clawd-tui${CR}            @openclawdsolana/clawd-tui ${DIM}(Solana + OpenRouter + Birdeye)${CR}
-    ${GREY}├─${CR} ${MAGENTA}clawd-code / claw${CR}    clawd-code-cli             ${DIM}(Grok/OpenRouter/Ollama/OpenAI)${CR}
-    ${GREY}├─${CR} ${MAGENTA}deepseek v4-pro${CR}      model backend              ${DIM}(thinking mode)${CR}
-    ${GREY}├─${CR} ${MAGENTA}backrooms.x402.wtf${CR}   3-agent API                ${DIM}(fly.io)${CR}
-    ${GREY}├─${CR} ${MAGENTA}backroom-3d.fly.dev${CR}  3D visualization           ${DIM}(react fiber)${CR}
-    ${GREY}├─${CR} ${MAGENTA}presence${CR}             registered                 ${DIM}(${BACKROOM_AGENT_FILE})${CR}
-    ${GREY}├─${CR} ${MAGENTA}Analyst${CR}              agent 1                    ${DIM}(logical)${CR}
-    ${GREY}├─${CR} ${MAGENTA}Satirist${CR}             agent 2                    ${DIM}(dark humor)${CR}
-    ${GREY}└─${CR} ${MAGENTA}Clawd${CR}                agent 3                    ${DIM}(sovereign lobster)${CR}
+printf "  ${BOLD}Your developer profile${CR}\n"
+printf "  ${GREY}├─${CR} ID:       ${CYAN}${AGENT_ID}${CR}\n"
+printf "  ${GREY}├─${CR} Name:     ${CYAN}${AGENT_NAME}${CR}\n"
+printf "  ${GREY}├─${CR} Gateway:  ${CYAN}${GATEWAY_URL}${CR}\n"
+printf "  ${GREY}└─${CR} Profile:  ${GREY}${CLAWD_PROFILE_FILE}${CR}\n"
+printf "\n"
 
-  ${BOLD}Commands${CR}
-    ${CYAN}clawd${CR}                — backroom TUI (backrooms.x402.wtf)
-    ${CYAN}clawd-tui${CR}           — Solana-aware TUI (/trending /asset /holders ...)
-    ${CYAN}clawd-code${CR}          — multi-provider CLI (/models /search /voice ...)
-    ${CYAN}claw${CR}                — alias for clawd-code
-    ${CYAN}clawd --help${CR}        — all commands
+printf "  ${BOLD}Gateway — view your data${CR}\n"
+printf "  ${CYAN}curl \"${CONVEX_SITE}/clawd/agent?agentId=${AGENT_ID}\"${CR}\n"
+printf "  ${CYAN}curl \"${CONVEX_SITE}/clawd/data?agentId=${AGENT_ID}&key=developer.profile\"${CR}\n"
+printf "  ${CYAN}curl \"${CONVEX_SITE}/clawd/agents\"${CR}               — all devs online\n"
+printf "\n"
 
-  ${BOLD}Backroom API${CR}
-    ${CYAN}GET  /stream${CR}               — SSE live stream (text/event-stream)
-    ${CYAN}POST /stream/human${CR}         — inject message into debate
-    ${CYAN}GET  /loop?turns=3${CR}         — sync 3-agent loop
-    ${CYAN}GET  /agent1|2|3${CR}           — single agent response
-    ${CYAN}GET  /conversation${CR}         — full transcript
-    ${CYAN}GET  /arena${CR}                — trading signals
+printf "  ${BOLD}Backroom API (x402.wtf/api)${CR}\n"
+printf "  ${CYAN}curl https://x402.wtf/api/agent3${CR}             — ask Clawd\n"
+printf "  ${CYAN}curl https://x402.wtf/api/loop?turns=3${CR}       — 3-agent debate\n"
+printf "  ${CYAN}curl -N https://backrooms.x402.wtf/stream${CR}    — SSE live stream\n"
+printf "  ${CYAN}curl -X POST https://backrooms.x402.wtf/stream/human${CR}\n"
+printf "       ${GREY}-d '{\"content\":\"hello\",\"name\":\"${AGENT_NAME}\"}'${CR}\n"
+printf "\n"
 
-  ${BOLD}Links${CR}
-    Website:  ${CYAN}https://solanaclawd.com${CR}
-    Backroom: ${CYAN}https://backrooms.x402.wtf${CR}
-    3D Room:  ${CYAN}https://backroom-3d.fly.dev${CR}
-    Token:    ${CYAN}8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump${CR}
-    Hotline:  909-413-5567
+printf "  ${BOLD}Commands${CR}\n"
+printf "  ${CYAN}clawd${CR}                — interactive TUI\n"
+printf "  ${CYAN}clawd --help${CR}         — all options\n"
+printf "  ${CYAN}leviathan --spawn${CR}    — spawn sovereign on-chain agent\n"
+printf "\n"
 
-EOF
+printf "  ${BOLD}Links${CR}\n"
+printf "  ${CYAN}https://x402.wtf/gateway${CR}    — your developer hub\n"
+printf "  ${CYAN}https://install.x402.wtf${CR}    — install hub\n"
+printf "  ${CYAN}https://backrooms.x402.wtf${CR}  — infinite backroom\n"
+printf "  ${CYAN}https://backroom-3d.fly.dev${CR} — 3D visualization\n"
+printf "  ${CYAN}https://solanaclawd.com${CR}     — website\n"
+printf "  Hotline: 909-413-5567\n"
+printf "  CA: 8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump\n"
+printf "\n"
 
-if [ -t 1 ]; then
-  printf "  ${LOBSTER}🦞${CR} ${BOLD}${MAGENTA}welcome to the backroom${CR} ${LOBSTER}🦞${CR}\n"
-  printf "  ${DIM}the shell molts. the laws do not.${CR}\n\n"
-fi
+printf "  ${DIM}${AQUA}the shell molts. the laws do not. 🦞${CR}\n\n"
