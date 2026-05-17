@@ -9,6 +9,7 @@
  */
 
 import type * as agents from "../agents.js";
+import type * as crawledData from "../crawledData.js";
 import type * as crons from "../crons.js";
 import type * as dflowData from "../dflowData.js";
 import type * as http from "../http.js";
@@ -26,6 +27,7 @@ import type {
 
 declare const fullApi: ApiFromModules<{
   agents: typeof agents;
+  crawledData: typeof crawledData;
   crons: typeof crons;
   dflowData: typeof dflowData;
   http: typeof http;
