@@ -30,9 +30,18 @@ node_modules/
 # Build output
 dist/
 build/
+target/
+**/target/
 .next/
 coverage/
 *.tsbuildinfo
+
+# Solana / Anchor generated keys
+*-keypair.json
+keypair.json
+id.json
+wallet.json
+**/target/deploy/*-keypair.json
 
 # Logs and local databases
 *.log
