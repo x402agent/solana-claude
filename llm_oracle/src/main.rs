@@ -370,10 +370,8 @@ async fn fetch_and_process_program_accounts(
 
 /// Load the Oracle configuration
 fn load_config() -> Result<OracleConfig, Box<dyn Error>> {
-    let identity = env::var("IDENTITY").unwrap_or_else(|_| {
-        "62LxqpAW6SWhp7iKBjCQneapn1w6btAhW7xHeREWSpPzw3xZbHCfAFesSR4R76ejQXCLWrndn37cKCCLFvx6Swps"
-            .to_string()
-    });
+    let identity = env::var("IDENTITY")
+        .map_err(|_| "IDENTITY env var is required; do not hardcode private keys")?;
     let rpc_url = env::var("RPC_URL").unwrap_or_else(|_| "http://localhost:8899".to_string());
     let websocket_url =
         env::var("WEBSOCKET_URL").unwrap_or_else(|_| "ws://localhost:8900".to_string());

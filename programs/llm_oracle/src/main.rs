@@ -326,10 +326,8 @@ async fn fetch_and_process_program_accounts(
 
 /// Load the Oracle configuration
 fn load_config() -> (String, String, String, Keypair, Pubkey) {
-    let identity = env::var("IDENTITY").unwrap_or(
-        "62LxqpAW6SWhp7iKBjCQneapn1w6btAhW7xHeREWSpPzw3xZbHCfAFesSR4R76ejQXCLWrndn37cKCCLFvx6Swps"
-            .to_string(),
-    );
+    let identity =
+        env::var("IDENTITY").expect("IDENTITY env var is required; do not hardcode private keys");
     let rpc_url = env::var("RPC_URL").unwrap_or("http://localhost:8899".to_string());
     let websocket_url = env::var("WEBSOCKET_URL").unwrap_or("ws://localhost:8900".to_string());
     let open_api_key = env::var("OPENAI_API_KEY").unwrap_or("OPENAI_API_KEY not set".to_string());
