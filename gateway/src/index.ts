@@ -25,6 +25,8 @@ import {
   searchTokens,
 } from './birdeye.js';
 import { supabase } from './supabase.js';
+import agentRegistryRouter from './agentRegistry.js';
+import gaslessMintRouter from './gaslessMint.js';
 
 // ---------------------------------------------------------------------------
 // HTTP Gateway (Express)
@@ -32,6 +34,11 @@ import { supabase } from './supabase.js';
 const app = express();
 app.use(express.json());
 const PORT = parseInt(process.env.GATEWAY_PORT ?? '8080', 10);
+
+// Free agent registry + identity endpoints (no auth required)
+app.use('/', agentRegistryRouter);
+// Gasless Metaplex minting endpoints
+app.use('/', gaslessMintRouter);
 
 app.get('/health', (_req, res) => {
   res.json({
