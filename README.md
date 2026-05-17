@@ -25,9 +25,10 @@ when `cargo` is available.
 The root `sdk/` workspace is also installed and built by the one-shot installer.
 It contains the local `@openclawdsolana/leviathan` source, assets, automation,
 characters, examples, goals, knowledge, library, LiveKit agent, MCP server,
-pay, scripts, skills, vendor code, x402 integrations, and compiled `dist/`
-output. Use `npm run sdk:install`, `npm run sdk:build`, or `npm run sdk:check`
-from the repo root when working on it directly.
+dynamic bonding curve program/SDK sources, pay, scripts, skills, vendor code,
+x402 integrations, and compiled `dist/` output. Use `npm run sdk:install`,
+`npm run sdk:build`, or `npm run sdk:check` from the repo root when working on
+it directly.
 
 Useful root commands:
 

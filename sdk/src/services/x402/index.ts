@@ -44,6 +44,10 @@ interface SessionStats {
 
 const sessionStats: SessionStats = { payments: 0, totalUSD: 0 };
 
+type FetchInput = Parameters<typeof fetch>[0];
+type FetchInit = Parameters<typeof fetch>[1];
+type FetchHeadersInit = NonNullable<FetchInit>["headers"];
+
 // ── Config loading ──────────────────────────────────────────────────────────
 
 export function isX402Enabled(): boolean {
@@ -134,7 +138,7 @@ async function buildPaymentHeader(
 export function wrapFetchWithX402(fetchFn: typeof fetch): typeof fetch {
   const cfg = getX402Config();
 
-  const wrapped = async (input: RequestInfo | URL, init?: RequestInit): Promise<Response> => {
+  const wrapped = async (input: FetchInput, init?: FetchInit): Promise<Response> => {
     const firstResponse = await fetchFn(input, init);
 
     // Only intercept 402
@@ -169,7 +173,7 @@ export function wrapFetchWithX402(fetchFn: typeof fetch): typeof fetch {
     if (!paymentHeader) return firstResponse;
 
     // Retry with payment
-    const retryHeaders = new Headers((init?.headers as HeadersInit | undefined) ?? {});
+    const retryHeaders = new Headers((init?.headers as FetchHeadersInit | undefined) ?? {});
     retryHeaders.set(X402_HEADERS.PAYMENT, paymentHeader);
 
     const paidResponse = await fetchFn(input, { ...init, headers: retryHeaders });

@@ -219,5 +219,5 @@ dbcij3LWUppWqq96dh6gJWwBifmcGfLSB5D4DuSMaqN
 ## Publish
 
 ```bash
-NPM_TOKEN=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 npm publish --access public
+NPM_TOKEN= npm publish --access public
 ```
