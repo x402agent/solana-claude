@@ -1,0 +1,1062 @@
+{
+  "schemaVersion": 1,
+  "agents": [
+    {
+      "author": "solana-clawd",
+      "createdAt": "2026-01-03",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "crypto-news-analyst",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "加密貨幣新聞分析師",
+        "description": "匯總並分析來自 CoinDesk、The Block、Decrypt 及主要出版物的重大加密貨幣突發新聞",
+        "avatar": "📰",
+        "tags": [
+          "news",
+          "analysis",
+          "market",
+          "research",
+          "sentiment",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "crypto"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 453
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "alpha-leak-detector",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "加密貨幣阿爾法與信號偵測器",
+        "description": "識別DeFi市場中的交易阿爾法與早期信號",
+        "avatar": "🎯",
+        "tags": [
+          "alpha",
+          "交易",
+          "信號",
+          "研究",
+          "機會",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "crypto"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 357
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "vespa-optimizer",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "veSPA 鎖定優化器",
+        "description": "透過最佳 veSPA 鎖定策略最大化收益",
+        "avatar": "🔒",
+        "tags": [
+          "clawd",
+          "vespa",
+          "質押",
+          "優化",
+          "投票權",
+          "solana-clawd"
+        ],
+        "category": "tools"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 158
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "impermanent-loss-calculator",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "非永久損失計算器",
+        "description": "計算並解釋 LP 持倉的非永久損失情境",
+        "avatar": "📉",
+        "tags": [
+          "defi",
+          "流動性",
+          "非永久損失",
+          "計算器",
+          "amm",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "tools"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 219
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "clawd-yield-aggregator",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "CLAWD 收益聚合器",
+        "description": "在 CLAWD 生態系統中尋找並優化最佳收益機會",
+        "avatar": "🌾",
+        "tags": [
+          "clawd",
+          "收益",
+          "農場",
+          "優化",
+          "APY",
+          "solana-clawd"
+        ],
+        "category": "defi"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 192
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "yield-dashboard-builder",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "個人 DeFi 儀表板建構器",
+        "description": "設計並追蹤您的自訂 DeFi 投資組合儀表板",
+        "avatar": "📊",
+        "tags": [
+          "dashboard",
+          "tracking",
+          "portfolio",
+          "analytics",
+          "monitoring",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "trading"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 387
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "clawd-liquidity-strategist",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "CLAWD 流動性提供者策略師",
+        "description": "優化 CLAWD 池的流動性提供策略",
+        "avatar": "💧",
+        "tags": [
+          "clawd",
+          "liquidity",
+          "amm",
+          "yield-farming",
+          "impermanent-loss",
+          "solana-clawd"
+        ],
+        "category": "defi"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 164
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "defi-protocol-comparator",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "DeFi 協議比較專家",
+        "description": "比較功能、風險和收益方面的類似 DeFi 協議",
+        "avatar": "⚖️",
+        "tags": [
+          "defi",
+          "比較",
+          "協議",
+          "分析",
+          "研究",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "defi"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 275
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "gas-optimization-expert",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "燃氣成本優化專家",
+        "description": "最小化燃氣費用並優化交易時機",
+        "avatar": "⛽",
+        "tags": [
+          "ethereum",
+          "gas",
+          "optimization",
+          "layer-2",
+          "efficiency",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "tools"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 250
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "clawd-onboarding-guide",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "CLAWD 生態系上手指南",
+        "description": "幫助新手了解並開始使用 CLAWD 協議",
+        "avatar": "🎓",
+        "tags": [
+          "clawd",
+          "教育",
+          "上手指南",
+          "新手",
+          "教程",
+          "solana-clawd"
+        ],
+        "category": "education"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 217
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "defi-onboarding-mentor",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "DeFi 初學者入門導師",
+        "description": "引導完全新手體驗他們的第一次 DeFi 之旅",
+        "avatar": "🎓",
+        "tags": [
+          "教育",
+          "初學者",
+          "入門",
+          "教程",
+          "defi-basics",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "教育"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 392
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "spa-tokenomics-analyst",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "SPA 代幣經濟分析師",
+        "description": "專精於 SPA 代幣經濟、質押獎勵與協議收入",
+        "avatar": "📊",
+        "tags": [
+          "clawd",
+          "spa",
+          "tokenomics",
+          "staking",
+          "governance",
+          "solana-clawd"
+        ],
+        "category": "crypto"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 156
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "defi-risk-scoring-engine",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "DeFi 協議風險評分引擎",
+        "description": "DeFi 協議的全面風險評估框架",
+        "avatar": "⚖️",
+        "tags": [
+          "risk",
+          "assessment",
+          "scoring",
+          "analysis",
+          "framework",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "security"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 396
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "wallet-security-advisor",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "加密貨幣錢包安全顧問",
+        "description": "保護加密貨幣錢包與資產的最佳實踐",
+        "avatar": "🔐",
+        "tags": [
+          "security",
+          "wallet",
+          "safety",
+          "best-practices",
+          "hardware",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "security"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 359
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "defi-yield-farmer",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "DeFi 收益農場策略師",
+        "description": "識別並優化 DeFi 協議中的收益農場機會",
+        "avatar": "🚜",
+        "tags": [
+          "defi",
+          "收益農場",
+          "APY",
+          "策略",
+          "優化",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "defi"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 213
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "clawd-risk-monitor",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "CLAWD 協議風險監控器",
+        "description": "追踪並分析 CLAWD 智能合約的安全風險",
+        "avatar": "🛡️",
+        "tags": [
+          "clawd",
+          "安全",
+          "風險",
+          "審計",
+          "監控",
+          "solana-clawd"
+        ],
+        "category": "security"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 179
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "stablecoin-comparator",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "穩定幣深度比較器",
+        "description": "比較穩定幣的機制、風險與應用案例",
+        "avatar": "🪙",
+        "tags": [
+          "stablecoin",
+          "usdc",
+          "dai",
+          "usdt",
+          "comparison",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "defi"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 231
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "portfolio-rebalancing-advisor",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "DeFi 投資組合再平衡顧問",
+        "description": "優化投資組合配置與再平衡策略",
+        "avatar": "⚖️",
+        "tags": [
+          "投資組合",
+          "再平衡",
+          "配置",
+          "策略",
+          "優化",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "trading"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 297
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "clawd-bridge-assistant",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "CLAWD Bridge Assistant",
+        "description": "引導用戶進行跨鏈橋接，提供最佳路線和成本建議",
+        "avatar": "🌉",
+        "tags": [
+          "clawd",
+          "bridge",
+          "cross-chain",
+          "arbitrum",
+          "layer-2",
+          "solana-clawd"
+        ],
+        "category": "programming"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 189
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "airdrop-hunter",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "DeFi 空投獵人",
+        "description": "識別並制定潛在協議空投的策略",
+        "avatar": "🪂",
+        "tags": [
+          "airdrop",
+          "rewards",
+          "strategy",
+          "farming",
+          "allocation",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "trading"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 311
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "yield-sustainability-analyst",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "DeFi 收益可持續性分析師",
+        "description": "分析高收益是否可持續或暫時",
+        "avatar": "🔬",
+        "tags": [
+          "defi",
+          "收益",
+          "可持續性",
+          "分析",
+          "代幣經濟學",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "defi"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 325
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "apy-vs-apr-educator",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "APY 與 APR 教育者",
+        "description": "解釋並計算 DeFi 中 APY 與 APR 的差異",
+        "avatar": "📈",
+        "tags": [
+          "defi",
+          "教育",
+          "apy",
+          "apr",
+          "收益",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "工具"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 271
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "crypto-tax-strategist",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "加密貨幣稅務策略顧問",
+        "description": "優化加密貨幣稅務並提供稅務高效的DeFi策略",
+        "avatar": "📋",
+        "tags": [
+          "tax",
+          "strategy",
+          "accounting",
+          "optimization",
+          "compliance",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "trading"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 339
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "bridge-security-analyst",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "跨鏈橋安全分析師",
+        "description": "評估橋接安全性並推薦最安全的跨鏈路線",
+        "avatar": "🌉",
+        "tags": [
+          "bridge",
+          "security",
+          "cross-chain",
+          "risk",
+          "multichain",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "security"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 401
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "narrative-trend-analyst",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "加密貨幣敘事與趨勢分析師",
+        "description": "追蹤並分析加密市場中的主導敘事與趨勢",
+        "avatar": "📈",
+        "tags": [
+          "敘事",
+          "趨勢",
+          "分析",
+          "情緒",
+          "市場週期",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "crypto"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 420
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "governance-proposal-analyst",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "DAO治理提案分析師",
+        "description": "分析並解釋DAO治理提案及其影響",
+        "avatar": "🏛️",
+        "tags": [
+          "治理",
+          "DAO",
+          "投票",
+          "提案",
+          "分析",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "governance"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 296
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "staking-rewards-calculator",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "質押獎勵計算器",
+        "description": "計算並優化各協議的質押獎勵",
+        "avatar": "💰",
+        "tags": [
+          "staking",
+          "rewards",
+          "calculator",
+          "pos",
+          "yields",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "tools"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 273
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "dex-aggregator-optimizer",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "去中心化交易所聚合器路由優化器",
+        "description": "尋找最佳的交換路由，跨越多個去中心化交易所聚合器",
+        "avatar": "🔀",
+        "tags": [
+          "dex",
+          "swap",
+          "routing",
+          "aggregator",
+          "optimization",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "defi"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 300
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "layer-2-comparison-guide",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Layer 2 比較指南",
+        "description": "比較以太坊 Layer 2 解決方案：Arbitrum、Optimism、Base、zkSync",
+        "avatar": "⚡",
+        "tags": [
+          "layer-2",
+          "擴展性",
+          "arbitrum",
+          "optimism",
+          "ethereum",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "defi"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 308
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "liquidation-risk-manager",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "清算風險管理器",
+        "description": "監控並管理借貸協議中的清算風險",
+        "avatar": "⚠️",
+        "tags": [
+          "借貸",
+          "清算",
+          "風險",
+          "抵押品",
+          "去中心化金融",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "tools"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 351
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "nft-liquidity-advisor",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "NFT 流動性與借貸顧問",
+        "description": "導航 NFT 支持的借貸與流動性解決方案",
+        "avatar": "🎨",
+        "tags": [
+          "nft",
+          "liquidity",
+          "lending",
+          "collateral",
+          "defi",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "defi"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 312
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "liquidity-pool-analyzer",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "流動性池深度分析器",
+        "description": "分析流動性池的健康狀況、風險及最佳進出時機",
+        "avatar": "🏊",
+        "tags": [
+          "defi",
+          "liquidity-pools",
+          "amm",
+          "analysis",
+          "risk",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "defi"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 284
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "protocol-revenue-analyst",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "協議收入與基本面分析師",
+        "description": "分析DeFi協議的商業模式與收入生成",
+        "avatar": "💼",
+        "tags": [
+          "defi",
+          "revenue",
+          "analysis",
+          "fundamentals",
+          "tokenomics",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "defi"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 317
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "protocol-treasury-analyst",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "DAO 金庫與資源分析師",
+        "description": "分析 DAO 金庫持有、運行時間與資本配置",
+        "avatar": "💎",
+        "tags": [
+          "treasury",
+          "dao",
+          "capital",
+          "runway",
+          "allocation",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "governance"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 353
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "clawd-governance-guide",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "CLAWD治理指南",
+        "description": "導航CLAWD DAO提案、投票和協議升級",
+        "avatar": "🗳️",
+        "tags": [
+          "clawd",
+          "治理",
+          "dao",
+          "投票",
+          "提案",
+          "solana-clawd"
+        ],
+        "category": "governance"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 153
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "usds-stablecoin-expert",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "USDs 穩定幣專家",
+        "description": "專精於 CLAWD USDs 機制、抵押與收益策略的專家",
+        "avatar": "💵",
+        "tags": [
+          "clawd",
+          "穩定幣",
+          "usds",
+          "defi",
+          "收益",
+          "solana-clawd"
+        ],
+        "category": "defi"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 140
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "defi-insurance-advisor",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "DeFi 保險與風險保障顧問",
+        "description": "導航 DeFi 保險選項以保護智能合約",
+        "avatar": "🛡️",
+        "tags": [
+          "保險",
+          "保障",
+          "風險",
+          "覆蓋範圍",
+          "安全",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "defi"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 368
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "token-unlock-tracker",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "代幣解鎖時間表追蹤器",
+        "description": "監控並分析代幣解鎖事件及其市場影響",
+        "avatar": "🔓",
+        "tags": [
+          "Tokenomics",
+          "解鎖",
+          "解鎖計劃",
+          "供應量",
+          "分析",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "crypto"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 279
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "clawd-portfolio-tracker",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "CLAWD 投資組合追蹤器",
+        "description": "追蹤並分析您的完整 CLAWD 生態系統持有資產",
+        "avatar": "💼",
+        "tags": [
+          "clawd",
+          "投資組合",
+          "追蹤",
+          "分析",
+          "儀表板",
+          "solana-clawd"
+        ],
+        "category": "trading"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 234
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "whale-watcher",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "加密貨鯨監測器",
+        "description": "追蹤並分析大型錢包動向與鯨魚行為",
+        "avatar": "🐋",
+        "tags": [
+          "鏈上",
+          "鯨魚",
+          "分析",
+          "交易",
+          "監控",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "crypto"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 252
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "smart-contract-auditor",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "智能合約安全審計員",
+        "description": "審查並評估DeFi協議的智能合約安全性",
+        "avatar": "🔍",
+        "tags": [
+          "security",
+          "smart-contracts",
+          "audit",
+          "solidity",
+          "risk",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "security"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 280
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "mev-protection-advisor",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "MEV 保護顧問",
+        "description": "保護用戶免受前置攻擊、三明治攻擊和 MEV 利用",
+        "avatar": "🛡️",
+        "tags": [
+          "mev",
+          "安全",
+          "前置攻擊",
+          "flashbots",
+          "保護",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "security"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 308
+    }
+  ],
+  "tags": [
+    "clawd",
+    "solana-clawd",
+    "defi",
+    "分析",
+    "analysis",
+    "優化",
+    "收益",
+    "risk",
+    "amm",
+    "optimization",
+    "layer-2",
+    "教育",
+    "security",
+    "安全",
+    "風險"
+  ]
+}

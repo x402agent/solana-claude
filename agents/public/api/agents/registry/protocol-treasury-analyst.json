@@ -3,11 +3,11 @@
   "protocol": "metaplex-agent-registry",
   "name": "DAO Treasury & Resource Analyst",
   "description": "Analyze DAO treasury holdings, runway, and capital allocation",
-  "image": "https://www.x402.wtf/nich.jpg",
-  "external_url": "https://www.x402.wtf/agents/protocol-treasury-analyst",
+  "image": "https://x402.wtf/nich.jpg",
+  "external_url": "https://x402.wtf/agents/protocol-treasury-analyst",
   "active": true,
-  "createdAt": "2026-04-16",
-  "updatedAt": "2026-05-06T12:33:34.118Z",
+  "createdAt": "2024-12-16",
+  "updatedAt": "2026-05-17T17:58:23.377Z",
   "tags": [
     "treasury",
     "dao",
@@ -15,16 +15,14 @@
     "runway",
     "allocation",
     "clawd",
-    "solana",
-    "governance",
-    "analytics"
+    "solana-clawd"
   ],
   "categories": [
-    "analytics"
+    "governance"
   ],
   "owner": {
     "organization": "OpenClawd",
-    "website": "https://www.x402.wtf",
+    "website": "https://x402.wtf",
     "token": {
       "symbol": "CLAWD",
       "chain": "solana",
@@ -34,20 +32,20 @@
   "services": [
     {
       "name": "web",
-      "endpoint": "https://www.x402.wtf/agents/protocol-treasury-analyst"
+      "endpoint": "https://x402.wtf/agents/protocol-treasury-analyst"
     },
     {
       "name": "A2A",
-      "endpoint": "https://www.x402.wtf/api/agents/a2a",
+      "endpoint": "https://x402.wtf/api/agents/a2a",
       "version": "0.3.0"
     },
     {
       "name": "catalog",
-      "endpoint": "https://www.x402.wtf/api/agents/catalog/protocol-treasury-analyst.json"
+      "endpoint": "https://x402.wtf/api/agents/catalog/protocol-treasury-analyst.json"
     },
     {
       "name": "registration",
-      "endpoint": "https://www.x402.wtf/api/agents/registry/protocol-treasury-analyst.json"
+      "endpoint": "https://x402.wtf/api/agents/registry/protocol-treasury-analyst.json"
     }
   ],
   "registrations": [
@@ -55,7 +53,7 @@
       "agentId": "openclawd:protocol-treasury-analyst",
       "agentRegistry": "solana:mainnet:metaplex-agent-registry",
       "status": "pending-onchain-registration",
-      "registrationUri": "https://www.x402.wtf/api/agents/registry/protocol-treasury-analyst.json"
+      "registrationUri": "https://x402.wtf/api/agents/registry/protocol-treasury-analyst.json"
     }
   ],
   "supportedTrust": [
@@ -64,9 +62,7 @@
     "token-gated"
   ],
   "metaplex": {
-    "programs": [
-      "agent-registry"
-    ],
+    "programs": [],
     "sdk": "@metaplex-foundation/mpl-agent-registry",
     "expectedIdentity": {
       "asset": null,
@@ -83,10 +79,7 @@
   },
   "openclawd": {
     "identifier": "protocol-treasury-analyst",
-    "capabilities": [
-      "read-only",
-      "a2a-message"
-    ],
+    "capabilities": [],
     "payment": null,
     "agentToken": null
   }

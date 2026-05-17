@@ -43,7 +43,9 @@
   },
   "oneShot": true,
   "featured": true,
-  "tokenUsage": null,
+  "knowledgeCount": 0,
+  "pluginCount": 0,
+  "tokenUsage": 0,
   "capabilities": [
     "swap-execution",
     "read-only",

@@ -39,6 +39,49 @@ Purpose: lets your agent/UI discover what's for sale before calling it.
 
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2A. AGENTS CATALOG  (x402 public agent hub)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+GET /api/agents
+→ 200 {
+    name: "OpenClawd Agents API",
+    endpoints: {
+      catalog: "/api/agents/catalog",
+      registry: "/api/agents/registry"
+    }
+  }
+
+GET /api/agents/catalog
+→ 200 {
+    stats: {
+      totalAgents: 124,
+      totalOneShots: 1,
+      totalFeatured: 2,
+      totalTemplates: 0
+    },
+    agents: AgentDefinition[],
+    featured: AgentDefinition[],
+    oneShots: AgentDefinition[]
+  }
+
+GET /api/agents/catalog/:identifier.json
+→ 200 AgentDefinition
+
+GET /api/agents/registry
+→ 200 {
+    count: 124,
+    agents: AgentRegistryEntry[]
+  }
+
+Curl:
+
+curl https://x402.wtf/api/agents | jq .
+curl https://x402.wtf/api/agents/catalog | jq '.stats'
+curl https://x402.wtf/api/agents/registry | jq .
+curl https://x402.wtf/api/agents/catalog/solana-pumpfun-bot.json | jq .
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 3. FACILITATOR  (Solana-native x402 settlement)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 

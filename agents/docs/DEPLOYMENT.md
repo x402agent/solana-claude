@@ -1,6 +1,6 @@
 # 🚀 Solana Clawd Agent Deployment Guide
 
-There are **four paths** to getting your agent live on the [Solana Clawd hub](https://www.x402.wtf/agents). Pick the one that matches how much control you want.
+There are **four paths** to getting your agent live on the [Solana Clawd hub](https://x402.wtf/agents). Pick the one that matches how much control you want.
 
 | Path                         | Best for                                  | Result                                             |
 | ---------------------------- | ----------------------------------------- | -------------------------------------------------- |
@@ -38,7 +38,7 @@ git push origin add-your-agent
 3. Builds the aggregated index (`index.json`, `index.{locale}.json`, `agents-manifest.json`)
 4. Deploys to both:
    - **GitHub Pages** at `https://clawd.click/{your-agent-name}.json`
-   - **Solana Clawd hub** at `https://www.x402.wtf/agents/{your-agent-name}`
+   - **Solana Clawd hub** at `https://x402.wtf/agents/{your-agent-name}`
 
 ### Required secret for translation
 
@@ -96,7 +96,7 @@ app.listen(3000);
 ### Register with the hub
 
 ```bash
-curl -X POST https://www.x402.wtf/api/agents/register \
+curl -X POST https://x402.wtf/api/agents/register \
   -H "Content-Type: application/json" \
   -d '{
     "identifier": "your-agent-name",
@@ -115,13 +115,13 @@ For agents that should have **transferable ownership**, **royalty rails**, or a 
 
 ### UI flow (recommended)
 
-1. Go to [x402.wtf/agents-mint](https://www.x402.wtf/agents-mint)
+1. Go to [x402.wtf/agents-mint](https://x402.wtf/agents-mint)
 2. Connect your Solana wallet (Phantom, Solflare, Backpack)
 3. Either:
    - **Upload `agent.json`** — we handle IPFS pinning and metadata
    - **Paste a manifest URL** if you're already hosting it
 4. Confirm the mint transaction (~0.003 SOL + priority fee)
-5. Your agent appears in [/agents-registry](https://www.x402.wtf/agents-registry) with its on-chain asset address
+5. Your agent appears in [/agents-registry](https://x402.wtf/agents-registry) with its on-chain asset address
 
 ### Programmatic mint (server-side)
 
@@ -136,7 +136,7 @@ const asset = generateSigner(umi);
 await create(umi, {
   asset,
   name: "Solana Portfolio Manager",
-  uri: "https://www.x402.wtf/api/agents/nft-metadata.json?identifier=solana-portfolio-manager",
+  uri: "https://x402.wtf/api/agents/nft-metadata.json?identifier=solana-portfolio-manager",
   collection: publicKey(process.env.AGENT_COLLECTION!),
 }).sendAndConfirm(umi);
 
@@ -163,7 +163,7 @@ curl -X POST https://modelcontextprotocol.name/register \
   }'
 ```
 
-Your server shows up in both the [MCP catalog](https://modelcontextprotocol.name) and the Solana Clawd [agents registry](https://www.x402.wtf/agents-registry) under "Tool Providers".
+Your server shows up in both the [MCP catalog](https://modelcontextprotocol.name) and the Solana Clawd [agents registry](https://x402.wtf/agents-registry) under "Tool Providers".
 
 ---
 
@@ -207,9 +207,9 @@ Enable HTTPS in your hosting provider after DNS propagates.
 
 Once deployed, monitor your agent at:
 
-- **Gallery card**: `https://www.x402.wtf/agents/{identifier}`
-- **Registry entry**: `https://www.x402.wtf/agents-registry?filter={identifier}`
-- **Usage stats** (A2A call counts, install counts): `https://www.x402.wtf/agents/{identifier}/stats`
+- **Gallery card**: `https://x402.wtf/agents/{identifier}`
+- **Registry entry**: `https://x402.wtf/agents-registry?filter={identifier}`
+- **Usage stats** (A2A call counts, install counts): `https://x402.wtf/agents/{identifier}/stats`
 - **On-chain asset** (if minted): `https://solscan.io/token/{asset-address}`
 
 ---

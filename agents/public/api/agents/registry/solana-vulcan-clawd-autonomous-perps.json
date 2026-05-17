@@ -3,11 +3,11 @@
   "protocol": "metaplex-agent-registry",
   "name": "Vulcan CLAWD Autonomous Perps",
   "description": "Autonomous Phoenix perps agent using Vulcan skills, RISE SDK market data, Clawd RPC, and builder-authority routing",
-  "image": "https://www.x402.wtf/nich.jpg",
-  "external_url": "https://www.x402.wtf/agents/solana-vulcan-clawd-autonomous-perps",
+  "image": "https://x402.wtf/nich.jpg",
+  "external_url": "https://x402.wtf/agents/solana-vulcan-clawd-autonomous-perps",
   "active": true,
   "createdAt": "2026-05-16",
-  "updatedAt": "2026-05-16T20:50:19.985Z",
+  "updatedAt": "2026-05-17T17:58:23.377Z",
   "tags": [
     "solana",
     "clawd",
@@ -25,7 +25,7 @@
   ],
   "owner": {
     "organization": "OpenClawd",
-    "website": "https://www.x402.wtf",
+    "website": "https://x402.wtf",
     "token": {
       "symbol": "CLAWD",
       "chain": "solana",
@@ -35,20 +35,20 @@
   "services": [
     {
       "name": "web",
-      "endpoint": "https://www.x402.wtf/agents/solana-vulcan-clawd-autonomous-perps"
+      "endpoint": "https://x402.wtf/agents/solana-vulcan-clawd-autonomous-perps"
     },
     {
       "name": "A2A",
-      "endpoint": "https://www.x402.wtf/api/agents/a2a",
+      "endpoint": "https://x402.wtf/api/agents/a2a",
       "version": "0.3.0"
     },
     {
       "name": "catalog",
-      "endpoint": "https://www.x402.wtf/api/agents/catalog/solana-vulcan-clawd-autonomous-perps.json"
+      "endpoint": "https://x402.wtf/api/agents/catalog/solana-vulcan-clawd-autonomous-perps.json"
     },
     {
       "name": "registration",
-      "endpoint": "https://www.x402.wtf/api/agents/registry/solana-vulcan-clawd-autonomous-perps.json"
+      "endpoint": "https://x402.wtf/api/agents/registry/solana-vulcan-clawd-autonomous-perps.json"
     }
   ],
   "registrations": [
@@ -56,7 +56,7 @@
       "agentId": "openclawd:solana-vulcan-clawd-autonomous-perps",
       "agentRegistry": "solana:mainnet:metaplex-agent-registry",
       "status": "pending-onchain-registration",
-      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-vulcan-clawd-autonomous-perps.json"
+      "registrationUri": "https://x402.wtf/api/agents/registry/solana-vulcan-clawd-autonomous-perps.json"
     }
   ],
   "supportedTrust": [

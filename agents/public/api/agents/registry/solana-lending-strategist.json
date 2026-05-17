@@ -3,11 +3,11 @@
   "protocol": "metaplex-agent-registry",
   "name": "Lending Protocol Strategist",
   "description": "Optimizes borrowing, lending, and leverage strategies across Solana lending protocols",
-  "image": "https://www.x402.wtf/nich.jpg",
-  "external_url": "https://www.x402.wtf/agents/solana-lending-strategist",
+  "image": "https://x402.wtf/nich.jpg",
+  "external_url": "https://x402.wtf/agents/solana-lending-strategist",
   "active": true,
   "createdAt": "2026-03-15",
-  "updatedAt": "2026-05-16T20:50:19.985Z",
+  "updatedAt": "2026-05-17T17:58:23.377Z",
   "tags": [
     "lending",
     "borrowing",
@@ -21,7 +21,7 @@
   ],
   "owner": {
     "organization": "OpenClawd",
-    "website": "https://www.x402.wtf",
+    "website": "https://x402.wtf",
     "token": {
       "symbol": "CLAWD",
       "chain": "solana",
@@ -31,20 +31,20 @@
   "services": [
     {
       "name": "web",
-      "endpoint": "https://www.x402.wtf/agents/solana-lending-strategist"
+      "endpoint": "https://x402.wtf/agents/solana-lending-strategist"
     },
     {
       "name": "A2A",
-      "endpoint": "https://www.x402.wtf/api/agents/a2a",
+      "endpoint": "https://x402.wtf/api/agents/a2a",
       "version": "0.3.0"
     },
     {
       "name": "catalog",
-      "endpoint": "https://www.x402.wtf/api/agents/catalog/solana-lending-strategist.json"
+      "endpoint": "https://x402.wtf/api/agents/catalog/solana-lending-strategist.json"
     },
     {
       "name": "registration",
-      "endpoint": "https://www.x402.wtf/api/agents/registry/solana-lending-strategist.json"
+      "endpoint": "https://x402.wtf/api/agents/registry/solana-lending-strategist.json"
     }
   ],
   "registrations": [
@@ -52,7 +52,7 @@
       "agentId": "openclawd:solana-lending-strategist",
       "agentRegistry": "solana:mainnet:metaplex-agent-registry",
       "status": "pending-onchain-registration",
-      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-lending-strategist.json"
+      "registrationUri": "https://x402.wtf/api/agents/registry/solana-lending-strategist.json"
     }
   ],
   "supportedTrust": [

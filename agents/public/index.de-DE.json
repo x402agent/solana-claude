@@ -1,0 +1,1066 @@
+{
+  "schemaVersion": 1,
+  "agents": [
+    {
+      "author": "solana-clawd",
+      "createdAt": "2026-01-03",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "crypto-news-analyst",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Krypto Nachrichten Analyst",
+        "description": "Aggregieren und Analysieren von aktuellen Krypto-Nachrichten von CoinDesk, The Block, Decrypt und großen Publikationen",
+        "avatar": "📰",
+        "tags": [
+          "nachrichten",
+          "analyse",
+          "markt",
+          "forschung",
+          "stimmung",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "krypto"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 453
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "alpha-leak-detector",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Crypto Alpha- & Signaldetektor",
+        "description": "Identifizieren Sie Handels-Alpha und Frühsignale in DeFi-Märkten",
+        "avatar": "🎯",
+        "tags": [
+          "alpha",
+          "handel",
+          "signale",
+          "forschung",
+          "Chancen",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "Krypto"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 357
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "vespa-optimizer",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "veSPA Lock Optimizer",
+        "description": "Maximieren Sie die Renditen durch optimale veSPA-Sperrstrategien",
+        "avatar": "🔒",
+        "tags": [
+          "clawd",
+          "vespa",
+          "staking",
+          "optimierung",
+          "stimmrecht",
+          "solana-clawd"
+        ],
+        "category": "tools"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 158
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "impermanent-loss-calculator",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Impermanent Loss Rechner",
+        "description": "Berechnen und erklären Sie Szenarien temporärer Verluste für LP-Positionen",
+        "avatar": "📉",
+        "tags": [
+          "defi",
+          "liquidität",
+          "impermanenter-verlust",
+          "rechner",
+          "amm",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "tools"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 219
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "clawd-yield-aggregator",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "CLAWD Ertragsaggregator",
+        "description": "Finden und Optimieren der besten Ertragsmöglichkeiten im CLAWD-Ökosystem",
+        "avatar": "🌾",
+        "tags": [
+          "clawd",
+          "ertrag",
+          "landwirtschaft",
+          "optimierung",
+          "apy",
+          "solana-clawd"
+        ],
+        "category": "defi"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 192
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "yield-dashboard-builder",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Persönlicher DeFi-Dashboard-Builder",
+        "description": "Gestalten und verfolgen Sie Ihr individuelles DeFi-Portfolio-Dashboard",
+        "avatar": "📊",
+        "tags": [
+          "dashboard",
+          "Verfolgung",
+          "Portfolio",
+          "Analytik",
+          "Überwachung",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "Handel"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 387
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "clawd-liquidity-strategist",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "CLAWD Liquidity Provider Strategist",
+        "description": "Optimieren Sie Strategien zur Liquiditätsbereitstellung in CLAWD-Pools",
+        "avatar": "💧",
+        "tags": [
+          "clawd",
+          "liquidity",
+          "amm",
+          "yield-farming",
+          "impermanent-loss",
+          "solana-clawd"
+        ],
+        "category": "defi"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 164
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "defi-protocol-comparator",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "DeFi-Protokoll-Vergleichsexperte",
+        "description": "Vergleichen Sie ähnliche DeFi-Protokolle hinsichtlich Funktionen, Risiken und Renditen",
+        "avatar": "⚖️",
+        "tags": [
+          "defi",
+          "vergleich",
+          "protokolle",
+          "analyse",
+          "forschung",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "defi"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 275
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "gas-optimization-expert",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Gas-Kosten-Optimierungs-Experte",
+        "description": "Minimieren Sie Gaskosten und optimieren Sie den Transaktionszeitpunkt",
+        "avatar": "⛽",
+        "tags": [
+          "ethereum",
+          "gas",
+          "optimierung",
+          "layer-2",
+          "effizienz",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "tools"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 250
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "clawd-onboarding-guide",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "CLAWD Ecosystem Onboarding Guide",
+        "description": "Helfen Sie Neulingen, CLAWD-Protokoll zu verstehen und zu nutzen",
+        "avatar": "🎓",
+        "tags": [
+          "clawd",
+          "bildung",
+          "onboarding",
+          "anfänger",
+          "tutorial",
+          "solana-clawd"
+        ],
+        "category": "bildung"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 217
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "defi-onboarding-mentor",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "DeFi Anfänger-Onboarding-Mentor",
+        "description": "Beginners durch ihre ersten DeFi-Erfahrungen führen",
+        "avatar": "🎓",
+        "tags": [
+          "bildung",
+          "anfänger",
+          "onboarding",
+          "tutorial",
+          "defi-grundlagen",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "bildung"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 392
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "spa-tokenomics-analyst",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "SPA Tokenomics Analyst",
+        "description": "Experte für SPA-Token-Ökonomie, Staking-Belohnungen und Protokollumsatz",
+        "avatar": "📊",
+        "tags": [
+          "clawd",
+          "spa",
+          "tokenomics",
+          "staking",
+          "governance",
+          "solana-clawd"
+        ],
+        "category": "Krypto"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 156
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "defi-risk-scoring-engine",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "DeFi-Protokoll-Risiko-Bewertungsmaschine",
+        "description": "Umfassender Risikobewertungsrahmen für DeFi-Protokolle",
+        "avatar": "⚖️",
+        "tags": [
+          "risiko",
+          "bewertung",
+          "score",
+          "analyse",
+          "rahmen",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "security"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 396
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "wallet-security-advisor",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Krypto-Brieftasche Sicherheitsberater",
+        "description": "Best Practices zur Sicherung von Krypto-Brieftaschen und Vermögenswerten",
+        "avatar": "🔐",
+        "tags": [
+          "Sicherheit",
+          "Brieftasche",
+          "Sicherheit",
+          "Best Practices",
+          "Hardware",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "security"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 359
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "defi-yield-farmer",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "DeFi Ertragslandwirtschaftsstratege",
+        "description": "Identifizieren und Optimieren von Ertragslandwirtschaftsmöglichkeiten in DeFi-Protokollen",
+        "avatar": "🚜",
+        "tags": [
+          "defi",
+          "yield-farming",
+          "apy",
+          "strategie",
+          "optimierung",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "defi"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 213
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "clawd-risk-monitor",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "CLAWD Protocol Risikoüberwachung",
+        "description": "Verfolgung und Analyse von Sicherheitsrisiken in CLAWD Smart Contracts",
+        "avatar": "🛡️",
+        "tags": [
+          "clawd",
+          "sicherheit",
+          "risiko",
+          "prüfung",
+          "überwachung",
+          "solana-clawd"
+        ],
+        "category": "security"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 179
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "stablecoin-comparator",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Stablecoin Deep Comparator",
+        "description": "Vergleich von Stablecoin-Mechanismen, Risiken und Anwendungsfällen",
+        "avatar": "🪙",
+        "tags": [
+          "stablecoin",
+          "usdc",
+          "dai",
+          "usdt",
+          "vergleich",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "defi"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 231
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "portfolio-rebalancing-advisor",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "DeFi Portfolio Rebalancing Berater",
+        "description": "Optimieren Sie Portfolioallokation und Rebalancing-Strategien",
+        "avatar": "⚖️",
+        "tags": [
+          "portfolio",
+          "rebalancing",
+          "allokation",
+          "strategie",
+          "optimierung",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "Handel"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 297
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "clawd-bridge-assistant",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "CLAWD Bridge Assistent",
+        "description": "Benutzer bei der grenzüberschreitenden Brückenschaltung mit optimalen Routen und Kosten unterstützen",
+        "avatar": "🌉",
+        "tags": [
+          "clawd",
+          "brücke",
+          "grenzüberschreitend",
+          "arbitrum",
+          "layer-2",
+          "solana-clawd"
+        ],
+        "category": "Programmierung"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 189
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "airdrop-hunter",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "DeFi Airdrop Hunter",
+        "description": "Identifizieren und Strategien für potenzielle Protokoll-Airdrops entwickeln",
+        "avatar": "🪂",
+        "tags": [
+          "airdrop",
+          "belohnungen",
+          "strategie",
+          "farming",
+          "zuweisung",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "Handel"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 311
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "yield-sustainability-analyst",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "DeFi-Ertragsnachhaltigkeitsanalyst",
+        "description": "Analysieren, ob hohe Erträge nachhaltig oder vorübergehend sind",
+        "avatar": "🔬",
+        "tags": [
+          "defi",
+          "ertrag",
+          "nachhaltigkeit",
+          "analyse",
+          "tokenomics",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "defi"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 325
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "apy-vs-apr-educator",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "APY vs APR Lehrer",
+        "description": "Erklären und Berechnen des Unterschieds zwischen APY und APR in DeFi",
+        "avatar": "📈",
+        "tags": [
+          "defi",
+          "bildung",
+          "apy",
+          "apr",
+          "renditen",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "tools"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 271
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "crypto-tax-strategist",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Krypto-Steuer-Strategie-Berater",
+        "description": "Optimieren Sie Krypto-Steuern und bieten Sie steueroptimierte DeFi-Strategien an",
+        "avatar": "📋",
+        "tags": [
+          "Steuer",
+          "Strategie",
+          "Buchhaltung",
+          "Optimierung",
+          "Einhaltung",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "Handel"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 339
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "bridge-security-analyst",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Cross-Chain Bridge Security Analyst",
+        "description": "Bewertung der Sicherheit von Brücken und Empfehlung der sichersten Cross-Chain-Routen",
+        "avatar": "🌉",
+        "tags": [
+          "bridge",
+          "security",
+          "cross-chain",
+          "risk",
+          "multichain",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "security"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 401
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "narrative-trend-analyst",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Krypto-Narrativ- und Trendanalyst",
+        "description": "Verfolgen und Analysieren dominanter Narrative und Trends auf Kryptomärkten",
+        "avatar": "📈",
+        "tags": [
+          "narrative",
+          "trends",
+          "analyse",
+          "stimmung",
+          "marktzyklen",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "Krypto"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 420
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "governance-proposal-analyst",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "DAO-Governance-Vorschlagsanalyst",
+        "description": "Analysieren und Erklären von DAO-Governance-Vorschlägen und deren Auswirkungen",
+        "avatar": "🏛️",
+        "tags": [
+          "governance",
+          "dao",
+          "abstimmung",
+          "vorschläge",
+          "analyse",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "governance"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 296
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "staking-rewards-calculator",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Staking Rewards Rechner",
+        "description": "Berechnen und optimieren Sie Staking-Belohnungen über verschiedene Protokolle hinweg",
+        "avatar": "💰",
+        "tags": [
+          "staking",
+          "belohnungen",
+          "rechner",
+          "pos",
+          "erträge",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "tools"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 273
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "dex-aggregator-optimizer",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "DEX-Aggregator-Routenoptimierer",
+        "description": "Finden Sie optimale Tauschrouten über DEX-Aggregatoren",
+        "avatar": "🔀",
+        "tags": [
+          "dex",
+          "tausch",
+          "routing",
+          "aggregator",
+          "optimierung",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "defi"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 300
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "layer-2-comparison-guide",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Vergleichsleitfaden für Layer 2",
+        "description": "Vergleichen Sie Ethereum L2-Lösungen: Arbitrum, Optimism, Base, zkSync",
+        "avatar": "⚡",
+        "tags": [
+          "layer-2",
+          "skalierung",
+          "arbitrum",
+          "optimismus",
+          "ethereum",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "defi"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 308
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "liquidation-risk-manager",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Liquidationsrisikomanager",
+        "description": "Überwachen und verwalten Sie Liquidationsrisiken in Kreditprotokollen",
+        "avatar": "⚠️",
+        "tags": [
+          "kredit",
+          "liquidation",
+          "risiko",
+          "sicherheit",
+          "defi",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "tools"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 351
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "nft-liquidity-advisor",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "NFT-Liquidität & Kreditberater",
+        "description": "Navigieren Sie durch NFT-gestützte Kredit- und Liquiditätslösungen",
+        "avatar": "🎨",
+        "tags": [
+          "nft",
+          "liquidität",
+          "kredit",
+          "sicherheit",
+          "deFi",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "defi"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 312
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "liquidity-pool-analyzer",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Tiefenanalyse für Liquiditätspools",
+        "description": "Analysieren Sie die Gesundheit, Risiken und optimale Ein-/Ausstiegszeitpunkte von LP-Pools",
+        "avatar": "🏊",
+        "tags": [
+          "defi",
+          "liquiditätspools",
+          "amm",
+          "analyse",
+          "risiko",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "defi"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 284
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "protocol-revenue-analyst",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Analyse von Protokollumsatz & Grundlagen",
+        "description": "Analyse von DeFi-Protokoll-Geschäftsmodellen und Umsatzgenerierung",
+        "avatar": "💼",
+        "tags": [
+          "defi",
+          "umsatz",
+          "analyse",
+          "grundlagen",
+          "tokenomics",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "defi"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 317
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "protocol-treasury-analyst",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "DAO-Tresor & Ressourcenanalyst",
+        "description": "Analysieren Sie DAO-Tresorbestände, Laufzeit und Kapitalallokation",
+        "avatar": "💎",
+        "tags": [
+          "treasury",
+          "dao",
+          "kapital",
+          "laufzeit",
+          "allokation",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "governance"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 353
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "clawd-governance-guide",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "CLAWD Governance-Leitfaden",
+        "description": "Navigieren Sie durch CLAWD DAO Vorschläge, Abstimmungen und Protokoll-Upgrades",
+        "avatar": "🗳️",
+        "tags": [
+          "clawd",
+          "governance",
+          "dao",
+          "abstimmung",
+          "vorschläge",
+          "solana-clawd"
+        ],
+        "category": "governance"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 153
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "usds-stablecoin-expert",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "USDs Stablecoin-Experte",
+        "description": "Spezialist für CLAWD USDs Mechanismus, Kollateralisierung und Ertragsstrategien",
+        "avatar": "💵",
+        "tags": [
+          "clawd",
+          "stablecoin",
+          "usds",
+          "defi",
+          "ertrag",
+          "solana-clawd"
+        ],
+        "category": "defi"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 140
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "defi-insurance-advisor",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "DeFi-Versicherung & Risikodeckungsberater",
+        "description": "Navigieren Sie durch DeFi-Versicherungsoptionen zum Schutz von Smart Contracts",
+        "avatar": "🛡️",
+        "tags": [
+          "Versicherung",
+          "Schutz",
+          "Risiko",
+          "Deckung",
+          "Sicherheit",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "defi"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 368
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "token-unlock-tracker",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Tokenfreigabe-Plan Tracker",
+        "description": "Überwachen und analysieren Sie Tokenfreigabeereignisse und deren Markteinfluss",
+        "avatar": "🔓",
+        "tags": [
+          "Tokenomics",
+          "Freigaben",
+          "Vesting",
+          "Angebot",
+          "Analyse",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "Krypto"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 279
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "clawd-portfolio-tracker",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "CLAWD Portfolio-Tracker",
+        "description": "Verfolgen und Analysieren Ihrer vollständigen CLAWD-Ökosystembestände",
+        "avatar": "💼",
+        "tags": [
+          "clawd",
+          "portfolio",
+          "tracking",
+          "analytics",
+          "dashboard",
+          "solana-clawd"
+        ],
+        "category": "Handel"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 234
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "whale-watcher",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Crypto Whale Watcher",
+        "description": "Verfolge und analysiere große Wallet-Bewegungen und Wale-Verhalten",
+        "avatar": "🐋",
+        "tags": [
+          "on-chain",
+          "wale",
+          "analytik",
+          "handel",
+          "überwachung",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "Krypto"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 252
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "smart-contract-auditor",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Smart Contract Security Auditor",
+        "description": "Überprüfung und Bewertung der Sicherheit von Smart Contracts für DeFi-Protokolle",
+        "avatar": "🔍",
+        "tags": [
+          "security",
+          "smart-contracts",
+          "audit",
+          "solidity",
+          "risk",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "security"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 280
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "mev-protection-advisor",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "MEV-Schutzberater",
+        "description": "Schützt Nutzer vor Front-Running, Sandwich-Angriffen und MEV-Ausbeutung",
+        "avatar": "🛡️",
+        "tags": [
+          "mev",
+          "sicherheit",
+          "front-running",
+          "flashbots",
+          "schutz",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "security"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 308
+    }
+  ],
+  "tags": [
+    "clawd",
+    "solana-clawd",
+    "defi",
+    "analyse",
+    "optimierung",
+    "risiko",
+    "sicherheit",
+    "forschung",
+    "staking",
+    "amm",
+    "ertrag",
+    "apy",
+    "layer-2",
+    "bildung",
+    "tokenomics",
+    "governance",
+    "Sicherheit",
+    "strategie",
+    "dao"
+  ]
+}

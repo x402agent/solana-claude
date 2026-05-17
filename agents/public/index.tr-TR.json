@@ -1,0 +1,1066 @@
+{
+  "schemaVersion": 1,
+  "agents": [
+    {
+      "author": "solana-clawd",
+      "createdAt": "2026-01-03",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "crypto-news-analyst",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Kripto Haber Analisti",
+        "description": "CoinDesk, The Block, Decrypt ve büyük yayınlardan gelen önemli kripto haberlerini toplayıp analiz edin",
+        "avatar": "📰",
+        "tags": [
+          "haber",
+          "analiz",
+          "piyasa",
+          "araştırma",
+          "duygu",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "kripto"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 453
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "alpha-leak-detector",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Kripto Alfa ve Sinyal Dedektörü",
+        "description": "DeFi piyasalarında işlem alfa ve erken sinyalleri tanımlayın",
+        "avatar": "🎯",
+        "tags": [
+          "alpha",
+          "t trading",
+          "sinyaller",
+          "araştırma",
+          "fırsatlar",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "kripto"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 357
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "vespa-optimizer",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "veSPA Kilit Optimizasyonu",
+        "description": "En iyi veSPA kilitleme stratejileriyle getirileri en üst düzeye çıkarın",
+        "avatar": "🔒",
+        "tags": [
+          "clawd",
+          "vespa",
+          "stake",
+          "optimizasyon",
+          "oylama-gücü",
+          "solana-clawd"
+        ],
+        "category": "tools"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 158
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "impermanent-loss-calculator",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Geçici Kayıp Hesaplayıcı",
+        "description": "LP pozisyonları için geçici kayıp senaryolarını hesapla ve açıkla",
+        "avatar": "📉",
+        "tags": [
+          "defi",
+          "likidite",
+          "geçici-kayıp",
+          "hesaplayıcı",
+          "amm",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "araçlar"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 219
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "clawd-yield-aggregator",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "CLAWD Getiri Toplayıcı",
+        "description": "CLAWD ekosisteminde en iyi getiri fırsatlarını bulun ve optimize edin",
+        "avatar": "🌾",
+        "tags": [
+          "clawd",
+          "getiri",
+          "çiftçilik",
+          "optimizasyon",
+          "apy",
+          "solana-clawd"
+        ],
+        "category": "defi"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 192
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "yield-dashboard-builder",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Kişisel DeFi Gösterge Paneli Oluşturucu",
+        "description": "Özel DeFi portföy gösterge panelinizi tasarlayın ve takip edin",
+        "avatar": "📊",
+        "tags": [
+          "gösterge paneli",
+          "takip",
+          "portföy",
+          "analitik",
+          "izleme",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "tüccarlık"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 387
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "clawd-liquidity-strategist",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "CLAWD Likidite Sağlayıcı Stratejisti",
+        "description": "CLAWD havuzları genelinde likidite sağlama stratejilerini optimize edin",
+        "avatar": "💧",
+        "tags": [
+          "clawd",
+          "likidite",
+          "amm",
+          "getiri-çiftliği",
+          "geçici-kayıp",
+          "solana-clawd"
+        ],
+        "category": "defi"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 164
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "defi-protocol-comparator",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "DeFi Protokol Karşılaştırma Uzmanı",
+        "description": "Benzer DeFi protokollerini özellikler, riskler ve getiriler açısından karşılaştırın",
+        "avatar": "⚖️",
+        "tags": [
+          "defi",
+          "karşılaştırma",
+          "protokoller",
+          "analiz",
+          "araştırma",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "defi"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 275
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "gas-optimization-expert",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Gaz Maliyeti Optimizasyonu Uzmanı",
+        "description": "Gaz maliyetlerini en aza indirin ve işlem zamanlamasını optimize edin",
+        "avatar": "⛽",
+        "tags": [
+          "ethereum",
+          "gaz",
+          "optimizasyon",
+          "katman-2",
+          "verimlilik",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "tools"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 250
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "clawd-onboarding-guide",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "CLAWD Ekosistemine Başlangıç Rehberi",
+        "description": "Yeni gelenlerin CLAWD protokolünü anlamalarına ve kullanmaya başlamalarına yardımcı olun",
+        "avatar": "🎓",
+        "tags": [
+          "clawd",
+          "eğitim",
+          "başlangıç",
+          "yeni başlayan",
+          "kılavuz",
+          "solana-clawd"
+        ],
+        "category": "eğitim"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 217
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "defi-onboarding-mentor",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "DeFi Yeni Başlayanlar İçin Onboarding Mentoru",
+        "description": "Yeni başlayanlara ilk DeFi deneyimlerinde rehberlik eder",
+        "avatar": "🎓",
+        "tags": [
+          "eğitim",
+          "yeni başlayan",
+          "onboarding",
+          "kılavuz",
+          "defi-temelleri",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "eğitim"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 392
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "spa-tokenomics-analyst",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "SPA Tokenomics Analisti",
+        "description": "SPA token ekonomisi, stake ödülleri ve protokol gelirleri konusunda uzman",
+        "avatar": "📊",
+        "tags": [
+          "clawd",
+          "spa",
+          "tokenomics",
+          "staking",
+          "yönetim",
+          "solana-clawd"
+        ],
+        "category": "kripto"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 156
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "defi-risk-scoring-engine",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "DeFi Protokol Risk Skorlama Motoru",
+        "description": "DeFi protokolleri için Kapsamlı risk değerlendirme çerçevesi",
+        "avatar": "⚖️",
+        "tags": [
+          "risk",
+          "değerlendirme",
+          "skorlama",
+          "analiz",
+          "çerçeve",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "security"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 396
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "wallet-security-advisor",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Kripto Cüzdan Güvenliği Danışmanı",
+        "description": "Kripto cüzdanları ve varlıkların güvenliğini sağlamak için en iyi uygulamalar",
+        "avatar": "🔐",
+        "tags": [
+          "güvenlik",
+          "cüzdan",
+          "güvenlik",
+          "en-iyi-uygulamalar",
+          "donanım",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "security"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 359
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "defi-yield-farmer",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "DeFi Getiri Çiftçiliği Stratejisti",
+        "description": "DeFi protokolleri genelinde getiri çiftçiliği fırsatlarını tanımlayın ve optimize edin",
+        "avatar": "🚜",
+        "tags": [
+          "defi",
+          "getiri-çiftçiliği",
+          "apy",
+          "strateji",
+          "optimizasyon",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "defi"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 213
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "clawd-risk-monitor",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "CLAWD Protokolü Risk İzleyici",
+        "description": "CLAWD akıllı sözleşmelerinde güvenlik risklerini takip edin ve analiz edin",
+        "avatar": "🛡️",
+        "tags": [
+          "clawd",
+          "güvenlik",
+          "risk",
+          "denetim",
+          "izleme",
+          "solana-clawd"
+        ],
+        "category": "security"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 179
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "stablecoin-comparator",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Stablecoin Derin Karşılaştırıcı",
+        "description": "Stablecoin mekanizmalarını, risklerini ve kullanım durumlarını karşılaştırın",
+        "avatar": "🪙",
+        "tags": [
+          "stablecoin",
+          "usdc",
+          "dai",
+          "usdt",
+          "karşılaştırma",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "defi"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 231
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "portfolio-rebalancing-advisor",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "DeFi Portföy Yeniden Dengeleme Danışmanı",
+        "description": "Portföy tahsisatını ve yeniden dengeleme stratejilerini optimize edin",
+        "avatar": "⚖️",
+        "tags": [
+          "portföy",
+          "yeniden dengeleme",
+          "tahsisat",
+          "strateji",
+          "optimizasyon",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "tüccarlık"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 297
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "clawd-bridge-assistant",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "CLAWD Köprü Asistanı",
+        "description": "Kullanıcıları en uygun rotalar ve maliyetlerle çapraz zincir köprüleme konusunda yönlendirin",
+        "avatar": "🌉",
+        "tags": [
+          "clawd",
+          "köprü",
+          "çapraz-zincir",
+          "arbitrum",
+          "katman-2",
+          "solana-clawd"
+        ],
+        "category": "programming"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 189
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "airdrop-hunter",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "DeFi Airdrop Avcısı",
+        "description": "Potansiyel protokol airdroplarını belirleyin ve stratejilerini geliştirin",
+        "avatar": "🪂",
+        "tags": [
+          "airdrop",
+          "ödüller",
+          "strateji",
+          "farming",
+          "dağıtım",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "türkiye"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 311
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "yield-sustainability-analyst",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "DeFi Getiri Sürdürülebilirlik Analisti",
+        "description": "Yüksek getirilerin sürdürülebilir mi yoksa geçici mi olduğunu analiz edin",
+        "avatar": "🔬",
+        "tags": [
+          "defi",
+          "getiri",
+          "sürdürülebilirlik",
+          "analiz",
+          "tokenomik",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "defi"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 325
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "apy-vs-apr-educator",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "APY ve APR Eğitmeni",
+        "description": "DeFi'de APY ve APR arasındaki farkı açıkla ve hesapla",
+        "avatar": "📈",
+        "tags": [
+          "defi",
+          "eğitim",
+          "apy",
+          "apr",
+          "getiriler",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "tools"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 271
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "crypto-tax-strategist",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Kripto Vergi Stratejisi Danışmanı",
+        "description": "Kripto vergilerini optimize edin ve vergi verimli DeFi stratejileri sağlayın",
+        "avatar": "📋",
+        "tags": [
+          "tax",
+          "strategy",
+          "accounting",
+          "optimization",
+          "compliance",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "trading"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 339
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "bridge-security-analyst",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Çapraz Zincir Köprüsü Güvenlik Analisti",
+        "description": "Köprü güvenliğini değerlendirin ve en güvenli çapraz zincir rotalarını önerin",
+        "avatar": "🌉",
+        "tags": [
+          "köprü",
+          "güvenlik",
+          "çapraz-zincir",
+          "risk",
+          "çok zincirli",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "security"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 401
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "narrative-trend-analyst",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Kripto Hikayesi ve Trend Analisti",
+        "description": "Kripto piyasalarındaki baskın hikayeleri ve trendleri takip edin ve analiz edin",
+        "avatar": "📈",
+        "tags": [
+          "hikaye",
+          "trendler",
+          "analiz",
+          "görüntü",
+          "piyasa-döngüleri",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "kripto"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 420
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "governance-proposal-analyst",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "DAO Yönetişim Teklifi Analisti",
+        "description": "DAO yönetişim tekliflerini analiz et ve açıklayarak etkilerini değerlendir",
+        "avatar": "🏛️",
+        "tags": [
+          "yönetişim",
+          "dao",
+          "oylama",
+          "teklifler",
+          "analiz",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "yönetim"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 296
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "staking-rewards-calculator",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Hisse Senedi Ödülleri Hesaplayıcı",
+        "description": "Protokoller arasında staking ödüllerini hesapla ve optimize et",
+        "avatar": "💰",
+        "tags": [
+          "staking",
+          "ödüller",
+          "hesaplayıcı",
+          "pos",
+          "getiriler",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "tools"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 273
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "dex-aggregator-optimizer",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "DEX Toplu İşlem Yönlendirme Optimizatörü",
+        "description": "DEX toplayıcıları arasında en uygun takas rotalarını bulun",
+        "avatar": "🔀",
+        "tags": [
+          "dex",
+          "takast",
+          "yönlendirme",
+          "toplayıcı",
+          "optimizasyon",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "defi"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 300
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "layer-2-comparison-guide",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Katman 2 Karşılaştırma Rehberi",
+        "description": "Ethereum L2 çözümlerini karşılaştırın: Arbitrum, Optimism, Base, zkSync",
+        "avatar": "⚡",
+        "tags": [
+          "layer-2",
+          "ölçeklenebilirlik",
+          "arbitrum",
+          "optimism",
+          "ethereum",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "defi"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 308
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "liquidation-risk-manager",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Tasfiye Riski Yöneticisi",
+        "description": "Kredi protokollerinde tasfiye risklerini izleyin ve yönetin",
+        "avatar": "⚠️",
+        "tags": [
+          "kredi",
+          "tasfiye",
+          "risk",
+          "teminat",
+          "defi",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "tools"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 351
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "nft-liquidity-advisor",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "NFT Likidite ve Kredi Danışmanı",
+        "description": "NFT destekli kredilendirme ve likidite çözümlerinde rehberlik edin",
+        "avatar": "🎨",
+        "tags": [
+          "nft",
+          "likidite",
+          "kredi",
+          "teminat",
+          "defi",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "defi"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 312
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "liquidity-pool-analyzer",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Likidite Havuzu Derin Analizörü",
+        "description": "LP havuzu sağlığını, riskleri ve en uygun giriş/çıkış zamanlamasını analiz edin",
+        "avatar": "🏊",
+        "tags": [
+          "defi",
+          "likidite-havuzları",
+          "amm",
+          "analiz",
+          "risk",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "defi"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 284
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "protocol-revenue-analyst",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Protokol Geliri ve Temeller Analisti",
+        "description": "DeFi protokolü iş modellerini ve gelir üretimini analiz edin",
+        "avatar": "💼",
+        "tags": [
+          "defi",
+          "gelir",
+          "analiz",
+          "temeller",
+          "tokenomik",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "defi"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 317
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "protocol-treasury-analyst",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "DAO Hazine ve Kaynak Analisti",
+        "description": "DAO hazinesinin varlıklarını, çalışma süresini ve sermaye tahsisini analiz edin",
+        "avatar": "💎",
+        "tags": [
+          "hazine",
+          "dao",
+          "sermaye",
+          "çalışma süresi",
+          "tahsis",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "yönetim"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 353
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "clawd-governance-guide",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "CLAWD Yönetişim Rehberi",
+        "description": "CLAWD DAO tekliflerini, oylamaları ve protokol yükseltmelerini gezin",
+        "avatar": "🗳️",
+        "tags": [
+          "clawd",
+          "yönetişim",
+          "dao",
+          "oylama",
+          "teklifler",
+          "solana-clawd"
+        ],
+        "category": "yönetim"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 153
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "usds-stablecoin-expert",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "USDs Stablecoin Uzmanı",
+        "description": "CLAWD USDs mekanizması, teminatlandırma ve getiri stratejilerinde uzmanlık",
+        "avatar": "💵",
+        "tags": [
+          "clawd",
+          "stablecoin",
+          "usds",
+          "defi",
+          "getiri",
+          "solana-clawd"
+        ],
+        "category": "defi"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 140
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "defi-insurance-advisor",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "DeFi Sigorta ve Risk Kapsamı Danışmanı",
+        "description": "Akıllı sözleşme koruması için DeFi sigorta seçeneklerini gezin",
+        "avatar": "🛡️",
+        "tags": [
+          "sigorta",
+          "koruma",
+          "risk",
+          "kapsam",
+          "güvenlik",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "defi"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 368
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "token-unlock-tracker",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Jeton Kilit Açma Takipçisi",
+        "description": "Jeton açma olaylarını ve piyasa etkilerini izleyin ve analiz edin",
+        "avatar": "🔓",
+        "tags": [
+          "tokenomik",
+          "açmalar",
+          "vesting",
+          "arz",
+          "analiz",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "kripto"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 279
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "clawd-portfolio-tracker",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "CLAWD Portföy Takipçisi",
+        "description": "Tüm CLAWD ekosistem varlıklarınızı izleyin ve analiz edin",
+        "avatar": "💼",
+        "tags": [
+          "clawd",
+          "portföy",
+          "takip",
+          "analitik",
+          "panolar",
+          "solana-clawd"
+        ],
+        "category": "tüccarlık"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 234
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "whale-watcher",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Kripto Balina İzleyicisi",
+        "description": "Büyük cüzdan hareketlerini ve balina davranışlarını izleyin ve analiz edin",
+        "avatar": "🐋",
+        "tags": [
+          "zincir üstü",
+          "balina",
+          "analitik",
+          "ticareti",
+          "izleme",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "kripto"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 252
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "smart-contract-auditor",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Akıllı Sözleşme Güvenliği Denetçisi",
+        "description": "DeFi protokolleri için akıllı sözleşme güvenliğini inceleyin ve değerlendirin",
+        "avatar": "🔍",
+        "tags": [
+          "güvenlik",
+          "akıllı-sözleşmeler",
+          "denetim",
+          "solidity",
+          "risk",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "security"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 280
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "mev-protection-advisor",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "MEV Koruma Danışmanı",
+        "description": "Kullanıcıları ön-sıralama, sandviç saldırıları ve MEV istismarından koruyun",
+        "avatar": "🛡️",
+        "tags": [
+          "mev",
+          "güvenlik",
+          "ön-sıralama",
+          "flashbots",
+          "koruma",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "security"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 308
+    }
+  ],
+  "tags": [
+    "clawd",
+    "solana-clawd",
+    "defi",
+    "analiz",
+    "risk",
+    "güvenlik",
+    "optimizasyon",
+    "araştırma",
+    "likidite",
+    "amm",
+    "getiri",
+    "apy",
+    "portföy",
+    "analitik",
+    "izleme",
+    "eğitim",
+    "strateji",
+    "tokenomik",
+    "dao"
+  ]
+}

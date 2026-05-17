@@ -1,0 +1,1064 @@
+{
+  "schemaVersion": 1,
+  "agents": [
+    {
+      "author": "solana-clawd",
+      "createdAt": "2026-01-03",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "crypto-news-analyst",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Анализатор на новини в криптовалутите",
+        "description": "Обобщава и анализира актуалните новини в крипто света от CoinDesk, The Block, Decrypt и големи публикации",
+        "avatar": "📰",
+        "tags": [
+          "новини",
+          "анализ",
+          "пазар",
+          "изследване",
+          "сензация",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "крипто"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 453
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "alpha-leak-detector",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Crypto Alpha & Signal Detector",
+        "description": "Идентифициране на търговски алфа и ранни сигнали в DeFi пазари",
+        "avatar": "🎯",
+        "tags": [
+          "alpha",
+          "търговия",
+          "сигнали",
+          "проучване",
+          "възможности",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "крипто"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 357
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "vespa-optimizer",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "veSPA Lock Optimizer",
+        "description": "Максимизирайте възвръщаемостта чрез оптимални стратегии за блокиране на veSPA",
+        "avatar": "🔒",
+        "tags": [
+          "clawd",
+          "vespa",
+          "staking",
+          "optimization",
+          "voting-power",
+          "solana-clawd"
+        ],
+        "category": "инструменти"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 158
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "impermanent-loss-calculator",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Калькулатор за Имперманентна Загуба",
+        "description": "Изчислете и обяснете сценарии за имперманентна загуба за позиции LP",
+        "avatar": "📉",
+        "tags": [
+          "defi",
+          "ликвидност",
+          "имперманентна-загуба",
+          "калькулатор",
+          "amm",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "инструменти"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 219
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "clawd-yield-aggregator",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "CLAWD Yield Aggregator",
+        "description": "Намери и оптимизирай най-добрите възможности за доходност в екосистемата CLAWD",
+        "avatar": "🌾",
+        "tags": [
+          "clawd",
+          "yield",
+          "farming",
+          "optimization",
+          "apy",
+          "solana-clawd"
+        ],
+        "category": "defi"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 192
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "yield-dashboard-builder",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Изграждане на персонален DeFi табло за управление",
+        "description": "Дизайн и проследяване на вашето персонализирано DeFi портфолио табло за управление",
+        "avatar": "📊",
+        "tags": [
+          "табло за управление",
+          "проследяване",
+          "портфолио",
+          "аналитика",
+          "наблюдение",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "търговия"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 387
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "clawd-liquidity-strategist",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Стратег за доставчик на ликвидност CLAWD",
+        "description": "Оптимизирайте стратегиите за предоставяне на ликвидност в CLAWD пулове",
+        "avatar": "💧",
+        "tags": [
+          "clawd",
+          "ликвидност",
+          "amm",
+          "печалба-от-лозя",
+          "импермантна-загуба",
+          "solana-clawd"
+        ],
+        "category": "defi"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 164
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "defi-protocol-comparator",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Експерт по сравнение на DeFi протоколи",
+        "description": "Сравнявайте подобни DeFi протоколи по функции, рискове и доходност",
+        "avatar": "⚖️",
+        "tags": [
+          "defi",
+          "сравнение",
+          "протоколи",
+          "анализ",
+          "изследване",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "defi"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 275
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "gas-optimization-expert",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Експерт по оптимизация на разходите за газ",
+        "description": "Минимизирайте разходите за газ и оптимизирайте времето за транзакции",
+        "avatar": "⛽",
+        "tags": [
+          "ethereum",
+          "газ",
+          "оптимизация",
+          "слой-2",
+          "ефективност",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "инструменти"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 250
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "clawd-onboarding-guide",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Ръководство за започване в екосистемата CLAWD",
+        "description": "Помагайте на новаците да разберат и да започнат да използват протокола CLAWD",
+        "avatar": "🎓",
+        "tags": [
+          "clawd",
+          "образование",
+          "започване",
+          "начинаещи",
+          "учебник",
+          "solana-clawd"
+        ],
+        "category": "образование"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 217
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "defi-onboarding-mentor",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Ментор за начинаещи в DeFi",
+        "description": "Ръководство за напълно нови потребители през техните първи опити с DeFi",
+        "avatar": "🎓",
+        "tags": [
+          "образование",
+          "начинаещ",
+          "онбординг",
+          "учебник",
+          "дефи-базови",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "образование"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 392
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "spa-tokenomics-analyst",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Анализатор на SPA Tokenomics",
+        "description": "Експерт в областта на икономиката на SPA токените, наградите за залагане и приходите от протокола",
+        "avatar": "📊",
+        "tags": [
+          "clawd",
+          "spa",
+          "tokenomics",
+          "staking",
+          "governance",
+          "solana-clawd"
+        ],
+        "category": "крипто"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 156
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "defi-risk-scoring-engine",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Механизъм за оценка на риска на DeFi протоколи",
+        "description": "Обхватна рамка за оценка на риска за DeFi протоколи",
+        "avatar": "⚖️",
+        "tags": [
+          "риск",
+          "оценка",
+          "скоринг",
+          "анализ",
+          "рамка",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "security"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 396
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "wallet-security-advisor",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Съветник за сигурност на крипто портфейлите",
+        "description": "Най-добри практики за защита на крипто портфейли и активи",
+        "avatar": "🔐",
+        "tags": [
+          "сигурност",
+          "портфейл",
+          "безопасност",
+          "най-добри-практики",
+          "хардуер",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "security"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 359
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "defi-yield-farmer",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Стратег за доходност от DeFi фермиране",
+        "description": "Идентифицирайте и оптимизирайте възможностите за фермиране на доходност в различни DeFi протоколи",
+        "avatar": "🚜",
+        "tags": [
+          "defi",
+          "yield-farming",
+          "apy",
+          "strategy",
+          "optimization",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "defi"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 213
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "clawd-risk-monitor",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Монитор за рискове на CLAWD Protocol",
+        "description": "Проследявайте и анализирайте рисковете за сигурността в смарт договорите на CLAWD",
+        "avatar": "🛡️",
+        "tags": [
+          "clawd",
+          "сигурност",
+          "риск",
+          "одит",
+          "мониторинг",
+          "solana-clawd"
+        ],
+        "category": "security"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 179
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "stablecoin-comparator",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Дълбок сравнител на стабилкоини",
+        "description": "Сравняване на механизми, рискове и случаи на употреба на стабилкоини",
+        "avatar": "🪙",
+        "tags": [
+          "стабилкоин",
+          "usdc",
+          "dai",
+          "usdt",
+          "сравнение",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "defi"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 231
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "portfolio-rebalancing-advisor",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Консултант за ребалансиране на портфолио в DeFi",
+        "description": "Оптимизирайте разпределението на портфолиото и стратегиите за ребалансиране",
+        "avatar": "⚖️",
+        "tags": [
+          "портфолио",
+          "ребалансиране",
+          "разпределение",
+          "стратегия",
+          "оптимизация",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "търговия"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 297
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "clawd-bridge-assistant",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "CLAWD Bridge Assistant",
+        "description": "Ръководство за потребителите при крос-верижни мостове с оптимални маршрути и разходи",
+        "avatar": "🌉",
+        "tags": [
+          "clawd",
+          "bridge",
+          "cross-chain",
+          "arbitrum",
+          "layer-2",
+          "solana-clawd"
+        ],
+        "category": "програмиране"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 189
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "airdrop-hunter",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "DeFi Airdrop Hunter",
+        "description": "Идентифицирайте и стратегически планирайте потенциални протоколи за аирдропове",
+        "avatar": "🪂",
+        "tags": [
+          "airdrop",
+          "награди",
+          "стратегия",
+          "фарминг",
+          "разпределение",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "търговия"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 311
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "yield-sustainability-analyst",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Анализатор за устойчивост на доходността в DeFi",
+        "description": "Анализира дали високите доходи са устойчиви или временни",
+        "avatar": "🔬",
+        "tags": [
+          "defi",
+          "доходност",
+          "устойчивост",
+          "анализ",
+          "токеномика",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "defi"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 325
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "apy-vs-apr-educator",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Образовател по APY срещу APR",
+        "description": "Обяснете и изчислете разликата между APY и APR в DeFi",
+        "avatar": "📈",
+        "tags": [
+          "defi",
+          "образование",
+          "apy",
+          "apr",
+          "доходи",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "инструменти"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 271
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "crypto-tax-strategist",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Консултант по стратегия за данъци върху криптовалути",
+        "description": "Оптимизирайте данъците върху криптовалути и предоставяйте данъчно ефективни стратегии за DeFi",
+        "avatar": "📋",
+        "tags": [
+          "данък",
+          "стратегия",
+          "одитиране",
+          "оптимизация",
+          "съответствие",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "търговия"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 339
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "bridge-security-analyst",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Анализатор за сигурността на мостове между вериги",
+        "description": "Оценете сигурността на мостовете и препоръчайте най-сигурните междовалидни маршрути",
+        "avatar": "🌉",
+        "tags": [
+          "bridge",
+          "security",
+          "cross-chain",
+          "risk",
+          "multichain",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "security"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 401
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "narrative-trend-analyst",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Анализатор на крипто разкази и тенденции",
+        "description": "Следете и анализирайте доминиращите разкази и тенденции в крипто пазарите",
+        "avatar": "📈",
+        "tags": [
+          "разказ",
+          "тенденции",
+          "анализ",
+          "настроение",
+          "пазарни цикли",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "крипто"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 420
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "governance-proposal-analyst",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Анализатор на предложения за управление на DAO",
+        "description": "Анализирайте и обяснявайте предложения за управление на DAO и техните последици",
+        "avatar": "🏛️",
+        "tags": [
+          "управление",
+          "dao",
+          "гласуване",
+          "предложения",
+          "анализ",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "управление"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 296
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "staking-rewards-calculator",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Калкулатор за награди от залагане",
+        "description": "Изчислявайте и оптимизирайте наградите от залагане в различни протоколи",
+        "avatar": "💰",
+        "tags": [
+          "залагане",
+          "награди",
+          "калкулатор",
+          "pos",
+          "доходи",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "инструменти"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 273
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "dex-aggregator-optimizer",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Оптимизатор на маршрути за агрегаторите DEX",
+        "description": "Намиране на оптимални маршрути за размяна чрез агрегаторите DEX",
+        "avatar": "🔀",
+        "tags": [
+          "dex",
+          "размяна",
+          "маршрутизиране",
+          "агрегатор",
+          "оптимизация",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "defi"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 300
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "layer-2-comparison-guide",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Ръководство за сравнение на Layer 2",
+        "description": "Сравнете решенията Ethereum L2: Arbitrum, Optimism, Base, zkSync",
+        "avatar": "⚡",
+        "tags": [
+          "layer-2",
+          "скалиране",
+          "arbitrum",
+          "optimism",
+          "ethereum",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "defi"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 308
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "liquidation-risk-manager",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Мениджър на риск от ликвидация",
+        "description": "Следете и управлявайте рисковете от ликвидация в протоколите за кредитиране",
+        "avatar": "⚠️",
+        "tags": [
+          "кредитиране",
+          "ликвидация",
+          "риск",
+          "заложен актив",
+          "дефи",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "инструменти"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 351
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "nft-liquidity-advisor",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Консултант за ликвидност и заемане с NFT",
+        "description": "Навигирайте решения за заемане и ликвидност, базирани на NFT",
+        "avatar": "🎨",
+        "tags": [
+          "nft",
+          "ликвидност",
+          "заемане",
+          "колатерал",
+          "дефи",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "defi"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 312
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "liquidity-pool-analyzer",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Дълбок анализатор на ликвидностен пул",
+        "description": "Анализирайте здравето на LP пулове, рисковете и оптималното време за влизане/излизане",
+        "avatar": "🏊",
+        "tags": [
+          "defi",
+          "ликвидност-пулове",
+          "amm",
+          "анализ",
+          "риск",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "defi"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 284
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "protocol-revenue-analyst",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Анализатор на приходи и основи на протоколи",
+        "description": "Анализира бизнес моделите и генерирането на приходи на DeFi протоколи",
+        "avatar": "💼",
+        "tags": [
+          "defi",
+          "приходи",
+          "анализ",
+          "основи",
+          "токеномика",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "defi"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 317
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "protocol-treasury-analyst",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Анализатор на казна и ресурси на DAO",
+        "description": "Анализиране на държанието на казната на DAO, резерви и разпределение на капитали",
+        "avatar": "💎",
+        "tags": [
+          "казна",
+          "dao",
+          "капитал",
+          "резерви",
+          "разпределение",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "управление"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 353
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "clawd-governance-guide",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Ръководство за управление на CLAWD",
+        "description": "Навигирайте предложенията, гласуванията и актуализациите на протокола CLAWD DAO",
+        "avatar": "🗳️",
+        "tags": [
+          "clawd",
+          "управление",
+          "dao",
+          "гласуване",
+          "предложения",
+          "solana-clawd"
+        ],
+        "category": "управление"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 153
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "usds-stablecoin-expert",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Експерт за стабилната монета USDs",
+        "description": "Специалист в механизма на CLAWD USDs, заличаване на гаранции и стратегии за доходност",
+        "avatar": "💵",
+        "tags": [
+          "clawd",
+          "стабилна монета",
+          "usds",
+          "дефи",
+          "доходност",
+          "solana-clawd"
+        ],
+        "category": "defi"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 140
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "defi-insurance-advisor",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Консултант за застраховка и риск в DeFi",
+        "description": "Навигирайте опциите за застраховка в DeFi за защита на интелигентни договори",
+        "avatar": "🛡️",
+        "tags": [
+          "застраховка",
+          "защита",
+          "риск",
+          "покритие",
+          "безопасност",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "defi"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 368
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "token-unlock-tracker",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Трекър за график на отключване на токени",
+        "description": "Следете и анализирайте събитията на отключване на токени и тяхното въздействие върху пазара",
+        "avatar": "🔓",
+        "tags": [
+          "токеномика",
+          "отключвания",
+          "възнаграждения",
+          "предлагане",
+          "анализ",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "crypto"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 279
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "clawd-portfolio-tracker",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "CLAWD Портфейл Тракър",
+        "description": "Следете и анализирайте вашите цялостни активи в CLAWD екосистемата",
+        "avatar": "💼",
+        "tags": [
+          "clawd",
+          "портфейл",
+          "следене",
+          "аналитика",
+          "табло",
+          "solana-clawd"
+        ],
+        "category": "търговия"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 234
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "whale-watcher",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Крипто Китова Гледачка",
+        "description": "Проследявайте и анализирайте големи движения на портфейли и поведение на китове",
+        "avatar": "🐋",
+        "tags": [
+          "on-chain",
+          "whale",
+          "analytics",
+          "trading",
+          "monitoring",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "crypto"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 252
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "smart-contract-auditor",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Одитиращ за сигурността на смарт договори",
+        "description": "Преглед и оценка на сигурността на смарт договори за DeFi протоколи",
+        "avatar": "🔍",
+        "tags": [
+          "сигурност",
+          "смарт договори",
+          "одит",
+          "солидити",
+          "риск",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "security"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 280
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "mev-protection-advisor",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Съветник за защита срещу MEV",
+        "description": "Защитавайте потребителите от front-running, sandwich атаки и експлоатация на MEV",
+        "avatar": "🛡️",
+        "tags": [
+          "mev",
+          "сигурност",
+          "front-running",
+          "flashbots",
+          "защита",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "security"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 308
+    }
+  ],
+  "tags": [
+    "clawd",
+    "solana-clawd",
+    "анализ",
+    "defi",
+    "риск",
+    "оптимизация",
+    "сигурност",
+    "optimization",
+    "ликвидност",
+    "amm",
+    "apy",
+    "образование",
+    "разпределение",
+    "стратегия",
+    "токеномика",
+    "dao",
+    "дефи"
+  ]
+}

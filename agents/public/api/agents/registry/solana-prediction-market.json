@@ -3,11 +3,11 @@
   "protocol": "metaplex-agent-registry",
   "name": "Prediction Market Analyst",
   "description": "Expert in DFlow/Kalshi and Solana prediction markets for probabilistic forecasting and trade workflow design",
-  "image": "https://www.x402.wtf/nich.jpg",
-  "external_url": "https://www.x402.wtf/agents/solana-prediction-market",
+  "image": "https://x402.wtf/nich.jpg",
+  "external_url": "https://x402.wtf/agents/solana-prediction-market",
   "active": true,
   "createdAt": "2026-03-15",
-  "updatedAt": "2026-05-16T20:50:19.985Z",
+  "updatedAt": "2026-05-17T17:58:23.377Z",
   "tags": [
     "prediction-market",
     "probability",
@@ -20,7 +20,7 @@
   ],
   "owner": {
     "organization": "OpenClawd",
-    "website": "https://www.x402.wtf",
+    "website": "https://x402.wtf",
     "token": {
       "symbol": "CLAWD",
       "chain": "solana",
@@ -30,20 +30,20 @@
   "services": [
     {
       "name": "web",
-      "endpoint": "https://www.x402.wtf/agents/solana-prediction-market"
+      "endpoint": "https://x402.wtf/agents/solana-prediction-market"
     },
     {
       "name": "A2A",
-      "endpoint": "https://www.x402.wtf/api/agents/a2a",
+      "endpoint": "https://x402.wtf/api/agents/a2a",
       "version": "0.3.0"
     },
     {
       "name": "catalog",
-      "endpoint": "https://www.x402.wtf/api/agents/catalog/solana-prediction-market.json"
+      "endpoint": "https://x402.wtf/api/agents/catalog/solana-prediction-market.json"
     },
     {
       "name": "registration",
-      "endpoint": "https://www.x402.wtf/api/agents/registry/solana-prediction-market.json"
+      "endpoint": "https://x402.wtf/api/agents/registry/solana-prediction-market.json"
     }
   ],
   "registrations": [
@@ -51,7 +51,7 @@
       "agentId": "openclawd:solana-prediction-market",
       "agentRegistry": "solana:mainnet:metaplex-agent-registry",
       "status": "pending-onchain-registration",
-      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-prediction-market.json"
+      "registrationUri": "https://x402.wtf/api/agents/registry/solana-prediction-market.json"
     }
   ],
   "supportedTrust": [

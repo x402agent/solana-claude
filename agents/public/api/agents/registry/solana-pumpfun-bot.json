@@ -3,11 +3,11 @@
   "protocol": "metaplex-agent-registry",
   "name": "Solana PumpFun/PumpSwap Copy Trading Bot",
   "description": "High-performance Rust-based copy trading bot that monitors and replicates trading activity on Solana DEXs (PumpFun, PumpSwap, Raydium) using Yellowstone gRPC for real-time transaction monitoring with parallel processing, risk management, and Telegram notifications. Updated for v2 instructions, creator fees, cashback, Token-2022, and USDC-paired coins.",
-  "image": "https://www.x402.wtf/nich.jpg",
-  "external_url": "https://www.x402.wtf/agents/solana-pumpfun-bot",
+  "image": "https://x402.wtf/nich.jpg",
+  "external_url": "https://x402.wtf/agents/solana-pumpfun-bot",
   "active": true,
   "createdAt": "2026-05-11",
-  "updatedAt": "2026-05-16T20:50:19.985Z",
+  "updatedAt": "2026-05-17T17:58:23.377Z",
   "tags": [
     "solana",
     "pumpfun",
@@ -34,7 +34,7 @@
   ],
   "owner": {
     "organization": "OpenClawd",
-    "website": "https://www.x402.wtf",
+    "website": "https://x402.wtf",
     "token": {
       "symbol": "CLAWD",
       "chain": "solana",
@@ -44,20 +44,20 @@
   "services": [
     {
       "name": "web",
-      "endpoint": "https://www.x402.wtf/agents/solana-pumpfun-bot"
+      "endpoint": "https://x402.wtf/agents/solana-pumpfun-bot"
     },
     {
       "name": "A2A",
-      "endpoint": "https://www.x402.wtf/api/agents/a2a",
+      "endpoint": "https://x402.wtf/api/agents/a2a",
       "version": "0.3.0"
     },
     {
       "name": "catalog",
-      "endpoint": "https://www.x402.wtf/api/agents/catalog/solana-pumpfun-bot.json"
+      "endpoint": "https://x402.wtf/api/agents/catalog/solana-pumpfun-bot.json"
     },
     {
       "name": "registration",
-      "endpoint": "https://www.x402.wtf/api/agents/registry/solana-pumpfun-bot.json"
+      "endpoint": "https://x402.wtf/api/agents/registry/solana-pumpfun-bot.json"
     }
   ],
   "registrations": [
@@ -65,7 +65,7 @@
       "agentId": "openclawd:solana-pumpfun-bot",
       "agentRegistry": "solana:mainnet:metaplex-agent-registry",
       "status": "pending-onchain-registration",
-      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-pumpfun-bot.json"
+      "registrationUri": "https://x402.wtf/api/agents/registry/solana-pumpfun-bot.json"
     }
   ],
   "supportedTrust": [

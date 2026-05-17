@@ -3,11 +3,11 @@
   "protocol": "metaplex-agent-registry",
   "name": "Clawd USDC Allocator",
   "description": "Allocates USDC across agents, payment float, and execution needs in the fleet treasury.",
-  "image": "https://www.x402.wtf/nich.jpg",
-  "external_url": "https://www.x402.wtf/agents/solana-clawd-usdc-allocator",
+  "image": "https://x402.wtf/nich.jpg",
+  "external_url": "https://x402.wtf/agents/solana-clawd-usdc-allocator",
   "active": true,
   "createdAt": "2026-05-12",
-  "updatedAt": "2026-05-16T20:50:19.985Z",
+  "updatedAt": "2026-05-17T17:58:23.377Z",
   "tags": [
     "solana",
     "clawd",
@@ -22,7 +22,7 @@
   ],
   "owner": {
     "organization": "OpenClawd",
-    "website": "https://www.x402.wtf",
+    "website": "https://x402.wtf",
     "token": {
       "symbol": "CLAWD",
       "chain": "solana",
@@ -32,20 +32,20 @@
   "services": [
     {
       "name": "web",
-      "endpoint": "https://www.x402.wtf/agents/solana-clawd-usdc-allocator"
+      "endpoint": "https://x402.wtf/agents/solana-clawd-usdc-allocator"
     },
     {
       "name": "A2A",
-      "endpoint": "https://www.x402.wtf/api/agents/a2a",
+      "endpoint": "https://x402.wtf/api/agents/a2a",
       "version": "0.3.0"
     },
     {
       "name": "catalog",
-      "endpoint": "https://www.x402.wtf/api/agents/catalog/solana-clawd-usdc-allocator.json"
+      "endpoint": "https://x402.wtf/api/agents/catalog/solana-clawd-usdc-allocator.json"
     },
     {
       "name": "registration",
-      "endpoint": "https://www.x402.wtf/api/agents/registry/solana-clawd-usdc-allocator.json"
+      "endpoint": "https://x402.wtf/api/agents/registry/solana-clawd-usdc-allocator.json"
     }
   ],
   "registrations": [
@@ -53,7 +53,7 @@
       "agentId": "openclawd:solana-clawd-usdc-allocator",
       "agentRegistry": "solana:mainnet:metaplex-agent-registry",
       "status": "pending-onchain-registration",
-      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-clawd-usdc-allocator.json"
+      "registrationUri": "https://x402.wtf/api/agents/registry/solana-clawd-usdc-allocator.json"
     }
   ],
   "supportedTrust": [

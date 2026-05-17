@@ -18,7 +18,7 @@ const PUBLIC_CATALOG_DIR = path.join(PUBLIC_API_DIR, "catalog");
 const PUBLIC_TEMPLATES_DIR = path.join(PUBLIC_API_DIR, "templates");
 const PUBLIC_REGISTRY_DIR = path.join(PUBLIC_API_DIR, "registry");
 const WELL_KNOWN_DIR = path.join(PUBLIC_DIR, ".well-known");
-const HOST = "https://www.x402.wtf";
+const HOST = "https://x402.wtf";
 const CLAWD_MINT = "8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump";
 
 const readJson = (p) => JSON.parse(fs.readFileSync(p, "utf8"));
@@ -249,7 +249,7 @@ function buildRegistrationDocs(agents, generatedAt) {
       categories: [agent.category],
       owner: {
         organization: "OpenClawd",
-        website: "https://www.x402.wtf",
+        website: "https://x402.wtf",
         token: {
           symbol: "CLAWD",
           chain: "solana",
@@ -362,6 +362,8 @@ function buildAcpRegistry(agents, templates, catalog, registrationDocs) {
 }
 
 function writeStaticApi(catalog, agents, templates, registrationDocs, acpRegistry) {
+  fs.rmSync(PUBLIC_API_DIR, { recursive: true, force: true });
+
   writeJson(path.join(PUBLIC_API_DIR, "index.json"), {
     name: "OpenClawd Agents API",
     version: catalog.apiVersion,

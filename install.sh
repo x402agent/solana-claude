@@ -41,6 +41,7 @@ WORKSPACE="${OPENCLAWD_HOME:-$HOME/.openclawdsolana}"
 OPENCLAWD_BASE_URL="${OPENCLAWD_BASE_URL:-https://x402.wtf}"
 OPENCLAWD_GATEWAY_URL="${OPENCLAWD_GATEWAY_URL:-https://x402.wtf/api}"
 OPENCLAWD_SITE_URL="${OPENCLAWD_SITE_URL:-https://x402.wtf/automation}"
+OPENCLAWD_AGENTS_URL="${OPENCLAWD_AGENTS_URL:-https://x402.wtf/api/agents}"
 BIN_DIR_DEFAULT="$WORKSPACE/bin"
 BIN_DIR=""
 BUILD_DIR_NAME="build"
@@ -506,6 +507,9 @@ write_config() {
   "marketplaceBase": "$OPENCLAWD_SITE_URL/marketplace",
   "mcpBase":         "$OPENCLAWD_GATEWAY_URL/mcp",
   "registrarBase":   "$OPENCLAWD_BASE_URL/registrar",
+  "agentsBase":      "$OPENCLAWD_AGENTS_URL",
+  "agentsCatalog":   "$OPENCLAWD_AGENTS_URL/catalog",
+  "agentsRegistry":  "$OPENCLAWD_AGENTS_URL/registry",
   "solanaRpc":       "https://api.mainnet-beta.solana.com",
   "sasProgramId":    "22zoJMtdu4tQc2PzL74ZUT7FrwgB1Udec8DdW4yw4BdG",
   "scope":           "@openclawdsolana",
@@ -566,6 +570,9 @@ OPENCLAWD_VOICE_EPHEMERAL_TTL=300
 OPENCLAWD_API_BASE=$OPENCLAWD_BASE_URL
 OPENCLAWD_GATEWAY_BASE=$OPENCLAWD_GATEWAY_URL
 OPENCLAWD_MARKETPLACE=$OPENCLAWD_SITE_URL/marketplace
+OPENCLAWD_AGENTS_BASE=$OPENCLAWD_AGENTS_URL
+OPENCLAWD_AGENTS_CATALOG=$OPENCLAWD_AGENTS_URL/catalog
+OPENCLAWD_AGENTS_REGISTRY=$OPENCLAWD_AGENTS_URL/registry
 
 # ── Solana market data + indexing ─────────────────────────────────────────────
 HELIUS_API_KEY=
@@ -672,6 +679,9 @@ printf "\n"
 printf "  ${DIM}Hub      : https://github.com/x402agent/solana-clawd${RESET}\n"
 printf "  ${DIM}Automation: https://x402.wtf/automation${RESET}\n"
 printf "  ${DIM}x402     : https://x402.wtf${RESET}\n"
+printf "  ${DIM}Agents   : https://x402.wtf/api/agents${RESET}\n"
+printf "  ${DIM}Catalog  : https://x402.wtf/api/agents/catalog${RESET}\n"
+printf "  ${DIM}Registry : https://x402.wtf/api/agents/registry${RESET}\n"
 printf "  ${DIM}CA       : 8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump${RESET}\n"
 printf "  ${DIM}One-shot : curl -fsSL https://x402.wtf/automation/install.sh | bash${RESET}\n"
 printf "\n"

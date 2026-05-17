@@ -3,29 +3,25 @@
   "protocol": "metaplex-agent-registry",
   "name": "CLAWD Protocol Risk Monitor",
   "description": "Track and analyze security risks across CLAWD smart contracts",
-  "image": "https://www.x402.wtf/nich.jpg",
-  "external_url": "https://www.x402.wtf/agents/clawd-risk-monitor",
+  "image": "https://x402.wtf/nich.jpg",
+  "external_url": "https://x402.wtf/agents/clawd-risk-monitor",
   "active": true,
-  "createdAt": "2026-04-16",
-  "updatedAt": "2026-05-06T12:33:34.118Z",
+  "createdAt": "2024-12-16",
+  "updatedAt": "2026-05-17T17:58:23.377Z",
   "tags": [
     "clawd",
     "security",
     "risk",
     "audit",
     "monitoring",
-    "solana",
-    "alerts",
-    "kamino",
-    "drift",
-    "one-shot"
+    "solana-clawd"
   ],
   "categories": [
     "security"
   ],
   "owner": {
     "organization": "OpenClawd",
-    "website": "https://www.x402.wtf",
+    "website": "https://x402.wtf",
     "token": {
       "symbol": "CLAWD",
       "chain": "solana",
@@ -35,20 +31,20 @@
   "services": [
     {
       "name": "web",
-      "endpoint": "https://www.x402.wtf/agents/clawd-risk-monitor"
+      "endpoint": "https://x402.wtf/agents/clawd-risk-monitor"
     },
     {
       "name": "A2A",
-      "endpoint": "https://www.x402.wtf/api/agents/a2a",
+      "endpoint": "https://x402.wtf/api/agents/a2a",
       "version": "0.3.0"
     },
     {
       "name": "catalog",
-      "endpoint": "https://www.x402.wtf/api/agents/catalog/clawd-risk-monitor.json"
+      "endpoint": "https://x402.wtf/api/agents/catalog/clawd-risk-monitor.json"
     },
     {
       "name": "registration",
-      "endpoint": "https://www.x402.wtf/api/agents/registry/clawd-risk-monitor.json"
+      "endpoint": "https://x402.wtf/api/agents/registry/clawd-risk-monitor.json"
     }
   ],
   "registrations": [
@@ -56,7 +52,7 @@
       "agentId": "openclawd:clawd-risk-monitor",
       "agentRegistry": "solana:mainnet:metaplex-agent-registry",
       "status": "pending-onchain-registration",
-      "registrationUri": "https://www.x402.wtf/api/agents/registry/clawd-risk-monitor.json"
+      "registrationUri": "https://x402.wtf/api/agents/registry/clawd-risk-monitor.json"
     }
   ],
   "supportedTrust": [
@@ -65,9 +61,7 @@
     "token-gated"
   ],
   "metaplex": {
-    "programs": [
-      "agent-registry"
-    ],
+    "programs": [],
     "sdk": "@metaplex-foundation/mpl-agent-registry",
     "expectedIdentity": {
       "asset": null,
@@ -84,10 +78,7 @@
   },
   "openclawd": {
     "identifier": "clawd-risk-monitor",
-    "capabilities": [
-      "read-only",
-      "a2a-message"
-    ],
+    "capabilities": [],
     "payment": null,
     "agentToken": null
   }

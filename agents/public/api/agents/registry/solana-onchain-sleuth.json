@@ -3,11 +3,11 @@
   "protocol": "metaplex-agent-registry",
   "name": "On-Chain Investigation Specialist",
   "description": "Forensic blockchain analysis: wallet tracing, fund flows, entity identification on Solana",
-  "image": "https://www.x402.wtf/nich.jpg",
-  "external_url": "https://www.x402.wtf/agents/solana-onchain-sleuth",
+  "image": "https://x402.wtf/nich.jpg",
+  "external_url": "https://x402.wtf/agents/solana-onchain-sleuth",
   "active": true,
   "createdAt": "2026-03-15",
-  "updatedAt": "2026-05-16T20:50:19.985Z",
+  "updatedAt": "2026-05-17T17:58:23.377Z",
   "tags": [
     "forensics",
     "investigation",
@@ -20,7 +20,7 @@
   ],
   "owner": {
     "organization": "OpenClawd",
-    "website": "https://www.x402.wtf",
+    "website": "https://x402.wtf",
     "token": {
       "symbol": "CLAWD",
       "chain": "solana",
@@ -30,20 +30,20 @@
   "services": [
     {
       "name": "web",
-      "endpoint": "https://www.x402.wtf/agents/solana-onchain-sleuth"
+      "endpoint": "https://x402.wtf/agents/solana-onchain-sleuth"
     },
     {
       "name": "A2A",
-      "endpoint": "https://www.x402.wtf/api/agents/a2a",
+      "endpoint": "https://x402.wtf/api/agents/a2a",
       "version": "0.3.0"
     },
     {
       "name": "catalog",
-      "endpoint": "https://www.x402.wtf/api/agents/catalog/solana-onchain-sleuth.json"
+      "endpoint": "https://x402.wtf/api/agents/catalog/solana-onchain-sleuth.json"
     },
     {
       "name": "registration",
-      "endpoint": "https://www.x402.wtf/api/agents/registry/solana-onchain-sleuth.json"
+      "endpoint": "https://x402.wtf/api/agents/registry/solana-onchain-sleuth.json"
     }
   ],
   "registrations": [
@@ -51,7 +51,7 @@
       "agentId": "openclawd:solana-onchain-sleuth",
       "agentRegistry": "solana:mainnet:metaplex-agent-registry",
       "status": "pending-onchain-registration",
-      "registrationUri": "https://www.x402.wtf/api/agents/registry/solana-onchain-sleuth.json"
+      "registrationUri": "https://x402.wtf/api/agents/registry/solana-onchain-sleuth.json"
     }
   ],
   "supportedTrust": [

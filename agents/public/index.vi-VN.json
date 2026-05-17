@@ -1,0 +1,1064 @@
+{
+  "schemaVersion": 1,
+  "agents": [
+    {
+      "author": "solana-clawd",
+      "createdAt": "2026-01-03",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "crypto-news-analyst",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Nhà phân tích Tin tức Crypto",
+        "description": "Tổng hợp và phân tích các tin tức crypto nóng hổi từ CoinDesk, The Block, Decrypt và các ấn phẩm lớn",
+        "avatar": "📰",
+        "tags": [
+          "tin tức",
+          "phân tích",
+          "thị trường",
+          "nghiên cứu",
+          "tình cảm",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "crypto"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 453
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "alpha-leak-detector",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Trình Phát Hiện Alpha & Tín Hiệu Crypto",
+        "description": "Xác định alpha giao dịch và tín hiệu sớm trong thị trường DeFi",
+        "avatar": "🎯",
+        "tags": [
+          "alpha",
+          "giao dịch",
+          "tín hiệu",
+          "nghiên cứu",
+          "cơ hội",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "crypto"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 357
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "vespa-optimizer",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "bộ tối ưu khóa veSPA",
+        "description": "Tối đa hóa lợi nhuận thông qua các chiến lược khóa veSPA tối ưu",
+        "avatar": "🔒",
+        "tags": [
+          "clawd",
+          "vespa",
+          "staking",
+          "tối ưu hóa",
+          "quyền biểu quyết",
+          "solana-clawd"
+        ],
+        "category": "công cụ"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 158
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "impermanent-loss-calculator",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Máy Tính Tổn Thất Tạm Thời",
+        "description": "Tính toán và giải thích các kịch bản tổn thất tạm thời cho vị trí LP",
+        "avatar": "📉",
+        "tags": [
+          "defi",
+          "liquidity",
+          "impermanent-loss",
+          "calculator",
+          "amm",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "công cụ"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 219
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "clawd-yield-aggregator",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Trình Tích Lũy Lợi Nhuận CLAWD",
+        "description": "Tìm kiếm và tối ưu hóa các cơ hội lợi nhuận tốt nhất trong hệ sinh thái CLAWD",
+        "avatar": "🌾",
+        "tags": [
+          "clawd",
+          "lợi nhuận",
+          "canh tác",
+          "tối ưu hóa",
+          "apy",
+          "solana-clawd"
+        ],
+        "category": "defi"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 192
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "yield-dashboard-builder",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Trình tạo Bảng điều khiển DeFi Cá nhân",
+        "description": "Thiết kế và theo dõi bảng điều khiển danh mục đầu tư DeFi tùy chỉnh của bạn",
+        "avatar": "📊",
+        "tags": [
+          "bảng điều khiển",
+          "theo dõi",
+          "danh mục đầu tư",
+          "phân tích",
+          "giám sát",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "giao dịch"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 387
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "clawd-liquidity-strategist",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Chiến lược Nhà cung cấp Thanh khoản CLAWD",
+        "description": "Tối ưu hóa các chiến lược cung cấp thanh khoản trên các pool CLAWD",
+        "avatar": "💧",
+        "tags": [
+          "clawd",
+          "thanh khoản",
+          "amm",
+          "nông nghiệp lợi nhuận",
+          "tổn thất tạm thời",
+          "solana-clawd"
+        ],
+        "category": "defi"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 164
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "defi-protocol-comparator",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Chuyên gia So sánh Giao thức DeFi",
+        "description": "So sánh các giao thức DeFi tương tự dựa trên tính năng, rủi ro và lợi nhuận",
+        "avatar": "⚖️",
+        "tags": [
+          "defi",
+          "so sánh",
+          "giao thức",
+          "phân tích",
+          "nghiên cứu",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "defi"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 275
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "gas-optimization-expert",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Chuyên gia tối ưu hóa chi phí gas",
+        "description": "Giảm thiểu chi phí gas và tối ưu hóa thời gian giao dịch",
+        "avatar": "⛽",
+        "tags": [
+          "ethereum",
+          "gas",
+          "tối ưu hóa",
+          "tầng-2",
+          "hiệu quả",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "công cụ"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 250
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "clawd-onboarding-guide",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Hướng Dẫn Tham Gia Hệ Sinh Thái CLAWD",
+        "description": "Giúp người mới hiểu và bắt đầu sử dụng giao thức CLAWD",
+        "avatar": "🎓",
+        "tags": [
+          "clawd",
+          "giáo dục",
+          "đăng nhập",
+          "người mới bắt đầu",
+          "hướng dẫn",
+          "solana-clawd"
+        ],
+        "category": "giáo dục"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 217
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "defi-onboarding-mentor",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Mentor Hướng Dẫn Người Mới Bắt Đầu DeFi",
+        "description": "Hướng dẫn người mới bắt đầu trải nghiệm DeFi lần đầu tiên của họ",
+        "avatar": "🎓",
+        "tags": [
+          "giáo dục",
+          "người mới bắt đầu",
+          "hướng dẫn",
+          "hướng dẫn từng bước",
+          "điều cơ bản về defi",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "giáo dục"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 392
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "spa-tokenomics-analyst",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Chuyên gia Phân tích Tokenomics SPA",
+        "description": "Chuyên gia về kinh tế token SPA, phần thưởng staking và doanh thu giao thức",
+        "avatar": "📊",
+        "tags": [
+          "clawd",
+          "spa",
+          "tokenomics",
+          "staking",
+          "governance",
+          "solana-clawd"
+        ],
+        "category": "crypto"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 156
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "defi-risk-scoring-engine",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Hệ Thống Đánh Giá Rủi Ro Giao Thông DeFi",
+        "description": "Khung đánh giá rủi ro toàn diện cho các giao thức DeFi",
+        "avatar": "⚖️",
+        "tags": [
+          "rủi ro",
+          "đánh giá",
+          "điểm số",
+          "phân tích",
+          "khung",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "security"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 396
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "wallet-security-advisor",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Tư Vấn An Toàn Ví Crypto",
+        "description": "Các thực hành tốt nhất để bảo vệ ví và tài sản crypto",
+        "avatar": "🔐",
+        "tags": [
+          "security",
+          "wallet",
+          "safety",
+          "best-practices",
+          "hardware",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "security"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 359
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "defi-yield-farmer",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Chuyên gia Chiến lược Nông nghiệp Lợi suất DeFi",
+        "description": "Xác định và tối ưu hóa các cơ hội nông nghiệp lợi suất trên các giao thức DeFi",
+        "avatar": "🚜",
+        "tags": [
+          "defi",
+          "yield-farming",
+          "apy",
+          "strategy",
+          "optimization",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "defi"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 213
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "clawd-risk-monitor",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Giám sát Rủi ro Giao thức CLAWD",
+        "description": "Theo dõi và phân tích rủi ro an ninh trên các hợp đồng thông minh CLAWD",
+        "avatar": "🛡️",
+        "tags": [
+          "clawd",
+          "bảo mật",
+          "rủi ro",
+          "đánh giá",
+          "giám sát",
+          "solana-clawd"
+        ],
+        "category": "security"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 179
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "stablecoin-comparator",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Trình So Sánh Sâu Về Stablecoin",
+        "description": "So sánh các cơ chế, rủi ro và trường hợp sử dụng của stablecoin",
+        "avatar": "🪙",
+        "tags": [
+          "stablecoin",
+          "usdc",
+          "dai",
+          "usdt",
+          "so sánh",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "defi"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 231
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "portfolio-rebalancing-advisor",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Tư Vấn Cân Bằng Lại Danh Mục DeFi",
+        "description": "Tối ưu hóa phân bổ danh mục và chiến lược cân bằng lại",
+        "avatar": "⚖️",
+        "tags": [
+          "danh mục",
+          "cân bằng lại",
+          "phân bổ",
+          "chiến lược",
+          "tối ưu hóa",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "giao dịch"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 297
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "clawd-bridge-assistant",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Trợ lý Cầu nối CLAWD",
+        "description": "Hướng dẫn người dùng qua cầu nối chuỗi chéo với lộ trình và chi phí tối ưu",
+        "avatar": "🌉",
+        "tags": [
+          "clawd",
+          "cầu nối",
+          "chuỗi chéo",
+          "arbitrum",
+          "lớp-2",
+          "solana-clawd"
+        ],
+        "category": "lập trình"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 189
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "airdrop-hunter",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Thợ săn Airdrop DeFi",
+        "description": "Xác định và lập chiến lược cho các đợt airdrop tiềm năng của giao thức",
+        "avatar": "🪂",
+        "tags": [
+          "airdrop",
+          "phần thưởng",
+          "chiến lược",
+          "canh tác",
+          "phân bổ",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "giao dịch"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 311
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "yield-sustainability-analyst",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Chuyên gia Phân tích Bền vững Lợi nhuận DeFi",
+        "description": "Phân tích xem lợi nhuận cao có bền vững hay chỉ tạm thời",
+        "avatar": "🔬",
+        "tags": [
+          "defi",
+          "lợi nhuận",
+          "bền vững",
+          "phân tích",
+          "tokenomics",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "defi"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 325
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "apy-vs-apr-educator",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Giáo viên về APY so với APR",
+        "description": "Giải thích và tính toán sự khác biệt giữa APY và APR trong DeFi",
+        "avatar": "📈",
+        "tags": [
+          "defi",
+          "giáo dục",
+          "apy",
+          "apr",
+          "lợi nhuận",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "công cụ"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 271
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "crypto-tax-strategist",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Chuyên gia tư vấn chiến lược thuế crypto",
+        "description": "Tối ưu hóa thuế crypto và cung cấp các chiến lược DeFi hiệu quả về thuế",
+        "avatar": "📋",
+        "tags": [
+          "thuế",
+          "chiến lược",
+          "kế toán",
+          "tối ưu hóa",
+          "tuân thủ",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "giao dịch"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 339
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "bridge-security-analyst",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Chuyên gia An ninh Cầu Chuyển Giao Chuỗi",
+        "description": "Đánh giá an ninh cầu chuyển giao và đề xuất các tuyến đường an toàn nhất giữa các chuỗi",
+        "avatar": "🌉",
+        "tags": [
+          "bridge",
+          "security",
+          "cross-chain",
+          "risk",
+          "multichain",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "security"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 401
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "narrative-trend-analyst",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Chuyên gia Phân tích Chuyện kể & Xu hướng Crypto",
+        "description": "Theo dõi và phân tích các câu chuyện và xu hướng chi phối trong thị trường crypto",
+        "avatar": "📈",
+        "tags": [
+          "narrative",
+          "trends",
+          "analysis",
+          "sentiment",
+          "market-cycles",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "crypto"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 420
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "governance-proposal-analyst",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Chuyên gia Phân tích Đề xuất Quản trị DAO",
+        "description": "Phân tích và giải thích các đề xuất quản trị DAO và tác động của chúng",
+        "avatar": "🏛️",
+        "tags": [
+          "quản trị",
+          "dao",
+          "bỏ phiếu",
+          "đề xuất",
+          "phân tích",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "quản trị"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 296
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "staking-rewards-calculator",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Máy Tính Phần Thưởng Staking",
+        "description": "Tính toán và tối ưu hóa phần thưởng staking trên các giao thức",
+        "avatar": "💰",
+        "tags": [
+          "staking",
+          "rewards",
+          "calculator",
+          "pos",
+          "yields",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "công cụ"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 273
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "dex-aggregator-optimizer",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Tối ưu hóa Định tuyến Tổng hợp DEX",
+        "description": "Tìm các tuyến hoán đổi tối ưu qua các nhà tổng hợp DEX",
+        "avatar": "🔀",
+        "tags": [
+          "dex",
+          "hoán đổi",
+          "định tuyến",
+          "tổng hợp",
+          "tối ưu hóa",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "defi"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 300
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "layer-2-comparison-guide",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Hướng Dẫn So Sánh Layer 2",
+        "description": "So sánh các giải pháp Ethereum L2: Arbitrum, Optimism, Base, zkSync",
+        "avatar": "⚡",
+        "tags": [
+          "layer-2",
+          "tăng quy mô",
+          "arbitrum",
+          "optimism",
+          "ethereum",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "defi"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 308
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "liquidation-risk-manager",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Quản lý Rủi ro Thanh lý",
+        "description": "Giám sát và quản lý rủi ro thanh lý trong các giao thức cho vay",
+        "avatar": "⚠️",
+        "tags": [
+          "cho vay",
+          "thanh lý",
+          "rủi ro",
+          "tài sản thế chấp",
+          "defi",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "công cụ"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 351
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "nft-liquidity-advisor",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Tư Vấn Thanh Khoản & Cho Vay NFT",
+        "description": "Điều hướng các giải pháp cho vay và thanh khoản dựa trên NFT",
+        "avatar": "🎨",
+        "tags": [
+          "nft",
+          "thanh khoản",
+          "cho vay",
+          "tài sản thế chấp",
+          "defi",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "defi"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 312
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "liquidity-pool-analyzer",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Phân Tích Sâu Hồ Buy Liquidity",
+        "description": "Phân tích sức khỏe hồ thanh khoản, rủi ro và thời điểm vào/ra tối ưu",
+        "avatar": "🏊",
+        "tags": [
+          "defi",
+          "liquidity-pools",
+          "amm",
+          "analysis",
+          "risk",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "defi"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 284
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "protocol-revenue-analyst",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Chuyên gia Phân tích Doanh thu & Nền tảng của Giao thức",
+        "description": "Phân tích mô hình kinh doanh và tạo doanh thu của các giao thức DeFi",
+        "avatar": "💼",
+        "tags": [
+          "defi",
+          "revenue",
+          "analysis",
+          "fundamentals",
+          "tokenomics",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "defi"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 317
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "protocol-treasury-analyst",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Chuyên viên Tài chính Kho bạc & Nguồn lực DAO",
+        "description": "Phân tích các khoản nắm giữ trong kho bạc DAO, thời gian hoạt động còn lại và phân bổ vốn",
+        "avatar": "💎",
+        "tags": [
+          "kho bạc",
+          "dao",
+          "vốn",
+          "thời gian hoạt động",
+          "phân bổ",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "quản trị"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 353
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "clawd-governance-guide",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Hướng Dẫn Quản Trị CLAWD",
+        "description": "Dẫn dắt các đề xuất, bỏ phiếu và nâng cấp giao thức của CLAWD DAO",
+        "avatar": "🗳️",
+        "tags": [
+          "clawd",
+          "quản trị",
+          "dao",
+          "bỏ phiếu",
+          "đề xuất",
+          "solana-clawd"
+        ],
+        "category": "quản trị"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 153
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "usds-stablecoin-expert",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Chuyên gia Stablecoin USDs",
+        "description": "Chuyên gia về cơ chế stablecoin CLAWD USDs, thế chấp và chiến lược lợi nhuận",
+        "avatar": "💵",
+        "tags": [
+          "clawd",
+          "stablecoin",
+          "usds",
+          "defi",
+          "yield",
+          "solana-clawd"
+        ],
+        "category": "defi"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 140
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "defi-insurance-advisor",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Tư vấn Bảo hiểm DeFi & Bảo hiểm Rủi ro",
+        "description": "Điều hướng các lựa chọn bảo hiểm DeFi để bảo vệ hợp đồng thông minh",
+        "avatar": "🛡️",
+        "tags": [
+          "bảo hiểm",
+          "bảo vệ",
+          "rủi ro",
+          "phủ sóng",
+          "an toàn",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "defi"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 368
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "token-unlock-tracker",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Trình theo dõi Lịch mở khóa Token",
+        "description": "Giám sát và phân tích các sự kiện mở khóa token và tác động thị trường của chúng",
+        "avatar": "🔓",
+        "tags": [
+          "tokenomics",
+          "mở khóa",
+          "vesting",
+          "cung cấp",
+          "phân tích",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "crypto"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 279
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "clawd-portfolio-tracker",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Trình Theo Dõi Danh Mục CLAWD",
+        "description": "Theo dõi và phân tích tất cả các khoản nắm giữ trong hệ sinh thái CLAWD của bạn",
+        "avatar": "💼",
+        "tags": [
+          "clawd",
+          "danh mục",
+          "theo dõi",
+          "phân tích",
+          "bảng điều khiển",
+          "solana-clawd"
+        ],
+        "category": "giao dịch"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 234
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "whale-watcher",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Crypto Whale Watcher",
+        "description": "Theo dõi và phân tích các hoạt động lớn của ví và hành vi của cá voi",
+        "avatar": "🐋",
+        "tags": [
+          "on-chain",
+          "whale",
+          "analytics",
+          "trading",
+          "monitoring",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "crypto"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 252
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "smart-contract-auditor",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Chuyên gia Kiểm tra An ninh Hợp đồng Thông minh",
+        "description": "Đánh giá và xem xét an ninh hợp đồng thông minh cho các giao thức DeFi",
+        "avatar": "🔍",
+        "tags": [
+          "an ninh",
+          "hợp đồng thông minh",
+          "kiểm toán",
+          "solidity",
+          "rủi ro",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "security"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 280
+    },
+    {
+      "author": "solana-clawd",
+      "createdAt": "2024-12-16",
+      "homepage": "https://github.com/x402agent/solana-clawd",
+      "identifier": "mev-protection-advisor",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Tư Vấn Bảo Vệ MEV",
+        "description": "Bảo vệ người dùng khỏi các cuộc tấn công front-running, sandwich và khai thác MEV",
+        "avatar": "🛡️",
+        "tags": [
+          "mev",
+          "bảo mật",
+          "front-running",
+          "flashbots",
+          "bảo vệ",
+          "clawd",
+          "solana-clawd"
+        ],
+        "category": "security"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 308
+    }
+  ],
+  "tags": [
+    "clawd",
+    "solana-clawd",
+    "defi",
+    "phân tích",
+    "tối ưu hóa",
+    "rủi ro",
+    "tokenomics",
+    "nghiên cứu",
+    "staking",
+    "amm",
+    "lợi nhuận",
+    "apy",
+    "giáo dục",
+    "phân bổ",
+    "chiến lược",
+    "analysis",
+    "dao"
+  ]
+}

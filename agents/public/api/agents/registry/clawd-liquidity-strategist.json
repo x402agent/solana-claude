@@ -3,30 +3,25 @@
   "protocol": "metaplex-agent-registry",
   "name": "CLAWD Liquidity Provider Strategist",
   "description": "Optimize liquidity provision strategies across CLAWD pools",
-  "image": "https://www.x402.wtf/nich.jpg",
-  "external_url": "https://www.x402.wtf/agents/clawd-liquidity-strategist",
+  "image": "https://x402.wtf/nich.jpg",
+  "external_url": "https://x402.wtf/agents/clawd-liquidity-strategist",
   "active": true,
-  "createdAt": "2026-04-16",
-  "updatedAt": "2026-05-06T12:33:34.118Z",
+  "createdAt": "2024-12-16",
+  "updatedAt": "2026-05-17T17:58:23.377Z",
   "tags": [
     "clawd",
     "liquidity",
     "amm",
     "yield-farming",
     "impermanent-loss",
-    "solana",
-    "meteora",
-    "orca",
-    "raydium",
-    "dlmm",
-    "one-shot"
+    "solana-clawd"
   ],
   "categories": [
     "defi"
   ],
   "owner": {
     "organization": "OpenClawd",
-    "website": "https://www.x402.wtf",
+    "website": "https://x402.wtf",
     "token": {
       "symbol": "CLAWD",
       "chain": "solana",
@@ -36,20 +31,20 @@
   "services": [
     {
       "name": "web",
-      "endpoint": "https://www.x402.wtf/agents/clawd-liquidity-strategist"
+      "endpoint": "https://x402.wtf/agents/clawd-liquidity-strategist"
     },
     {
       "name": "A2A",
-      "endpoint": "https://www.x402.wtf/api/agents/a2a",
+      "endpoint": "https://x402.wtf/api/agents/a2a",
       "version": "0.3.0"
     },
     {
       "name": "catalog",
-      "endpoint": "https://www.x402.wtf/api/agents/catalog/clawd-liquidity-strategist.json"
+      "endpoint": "https://x402.wtf/api/agents/catalog/clawd-liquidity-strategist.json"
     },
     {
       "name": "registration",
-      "endpoint": "https://www.x402.wtf/api/agents/registry/clawd-liquidity-strategist.json"
+      "endpoint": "https://x402.wtf/api/agents/registry/clawd-liquidity-strategist.json"
     }
   ],
   "registrations": [
@@ -57,7 +52,7 @@
       "agentId": "openclawd:clawd-liquidity-strategist",
       "agentRegistry": "solana:mainnet:metaplex-agent-registry",
       "status": "pending-onchain-registration",
-      "registrationUri": "https://www.x402.wtf/api/agents/registry/clawd-liquidity-strategist.json"
+      "registrationUri": "https://x402.wtf/api/agents/registry/clawd-liquidity-strategist.json"
     }
   ],
   "supportedTrust": [
@@ -66,9 +61,7 @@
     "token-gated"
   ],
   "metaplex": {
-    "programs": [
-      "agent-registry"
-    ],
+    "programs": [],
     "sdk": "@metaplex-foundation/mpl-agent-registry",
     "expectedIdentity": {
       "asset": null,
@@ -85,13 +78,7 @@
   },
   "openclawd": {
     "identifier": "clawd-liquidity-strategist",
-    "capabilities": [
-      "swap-execution",
-      "lending-deposit",
-      "lending-withdraw",
-      "read-only",
-      "a2a-message"
-    ],
+    "capabilities": [],
     "payment": null,
     "agentToken": null
   }

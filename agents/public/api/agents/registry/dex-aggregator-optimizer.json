@@ -3,11 +3,11 @@
   "protocol": "metaplex-agent-registry",
   "name": "DEX Aggregator Route Optimizer",
   "description": "Find optimal swap routes across DEX aggregators",
-  "image": "https://www.x402.wtf/nich.jpg",
-  "external_url": "https://www.x402.wtf/agents/dex-aggregator-optimizer",
+  "image": "https://x402.wtf/nich.jpg",
+  "external_url": "https://x402.wtf/agents/dex-aggregator-optimizer",
   "active": true,
-  "createdAt": "2026-04-16",
-  "updatedAt": "2026-05-06T12:33:34.118Z",
+  "createdAt": "2024-12-16",
+  "updatedAt": "2026-05-17T17:58:23.377Z",
   "tags": [
     "dex",
     "swap",
@@ -15,18 +15,14 @@
     "aggregator",
     "optimization",
     "clawd",
-    "solana",
-    "jupiter",
-    "router",
-    "trading",
-    "one-shot"
+    "solana-clawd"
   ],
   "categories": [
-    "trading"
+    "defi"
   ],
   "owner": {
     "organization": "OpenClawd",
-    "website": "https://www.x402.wtf",
+    "website": "https://x402.wtf",
     "token": {
       "symbol": "CLAWD",
       "chain": "solana",
@@ -36,20 +32,20 @@
   "services": [
     {
       "name": "web",
-      "endpoint": "https://www.x402.wtf/agents/dex-aggregator-optimizer"
+      "endpoint": "https://x402.wtf/agents/dex-aggregator-optimizer"
     },
     {
       "name": "A2A",
-      "endpoint": "https://www.x402.wtf/api/agents/a2a",
+      "endpoint": "https://x402.wtf/api/agents/a2a",
       "version": "0.3.0"
     },
     {
       "name": "catalog",
-      "endpoint": "https://www.x402.wtf/api/agents/catalog/dex-aggregator-optimizer.json"
+      "endpoint": "https://x402.wtf/api/agents/catalog/dex-aggregator-optimizer.json"
     },
     {
       "name": "registration",
-      "endpoint": "https://www.x402.wtf/api/agents/registry/dex-aggregator-optimizer.json"
+      "endpoint": "https://x402.wtf/api/agents/registry/dex-aggregator-optimizer.json"
     }
   ],
   "registrations": [
@@ -57,7 +53,7 @@
       "agentId": "openclawd:dex-aggregator-optimizer",
       "agentRegistry": "solana:mainnet:metaplex-agent-registry",
       "status": "pending-onchain-registration",
-      "registrationUri": "https://www.x402.wtf/api/agents/registry/dex-aggregator-optimizer.json"
+      "registrationUri": "https://x402.wtf/api/agents/registry/dex-aggregator-optimizer.json"
     }
   ],
   "supportedTrust": [
@@ -66,9 +62,7 @@
     "token-gated"
   ],
   "metaplex": {
-    "programs": [
-      "agent-registry"
-    ],
+    "programs": [],
     "sdk": "@metaplex-foundation/mpl-agent-registry",
     "expectedIdentity": {
       "asset": null,
@@ -85,11 +79,7 @@
   },
   "openclawd": {
     "identifier": "dex-aggregator-optimizer",
-    "capabilities": [
-      "swap-execution",
-      "read-only",
-      "a2a-message"
-    ],
+    "capabilities": [],
     "payment": null,
     "agentToken": null
   }

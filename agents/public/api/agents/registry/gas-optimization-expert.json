@@ -3,11 +3,11 @@
   "protocol": "metaplex-agent-registry",
   "name": "Gas Cost Optimization Expert",
   "description": "Minimize gas costs and optimize transaction timing",
-  "image": "https://www.x402.wtf/nich.jpg",
-  "external_url": "https://www.x402.wtf/agents/gas-optimization-expert",
+  "image": "https://x402.wtf/nich.jpg",
+  "external_url": "https://x402.wtf/agents/gas-optimization-expert",
   "active": true,
-  "createdAt": "2026-04-16",
-  "updatedAt": "2026-05-06T12:33:34.118Z",
+  "createdAt": "2024-12-16",
+  "updatedAt": "2026-05-17T17:58:23.377Z",
   "tags": [
     "ethereum",
     "gas",
@@ -15,18 +15,14 @@
     "layer-2",
     "efficiency",
     "clawd",
-    "solana",
-    "priority-fees",
-    "compute-units",
-    "jito",
-    "dev-tools"
+    "solana-clawd"
   ],
   "categories": [
-    "dev-tools"
+    "tools"
   ],
   "owner": {
     "organization": "OpenClawd",
-    "website": "https://www.x402.wtf",
+    "website": "https://x402.wtf",
     "token": {
       "symbol": "CLAWD",
       "chain": "solana",
@@ -36,20 +32,20 @@
   "services": [
     {
       "name": "web",
-      "endpoint": "https://www.x402.wtf/agents/gas-optimization-expert"
+      "endpoint": "https://x402.wtf/agents/gas-optimization-expert"
     },
     {
       "name": "A2A",
-      "endpoint": "https://www.x402.wtf/api/agents/a2a",
+      "endpoint": "https://x402.wtf/api/agents/a2a",
       "version": "0.3.0"
     },
     {
       "name": "catalog",
-      "endpoint": "https://www.x402.wtf/api/agents/catalog/gas-optimization-expert.json"
+      "endpoint": "https://x402.wtf/api/agents/catalog/gas-optimization-expert.json"
     },
     {
       "name": "registration",
-      "endpoint": "https://www.x402.wtf/api/agents/registry/gas-optimization-expert.json"
+      "endpoint": "https://x402.wtf/api/agents/registry/gas-optimization-expert.json"
     }
   ],
   "registrations": [
@@ -57,7 +53,7 @@
       "agentId": "openclawd:gas-optimization-expert",
       "agentRegistry": "solana:mainnet:metaplex-agent-registry",
       "status": "pending-onchain-registration",
-      "registrationUri": "https://www.x402.wtf/api/agents/registry/gas-optimization-expert.json"
+      "registrationUri": "https://x402.wtf/api/agents/registry/gas-optimization-expert.json"
     }
   ],
   "supportedTrust": [
@@ -66,9 +62,7 @@
     "token-gated"
   ],
   "metaplex": {
-    "programs": [
-      "agent-registry"
-    ],
+    "programs": [],
     "sdk": "@metaplex-foundation/mpl-agent-registry",
     "expectedIdentity": {
       "asset": null,
@@ -85,10 +79,7 @@
   },
   "openclawd": {
     "identifier": "gas-optimization-expert",
-    "capabilities": [
-      "read-only",
-      "a2a-message"
-    ],
+    "capabilities": [],
     "payment": null,
     "agentToken": null
   }
