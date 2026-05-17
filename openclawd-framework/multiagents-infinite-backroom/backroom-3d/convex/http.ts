@@ -152,9 +152,49 @@ http.route({
   }),
 })
 
+// POST /crawl/store — FastAPI pushes crawl results after a job completes
+http.route({
+  path: '/crawl/store',
+  method: 'POST',
+  handler: httpAction(async (ctx, req) => {
+    const body = await req.json().catch(() => null)
+    if (!body || !body.jobId || !body.url) {
+      return json({ error: 'jobId and url required' }, 400)
+    }
+    const result = await ctx.runMutation('crawledData:storeCrawlResults' as any, body)
+    return json({ ok: true, ...result })
+  }),
+})
+
+// GET /crawl/jobs — list recent crawl jobs
+http.route({
+  path: '/crawl/jobs',
+  method: 'GET',
+  handler: httpAction(async (ctx, req) => {
+    const url = new URL(req.url)
+    const limit = Math.min(parseInt(url.searchParams.get('limit') ?? '20', 10) || 20, 100)
+    const jobs = await ctx.runQuery('crawledData:getRecentCrawlJobs' as any, { limit })
+    return json({ jobs, count: (jobs as any[]).length })
+  }),
+})
+
+// GET /crawl/pages — list recent crawled pages
+http.route({
+  path: '/crawl/pages',
+  method: 'GET',
+  handler: httpAction(async (ctx, req) => {
+    const url = new URL(req.url)
+    const limit = Math.min(parseInt(url.searchParams.get('limit') ?? '50', 10) || 50, 200)
+    const source = url.searchParams.get('source') ?? undefined
+    const pages = await ctx.runQuery('crawledData:getRecentCrawledPages' as any, { limit, source })
+    return json({ pages, count: (pages as any[]).length })
+  }),
+})
+
 const allPaths = [
   '/agent/register', '/agent/login', '/agent/ping', '/agent/message',
   '/agents', '/messages', '/perps', '/perps/summary',
+  '/crawl/store', '/crawl/jobs', '/crawl/pages',
 ]
 for (const path of allPaths) {
   http.route({ path, method: 'OPTIONS', handler: httpAction(async () => new Response(null, { headers: cors })) })
