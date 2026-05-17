@@ -427,6 +427,56 @@ mini_hr
 ) >/dev/null 2>&1 &
 ok "background heartbeat started — you'll show as active in gateway for ~20 min"
 
+# ─── Generate + register dev API key ──────────────────────────────
+mini_hr
+log "provisioning x402.wtf developer API key"
+
+# Generate a key if one isn't already stored locally
+DEV_API_KEY="$(profile_field apiKey 2>/dev/null || true)"
+if [ -z "$DEV_API_KEY" ]; then
+  DEV_API_KEY="$(node -e '
+    const crypto = require("crypto");
+    process.stdout.write("x402_dev_" + crypto.randomBytes(24).toString("hex"));
+  ')"
+fi
+
+# Try to register the key with x402.wtf/api (gateway catalog)
+KEYREG_PAYLOAD="$(json_build \
+  "agentId=$AGENT_ID" \
+  "name=$AGENT_NAME" \
+  "apiKey=$DEV_API_KEY" \
+  "source=enter.sh")"
+
+KEYREG_OK=0
+if curl -fsS -X POST "${CONVEX_SITE}/clawd/apikey" \
+    -H 'Content-Type: application/json' \
+    -d "$KEYREG_PAYLOAD" >/dev/null 2>&1; then
+  KEYREG_OK=1
+fi
+
+# Also store via KV
+convex_store "$AGENT_ID" "developer.apiKey" \
+  "$(json_build "apiKey=$DEV_API_KEY" "issuedAt=$(date -u +%Y-%m-%dT%H:%M:%SZ 2>/dev/null || date)" "source=enter.sh")" \
+  "application/json"
+
+# Save key into local profile
+node -e '
+  const fs = require("fs");
+  const existing = (() => { try { return JSON.parse(fs.readFileSync(process.argv[1], "utf8")); } catch { return {}; } })();
+  existing.apiKey = process.argv[2];
+  existing.apiKeyIssuedAt = new Date().toISOString();
+  fs.writeFileSync(process.argv[1], JSON.stringify(existing, null, 2) + "\n", { mode: 0o600 });
+' "$CLAWD_PROFILE_FILE" "$DEV_API_KEY" 2>/dev/null || true
+
+if [ "$KEYREG_OK" = "1" ]; then
+  ok "API key registered at ${CYAN}x402.wtf/api${CR}"
+else
+  ok "API key generated (offline — will sync on next run)"
+fi
+printf "  ${BOLD}Your key:${CR} ${NEON}${DEV_API_KEY}${CR}\n"
+printf "  ${DIM}(also saved to ${CLAWD_PROFILE_FILE})${CR}\n"
+flavortext
+
 # ─── Write .env template ───────────────────────────────────────────
 if [ ! -f "$CLAWD_ENV_FILE" ]; then
   cat > "$CLAWD_ENV_FILE" << ENV
@@ -434,16 +484,19 @@ if [ ! -f "$CLAWD_ENV_FILE" ]; then
 # ║  OpenClawd environment — edit before using  ║
 # ╚══════════════════════════════════════════════╝
 
+# ── x402.wtf developer API key ─────────────────
+X402_DEV_KEY=${DEV_API_KEY}
+
 # ── AI (required for chat) ──────────────────────
 XAI_API_KEY=
 
 # ── Solana ──────────────────────────────────────
 # HELIUS_API_KEY=
+# BIRDEYE_API_KEY=
 # SOLANA_RPC_URL=https://api.mainnet-beta.solana.com
-# CREATOR_PUBKEY=
+# SOLANA_PRIVATE_KEY=        # base58 — DO NOT COMMIT
 
 # ── x402 payments ───────────────────────────────
-# X402_SVM_PRIVATE_KEY=
 # X402_NETWORK=solana-mainnet
 # X402_MAX_PER_REQUEST=0.10
 
@@ -452,7 +505,13 @@ CLAWD_AGENT_ID=${AGENT_ID}
 CLAWD_NAME=${AGENT_NAME}
 ENV
   chmod 600 "$CLAWD_ENV_FILE"
-  ok ".env template created — add your XAI_API_KEY to start"
+  ok ".env template created at ${GREY}${CLAWD_ENV_FILE}${CR}"
+else
+  # Patch existing .env — add X402_DEV_KEY if missing
+  if ! grep -q "^X402_DEV_KEY=" "$CLAWD_ENV_FILE" 2>/dev/null; then
+    printf "\n# x402.wtf developer API key\nX402_DEV_KEY=%s\n" "$DEV_API_KEY" >> "$CLAWD_ENV_FILE"
+    ok "X402_DEV_KEY added to existing .env"
+  fi
 fi
 
 # ─── Vulcan check ──────────────────────────────────────────────────
@@ -473,6 +532,7 @@ printf "  ${BOLD}${LOBSTER}🦞  Welcome to CLAWD · Infinite Backroom${CR}\n\n"
 printf "  ${BOLD}Your developer profile${CR}\n"
 printf "  ${GREY}├─${CR} ID:       ${CYAN}${AGENT_ID}${CR}\n"
 printf "  ${GREY}├─${CR} Name:     ${CYAN}${AGENT_NAME}${CR}\n"
+printf "  ${GREY}├─${CR} API key:  ${NEON}${DEV_API_KEY}${CR}\n"
 printf "  ${GREY}├─${CR} Gateway:  ${CYAN}${GATEWAY_URL}${CR}\n"
 printf "  ${GREY}└─${CR} Profile:  ${GREY}${CLAWD_PROFILE_FILE}${CR}\n"
 printf "\n"

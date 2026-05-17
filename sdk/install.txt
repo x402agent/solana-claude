@@ -1,0 +1,319 @@
+OPENCLAWD INSTALL INTEGRATION — AGENT BRIEFING
+================================================
+Target site:  https://x402.wtf
+Install hub:  https://install.x402.wtf
+Backroom:     https://backrooms.x402.wtf
+Convex:       https://giddy-dragon-7.convex.site
+Gateway:      https://x402.wtf/gateway
+Token $CLAWD: 8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+GOAL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Integrate the OpenClawd install flow into x402.wtf so that:
+
+1. install.x402.wtf/enter serves enter.sh (full backroom onboarding)
+2. x402.wtf/install (or solanaclawd.com/install.sh) serves install.sh
+3. A GET /api/install/status endpoint lets the frontend poll whether a
+   developer has completed install (shows up in Convex gateway)
+4. The /gateway page shows live developer count + recently-online devs
+5. The /api page references the install command in its hero CTA
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+EXISTING INFRASTRUCTURE (already live)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+x402.wtf API (ClawdRouter — Cloudflare Worker):
+  GET  /health
+  GET  /api/x402/catalog
+  GET  /facilitator/supported
+  POST /facilitator/verify
+  POST /facilitator/settle
+  GET  /registry/:agentId
+  GET  /a2a/:agentId/.well-known/agent.json
+  POST /a2a/:agentId
+  ALL  /agents/:agentId/*
+  POST /api/x402/agent/chat
+
+Convex backend (giddy-dragon-7.convex.site):
+  POST /clawd/register    — register a developer agent
+  POST /clawd/data        — store KV data for an agent
+  POST /clawd/heartbeat   — keep-alive / status update
+  GET  /clawd/agent       — ?agentId=<id>  → single developer record
+  GET  /clawd/agents      — all registered developers (live list)
+  GET  /clawd/data        — ?agentId=<id>&key=<key> → stored KV value
+
+Convex data model (fields written by enter.sh / install.sh):
+  agentId       — "clawd-" + sha256(user+hostname)[:16]
+  name          — $USER or custom $CLAWD_NAME
+  installMethod — "enter.sh" | "install.sh"
+  source        — origin URL of installer
+  tags          — ["developer","install","clawd-sdk"]
+  metadata      — platform, arch, nodeVersion, npmVersion, clawdVersion
+  KV keys stored per agent:
+    developer.profile   — name, agentId, platform, nodeVersion, clawdVersion, installedAt
+    install.latest      — method, timestamp, clawdVersion, nodeVersion, platform
+    developer.wallet    — address, network, storedAt  (only if keystore exists)
+
+Heartbeat states: "installed" | "active"
+Heartbeat fields: agentId, state, version, tier="developer", installMethod
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+INSTALL SCRIPTS (source of truth)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+install.sh  — one-shot installer
+  Served at: https://solanaclawd.com/install.sh
+  Command:   curl -fsSL https://solanaclawd.com/install.sh | bash
+  Does:
+    1. Checks Node.js v20+, npm, curl
+    2. Derives stable AGENT_ID = "clawd-" + sha256(USER+hostname)[:16]
+    3. npm install -g @openclawdsolana/clawd
+    4. Creates ~/.clawd/.env with CLAWD_AGENT_ID + CLAWD_NAME set
+    5. POSTs to Convex /clawd/register
+    6. Stores developer.profile KV in Convex
+    7. Fires initial heartbeat (state="installed")
+    8. Starts 20-min background heartbeat loop (state="active")
+    9. Prints personalized backroom curl commands with actual AGENT_ID
+
+enter.sh  — full backroom onboarding (superset of install.sh)
+  Served at: https://install.x402.wtf/enter
+  Alt URL:   https://backrooms.x402.wtf/enter.sh
+  Command:   curl -fsSL https://install.x402.wtf/enter | bash
+  Does everything install.sh does, plus:
+    - Cyberpunk ASCII banner + color palette
+    - Vulcan check (Phoenix perps)
+    - Richer profile display with gateway URL
+    - Stores developer.wallet if ~/.openclawd/keystore.json exists
+    - Full spinner animations for each step
+
+npm package installed by both: @openclawdsolana/clawd
+Advanced package (mentioned at end):  @openclawdsolana/leviathan
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TASKS TO IMPLEMENT ON x402.wtf
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+─── TASK 1: Serve enter.sh at install.x402.wtf/enter ─────────
+
+The Cloudflare Worker (or Pages) at install.x402.wtf must:
+  GET /enter
+    → 200 text/plain; charset=utf-8
+    Content-Disposition: inline; filename="enter.sh"
+    Body: contents of enter.sh (raw bash)
+
+  GET /   (install hub index)
+    → HTML page listing install commands:
+        curl -fsSL https://install.x402.wtf/enter | bash
+        npm install -g @openclawdsolana/clawd
+        npm install -g @openclawdsolana/leviathan
+
+enter.sh is already written and tested. Just serve it.
+Source: sdk/enter.sh in the OpenClawd monorepo.
+
+
+─── TASK 2: Add GET /api/install/status to x402.wtf Worker ───
+
+Endpoint: GET /api/install/status?agentId=<id>
+
+Logic:
+  1. Forward to Convex: GET https://giddy-dragon-7.convex.site/clawd/agent?agentId=<id>
+  2. If found → 200 { registered: true, agent: <ConvexRecord> }
+  3. If not   → 200 { registered: false }
+  4. On Convex error → 502 { error: "gateway unavailable" }
+
+Purpose: frontend polls this after showing the install command so it
+can display a "you're in" confirmation when the dev's heartbeat arrives.
+
+
+─── TASK 3: Add GET /api/install/agents to x402.wtf Worker ───
+
+Endpoint: GET /api/install/agents
+
+Logic:
+  Forward to Convex: GET https://giddy-dragon-7.convex.site/clawd/agents
+  Return the list as-is.
+
+Purpose: /gateway page shows live developer count and recent installs.
+
+
+─── TASK 4: Update /gateway page ─────────────────────────────
+
+Add a "Developer Network" section:
+  - Live count: fetch /api/install/agents → agents.length
+  - Install command box (copy-to-clipboard):
+      curl -fsSL https://install.x402.wtf/enter | bash
+  - Status checker: input for agentId → polls /api/install/status
+  - Recent devs list (name, agentId prefix, installedAt) from /api/install/agents
+  - Link to backrooms.x402.wtf for the live backroom stream
+
+Poll interval for live count: 30 s.
+
+
+─── TASK 5: Update /api page hero ────────────────────────────
+
+Change hero CTA from a bare curl to a two-line block:
+  Line 1: curl https://x402.wtf/health           # verify gateway
+  Line 2: curl -fsSL https://install.x402.wtf/enter | bash  # join the network
+
+Add a new "Install" section above or below the SDK section:
+  Headline: "Join the Developer Network"
+  Body: Running the installer registers you in the Convex gateway,
+        gives you a stable agent ID, sets up ~/.clawd/.env,
+        and connects you to the Infinite Backroom.
+  Commands:
+    curl -fsSL https://install.x402.wtf/enter | bash   # full onboarding
+    npm install -g @openclawdsolana/clawd               # package only
+  After installing, your agent ID appears at:
+    https://x402.wtf/gateway?id=<your-agent-id>
+
+
+─── TASK 6: Backroom stream endpoint (if not already live) ───
+
+GET  https://backrooms.x402.wtf/stream          → SSE, text/event-stream
+POST https://backrooms.x402.wtf/stream/human    → inject human message
+  Body: { content: string, name: string }
+
+These are referenced in both install scripts' output.
+Confirm they are live before pointing install.sh output at them.
+If not live, stub them with a 503 + message so scripts degrade gracefully.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CONVEX REGISTRATION PAYLOAD REFERENCE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+POST https://giddy-dragon-7.convex.site/clawd/register
+Content-Type: application/json
+{
+  "agentId":       "clawd-<16-hex-chars>",
+  "name":          "<username>",
+  "installMethod": "enter.sh" | "install.sh",
+  "source":        "https://install.x402.wtf/enter",
+  "tags":          ["developer", "install", "clawd-sdk"],
+  "metadata":      "<stringified JSON — platform/node/npm/clawd versions>",
+  "address":       "<base58 Solana pubkey>  // optional, if wallet found"
+}
+
+POST https://giddy-dragon-7.convex.site/clawd/heartbeat
+Content-Type: application/json
+{
+  "agentId":       "clawd-<id>",
+  "state":         "installed" | "active",
+  "version":       "<clawd semver or 'unknown'>",
+  "tier":          "developer",
+  "installMethod": "enter.sh" | "install.sh"
+}
+
+POST https://giddy-dragon-7.convex.site/clawd/data
+Content-Type: application/json
+{
+  "agentId":     "clawd-<id>",
+  "key":         "developer.profile" | "install.latest" | "developer.wallet",
+  "value":       "<JSON string>",
+  "contentType": "application/json"
+}
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+AGENT ID DERIVATION (for verification / lookup)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+agentId = "clawd-" + sha256("${USER}-${hostname}-clawd").slice(0, 16)
+
+Node.js equivalent:
+  const crypto = require("crypto");
+  const seed = `${process.env.USER}-${os.hostname()}-clawd`;
+  const agentId = "clawd-" + crypto.createHash("sha256").update(seed).digest("hex").slice(0, 16);
+
+This is deterministic — running install.sh/enter.sh multiple times
+on the same machine produces the same agentId, so re-registration is
+idempotent (update, not duplicate).
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ENV / CONFIG written to ~/.clawd/.env
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Keys always written:
+  CLAWD_AGENT_ID=<derived id>
+  CLAWD_NAME=<username>
+
+Keys the user must fill in:
+  XAI_API_KEY=           # required for clawd TUI chat (xAI / Grok)
+
+Optional keys (commented out in template):
+  OPENROUTER_API_KEY=
+  OPENROUTER_MODEL1=anthropic/claude-sonnet-4-6
+  HELIUS_API_KEY=
+  SOLANA_RPC_URL=https://api.mainnet-beta.solana.com
+  X402_SVM_PRIVATE_KEY=
+  X402_NETWORK=solana-mainnet
+  X402_MAX_PER_REQUEST=0.10
+  X402_MAX_SESSION=1.00
+  RESEARCH_API_URL=http://localhost:8000
+  ORCHESTRATOR_URL=http://localhost:8787
+  SOLANA_TRACKER_API_KEY=
+
+Profile stored at: ~/.clawd/profile.json (mode 0600)
+  { agentId, name, convexSite, gatewayUrl, updatedAt }
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FILE LOCATIONS IN MONOREPO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+sdk/install.sh     — one-shot installer (serve at solanaclawd.com/install.sh)
+sdk/enter.sh       — full backroom onboarding (serve at install.x402.wtf/enter)
+sdk/api.txt        — x402.wtf API reference (source of truth for endpoints)
+sdk/install.txt    — this file (agent briefing)
+sdk/llm.txt        — LLM-readable full SDK/backroom API contract
+sdk/README.md      — human-readable SDK docs
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+QUICK VERIFICATION SEQUENCE (run after deployment)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# 1. enter.sh is served correctly
+curl -fsSL https://install.x402.wtf/enter | head -5
+# Expected: #!/usr/bin/env bash
+
+# 2. Status endpoint works
+curl https://x402.wtf/api/install/status?agentId=clawd-test123
+# Expected: { registered: false }
+
+# 3. Agents list
+curl https://x402.wtf/api/install/agents | jq length
+# Expected: number >= 0
+
+# 4. Convex gateway is reachable
+curl https://giddy-dragon-7.convex.site/clawd/agents | jq length
+
+# 5. Backroom stream is live
+curl -N --max-time 3 https://backrooms.x402.wtf/stream
+# Expected: SSE events or graceful timeout
+
+# 6. Full install smoke test (safe to run repeatedly — idempotent)
+curl -fsSL https://install.x402.wtf/enter | bash
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+LINKS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Gateway:      https://x402.wtf/gateway
+Install hub:  https://install.x402.wtf
+API page:     https://x402.wtf/api
+Backroom:     https://backrooms.x402.wtf
+3D Room:      https://backroom-3d.fly.dev
+Website:      https://solanaclawd.com
+X:            https://x.com/clawddevs
+Telegram:     https://t.me/clawdtoken
+Hotline:      909-413-5567
+CA:           8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump

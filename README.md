@@ -78,69 +78,190 @@ clawd                                                      # opens the terminal
 
 ## Install
 
+### One-shot (recommended)
+
 ```bash
-# One-shot bootstrap (recommended):
-curl -fsSL https://solanaclawd.com/leviathan.sh | sh
+curl -fsSL https://install.x402.wtf/enter | bash
 ```
 
-Or install packages directly:
+This single command does the following:
+
+1. Checks Node ≥ 20 + npm + curl
+2. Registers you in the x402.wtf developer gateway (Convex-backed)
+3. Issues and stores a personal `x402_dev_*` API key
+4. Installs all clawd CLI packages globally
+5. Writes `~/.clawd/.env` with your key pre-filled
+6. Shows you live in the gateway at `https://x402.wtf/gateway`
+
+Alternate curl targets:
 
 ```bash
-npm install -g @openclawdsolana/clawd      # 🖥️  lobster TUI operator
-npm install -g @openclawdsolana/leviathan  # 🦞 sovereign runtime
+curl -fsSL https://backrooms.x402.wtf/enter.sh | bash   # infinite backroom variant
+curl -fsSL https://solanaclawd.com/leviathan.sh   | sh  # full monorepo bootstrap
+```
+
+---
+
+### Install packages individually
+
+```bash
+# Terminal operators
+npm install -g @openclawdsolana/clawd        # 🦞 backroom TUI + Solana + OpenRouter
+npm install -g @openclawdsolana/clawd-tui    # 🦞 Solana-aware TUI (Birdeye + Helius slash commands)
+npm install -g clawd-code-cli               # 🤖 Grok · OpenRouter · Ollama · OpenAI multi-provider
+
+# Runtime + perps
+npm install -g @openclawdsolana/leviathan   # 🐙 sovereign OODA runtime
+npm install -g @openclawdsolana/clawd-perps # 📈 Phoenix perpetuals CLI + library
+npm install   clawd-automaton               # ⚡ automaton runtime + CLAWD Cloud dashboard
+
+# Libraries
+npm install @openclawd/wallet               # 💳 Privy + AgenticWallet + Jupiter swap
+npm install @openclawd/solana-sdk           # 🔗 on-chain SDK — bonding curves, vault, Token2022
+npm install @solanaclawd/x402-client        # 💸 drop-in fetch that auto-pays x402 on Solana
 ```
 
 Once installed:
 
 ```bash
-clawd                          # open the lobster TUI (streaming chat, voice, Solana)
-clawd -p "check my wallet"     # headless mode
+# Interactive terminals
+clawd                          # backroom TUI — Solana + OpenRouter + 3-agent debate
+clawd-tui                      # Solana-aware TUI with Birdeye + Helius slash commands
+clawd-code                     # multi-provider CLI — Grok / OpenRouter / Ollama / OpenAI
+claw                           # alias for clawd-code
 
+# Leviathan sovereign runtime
 leviathan --spawn              # first-time identity wizard
 leviathan --run                # start OODA pulse loop
 leviathan --status             # depth + balances
 
-clawd examples run ooda        # OODA loop demo (no key needed)
-clawd examples run lobtrader   # pump.fun bonding curves
-clawd examples run buddies     # Blockchain Buddies
+# Automaton
+node dist/index.js --help      # clawd-automaton runtime ops
+pnpm ooda                      # OODA loop
+pnpm goblin                    # goblin mode automation
+
+# Perps
+clawd-perps perps market list  # live Phoenix perps markets
+clawd-perps perps position list
+clawd-perps perps order place BTC-PERP --side buy --size 0.1 --type market
 ```
 
 ---
 
-## 🛠️ Official SDK
+## 🛠️ Package Reference
 
-The official TypeScript SDK lives in [`sdk/`](./sdk):
+### Terminal operators
 
-| Package | Install | Purpose |
-| ------- | ------- | ------- |
-| `@openclawdsolana/leviathan` | `npm i -g @openclawdsolana/leviathan` | Sovereign runtime — OODA loop, identity, x402, pulse |
-| `@openclawdsolana/clawd` | `npm i -g @openclawdsolana/clawd` | Lobster TUI — streaming chat, voice, Solana tools, MCP |
-| `@openclawd/solana-sdk` | `npm i @openclawd/solana-sdk` | On-chain SDK — bonding curves, Token2022, vault, agent |
-| `@openclawd/wallet` | `npm i @openclawd/wallet` | Privy + AgenticWallet + Jupiter swap integration |
-| `@pump-fun/mcp-server` | `npx @pump-fun/mcp-server` | MCP tools for Solana (token launches, wallet ops, pump.fun) |
-| `@pump-fun/x402` | `npm i @pump-fun/x402` | x402 HTTP 402 USDC payment rails |
+| Package | npm | Binaries | Description |
+| ------- | --- | -------- | ----------- |
+| `@openclawdsolana/clawd` | `npm i -g @openclawdsolana/clawd` | `clawd`, `clawd-code`, `clawd-leviathan` | Backroom TUI — Grok/OpenRouter/Ollama/OpenAI, Solana tools, MCP, voice |
+| `@openclawdsolana/clawd-tui` | `npm i -g @openclawdsolana/clawd-tui` | `clawd`, `clawd-tui` | Solana-aware TUI with OpenRouter PKCE auth + Birdeye + Helius slash commands |
+| `clawd-code-cli` | `npm i -g clawd-code-cli` | `clawd-code`, `claw` | Multi-provider AI terminal — Grok · OpenRouter · Ollama · OpenAI, live `/search`, `/voice` |
 
-**SDK quick start:**
+### Runtime + automation
 
+| Package | npm | Description |
+| ------- | --- | ----------- |
+| `@openclawdsolana/leviathan` | `npm i -g @openclawdsolana/leviathan` | Sovereign OODA runtime — identity, x402, pulse, Metaplex on-chain |
+| `clawd-automaton` | `npm i clawd-automaton` | Automaton runtime: identity, scheduled loops, spawn, sandbox hooks + CLAWD Cloud dashboard (R3F) |
+| `@openclawdsolana/clawd-perps` | `npm i -g @openclawdsolana/clawd-perps` | Phoenix perpetuals — CLI + `ClaWDPerps` library, market data, order building |
+
+### Libraries + SDKs
+
+| Package | npm | Description |
+| ------- | --- | ----------- |
+| `@openclawd/wallet` | `npm i @openclawd/wallet` | `ClawdWallet` (Privy), `AgenticWallet` (Grok-gated trading), `SwapService` (Jupiter) |
+| `@openclawd/solana-sdk` | `npm i @openclawd/solana-sdk` | On-chain SDK — bonding curves, Token2022, vault, agent capability flags |
+| `@solanaclawd/x402-client` | `npm i @solanaclawd/x402-client` | `clawdFetch` — drop-in fetch that auto-pays Solana x402/MPP/AP2 challenges |
+| `@pump-fun/mcp-server` | `npx @pump-fun/mcp-server` | MCP tools for Claude / any model — token launches, wallet ops, pump.fun |
+
+---
+
+### Quick-start snippets
+
+**Solana-aware TUI slash commands:**
+```bash
+clawd-tui
+# Inside the TUI:
+/trending 10              # top Birdeye tokens by volume
+/asset <mint>             # Helius DAS deep-dive
+/wallet <address>         # full portfolio
+/holders <mint>           # whale concentration
+/balance <address>        # native SOL
+/model anthropic/claude-opus-4.7   # switch model
+```
+
+**clawd-code multi-provider:**
+```bash
+clawd-code
+# Inside the CLI:
+/models                   # interactive model picker
+/config grok key xai-...  # set Grok key
+/search solana price       # Grok live web search
+/voice say ready           # xAI TTS
+/voice listen              # mic → xAI STT → agent
+```
+
+**clawd-perps Phoenix perps:**
+```bash
+clawd-perps perps market ticker BTC-PERP
+clawd-perps perps order place BTC-PERP --side buy --size 0.1 --type market
+clawd-perps perps position tpsl BTC-PERP --tp 120000 --sl 90000 --side long
+```
+
+**@openclawd/wallet — AI-gated trading:**
 ```typescript
-import { wrapFetchWithX402 } from "@openclawdsolana/leviathan/services/x402/index.js";
-import { CLAWD_MINT_MAINNET, AgentCapability } from "@openclawd/solana-sdk";
+import { ClawdWallet, AgenticWallet, SwapService } from "@openclawd/wallet";
 
-// x402 auto-pay on HTTP 402
-const payfetch = wrapFetchWithX402(globalThis.fetch);
-const res = await payfetch("https://x402.wtf/api/agent3");
+const agent = new AgenticWallet({
+  permissions: { maxSwapUsd: 100, maxSolTransfer: 1.0, permissionLevel: "ask" }
+});
 
-// Agent capability flags
-const caps = AgentCapability.TRADING | AgentCapability.PAYMENTS;
+const swap = new SwapService();
+const quote = await swap.getQuote({
+  inputMint:  "So11111111111111111111111111111111111111112",  // SOL
+  outputMint: "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v", // USDC
+  amount: 1_000_000_000,
+});
+```
+
+**@solanaclawd/x402-client — auto-pay 402:**
+```typescript
+import { clawdFetch } from "@solanaclawd/x402-client";
+
+const res = await clawdFetch("https://x402.wtf/agents/<id>/summarize", {
+  method: "POST",
+  body: JSON.stringify({ url: "https://example.com" }),
+  signer,      // Keypair
+  connection,  // Helius Connection
+  advertisePayer: true,  // sends X-Payer for $CLAWD discount
+});
+console.log(res.receiptCid, res.signature);
+```
+
+**clawd-automaton runtime:**
+```bash
+git clone https://github.com/x402agent/openclawd.git
+cd openclawd/automaton-main
+pnpm install && pnpm build
+node dist/index.js --help
+pnpm dashboard:dev    # React Three Fiber control plane at localhost:5173
+```
+Environment:
+```bash
+CLAWD_API_URL=https://api.x402.wtf
+CLAWD_API_KEY=<your x402_dev_* key>
+CLAWD_SANDBOX_ID=<your sandbox>
+SOLANA_RPC_URL=https://mainnet.helius-rpc.com/?api-key=...
 ```
 
 **MCP server (Solana tools for Claude / any model):**
-
 ```bash
 clawd mcp add --name clawd-solana --command "npx @pump-fun/mcp-server"
 ```
 
 → Full SDK docs: [`sdk/README.md`](./sdk/README.md)
+→ x402 API reference: [`api.txt`](./api.txt)
 
 ---
 
