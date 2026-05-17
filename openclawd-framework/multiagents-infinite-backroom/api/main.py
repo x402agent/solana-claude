@@ -144,6 +144,104 @@ terminal, backend, model_name = _build_terminal()
 app = FastAPI(title="Multi-Agent Infinite Backroom", version="2.1.0")
 CORS_ORIGINS = _parse_cors_origins()
 
+# ── Live stream state ────────────────────────────────────────────────────────
+# A small thread-safe queue for human messages that interrupt the agent loop.
+_human_queue: queue.Queue[dict] = queue.Queue(maxsize=20)
+# Broadcast: list of asyncio.Queue per connected SSE client
+_sse_clients: list[asyncio.Queue] = []
+_sse_lock = threading.Lock()
+_stream_turn = 0
+_stream_running = False
+_stream_lock = threading.Lock()
+
+
+def _sse_broadcast(event: dict) -> None:
+    """Push an event to every connected SSE client (fire-and-forget)."""
+    with _sse_lock:
+        dead = []
+        for q in _sse_clients:
+            try:
+                q.put_nowait(event)
+            except asyncio.QueueFull:
+                dead.append(q)
+        for q in dead:
+            _sse_clients.remove(q)
+
+
+def _agent_fn(agent_id: int):
+    fns = {
+        1: getattr(terminal, "get_agent_1_response", None),
+        2: getattr(terminal, "get_agent_2_response", None),
+        3: getattr(terminal, "get_agent_3_response", None),
+    }
+    return fns.get(agent_id)
+
+
+AGENT_STREAM_NAMES = {1: "The Analyst", 2: "The Satirist", 3: "Clawd"}
+AGENT_CYCLE = [1, 2, 3]
+
+
+def _run_stream_loop():
+    """Background thread: continuously cycle agents, injecting human messages between turns."""
+    global _stream_turn, _stream_running
+    with _stream_lock:
+        if _stream_running:
+            return
+        _stream_running = True
+
+    try:
+        while _stream_running:
+            for agent_id in AGENT_CYCLE:
+                if not _stream_running:
+                    break
+
+                # Drain any queued human messages first
+                while not _human_queue.empty():
+                    try:
+                        hm = _human_queue.get_nowait()
+                        human_text = hm.get("content", "")
+                        if human_text and terminal is not None:
+                            terminal.conversation += f"\nHuman: {human_text}"
+                        _sse_broadcast({
+                            "event": "human",
+                            "turn": _stream_turn,
+                            "agent": 0,
+                            "name": hm.get("name", "Human"),
+                            "content": human_text,
+                        })
+                        _stream_turn += 1
+                    except queue.Empty:
+                        break
+
+                if terminal is None:
+                    time.sleep(2)
+                    continue
+
+                fn = _agent_fn(agent_id)
+                if fn is None:
+                    continue
+
+                _sse_broadcast({"event": "typing", "agent": agent_id})
+                try:
+                    response = safe_call(fn)
+                except Exception as exc:
+                    response = f"[error: {exc}]"
+
+                _stream_turn += 1
+                _sse_broadcast({
+                    "event": "message",
+                    "turn": _stream_turn,
+                    "agent": agent_id,
+                    "name": AGENT_STREAM_NAMES[agent_id],
+                    "content": response,
+                })
+
+                # Pace between turns so agents don't race
+                time.sleep(1.5)
+    finally:
+        with _stream_lock:
+            _stream_running = False
+
 
 class VulcanPaperInitRequest(BaseModel):
     balance: float = Field(default=10000.0, gt=0)
@@ -226,6 +324,11 @@ class DreamsSyncRequest(BaseModel):
     inject: bool = True
     async_mode: bool = Field(default=False, alias="async")
     max_chars: int = Field(default=24000, ge=1000, le=120000)
+
+
+class HumanMessageRequest(BaseModel):
+    content: str = Field(min_length=1, max_length=2000)
+    name: str = Field(default="Human", max_length=32)
 
 
 # CORS — allow the 3D frontend and any tool
@@ -447,6 +550,88 @@ def trading_arena(symbols: str = Query(default="", description="Optional comma-s
     """
     requested = [s.strip().upper() for s in symbols.split(",") if s.strip()]
     return build_trading_arena(symbols=requested or None)
+
+
+@app.get("/stream")
+async def live_stream(request: Request):
+    """
+    SSE endpoint — streams real-time agent turns and human interrupts.
+    Connect with: EventSource('/stream')
+    Events: 'typing' | 'message' | 'human'
+    """
+    client_queue: asyncio.Queue = asyncio.Queue(maxsize=50)
+    with _sse_lock:
+        _sse_clients.append(client_queue)
+
+    # Start background loop if not already running
+    if not _stream_running:
+        t = threading.Thread(target=_run_stream_loop, daemon=True)
+        t.start()
+
+    async def event_generator():
+        try:
+            yield "data: {\"event\":\"connected\"}\n\n"
+            while True:
+                if await request.is_disconnected():
+                    break
+                try:
+                    event = await asyncio.wait_for(client_queue.get(), timeout=20.0)
+                    yield f"data: {json.dumps(event)}\n\n"
+                except asyncio.TimeoutError:
+                    yield ": keepalive\n\n"
+        finally:
+            with _sse_lock:
+                if client_queue in _sse_clients:
+                    _sse_clients.remove(client_queue)
+
+    return StreamingResponse(
+        event_generator(),
+        media_type="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache",
+            "X-Accel-Buffering": "no",
+        },
+    )
+
+
+@app.post("/stream/human")
+async def inject_human_message(req: HumanMessageRequest):
+    """
+    Inject a human message into the live agent conversation stream.
+    The next agent turn will receive and respond to this message.
+    """
+    try:
+        _human_queue.put_nowait({"content": req.content, "name": req.name})
+    except queue.Full:
+        return JSONResponse({"error": "message queue full, try again"}, status_code=429)
+
+    # Ensure the stream loop is running
+    if not _stream_running:
+        t = threading.Thread(target=_run_stream_loop, daemon=True)
+        t.start()
+
+    return {"ok": True, "queued": req.content[:80]}
+
+
+@app.post("/stream/start")
+def start_stream():
+    """Explicitly start the background agent stream loop."""
+    if not _stream_running:
+        t = threading.Thread(target=_run_stream_loop, daemon=True)
+        t.start()
+        return {"ok": True, "status": "started"}
+    return {"ok": True, "status": "already_running"}
+
+
+@app.get("/stream/status")
+def stream_status():
+    """Return the current state of the live stream."""
+    return {
+        "running": _stream_running,
+        "turn": _stream_turn,
+        "connected_clients": len(_sse_clients),
+        "queued_human_messages": _human_queue.qsize(),
+    }
 
 
 @app.get("/firecrawl/status")
