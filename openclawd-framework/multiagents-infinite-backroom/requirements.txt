@@ -1,4 +1,5 @@
 fastapi
 uvicorn
-openai>=1.0.0  # DeepSeek uses OpenAI-compatible API
+openai>=1.0.0
 python-dotenv
+requests>=2.31.0

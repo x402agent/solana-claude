@@ -27,6 +27,15 @@ from .auth import (
 )
 from .trading_arena import build_trading_arena
 from .clawd_orchestration import run_clawd_orchestration
+from .firecrawl_scraper import (
+    async_crawl_and_inject,
+    crawl_dreams_and_inject,
+    firecrawl_status,
+    get_crawl_status,
+    get_job_info,
+    map_site,
+    scrape_url,
+)
 from .solana_trading import (
     dflow_prediction_markets,
     dflow_prediction_order,
@@ -164,6 +173,29 @@ class MachineHandshakeRequest(BaseModel):
     environment: str = "production"
     version: str | None = None
     metadata: dict | None = None
+
+
+class CrawlRequest(BaseModel):
+    url: str
+    limit: int = Field(default=50, ge=1, le=500)
+    inject: bool = Field(default=True, description="Inject crawled content into agent conversation")
+    max_depth: int | None = Field(default=None, ge=1, le=10)
+    exclude_paths: list[str] = Field(default_factory=list)
+    include_paths: list[str] = Field(default_factory=list)
+
+
+class ScrapeRequest(BaseModel):
+    url: str
+    formats: list[str] = Field(default_factory=lambda: ["markdown"])
+    only_main_content: bool = True
+    inject: bool = Field(default=False, description="Inject scraped content into agent conversation")
+
+
+class MapRequest(BaseModel):
+    url: str
+    limit: int = Field(default=100, ge=1, le=5000)
+    search: str | None = None
+
 
 # CORS — allow the 3D frontend and any tool
 app.add_middleware(
@@ -384,6 +416,116 @@ def trading_arena(symbols: str = Query(default="", description="Optional comma-s
     """
     requested = [s.strip().upper() for s in symbols.split(",") if s.strip()]
     return build_trading_arena(symbols=requested or None)
+
+
+@app.get("/firecrawl/status")
+def firecrawl_health():
+    """Show Firecrawl integration readiness and active job count."""
+    return firecrawl_status()
+
+
+@app.post("/firecrawl/scrape", dependencies=[Depends(require_scope("chat:write"))])
+def firecrawl_scrape(req: ScrapeRequest):
+    """
+    Scrape a single URL with Firecrawl and return clean markdown.
+    Set inject=true to push the content into the active agent conversation.
+    """
+    try:
+        result = scrape_url(req.url, formats=req.formats, only_main_content=req.only_main_content)
+        page_data = result.get("data") or {}
+        md = page_data.get("markdown") or ""
+        if req.inject and md and terminal is not None:
+            injection = (
+                f"\n\n[SCRAPED CONTEXT — {req.url}]\n{md.strip()}\n[END SCRAPED CONTEXT]\n\n"
+            )
+            terminal.conversation += injection
+        return {
+            "url": req.url,
+            "markdown": md,
+            "injected": req.inject and bool(md),
+            "metadata": page_data.get("metadata") or {},
+        }
+    except Exception as e:
+        return JSONResponse({"error": str(e)}, status_code=502)
+
+
+@app.post("/firecrawl/map", dependencies=[Depends(require_scope("chat:read"))])
+def firecrawl_map(req: MapRequest):
+    """
+    Map a website — discover all URLs via sitemap + SERP (1 credit per call).
+    Optionally filter by search term.
+    """
+    try:
+        result = map_site(req.url, limit=req.limit, search=req.search)
+        return result
+    except Exception as e:
+        return JSONResponse({"error": str(e)}, status_code=502)
+
+
+@app.post("/firecrawl/crawl", dependencies=[Depends(require_scope("agents:loop"))])
+def firecrawl_crawl(req: CrawlRequest):
+    """
+    Start an async Firecrawl crawl. Returns a job_id immediately.
+    When inject=true (default) the results are automatically pushed into
+    the agent conversation as context once the crawl completes.
+    """
+    try:
+        job_id = async_crawl_and_inject(
+            url=req.url,
+            terminal=terminal if req.inject else None,
+            limit=req.limit,
+        )
+        return {
+            "job_id": job_id,
+            "url": req.url,
+            "limit": req.limit,
+            "inject": req.inject,
+            "status": "scraping",
+            "poll": f"/firecrawl/crawl/{job_id}",
+        }
+    except Exception as e:
+        return JSONResponse({"error": str(e)}, status_code=502)
+
+
+@app.get("/firecrawl/crawl/{job_id}", dependencies=[Depends(require_scope("chat:read"))])
+def firecrawl_crawl_status(job_id: str):
+    """
+    Poll a crawl job. Returns local injection status plus the live
+    Firecrawl API status (completed/scraping/failed + page count).
+    """
+    local = get_job_info(job_id)
+    try:
+        remote = get_crawl_status(job_id)
+    except Exception as e:
+        remote = {"error": str(e)}
+    return {
+        "job_id": job_id,
+        "local": local,
+        "remote": {
+            "status": remote.get("status"),
+            "completed": remote.get("completed"),
+            "total": remote.get("total"),
+            "credits_used": remote.get("creditsUsed"),
+        },
+    }
+
+
+@app.post("/firecrawl/dreams", dependencies=[Depends(require_scope("agents:loop"))])
+def firecrawl_dreams(
+    limit: int = Query(default=30, ge=1, le=200),
+):
+    """
+    Crawl the Dreams of an Electric Mind site in real-time and inject
+    all stories/conversations directly into the agent backroom as context.
+    Blocks until the crawl finishes (≤ 120 s) then returns a summary.
+    """
+    if terminal is None:
+        return JSONResponse({"error": "No agent terminal initialized"}, status_code=503)
+    try:
+        result = crawl_dreams_and_inject(terminal=terminal, limit=limit)
+        return result
+    except Exception as e:
+        return JSONResponse({"error": str(e)}, status_code=502)
 
 
 @app.get("/clawd/orchestrate", dependencies=[Depends(require_scope("agents:loop"))])
