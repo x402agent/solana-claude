@@ -31,9 +31,10 @@ interface MenuItem {
 const MENU_ITEMS: MenuItem[] = [
   { key: '1', label: '🦞  Backroom',         description: 'Two AI agents trapped in infinite debate' },
   { key: '2', label: '📈  Perps',             description: 'Phoenix perpetuals via Vulcan CLI' },
-  { key: '3', label: '💰  Wallet',            description: 'Fund + feed the leviathan' },
-  { key: '4', label: '🚀  Spawn automaton',   description: 'Launch the sovereign agent runtime' },
-  { key: '5', label: '❌  Exit',              description: 'The backroom will remember you' },
+  { key: '3', label: '🪪  Agent Registry',    description: 'Browse, mint, and register gasless Solana agents' },
+  { key: '4', label: '💰  Wallet',            description: 'Fund + feed the leviathan' },
+  { key: '5', label: '🚀  Spawn automaton',   description: 'Launch the sovereign agent runtime' },
+  { key: '6', label: '❌  Exit',              description: 'The backroom will remember you' },
 ];
 
 // ─── Render helpers ───────────────────────────────────────────────────────────
@@ -75,7 +76,7 @@ function renderMenu(selected: number): void {
 
   process.stdout.write('\n');
   process.stdout.write(
-    chalk.gray('[↑↓ / 1-5] navigate  [Enter] select  [q] exit') + '\n',
+    chalk.gray('[↑↓ / 1-6] navigate  [Enter] select  [q] exit') + '\n',
   );
 }
 
@@ -111,16 +112,21 @@ async function launchScreen(index: number): Promise<void> {
         break;
       }
       case 2: {
+        const { runAgents } = await import('./screens/agents.js');
+        await runAgents();
+        break;
+      }
+      case 3: {
         const { runWallet } = await import('./screens/wallet.js');
         await runWallet();
         break;
       }
-      case 3: {
+      case 4: {
         const { runAutomaton } = await import('./screens/automaton.js');
         await runAutomaton();
         break;
       }
-      case 4: {
+      case 5: {
         // Exit
         process.stdout.write('\x1b[2J\x1b[H');
         process.stdout.write(
@@ -193,8 +199,8 @@ async function main(): Promise<void> {
           needRedraw = true;
         }
 
-        // Number keys 1-5
-        const numMatch = chunk.match(/^[1-5]$/);
+        // Number keys 1-6
+        const numMatch = chunk.match(/^[1-6]$/);
         if (numMatch) {
           const idx = parseInt(chunk, 10) - 1;
           selected = idx;
