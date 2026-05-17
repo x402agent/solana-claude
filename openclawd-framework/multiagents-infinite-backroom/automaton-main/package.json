@@ -38,6 +38,8 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc && pnpm -r build",
+    "dashboard:dev": "pnpm --filter @conway/dashboard dev",
+    "dashboard:build": "pnpm --filter @conway/dashboard build",
     "dev": "tsx watch src/index.ts",
     "ooda": "tsx src/ooda/loop.ts",
     "ooda:tui": "tsx src/ooda/loop.ts --tui | tsx src/ooda/tui.ts",
