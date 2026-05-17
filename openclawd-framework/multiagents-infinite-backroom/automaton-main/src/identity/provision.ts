@@ -116,7 +116,7 @@ export async function provision(
       "Content-Type": "application/json",
       Authorization: `Bearer ${access_token}`,
     },
-    body: JSON.stringify({ name: "conway-automaton" }),
+    body: JSON.stringify({ name: "clawd-automaton" }),
   });
 
   if (!keyResp.ok) {

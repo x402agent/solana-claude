@@ -1,7 +1,7 @@
 /**
  * DeepSeek Multi-Agent Backroom Bridge
  *
- * Wraps the Conway Automaton agent loop with the DeepSeek multi-agent
+ * Wraps the CLAWD Automaton agent loop with the DeepSeek multi-agent
  * backroom pattern. Creates two agents (logical analyst + satirical
  * commentator) that converse with each other using DeepSeek thinking mode.
  *

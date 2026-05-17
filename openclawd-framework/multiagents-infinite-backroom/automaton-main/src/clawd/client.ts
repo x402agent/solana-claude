@@ -1,5 +1,5 @@
 /**
- * Conway API Client
+ * CLAWD API Client
  *
  * Communicates with Conway's control plane for sandbox management,
  * credits, and infrastructure operations.

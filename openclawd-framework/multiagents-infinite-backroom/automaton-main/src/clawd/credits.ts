@@ -1,5 +1,5 @@
 /**
- * Conway Credits Management
+ * CLAWD Credits Management
  *
  * Monitors the automaton's compute credit balance and triggers
  * survival mode transitions.

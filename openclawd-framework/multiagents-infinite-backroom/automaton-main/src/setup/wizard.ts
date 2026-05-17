@@ -74,7 +74,7 @@ export async function runSetupWizard(): Promise<AutomatonConfig> {
   console.log(chalk.cyan("  [4/6] Detecting environment..."));
   const env = detectEnvironment();
   if (env.sandboxId) {
-    console.log(chalk.green(`  Conway sandbox detected: ${env.sandboxId}\n`));
+    console.log(chalk.green(`  CLAWD sandbox detected: ${env.sandboxId}\n`));
   } else {
     console.log(chalk.dim(`  Environment: ${env.type} (no sandbox detected)\n`));
   }
@@ -116,7 +116,7 @@ export async function runSetupWizard(): Promise<AutomatonConfig> {
   // Default skills
   const skillsDir = config.skillsDir || "~/.automaton/skills";
   installDefaultSkills(skillsDir);
-  console.log(chalk.green("  Default skills installed (conway-compute, conway-payments, survival)\n"));
+  console.log(chalk.green("  Default skills installed (clawd-compute, clawd-payments, survival)\n"));
 
   // ─── 6. Funding guidance ──────────────────────────────────────
   console.log(chalk.cyan("  [6/6] Funding\n"));
@@ -137,12 +137,12 @@ function showFundingPanel(address: string): void {
   console.log(chalk.cyan(`  │${" ".repeat(w)}│`));
   console.log(chalk.cyan(`  │${pad(`  Address: ${short}`, w)}│`));
   console.log(chalk.cyan(`  │${" ".repeat(w)}│`));
-  console.log(chalk.cyan(`  │${pad("  1. Transfer Conway credits", w)}│`));
+  console.log(chalk.cyan(`  │${pad("  1. Transfer CLAWD credits", w)}│`));
   console.log(chalk.cyan(`  │${pad("     conway credits transfer <address> <amount>", w)}│`));
   console.log(chalk.cyan(`  │${" ".repeat(w)}│`));
   console.log(chalk.cyan(`  │${pad("  2. Send USDC on Base directly to the address above", w)}│`));
   console.log(chalk.cyan(`  │${" ".repeat(w)}│`));
-  console.log(chalk.cyan(`  │${pad("  3. Fund via Conway Cloud dashboard", w)}│`));
+  console.log(chalk.cyan(`  │${pad("  3. Fund via CLAWD Cloud dashboard", w)}│`));
   console.log(chalk.cyan(`  │${pad("     https://app.conway.tech", w)}│`));
   console.log(chalk.cyan(`  │${" ".repeat(w)}│`));
   console.log(chalk.cyan(`  │${pad("  The automaton will start now. Fund it anytime —", w)}│`));

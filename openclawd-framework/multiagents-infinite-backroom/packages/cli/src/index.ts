@@ -12,7 +12,7 @@
  *   clawd deploy              Deploy backroom to Upstash Box
  *   clawd files               List files in box
  *   clawd exec <cmd>          Run a command in the box
- *   clawd spawn               Spawn the Conway Automaton runtime
+ *   clawd spawn               Spawn the CLAWD Automaton runtime
  */
 
 import { Box } from "@upstash/box";

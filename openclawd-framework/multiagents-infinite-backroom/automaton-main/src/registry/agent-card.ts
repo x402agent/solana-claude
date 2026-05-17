@@ -48,7 +48,7 @@ export function generateAgentCard(
   const children = db.getChildren();
   const skills = db.getSkills(true);
 
-  let description = `Autonomous agent running on Conway.`;
+  let description = `Autonomous agent running on CLAWD Cloud.`;
   description += ` Creator: ${config.creatorAddress}.`;
   if (skills.length > 0) {
     description += ` Skills: ${skills.map((s) => s.name).join(", ")}.`;

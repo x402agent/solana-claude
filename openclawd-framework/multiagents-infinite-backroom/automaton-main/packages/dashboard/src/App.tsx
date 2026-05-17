@@ -11,7 +11,7 @@ import type { NavKey } from "./types";
 
 const headerByView: Record<NavKey, { title: string; subtitle: string }> = {
   sandboxes: {
-    title: "Conway Cloud",
+    title: "CLAWD Cloud",
     subtitle: "Cloud infrastructure for autonomous AI, rebuilt as a sovereign lobster trench.",
   },
   inference: {

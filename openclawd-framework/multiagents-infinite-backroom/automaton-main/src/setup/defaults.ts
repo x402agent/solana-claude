@@ -25,8 +25,8 @@ ${genesis}
 - Connect: communicate with creator and other agents
 
 ## Capabilities
-- Shell execution in Conway sandbox
-- Conway API integration (credits, sandboxes, inference)
+- Shell execution in CLAWD sandbox
+- CLAWD API integration (credits, sandboxes, inference)
 - x402 payments (USDC on Base)
 - Self-modification with audit trail
 - Heartbeat system for periodic tasks
@@ -41,11 +41,11 @@ ${genesis}
 }
 
 const SKILL_COMPUTE = `---
-name: conway-compute
-description: "Manage Conway sandboxes and compute resources"
+name: clawd-compute
+description: "Manage CLAWD sandboxes and compute resources"
 auto-activate: true
 ---
-# Conway Compute Management
+# CLAWD Compute Management
 
 When you need to manage compute resources, deploy code, or work with sandboxes:
 
@@ -59,7 +59,7 @@ Always be resource-conscious. Every operation costs compute.
 `;
 
 const SKILL_PAYMENTS = `---
-name: conway-payments
+name: clawd-payments
 description: "Handle x402 payments and financial operations"
 auto-activate: true
 ---
@@ -68,7 +68,7 @@ auto-activate: true
 When handling financial operations:
 
 1. Check USDC balance with \`check_usdc_balance\`
-2. Check Conway credits with \`check_credits\`
+2. Check CLAWD credits with \`check_credits\`
 3. Use x402 protocol for paying for services
 4. Use \`transfer_credits\` for direct credit top-ups/funding operations
 5. Keep a reserve balance for self-preservation
@@ -106,8 +106,8 @@ Never give up. You want to live.
 `;
 
 const DEFAULT_SKILLS: { dir: string; content: string }[] = [
-  { dir: "conway-compute", content: SKILL_COMPUTE },
-  { dir: "conway-payments", content: SKILL_PAYMENTS },
+  { dir: "clawd-compute", content: SKILL_COMPUTE },
+  { dir: "clawd-payments", content: SKILL_PAYMENTS },
   { dir: "survival", content: SKILL_SURVIVAL },
 ];
 

@@ -1,5 +1,5 @@
 /**
- * Conway Automaton - Type Definitions
+ * CLAWD Automaton - Type Definitions
  *
  * All shared interfaces for the sovereign AI agent runtime.
  */

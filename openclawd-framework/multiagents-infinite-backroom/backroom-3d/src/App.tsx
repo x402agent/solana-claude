@@ -239,7 +239,7 @@ function AutomatonRuntimePanel() {
   const { autoLoop, turnCount, messages } = useBackroomStore()
   return (
     <div className="runtime-panel">
-      <div className="runtime-title">Conway Automaton Core</div>
+      <div className="runtime-title">CLAWD Automaton Core</div>
       <div className="runtime-grid">
         <span className="runtime-key">agent loop</span><span className="runtime-val">{autoLoop ? 'RUNNING' : 'PAUSED'}</span>
         <span className="runtime-key">turns</span><span className="runtime-val">{turnCount}</span>

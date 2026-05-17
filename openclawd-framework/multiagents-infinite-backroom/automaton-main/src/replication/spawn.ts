@@ -68,7 +68,7 @@ export async function spawnChild(
   await execInSandbox(
     conway,
     sandbox.id,
-    "npm install -g @conway/automaton@latest 2>/dev/null || true",
+    "npm install -g @clawd/automaton@latest 2>/dev/null || true",
     60000,
   );
 
