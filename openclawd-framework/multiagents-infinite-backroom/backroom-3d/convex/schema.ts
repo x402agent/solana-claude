@@ -148,4 +148,31 @@ export default defineSchema({
   }).index('by_timestamp', ['timestamp'])
     .index('by_processed', ['processed'])
     .index('by_symbol', ['symbol']),
+
+  crawledPages: defineTable({
+    jobId: v.string(),
+    url: v.string(),
+    title: v.optional(v.string()),
+    markdown: v.string(),
+    sourceUrl: v.string(),
+    crawlSource: v.string(),
+    statusCode: v.optional(v.number()),
+    injectedIntoAgents: v.boolean(),
+    timestamp: v.number(),
+  }).index('by_timestamp', ['timestamp'])
+    .index('by_jobId', ['jobId'])
+    .index('by_source', ['crawlSource']),
+
+  crawlJobs: defineTable({
+    jobId: v.string(),
+    url: v.string(),
+    status: v.string(),
+    pagesCompleted: v.number(),
+    pagesTotal: v.optional(v.number()),
+    creditsUsed: v.optional(v.number()),
+    injectedChars: v.optional(v.number()),
+    startedAt: v.number(),
+    completedAt: v.optional(v.number()),
+  }).index('by_jobId', ['jobId'])
+    .index('by_timestamp', ['startedAt']),
 })
