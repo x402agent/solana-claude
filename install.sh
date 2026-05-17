@@ -340,6 +340,62 @@ else
 fi
 
 # ──────────────────────────────────────────────────────────────────────────────
+# packages/ — monorepo workspace packages (TypeScript SDKs + CLIs)
+#   agentwallet   — encrypted keypair vault (Solana + EVM), E2B sandbox, CF Workers
+#   clawd         — lobster TUI bound to @openclawdsolana/leviathan runtime
+#   clawd-perps   — Phoenix Perpetuals DEX CLI (mirrors Vulcan command surface)
+#   clawd-sdk     — token launches, bonding curves, Token2022, pTokens, vault
+#   clawd-wallet  — Privy-embedded wallet + AgenticWallet + Jupiter SwapService
+#   cli-standalone— lobster agent (Grok + Solana + MCP), no Leviathan dependency
+#   clawd-protocol— Anchor on-chain program workspace (Cargo — Rust/Solana)
+# ──────────────────────────────────────────────────────────────────────────────
+if [ "$NO_NODE" = "1" ]; then
+  info "skipping packages/ workspace (--no-node)"
+elif command -v npm >/dev/null 2>&1; then
+  step "installing and building packages/ workspace"
+  for PKG_DIR in \
+      "$SRC_DIR/packages/agentwallet" \
+      "$SRC_DIR/packages/clawd" \
+      "$SRC_DIR/packages/clawd-perps" \
+      "$SRC_DIR/packages/clawd-sdk" \
+      "$SRC_DIR/packages/clawd-wallet" \
+      "$SRC_DIR/packages/cli-standalone"; do
+    [ -d "$PKG_DIR" ] || continue
+    PKG_NAME="$(basename "$PKG_DIR")"
+    pkg_install "$PKG_DIR" || { warn "install failed: $PKG_NAME"; continue; }
+    pkg_run     "$PKG_DIR" build || warn "build failed: $PKG_NAME"
+    ok "packages/$PKG_NAME ready"
+  done
+
+  # clawd-protocol is a Rust/Anchor workspace — build only when cargo is present
+  if command -v cargo >/dev/null 2>&1 && [ -f "$SRC_DIR/packages/clawd-protocol/Cargo.toml" ]; then
+    step "building packages/clawd-protocol (Anchor program)"
+    ( cd "$SRC_DIR/packages/clawd-protocol" && cargo build 2>&1 | tail -3 ) \
+      && ok "packages/clawd-protocol built" \
+      || warn "packages/clawd-protocol build failed — install Anchor CLI and Solana toolchain if needed"
+  else
+    info "skipping packages/clawd-protocol (cargo not found or not needed)"
+  fi
+
+  # Wire up CLI bins from packages into $BIN_DIR
+  for LINK_SPEC in \
+      "packages/clawd/dist/index.js:clawd-pkg" \
+      "packages/clawd-perps/dist/cli.js:clawd-perps" \
+      "packages/agentwallet/dist/cli.js:agentwallet"; do
+    JS_REL="${LINK_SPEC%%:*}"
+    BIN_NAME="${LINK_SPEC##*:}"
+    JS_ABS="$SRC_DIR/$JS_REL"
+    if [ -f "$JS_ABS" ]; then
+      chmod +x "$JS_ABS"
+      ln -sf "$JS_ABS" "$BIN_DIR/$BIN_NAME" 2>/dev/null || true
+      ok "linked $BIN_DIR/$BIN_NAME"
+    fi
+  done
+else
+  warn "npm not found — skipping packages/ workspace"
+fi
+
+# ──────────────────────────────────────────────────────────────────────────────
 # Clawd npm CLIs — lobster TUI suite (all four packages)
 # ──────────────────────────────────────────────────────────────────────────────
 _npm_global_install() {
@@ -357,10 +413,15 @@ _npm_global_install() {
 if [ "$NO_NODE" = "1" ]; then
   info "skipping clawd npm CLIs (--no-node)"
 elif command -v npm >/dev/null 2>&1; then
-  _npm_global_install "@openclawdsolana/clawd"        "@openclawdsolana/clawd (backroom TUI)"
-  _npm_global_install "@openclawdsolana/leviathan"    "@openclawdsolana/leviathan (sovereign runtime)"
-  _npm_global_install "@openclawdsolana/clawd-tui"    "@openclawdsolana/clawd-tui (Solana-aware TUI + OpenRouter)"
-  _npm_global_install "clawd-code-cli"                "clawd-code-cli (multi-provider: Grok/OpenRouter/Ollama)"
+  _npm_global_install "@openclawdsolana/clawd"           "@openclawdsolana/clawd (backroom TUI)"
+  _npm_global_install "@openclawdsolana/leviathan"       "@openclawdsolana/leviathan (sovereign runtime)"
+  _npm_global_install "@openclawdsolana/clawd-tui"       "@openclawdsolana/clawd-tui (Solana-aware TUI + OpenRouter)"
+  _npm_global_install "clawd-code-cli"                   "clawd-code-cli (multi-provider: Grok/OpenRouter/Ollama)"
+  _npm_global_install "@openclawdsolana/clawd-sdk"       "@openclawdsolana/clawd-sdk (bonding curves + Token2022 + vault)"
+  _npm_global_install "@openclawdsolana/clawd-perps"     "@openclawdsolana/clawd-perps (Phoenix perps CLI)"
+  _npm_global_install "@openclawdsolana/clawd-wallet"    "@openclawdsolana/clawd-wallet (Privy wallet + Jupiter swap)"
+  _npm_global_install "@openclawdsolana/clawd-standalone" "@openclawdsolana/clawd-standalone (standalone lobster CLI)"
+  _npm_global_install "agentwallet-vault"                "agentwallet-vault (encrypted keypair vault)"
 
   CLAWD_BIN="$(command -v clawd 2>/dev/null || echo '')"
   if [ -n "$CLAWD_BIN" ]; then
@@ -545,9 +606,11 @@ printf "       ${DIM}echo \"XAI_API_KEY=xai-...\" >> $ENV_PATH${RESET}\n"
 printf "       ${DIM}echo \"HELIUS_API_KEY=...\"  >> $ENV_PATH${RESET}\n"
 printf "\n"
 printf "  ${PURPLE}3.${RESET}  Launch a TUI (pick your surface):\n"
-printf "       ${GREEN}clawd${RESET}          ${DIM}# @openclawdsolana/clawd-tui — Solana + OpenRouter + Birdeye${RESET}\n"
-printf "       ${GREEN}clawd-code${RESET}     ${DIM}# clawd-code-cli — Grok / OpenRouter / Ollama / OpenAI${RESET}\n"
-printf "       ${GREEN}claw${RESET}           ${DIM}# alias for clawd-code-cli${RESET}\n"
+printf "       ${GREEN}clawd${RESET}              ${DIM}# @openclawdsolana/clawd — Leviathan TUI (Grok, Solana, MCP)${RESET}\n"
+printf "       ${GREEN}clawd-standalone${RESET}   ${DIM}# @openclawdsolana/clawd-standalone — lightweight, no Leviathan${RESET}\n"
+printf "       ${GREEN}clawd-perps${RESET}        ${DIM}# @openclawdsolana/clawd-perps — Phoenix Perpetuals CLI${RESET}\n"
+printf "       ${GREEN}agentwallet${RESET}        ${DIM}# agentwallet-vault — encrypted keypair vault + HTTP server${RESET}\n"
+printf "       ${GREEN}clawd-code${RESET}         ${DIM}# clawd-code-cli — Grok / OpenRouter / Ollama / OpenAI${RESET}\n"
 printf "       ${GREEN}clawd -p \"check my wallet\"${RESET}  ${DIM}# headless one-shot${RESET}\n"
 printf "\n"
 printf "  ${PURPLE}4.${RESET}  Run the sovereign runtime:\n"

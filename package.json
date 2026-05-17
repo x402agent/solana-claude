@@ -42,8 +42,16 @@
     "mcp:build": "cd MCP && npm ci && npm run build",
     "mcp:start": "cd MCP && npm start",
     "mcp:http": "cd MCP && npm run start:http",
-    "agentwallet:build": "npm --prefix packages/agentwallet ci && npm --prefix packages/agentwallet run build",
+    "packages:install": "for pkg in packages/agentwallet packages/clawd packages/clawd-perps packages/clawd-sdk packages/clawd-wallet packages/cli-standalone; do npm --prefix $pkg install --legacy-peer-deps; done",
+    "packages:build": "for pkg in packages/agentwallet packages/clawd packages/clawd-perps packages/clawd-sdk packages/clawd-wallet; do npm --prefix $pkg run build --if-present; done",
+    "agentwallet:build": "npm --prefix packages/agentwallet install --legacy-peer-deps && npm --prefix packages/agentwallet run build",
     "agentwallet:start": "npm --prefix packages/agentwallet start",
+    "clawd:build": "npm --prefix packages/clawd install --legacy-peer-deps && npm --prefix packages/clawd run build",
+    "clawd:start": "npm --prefix packages/clawd start",
+    "clawd-perps:build": "npm --prefix packages/clawd-perps install --legacy-peer-deps && npm --prefix packages/clawd-perps run build",
+    "clawd-sdk:build": "npm --prefix packages/clawd-sdk install --legacy-peer-deps && npm --prefix packages/clawd-sdk run build",
+    "clawd-wallet:build": "npm --prefix packages/clawd-wallet install --legacy-peer-deps && npm --prefix packages/clawd-wallet run build",
+    "cli-standalone:start": "npm --prefix packages/cli-standalone start",
     "vault:web:build": "npm --prefix llm-wiki-tang/web run build",
     "vault:web:dev": "npm --prefix llm-wiki-tang/web run dev",
     "demo": "node dist/entrypoints/clawd.js demo",
@@ -233,6 +241,14 @@
     "typescript": "^5.8.3"
   },
   "packageManager": "npm@10.9.2",
+  "workspaces": [
+    "packages/agentwallet",
+    "packages/clawd",
+    "packages/clawd-perps",
+    "packages/clawd-sdk",
+    "packages/clawd-wallet",
+    "packages/cli-standalone"
+  ],
   "sideEffects": false,
   "keywords": [
     "solana",
