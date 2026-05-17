@@ -5,6 +5,8 @@ Auto-loop endpoint for infinite debate.
 Always uses DeepSeek API by default.
 """
 
+from __future__ import annotations
+
 import os
 import sys
 import time

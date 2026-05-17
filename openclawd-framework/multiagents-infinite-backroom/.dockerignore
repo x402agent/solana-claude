@@ -15,6 +15,17 @@
 **/node_modules
 /backroom-3d/node_modules
 /automaton-main/node_modules
+/backroom-tui/node_modules
+/packages/cli/node_modules
+/vulcan-cli-master/target
+/vulcan-cli-master/.git
+/vulcan-cli-master/.claude-plugin
+/vulcan-cli-master/.codex-plugin
+/vulcan-cli-master/.cursor-plugin
+/vulcan-cli-master/.github
+/vulcan-cli-master/scripts
+/vulcan-cli-master/agents
+/vulcan-cli-master/skills
 /.next
 **/.next
 /dist
