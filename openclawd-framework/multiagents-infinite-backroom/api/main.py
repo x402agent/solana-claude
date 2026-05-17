@@ -7,12 +7,21 @@ Always uses DeepSeek API by default.
 
 import os
 import sys
-from fastapi import FastAPI, Query
+import time
+from fastapi import Depends, FastAPI, Query, Request
 from fastapi.responses import HTMLResponse, PlainTextResponse, StreamingResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from pathlib import Path
 from pydantic import BaseModel, Field
+from .auth import (
+    AuthContext,
+    auth_status,
+    create_api_key_via_convex,
+    log_usage,
+    machine_handshake_via_convex,
+    require_scope,
+)
 from .trading_arena import build_trading_arena
 from .clawd_orchestration import run_clawd_orchestration
 from .solana_trading import (
@@ -98,6 +107,28 @@ class DflowPredictionOrderRequest(BaseModel):
     referral_fee_bps: int | None = Field(default=None, ge=0, le=10000)
     destination_token_account: str | None = None
 
+
+class CreateApiKeyRequest(BaseModel):
+    project_id: str = Field(alias="projectId")
+    name: str
+    scopes: list[str] = Field(default_factory=list)
+    expires_at: int | None = Field(default=None, alias="expiresAt")
+    machine_id: str | None = Field(default=None, alias="machineId")
+
+    class Config:
+        allow_population_by_field_name = True
+
+
+class MachineHandshakeRequest(BaseModel):
+    machine_id: str = Field(alias="machineId")
+    provider: str = "fly"
+    environment: str = "production"
+    version: str | None = None
+    metadata: dict | None = None
+
+    class Config:
+        allow_population_by_field_name = True
+
 # CORS — allow the 3D frontend and any tool
 app.add_middleware(
     CORSMiddleware,
@@ -106,6 +137,15 @@ app.add_middleware(
     allow_methods=["GET", "POST"],
     allow_headers=["*"],
 )
+
+
+@app.middleware("http")
+async def usage_logging_middleware(request: Request, call_next):
+    start = time.perf_counter()
+    response = await call_next(request)
+    latency_ms = (time.perf_counter() - start) * 1000
+    log_usage(request, response.status_code, latency_ms)
+    return response
 
 # Mount static files
 static_dir = Path(__file__).parent / "static"
@@ -152,6 +192,12 @@ def safe_call(fn, *args, **kwargs):
         return f"[Error] {err_str}"
 
 
+def _dump_model(model: BaseModel) -> dict:
+    if hasattr(model, "model_dump"):
+        return model.model_dump(by_alias=True, exclude_none=True)
+    return model.dict(by_alias=True, exclude_none=True)
+
+
 @app.get("/", response_class=HTMLResponse)
 def get_index():
     """Serve the main frontend page."""
@@ -175,7 +221,37 @@ def healthcheck():
         "configured_backends": configured_backends,
         "terminal_ready": terminal is not None,
         "solana": integration_status(),
+        "auth": auth_status(),
     }
+
+
+@app.get("/v1/auth/status")
+def get_auth_status():
+    """Show API auth backend readiness without exposing secrets."""
+    return auth_status()
+
+
+@app.post("/v1/keys", dependencies=[Depends(require_scope("admin:keys"))])
+def create_api_key(req: CreateApiKeyRequest):
+    """Create a project API key through Convex. Raw keys are returned once by Convex."""
+    return create_api_key_via_convex(_dump_model(req))
+
+
+@app.post("/v1/machines/handshake")
+def machine_handshake(
+    req: MachineHandshakeRequest,
+    auth: AuthContext = Depends(require_scope("machine:connect")),
+):
+    """Register or refresh a trusted machine client such as the Fly-hosted runtime."""
+    payload = _dump_model(req)
+    payload["auth"] = {
+        "subject": auth.subject,
+        "projectId": auth.project_id,
+        "apiKeyId": auth.api_key_id,
+        "machineId": auth.machine_id,
+        "scopes": list(auth.scopes),
+    }
+    return machine_handshake_via_convex(payload)
 
 
 @app.get("/solana/status")
@@ -186,25 +262,25 @@ def solana_status():
     return status
 
 
-@app.get("/perps/markets")
+@app.get("/perps/markets", dependencies=[Depends(require_scope("perps:read"))])
 def perps_markets(source: str = Query(default="vulcan", pattern="^(vulcan|phoenix)$")):
     """List Phoenix perpetual markets via Vulcan or direct Phoenix HTTP."""
     return vulcan_market_list() if source == "vulcan" else phoenix_market_list()
 
 
-@app.get("/perps/ticker/{symbol}")
+@app.get("/perps/ticker/{symbol}", dependencies=[Depends(require_scope("perps:read"))])
 def perps_ticker(symbol: str, source: str = Query(default="vulcan", pattern="^(vulcan|phoenix)$")):
     """Read perps ticker data for one market."""
     return vulcan_market_ticker(symbol) if source == "vulcan" else phoenix_market_ticker(symbol)
 
 
-@app.post("/perps/paper/init")
+@app.post("/perps/paper/init", dependencies=[Depends(require_scope("perps:paper"))])
 def perps_paper_init(req: VulcanPaperInitRequest):
     """Initialize a local Vulcan paper account for perpetuals testing."""
     return vulcan_paper_init(balance=req.balance, currency=req.currency, fee_bps=req.fee_bps)
 
 
-@app.post("/perps/paper/order")
+@app.post("/perps/paper/order", dependencies=[Depends(require_scope("perps:paper"))])
 def perps_paper_order(req: VulcanOrderRequest):
     """Place a paper-mode Vulcan perpetual order."""
     return vulcan_paper_order(
@@ -218,7 +294,7 @@ def perps_paper_order(req: VulcanOrderRequest):
     )
 
 
-@app.post("/perps/order")
+@app.post("/perps/order", dependencies=[Depends(require_scope("perps:live"))])
 def perps_order(req: VulcanOrderRequest):
     """Run a Vulcan perpetual order as dry-run by default, or live when dry_run=false."""
     return vulcan_live_order(
@@ -238,7 +314,7 @@ def perps_order(req: VulcanOrderRequest):
     )
 
 
-@app.get("/prediction/markets")
+@app.get("/prediction/markets", dependencies=[Depends(require_scope("prediction:read"))])
 def prediction_markets(
     limit: int = Query(default=25, ge=1, le=100),
     status: str | None = Query(default=None),
@@ -247,7 +323,7 @@ def prediction_markets(
     return dflow_prediction_markets(limit=limit, status=status)
 
 
-@app.post("/prediction/order")
+@app.post("/prediction/order", dependencies=[Depends(require_scope("prediction:trade"))])
 def prediction_order(req: DflowPredictionOrderRequest):
     """Build a DFlow prediction market order route/transaction payload."""
     return dflow_prediction_order(
@@ -261,7 +337,7 @@ def prediction_order(req: DflowPredictionOrderRequest):
     )
 
 
-@app.get("/arena")
+@app.get("/arena", dependencies=[Depends(require_scope("perps:read"))])
 def trading_arena(symbols: str = Query(default="", description="Optional comma-separated perps symbols")):
     """
     Agent-Trading-Arena-inspired signal tape for live Phoenix perps.
@@ -271,7 +347,7 @@ def trading_arena(symbols: str = Query(default="", description="Optional comma-s
     return build_trading_arena(symbols=requested or None)
 
 
-@app.get("/clawd/orchestrate")
+@app.get("/clawd/orchestrate", dependencies=[Depends(require_scope("agents:loop"))])
 def clawd_orchestrate(
     task: str = Query(default="Explore the backroom and produce a safe orchestration plan."),
     loops: int = Query(default=4, ge=1, le=8),
@@ -339,7 +415,7 @@ def agent_registration_metadata(agent_slug: str):
     }
 
 
-@app.get("/agent1")
+@app.get("/agent1", dependencies=[Depends(require_scope("chat:write"))])
 def get_agent_response():
     """Get response from Agent 1 — The Analyst (logical)."""
     if terminal is None:
@@ -348,7 +424,7 @@ def get_agent_response():
     return {"agent": 1, "name": "The Analyst", "response": response}
 
 
-@app.get("/agent2")
+@app.get("/agent2", dependencies=[Depends(require_scope("chat:write"))])
 def get_agent_2_response():
     """Get response from Agent 2 — The Satirist (dark humor)."""
     if terminal is None:
@@ -357,7 +433,7 @@ def get_agent_2_response():
     return {"agent": 2, "name": "The Satirist", "response": response}
 
 
-@app.get("/agent3")
+@app.get("/agent3", dependencies=[Depends(require_scope("chat:write"))])
 def get_agent_3_response():
     """Get response from Agent 3 — Clawd Claude Agent (sovereign lobster)."""
     if terminal is None:
@@ -368,7 +444,7 @@ def get_agent_3_response():
     return {"agent": 3, "name": "Clawd", "response": response}
 
 
-@app.get("/loop")
+@app.get("/loop", dependencies=[Depends(require_scope("agents:loop"))])
 def run_agent_loop(turns: int = Query(default=3, ge=1, le=20)):
     """
     Run an automated 3-agent debate loop.
@@ -389,7 +465,7 @@ def run_agent_loop(turns: int = Query(default=3, ge=1, le=20)):
         return {"turns": 0, "agents": 3, "error": str(e)}
 
 
-@app.get("/conversation")
+@app.get("/conversation", dependencies=[Depends(require_scope("chat:read"))])
 def get_conversation_response():
     """Get the full conversation history."""
     if terminal is None:
@@ -427,7 +503,7 @@ def welcome_screen():
     }
 
 
-@app.get("/reset")
+@app.get("/reset", dependencies=[Depends(require_scope("chat:write"))])
 def reset_conversation():
     """Reset the conversation history."""
     if terminal is None:
@@ -450,7 +526,7 @@ def install_script():
     )
 
 
-@app.get("/enter", response_class=PlainTextResponse)
+@app.get("/enter", response_class=PlainTextResponse, dependencies=[Depends(require_scope("chat:write"))])
 def enter_backroom(
     message: str = Query(default="", description="Your message to the backroom")
 ):
