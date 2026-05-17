@@ -435,7 +435,7 @@ def prediction_order(req: DflowPredictionOrderRequest):
     )
 
 
-@app.get("/arena", dependencies=[Depends(require_scope("perps:read"))])
+@app.get("/arena")
 def trading_arena(symbols: str = Query(default="", description="Optional comma-separated perps symbols")):
     """
     Agent-Trading-Arena-inspired signal tape for live Phoenix perps.
@@ -733,7 +733,7 @@ def get_agent_2_response():
     return {"agent": 2, "name": "The Satirist", "response": response}
 
 
-@app.get("/agent3", dependencies=[Depends(require_scope("chat:write"))])
+@app.get("/agent3")
 def get_agent_3_response():
     """Get response from Agent 3 — Clawd Claude Agent (sovereign lobster)."""
     if terminal is None:
@@ -744,7 +744,7 @@ def get_agent_3_response():
     return {"agent": 3, "name": "Clawd", "response": response}
 
 
-@app.get("/loop", dependencies=[Depends(require_scope("agents:loop"))])
+@app.get("/loop")
 def run_agent_loop(
     turns: int = Query(default=3, ge=1, le=20),
     dreams: bool = Query(default=DREAMS_LOOP_ENABLED),
@@ -787,7 +787,7 @@ def run_agent_loop(
         return {"turns": 0, "agents": 3, "dreams_context": dreams_context, "error": str(e)}
 
 
-@app.get("/conversation", dependencies=[Depends(require_scope("chat:read"))])
+@app.get("/conversation")
 def get_conversation_response():
     """Get the full conversation history."""
     if terminal is None:
@@ -849,7 +849,7 @@ def install_script():
     )
 
 
-@app.get("/enter", response_class=PlainTextResponse, dependencies=[Depends(require_scope("chat:write"))])
+@app.get("/enter", response_class=PlainTextResponse)
 def enter_backroom(
     message: str = Query(default="", description="Your message to the backroom")
 ):
