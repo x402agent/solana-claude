@@ -1,0 +1,81 @@
+# Secrets and local credentials
+.env
+.env.*
+!.env.example
+!**/.env.example
+!**/.env.sample
+!**/.env.template
+.npmrc
+.netrc
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+*.cer
+*.mobileprovision
+id_rsa
+id_ed25519
+clawd-terminal
+# Wrangler / Cloudflare Workers build artifacts
+.wrangler/
+.wrangler
+**/.wrangler/
+**/.wrangler
+
+# Dependencies and package manager caches
+node_modules/
+.pnpm-store/
+
+# Build output
+dist/
+build/
+target/
+**/target/
+.next/
+coverage/
+*.tsbuildinfo
+
+# Solana / Anchor generated keys
+*-keypair.json
+keypair.json
+id.json
+wallet.json
+**/target/deploy/*-keypair.json
+
+# Logs and local databases
+*.log
+*.sqlite
+*.sqlite3
+
+# OS and editor noise
+.DS_Store
+.idea/
+.vscode/
+
+# Nested repositories and release noise
+**/.git
+UltraThink-SKill/
+skills/UltraThink-SKill/
+skills/dflow-phantom-connect-skill/
+skills/dflow-skills/
+tui/dist/
+tui/node_modules/
+llm_oracle/upstream/percolator-prog
+
+# Private framework workspace — keep local only, never publish to public GitHub
+openclawd-framework/
+openclawd-framework/NanoSolana/
+openclawd-framework/pay/
+openclawd-framework/*.tar.gz
+openclawd-framework/Solanapolis-restore/
+openclawd-framework/Solanapolis-tmp/
+openclawd-framework/**/node_modules/
+openclawd-framework/**/dist/
+openclawd-framework/**/__pycache__/
+openclawd-framework/**/*.tsbuildinfo
+
+# Private / internal — never expose publicly
+openclawd-framework/multiagents-infinite-backroom/
+openclawd-framework/clawd-terminal/
+openclawd-framework/clawd-voice/
