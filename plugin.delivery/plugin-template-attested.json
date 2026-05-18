@@ -1,0 +1,74 @@
+{
+  "author": "OpenClawd",
+  "homepage": "https://github.com/x402agent/solana-clawd",
+  "identifier": "plugin-template-attested",
+  "locale": "en-US",
+  "manifest": "https://x402.wtf/plugins/manifest.json",
+  "registry": {
+    "protocol": "8004",
+    "program_id": "Ag8004rWo8ao8AUKhLk78iv2nLQpZMyBPXiAh5QLbFiE",
+    "verified": true,
+    "attestation_service": "22zoJMtdu4tQc2PzL74ZUT7FrwgB1Udec8DdW4yw4BdG"
+  },
+  "meta": {
+    "avatar": "⛓️",
+    "tags": [
+      "plugin",
+      "attestation",
+      "formal-verification",
+      "solana",
+      "openclawd"
+    ],
+    "title": "Attested Plugin Template",
+    "description": "Template for plugins that require Solana Attestation Service verification, proof-hash tracking, and OpenClawd registry metadata."
+  },
+  "attestation": {
+    "service": "solana-attestation-service",
+    "program_id": "22zoJMtdu4tQc2PzL74ZUT7FrwgB1Udec8DdW4yw4BdG",
+    "plugin_schema": {
+      "name": "OpenClawdPluginAttestation",
+      "layout": [
+        12,
+        32,
+        12,
+        34,
+        8,
+        1
+      ],
+      "field_names": [
+        "plugin_id",
+        "author_pubkey",
+        "attestation_ref",
+        "audit_proof_hash",
+        "timestamp",
+        "is_audited"
+      ]
+    }
+  },
+  "skills": [
+    {
+      "name": "solana-attestation-skill",
+      "enabled": true,
+      "priority": "required",
+      "path": "agents/skills/solana-attestation-skill"
+    },
+    {
+      "name": "solana-formal-verification",
+      "enabled": true,
+      "priority": "required",
+      "path": "agents/skills/solana-formal-verification"
+    }
+  ],
+  "capabilities": {
+    "formalVerification": true,
+    "attestationVerified": true,
+    "auditProofHash": true,
+    "registryIntegration": true
+  },
+  "securityRules": {
+    "formalVerificationRequired": true,
+    "attestationRequired": true,
+    "auditTrail": true,
+    "requireConfirmation": true
+  }
+}

@@ -1,0 +1,173 @@
+# Ralph Orchestrator Documentation
+site_name: Ralph Orchestrator
+site_description: Production-ready AI orchestration using the Ralph Wiggum technique
+site_author: Ralph Orchestrator Contributors
+site_url: https://mikeyobrien.github.io/ralph-orchestrator/
+repo_url: https://github.com/mikeyobrien/ralph-orchestrator
+repo_name: mikeyobrien/ralph-orchestrator
+edit_uri: edit/main/docs/
+
+# Theme Configuration
+theme:
+  name: material
+  favicon: assets/favicon.png
+  logo: assets/logo.png
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  font:
+    text: Roboto
+    code: Roboto Mono
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.sections
+    - navigation.expand
+    - navigation.path
+    - navigation.indexes
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - search.share
+    - header.autohide
+    - content.code.copy
+    - content.code.select
+    - content.code.annotate
+    - content.action.edit
+    - content.action.view
+    - content.tabs.link
+    - toc.follow
+
+# Navigation
+nav:
+  - Home:
+    - index.md
+    - quick-start.md
+    - installation.md
+  - User Guide:
+    - guide/overview.md
+    - guide/configuration.md
+    - guide/kiro-migration.md
+    - guide/agents.md
+    - guide/prompts.md
+    - guide/checkpointing.md
+    - guide/cost-management.md
+  - Deployment:
+    - deployment/docker.md
+    - deployment/kubernetes.md
+    - deployment/ci-cd.md
+    - deployment/production.md
+  - Advanced:
+    - advanced/architecture.md
+    - advanced/loop-detection.md
+    - advanced/security.md
+    - advanced/monitoring.md
+    - advanced/context-management.md
+    - advanced/production-deployment.md
+  - API Reference:
+    - api/orchestrator.md
+    - api/config.md
+    - api/agents.md
+    - api/metrics.md
+    - api/cli.md
+    - api/security.md
+  - Examples:
+    - examples/index.md
+    - examples/simple-task.md
+    - examples/web-api.md
+    - examples/cli-tool.md
+    - examples/data-analysis.md
+    - examples/bug-fix.md
+    - examples/documentation.md
+    - examples/testing.md
+  - Development:
+    - contributing.md
+    - testing.md
+    - changelog.md
+    - license.md
+  - Resources:
+    - troubleshooting.md
+    - faq.md
+    - glossary.md
+    - research.md
+    - 03-best-practices/best-practices.md
+    - 06-analysis/comparison-matrix.md
+
+# Plugins
+plugins:
+  - search:
+      separator: '[\s\-\.]+'
+
+# Markdown Extensions
+markdown_extensions:
+  - abbr
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+      toc_depth: 3
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.caret
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.magiclink:
+      repo_url_shorthand: true
+      user: mikeyobrien
+      repo: ralph-orchestrator
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde
+
+# Extra Configuration
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/mikeyobrien/ralph-orchestrator
+    - icon: fontawesome/brands/twitter
+      link: https://twitter.com/mikeyobrien
+  version:
+    provider: mike
+  analytics:
+    provider: google
+    property: !ENV GOOGLE_ANALYTICS_KEY
+
+# Copyright
+copyright: Copyright &copy; 2025 Ralph Orchestrator Contributors

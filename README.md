@@ -40,9 +40,44 @@
 ╚══════════════════════════════════════════════════════════════════════════════╝
 ```
 
+## New Core Surfaces
+
+The repo now includes three first-class operator/verification layers that sit alongside the broader Solana Clawd runtime:
+
+- [`automaton-main/`](./automaton-main/) — Crustacean Automation runtime, dashboard, vault, and registry-aware bootstrap scripts
+- [`attestation/`](./attestation/README.md) — vendored Solana Attestation Service program, IDL, generated clients, and integration tests
+- [`operator/`](./operator/README.md) — OpenClawd Operator loop for iterative agent execution, checkpointing, scratchpads, prompt archiving, and ACP-compatible orchestration
+
+These tie directly into the generated agent/template/skill surfaces under [`agents/`](./agents/):
+
+- `134` agents
+- `43` one-shots
+- `23` featured agents
+- `5` templates
+- `20` formalized skill-hub entries
+- `115` top-level skills with `SKILL.md`
+
+Verification-specific integrations now present in-tree:
+
+- [`agents/skills/solana-attestation-skill/`](./agents/skills/solana-attestation-skill/)
+- [`agents/agent-template-attested.json`](./agents/agent-template-attested.json)
+- [`plugin.delivery/plugin-template-attested.json`](./plugin.delivery/plugin-template-attested.json)
+- [`agents/templates/solana-attestation-agent.template.json`](./agents/templates/solana-attestation-agent.template.json)
+
+Operator-specific runtime now present in-tree:
+
+- `operator/src/ralph_orchestrator/` — vendored loop engine, adapters, output formatters, metrics, and safety modules
+- `operator/tests/` — upstream async/integration/ACP-heavy operator test suite
+- `operator/ralph.yml` — operator configuration surface carried forward for the existing loop engine
+
 ## Skills Index
 
-This repo currently carries 94 active skills under [`skills/`](./skills/). The full generated catalog lives in [`skills/README.md`](./skills/README.md) and [`skills/catalog.json`](./skills/catalog.json).
+This repo currently carries 115 active skills under [`skills/`](./skills/) and [`agents/skills/`](./agents/skills/). The generated catalogs live in:
+
+- [`skills/README.md`](./skills/README.md)
+- [`skills/catalog.json`](./skills/catalog.json)
+- [`agents/skills/README.md`](./agents/skills/README.md)
+- [`agents/skills/index.json`](./agents/skills/index.json)
 
 <details>
 <summary>All skills</summary>

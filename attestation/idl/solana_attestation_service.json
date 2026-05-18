@@ -1,0 +1,796 @@
+{
+  "version": "0.1.0",
+  "name": "solana_attestation_service",
+  "instructions": [
+    {
+      "name": "CreateCredential",
+      "accounts": [
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "credential",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "name": "signers",
+          "type": {
+            "vec": "publicKey"
+          }
+        }
+      ],
+      "discriminant": {
+        "type": "u8",
+        "value": 0
+      }
+    },
+    {
+      "name": "CreateSchema",
+      "accounts": [
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "credential",
+          "isMut": false,
+          "isSigner": false,
+          "docs": [
+            "Credential the Schema is associated with"
+          ]
+        },
+        {
+          "name": "schema",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "name": "description",
+          "type": "string"
+        },
+        {
+          "name": "layout",
+          "type": "bytes"
+        },
+        {
+          "name": "fieldNames",
+          "type": {
+            "vec": "string"
+          }
+        }
+      ],
+      "discriminant": {
+        "type": "u8",
+        "value": 1
+      }
+    },
+    {
+      "name": "ChangeSchemaStatus",
+      "accounts": [
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "credential",
+          "isMut": false,
+          "isSigner": false,
+          "docs": [
+            "Credential the Schema is associated with"
+          ]
+        },
+        {
+          "name": "schema",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "Credential the Schema is associated with"
+          ]
+        }
+      ],
+      "args": [
+        {
+          "name": "isPaused",
+          "type": "bool"
+        }
+      ],
+      "discriminant": {
+        "type": "u8",
+        "value": 2
+      }
+    },
+    {
+      "name": "ChangeAuthorizedSigners",
+      "accounts": [
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "credential",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "Credential the Schema is associated with"
+          ]
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "signers",
+          "type": {
+            "vec": "publicKey"
+          }
+        }
+      ],
+      "discriminant": {
+        "type": "u8",
+        "value": 3
+      }
+    },
+    {
+      "name": "ChangeSchemaDescription",
+      "accounts": [
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "credential",
+          "isMut": false,
+          "isSigner": false,
+          "docs": [
+            "Credential the Schema is associated with"
+          ]
+        },
+        {
+          "name": "schema",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "Credential the Schema is associated with"
+          ]
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "description",
+          "type": "string"
+        }
+      ],
+      "discriminant": {
+        "type": "u8",
+        "value": 4
+      }
+    },
+    {
+      "name": "ChangeSchemaVersion",
+      "accounts": [
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "credential",
+          "isMut": false,
+          "isSigner": false,
+          "docs": [
+            "Credential the Schema is associated with"
+          ]
+        },
+        {
+          "name": "existingSchema",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "newSchema",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "layout",
+          "type": "bytes"
+        },
+        {
+          "name": "fieldNames",
+          "type": {
+            "vec": "string"
+          }
+        }
+      ],
+      "discriminant": {
+        "type": "u8",
+        "value": 5
+      }
+    },
+    {
+      "name": "CreateAttestation",
+      "accounts": [
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true,
+          "docs": [
+            "Authorized signer of the Schema's Credential"
+          ]
+        },
+        {
+          "name": "credential",
+          "isMut": false,
+          "isSigner": false,
+          "docs": [
+            "Credential the Schema is associated with"
+          ]
+        },
+        {
+          "name": "schema",
+          "isMut": false,
+          "isSigner": false,
+          "docs": [
+            "Schema the Attestation is associated with"
+          ]
+        },
+        {
+          "name": "attestation",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "nonce",
+          "type": "publicKey"
+        },
+        {
+          "name": "data",
+          "type": "bytes"
+        },
+        {
+          "name": "expiry",
+          "type": "i64"
+        }
+      ],
+      "discriminant": {
+        "type": "u8",
+        "value": 6
+      }
+    },
+    {
+      "name": "CloseAttestation",
+      "accounts": [
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true,
+          "docs": [
+            "Authorized signer of the Schema's Credential"
+          ]
+        },
+        {
+          "name": "credential",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "attestation",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "eventAuthority",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "attestationProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [],
+      "discriminant": {
+        "type": "u8",
+        "value": 7
+      }
+    },
+    {
+      "name": "TokenizeSchema",
+      "accounts": [
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "credential",
+          "isMut": false,
+          "isSigner": false,
+          "docs": [
+            "Credential the Schema is associated with"
+          ]
+        },
+        {
+          "name": "schema",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "mint",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "Mint of Schema Token"
+          ]
+        },
+        {
+          "name": "sasPda",
+          "isMut": false,
+          "isSigner": false,
+          "docs": [
+            "Program derived address used as program signer authority"
+          ]
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "maxSize",
+          "type": "u64"
+        }
+      ],
+      "discriminant": {
+        "type": "u8",
+        "value": 9
+      }
+    },
+    {
+      "name": "CreateTokenizedAttestation",
+      "accounts": [
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true,
+          "docs": [
+            "Authorized signer of the Schema's Credential"
+          ]
+        },
+        {
+          "name": "credential",
+          "isMut": false,
+          "isSigner": false,
+          "docs": [
+            "Credential the Schema is associated with"
+          ]
+        },
+        {
+          "name": "schema",
+          "isMut": false,
+          "isSigner": false,
+          "docs": [
+            "Schema the Attestation is associated with"
+          ]
+        },
+        {
+          "name": "attestation",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "schemaMint",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "Mint of Schema Token"
+          ]
+        },
+        {
+          "name": "attestationMint",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "Mint of Attestation Token"
+          ]
+        },
+        {
+          "name": "sasPda",
+          "isMut": false,
+          "isSigner": false,
+          "docs": [
+            "Program derived address used as program signer authority"
+          ]
+        },
+        {
+          "name": "recipientTokenAccount",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "Associated token account of Recipient for Attestation Token"
+          ]
+        },
+        {
+          "name": "recipient",
+          "isMut": false,
+          "isSigner": false,
+          "docs": [
+            "Wallet to receive Attestation Token"
+          ]
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "associatedTokenProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "nonce",
+          "type": "publicKey"
+        },
+        {
+          "name": "data",
+          "type": "bytes"
+        },
+        {
+          "name": "expiry",
+          "type": "i64"
+        },
+        {
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "name": "uri",
+          "type": "string"
+        },
+        {
+          "name": "symbol",
+          "type": "string"
+        },
+        {
+          "name": "mintAccountSpace",
+          "type": "u16"
+        }
+      ],
+      "discriminant": {
+        "type": "u8",
+        "value": 10
+      }
+    },
+    {
+      "name": "CloseTokenizedAttestation",
+      "accounts": [
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true,
+          "docs": [
+            "Authorized signer of the Schema's Credential"
+          ]
+        },
+        {
+          "name": "credential",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "attestation",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "eventAuthority",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "attestationProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "attestationMint",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "Mint of Attestation Token"
+          ]
+        },
+        {
+          "name": "sasPda",
+          "isMut": false,
+          "isSigner": false,
+          "docs": [
+            "Program derived address used as program signer authority"
+          ]
+        },
+        {
+          "name": "attestationTokenAccount",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "Associated token account of the related Attestation Token"
+          ]
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [],
+      "discriminant": {
+        "type": "u8",
+        "value": 11
+      }
+    },
+    {
+      "name": "EmitEvent",
+      "accounts": [
+        {
+          "name": "eventAuthority",
+          "isMut": false,
+          "isSigner": true
+        }
+      ],
+      "args": [],
+      "discriminant": {
+        "type": "u8",
+        "value": 228
+      }
+    }
+  ],
+  "accounts": [
+    {
+      "name": "Attestation",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "nonce",
+            "type": "publicKey"
+          },
+          {
+            "name": "credential",
+            "type": "publicKey"
+          },
+          {
+            "name": "schema",
+            "type": "publicKey"
+          },
+          {
+            "name": "data",
+            "type": "bytes"
+          },
+          {
+            "name": "signer",
+            "type": "publicKey"
+          },
+          {
+            "name": "expiry",
+            "type": "i64"
+          },
+          {
+            "name": "tokenAccount",
+            "type": "publicKey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Credential",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "authority",
+            "type": "publicKey"
+          },
+          {
+            "name": "name",
+            "type": "bytes"
+          },
+          {
+            "name": "authorizedSigners",
+            "type": {
+              "vec": "publicKey"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "Schema",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "credential",
+            "type": "publicKey"
+          },
+          {
+            "name": "name",
+            "type": "bytes"
+          },
+          {
+            "name": "description",
+            "type": "bytes"
+          },
+          {
+            "name": "layout",
+            "type": "bytes"
+          },
+          {
+            "name": "fieldNames",
+            "type": "bytes"
+          },
+          {
+            "name": "isPaused",
+            "type": "bool"
+          },
+          {
+            "name": "version",
+            "type": "u8"
+          }
+        ]
+      }
+    }
+  ],
+  "types": [
+    {
+      "name": "CloseAttestationEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "discriminator",
+            "type": "u8"
+          },
+          {
+            "name": "schema",
+            "type": "publicKey"
+          },
+          {
+            "name": "attestationData",
+            "type": "bytes"
+          }
+        ]
+      }
+    }
+  ],
+  "metadata": {
+    "origin": "shank",
+    "address": "22zoJMtdu4tQc2PzL74ZUT7FrwgB1Udec8DdW4yw4BdG"
+  }
+}

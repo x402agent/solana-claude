@@ -88,6 +88,22 @@ Both `leviathan.sh` and `quickstart.sh` link `dist/index.js` to `~/.local/bin/cl
 
 ---
 
+## Adjacent Layers
+
+This runtime now sits beside two new first-class sibling surfaces in the repo:
+
+- [`../attestation/README.md`](../attestation/README.md) — vendored Solana Attestation Service program, generated clients, IDL, and integration tests for formally verified skills, agents, and plugins
+- [`../operator/README.md`](../operator/README.md) — OpenClawd Operator, the iterative agent-command loop that carries the Llobster Legend orchestration path forward under the OpenClawd banner
+
+The attestation path is wired into this runtime through:
+
+- [`../agents/skills/solana-attestation-skill/`](../agents/skills/solana-attestation-skill/)
+- [`../agents/agent-template-attested.json`](../agents/agent-template-attested.json)
+- [`../plugin.delivery/plugin-template-attested.json`](../plugin.delivery/plugin-template-attested.json)
+- [`../agents/templates/solana-attestation-agent.template.json`](../agents/templates/solana-attestation-agent.template.json)
+
+---
+
 ## Runtime API surface
 
 | Variable | Description |
@@ -165,7 +181,7 @@ Current generated catalog state:
 - `23` featured agents
 - `5` templates
 - `20` formalized skill-hub entries
-- `114` top-level local skills with `SKILL.md`
+- `115` top-level local skills with `SKILL.md`
 
 The important distinction is:
 
@@ -227,7 +243,7 @@ Formal verification metadata is defined in [`../agents/skills/skill-schema.v1.js
 
 ## Expanded Local Skill Library
 
-The broader operator skill library lives in [`../agents/skills`](../agents/skills). Today there are `114` top-level skills with `SKILL.md`. These are the human-facing local capabilities; some are already in the formal hub, some are not yet normalized into the generated registry.
+The broader operator skill library lives in [`../agents/skills`](../agents/skills). Today there are `115` top-level skills with `SKILL.md`. These are the human-facing local capabilities; some are already in the formal hub, some are not yet normalized into the generated registry.
 
 ### Dev Tools / Agents
 
@@ -329,6 +345,7 @@ The broader operator skill library lives in [`../agents/skills`](../agents/skill
 - `pumpfun-trading`
 - `solana-clawd`
 - `solana-clawd-agentic-commerce`
+- `solana-attestation-skill`
 - `solana-formal-verification`
 - `sponge-wallet`
 - `swarm-orchestrator`
