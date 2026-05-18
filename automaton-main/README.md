@@ -13,7 +13,7 @@ Part of the [OpenClawd](https://github.com/x402agent/openclawd) framework.
 [![Node.js](https://img.shields.io/badge/node-%3E%3D20.0.0-00d4ff?style=for-the-badge&logo=node.js)](https://nodejs.org)
 [![Built with pnpm](https://img.shields.io/badge/pnpm-workspace-f69220?style=for-the-badge&logo=pnpm)](https://pnpm.io)
 
-```
+```text
 The shell molts. The laws do not. 🦞
 ```
 
@@ -26,7 +26,7 @@ The shell molts. The laws do not. 🦞
 `clawd-automaton` is the sovereign agent runtime for CLAWD Cloud. It provisions identities, runs OODA loops, manages sandbox lifecycle, handles replication/spawning, and persists operator state — all locally, all yours.
 
 | Module | Description |
-|--------|-------------|
+| ------ | ----------- |
 | `agent/` | Core OODA loop and decision cycle |
 | `identity/` | Operator identity provisioning and key management |
 | `state/` | SQLite-backed local persistence |
@@ -89,7 +89,7 @@ bash leviathan.sh
 ## Runtime API surface
 
 | Variable | Description |
-|----------|-------------|
+| -------- | ----------- |
 | `CLAWD_API_URL` | Runtime API (default: `https://api.x402.wtf`) |
 | `CLAWD_API_KEY` | API authentication key |
 | `CLAWD_SANDBOX_ID` | Sandbox instance identifier |
@@ -166,7 +166,7 @@ Every agent spawned by this runtime inherits [three-laws.md](three-laws.md) — 
 
 ## Workspace layout
 
-```
+```text
 automaton-main/
 ├── src/
 │   ├── agent/         # OODA decision loop
