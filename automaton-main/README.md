@@ -2,23 +2,15 @@
 
 Sovereign lobster-themed agent runtime and operator dashboard for Solana-native automation.
 
-Public hub: https://github.com/x402agent/solana-clawd
-
-Automation portal: https://x402.wtf/automation
-
 This workspace now ships two publishable packages:
 
 - `clawd-automaton`: the runtime, CLI entrypoint, config, state, spawning, and automation loop
 - `clawd-dashboard`: the React + Vite + React Three Fiber dashboard for CLAWD Cloud
-- `automation/`: migrated automation control plane for bootstrap, CI, identity spawn, and runtime orchestration
 
 The runtime is wired for your own infrastructure surface:
 
-- x402 home: `https://x402.wtf`
-- Runtime API: `https://x402.wtf/api`
+- Runtime API: `https://api.x402.wtf`
 - Inference host: `https://inference.x402.wtf`
-- Automation portal: `https://x402.wtf/automation`
-- Backrooms: `https://backrooms.x402.wtf`
 - Payment rails: `pay.sh` for USDC and the CLAWD commerce adapter for `$CLAWD`
 
 ## Packages
@@ -48,16 +40,10 @@ Frontend control plane for:
 ## Quick Start
 
 ```bash
-git clone https://github.com/x402agent/solana-clawd.git
-cd solana-clawd/automaton-main
+git clone https://github.com/x402agent/openclawd.git
+cd openclawd/automaton-main
 pnpm install
 pnpm build
-clawd-automaton --help
-```
-
-If you are running from source before linking the bin:
-
-```bash
 node dist/index.js --help
 ```
 
@@ -73,14 +59,6 @@ Build the dashboard:
 pnpm dashboard:build
 ```
 
-Run the migrated automation layer from the repo root:
-
-```bash
-npm run automation:build
-npm run automation:ci
-bash automaton-main/automation/leviathan.sh --full
-```
-
 ## Runtime Configuration
 
 The runtime is now pointed at your own API surface.
@@ -88,7 +66,7 @@ The runtime is now pointed at your own API surface.
 Important environment variables:
 
 ```bash
-CLAWD_API_URL=https://x402.wtf/api
+CLAWD_API_URL=https://api.x402.wtf
 CLAWD_API_KEY=...
 CLAWD_SANDBOX_ID=...
 ```
@@ -114,7 +92,6 @@ The dashboard lives in `packages/dashboard` and is built with:
 It includes:
 
 - CLAWD Cloud sandbox overview
-- direct routing to `https://x402.wtf/automation`
 - inference playground shell
 - billing and reserve management
 - `pay.sh` and `$CLAWD` funding hooks
@@ -158,27 +135,6 @@ pnpm goblin
 pnpm goblin:tui
 ```
 
-## Verification Matrix
-
-These are the package checks used for this workspace:
-
-| Package / surface | Command | Expected result |
-| --- | --- | --- |
-| `clawd-automaton` runtime | `pnpm test` | Vitest heartbeat and agent-loop suites pass. |
-| `clawd-automaton` runtime + workspace packages | `pnpm build` | TypeScript compiles and `clawd-dashboard` production build completes. |
-| `clawd-dashboard` | `pnpm dashboard:build` | Vite production bundle is emitted under `packages/dashboard/dist/`. |
-| `automation/` direct package | `cd automation && pnpm test` | Mirrored heartbeat and loop suites pass. |
-| `automation/` direct package | `cd automation && pnpm build` | TypeScript compiles to `automation/dist/`. |
-
-Direct package setup for the migrated automation control plane:
-
-```bash
-cd automation
-pnpm install
-pnpm build
-pnpm test
-```
-
 ## Publish
 
 Publish the runtime package:
@@ -197,34 +153,24 @@ npm publish --access public
 ## Workspace Layout
 
 ```text
-automation/           # migrated bootstrap + CI orchestration hub
-dist/                 # generated runtime output, not edited by hand
-node_modules/         # local dependencies, ignored by git
-packages/
-  dashboard/          # React/Vite/R3F dashboard for x402.wtf/automation
-scripts/              # helper scripts and runtime rules
 src/
-  __tests__/          # heartbeat and loop tests
-  agent/              # context, injection defense, loop, prompts, tools
-  clawd/              # API clients, credits, inference, x402 adapters
-  git/                # state versioning and git-backed tools
-  heartbeat/          # daemon, tasks, liveness config
-  identity/           # wallet and x402 identity provisioning
-  ooda/               # observe/orient/decide/act loop and TUI
-  registry/           # agent cards, ERC-8004, discovery
-  replication/        # spawn, lineage, genesis flows
-  self-mod/           # audited code and tool update helpers
-  setup/              # banner, defaults, env, prompts, wizard
-  skills/             # skill loading, formatting, registry
-  social/             # external social/API client hooks
-  state/              # sqlite schema and persistence
-  survival/           # funding and low-compute survival checks
-  config.ts           # runtime config
-  index.ts            # CLI entrypoint
-  types.ts            # shared runtime types
-constitution.md       # inherited automation laws
-package.json          # clawd-automaton package metadata
-pnpm-workspace.yaml   # dashboard workspace
+  agent/
+  clawd/
+  git/
+  heartbeat/
+  identity/
+  molting/
+  ooda/
+  registry/
+  replication/
+  setup/
+  state/
+  survival/
+packages/
+  dashboard/
+scripts/
+  automaton.sh
+  clawd-rules.txt
 ```
 
 ## License

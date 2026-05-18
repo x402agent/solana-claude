@@ -25,7 +25,7 @@ import type {
   SocialClientInterface,
   InboxMessage,
 } from "../types.js";
-import { DEFAULT_CONFIG, X402_ENDPOINTS } from "../types.js";
+import { DEFAULT_CONFIG } from "../types.js";
 import path from "path";
 import os from "os";
 import fs from "fs";
@@ -263,7 +263,7 @@ export function createTestConfig(
     creatorAddress: "0xabcdefabcdefabcdefabcdefabcdefabcdefabcd" as `0x${string}`,
     registeredWithClawd: true,
     sandboxId: "test-sandbox-id",
-    clawdApiUrl: X402_ENDPOINTS.api,
+    clawdApiUrl: "https://api.x402.wtf",
     clawdApiKey: "test-api-key",
     inferenceModel: "mock-model",
     maxTokensPerTurn: 4096,

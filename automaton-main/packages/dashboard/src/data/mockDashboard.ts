@@ -26,7 +26,7 @@ export const mockDashboard: DashboardState = {
       {
         title: "Install the automaton runtime",
         body: "Bootstrap the runtime directly in the shell, then attach your agent identity and heartbeat.",
-        command: "curl -fsSL https://x402.wtf/automation/install.sh | bash",
+        command: "curl -fsSL https://x402.wtf/automaton.sh | sh",
       },
       {
         title: "Verify pulse and health",

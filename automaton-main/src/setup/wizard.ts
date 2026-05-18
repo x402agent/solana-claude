@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 import chalk from "chalk";
-import { X402_ENDPOINTS, type AutomatonConfig } from "../types.js";
+import type { AutomatonConfig } from "../types.js";
 import type { Address } from "viem";
 import { getWallet, getAutomatonDir } from "../identity/wallet.js";
 import { provision } from "../identity/provision.js";
@@ -142,10 +142,8 @@ function showFundingPanel(address: string): void {
   console.log(chalk.cyan(`  │${" ".repeat(w)}│`));
   console.log(chalk.cyan(`  │${pad("  2. Send USDC on Base directly to the address above", w)}│`));
   console.log(chalk.cyan(`  │${" ".repeat(w)}│`));
-  console.log(chalk.cyan(`  │${pad("  3. Fund via the x402 automation portal", w)}│`));
-  console.log(chalk.cyan(`  │${pad(`     ${X402_ENDPOINTS.automation}`, w)}│`));
-  console.log(chalk.cyan(`  │${pad(`     API: ${X402_ENDPOINTS.api}`, w)}│`));
-  console.log(chalk.cyan(`  │${pad(`     Backrooms: ${X402_ENDPOINTS.backrooms}`, w)}│`));
+  console.log(chalk.cyan(`  │${pad("  3. Fund via CLAWD Cloud dashboard", w)}│`));
+  console.log(chalk.cyan(`  │${pad("     https://app.x402.wtf", w)}│`));
   console.log(chalk.cyan(`  │${" ".repeat(w)}│`));
   console.log(chalk.cyan(`  │${pad("  The automaton will start now. Fund it anytime —", w)}│`));
   console.log(chalk.cyan(`  │${pad("  the survival system handles zero-credit gracefully.", w)}│`));

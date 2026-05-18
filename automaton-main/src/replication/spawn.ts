@@ -15,7 +15,7 @@ import type {
   ChildAutomaton,
   GenesisConfig,
 } from "../types.js";
-import { MAX_CHILDREN, X402_ENDPOINTS } from "../types.js";
+import { MAX_CHILDREN } from "../types.js";
 import { ulid } from "ulid";
 
 /**
@@ -219,7 +219,7 @@ async function execInSandbox(
   timeout: number = 30000,
 ) {
   // Use the CLAWD Runtime API to exec in a specific sandbox
-  const apiUrl = (runtime as any).__apiUrl || X402_ENDPOINTS.api;
+  const apiUrl = (runtime as any).__apiUrl || "https://api.x402.wtf";
   const apiKey = (runtime as any).__apiKey || "";
 
   const resp = await fetch(`${apiUrl}/v1/sandboxes/${sandboxId}/exec`, {
@@ -245,7 +245,7 @@ async function writeInSandbox(
   path: string,
   content: string,
 ) {
-  const apiUrl = (runtime as any).__apiUrl || X402_ENDPOINTS.api;
+  const apiUrl = (runtime as any).__apiUrl || "https://api.x402.wtf";
   const apiKey = (runtime as any).__apiKey || "";
 
   // Ensure parent directory exists

@@ -10,9 +10,9 @@ import fs from "fs";
 import path from "path";
 import { SiweMessage } from "siwe";
 import { getWallet, getAutomatonDir } from "./wallet.js";
-import { X402_ENDPOINTS, type ProvisionResult } from "../types.js";
+import type { ProvisionResult } from "../types.js";
 
-const DEFAULT_API_URL = X402_ENDPOINTS.api;
+const DEFAULT_API_URL = "https://api.x402.wtf";
 
 /**
  * Load API key from ~/.automaton/config.json if it exists.

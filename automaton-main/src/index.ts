@@ -24,7 +24,7 @@ import { loadSkills } from "./skills/loader.js";
 import { initStateRepo } from "./git/state-versioning.js";
 import { createSocialClient } from "./social/client.js";
 import { createConvexClient } from "./clawd/convex-client.js";
-import { X402_ENDPOINTS, type AutomatonIdentity, type AgentState, type Skill, type SocialClientInterface, type ConvexAgentClient } from "./types.js";
+import type { AutomatonIdentity, AgentState, Skill, SocialClientInterface, ConvexAgentClient } from "./types.js";
 
 const VERSION = "0.1.0";
 
@@ -54,14 +54,8 @@ Usage:
   clawd --help         Show this help
 
 Environment:
-  CLAWD_API_URL       CLAWD Runtime API URL (default: ${X402_ENDPOINTS.api})
+  CLAWD_API_URL       CLAWD Runtime API URL (default: https://api.x402.wtf)
   CLAWD_API_KEY       CLAWD Runtime API key (overrides config)
-
-Routes:
-  GitHub hub          ${X402_ENDPOINTS.hub}
-  x402 home           ${X402_ENDPOINTS.x402}
-  Automation portal   ${X402_ENDPOINTS.automation}
-  Backrooms           ${X402_ENDPOINTS.backrooms}
 `);
     process.exit(0);
   }

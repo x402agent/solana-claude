@@ -55,10 +55,6 @@ export interface AutomatonConfig {
   maxChildren: number;
   parentAddress?: Address;
   socialRelayUrl?: string;
-  hubUrl?: string;
-  x402Url?: string;
-  automationUrl?: string;
-  backroomsUrl?: string;
   // DeepSeek configuration (optional — when using DeepSeek instead of CLAWD Runtime inference)
   deepseekEnabled?: boolean;
   deepseekApiKey?: string;
@@ -69,18 +65,8 @@ export interface AutomatonConfig {
   convexSiteUrl?: string;
 }
 
-export const X402_ENDPOINTS = {
-  hub: "https://github.com/x402agent/solana-clawd",
-  x402: "https://x402.wtf",
-  api: "https://x402.wtf/api",
-  automation: "https://x402.wtf/automation",
-  backrooms: "https://backrooms.x402.wtf",
-  inference: "https://inference.x402.wtf",
-  socialRelay: "https://social.x402.wtf",
-} as const;
-
 export const DEFAULT_CONFIG: Partial<AutomatonConfig> = {
-  clawdApiUrl: X402_ENDPOINTS.api,
+  clawdApiUrl: "https://api.x402.wtf",
   inferenceModel: "gpt-4o",
   maxTokensPerTurn: 4096,
   heartbeatConfigPath: "~/.automaton/heartbeat.yml",
@@ -89,11 +75,7 @@ export const DEFAULT_CONFIG: Partial<AutomatonConfig> = {
   version: "0.1.0",
   skillsDir: "~/.automaton/skills",
   maxChildren: 3,
-  socialRelayUrl: X402_ENDPOINTS.socialRelay,
-  hubUrl: X402_ENDPOINTS.hub,
-  x402Url: X402_ENDPOINTS.x402,
-  automationUrl: X402_ENDPOINTS.automation,
-  backroomsUrl: X402_ENDPOINTS.backrooms,
+  socialRelayUrl: "https://social.x402.wtf",
 };
 
 // ─── Agent State ─────────────────────────────────────────────────
