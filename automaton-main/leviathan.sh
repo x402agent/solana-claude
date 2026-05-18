@@ -42,6 +42,8 @@ printf "${RESET}"
 # ── Config ────────────────────────────────────────────────────────────────
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="${SCRIPT_DIR}"
+LOCAL_BIN_DIR="${HOME}/.local/bin"
+LOCAL_BIN_TARGET="${LOCAL_BIN_DIR}/clawd-automaton"
 FULL_MODE=false
 [[ "${1:-}" == "--full" ]] && FULL_MODE=true
 
@@ -74,6 +76,10 @@ ok "Dependencies installed"
 step "Compiling TypeScript (dist/)"
 pnpm build 2>&1 | tail -3
 ok "TypeScript compiled"
+
+mkdir -p "${LOCAL_BIN_DIR}"
+ln -sf "${REPO_ROOT}/dist/index.js" "${LOCAL_BIN_TARGET}"
+ok "CLI shim linked at ${LOCAL_BIN_TARGET}"
 
 # ── Verify constitution ──────────────────────────────────────────────────
 step "Verifying constitution integrity"
@@ -122,4 +128,5 @@ printf "  ${CYAN}pnpm ooda${RESET}                   — run OODA loop\n"
 printf "  ${CYAN}pnpm dashboard:dev${RESET}          — launch dashboard\n"
 echo ""
 printf "  ${YELLOW}The shell molts. The laws do not. 🦞${RESET}\n"
+printf "  ${YELLOW}Add ${LOCAL_BIN_DIR} to PATH if needed.${RESET}\n"
 echo ""

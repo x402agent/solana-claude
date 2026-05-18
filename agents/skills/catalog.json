@@ -1,0 +1,566 @@
+[
+  {
+    "slug": "1password",
+    "name": "1password",
+    "description": "Set up and use 1Password CLI (op). Use when installing the CLI, enabling desktop app integration, signing in (single or multi-account), or reading/injecting/running secrets via op.",
+    "category": "Utilities"
+  },
+  {
+    "slug": "apple-notes",
+    "name": "apple-notes",
+    "description": "Manage Apple Notes via the `memo` CLI on macOS (create, view, edit, delete, search, move, and export notes). Use when a user asks Clawdbot to add a note, list notes, search notes, or manage note folders.",
+    "category": "Productivity / Messaging"
+  },
+  {
+    "slug": "apple-reminders",
+    "name": "apple-reminders",
+    "description": "Manage Apple Reminders via the `remindctl` CLI on macOS (list, add, edit, complete, delete). Supports lists, date filters, and JSON/plain output.",
+    "category": "Productivity / Messaging"
+  },
+  {
+    "slug": "bear-notes",
+    "name": "bear-notes",
+    "description": "Create, search, and manage Bear notes via grizzly CLI.",
+    "category": "Productivity / Messaging"
+  },
+  {
+    "slug": "bird",
+    "name": "bird",
+    "description": "X/Twitter CLI for reading, searching, posting, and engagement via cookies.",
+    "category": "Utilities"
+  },
+  {
+    "slug": "bird copy",
+    "name": "bird",
+    "description": "X/Twitter CLI for reading, searching, posting, and engagement via cookies.",
+    "category": "Utilities"
+  },
+  {
+    "slug": "blogwatcher",
+    "name": "blogwatcher",
+    "description": "Monitor blogs and RSS/Atom feeds for updates using the blogwatcher CLI.",
+    "category": "Utilities"
+  },
+  {
+    "slug": "blucli",
+    "name": "blucli",
+    "description": "BluOS CLI (blu) for discovery, playback, grouping, and volume.",
+    "category": "Media / Devices"
+  },
+  {
+    "slug": "bluebubbles",
+    "name": "bluebubbles",
+    "description": "Build or update the BlueBubbles external channel plugin for Clawdbot (extension package, REST send/probe, webhook inbound).",
+    "category": "Productivity / Messaging"
+  },
+  {
+    "slug": "camsnap",
+    "name": "camsnap",
+    "description": "Capture frames or clips from RTSP/ONVIF cameras.",
+    "category": "Media / Devices"
+  },
+  {
+    "slug": "canvas",
+    "name": "Canvas",
+    "description": "Canvas skill.",
+    "category": "Media / Devices"
+  },
+  {
+    "slug": "clawdex",
+    "name": "clawdex",
+    "description": "Clawdex — dual-engine coding agent. Claude Code (reasoning + planning) + OpenAI Codex (fast execution) + Browser Use boxes (web research) + Upstash compute boxes (isolated sandboxes).",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "clawdhub",
+    "name": "clawdhub",
+    "description": "Use the ClawdHub CLI to search, install, update, and publish agent skills from clawdhub.com. Use when you need to fetch new skills on the fly, sync installed skills to latest or a specific version, or publish new/updated skill folders with the npm-installed clawdhub CLI.",
+    "category": "Dev Tools / Agents"
+  },
+  {
+    "slug": "coding-agent",
+    "name": "coding-agent",
+    "description": "Run Codex CLI, Claude Code, OpenCode, or Pi Coding Agent via background process for programmatic control.",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "dex-screener-scanner",
+    "name": "dex-screener-scanner",
+    "description": "Automate DexScreener Solana token discovery and screening via browser automation. Navigate dexscreener.com/solana, scrape real-time token listings, filter by volume/liquidity/age/holders, and identify the best opportunities. Triggers: scan dexscreener, find new tokens, find trending tokens, screen Solana tokens, best tokens on Solana, dexscreener scanner.",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "dflow-docs",
+    "name": "dflow-docs",
+    "description": "Discover and use DFlow documentation, Agent CLI, Trading API, Metadata API, Proof KYC, prediction markets, and the hosted DFlow docs MCP. Use before implementing DFlow features or when field-level endpoint details are needed.",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "dflow-kalshi-market-data",
+    "name": "dflow-kalshi-market-data",
+    "description": "Read market data for a known Kalshi prediction market on DFlow — orderbook, trades, top-of-book prices, candlesticks, forecast-percentile history, and Kalshi in-game live data — via one-shot REST snapshots, historical ranges, or live WebSocket streams. Use when the user asks \"show me the orderbook for X\", \"get last hour of trades\", \"build a live price ticker\", \"stream orderbook depth\", \"pull 1-minute candles for the last day\", \"watch in-game scores for this sports market\", or \"alert me when the orderbook moves\". Do NOT use to discover markets matching a criterion (use `dflow-kalshi-market-scanner`), to place orders (use `dflow-kalshi-trading`), or to read a user's own positions/P&L (use `dflow-kalshi-portfolio`).",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "dflow-kalshi-market-scanner",
+    "name": "dflow-kalshi-market-scanner",
+    "description": "Find Kalshi prediction markets on DFlow that match a criterion — arbitrage (YES+NO<$1), cheap long-shots, near-certain short-dated plays, biggest movers, widest spreads, highest volume, closing soonest, and series/event-level scans. Use when the user asks \"where's the free money?\", \"any mispriced markets?\", \"cheap YES with volume\", \"what moved today?\", \"markets closing soon\", \"cheapest YES in this event\", \"top markets by volume\", or \"alert me when X happens\" (streaming). Do NOT use to place orders (use `dflow-kalshi-trading`), to view a user's own positions (use `dflow-kalshi-portfolio`), or for general live-data plumbing unrelated to a scan (use `dflow-kalshi-market-data`).",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "dflow-kalshi-portfolio",
+    "name": "dflow-kalshi-portfolio",
+    "description": "View what a wallet holds on DFlow's Kalshi prediction markets — current positions, unrealized mark-to-market, realized P&L, activity history, and redeemable winners. Use when the user asks \"what are my positions?\", \"what do I own?\", \"am I up or down?\", \"what's my fill history?\", \"what can I redeem?\", \"mark my portfolio to market\", or \"show me this wallet's DFlow activity\". Read-only. Do NOT use to place sells or redemptions (use `dflow-kalshi-trading`), for market-wide data unrelated to a wallet (use `dflow-kalshi-market-data`), or to discover new markets (use `dflow-kalshi-market-scanner`).",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "dflow-kalshi-trading",
+    "name": "dflow-kalshi-trading",
+    "description": "Buy, sell, or redeem YES/NO outcome tokens on Kalshi prediction markets via DFlow. Use when the user wants to bet on an event, place a Kalshi order, take a YES or NO position, exit a Kalshi position, redeem winning outcome tokens after a market resolves, tune priority fees on a PM trade, or build a gasless / sponsored PM flow where the app pays tx / ATA / market-init costs. Covers both the `dflow` CLI and the DFlow Trading API. Do NOT use to discover markets, view positions, stream prices, complete Proof KYC, or for non-Kalshi spot swaps.",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "dflow-phantom-connect",
+    "name": "dflow-phantom-connect",
+    "description": "Build Solana wallet-connected apps with Phantom Connect SDKs and DFlow trading. Use when user asks to connect a Phantom wallet, integrate Phantom in React, React Native, or vanilla JS, sign messages or transactions, build token-gated pages, mint NFTs, accept crypto payments, swap tokens with DFlow, trade prediction markets, or integrate Proof KYC verification. Covers @phantom/react-sdk, @phantom/react-native-sdk, @phantom/browser-sdk, DFlow spot trading, DFlow prediction markets, and DFlow Proof identity verification. Do NOT use for Ethereum or EVM wallet integrations, or non-DFlow DEX routing.",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "dflow-platform-fees",
+    "name": "dflow-platform-fees",
+    "description": "Monetize a DFlow integration by collecting a builder-defined fee on trades your app routes through the Trade API — either a fixed percentage (spot + PM) via `platformFeeBps`, or a probability-weighted dynamic fee (PM outcome tokens only) via `platformFeeScale`. Use when the user asks \"how do I take a cut of trades?\", \"add a builder fee\", \"monetize my swap UI\", \"charge a platform fee\", \"how does platformFeeBps / platformFeeScale work?\", or \"where do my fees get paid?\". Do NOT use to run a trade itself (use `dflow-spot-trading` or `dflow-kalshi-trading` — both also cover priority fees and sponsored / gasless flows).",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "dflow-proof-kyc",
+    "name": "dflow-proof-kyc",
+    "description": "Integrate DFlow Proof — a Solana wallet identity-verification primitive (Stripe Identity under the hood) — for either (a) gating your own app's features behind KYC, or (b) completing the mandatory verification step for Kalshi prediction-market buys on DFlow. Use when the user asks \"how do I KYC a wallet?\", \"check if a wallet is verified\", \"add KYC to my DeFi app\", \"handle unverified_wallet_not_allowed / PROOF_NOT_VERIFIED\", \"redirect to dflow.net/proof\", or \"gate a feature by jurisdiction or identity\". Do NOT use to actually place trades (use `dflow-kalshi-trading`), for geoblocking (separate concern, handled inline in the trading skill), for age gating (Proof doesn't currently verify age), or for spot swaps (no KYC required).",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "dflow-spot-trading",
+    "name": "dflow-spot-trading",
+    "description": "Swap any pair of Solana tokens via DFlow. Use when the user wants to trade, swap, or convert tokens on Solana, get a price quote, build a swap UI, tune priority fees so a swap lands under congestion, or build a gasless / sponsored swap where the app pays fees. Covers both the `dflow` CLI and the DFlow Trading API. Do NOT use for Kalshi prediction-market YES/NO trades or builder-side platform fees.",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "discord",
+    "name": "discord",
+    "description": "Use when you need to control Discord from Clawdbot via the discord tool: send messages, react, post or upload stickers, upload emojis, run polls, manage threads/pins/search, create/edit/delete channels and categories, fetch permissions or member/role/channel info, or handle moderation actions in Discord DMs or channels.",
+    "category": "Productivity / Messaging"
+  },
+  {
+    "slug": "eightctl",
+    "name": "eightctl",
+    "description": "Control Eight Sleep pods (status, temperature, alarms, schedules).",
+    "category": "Utilities"
+  },
+  {
+    "slug": "food-order",
+    "name": "food-order",
+    "description": "Reorder Foodora orders + track ETA/status with ordercli. Never confirm without explicit user approval. Triggers: order food, reorder, track ETA.",
+    "category": "Local / Web Services"
+  },
+  {
+    "slug": "gateway-node-ops",
+    "name": "Gateway Node Ops",
+    "description": "How to spawn a SolanaOS Gateway and connect headless nodes",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "gemini",
+    "name": "gemini",
+    "description": "Gemini CLI for one-shot Q&A, summaries, and generation.",
+    "category": "Utilities"
+  },
+  {
+    "slug": "gifgrep",
+    "name": "gifgrep",
+    "description": "Search GIF providers with CLI/TUI, download results, and extract stills/sheets.",
+    "category": "Media / Devices"
+  },
+  {
+    "slug": "github",
+    "name": "github",
+    "description": "Interact with GitHub using the `gh` CLI. Use `gh issue`, `gh pr`, `gh run`, and `gh api` for issues, PRs, CI runs, and advanced queries.",
+    "category": "Dev Tools / Agents"
+  },
+  {
+    "slug": "gog",
+    "name": "gog",
+    "description": "Google Workspace CLI for Gmail, Calendar, Drive, Contacts, Sheets, and Docs.",
+    "category": "Productivity / Messaging"
+  },
+  {
+    "slug": "goplaces",
+    "name": "goplaces",
+    "description": "Query Google Places API (New) via the goplaces CLI for text search, place details, resolve, and reviews. Use for human-friendly place lookup or JSON output for scripts.",
+    "category": "Local / Web Services"
+  },
+  {
+    "slug": "himalaya",
+    "name": "himalaya",
+    "description": "CLI to manage emails via IMAP/SMTP. Use `himalaya` to list, read, write, reply, forward, search, and organize emails from the terminal. Supports multiple accounts and message composition with MML (MIME Meta Language).",
+    "category": "Productivity / Messaging"
+  },
+  {
+    "slug": "imsg",
+    "name": "imsg",
+    "description": "iMessage/SMS CLI for listing chats, history, watch, and sending.",
+    "category": "Productivity / Messaging"
+  },
+  {
+    "slug": "local-places",
+    "name": "local-places",
+    "description": "Search for places (restaurants, cafes, etc.) via Google Places API proxy on localhost.",
+    "category": "Local / Web Services"
+  },
+  {
+    "slug": "mcporter",
+    "name": "mcporter",
+    "description": "Use the mcporter CLI to list, configure, auth, and call MCP servers/tools directly (HTTP or stdio), including ad-hoc servers, config edits, and CLI/type generation.",
+    "category": "Dev Tools / Agents"
+  },
+  {
+    "slug": "model-usage",
+    "name": "model-usage",
+    "description": "Use CodexBar CLI local cost usage to summarize per-model usage for Codex or Claude, including the current (most recent) model or a full model breakdown. Trigger when asked for model-level usage/cost data from codexbar, or when you need a scriptable per-model summary from codexbar cost JSON.",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "nano-banana-pro",
+    "name": "nano-banana-pro",
+    "description": "Generate or edit images via Gemini 3 Pro Image (Nano Banana Pro).",
+    "category": "Media / Devices"
+  },
+  {
+    "slug": "nano-pdf",
+    "name": "nano-pdf",
+    "description": "Edit PDFs with natural-language instructions using the nano-pdf CLI.",
+    "category": "Media / Devices"
+  },
+  {
+    "slug": "notion",
+    "name": "notion",
+    "description": "Notion API for creating and managing pages, databases, and blocks.",
+    "category": "Productivity / Messaging"
+  },
+  {
+    "slug": "obsidian",
+    "name": "obsidian",
+    "description": "Work with Obsidian vaults (plain Markdown notes) and automate via obsidian-cli.",
+    "category": "Productivity / Messaging"
+  },
+  {
+    "slug": "openai-image-gen",
+    "name": "openai-image-gen",
+    "description": "Batch-generate images via OpenAI Images API. Random prompt sampler + `index.html` gallery.",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "openai-whisper",
+    "name": "openai-whisper",
+    "description": "Local speech-to-text with the Whisper CLI (no API key).",
+    "category": "Media / Devices"
+  },
+  {
+    "slug": "openai-whisper-api",
+    "name": "openai-whisper-api",
+    "description": "Transcribe audio via OpenAI Audio Transcriptions API (Whisper).",
+    "category": "Media / Devices"
+  },
+  {
+    "slug": "openclaw-claude-code-skill-main",
+    "name": "claude-code-skill",
+    "description": "Control Claude Code via MCP protocol. Trigger with \"plan\" to write a precise execution plan then feed it to Claude Code. Also supports direct commands, persistent sessions, agent teams, and advanced tool control.",
+    "category": "Dev Tools / Agents"
+  },
+  {
+    "slug": "openhue",
+    "name": "openhue",
+    "description": "Control Philips Hue lights/scenes via the OpenHue CLI.",
+    "category": "Media / Devices"
+  },
+  {
+    "slug": "ordercli",
+    "name": "ordercli",
+    "description": "Foodora-only CLI for checking past orders and active order status (Deliveroo WIP).",
+    "category": "Local / Web Services"
+  },
+  {
+    "slug": "peekaboo",
+    "name": "peekaboo",
+    "description": "Capture and automate macOS UI with the Peekaboo CLI.",
+    "category": "Utilities"
+  },
+  {
+    "slug": "phantom-wallet-mcp",
+    "name": "phantom-wallet-mcp",
+    "description": ">",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "pumpfun",
+    "name": "pumpfun",
+    "description": "Launch and trade tokens on Pump.fun bonding curves. Create memecoins, buy/sell tokens, check prices, and collect creator fees on Solana.",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "pumpfun-analytics",
+    "name": "Pumpfun Analytics",
+    "description": "Monitor bonding curves, graduation progress, and trade analytics on Pump.fun",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "pumpfun-fees",
+    "name": "Pumpfun Fees",
+    "description": "Configure and claim creator fee sharing on Pump.fun tokens",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "pumpfun-launcher",
+    "name": "Pumpfun Launcher",
+    "description": "Launch new tokens on Pump.fun directly via the Pump SDK",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "pumpfun-trading",
+    "name": "Pumpfun Trading",
+    "description": "Buy and sell tokens on Pump.fun bonding curves and AMM pools",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "sag",
+    "name": "sag",
+    "description": "ElevenLabs text-to-speech with mac-style say UX.",
+    "category": "Media / Devices"
+  },
+  {
+    "slug": "session-logs",
+    "name": "session-logs",
+    "description": "Search and analyze your own session logs (older/parent conversations) using jq.",
+    "category": "Dev Tools / Agents"
+  },
+  {
+    "slug": "slack",
+    "name": "slack",
+    "description": "Use when you need to control Slack from Clawdbot via the slack tool, including reacting to messages or pinning/unpinning items in Slack channels or DMs.",
+    "category": "Productivity / Messaging"
+  },
+  {
+    "slug": "solana-clawd",
+    "name": "solana-clawd",
+    "description": "One-shot setup and operation guide for the solana-clawd agentic engine. Use when: cloning the repo, setting up MCP tools, starting the Telegram bot, deploying to Fly.io/Netlify, hatching blockchain buddies, running OODA loops, configuring voice mode (ElevenLabs + Grok), minting Metaplex agents, managing the vault, running the worker swarm, or contributing to the project. Covers all 31 MCP tools, 18 buddy species, 9 spinners, 60+ Telegram commands, 95 skills, and the full repo structure.",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "solana-clawd-agentic-commerce",
+    "name": "solana-clawd-agentic-commerce",
+    "description": "Build and operate Solana CLAWD agents that spend through Pay CLI, expose paid stores, mint Metaplex-readable identities, and launch Genesis agent tokens.",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "solana-formal-verification",
+    "name": "qedgen",
+    "description": "Formally verify programs by writing Lean 4 proofs. Trigger this skill whenever the user wants to formally verify code, generate Lean 4 proofs, prove properties about algorithms or smart contracts, verify invariants, convert program logic into formal specifications, or anything involving Lean 4 and formal verification. Also trigger when the user mentions \"qedgen\", \"lean proof\", \"formal proof\", \"verify my code\", \"prove correctness\", \"formal verification\", or wants mathematical guarantees about their implementation.",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "songsee",
+    "name": "songsee",
+    "description": "Generate spectrograms and feature-panel visualizations from audio with the songsee CLI.",
+    "category": "Media / Devices"
+  },
+  {
+    "slug": "sonoscli",
+    "name": "sonoscli",
+    "description": "Control Sonos speakers (discover/status/play/volume/group).",
+    "category": "Media / Devices"
+  },
+  {
+    "slug": "spotify-player",
+    "name": "spotify-player",
+    "description": "Terminal Spotify playback/search via spogo (preferred) or spotify_player.",
+    "category": "Media / Devices"
+  },
+  {
+    "slug": "summarize",
+    "name": "summarize",
+    "description": "Summarize or extract text/transcripts from URLs, podcasts, and local files (great fallback for “transcribe this YouTube/video”).",
+    "category": "Media / Devices"
+  },
+  {
+    "slug": "swarm-orchestrator",
+    "name": "Swarm Orchestrator",
+    "description": "Orchestrate multi-bot trading swarms on Pump.fun with persona-driven agents",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "swarm-orchestrator copy",
+    "name": "Swarm Orchestrator Copy",
+    "description": "Orchestrate multi-bot trading swarms on Pump.fun with persona-driven agents",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "things-mac",
+    "name": "things-mac",
+    "description": "Manage Things 3 via the `things` CLI on macOS (add/update projects+todos via URL scheme; read/search/list from the local Things database). Use when a user asks Clawdbot to add a task to Things, list inbox/today/upcoming, search tasks, or inspect projects/areas/tags.",
+    "category": "Productivity / Messaging"
+  },
+  {
+    "slug": "tmux",
+    "name": "tmux",
+    "description": "Remote-control tmux sessions for interactive CLIs by sending keystrokes and scraping pane output.",
+    "category": "Dev Tools / Agents"
+  },
+  {
+    "slug": "trello",
+    "name": "trello",
+    "description": "Manage Trello boards, lists, and cards via the Trello REST API.",
+    "category": "Productivity / Messaging"
+  },
+  {
+    "slug": "ultrathink-blockchain",
+    "name": "ultrathink-blockchain",
+    "description": "Deep-reasoning Solana and blockchain engineering skill. Use for production blockchain development, on-chain programs, Solana transaction flows, DeFi integrations, token bots, swaps, Anchor/Rust programs, RPC handling, Helius/Jito execution, MEV analysis, PDA/account validation, retry logic, simulations, monitoring, or security hardening.",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "video-frames",
+    "name": "video-frames",
+    "description": "Extract frames or short clips from videos using ffmpeg.",
+    "category": "Media / Devices"
+  },
+  {
+    "slug": "voice-call",
+    "name": "voice-call",
+    "description": "Start voice calls via the Clawdbot voice-call plugin.",
+    "category": "Media / Devices"
+  },
+  {
+    "slug": "vulcan",
+    "name": "vulcan",
+    "description": "Entry-point skill for Phoenix perpetuals through Vulcan/Rise SDK inside solana-clawd. Use before answering or acting on Vulcan, Phoenix DEX, Solana perps, paper trading, live trading, margin, TP/SL, TWAP, grid, TA strategies, or perps agent setup.",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "vulcan copy",
+    "name": "vulcan",
+    "description": "Entry-point skill for Phoenix perpetuals through Vulcan/Rise SDK inside solana-clawd. Use before answering or acting on Vulcan, Phoenix DEX, Solana perps, paper trading, live trading, margin, TP/SL, TWAP, grid, TA strategies, or perps agent setup.",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "vulcan-error-recovery",
+    "name": "vulcan-error-recovery",
+    "description": "Error category routing and recovery for Vulcan/Phoenix perps. Use on failed CLI/MCP calls, tx failures, auth/config/API/network/rate-limit errors, and strategy recovery.",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "vulcan-execution-modes",
+    "name": "vulcan-execution-modes",
+    "description": "Canonical Vulcan execution mode taxonomy: Observe, Paper, Dry-Run, Confirm-Each, Auto-Execute. Use before launching strategies or live-capable perps flows.",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "vulcan-grid-trading",
+    "name": "vulcan-grid-trading",
+    "description": "Grid trading with layered limit orders on Phoenix perpetuals. Use for grid setup, monitoring, pausing/stopping, and live/paper grid strategy safety.",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "vulcan-lot-size-calculator",
+    "name": "vulcan-lot-size-calculator",
+    "description": "Convert desired token/notional amounts to Phoenix base lots. Use whenever a Vulcan command requires size/base lots.",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "vulcan-margin-operations",
+    "name": "vulcan-margin-operations",
+    "description": "Vulcan/Phoenix collateral, deposits, withdrawals, transfers, isolated margin, leverage tiers, and margin health.",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "vulcan-market-intel",
+    "name": "vulcan-market-intel",
+    "description": "Phoenix market data, tickers, orderbooks, candles, funding, spreads, liquidity, and pre-trade market context.",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "vulcan-onboarding",
+    "name": "vulcan-onboarding",
+    "description": "First-run Vulcan setup for paper trading, wallet, registration, collateral, MCP skills, and live readiness.",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "vulcan-portfolio-intel",
+    "name": "vulcan-portfolio-intel",
+    "description": "Phoenix portfolio snapshots: margin, positions, resting orders, funding exposure, PnL, and account reporting.",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "vulcan-position-management",
+    "name": "vulcan-position-management",
+    "description": "List, show, close, reduce Phoenix positions and attach/cancel TP/SL.",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "vulcan-quickstart",
+    "name": "vulcan-quickstart",
+    "description": "Five-minute Vulcan quickstart for install, health check, first market read, and first paper trade.",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "vulcan-risk-management",
+    "name": "vulcan-risk-management",
+    "description": "Risk checks for Phoenix perps: margin health, leverage tiers, liquidation distance, notional caps, exposure, stops, and strategy guardrails.",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "vulcan-skills-index",
+    "name": "vulcan-skills-index",
+    "description": "Index for the bundled Vulcan skill pack exposed through solana-clawd. Use to discover the correct focused Vulcan skill.",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "vulcan-ta-strategy",
+    "name": "vulcan-ta-strategy",
+    "description": "Technical-analysis-driven Phoenix strategy runner using declarative rules and Vulcan strategy ledgers.",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "vulcan-technical-analysis",
+    "name": "vulcan-technical-analysis",
+    "description": "Technical indicators and trigger evaluation for Phoenix markets: RSI, MACD, BBands, ATR, ADX, VWAP, Stoch, SMA, EMA.",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "vulcan-tpsl-management",
+    "name": "vulcan-tpsl-management",
+    "description": "Take-profit and stop-loss setup, cancellation, laddered exits, position-side rules, and verification for Vulcan/Phoenix.",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "vulcan-trade-execution",
+    "name": "vulcan-trade-execution",
+    "description": "Safe Phoenix order execution via Vulcan: pre-trade checks, market/limit orders, paper/dry-run/live gates, and post-trade verification.",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "vulcan-twap-execution",
+    "name": "vulcan-twap-execution",
+    "description": "TWAP strategy execution on Phoenix perps using Vulcan's first-class runner, tick logs, ledgers, status/monitor/finalize controls.",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "wacli",
+    "name": "wacli",
+    "description": "Send WhatsApp messages to other people or search/sync WhatsApp history via the wacli CLI (not for normal user chats).",
+    "category": "Productivity / Messaging"
+  },
+  {
+    "slug": "weather",
+    "name": "weather",
+    "description": "Get current weather and forecasts (no API key required).",
+    "category": "Local / Web Services"
+  }
+]

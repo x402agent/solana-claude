@@ -4,7 +4,9 @@
 set -e
 
 REPO_URL="https://github.com/x402agent/openclawd.git"
-INSTALL_DIR="/opt/clawd-automaton"
+INSTALL_DIR="${CLAWD_AUTOMATON_INSTALL_DIR:-$HOME/.clawd/automaton}"
+BIN_DIR="${HOME}/.local/bin"
+BIN_TARGET="${BIN_DIR}/clawd-automaton"
 
 echo "🦞  Crustacean Automation — One-Shot Install"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
@@ -22,6 +24,8 @@ if ! command -v pnpm >/dev/null 2>&1; then
 fi
 
 # Clone or update
+mkdir -p "$(dirname "${INSTALL_DIR}")"
+
 if [ -d "${INSTALL_DIR}" ]; then
   echo "Updating existing install at ${INSTALL_DIR}..."
   git -C "${INSTALL_DIR}" pull --ff-only
@@ -34,12 +38,16 @@ cd "${INSTALL_DIR}/automaton-main"
 pnpm install --frozen-lockfile
 pnpm build
 
+mkdir -p "${BIN_DIR}"
+ln -sf "${INSTALL_DIR}/automaton-main/dist/index.js" "${BIN_TARGET}"
+
 echo ""
 echo "✅  Installation complete!"
 echo ""
 echo "  clawd-automaton --help     Show available commands"
 echo "  clawd-automaton --run      Start the agent loop"
 echo "  clawd-automaton --status   Check runtime status"
+echo "  Binary linked at ${BIN_TARGET}"
 echo ""
 echo "  The shell molts. The laws do not. 🦞"
 echo ""

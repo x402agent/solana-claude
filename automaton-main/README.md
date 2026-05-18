@@ -84,6 +84,8 @@ Or use the one-shot bootstrap:
 bash leviathan.sh
 ```
 
+Both `leviathan.sh` and `quickstart.sh` link `dist/index.js` to `~/.local/bin/clawd-automaton` so the CLI is usable after a source install. If `~/.local/bin` is not on your `PATH`, add it in your shell profile.
+
 ---
 
 ## Runtime API surface
@@ -204,6 +206,7 @@ automaton-main/
 pnpm install        # Install all workspace deps
 pnpm build          # Build runtime + dashboard
 pnpm test           # Run test suite
+pnpm exec clawd-automaton --help
 pnpm dev            # Watch mode
 pnpm ooda           # Run OODA loop (dev)
 pnpm goblin         # Goblin mode (dev, devnet)

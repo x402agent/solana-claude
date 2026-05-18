@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ULTRATHINK × BLOCKCHAIN</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --sol-purple: #9945FF;
+      --sol-green: #14F195;
+      --sol-dark: #0a0a0f;
+      --sol-darker: #050508;
+      --glow-purple: rgba(153, 69, 255, 0.6);
+      --glow-green: rgba(20, 241, 149, 0.6);
+      --text-dim: rgba(255, 255, 255, 0.5);
+      --text-bright: rgba(255, 255, 255, 0.95);
+      --grid-color: rgba(153, 69, 255, 0.08);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: var(--sol-darker);
+      color: var(--text-bright);
+      font-family: 'JetBrains Mono', monospace;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Scanlines overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: repeating-linear-gradient(
+        0deg,
+        rgba(0, 0, 0, 0.15) 0px,
+        rgba(0, 0, 0, 0.15) 1px,
+        transparent 1px,
+        transparent 2px
+      );
+      pointer-events: none;
+      z-index: 1000;
+    }
+
+    /* Grid background */
+    .grid-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        linear-gradient(var(--grid-color) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+      background-size: 50px 50px;
+      z-index: -1;
+    }
+
+    /* Gradient orbs */
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(100px);
+      z-index: -1;
+      animation: pulse 8s ease-in-out infinite;
+    }
+
+    .orb-1 {
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, var(--glow-purple) 0%, transparent 70%);
+      top: -200px;
+      right: -200px;
+    }
+
+    .orb-2 {
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, var(--glow-green) 0%, transparent 70%);
+      bottom: -150px;
+      left: -150px;
+      animation-delay: -4s;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.4; transform: scale(1); }
+      50% { opacity: 0.6; transform: scale(1.1); }
+    }
+
+    /* Header */
+    .header {
+      text-align: center;
+      padding: 60px 20px 40px;
+      position: relative;
+    }
+
+    .header h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(2rem, 6vw, 4rem);
+      font-weight: 900;
+      letter-spacing: 0.2em;
+      background: linear-gradient(135deg, var(--sol-purple) 0%, var(--sol-green) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-shadow: 0 0 60px var(--glow-purple);
+      margin-bottom: 10px;
+    }
+
+    .header .subtitle {
+      font-size: 0.85rem;
+      color: var(--text-dim);
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+    }
+
+    /* Main container */
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    /* Formula display */
+    .formula-display {
+      background: linear-gradient(135deg, rgba(153, 69, 255, 0.1) 0%, rgba(20, 241, 149, 0.05) 100%);
+      border: 1px solid rgba(153, 69, 255, 0.3);
+      border-radius: 8px;
+      padding: 30px;
+      margin-bottom: 50px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .formula-display::before {
+      content: '>';
+      position: absolute;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--sol-green);
+      font-size: 1.5rem;
+      animation: blink 1s infinite;
+    }
+
+    @keyframes blink {
+      0%, 50% { opacity: 1; }
+      51%, 100% { opacity: 0; }
+    }
+
+    .formula-text {
+      font-size: clamp(0.7rem, 2vw, 1rem);
+      font-weight: 500;
+      letter-spacing: 0.05em;
+    }
+
+    .formula-text .op {
+      color: var(--sol-purple);
+      margin: 0 8px;
+    }
+
+    .formula-text .var {
+      color: var(--sol-green);
+    }
+
+    /* Pipeline flow */
+    .pipeline {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 60px;
+      padding: 0 20px;
+    }
+
+    .pipeline-node {
+      background: rgba(10, 10, 15, 0.8);
+      border: 1px solid rgba(153, 69, 255, 0.4);
+      border-radius: 6px;
+      padding: 15px 20px;
+      text-align: center;
+      flex: 1;
+      min-width: 120px;
+      position: relative;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .pipeline-node:hover {
+      border-color: var(--sol-green);
+      box-shadow: 0 0 30px rgba(20, 241, 149, 0.2);
+      transform: translateY(-3px);
+    }
+
+    .pipeline-node .num {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.7rem;
+      color: var(--sol-purple);
+      margin-bottom: 5px;
+    }
+
+    .pipeline-node .label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+    }
+
+    .pipeline-arrow {
+      color: var(--sol-purple);
+      font-size: 1.2rem;
+      opacity: 0.6;
+    }
+
+    /* Sections */
+    .section {
+      margin-bottom: 50px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 25px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid rgba(153, 69, 255, 0.2);
+    }
+
+    .section-num {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.8rem;
+      color: var(--sol-dark);
+      background: var(--sol-purple);
+      padding: 6px 12px;
+      border-radius: 4px;
+    }
+
+    .section-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+    }
+
+    /* Cards grid */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: linear-gradient(145deg, rgba(10, 10, 15, 0.9) 0%, rgba(20, 20, 30, 0.9) 100%);
+      border: 1px solid rgba(153, 69, 255, 0.2);
+      border-radius: 8px;
+      padding: 25px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(90deg, var(--sol-purple), var(--sol-green));
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .card:hover {
+      border-color: rgba(153, 69, 255, 0.5);
+      transform: translateY(-2px);
+    }
+
+    .card:hover::before {
+      opacity: 1;
+    }
+
+    .card-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--sol-green);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card-title .icon {
+      font-size: 1rem;
+    }
+
+    .card-content {
+      font-size: 0.75rem;
+      line-height: 1.7;
+      color: var(--text-dim);
+    }
+
+    .card-content code {
+      background: rgba(153, 69, 255, 0.2);
+      padding: 2px 6px;
+      border-radius: 3px;
+      color: var(--sol-green);
+      font-size: 0.7rem;
+    }
+
+    /* Ultrathink depth ladder */
+    .depth-ladder {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .depth-level {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      padding: 12px 15px;
+      background: rgba(10, 10, 15, 0.6);
+      border-left: 3px solid var(--sol-purple);
+      border-radius: 0 6px 6px 0;
+      transition: all 0.3s ease;
+    }
+
+    .depth-level:hover {
+      background: rgba(153, 69, 255, 0.1);
+      border-left-color: var(--sol-green);
+    }
+
+    .depth-level .name {
+      font-weight: 700;
+      font-size: 0.8rem;
+      min-width: 100px;
+      color: var(--sol-green);
+    }
+
+    .depth-level .bar {
+      flex: 1;
+      height: 8px;
+      background: rgba(153, 69, 255, 0.2);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .depth-level .bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--sol-purple), var(--sol-green));
+      border-radius: 4px;
+      transition: width 0.5s ease;
+    }
+
+    .depth-level .tokens {
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      min-width: 80px;
+      text-align: right;
+    }
+
+    /* Focus areas */
+    .focus-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+    }
+
+    .focus-item {
+      background: rgba(10, 10, 15, 0.8);
+      border: 1px solid rgba(20, 241, 149, 0.2);
+      border-radius: 6px;
+      padding: 20px;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .focus-item:hover {
+      border-color: var(--sol-green);
+      box-shadow: 0 0 20px rgba(20, 241, 149, 0.15);
+    }
+
+    .focus-item .icon {
+      font-size: 1.8rem;
+      margin-bottom: 10px;
+    }
+
+    .focus-item .name {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--sol-green);
+      margin-bottom: 8px;
+    }
+
+    .focus-item .desc {
+      font-size: 0.65rem;
+      color: var(--text-dim);
+      line-height: 1.5;
+    }
+
+    /* Checklist */
+    .checklist {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 12px;
+    }
+
+    .check-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 15px;
+      background: rgba(10, 10, 15, 0.6);
+      border: 1px solid rgba(20, 241, 149, 0.15);
+      border-radius: 6px;
+      font-size: 0.75rem;
+      transition: all 0.3s ease;
+    }
+
+    .check-item:hover {
+      border-color: var(--sol-green);
+      background: rgba(20, 241, 149, 0.05);
+    }
+
+    .check-item .check {
+      color: var(--sol-green);
+      font-size: 1rem;
+    }
+
+    /* Code block */
+    .code-block {
+      background: rgba(5, 5, 8, 0.9);
+      border: 1px solid rgba(153, 69, 255, 0.3);
+      border-radius: 8px;
+      padding: 20px;
+      overflow-x: auto;
+      font-size: 0.7rem;
+      line-height: 1.8;
+    }
+
+    .code-block .comment {
+      color: rgba(255, 255, 255, 0.35);
+    }
+
+    .code-block .keyword {
+      color: var(--sol-purple);
+    }
+
+    .code-block .string {
+      color: var(--sol-green);
+    }
+
+    .code-block .func {
+      color: #FFD700;
+    }
+
+    /* Terminal prompt visual */
+    .terminal-box {
+      background: rgba(5, 5, 8, 0.95);
+      border: 1px solid rgba(153, 69, 255, 0.4);
+      border-radius: 8px;
+      overflow: hidden;
+      margin-top: 40px;
+    }
+
+    .terminal-header {
+      background: rgba(153, 69, 255, 0.15);
+      padding: 10px 15px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px solid rgba(153, 69, 255, 0.3);
+    }
+
+    .terminal-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+
+    .terminal-dot.red { background: #ff5f56; }
+    .terminal-dot.yellow { background: #ffbd2e; }
+    .terminal-dot.green { background: #27c93f; }
+
+    .terminal-title {
+      margin-left: 10px;
+      font-size: 0.75rem;
+      color: var(--text-dim);
+    }
+
+    .terminal-body {
+      padding: 20px;
+      font-size: 0.75rem;
+      line-height: 1.8;
+    }
+
+    .terminal-line {
+      margin-bottom: 8px;
+    }
+
+    .terminal-line .prompt {
+      color: var(--sol-green);
+    }
+
+    .terminal-line .cmd {
+      color: var(--text-bright);
+    }
+
+    .terminal-line .output {
+      color: var(--text-dim);
+      padding-left: 20px;
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      padding: 60px 20px;
+      border-top: 1px solid rgba(153, 69, 255, 0.2);
+      margin-top: 60px;
+    }
+
+    .footer-text {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.8rem;
+      letter-spacing: 0.2em;
+      color: var(--text-dim);
+    }
+
+    .footer-text span {
+      color: var(--sol-purple);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .pipeline {
+        flex-direction: column;
+      }
+      
+      .pipeline-arrow {
+        transform: rotate(90deg);
+      }
+      
+      .pipeline-node {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="grid-bg"></div>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+
+  <header class="header">
+    <h1>ULTRATHINK</h1>
+    <p class="subtitle">Claude Code × Blockchain Protocol</p>
+  </header>
+
+  <div class="container">
+    <!-- Formula Display -->
+    <div class="formula-display">
+      <div class="formula-text">
+        <span class="var">INTENT</span>
+        <span class="op">+</span>
+        <span class="var">INTERVIEW</span>
+        <span class="op">+</span>
+        <span class="var">ULTRATHINK</span>
+        <span class="op">+</span>
+        <span class="var">PLAN</span>
+        <span class="op">+</span>
+        <span class="var">CONSTRAINTS</span>
+        <span class="op">→</span>
+        <span class="var">PRODUCTION CODE</span>
+      </div>
+    </div>
+
+    <!-- Pipeline Flow -->
+    <div class="pipeline">
+      <div class="pipeline-node">
+        <div class="num">01</div>
+        <div class="label">CONTEXT</div>
+      </div>
+      <div class="pipeline-arrow">→</div>
+      <div class="pipeline-node">
+        <div class="num">02</div>
+        <div class="label">INTENT</div>
+      </div>
+      <div class="pipeline-arrow">→</div>
+      <div class="pipeline-node">
+        <div class="num">03</div>
+        <div class="label">INTERVIEW</div>
+      </div>
+      <div class="pipeline-arrow">→</div>
+      <div class="pipeline-node">
+        <div class="num">04</div>
+        <div class="label">ULTRATHINK</div>
+      </div>
+      <div class="pipeline-arrow">→</div>
+      <div class="pipeline-node">
+        <div class="num">05</div>
+        <div class="label">PLAN</div>
+      </div>
+      <div class="pipeline-arrow">→</div>
+      <div class="pipeline-node">
+        <div class="num">06</div>
+        <div class="label">EXECUTE</div>
+      </div>
+      <div class="pipeline-arrow">→</div>
+      <div class="pipeline-node">
+        <div class="num">07</div>
+        <div class="label">ITERATE</div>
+      </div>
+    </div>
+
+    <!-- Ultrathink Section -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-num">DEPTH</span>
+        <h2 class="section-title">ULTRATHINK DEPTH LADDER</h2>
+      </div>
+      <div class="depth-ladder">
+        <div class="depth-level">
+          <span class="name">think</span>
+          <div class="bar"><div class="bar-fill" style="width: 15%"></div></div>
+          <span class="tokens">~500 tokens</span>
+        </div>
+        <div class="depth-level">
+          <span class="name">think hard</span>
+          <div class="bar"><div class="bar-fill" style="width: 30%"></div></div>
+          <span class="tokens">~2000 tokens</span>
+        </div>
+        <div class="depth-level">
+          <span class="name">think harder</span>
+          <div class="bar"><div class="bar-fill" style="width: 50%"></div></div>
+          <span class="tokens">~4000 tokens</span>
+        </div>
+        <div class="depth-level">
+          <span class="name">ultrathink</span>
+          <div class="bar"><div class="bar-fill" style="width: 80%"></div></div>
+          <span class="tokens">~8000 tokens</span>
+        </div>
+        <div class="depth-level">
+          <span class="name">megathink</span>
+          <div class="bar"><div class="bar-fill" style="width: 100%"></div></div>
+          <span class="tokens">MAX DEPTH</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Focus Areas -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-num">FOCUS</span>
+        <h2 class="section-title">BLOCKCHAIN ULTRATHINK TRIGGERS</h2>
+      </div>
+      <div class="focus-grid">
+        <div class="focus-item">
+          <div class="icon">⚡</div>
+          <div class="name">TRANSACTIONS</div>
+          <div class="desc">Instruction ordering, PDAs, compute units, lookup tables</div>
+        </div>
+        <div class="focus-item">
+          <div class="icon">🔺</div>
+          <div class="name">MEV EXPOSURE</div>
+          <div class="desc">Sandwich risk, backrun opportunities, Jito bundle decisions</div>
+        </div>
+        <div class="focus-item">
+          <div class="icon">🔄</div>
+          <div class="name">STATE RACES</div>
+          <div class="desc">Stale blockhash, account contention, retry strategies</div>
+        </div>
+        <div class="focus-item">
+          <div class="icon">🛡️</div>
+          <div class="name">SECURITY</div>
+          <div class="desc">Attack vectors, authority checks, reentrancy paths</div>
+        </div>
+        <div class="focus-item">
+          <div class="icon">💀</div>
+          <div class="name">FAILURE MODES</div>
+          <div class="desc">What breaks at 3am with no one watching?</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Phase Cards -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-num">PHASES</span>
+        <h2 class="section-title">THE EXTRACTION PROTOCOL</h2>
+      </div>
+      <div class="cards-grid">
+        <div class="card">
+          <div class="card-title"><span class="icon">📍</span> CONTEXT DUMP</div>
+          <div class="card-content">
+            Prime the model with chain-native context. Stack: <code>Helius</code> + <code>Birdeye</code> + <code>Jito</code>. 
+            Set constraints: retry logic, simulation-first, dynamic fees. Prevent web2 patterns from leaking in.
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title"><span class="icon">🎯</span> INTENT DECLARATION</div>
+          <div class="card-content">
+            Dimensional goal statements. Not "build a sniper" but <code>"sub-200ms execution via Jito with trailing stops"</code>. 
+            Include success criteria and non-obvious constraints.
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title"><span class="icon">🔍</span> EXTRACTION INTERVIEW</div>
+          <div class="card-content">
+            Force requirements gathering. Ask about existing stack, edge cases, scale expectations, 
+            what's already been tried. <code>3-5 questions at a time</code>. Requirements checkpoint before code.
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title"><span class="icon">🧠</span> ULTRATHINK</div>
+          <div class="card-content">
+            Focus deep reasoning on critical areas: TX structure, MEV exposure, state races, security. 
+            Don't burn tokens on obvious code. <code>ultrathink about [specific problem]</code>.
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title"><span class="icon">📋</span> PLAN MODE</div>
+          <div class="card-content">
+            Output before execution: Account schema, instruction flow, error taxonomy, test strategy. 
+            Review → steer → execute. The plan is where you catch architecture mistakes.
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title"><span class="icon">🔒</span> CONSTRAINTS</div>
+          <div class="card-content">
+            Guardrails that prevent anti-patterns. Retries on all RPC. Simulation before send. 
+            <code>Jito for value TXs</code>. Explicit timeouts. Graceful shutdown.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Checklist -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-num">SHIP</span>
+        <h2 class="section-title">NEVER DEPLOY WITHOUT</h2>
+      </div>
+      <div class="checklist">
+        <div class="check-item">
+          <span class="check">✓</span>
+          <span>Retry logic on all RPC calls</span>
+        </div>
+        <div class="check-item">
+          <span class="check">✓</span>
+          <span>Transaction simulation before send</span>
+        </div>
+        <div class="check-item">
+          <span class="check">✓</span>
+          <span>Dynamic priority fees via Helius</span>
+        </div>
+        <div class="check-item">
+          <span class="check">✓</span>
+          <span>Jito bundles for value transactions</span>
+        </div>
+        <div class="check-item">
+          <span class="check">✓</span>
+          <span>Explicit timeouts on network ops</span>
+        </div>
+        <div class="check-item">
+          <span class="check">✓</span>
+          <span>Graceful shutdown / position cleanup</span>
+        </div>
+        <div class="check-item">
+          <span class="check">✓</span>
+          <span>Structured logging with correlation IDs</span>
+        </div>
+        <div class="check-item">
+          <span class="check">✓</span>
+          <span>Circuit breakers for cascading failures</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Terminal Example -->
+    <div class="terminal-box">
+      <div class="terminal-header">
+        <div class="terminal-dot red"></div>
+        <div class="terminal-dot yellow"></div>
+        <div class="terminal-dot green"></div>
+        <span class="terminal-title">claude-code-session.sh</span>
+      </div>
+      <div class="terminal-body">
+        <div class="terminal-line">
+          <span class="prompt">λ </span>
+          <span class="cmd">Context: Solana mainnet. Stack: Helius + Birdeye + Jito.</span>
+        </div>
+        <div class="terminal-line">
+          <span class="prompt">λ </span>
+          <span class="cmd">I want a token sniper with sub-200ms execution and trailing stops.</span>
+        </div>
+        <div class="terminal-line">
+          <span class="prompt">λ </span>
+          <span class="cmd">Interview me thoroughly about requirements before writing code.</span>
+        </div>
+        <div class="terminal-line">
+          <span class="prompt">λ </span>
+          <span class="cmd">ultrathink about: TX atomicity, MEV protection, failure modes.</span>
+        </div>
+        <div class="terminal-line">
+          <span class="prompt">λ </span>
+          <span class="cmd">plan mode: on — show accounts, instructions, error taxonomy.</span>
+        </div>
+        <div class="terminal-line">
+          <span class="prompt">λ </span>
+          <span class="cmd">Constraints: retries, simulation, Jito, timeouts, graceful shutdown.</span>
+        </div>
+        <div class="terminal-line">
+          <span class="output">→ Full files. Production code. Ship to mainnet.</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <footer class="footer">
+    <p class="footer-text">ULTRATHINK <span>×</span> BUILD ON-CHAIN <span>×</span> SHIP TO MAINNET</p>
+  </footer>
+
+  <script>
+    // Add hover glow effect to pipeline nodes
+    document.querySelectorAll('.pipeline-node').forEach(node => {
+      node.addEventListener('mouseenter', () => {
+        node.style.boxShadow = '0 0 30px rgba(20, 241, 149, 0.3), inset 0 0 20px rgba(20, 241, 149, 0.1)';
+      });
+      node.addEventListener('mouseleave', () => {
+        node.style.boxShadow = 'none';
+      });
+    });
+
+    // Animate depth bars on scroll
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.animation = 'none';
+          entry.target.offsetHeight;
+          entry.target.style.animation = null;
+        }
+      });
+    }, { threshold: 0.5 });
+
+    document.querySelectorAll('.depth-level').forEach(level => {
+      observer.observe(level);
+    });
+
+    // Terminal typing effect
+    const terminalLines = document.querySelectorAll('.terminal-line');
+    terminalLines.forEach((line, index) => {
+      line.style.opacity = '0';
+      line.style.animation = `fadeIn 0.5s ease forwards ${index * 0.15}s`;
+    });
+
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateX(-10px); }
+        to { opacity: 1; transform: translateX(0); }
+      }
+    `;
+    document.head.appendChild(style);
+  </script>
+</body>
+</html>

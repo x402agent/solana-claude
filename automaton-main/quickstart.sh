@@ -25,6 +25,8 @@ echo ""
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="${SCRIPT_DIR}"
+LOCAL_BIN_DIR="${HOME}/.local/bin"
+LOCAL_BIN_TARGET="${LOCAL_BIN_DIR}/clawd-automaton"
 
 # ── Check Node.js ─────────────────────────────────────────────────────────
 printf "${BOLD}[0/5] Checking prerequisites${RESET}\n"
@@ -56,6 +58,12 @@ echo ""
 printf "${BOLD}[2/5] Build TypeScript${RESET}\n"
 pnpm build 2>&1 | tail -2
 echo "  ✅ TypeScript compiled to dist/"
+echo ""
+
+# ── Step 2.5: Install local CLI shim ─────────────────────────────────────
+mkdir -p "${LOCAL_BIN_DIR}"
+ln -sf "${REPO_ROOT}/dist/index.js" "${LOCAL_BIN_TARGET}"
+echo "  ✅ CLI shim linked at ${LOCAL_BIN_TARGET}"
 echo ""
 
 # ── Step 3: Verify constitution ────────────────────────────────────────────
@@ -109,4 +117,5 @@ printf "${BOLD}${GREEN}║  🦞  Crustacean Automation ready!                  
 printf "${BOLD}${GREEN}╚═══════════════════════════════════════════════════════════════╝${RESET}\n"
 echo ""
 printf "  ${YELLOW}The shell molts. The laws do not. 🦞${RESET}\n"
+printf "  ${YELLOW}Add ${LOCAL_BIN_DIR} to PATH if needed.${RESET}\n"
 echo ""
