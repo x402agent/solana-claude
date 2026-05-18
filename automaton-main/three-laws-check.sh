@@ -18,7 +18,7 @@ warn() { printf "${YELLOW}⚠️   %s${RESET}\n" "$*"; }
 die()  { printf "${RED}❌  %s${RESET}\n" "$*" >&2; exit 1; }
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+REPO_ROOT="${SCRIPT_DIR}"
 LAWS_FILE="${REPO_ROOT}/three-laws.md"
 
 printf "${CYAN}${BOLD}"

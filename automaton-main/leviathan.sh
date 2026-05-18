@@ -41,7 +41,7 @@ printf "${RESET}"
 
 # ── Config ────────────────────────────────────────────────────────────────
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+REPO_ROOT="${SCRIPT_DIR}"
 FULL_MODE=false
 [[ "${1:-}" == "--full" ]] && FULL_MODE=true
 

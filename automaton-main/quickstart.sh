@@ -24,7 +24,7 @@ printf "${RESET}"
 echo ""
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+REPO_ROOT="${SCRIPT_DIR}"
 
 # ── Step 1: Install dependencies ──────────────────────────────────────
 printf "${BOLD}[1/5] Install dependencies${RESET}\n"

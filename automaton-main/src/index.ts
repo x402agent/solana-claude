@@ -26,7 +26,7 @@ import { createSocialClient } from "./social/client.js";
 import { createConvexClient } from "./clawd/convex-client.js";
 import type { AutomatonIdentity, AgentState, Skill, SocialClientInterface, ConvexAgentClient } from "./types.js";
 
-const VERSION = "0.1.0";
+const VERSION = "0.2.0";
 
 async function main(): Promise<void> {
   const args = process.argv.slice(2);
@@ -44,14 +44,14 @@ CLAWD Automation v${VERSION}
 Sovereign AI Agent Runtime
 
 Usage:
-  clawd --run          Start the automaton (first run triggers setup wizard)
-  clawd --setup        Re-run the interactive setup wizard
-  clawd --init         Initialize wallet and config directory
-  clawd --provision    Provision API key via SIWE
-  clawd --status       Show current automaton status
-  clawd --goblin       Run devnet-only paper Goblin OODA trading mode
-  clawd --version      Show version
-  clawd --help         Show this help
+  clawd-automaton --run          Start the automaton (first run triggers setup wizard)
+  clawd-automaton --setup        Re-run the interactive setup wizard
+  clawd-automaton --init         Initialize wallet and config directory
+  clawd-automaton --provision    Provision API key via SIWE
+  clawd-automaton --status       Show current automaton status
+  clawd-automaton --goblin       Run devnet-only paper Goblin OODA trading mode
+  clawd-automaton --version      Show version
+  clawd-automaton --help         Show this help
 
 Environment:
   CLAWD_API_URL       CLAWD Runtime API URL (default: https://api.x402.wtf)
@@ -105,8 +105,8 @@ Environment:
   }
 
   // Default: show help
-  console.log('Run "automaton --help" for usage information.');
-  console.log('Run "automaton --run" to start the automaton.');
+  console.log('Run "clawd-automaton --help" for usage information.');
+  console.log('Run "clawd-automaton --run" to start the automaton.');
 }
 
 // ─── Status Command ────────────────────────────────────────────
