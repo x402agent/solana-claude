@@ -119,9 +119,7 @@ async function mintCoreAsset(opts: {
 // POST /api/mint/agent — gasless preset agent mint
 // ---------------------------------------------------------------------------
 router.post('/api/mint/agent', async (req: Request, res: Response) => {
-  const ip = (req.headers['x-forwarded-for'] as string | undefined)?.split(',')[0]?.trim()
-    ?? req.socket.remoteAddress
-    ?? 'unknown';
+  const ip = req.ip || req.socket.remoteAddress || 'unknown';
 
   if (isRateLimited(ip)) {
     return res.status(429).json({
@@ -191,9 +189,7 @@ router.post('/api/mint/agent', async (req: Request, res: Response) => {
 // POST /api/mint/agent/custom — gasless custom agent mint
 // ---------------------------------------------------------------------------
 router.post('/api/mint/agent/custom', async (req: Request, res: Response) => {
-  const ip = (req.headers['x-forwarded-for'] as string | undefined)?.split(',')[0]?.trim()
-    ?? req.socket.remoteAddress
-    ?? 'unknown';
+  const ip = req.ip || req.socket.remoteAddress || 'unknown';
 
   if (isRateLimited(ip)) {
     return res.status(429).json({ error: 'Rate limit exceeded', retry_after: 3600 });
