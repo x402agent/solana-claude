@@ -18,16 +18,26 @@ import {
   verifyPayment,
   settlePayment,
 } from "./x402";
+import { detectPToken, SPL_TOKEN_PROGRAM_ID } from "./p-token";
 
 export const facilitator = new Hono<{ Bindings: Env }>();
 
-facilitator.get("/supported", (c) => {
+facilitator.get("/supported", async (c) => {
+  const pToken = await detectPToken(c.env);
+  const tokenPrograms = [
+    { id: "spl", programId: SPL_TOKEN_PROGRAM_ID.toBase58() },
+  ];
+  if (pToken.active) {
+    tokenPrograms.push({ id: "p-token", programId: pToken.programId });
+  }
+
   return c.json({
     networks: [c.env.NETWORK],
     schemes: ["exact"],
+    tokenPrograms,
     assets: [
-      { mint: c.env.USDC_MINT, symbol: "USDC", decimals: 6 },
-      { mint: c.env.CLAWD_MINT, symbol: "CLAWD", decimals: 9 },
+      { mint: c.env.USDC_MINT, symbol: "USDC", decimals: 6, tokenPrograms: tokenPrograms.map((p) => p.id) },
+      { mint: c.env.CLAWD_MINT, symbol: "CLAWD", decimals: 9, tokenPrograms: tokenPrograms.map((p) => p.id) },
     ],
   });
 });

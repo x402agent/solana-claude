@@ -16,12 +16,18 @@ const program = new Program(idl as any, provider);
 
 const manifestCid = /* 64 bytes — your agent's IPFS manifest */;
 const endpoint = new TextEncoder().encode("https://my-agent.example.com").slice(0, 128);
+const recipients = {
+  buyback: new PublicKey(process.env.BUYBACK_OWNER!),
+  treasury: new PublicKey(process.env.TREASURY_OWNER!),
+  operator: new PublicKey(process.env.OPERATOR_OWNER!),
+};
 
 await program.methods
   .registerAgent(
     Array.from(manifestCid),
     Array.from(endpoint),
     { ownerBps: 7000, buybackBps: 1500, treasuryBps: 1000, operatorBps: 500 },
+    recipients,
     0b0111,                                    // x402 | mpp | ap2, no a2a (yet)
     [
       { methodHash: methodHashOf("summarize"), amount: new BN("50000") },   // $0.05
@@ -77,6 +83,8 @@ const res = await clawdFetch(
     }),
     signer: caller,
     connection: conn,
+    maxAmount: 50000n,
+    allowedAssets: [process.env.USDC_MINT!],
     onPaymentRequired: async (req) => {
       console.log(`Paying ${req.maxAmountRequired} base units for ${req.resource}`);
       return true;

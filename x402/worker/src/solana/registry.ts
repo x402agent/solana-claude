@@ -13,6 +13,9 @@
  *   split_buyback_bps: u16
  *   split_treasury_bps: u16
  *   split_operator_bps: u16
+ *   buyback_recipient: Pubkey
+ *   treasury_recipient: Pubkey
+ *   operator_recipient: Pubkey
  *   protocols_mask: u8       (bits: x402=1, mpp=2, ap2=4, a2a=8)
  *   pricing_count: u8
  *   pricing: [PricingEntry; 16]  // method_hash:[u8;8] -> amount:u64
@@ -49,6 +52,9 @@ export async function getAgent(env: Env, agentId: string): Promise<AgentRecord |
 }
 
 function decodeRegistryAccount(raw: Uint8Array, agentId: string): AgentRecord {
+  if (raw.length < 8 + 32 + 64 + 128 + 8 + 96 + 2) {
+    throw new Error(`registry account too short: ${raw.length} bytes`);
+  }
   // Skip Anchor 8-byte discriminator
   let o = 8;
 
@@ -66,6 +72,10 @@ function decodeRegistryAccount(raw: Uint8Array, agentId: string): AgentRecord {
   const splitTreasuryBps = dv.getUint16(o, true); o += 2;
   const splitOperatorBps = dv.getUint16(o, true); o += 2;
 
+  const buybackRecipient = new PublicKey(raw.slice(o, o + 32)).toBase58(); o += 32;
+  const treasuryRecipient = new PublicKey(raw.slice(o, o + 32)).toBase58(); o += 32;
+  const operatorRecipient = new PublicKey(raw.slice(o, o + 32)).toBase58(); o += 32;
+
   const mask = raw[o]; o += 1;
   const protocols = {
     x402: (mask & 1) !== 0,
@@ -75,9 +85,12 @@ function decodeRegistryAccount(raw: Uint8Array, agentId: string): AgentRecord {
   };
 
   const pricingCount = raw[o]; o += 1;
+  if (pricingCount > 16) {
+    throw new Error(`registry pricing_count exceeds max: ${pricingCount}`);
+  }
   const pricing: Record<string, string> = {};
   for (let i = 0; i < pricingCount && i < 16; i++) {
-    const hash = Buffer.from(raw.slice(o, o + 8)).toString("hex"); o += 8;
+    const hash = Array.from(raw.slice(o, o + 8), (b) => b.toString(16).padStart(2, "0")).join(""); o += 8;
     const amount = dv.getBigUint64(o, true); o += 8;
     pricing[hash] = amount.toString();
   }
@@ -89,6 +102,9 @@ function decodeRegistryAccount(raw: Uint8Array, agentId: string): AgentRecord {
     splitBuybackBps: splitBuybackBps || undefined,
     splitTreasuryBps: splitTreasuryBps || undefined,
     splitOperatorBps: splitOperatorBps || undefined,
+    buybackRecipient,
+    treasuryRecipient,
+    operatorRecipient,
     manifestCid,
     endpoint,
     protocols,
@@ -100,9 +116,12 @@ function decodeRegistryAccount(raw: Uint8Array, agentId: string): AgentRecord {
 export async function methodHash(method: string): Promise<string> {
   const data = new TextEncoder().encode(method);
   const digest = await crypto.subtle.digest("SHA-256", data);
-  return Buffer.from(digest, 0, 8).toString("hex").slice(0, 16);
+  return Array.from(new Uint8Array(digest).slice(0, 8), (b) => b.toString(16).padStart(2, "0")).join("");
 }
 
 export function priceFor(record: AgentRecord, method: string, hash: string, fallback: bigint): bigint {
-  return BigInt(record.pricing[hash] ?? record.pricing[method] ?? fallback.toString());
+  const raw = record.pricing[hash] ?? record.pricing[method] ?? fallback.toString();
+  const price = BigInt(raw);
+  if (price <= 0n) throw new Error("agent price must be greater than zero");
+  return price;
 }

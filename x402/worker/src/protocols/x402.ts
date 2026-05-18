@@ -63,11 +63,15 @@ export async function handlePayment(
   env: Env,
   paymentHeader: string,
   challenge: SolanaPaymentRequirement,
+  expectedPayer?: string,
 ): Promise<PaymentResult> {
   const tx = decodeSignedTransaction(paymentHeader);
   const verify = await verifyPayment(env, tx, challenge);
   if (!verify.valid || !verify.payer) {
     throw new Error(`verify failed: ${verify.reason}`);
+  }
+  if (expectedPayer && verify.payer !== expectedPayer) {
+    throw new Error("payer mismatch");
   }
 
   const signature = await settlePayment(env, tx);

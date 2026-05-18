@@ -134,6 +134,7 @@ export async function handleAp2UserFlow(
   paymentHeader: string,
   challenge: SolanaPaymentRequirement,
   expectedAudience: string,
+  expectedPayer?: string,
 ): Promise<{ payment: PaymentResult; mandate: VerifiedMandate["payload"] }> {
   const v = await verifyMandate(env, mandateJwt, expectedAudience, challenge.resource);
   if (!v.valid) throw new Error(`AP2 mandate invalid: ${v.reason}`);
@@ -145,7 +146,7 @@ export async function handleAp2UserFlow(
     throw new Error(`AP2 mandate asset mismatch`);
   }
 
-  const payment = await handleX402Payment(env, paymentHeader, challenge);
+  const payment = await handleX402Payment(env, paymentHeader, challenge, expectedPayer);
   return { payment, mandate: v.payload };
 }
 

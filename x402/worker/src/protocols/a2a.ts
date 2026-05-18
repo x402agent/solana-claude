@@ -108,11 +108,17 @@ export async function forwardA2ACall(
 export function priceForA2ACall(record: AgentRecord, rpc: A2ARequest, fallback: bigint): bigint {
   const skillId = rpc.params.metadata?.["skillId"];
   if (typeof skillId === "string" && record.pricing[skillId]) {
-    return BigInt(record.pricing[skillId]);
+    return parsePositivePrice(record.pricing[skillId]);
   }
   // Per-method fallback: charge the default method price
   if (record.pricing[rpc.method]) {
-    return BigInt(record.pricing[rpc.method]);
+    return parsePositivePrice(record.pricing[rpc.method]);
   }
   return fallback;
+}
+
+function parsePositivePrice(raw: string): bigint {
+  const price = BigInt(raw);
+  if (price <= 0n) throw new Error("agent price must be greater than zero");
+  return price;
 }
