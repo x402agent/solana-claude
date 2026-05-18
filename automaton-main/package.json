@@ -36,8 +36,7 @@
     "dist",
     "README.md",
     "LICENSE",
-    "three-laws.md",
-    "constitution.md"
+    "three-laws.md"
   ],
   "keywords": [
     "autonomous-agent",
