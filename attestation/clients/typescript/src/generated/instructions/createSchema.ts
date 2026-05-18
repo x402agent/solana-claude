@@ -38,9 +38,9 @@ import {
   type TransactionSigner,
   type WritableAccount,
   type WritableSignerAccount,
-} from '@solana/kit';
-import { SOLANA_ATTESTATION_SERVICE_PROGRAM_ADDRESS } from '../programs';
-import { getAccountMetaFactory, type ResolvedAccount } from '../shared';
+} from "@solana/kit";
+import { SOLANA_ATTESTATION_SERVICE_PROGRAM_ADDRESS } from "../programs";
+import { getAccountMetaFactory, type ResolvedAccount } from "../shared";
 
 export const CREATE_SCHEMA_DISCRIMINATOR = 1;
 
@@ -54,9 +54,8 @@ export type CreateSchemaInstruction<
   TAccountAuthority extends string | AccountMeta<string> = string,
   TAccountCredential extends string | AccountMeta<string> = string,
   TAccountSchema extends string | AccountMeta<string> = string,
-  TAccountSystemProgram extends
-    | string
-    | AccountMeta<string> = '11111111111111111111111111111111',
+  TAccountSystemProgram extends string | AccountMeta<string> =
+    "11111111111111111111111111111111",
   TRemainingAccounts extends readonly AccountMeta<string>[] = [],
 > = Instruction<TProgram> &
   InstructionWithData<ReadonlyUint8Array> &
@@ -101,29 +100,29 @@ export type CreateSchemaInstructionDataArgs = {
 export function getCreateSchemaInstructionDataEncoder(): Encoder<CreateSchemaInstructionDataArgs> {
   return transformEncoder(
     getStructEncoder([
-      ['discriminator', getU8Encoder()],
-      ['name', addEncoderSizePrefix(getUtf8Encoder(), getU32Encoder())],
-      ['description', addEncoderSizePrefix(getUtf8Encoder(), getU32Encoder())],
-      ['layout', addEncoderSizePrefix(getBytesEncoder(), getU32Encoder())],
+      ["discriminator", getU8Encoder()],
+      ["name", addEncoderSizePrefix(getUtf8Encoder(), getU32Encoder())],
+      ["description", addEncoderSizePrefix(getUtf8Encoder(), getU32Encoder())],
+      ["layout", addEncoderSizePrefix(getBytesEncoder(), getU32Encoder())],
       [
-        'fieldNames',
+        "fieldNames",
         getArrayEncoder(
-          addEncoderSizePrefix(getUtf8Encoder(), getU32Encoder())
+          addEncoderSizePrefix(getUtf8Encoder(), getU32Encoder()),
         ),
       ],
     ]),
-    (value) => ({ ...value, discriminator: CREATE_SCHEMA_DISCRIMINATOR })
+    (value) => ({ ...value, discriminator: CREATE_SCHEMA_DISCRIMINATOR }),
   );
 }
 
 export function getCreateSchemaInstructionDataDecoder(): Decoder<CreateSchemaInstructionData> {
   return getStructDecoder([
-    ['discriminator', getU8Decoder()],
-    ['name', addDecoderSizePrefix(getUtf8Decoder(), getU32Decoder())],
-    ['description', addDecoderSizePrefix(getUtf8Decoder(), getU32Decoder())],
-    ['layout', addDecoderSizePrefix(getBytesDecoder(), getU32Decoder())],
+    ["discriminator", getU8Decoder()],
+    ["name", addDecoderSizePrefix(getUtf8Decoder(), getU32Decoder())],
+    ["description", addDecoderSizePrefix(getUtf8Decoder(), getU32Decoder())],
+    ["layout", addDecoderSizePrefix(getBytesDecoder(), getU32Decoder())],
     [
-      'fieldNames',
+      "fieldNames",
       getArrayDecoder(addDecoderSizePrefix(getUtf8Decoder(), getU32Decoder())),
     ],
   ]);
@@ -135,7 +134,7 @@ export function getCreateSchemaInstructionDataCodec(): Codec<
 > {
   return combineCodec(
     getCreateSchemaInstructionDataEncoder(),
-    getCreateSchemaInstructionDataDecoder()
+    getCreateSchemaInstructionDataDecoder(),
   );
 }
 
@@ -152,10 +151,10 @@ export type CreateSchemaInput<
   credential: Address<TAccountCredential>;
   schema: Address<TAccountSchema>;
   systemProgram?: Address<TAccountSystemProgram>;
-  name: CreateSchemaInstructionDataArgs['name'];
-  description: CreateSchemaInstructionDataArgs['description'];
-  layout: CreateSchemaInstructionDataArgs['layout'];
-  fieldNames: CreateSchemaInstructionDataArgs['fieldNames'];
+  name: CreateSchemaInstructionDataArgs["name"];
+  description: CreateSchemaInstructionDataArgs["description"];
+  layout: CreateSchemaInstructionDataArgs["layout"];
+  fieldNames: CreateSchemaInstructionDataArgs["fieldNames"];
 };
 
 export function getCreateSchemaInstruction<
@@ -164,8 +163,8 @@ export function getCreateSchemaInstruction<
   TAccountCredential extends string,
   TAccountSchema extends string,
   TAccountSystemProgram extends string,
-  TProgramAddress extends
-    Address = typeof SOLANA_ATTESTATION_SERVICE_PROGRAM_ADDRESS,
+  TProgramAddress extends Address =
+    typeof SOLANA_ATTESTATION_SERVICE_PROGRAM_ADDRESS,
 >(
   input: CreateSchemaInput<
     TAccountPayer,
@@ -174,7 +173,7 @@ export function getCreateSchemaInstruction<
     TAccountSchema,
     TAccountSystemProgram
   >,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): CreateSchemaInstruction<
   TProgramAddress,
   TAccountPayer,
@@ -206,10 +205,10 @@ export function getCreateSchemaInstruction<
   // Resolve default values.
   if (!accounts.systemProgram.value) {
     accounts.systemProgram.value =
-      '11111111111111111111111111111111' as Address<'11111111111111111111111111111111'>;
+      "11111111111111111111111111111111" as Address<"11111111111111111111111111111111">;
   }
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.payer),
@@ -219,7 +218,7 @@ export function getCreateSchemaInstruction<
       getAccountMeta(accounts.systemProgram),
     ],
     data: getCreateSchemaInstructionDataEncoder().encode(
-      args as CreateSchemaInstructionDataArgs
+      args as CreateSchemaInstructionDataArgs,
     ),
     programAddress,
   } as CreateSchemaInstruction<
@@ -254,11 +253,11 @@ export function parseCreateSchemaInstruction<
 >(
   instruction: Instruction<TProgram> &
     InstructionWithAccounts<TAccountMetas> &
-    InstructionWithData<ReadonlyUint8Array>
+    InstructionWithData<ReadonlyUint8Array>,
 ): ParsedCreateSchemaInstruction<TProgram, TAccountMetas> {
   if (instruction.accounts.length < 5) {
     // TODO: Coded error.
-    throw new Error('Not enough accounts');
+    throw new Error("Not enough accounts");
   }
   let accountIndex = 0;
   const getNextAccount = () => {

@@ -6,15 +6,15 @@
  * @see https://github.com/codama-idl/codama
  */
 
-export * from './changeAuthorizedSigners';
-export * from './changeSchemaDescription';
-export * from './changeSchemaStatus';
-export * from './changeSchemaVersion';
-export * from './closeAttestation';
-export * from './closeTokenizedAttestation';
-export * from './createAttestation';
-export * from './createCredential';
-export * from './createSchema';
-export * from './createTokenizedAttestation';
-export * from './emitEvent';
-export * from './tokenizeSchema';
+export * from "./changeAuthorizedSigners";
+export * from "./changeSchemaDescription";
+export * from "./changeSchemaStatus";
+export * from "./changeSchemaVersion";
+export * from "./closeAttestation";
+export * from "./closeTokenizedAttestation";
+export * from "./createAttestation";
+export * from "./createCredential";
+export * from "./createSchema";
+export * from "./createTokenizedAttestation";
+export * from "./emitEvent";
+export * from "./tokenizeSchema";

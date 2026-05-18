@@ -79,3 +79,5 @@ openclawd-framework/**/*.tsbuildinfo
 openclawd-framework/multiagents-infinite-backroom/
 openclawd-framework/clawd-terminal/
 openclawd-framework/clawd-voice/
+
+openclawd-framework/

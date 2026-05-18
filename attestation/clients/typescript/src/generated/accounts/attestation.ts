@@ -38,7 +38,7 @@ import {
   type MaybeAccount,
   type MaybeEncodedAccount,
   type ReadonlyUint8Array,
-} from '@solana/kit';
+} from "@solana/kit";
 
 export type Attestation = {
   discriminator: number;
@@ -65,28 +65,28 @@ export type AttestationArgs = {
 /** Gets the encoder for {@link AttestationArgs} account data. */
 export function getAttestationEncoder(): Encoder<AttestationArgs> {
   return getStructEncoder([
-    ['discriminator', getU8Encoder()],
-    ['nonce', getAddressEncoder()],
-    ['credential', getAddressEncoder()],
-    ['schema', getAddressEncoder()],
-    ['data', addEncoderSizePrefix(getBytesEncoder(), getU32Encoder())],
-    ['signer', getAddressEncoder()],
-    ['expiry', getI64Encoder()],
-    ['tokenAccount', getAddressEncoder()],
+    ["discriminator", getU8Encoder()],
+    ["nonce", getAddressEncoder()],
+    ["credential", getAddressEncoder()],
+    ["schema", getAddressEncoder()],
+    ["data", addEncoderSizePrefix(getBytesEncoder(), getU32Encoder())],
+    ["signer", getAddressEncoder()],
+    ["expiry", getI64Encoder()],
+    ["tokenAccount", getAddressEncoder()],
   ]);
 }
 
 /** Gets the decoder for {@link Attestation} account data. */
 export function getAttestationDecoder(): Decoder<Attestation> {
   return getStructDecoder([
-    ['discriminator', getU8Decoder()],
-    ['nonce', getAddressDecoder()],
-    ['credential', getAddressDecoder()],
-    ['schema', getAddressDecoder()],
-    ['data', addDecoderSizePrefix(getBytesDecoder(), getU32Decoder())],
-    ['signer', getAddressDecoder()],
-    ['expiry', getI64Decoder()],
-    ['tokenAccount', getAddressDecoder()],
+    ["discriminator", getU8Decoder()],
+    ["nonce", getAddressDecoder()],
+    ["credential", getAddressDecoder()],
+    ["schema", getAddressDecoder()],
+    ["data", addDecoderSizePrefix(getBytesDecoder(), getU32Decoder())],
+    ["signer", getAddressDecoder()],
+    ["expiry", getI64Decoder()],
+    ["tokenAccount", getAddressDecoder()],
   ]);
 }
 
@@ -96,24 +96,24 @@ export function getAttestationCodec(): Codec<AttestationArgs, Attestation> {
 }
 
 export function decodeAttestation<TAddress extends string = string>(
-  encodedAccount: EncodedAccount<TAddress>
+  encodedAccount: EncodedAccount<TAddress>,
 ): Account<Attestation, TAddress>;
 export function decodeAttestation<TAddress extends string = string>(
-  encodedAccount: MaybeEncodedAccount<TAddress>
+  encodedAccount: MaybeEncodedAccount<TAddress>,
 ): MaybeAccount<Attestation, TAddress>;
 export function decodeAttestation<TAddress extends string = string>(
-  encodedAccount: EncodedAccount<TAddress> | MaybeEncodedAccount<TAddress>
+  encodedAccount: EncodedAccount<TAddress> | MaybeEncodedAccount<TAddress>,
 ): Account<Attestation, TAddress> | MaybeAccount<Attestation, TAddress> {
   return decodeAccount(
     encodedAccount as MaybeEncodedAccount<TAddress>,
-    getAttestationDecoder()
+    getAttestationDecoder(),
   );
 }
 
 export async function fetchAttestation<TAddress extends string = string>(
   rpc: Parameters<typeof fetchEncodedAccount>[0],
   address: Address<TAddress>,
-  config?: FetchAccountConfig
+  config?: FetchAccountConfig,
 ): Promise<Account<Attestation, TAddress>> {
   const maybeAccount = await fetchMaybeAttestation(rpc, address, config);
   assertAccountExists(maybeAccount);
@@ -123,7 +123,7 @@ export async function fetchAttestation<TAddress extends string = string>(
 export async function fetchMaybeAttestation<TAddress extends string = string>(
   rpc: Parameters<typeof fetchEncodedAccount>[0],
   address: Address<TAddress>,
-  config?: FetchAccountConfig
+  config?: FetchAccountConfig,
 ): Promise<MaybeAccount<Attestation, TAddress>> {
   const maybeAccount = await fetchEncodedAccount(rpc, address, config);
   return decodeAttestation(maybeAccount);
@@ -132,7 +132,7 @@ export async function fetchMaybeAttestation<TAddress extends string = string>(
 export async function fetchAllAttestation(
   rpc: Parameters<typeof fetchEncodedAccounts>[0],
   addresses: Array<Address>,
-  config?: FetchAccountsConfig
+  config?: FetchAccountsConfig,
 ): Promise<Account<Attestation>[]> {
   const maybeAccounts = await fetchAllMaybeAttestation(rpc, addresses, config);
   assertAccountsExist(maybeAccounts);
@@ -142,7 +142,7 @@ export async function fetchAllAttestation(
 export async function fetchAllMaybeAttestation(
   rpc: Parameters<typeof fetchEncodedAccounts>[0],
   addresses: Array<Address>,
-  config?: FetchAccountsConfig
+  config?: FetchAccountsConfig,
 ): Promise<MaybeAccount<Attestation>[]> {
   const maybeAccounts = await fetchEncodedAccounts(rpc, addresses, config);
   return maybeAccounts.map((maybeAccount) => decodeAttestation(maybeAccount));

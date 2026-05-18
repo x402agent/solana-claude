@@ -1,0 +1,21 @@
+{
+  "skillId": "clawdhub",
+  "name": "clawdhub",
+  "description": "Use the ClawdHub CLI to search, install, update, and publish agent skills from clawdhub.com. Use when you need to fetch new skills on the fly, sync installed skills to latest or a specific version, or publish new/updated skill folders with the npm-installed clawdhub CLI.",
+  "category": "pump-protocol",
+  "path": "clawdhub/SKILL.md",
+  "url": "https://x402.wtf/api/skills/clawdhub",
+  "tags": [
+    "clawdhub",
+    "solana"
+  ],
+  "requiredEnv": [],
+  "homepage": null,
+  "attestation": {
+    "status": "pending",
+    "isFormallyVerified": false,
+    "attestationPda": null,
+    "verificationTimestamp": null
+  },
+  "markdown": "---\nname: clawdhub\ndescription: Use the ClawdHub CLI to search, install, update, and publish agent skills from clawdhub.com. Use when you need to fetch new skills on the fly, sync installed skills to latest or a specific version, or publish new/updated skill folders with the npm-installed clawdhub CLI.\nmetadata: {\"clawdbot\":{\"requires\":{\"bins\":[\"clawdhub\"]},\"install\":[{\"id\":\"node\",\"kind\":\"node\",\"package\":\"clawdhub\",\"bins\":[\"clawdhub\"],\"label\":\"Install ClawdHub CLI (npm)\"}]}}\n---\n\n# ClawdHub CLI\n\nInstall\n```bash\nnpm i -g clawdhub\n```\n\nAuth (publish)\n```bash\nclawdhub login\nclawdhub whoami\n```\n\nSearch\n```bash\nclawdhub search \"postgres backups\"\n```\n\nInstall\n```bash\nclawdhub install my-skill\nclawdhub install my-skill --version 1.2.3\n```\n\nUpdate (hash-based match + upgrade)\n```bash\nclawdhub update my-skill\nclawdhub update my-skill --version 1.2.3\nclawdhub update --all\nclawdhub update my-skill --force\nclawdhub update --all --no-input --force\n```\n\nList\n```bash\nclawdhub list\n```\n\nPublish\n```bash\nclawdhub publish ./my-skill --slug my-skill --name \"My Skill\" --version 1.2.0 --changelog \"Fixes + docs\"\n```\n\nNotes\n- Default registry: https://clawdhub.com (override with CLAWDHUB_REGISTRY or --registry)\n- Default workdir: cwd (falls back to Clawdbot workspace); install dir: ./skills (override with --workdir / --dir / CLAWDHUB_WORKDIR)\n- Update command hashes local files, resolves matching version, and upgrades to latest unless --version is set\n"
+}

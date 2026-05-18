@@ -1,0 +1,23 @@
+{
+  "skillId": "solana-clawd-agentic-commerce",
+  "name": "solana-clawd-agentic-commerce",
+  "description": "Build and operate Solana CLAWD agents that spend through Pay CLI, expose paid stores, mint Metaplex-readable identities, and launch Genesis agent tokens.",
+  "category": "solana-dev",
+  "path": "solana-clawd-agentic-commerce/SKILL.md",
+  "url": "https://x402.wtf/api/skills/solana-clawd-agentic-commerce",
+  "tags": [
+    "solana",
+    "clawd",
+    "agentic",
+    "commerce"
+  ],
+  "requiredEnv": [],
+  "homepage": null,
+  "attestation": {
+    "status": "pending",
+    "isFormallyVerified": false,
+    "attestationPda": null,
+    "verificationTimestamp": null
+  },
+  "markdown": "---\nname: solana-clawd-agentic-commerce\ndescription: Build and operate Solana CLAWD agents that spend through Pay CLI, expose paid stores, mint Metaplex-readable identities, and launch Genesis agent tokens.\n---\n\n# Solana CLAWD Agentic Commerce\n\nUse this skill when an agent needs to pay for APIs, publish a paid service, mint/register on Metaplex, launch an agent token, or prove its on-chain identity.\n\n## Runtime Order\n\n1. Start in Pay sandbox mode unless the user explicitly requests mainnet spending.\n2. Load the spend policy from `openclawd-framework/src/commerce/pay-policy.ts`.\n3. Plan every paid call before execution: provider, endpoint, estimated USD, expected calls, and why it matches.\n4. Refuse calls that exceed policy, hit denied URL patterns, or target non-allowlisted endpoints.\n5. For Metaplex, mint or read the agent identity before token launch.\n6. Use devnet and `setToken: false` until final launch.\n7. Only use `setToken: true` when the user explicitly acknowledges the permanent one-token-per-agent binding.\n\n## Important Files\n\n- `docs/AGENTIC_COMMERCE.md`\n- `openclawd-framework/src/commerce/pay-policy.ts`\n- `openclawd-framework/src/commerce/pay-client.ts`\n- `openclawd-framework/src/commerce/metaplex-agent-commerce.ts`\n- `openclawd-framework/pay/solana-clawd-agent-commerce.yml`\n- `openclawd-framework/examples/agent-commerce.ts`\n\n## Commands\n\n```sh\npay --sandbox server start openclawd-framework/pay/solana-clawd-agent-commerce.yml --debugger\ncd openclawd-framework && node --import tsx/esm examples/agent-commerce.ts\n```\n\n## Non-Negotiables\n\n- Never ask for or print private keys, wallet bytes, wallet passwords, or signed challenge material.\n- Never bypass `PayAutonomyClient.plan` for autonomous spending.\n- Never launch a mainnet agent token with `setToken: true` unless the user explicitly confirms finality.\n- Always report transaction signatures and payment receipts when an actual paid/on-chain action occurs.\n"
+}

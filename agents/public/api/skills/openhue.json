@@ -1,0 +1,21 @@
+{
+  "skillId": "openhue",
+  "name": "openhue",
+  "description": "Control Philips Hue lights/scenes via the OpenHue CLI.",
+  "category": "pump-protocol",
+  "path": "openhue/SKILL.md",
+  "url": "https://x402.wtf/api/skills/openhue",
+  "tags": [
+    "openhue",
+    "solana"
+  ],
+  "requiredEnv": [],
+  "homepage": null,
+  "attestation": {
+    "status": "pending",
+    "isFormallyVerified": false,
+    "attestationPda": null,
+    "verificationTimestamp": null
+  },
+  "markdown": "---\nname: openhue\ndescription: Control Philips Hue lights/scenes via the OpenHue CLI.\nhomepage: https://www.openhue.io/cli\nmetadata: {\"clawdbot\":{\"emoji\":\"💡\",\"requires\":{\"bins\":[\"openhue\"]},\"install\":[{\"id\":\"brew\",\"kind\":\"brew\",\"formula\":\"openhue/cli/openhue-cli\",\"bins\":[\"openhue\"],\"label\":\"Install OpenHue CLI (brew)\"}]}}\n---\n\n# OpenHue CLI\n\nUse `openhue` to control Hue lights and scenes via a Hue Bridge.\n\nSetup\n- Discover bridges: `openhue discover`\n- Guided setup: `openhue setup`\n\nRead\n- `openhue get light --json`\n- `openhue get room --json`\n- `openhue get scene --json`\n\nWrite\n- Turn on: `openhue set light <id-or-name> --on`\n- Turn off: `openhue set light <id-or-name> --off`\n- Brightness: `openhue set light <id> --on --brightness 50`\n- Color: `openhue set light <id> --on --rgb #3399FF`\n- Scene: `openhue set scene <scene-id>`\n\nNotes\n- You may need to press the Hue Bridge button during setup.\n- Use `--room \"Room Name\"` when light names are ambiguous.\n"
+}

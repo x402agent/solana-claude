@@ -29,9 +29,9 @@ import {
   type ReadonlyUint8Array,
   type TransactionSigner,
   type WritableAccount,
-} from '@solana/kit';
-import { SOLANA_ATTESTATION_SERVICE_PROGRAM_ADDRESS } from '../programs';
-import { getAccountMetaFactory, type ResolvedAccount } from '../shared';
+} from "@solana/kit";
+import { SOLANA_ATTESTATION_SERVICE_PROGRAM_ADDRESS } from "../programs";
+import { getAccountMetaFactory, type ResolvedAccount } from "../shared";
 
 export const CHANGE_SCHEMA_STATUS_DISCRIMINATOR = 2;
 
@@ -73,17 +73,20 @@ export type ChangeSchemaStatusInstructionDataArgs = { isPaused: boolean };
 export function getChangeSchemaStatusInstructionDataEncoder(): FixedSizeEncoder<ChangeSchemaStatusInstructionDataArgs> {
   return transformEncoder(
     getStructEncoder([
-      ['discriminator', getU8Encoder()],
-      ['isPaused', getBooleanEncoder()],
+      ["discriminator", getU8Encoder()],
+      ["isPaused", getBooleanEncoder()],
     ]),
-    (value) => ({ ...value, discriminator: CHANGE_SCHEMA_STATUS_DISCRIMINATOR })
+    (value) => ({
+      ...value,
+      discriminator: CHANGE_SCHEMA_STATUS_DISCRIMINATOR,
+    }),
   );
 }
 
 export function getChangeSchemaStatusInstructionDataDecoder(): FixedSizeDecoder<ChangeSchemaStatusInstructionData> {
   return getStructDecoder([
-    ['discriminator', getU8Decoder()],
-    ['isPaused', getBooleanDecoder()],
+    ["discriminator", getU8Decoder()],
+    ["isPaused", getBooleanDecoder()],
   ]);
 }
 
@@ -93,7 +96,7 @@ export function getChangeSchemaStatusInstructionDataCodec(): FixedSizeCodec<
 > {
   return combineCodec(
     getChangeSchemaStatusInstructionDataEncoder(),
-    getChangeSchemaStatusInstructionDataDecoder()
+    getChangeSchemaStatusInstructionDataDecoder(),
   );
 }
 
@@ -107,22 +110,22 @@ export type ChangeSchemaStatusInput<
   credential: Address<TAccountCredential>;
   /** Credential the Schema is associated with */
   schema: Address<TAccountSchema>;
-  isPaused: ChangeSchemaStatusInstructionDataArgs['isPaused'];
+  isPaused: ChangeSchemaStatusInstructionDataArgs["isPaused"];
 };
 
 export function getChangeSchemaStatusInstruction<
   TAccountAuthority extends string,
   TAccountCredential extends string,
   TAccountSchema extends string,
-  TProgramAddress extends
-    Address = typeof SOLANA_ATTESTATION_SERVICE_PROGRAM_ADDRESS,
+  TProgramAddress extends Address =
+    typeof SOLANA_ATTESTATION_SERVICE_PROGRAM_ADDRESS,
 >(
   input: ChangeSchemaStatusInput<
     TAccountAuthority,
     TAccountCredential,
     TAccountSchema
   >,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): ChangeSchemaStatusInstruction<
   TProgramAddress,
   TAccountAuthority,
@@ -147,7 +150,7 @@ export function getChangeSchemaStatusInstruction<
   // Original args.
   const args = { ...input };
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.authority),
@@ -155,7 +158,7 @@ export function getChangeSchemaStatusInstruction<
       getAccountMeta(accounts.schema),
     ],
     data: getChangeSchemaStatusInstructionDataEncoder().encode(
-      args as ChangeSchemaStatusInstructionDataArgs
+      args as ChangeSchemaStatusInstructionDataArgs,
     ),
     programAddress,
   } as ChangeSchemaStatusInstruction<
@@ -187,11 +190,11 @@ export function parseChangeSchemaStatusInstruction<
 >(
   instruction: Instruction<TProgram> &
     InstructionWithAccounts<TAccountMetas> &
-    InstructionWithData<ReadonlyUint8Array>
+    InstructionWithData<ReadonlyUint8Array>,
 ): ParsedChangeSchemaStatusInstruction<TProgram, TAccountMetas> {
   if (instruction.accounts.length < 3) {
     // TODO: Coded error.
-    throw new Error('Not enough accounts');
+    throw new Error("Not enough accounts");
   }
   let accountIndex = 0;
   const getNextAccount = () => {
@@ -207,7 +210,7 @@ export function parseChangeSchemaStatusInstruction<
       schema: getNextAccount(),
     },
     data: getChangeSchemaStatusInstructionDataDecoder().decode(
-      instruction.data
+      instruction.data,
     ),
   };
 }

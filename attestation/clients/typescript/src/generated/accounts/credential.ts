@@ -38,7 +38,7 @@ import {
   type MaybeAccount,
   type MaybeEncodedAccount,
   type ReadonlyUint8Array,
-} from '@solana/kit';
+} from "@solana/kit";
 
 export type Credential = {
   discriminator: number;
@@ -52,20 +52,20 @@ export type CredentialArgs = Credential;
 /** Gets the encoder for {@link CredentialArgs} account data. */
 export function getCredentialEncoder(): Encoder<CredentialArgs> {
   return getStructEncoder([
-    ['discriminator', getU8Encoder()],
-    ['authority', getAddressEncoder()],
-    ['name', addEncoderSizePrefix(getBytesEncoder(), getU32Encoder())],
-    ['authorizedSigners', getArrayEncoder(getAddressEncoder())],
+    ["discriminator", getU8Encoder()],
+    ["authority", getAddressEncoder()],
+    ["name", addEncoderSizePrefix(getBytesEncoder(), getU32Encoder())],
+    ["authorizedSigners", getArrayEncoder(getAddressEncoder())],
   ]);
 }
 
 /** Gets the decoder for {@link Credential} account data. */
 export function getCredentialDecoder(): Decoder<Credential> {
   return getStructDecoder([
-    ['discriminator', getU8Decoder()],
-    ['authority', getAddressDecoder()],
-    ['name', addDecoderSizePrefix(getBytesDecoder(), getU32Decoder())],
-    ['authorizedSigners', getArrayDecoder(getAddressDecoder())],
+    ["discriminator", getU8Decoder()],
+    ["authority", getAddressDecoder()],
+    ["name", addDecoderSizePrefix(getBytesDecoder(), getU32Decoder())],
+    ["authorizedSigners", getArrayDecoder(getAddressDecoder())],
   ]);
 }
 
@@ -75,24 +75,24 @@ export function getCredentialCodec(): Codec<CredentialArgs, Credential> {
 }
 
 export function decodeCredential<TAddress extends string = string>(
-  encodedAccount: EncodedAccount<TAddress>
+  encodedAccount: EncodedAccount<TAddress>,
 ): Account<Credential, TAddress>;
 export function decodeCredential<TAddress extends string = string>(
-  encodedAccount: MaybeEncodedAccount<TAddress>
+  encodedAccount: MaybeEncodedAccount<TAddress>,
 ): MaybeAccount<Credential, TAddress>;
 export function decodeCredential<TAddress extends string = string>(
-  encodedAccount: EncodedAccount<TAddress> | MaybeEncodedAccount<TAddress>
+  encodedAccount: EncodedAccount<TAddress> | MaybeEncodedAccount<TAddress>,
 ): Account<Credential, TAddress> | MaybeAccount<Credential, TAddress> {
   return decodeAccount(
     encodedAccount as MaybeEncodedAccount<TAddress>,
-    getCredentialDecoder()
+    getCredentialDecoder(),
   );
 }
 
 export async function fetchCredential<TAddress extends string = string>(
   rpc: Parameters<typeof fetchEncodedAccount>[0],
   address: Address<TAddress>,
-  config?: FetchAccountConfig
+  config?: FetchAccountConfig,
 ): Promise<Account<Credential, TAddress>> {
   const maybeAccount = await fetchMaybeCredential(rpc, address, config);
   assertAccountExists(maybeAccount);
@@ -102,7 +102,7 @@ export async function fetchCredential<TAddress extends string = string>(
 export async function fetchMaybeCredential<TAddress extends string = string>(
   rpc: Parameters<typeof fetchEncodedAccount>[0],
   address: Address<TAddress>,
-  config?: FetchAccountConfig
+  config?: FetchAccountConfig,
 ): Promise<MaybeAccount<Credential, TAddress>> {
   const maybeAccount = await fetchEncodedAccount(rpc, address, config);
   return decodeCredential(maybeAccount);
@@ -111,7 +111,7 @@ export async function fetchMaybeCredential<TAddress extends string = string>(
 export async function fetchAllCredential(
   rpc: Parameters<typeof fetchEncodedAccounts>[0],
   addresses: Array<Address>,
-  config?: FetchAccountsConfig
+  config?: FetchAccountsConfig,
 ): Promise<Account<Credential>[]> {
   const maybeAccounts = await fetchAllMaybeCredential(rpc, addresses, config);
   assertAccountsExist(maybeAccounts);
@@ -121,7 +121,7 @@ export async function fetchAllCredential(
 export async function fetchAllMaybeCredential(
   rpc: Parameters<typeof fetchEncodedAccounts>[0],
   addresses: Array<Address>,
-  config?: FetchAccountsConfig
+  config?: FetchAccountsConfig,
 ): Promise<MaybeAccount<Credential>[]> {
   const maybeAccounts = await fetchEncodedAccounts(rpc, addresses, config);
   return maybeAccounts.map((maybeAccount) => decodeCredential(maybeAccount));

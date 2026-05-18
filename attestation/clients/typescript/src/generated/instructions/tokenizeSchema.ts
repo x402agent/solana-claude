@@ -30,9 +30,9 @@ import {
   type TransactionSigner,
   type WritableAccount,
   type WritableSignerAccount,
-} from '@solana/kit';
-import { SOLANA_ATTESTATION_SERVICE_PROGRAM_ADDRESS } from '../programs';
-import { getAccountMetaFactory, type ResolvedAccount } from '../shared';
+} from "@solana/kit";
+import { SOLANA_ATTESTATION_SERVICE_PROGRAM_ADDRESS } from "../programs";
+import { getAccountMetaFactory, type ResolvedAccount } from "../shared";
 
 export const TOKENIZE_SCHEMA_DISCRIMINATOR = 9;
 
@@ -48,12 +48,10 @@ export type TokenizeSchemaInstruction<
   TAccountSchema extends string | AccountMeta<string> = string,
   TAccountMint extends string | AccountMeta<string> = string,
   TAccountSasPda extends string | AccountMeta<string> = string,
-  TAccountSystemProgram extends
-    | string
-    | AccountMeta<string> = '11111111111111111111111111111111',
-  TAccountTokenProgram extends
-    | string
-    | AccountMeta<string> = 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+  TAccountSystemProgram extends string | AccountMeta<string> =
+    "11111111111111111111111111111111",
+  TAccountTokenProgram extends string | AccountMeta<string> =
+    "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb",
   TRemainingAccounts extends readonly AccountMeta<string>[] = [],
 > = Instruction<TProgram> &
   InstructionWithData<ReadonlyUint8Array> &
@@ -99,17 +97,17 @@ export type TokenizeSchemaInstructionDataArgs = { maxSize: number | bigint };
 export function getTokenizeSchemaInstructionDataEncoder(): FixedSizeEncoder<TokenizeSchemaInstructionDataArgs> {
   return transformEncoder(
     getStructEncoder([
-      ['discriminator', getU8Encoder()],
-      ['maxSize', getU64Encoder()],
+      ["discriminator", getU8Encoder()],
+      ["maxSize", getU64Encoder()],
     ]),
-    (value) => ({ ...value, discriminator: TOKENIZE_SCHEMA_DISCRIMINATOR })
+    (value) => ({ ...value, discriminator: TOKENIZE_SCHEMA_DISCRIMINATOR }),
   );
 }
 
 export function getTokenizeSchemaInstructionDataDecoder(): FixedSizeDecoder<TokenizeSchemaInstructionData> {
   return getStructDecoder([
-    ['discriminator', getU8Decoder()],
-    ['maxSize', getU64Decoder()],
+    ["discriminator", getU8Decoder()],
+    ["maxSize", getU64Decoder()],
   ]);
 }
 
@@ -119,7 +117,7 @@ export function getTokenizeSchemaInstructionDataCodec(): FixedSizeCodec<
 > {
   return combineCodec(
     getTokenizeSchemaInstructionDataEncoder(),
-    getTokenizeSchemaInstructionDataDecoder()
+    getTokenizeSchemaInstructionDataDecoder(),
   );
 }
 
@@ -144,7 +142,7 @@ export type TokenizeSchemaInput<
   sasPda: Address<TAccountSasPda>;
   systemProgram?: Address<TAccountSystemProgram>;
   tokenProgram?: Address<TAccountTokenProgram>;
-  maxSize: TokenizeSchemaInstructionDataArgs['maxSize'];
+  maxSize: TokenizeSchemaInstructionDataArgs["maxSize"];
 };
 
 export function getTokenizeSchemaInstruction<
@@ -156,8 +154,8 @@ export function getTokenizeSchemaInstruction<
   TAccountSasPda extends string,
   TAccountSystemProgram extends string,
   TAccountTokenProgram extends string,
-  TProgramAddress extends
-    Address = typeof SOLANA_ATTESTATION_SERVICE_PROGRAM_ADDRESS,
+  TProgramAddress extends Address =
+    typeof SOLANA_ATTESTATION_SERVICE_PROGRAM_ADDRESS,
 >(
   input: TokenizeSchemaInput<
     TAccountPayer,
@@ -169,7 +167,7 @@ export function getTokenizeSchemaInstruction<
     TAccountSystemProgram,
     TAccountTokenProgram
   >,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): TokenizeSchemaInstruction<
   TProgramAddress,
   TAccountPayer,
@@ -207,14 +205,14 @@ export function getTokenizeSchemaInstruction<
   // Resolve default values.
   if (!accounts.systemProgram.value) {
     accounts.systemProgram.value =
-      '11111111111111111111111111111111' as Address<'11111111111111111111111111111111'>;
+      "11111111111111111111111111111111" as Address<"11111111111111111111111111111111">;
   }
   if (!accounts.tokenProgram.value) {
     accounts.tokenProgram.value =
-      'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb' as Address<'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb'>;
+      "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb" as Address<"TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb">;
   }
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.payer),
@@ -227,7 +225,7 @@ export function getTokenizeSchemaInstruction<
       getAccountMeta(accounts.tokenProgram),
     ],
     data: getTokenizeSchemaInstructionDataEncoder().encode(
-      args as TokenizeSchemaInstructionDataArgs
+      args as TokenizeSchemaInstructionDataArgs,
     ),
     programAddress,
   } as TokenizeSchemaInstruction<
@@ -270,11 +268,11 @@ export function parseTokenizeSchemaInstruction<
 >(
   instruction: Instruction<TProgram> &
     InstructionWithAccounts<TAccountMetas> &
-    InstructionWithData<ReadonlyUint8Array>
+    InstructionWithData<ReadonlyUint8Array>,
 ): ParsedTokenizeSchemaInstruction<TProgram, TAccountMetas> {
   if (instruction.accounts.length < 8) {
     // TODO: Coded error.
-    throw new Error('Not enough accounts');
+    throw new Error("Not enough accounts");
   }
   let accountIndex = 0;
   const getNextAccount = () => {

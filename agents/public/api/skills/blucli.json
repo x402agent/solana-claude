@@ -1,0 +1,21 @@
+{
+  "skillId": "blucli",
+  "name": "blucli",
+  "description": "BluOS CLI (blu) for discovery, playback, grouping, and volume.",
+  "category": "pump-protocol",
+  "path": "blucli/SKILL.md",
+  "url": "https://x402.wtf/api/skills/blucli",
+  "tags": [
+    "blucli",
+    "solana"
+  ],
+  "requiredEnv": [],
+  "homepage": null,
+  "attestation": {
+    "status": "pending",
+    "isFormallyVerified": false,
+    "attestationPda": null,
+    "verificationTimestamp": null
+  },
+  "markdown": "---\nname: blucli\ndescription: BluOS CLI (blu) for discovery, playback, grouping, and volume.\nhomepage: https://blucli.sh\nmetadata: {\"clawdbot\":{\"emoji\":\"🫐\",\"requires\":{\"bins\":[\"blu\"]},\"install\":[{\"id\":\"go\",\"kind\":\"go\",\"module\":\"github.com/steipete/blucli/cmd/blu@latest\",\"bins\":[\"blu\"],\"label\":\"Install blucli (go)\"}]}}\n---\n\n# blucli (blu)\n\nUse `blu` to control Bluesound/NAD players.\n\nQuick start\n- `blu devices` (pick target)\n- `blu --device <id> status`\n- `blu play|pause|stop`\n- `blu volume set 15`\n\nTarget selection (in priority order)\n- `--device <id|name|alias>`\n- `BLU_DEVICE`\n- config default (if set)\n\nCommon tasks\n- Grouping: `blu group status|add|remove`\n- TuneIn search/play: `blu tunein search \"query\"`, `blu tunein play \"query\"`\n\nPrefer `--json` for scripts. Confirm the target device before changing playback.\n"
+}

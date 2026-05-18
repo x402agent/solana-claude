@@ -1,0 +1,22 @@
+{
+  "skillId": "voice-call",
+  "name": "voice-call",
+  "description": "Start voice calls via the Clawdbot voice-call plugin.",
+  "category": "pump-protocol",
+  "path": "voice-call/SKILL.md",
+  "url": "https://x402.wtf/api/skills/voice-call",
+  "tags": [
+    "voice",
+    "solana",
+    "call"
+  ],
+  "requiredEnv": [],
+  "homepage": null,
+  "attestation": {
+    "status": "pending",
+    "isFormallyVerified": false,
+    "attestationPda": null,
+    "verificationTimestamp": null
+  },
+  "markdown": "---\nname: voice-call\ndescription: Start voice calls via the Clawdbot voice-call plugin.\nmetadata: {\"clawdbot\":{\"emoji\":\"📞\",\"skillKey\":\"voice-call\",\"requires\":{\"config\":[\"plugins.entries.voice-call.enabled\"]}}}\n---\n\n# Voice Call\n\nUse the voice-call plugin to start or inspect calls (Twilio, Telnyx, Plivo, or mock).\n\n## CLI\n\n```bash\nclawdbot voicecall call --to \"+15555550123\" --message \"Hello from Clawdbot\"\nclawdbot voicecall status --call-id <id>\n```\n\n## Tool\n\nUse `voice_call` for agent-initiated calls.\n\nActions:\n- `initiate_call` (message, to?, mode?)\n- `continue_call` (callId, message)\n- `speak_to_user` (callId, message)\n- `end_call` (callId)\n- `get_status` (callId)\n\nNotes:\n- Requires the voice-call plugin to be enabled.\n- Plugin config lives under `plugins.entries.voice-call.config`.\n- Twilio config: `provider: \"twilio\"` + `twilio.accountSid/authToken` + `fromNumber`.\n- Telnyx config: `provider: \"telnyx\"` + `telnyx.apiKey/connectionId` + `fromNumber`.\n- Plivo config: `provider: \"plivo\"` + `plivo.authId/authToken` + `fromNumber`.\n- Dev fallback: `provider: \"mock\"` (no network).\n"
+}

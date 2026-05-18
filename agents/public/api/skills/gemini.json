@@ -1,0 +1,21 @@
+{
+  "skillId": "gemini",
+  "name": "gemini",
+  "description": "Gemini CLI for one-shot Q&A, summaries, and generation.",
+  "category": "pump-protocol",
+  "path": "gemini/SKILL.md",
+  "url": "https://x402.wtf/api/skills/gemini",
+  "tags": [
+    "gemini",
+    "solana"
+  ],
+  "requiredEnv": [],
+  "homepage": null,
+  "attestation": {
+    "status": "pending",
+    "isFormallyVerified": false,
+    "attestationPda": null,
+    "verificationTimestamp": null
+  },
+  "markdown": "---\nname: gemini\ndescription: Gemini CLI for one-shot Q&A, summaries, and generation.\nhomepage: https://ai.google.dev/\nmetadata: {\"clawdbot\":{\"emoji\":\"♊️\",\"requires\":{\"bins\":[\"gemini\"]},\"install\":[{\"id\":\"brew\",\"kind\":\"brew\",\"formula\":\"gemini-cli\",\"bins\":[\"gemini\"],\"label\":\"Install Gemini CLI (brew)\"}]}}\n---\n\n# Gemini CLI\n\nUse Gemini in one-shot mode with a positional prompt (avoid interactive mode).\n\nQuick start\n- `gemini \"Answer this question...\"`\n- `gemini --model <name> \"Prompt...\"`\n- `gemini --output-format json \"Return JSON\"`\n\nExtensions\n- List: `gemini --list-extensions`\n- Manage: `gemini extensions <command>`\n\nNotes\n- If auth is required, run `gemini` once interactively and follow the login flow.\n- Avoid `--yolo` for safety.\n"
+}

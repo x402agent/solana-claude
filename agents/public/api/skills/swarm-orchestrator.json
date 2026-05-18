@@ -1,0 +1,22 @@
+{
+  "skillId": "swarm-orchestrator",
+  "name": "swarm-orchestrator",
+  "description": "Orchestrate multi-bot trading swarms on Pump.fun with persona-driven agents",
+  "category": "pump-protocol",
+  "path": "swarm-orchestrator/SKILL.md",
+  "url": "https://x402.wtf/api/skills/swarm-orchestrator",
+  "tags": [
+    "swarm",
+    "solana",
+    "orchestrator"
+  ],
+  "requiredEnv": [],
+  "homepage": null,
+  "attestation": {
+    "status": "pending",
+    "isFormallyVerified": false,
+    "attestationPda": null,
+    "verificationTimestamp": null
+  },
+  "markdown": "---\ndescription: Orchestrate multi-bot trading swarms on Pump.fun with persona-driven agents\n---\n\n# Swarm Orchestrator\n\nManage multi-bot trading swarms with agent personas, epistemological memory, and cross-bot event routing.\n\n## Prerequisites\n\n- SolanaOS core installed\n- `TELEGRAM_BOT_TOKEN` for Telegram gateway (optional)\n- `HELIUS_RPC_URL` configured\n\n## Quick Start\n\n```bash\n# Start the swarm orchestrator\nnpm run swarm\n\n# Start SolanaOS agent orchestrator\nnpm run claw\nnpm run claw:dev  # with hot reload\n```\n\n## Agent Roles\n\n| Role | Description | Auto-Actions |\n|------|-------------|-------------|\n| `sniper` | Snipe new token launches | Monitor → Buy on launch |\n| `monitor` | On-chain event watcher | Observe → Alert |\n| `fee-claimer` | Claim creator fees | Check → Claim automatically |\n| `analyst` | Price/curve analysis | Observe → Report |\n| `momentum` | Momentum-based trading | RSI+EMA → Execute |\n| `graduation` | Target near-graduation tokens | Monitor progress → Buy |\n| `market-maker` | Provide liquidity | Buy/sell oscillation |\n| `launcher` | Create new tokens | Build → Launch |\n| `channel-feed` | Telegram channel updates | Events → Post |\n| `outsider` | Call tracking + leaderboards | Track → Score |\n\n## Persona Assignment\n\nEvery agent can be born with one of 43+ DeFi personas:\n\n```bash\n# Via Telegram\n/spawn analyst --persona whale-watcher\n/spawn sniper --persona alpha-leak-detector\n/personas                    # Browse all personas\n/personas trading            # Filter by category\n```\n\n### Persona Categories\n\n| Category | Count | Examples |\n|----------|-------|---------|\n| 🪙 Crypto | 6 | Whale Watcher, Alpha Detector |\n| 🏦 DeFi | 14 | Yield Farmer, Flash Loan Analyst |\n| 📈 Trading | 5 | Pump SDK Expert, MEV Researcher |\n| 🔒 Security | 6 | Smart Contract Auditor |\n| 📚 Education | 2 | DeFi Mentor |\n\n## Event Bus\n\nAll bots communicate through a pub/sub event bus:\n\n| Event | Source | Description |\n|-------|--------|-------------|\n| `token:launch` | websocket-server | New token detected |\n| `token:graduation` | monitor | Token completed bonding curve |\n| `trade:buy` / `trade:sell` | swarm-bot | Trade executed |\n| `alert:whale` | monitor | Large transaction detected |\n| `fee:claim` | fee-claimer | Fee claimed successfully |\n| `call:new` | outsiders-bot | New call registered |\n\n## Memory System\n\nEach agent gets its own ClawVault with 3-tier epistemological memory:\n\n- **KNOWN** (60s TTL) — live market data\n- **LEARNED** (7d TTL) — validated patterns\n- **INFERRED** (3d TTL) — hypotheses\n\n```bash\n/memory <agent-id>     # View agent's memory\n/agents                # List agents with memory stats\n/health                # Collective memory overview\n```\n\n## Telegram Commands\n\n| Command | Description |\n|---------|-------------|\n| `/spawn <role> [--persona <id>]` | Spawn agent |\n| `/stop <id>` | Stop an agent |\n| `/agents` | List active agents |\n| `/personas [query]` | Browse personas |\n| `/memory <id>` | View agent memory |\n| `/health` | Swarm health dashboard |\n| `/price <mint>` | Token price |\n| `/quote <mint> <sol>` | Buy/sell quote |\n| `/curve <mint>` | Bonding curve state |\n| `/events` | Recent event stream |\n\n## Bot Manager\n\nThe bot manager handles lifecycle for sub-bots:\n\n```typescript\nimport { BotManager, EventBus } from \"nanosolana\";\n\nconst eventBus = new EventBus(5000);\nconst manager = new BotManager(eventBus);\n\nawait manager.start(\"telegram-bot\");\nawait manager.start(\"swarm-bot\");\n\nmanager.startHealthChecks();\n\n// Route events\neventBus.on(\"alert:whale\", (event) => {\n  console.log(\"Whale detected:\", event.data);\n});\n```\n"
+}

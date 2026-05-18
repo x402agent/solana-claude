@@ -1,0 +1,23 @@
+{
+  "skillId": "vulcan-position-management",
+  "name": "vulcan-position-management",
+  "description": "List, show, close, reduce Phoenix positions and attach/cancel TP/SL.",
+  "category": "pump-protocol",
+  "path": "vulcan-position-management/SKILL.md",
+  "url": "https://x402.wtf/api/skills/vulcan-position-management",
+  "tags": [
+    "vulcan",
+    "solana",
+    "position",
+    "management"
+  ],
+  "requiredEnv": [],
+  "homepage": null,
+  "attestation": {
+    "status": "pending",
+    "isFormallyVerified": false,
+    "attestationPda": null,
+    "verificationTimestamp": null
+  },
+  "markdown": "---\nname: vulcan-position-management\ndescription: List, show, close, reduce Phoenix positions and attach/cancel TP/SL.\n---\n\n# Vulcan Position Management\n\nCanonical source: `../../vulcan-cli-master/skills/vulcan-position-management/SKILL.md`\n\nClosing, reducing, and TP/SL changes are dangerous live operations. Confirm intent, pass `--yes`, and verify state after execution.\n"
+}

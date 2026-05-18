@@ -1,0 +1,23 @@
+{
+  "skillId": "vulcan-trade-execution",
+  "name": "vulcan-trade-execution",
+  "description": "Safe Phoenix order execution via Vulcan: pre-trade checks, market/limit orders, paper/dry-run/live gates, and post-trade verification.",
+  "category": "pump-protocol",
+  "path": "vulcan-trade-execution/SKILL.md",
+  "url": "https://x402.wtf/api/skills/vulcan-trade-execution",
+  "tags": [
+    "vulcan",
+    "solana",
+    "trade",
+    "execution"
+  ],
+  "requiredEnv": [],
+  "homepage": null,
+  "attestation": {
+    "status": "pending",
+    "isFormallyVerified": false,
+    "attestationPda": null,
+    "verificationTimestamp": null
+  },
+  "markdown": "---\nname: vulcan-trade-execution\ndescription: Safe Phoenix order execution via Vulcan: pre-trade checks, market/limit orders, paper/dry-run/live gates, and post-trade verification.\n---\n\n# Vulcan Trade Execution\n\nCanonical source: `../../vulcan-cli-master/skills/vulcan-trade-execution/SKILL.md`\n\nLive trades require market info, margin status, current positions, explicit approval, `--yes`, event-level reporting, and post-trade verification.\n"
+}

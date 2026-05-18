@@ -38,9 +38,9 @@ import {
   type TransactionSigner,
   type WritableAccount,
   type WritableSignerAccount,
-} from '@solana/kit';
-import { SOLANA_ATTESTATION_SERVICE_PROGRAM_ADDRESS } from '../programs';
-import { getAccountMetaFactory, type ResolvedAccount } from '../shared';
+} from "@solana/kit";
+import { SOLANA_ATTESTATION_SERVICE_PROGRAM_ADDRESS } from "../programs";
+import { getAccountMetaFactory, type ResolvedAccount } from "../shared";
 
 export const CREATE_CREDENTIAL_DISCRIMINATOR = 0;
 
@@ -53,9 +53,8 @@ export type CreateCredentialInstruction<
   TAccountPayer extends string | AccountMeta<string> = string,
   TAccountCredential extends string | AccountMeta<string> = string,
   TAccountAuthority extends string | AccountMeta<string> = string,
-  TAccountSystemProgram extends
-    | string
-    | AccountMeta<string> = '11111111111111111111111111111111',
+  TAccountSystemProgram extends string | AccountMeta<string> =
+    "11111111111111111111111111111111",
   TRemainingAccounts extends readonly AccountMeta<string>[] = [],
 > = Instruction<TProgram> &
   InstructionWithData<ReadonlyUint8Array> &
@@ -93,19 +92,19 @@ export type CreateCredentialInstructionDataArgs = {
 export function getCreateCredentialInstructionDataEncoder(): Encoder<CreateCredentialInstructionDataArgs> {
   return transformEncoder(
     getStructEncoder([
-      ['discriminator', getU8Encoder()],
-      ['name', addEncoderSizePrefix(getUtf8Encoder(), getU32Encoder())],
-      ['signers', getArrayEncoder(getAddressEncoder())],
+      ["discriminator", getU8Encoder()],
+      ["name", addEncoderSizePrefix(getUtf8Encoder(), getU32Encoder())],
+      ["signers", getArrayEncoder(getAddressEncoder())],
     ]),
-    (value) => ({ ...value, discriminator: CREATE_CREDENTIAL_DISCRIMINATOR })
+    (value) => ({ ...value, discriminator: CREATE_CREDENTIAL_DISCRIMINATOR }),
   );
 }
 
 export function getCreateCredentialInstructionDataDecoder(): Decoder<CreateCredentialInstructionData> {
   return getStructDecoder([
-    ['discriminator', getU8Decoder()],
-    ['name', addDecoderSizePrefix(getUtf8Decoder(), getU32Decoder())],
-    ['signers', getArrayDecoder(getAddressDecoder())],
+    ["discriminator", getU8Decoder()],
+    ["name", addDecoderSizePrefix(getUtf8Decoder(), getU32Decoder())],
+    ["signers", getArrayDecoder(getAddressDecoder())],
   ]);
 }
 
@@ -115,7 +114,7 @@ export function getCreateCredentialInstructionDataCodec(): Codec<
 > {
   return combineCodec(
     getCreateCredentialInstructionDataEncoder(),
-    getCreateCredentialInstructionDataDecoder()
+    getCreateCredentialInstructionDataDecoder(),
   );
 }
 
@@ -129,8 +128,8 @@ export type CreateCredentialInput<
   credential: Address<TAccountCredential>;
   authority: TransactionSigner<TAccountAuthority>;
   systemProgram?: Address<TAccountSystemProgram>;
-  name: CreateCredentialInstructionDataArgs['name'];
-  signers: CreateCredentialInstructionDataArgs['signers'];
+  name: CreateCredentialInstructionDataArgs["name"];
+  signers: CreateCredentialInstructionDataArgs["signers"];
 };
 
 export function getCreateCredentialInstruction<
@@ -138,8 +137,8 @@ export function getCreateCredentialInstruction<
   TAccountCredential extends string,
   TAccountAuthority extends string,
   TAccountSystemProgram extends string,
-  TProgramAddress extends
-    Address = typeof SOLANA_ATTESTATION_SERVICE_PROGRAM_ADDRESS,
+  TProgramAddress extends Address =
+    typeof SOLANA_ATTESTATION_SERVICE_PROGRAM_ADDRESS,
 >(
   input: CreateCredentialInput<
     TAccountPayer,
@@ -147,7 +146,7 @@ export function getCreateCredentialInstruction<
     TAccountAuthority,
     TAccountSystemProgram
   >,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): CreateCredentialInstruction<
   TProgramAddress,
   TAccountPayer,
@@ -177,10 +176,10 @@ export function getCreateCredentialInstruction<
   // Resolve default values.
   if (!accounts.systemProgram.value) {
     accounts.systemProgram.value =
-      '11111111111111111111111111111111' as Address<'11111111111111111111111111111111'>;
+      "11111111111111111111111111111111" as Address<"11111111111111111111111111111111">;
   }
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.payer),
@@ -189,7 +188,7 @@ export function getCreateCredentialInstruction<
       getAccountMeta(accounts.systemProgram),
     ],
     data: getCreateCredentialInstructionDataEncoder().encode(
-      args as CreateCredentialInstructionDataArgs
+      args as CreateCredentialInstructionDataArgs,
     ),
     programAddress,
   } as CreateCredentialInstruction<
@@ -221,11 +220,11 @@ export function parseCreateCredentialInstruction<
 >(
   instruction: Instruction<TProgram> &
     InstructionWithAccounts<TAccountMetas> &
-    InstructionWithData<ReadonlyUint8Array>
+    InstructionWithData<ReadonlyUint8Array>,
 ): ParsedCreateCredentialInstruction<TProgram, TAccountMetas> {
   if (instruction.accounts.length < 4) {
     // TODO: Coded error.
-    throw new Error('Not enough accounts');
+    throw new Error("Not enough accounts");
   }
   let accountIndex = 0;
   const getNextAccount = () => {

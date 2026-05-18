@@ -1,0 +1,23 @@
+{
+  "skillId": "vulcan-technical-analysis",
+  "name": "vulcan-technical-analysis",
+  "description": "Technical indicators and trigger evaluation for Phoenix markets: RSI, MACD, BBands, ATR, ADX, VWAP, Stoch, SMA, EMA.",
+  "category": "pump-protocol",
+  "path": "vulcan-technical-analysis/SKILL.md",
+  "url": "https://x402.wtf/api/skills/vulcan-technical-analysis",
+  "tags": [
+    "vulcan",
+    "solana",
+    "technical",
+    "analysis"
+  ],
+  "requiredEnv": [],
+  "homepage": null,
+  "attestation": {
+    "status": "pending",
+    "isFormallyVerified": false,
+    "attestationPda": null,
+    "verificationTimestamp": null
+  },
+  "markdown": "---\nname: vulcan-technical-analysis\ndescription: Technical indicators and trigger evaluation for Phoenix markets: RSI, MACD, BBands, ATR, ADX, VWAP, Stoch, SMA, EMA.\n---\n\n# Vulcan Technical Analysis\n\nCanonical source: `../../vulcan-cli-master/skills/vulcan-technical-analysis/SKILL.md`\n\nUse `vulcan ta compute`, `vulcan ta signal`, and `vulcan ta report` for read-only market-intel and trigger checks.\n"
+}

@@ -1,0 +1,23 @@
+{
+  "skillId": "vulcan-error-recovery",
+  "name": "vulcan-error-recovery",
+  "description": "Error category routing and recovery for Vulcan/Phoenix perps. Use on failed CLI/MCP calls, tx failures, auth/config/API/network/rate-limit errors, and strategy recovery.",
+  "category": "pump-protocol",
+  "path": "vulcan-error-recovery/SKILL.md",
+  "url": "https://x402.wtf/api/skills/vulcan-error-recovery",
+  "tags": [
+    "vulcan",
+    "solana",
+    "error",
+    "recovery"
+  ],
+  "requiredEnv": [],
+  "homepage": null,
+  "attestation": {
+    "status": "pending",
+    "isFormallyVerified": false,
+    "attestationPda": null,
+    "verificationTimestamp": null
+  },
+  "markdown": "---\nname: vulcan-error-recovery\ndescription: Error category routing and recovery for Vulcan/Phoenix perps. Use on failed CLI/MCP calls, tx failures, auth/config/API/network/rate-limit errors, and strategy recovery.\n---\n\n# Vulcan Error Recovery\n\nCanonical source: `../../vulcan-cli-master/skills/vulcan-error-recovery/SKILL.md`\n\nAlways pair with `skills/vulcan/SKILL.md`. For live trading errors, do not blind-retry transactions; verify account, order, position, and history state first.\n"
+}

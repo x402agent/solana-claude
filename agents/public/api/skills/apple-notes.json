@@ -1,0 +1,22 @@
+{
+  "skillId": "apple-notes",
+  "name": "apple-notes",
+  "description": "Manage Apple Notes via the `memo` CLI on macOS (create, view, edit, delete, search, move, and export notes). Use when a user asks Clawdbot to add a note, list notes, search notes, or manage note folders.",
+  "category": "pump-protocol",
+  "path": "apple-notes/SKILL.md",
+  "url": "https://x402.wtf/api/skills/apple-notes",
+  "tags": [
+    "apple",
+    "solana",
+    "notes"
+  ],
+  "requiredEnv": [],
+  "homepage": null,
+  "attestation": {
+    "status": "pending",
+    "isFormallyVerified": false,
+    "attestationPda": null,
+    "verificationTimestamp": null
+  },
+  "markdown": "---\nname: apple-notes\ndescription: Manage Apple Notes via the `memo` CLI on macOS (create, view, edit, delete, search, move, and export notes). Use when a user asks Clawdbot to add a note, list notes, search notes, or manage note folders.\nhomepage: https://github.com/antoniorodr/memo\nmetadata: {\"clawdbot\":{\"emoji\":\"📝\",\"os\":[\"darwin\"],\"requires\":{\"bins\":[\"memo\"]},\"install\":[{\"id\":\"brew\",\"kind\":\"brew\",\"formula\":\"antoniorodr/memo/memo\",\"bins\":[\"memo\"],\"label\":\"Install memo via Homebrew\"}]}}\n---\n\n# Apple Notes CLI\n\nUse `memo notes` to manage Apple Notes directly from the terminal. Create, view, edit, delete, search, move notes between folders, and export to HTML/Markdown.\n\nSetup\n- Install (Homebrew): `brew tap antoniorodr/memo && brew install antoniorodr/memo/memo`\n- Manual (pip): `pip install .` (after cloning the repo)\n- macOS-only; if prompted, grant Automation access to Notes.app.\n\nView Notes\n- List all notes: `memo notes`\n- Filter by folder: `memo notes -f \"Folder Name\"`\n- Search notes (fuzzy): `memo notes -s \"query\"`\n\nCreate Notes\n- Add a new note: `memo notes -a`\n  - Opens an interactive editor to compose the note.\n- Quick add with title: `memo notes -a \"Note Title\"`\n\nEdit Notes\n- Edit existing note: `memo notes -e`\n  - Interactive selection of note to edit.\n\nDelete Notes\n- Delete a note: `memo notes -d`\n  - Interactive selection of note to delete.\n\nMove Notes\n- Move note to folder: `memo notes -m`\n  - Interactive selection of note and destination folder.\n\nExport Notes\n- Export to HTML/Markdown: `memo notes -ex`\n  - Exports selected note; uses Mistune for markdown processing.\n\nLimitations\n- Cannot edit notes containing images or attachments.\n- Interactive prompts may require terminal access.\n\nNotes\n- macOS-only.\n- Requires Apple Notes.app to be accessible.\n- For automation, grant permissions in System Settings > Privacy & Security > Automation.\n"
+}

@@ -42,9 +42,9 @@ import {
   type TransactionSigner,
   type WritableAccount,
   type WritableSignerAccount,
-} from '@solana/kit';
-import { SOLANA_ATTESTATION_SERVICE_PROGRAM_ADDRESS } from '../programs';
-import { getAccountMetaFactory, type ResolvedAccount } from '../shared';
+} from "@solana/kit";
+import { SOLANA_ATTESTATION_SERVICE_PROGRAM_ADDRESS } from "../programs";
+import { getAccountMetaFactory, type ResolvedAccount } from "../shared";
 
 export const CREATE_TOKENIZED_ATTESTATION_DISCRIMINATOR = 10;
 
@@ -59,20 +59,17 @@ export type CreateTokenizedAttestationInstruction<
   TAccountCredential extends string | AccountMeta<string> = string,
   TAccountSchema extends string | AccountMeta<string> = string,
   TAccountAttestation extends string | AccountMeta<string> = string,
-  TAccountSystemProgram extends
-    | string
-    | AccountMeta<string> = '11111111111111111111111111111111',
+  TAccountSystemProgram extends string | AccountMeta<string> =
+    "11111111111111111111111111111111",
   TAccountSchemaMint extends string | AccountMeta<string> = string,
   TAccountAttestationMint extends string | AccountMeta<string> = string,
   TAccountSasPda extends string | AccountMeta<string> = string,
   TAccountRecipientTokenAccount extends string | AccountMeta<string> = string,
   TAccountRecipient extends string | AccountMeta<string> = string,
-  TAccountTokenProgram extends
-    | string
-    | AccountMeta<string> = 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
-  TAccountAssociatedTokenProgram extends
-    | string
-    | AccountMeta<string> = 'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL',
+  TAccountTokenProgram extends string | AccountMeta<string> =
+    "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb",
+  TAccountAssociatedTokenProgram extends string | AccountMeta<string> =
+    "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL",
   TRemainingAccounts extends readonly AccountMeta<string>[] = [],
 > = Instruction<TProgram> &
   InstructionWithData<ReadonlyUint8Array> &
@@ -147,32 +144,32 @@ export type CreateTokenizedAttestationInstructionDataArgs = {
 export function getCreateTokenizedAttestationInstructionDataEncoder(): Encoder<CreateTokenizedAttestationInstructionDataArgs> {
   return transformEncoder(
     getStructEncoder([
-      ['discriminator', getU8Encoder()],
-      ['nonce', getAddressEncoder()],
-      ['data', addEncoderSizePrefix(getBytesEncoder(), getU32Encoder())],
-      ['expiry', getI64Encoder()],
-      ['name', addEncoderSizePrefix(getUtf8Encoder(), getU32Encoder())],
-      ['uri', addEncoderSizePrefix(getUtf8Encoder(), getU32Encoder())],
-      ['symbol', addEncoderSizePrefix(getUtf8Encoder(), getU32Encoder())],
-      ['mintAccountSpace', getU16Encoder()],
+      ["discriminator", getU8Encoder()],
+      ["nonce", getAddressEncoder()],
+      ["data", addEncoderSizePrefix(getBytesEncoder(), getU32Encoder())],
+      ["expiry", getI64Encoder()],
+      ["name", addEncoderSizePrefix(getUtf8Encoder(), getU32Encoder())],
+      ["uri", addEncoderSizePrefix(getUtf8Encoder(), getU32Encoder())],
+      ["symbol", addEncoderSizePrefix(getUtf8Encoder(), getU32Encoder())],
+      ["mintAccountSpace", getU16Encoder()],
     ]),
     (value) => ({
       ...value,
       discriminator: CREATE_TOKENIZED_ATTESTATION_DISCRIMINATOR,
-    })
+    }),
   );
 }
 
 export function getCreateTokenizedAttestationInstructionDataDecoder(): Decoder<CreateTokenizedAttestationInstructionData> {
   return getStructDecoder([
-    ['discriminator', getU8Decoder()],
-    ['nonce', getAddressDecoder()],
-    ['data', addDecoderSizePrefix(getBytesDecoder(), getU32Decoder())],
-    ['expiry', getI64Decoder()],
-    ['name', addDecoderSizePrefix(getUtf8Decoder(), getU32Decoder())],
-    ['uri', addDecoderSizePrefix(getUtf8Decoder(), getU32Decoder())],
-    ['symbol', addDecoderSizePrefix(getUtf8Decoder(), getU32Decoder())],
-    ['mintAccountSpace', getU16Decoder()],
+    ["discriminator", getU8Decoder()],
+    ["nonce", getAddressDecoder()],
+    ["data", addDecoderSizePrefix(getBytesDecoder(), getU32Decoder())],
+    ["expiry", getI64Decoder()],
+    ["name", addDecoderSizePrefix(getUtf8Decoder(), getU32Decoder())],
+    ["uri", addDecoderSizePrefix(getUtf8Decoder(), getU32Decoder())],
+    ["symbol", addDecoderSizePrefix(getUtf8Decoder(), getU32Decoder())],
+    ["mintAccountSpace", getU16Decoder()],
   ]);
 }
 
@@ -182,7 +179,7 @@ export function getCreateTokenizedAttestationInstructionDataCodec(): Codec<
 > {
   return combineCodec(
     getCreateTokenizedAttestationInstructionDataEncoder(),
-    getCreateTokenizedAttestationInstructionDataDecoder()
+    getCreateTokenizedAttestationInstructionDataDecoder(),
   );
 }
 
@@ -222,13 +219,13 @@ export type CreateTokenizedAttestationInput<
   recipient: Address<TAccountRecipient>;
   tokenProgram?: Address<TAccountTokenProgram>;
   associatedTokenProgram?: Address<TAccountAssociatedTokenProgram>;
-  nonce: CreateTokenizedAttestationInstructionDataArgs['nonce'];
-  data: CreateTokenizedAttestationInstructionDataArgs['data'];
-  expiry: CreateTokenizedAttestationInstructionDataArgs['expiry'];
-  name: CreateTokenizedAttestationInstructionDataArgs['name'];
-  uri: CreateTokenizedAttestationInstructionDataArgs['uri'];
-  symbol: CreateTokenizedAttestationInstructionDataArgs['symbol'];
-  mintAccountSpace: CreateTokenizedAttestationInstructionDataArgs['mintAccountSpace'];
+  nonce: CreateTokenizedAttestationInstructionDataArgs["nonce"];
+  data: CreateTokenizedAttestationInstructionDataArgs["data"];
+  expiry: CreateTokenizedAttestationInstructionDataArgs["expiry"];
+  name: CreateTokenizedAttestationInstructionDataArgs["name"];
+  uri: CreateTokenizedAttestationInstructionDataArgs["uri"];
+  symbol: CreateTokenizedAttestationInstructionDataArgs["symbol"];
+  mintAccountSpace: CreateTokenizedAttestationInstructionDataArgs["mintAccountSpace"];
 };
 
 export function getCreateTokenizedAttestationInstruction<
@@ -245,8 +242,8 @@ export function getCreateTokenizedAttestationInstruction<
   TAccountRecipient extends string,
   TAccountTokenProgram extends string,
   TAccountAssociatedTokenProgram extends string,
-  TProgramAddress extends
-    Address = typeof SOLANA_ATTESTATION_SERVICE_PROGRAM_ADDRESS,
+  TProgramAddress extends Address =
+    typeof SOLANA_ATTESTATION_SERVICE_PROGRAM_ADDRESS,
 >(
   input: CreateTokenizedAttestationInput<
     TAccountPayer,
@@ -263,7 +260,7 @@ export function getCreateTokenizedAttestationInstruction<
     TAccountTokenProgram,
     TAccountAssociatedTokenProgram
   >,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): CreateTokenizedAttestationInstruction<
   TProgramAddress,
   TAccountPayer,
@@ -317,18 +314,18 @@ export function getCreateTokenizedAttestationInstruction<
   // Resolve default values.
   if (!accounts.systemProgram.value) {
     accounts.systemProgram.value =
-      '11111111111111111111111111111111' as Address<'11111111111111111111111111111111'>;
+      "11111111111111111111111111111111" as Address<"11111111111111111111111111111111">;
   }
   if (!accounts.tokenProgram.value) {
     accounts.tokenProgram.value =
-      'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb' as Address<'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb'>;
+      "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb" as Address<"TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb">;
   }
   if (!accounts.associatedTokenProgram.value) {
     accounts.associatedTokenProgram.value =
-      'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL' as Address<'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL'>;
+      "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL" as Address<"ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL">;
   }
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.payer),
@@ -346,7 +343,7 @@ export function getCreateTokenizedAttestationInstruction<
       getAccountMeta(accounts.associatedTokenProgram),
     ],
     data: getCreateTokenizedAttestationInstructionDataEncoder().encode(
-      args as CreateTokenizedAttestationInstructionDataArgs
+      args as CreateTokenizedAttestationInstructionDataArgs,
     ),
     programAddress,
   } as CreateTokenizedAttestationInstruction<
@@ -404,11 +401,11 @@ export function parseCreateTokenizedAttestationInstruction<
 >(
   instruction: Instruction<TProgram> &
     InstructionWithAccounts<TAccountMetas> &
-    InstructionWithData<ReadonlyUint8Array>
+    InstructionWithData<ReadonlyUint8Array>,
 ): ParsedCreateTokenizedAttestationInstruction<TProgram, TAccountMetas> {
   if (instruction.accounts.length < 13) {
     // TODO: Coded error.
-    throw new Error('Not enough accounts');
+    throw new Error("Not enough accounts");
   }
   let accountIndex = 0;
   const getNextAccount = () => {
@@ -434,7 +431,7 @@ export function parseCreateTokenizedAttestationInstruction<
       associatedTokenProgram: getNextAccount(),
     },
     data: getCreateTokenizedAttestationInstructionDataDecoder().decode(
-      instruction.data
+      instruction.data,
     ),
   };
 }

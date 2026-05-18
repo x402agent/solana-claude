@@ -1,0 +1,22 @@
+{
+  "skillId": "openai-whisper",
+  "name": "openai-whisper",
+  "description": "Local speech-to-text with the Whisper CLI (no API key).",
+  "category": "pump-protocol",
+  "path": "openai-whisper/SKILL.md",
+  "url": "https://x402.wtf/api/skills/openai-whisper",
+  "tags": [
+    "openai",
+    "solana",
+    "whisper"
+  ],
+  "requiredEnv": [],
+  "homepage": null,
+  "attestation": {
+    "status": "pending",
+    "isFormallyVerified": false,
+    "attestationPda": null,
+    "verificationTimestamp": null
+  },
+  "markdown": "---\nname: openai-whisper\ndescription: Local speech-to-text with the Whisper CLI (no API key).\nhomepage: https://openai.com/research/whisper\nmetadata: {\"clawdbot\":{\"emoji\":\"🎙️\",\"requires\":{\"bins\":[\"whisper\"]},\"install\":[{\"id\":\"brew\",\"kind\":\"brew\",\"formula\":\"openai-whisper\",\"bins\":[\"whisper\"],\"label\":\"Install OpenAI Whisper (brew)\"}]}}\n---\n\n# Whisper (CLI)\n\nUse `whisper` to transcribe audio locally.\n\nQuick start\n- `whisper /path/audio.mp3 --model medium --output_format txt --output_dir .`\n- `whisper /path/audio.m4a --task translate --output_format srt`\n\nNotes\n- Models download to `~/.cache/whisper` on first run.\n- `--model` defaults to `turbo` on this install.\n- Use smaller models for speed, larger for accuracy.\n"
+}

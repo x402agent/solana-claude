@@ -1,0 +1,23 @@
+{
+  "skillId": "vulcan-market-intel",
+  "name": "vulcan-market-intel",
+  "description": "Phoenix market data, tickers, orderbooks, candles, funding, spreads, liquidity, and pre-trade market context.",
+  "category": "pump-protocol",
+  "path": "vulcan-market-intel/SKILL.md",
+  "url": "https://x402.wtf/api/skills/vulcan-market-intel",
+  "tags": [
+    "vulcan",
+    "solana",
+    "market",
+    "intel"
+  ],
+  "requiredEnv": [],
+  "homepage": null,
+  "attestation": {
+    "status": "pending",
+    "isFormallyVerified": false,
+    "attestationPda": null,
+    "verificationTimestamp": null
+  },
+  "markdown": "---\nname: vulcan-market-intel\ndescription: Phoenix market data, tickers, orderbooks, candles, funding, spreads, liquidity, and pre-trade market context.\n---\n\n# Vulcan Market Intel\n\nCanonical source: `../../vulcan-cli-master/skills/vulcan-market-intel/SKILL.md`\n\nUse for read-only live data in CLI/TUI/agents: `vulcan market list`, `ticker`, `orderbook`, `candles`, `funding-rates`, and `trades`.\n"
+}

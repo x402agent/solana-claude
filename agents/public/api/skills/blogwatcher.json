@@ -1,0 +1,21 @@
+{
+  "skillId": "blogwatcher",
+  "name": "blogwatcher",
+  "description": "Monitor blogs and RSS/Atom feeds for updates using the blogwatcher CLI.",
+  "category": "pump-protocol",
+  "path": "blogwatcher/SKILL.md",
+  "url": "https://x402.wtf/api/skills/blogwatcher",
+  "tags": [
+    "blogwatcher",
+    "solana"
+  ],
+  "requiredEnv": [],
+  "homepage": null,
+  "attestation": {
+    "status": "pending",
+    "isFormallyVerified": false,
+    "attestationPda": null,
+    "verificationTimestamp": null
+  },
+  "markdown": "---\nname: blogwatcher\ndescription: Monitor blogs and RSS/Atom feeds for updates using the blogwatcher CLI.\nhomepage: https://github.com/Hyaxia/blogwatcher\nmetadata: {\"clawdbot\":{\"emoji\":\"📰\",\"requires\":{\"bins\":[\"blogwatcher\"]},\"install\":[{\"id\":\"go\",\"kind\":\"go\",\"module\":\"github.com/Hyaxia/blogwatcher/cmd/blogwatcher@latest\",\"bins\":[\"blogwatcher\"],\"label\":\"Install blogwatcher (go)\"}]}}\n---\n\n# blogwatcher\n\nTrack blog and RSS/Atom feed updates with the `blogwatcher` CLI.\n\nInstall\n- Go: `go install github.com/Hyaxia/blogwatcher/cmd/blogwatcher@latest`\n\nQuick start\n- `blogwatcher --help`\n\nCommon commands\n- Add a blog: `blogwatcher add \"My Blog\" https://example.com`\n- List blogs: `blogwatcher blogs`\n- Scan for updates: `blogwatcher scan`\n- List articles: `blogwatcher articles`\n- Mark an article read: `blogwatcher read 1`\n- Mark all articles read: `blogwatcher read-all`\n- Remove a blog: `blogwatcher remove \"My Blog\"`\n\nExample output\n```\n$ blogwatcher blogs\nTracked blogs (1):\n\n  xkcd\n    URL: https://xkcd.com\n```\n```\n$ blogwatcher scan\nScanning 1 blog(s)...\n\n  xkcd\n    Source: RSS | Found: 4 | New: 4\n\nFound 4 new article(s) total!\n```\n\nNotes\n- Use `blogwatcher <command> --help` to discover flags and options.\n"
+}

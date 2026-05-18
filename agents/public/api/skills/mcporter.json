@@ -1,0 +1,21 @@
+{
+  "skillId": "mcporter",
+  "name": "mcporter",
+  "description": "Use the mcporter CLI to list, configure, auth, and call MCP servers/tools directly (HTTP or stdio), including ad-hoc servers, config edits, and CLI/type generation.",
+  "category": "pump-protocol",
+  "path": "mcporter/SKILL.md",
+  "url": "https://x402.wtf/api/skills/mcporter",
+  "tags": [
+    "mcporter",
+    "solana"
+  ],
+  "requiredEnv": [],
+  "homepage": null,
+  "attestation": {
+    "status": "pending",
+    "isFormallyVerified": false,
+    "attestationPda": null,
+    "verificationTimestamp": null
+  },
+  "markdown": "---\nname: mcporter\ndescription: Use the mcporter CLI to list, configure, auth, and call MCP servers/tools directly (HTTP or stdio), including ad-hoc servers, config edits, and CLI/type generation.\nhomepage: http://mcporter.dev\nmetadata: {\"clawdbot\":{\"emoji\":\"📦\",\"requires\":{\"bins\":[\"mcporter\"]},\"install\":[{\"id\":\"node\",\"kind\":\"node\",\"package\":\"mcporter\",\"bins\":[\"mcporter\"],\"label\":\"Install mcporter (node)\"}]}}\n---\n\n# mcporter\n\nUse `mcporter` to work with MCP servers directly.\n\nQuick start\n- `mcporter list`\n- `mcporter list <server> --schema`\n- `mcporter call <server.tool> key=value`\n\nCall tools\n- Selector: `mcporter call linear.list_issues team=ENG limit:5`\n- Function syntax: `mcporter call \"linear.create_issue(title: \\\"Bug\\\")\"`\n- Full URL: `mcporter call https://api.example.com/mcp.fetch url:https://example.com`\n- Stdio: `mcporter call --stdio \"bun run ./server.ts\" scrape url=https://example.com`\n- JSON payload: `mcporter call <server.tool> --args '{\"limit\":5}'`\n\nAuth + config\n- OAuth: `mcporter auth <server | url> [--reset]`\n- Config: `mcporter config list|get|add|remove|import|login|logout`\n\nDaemon\n- `mcporter daemon start|status|stop|restart`\n\nCodegen\n- CLI: `mcporter generate-cli --server <name>` or `--command <url>`\n- Inspect: `mcporter inspect-cli <path> [--json]`\n- TS: `mcporter emit-ts <server> --mode client|types`\n\nNotes\n- Config default: `./config/mcporter.json` (override with `--config`).\n- Prefer `--output json` for machine-readable results.\n"
+}

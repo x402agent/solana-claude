@@ -70,6 +70,15 @@ Operator-specific runtime now present in-tree:
 - `operator/tests/` — upstream async/integration/ACP-heavy operator test suite
 - `operator/ralph.yml` — operator configuration surface carried forward for the existing loop engine
 
+Repo control plane from the root package:
+
+```bash
+npm run catalog:refresh
+npm run automaton:install && npm run automaton:build
+npm run attestation:install && npm run attestation:generate-clients
+npm run operator:test
+```
+
 ## Skills Index
 
 This repo currently carries 115 active skills under [`skills/`](./skills/) and [`agents/skills/`](./agents/skills/). The generated catalogs live in:
@@ -528,13 +537,16 @@ Local docs:
 1. [`README.md`](./README.md)
 2. [`sdk/README.md`](./sdk/README.md)
 3. [`automaton-main/README.md`](./automaton-main/README.md)
-4. [`leviathan/README.md`](./leviathan/README.md)
-5. [`x402/README.md`](./x402/README.md)
-6. [`MCP/README.md`](./MCP/README.md)
-7. [`programs/README.md`](./programs/README.md)
-8. [`llm_oracle/README.md`](./llm_oracle/README.md)
-9. [`packages/clawd/README.md`](./packages/clawd/README.md)
-10. [`packages/clawd-sdk/README.md`](./packages/clawd-sdk/README.md)
+4. [`attestation/README.md`](./attestation/README.md)
+5. [`operator/README.md`](./operator/README.md)
+6. [`agents/README.md`](./agents/README.md)
+7. [`leviathan/README.md`](./leviathan/README.md)
+8. [`x402/README.md`](./x402/README.md)
+9. [`MCP/README.md`](./MCP/README.md)
+10. [`programs/README.md`](./programs/README.md)
+11. [`llm_oracle/README.md`](./llm_oracle/README.md)
+12. [`packages/clawd/README.md`](./packages/clawd/README.md)
+13. [`packages/clawd-sdk/README.md`](./packages/clawd-sdk/README.md)
 
 ## Mapping
 
@@ -547,7 +559,9 @@ solana-clawd/
 ├── README.md
 ├── sdk/                     runtime source, library, goals, knowledge, assets
 ├── automaton-main/          clawd-automaton runtime + dashboard + automation
-├── agents/                  124-agent catalog + static x402 API/registry output
+├── attestation/             Solana Attestation Service program + clients + tests
+├── operator/                OpenClawd Operator loop + ACP adapter + Python tests
+├── agents/                  134-agent catalog + templates + skills hub + x402 API output
 ├── leviathan/               sovereign runtime source
 ├── x402/                    payment rail code and docs
 ├── MemeBRain/               Clawd memory substrate

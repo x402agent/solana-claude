@@ -1,0 +1,22 @@
+{
+  "skillId": "video-frames",
+  "name": "video-frames",
+  "description": "Extract frames or short clips from videos using ffmpeg.",
+  "category": "pump-protocol",
+  "path": "video-frames/SKILL.md",
+  "url": "https://x402.wtf/api/skills/video-frames",
+  "tags": [
+    "video",
+    "solana",
+    "frames"
+  ],
+  "requiredEnv": [],
+  "homepage": null,
+  "attestation": {
+    "status": "pending",
+    "isFormallyVerified": false,
+    "attestationPda": null,
+    "verificationTimestamp": null
+  },
+  "markdown": "---\nname: video-frames\ndescription: Extract frames or short clips from videos using ffmpeg.\nhomepage: https://ffmpeg.org\nmetadata: {\"clawdbot\":{\"emoji\":\"🎞️\",\"requires\":{\"bins\":[\"ffmpeg\"]},\"install\":[{\"id\":\"brew\",\"kind\":\"brew\",\"formula\":\"ffmpeg\",\"bins\":[\"ffmpeg\"],\"label\":\"Install ffmpeg (brew)\"}]}}\n---\n\n# Video Frames (ffmpeg)\n\nExtract a single frame from a video, or create quick thumbnails for inspection.\n\n## Quick start\n\nFirst frame:\n\n```bash\n{baseDir}/scripts/frame.sh /path/to/video.mp4 --out /tmp/frame.jpg\n```\n\nAt a timestamp:\n\n```bash\n{baseDir}/scripts/frame.sh /path/to/video.mp4 --time 00:00:10 --out /tmp/frame-10s.jpg\n```\n\n## Notes\n\n- Prefer `--time` for “what is happening around here?”.\n- Use a `.jpg` for quick share; use `.png` for crisp UI frames.\n"
+}

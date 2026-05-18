@@ -7,12 +7,27 @@
  */
 
 import {
+  assertIsInstructionWithAccounts,
   containsBytes,
   getU8Encoder,
   type Address,
+  type Instruction,
+  type InstructionWithData,
   type ReadonlyUint8Array,
-} from '@solana/kit';
+} from "@solana/kit";
 import {
+  parseChangeAuthorizedSignersInstruction,
+  parseChangeSchemaDescriptionInstruction,
+  parseChangeSchemaStatusInstruction,
+  parseChangeSchemaVersionInstruction,
+  parseCloseAttestationInstruction,
+  parseCloseTokenizedAttestationInstruction,
+  parseCreateAttestationInstruction,
+  parseCreateCredentialInstruction,
+  parseCreateSchemaInstruction,
+  parseCreateTokenizedAttestationInstruction,
+  parseEmitEventInstruction,
+  parseTokenizeSchemaInstruction,
   type ParsedChangeAuthorizedSignersInstruction,
   type ParsedChangeSchemaDescriptionInstruction,
   type ParsedChangeSchemaStatusInstruction,
@@ -25,10 +40,10 @@ import {
   type ParsedCreateTokenizedAttestationInstruction,
   type ParsedEmitEventInstruction,
   type ParsedTokenizeSchemaInstruction,
-} from '../instructions';
+} from "../instructions";
 
 export const SOLANA_ATTESTATION_SERVICE_PROGRAM_ADDRESS =
-  '22zoJMtdu4tQc2PzL74ZUT7FrwgB1Udec8DdW4yw4BdG' as Address<'22zoJMtdu4tQc2PzL74ZUT7FrwgB1Udec8DdW4yw4BdG'>;
+  "22zoJMtdu4tQc2PzL74ZUT7FrwgB1Udec8DdW4yw4BdG" as Address<"22zoJMtdu4tQc2PzL74ZUT7FrwgB1Udec8DdW4yw4BdG">;
 
 export enum SolanaAttestationServiceAccount {
   Attestation,
@@ -52,9 +67,9 @@ export enum SolanaAttestationServiceInstruction {
 }
 
 export function identifySolanaAttestationServiceInstruction(
-  instruction: { data: ReadonlyUint8Array } | ReadonlyUint8Array
+  instruction: { data: ReadonlyUint8Array } | ReadonlyUint8Array,
 ): SolanaAttestationServiceInstruction {
-  const data = 'data' in instruction ? instruction.data : instruction;
+  const data = "data" in instruction ? instruction.data : instruction;
   if (containsBytes(data, getU8Encoder().encode(0), 0)) {
     return SolanaAttestationServiceInstruction.CreateCredential;
   }
@@ -92,12 +107,12 @@ export function identifySolanaAttestationServiceInstruction(
     return SolanaAttestationServiceInstruction.EmitEvent;
   }
   throw new Error(
-    'The provided instruction could not be identified as a solanaAttestationService instruction.'
+    "The provided instruction could not be identified as a solanaAttestationService instruction.",
   );
 }
 
 export type ParsedSolanaAttestationServiceInstruction<
-  TProgram extends string = '22zoJMtdu4tQc2PzL74ZUT7FrwgB1Udec8DdW4yw4BdG',
+  TProgram extends string = "22zoJMtdu4tQc2PzL74ZUT7FrwgB1Udec8DdW4yw4BdG",
 > =
   | ({
       instructionType: SolanaAttestationServiceInstruction.CreateCredential;
@@ -135,3 +150,107 @@ export type ParsedSolanaAttestationServiceInstruction<
   | ({
       instructionType: SolanaAttestationServiceInstruction.EmitEvent;
     } & ParsedEmitEventInstruction<TProgram>);
+
+export function parseSolanaAttestationServiceInstruction<
+  TProgram extends string,
+>(
+  instruction: Instruction<TProgram> & InstructionWithData<ReadonlyUint8Array>,
+): ParsedSolanaAttestationServiceInstruction<TProgram> {
+  const instructionType =
+    identifySolanaAttestationServiceInstruction(instruction);
+  switch (instructionType) {
+    case SolanaAttestationServiceInstruction.CreateCredential: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: SolanaAttestationServiceInstruction.CreateCredential,
+        ...parseCreateCredentialInstruction(instruction),
+      };
+    }
+    case SolanaAttestationServiceInstruction.CreateSchema: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: SolanaAttestationServiceInstruction.CreateSchema,
+        ...parseCreateSchemaInstruction(instruction),
+      };
+    }
+    case SolanaAttestationServiceInstruction.ChangeSchemaStatus: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: SolanaAttestationServiceInstruction.ChangeSchemaStatus,
+        ...parseChangeSchemaStatusInstruction(instruction),
+      };
+    }
+    case SolanaAttestationServiceInstruction.ChangeAuthorizedSigners: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType:
+          SolanaAttestationServiceInstruction.ChangeAuthorizedSigners,
+        ...parseChangeAuthorizedSignersInstruction(instruction),
+      };
+    }
+    case SolanaAttestationServiceInstruction.ChangeSchemaDescription: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType:
+          SolanaAttestationServiceInstruction.ChangeSchemaDescription,
+        ...parseChangeSchemaDescriptionInstruction(instruction),
+      };
+    }
+    case SolanaAttestationServiceInstruction.ChangeSchemaVersion: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType:
+          SolanaAttestationServiceInstruction.ChangeSchemaVersion,
+        ...parseChangeSchemaVersionInstruction(instruction),
+      };
+    }
+    case SolanaAttestationServiceInstruction.CreateAttestation: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: SolanaAttestationServiceInstruction.CreateAttestation,
+        ...parseCreateAttestationInstruction(instruction),
+      };
+    }
+    case SolanaAttestationServiceInstruction.CloseAttestation: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: SolanaAttestationServiceInstruction.CloseAttestation,
+        ...parseCloseAttestationInstruction(instruction),
+      };
+    }
+    case SolanaAttestationServiceInstruction.TokenizeSchema: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: SolanaAttestationServiceInstruction.TokenizeSchema,
+        ...parseTokenizeSchemaInstruction(instruction),
+      };
+    }
+    case SolanaAttestationServiceInstruction.CreateTokenizedAttestation: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType:
+          SolanaAttestationServiceInstruction.CreateTokenizedAttestation,
+        ...parseCreateTokenizedAttestationInstruction(instruction),
+      };
+    }
+    case SolanaAttestationServiceInstruction.CloseTokenizedAttestation: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType:
+          SolanaAttestationServiceInstruction.CloseTokenizedAttestation,
+        ...parseCloseTokenizedAttestationInstruction(instruction),
+      };
+    }
+    case SolanaAttestationServiceInstruction.EmitEvent: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: SolanaAttestationServiceInstruction.EmitEvent,
+        ...parseEmitEventInstruction(instruction),
+      };
+    }
+    default:
+      throw new Error(
+        `Unrecognized instruction type: ${instructionType as string}`,
+      );
+  }
+}

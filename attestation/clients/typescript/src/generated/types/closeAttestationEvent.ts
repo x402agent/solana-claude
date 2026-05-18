@@ -25,7 +25,7 @@ import {
   type Decoder,
   type Encoder,
   type ReadonlyUint8Array,
-} from '@solana/kit';
+} from "@solana/kit";
 
 export type CloseAttestationEvent = {
   discriminator: number;
@@ -37,10 +37,10 @@ export type CloseAttestationEventArgs = CloseAttestationEvent;
 
 export function getCloseAttestationEventEncoder(): Encoder<CloseAttestationEventArgs> {
   return getStructEncoder([
-    ['discriminator', getU8Encoder()],
-    ['schema', getAddressEncoder()],
+    ["discriminator", getU8Encoder()],
+    ["schema", getAddressEncoder()],
     [
-      'attestationData',
+      "attestationData",
       addEncoderSizePrefix(getBytesEncoder(), getU32Encoder()),
     ],
   ]);
@@ -48,10 +48,10 @@ export function getCloseAttestationEventEncoder(): Encoder<CloseAttestationEvent
 
 export function getCloseAttestationEventDecoder(): Decoder<CloseAttestationEvent> {
   return getStructDecoder([
-    ['discriminator', getU8Decoder()],
-    ['schema', getAddressDecoder()],
+    ["discriminator", getU8Decoder()],
+    ["schema", getAddressDecoder()],
     [
-      'attestationData',
+      "attestationData",
       addDecoderSizePrefix(getBytesDecoder(), getU32Decoder()),
     ],
   ]);
@@ -63,6 +63,6 @@ export function getCloseAttestationEventCodec(): Codec<
 > {
   return combineCodec(
     getCloseAttestationEventEncoder(),
-    getCloseAttestationEventDecoder()
+    getCloseAttestationEventDecoder(),
   );
 }

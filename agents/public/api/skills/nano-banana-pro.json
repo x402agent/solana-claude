@@ -1,0 +1,23 @@
+{
+  "skillId": "nano-banana-pro",
+  "name": "nano-banana-pro",
+  "description": "Generate or edit images via Gemini 3 Pro Image (Nano Banana Pro).",
+  "category": "pump-protocol",
+  "path": "nano-banana-pro/SKILL.md",
+  "url": "https://x402.wtf/api/skills/nano-banana-pro",
+  "tags": [
+    "nano",
+    "solana",
+    "banana",
+    "pro"
+  ],
+  "requiredEnv": [],
+  "homepage": null,
+  "attestation": {
+    "status": "pending",
+    "isFormallyVerified": false,
+    "attestationPda": null,
+    "verificationTimestamp": null
+  },
+  "markdown": "---\nname: nano-banana-pro\ndescription: Generate or edit images via Gemini 3 Pro Image (Nano Banana Pro).\nhomepage: https://ai.google.dev/\nmetadata: {\"clawdbot\":{\"emoji\":\"🍌\",\"requires\":{\"bins\":[\"uv\"],\"env\":[\"GEMINI_API_KEY\"]},\"primaryEnv\":\"GEMINI_API_KEY\",\"install\":[{\"id\":\"uv-brew\",\"kind\":\"brew\",\"formula\":\"uv\",\"bins\":[\"uv\"],\"label\":\"Install uv (brew)\"}]}}\n---\n\n# Nano Banana Pro (Gemini 3 Pro Image)\n\nUse the bundled script to generate or edit images.\n\nGenerate\n```bash\nuv run {baseDir}/scripts/generate_image.py --prompt \"your image description\" --filename \"output.png\" --resolution 1K\n```\n\nEdit\n```bash\nuv run {baseDir}/scripts/generate_image.py --prompt \"edit instructions\" --filename \"output.png\" --input-image \"/path/in.png\" --resolution 2K\n```\n\nAPI key\n- `GEMINI_API_KEY` env var\n- Or set `skills.\"nano-banana-pro\".apiKey` / `skills.\"nano-banana-pro\".env.GEMINI_API_KEY` in `~/.clawdbot/clawdbot.json`\n\nNotes\n- Resolutions: `1K` (default), `2K`, `4K`.\n- Use timestamps in filenames: `yyyy-mm-dd-hh-mm-ss-name.png`.\n- The script prints a `MEDIA:` line for Clawdbot to auto-attach on supported chat providers.\n- Do not read the image back; report the saved path only.\n"
+}

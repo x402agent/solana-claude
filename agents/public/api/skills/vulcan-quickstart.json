@@ -1,0 +1,22 @@
+{
+  "skillId": "vulcan-quickstart",
+  "name": "vulcan-quickstart",
+  "description": "Five-minute Vulcan quickstart for install, health check, first market read, and first paper trade.",
+  "category": "pump-protocol",
+  "path": "vulcan-quickstart/SKILL.md",
+  "url": "https://x402.wtf/api/skills/vulcan-quickstart",
+  "tags": [
+    "vulcan",
+    "solana",
+    "quickstart"
+  ],
+  "requiredEnv": [],
+  "homepage": null,
+  "attestation": {
+    "status": "pending",
+    "isFormallyVerified": false,
+    "attestationPda": null,
+    "verificationTimestamp": null
+  },
+  "markdown": "---\nname: vulcan-quickstart\ndescription: Five-minute Vulcan quickstart for install, health check, first market read, and first paper trade.\n---\n\n# Vulcan Quickstart\n\nCanonical source: `../../vulcan-cli-master/skills/vulcan-quickstart/SKILL.md`\n\nRecommended first commands: `vulcan agent health -o json`, `vulcan market list -o json`, `vulcan paper init --balance 10000`, and a small paper order.\n"
+}

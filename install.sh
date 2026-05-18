@@ -5,6 +5,9 @@
 #   • openclawd / clawd Go binary             — daemon, gateway, solana ops
 #   • sdk/ (Node)                             — @openclawdsolana/leviathan runtime
 #   • automaton-main (pnpm)                   — clawd-automaton + x402.wtf/automation dashboard
+#   • agents/                                 — generated agent catalog, templates, and formal skills hub
+#   • attestation/                            — Solana Attestation Service program + generated clients
+#   • operator/                               — OpenClawd Operator loop (Python/uv surface)
 #   • gateway (Node)                          — Telegram + Birdeye/Helius control plane
 #   • plugin.delivery (Node)                  — public plugin SDK + edge gateway
 #   • dark-ralph TUI                          — Bloomberg-style Solana intelligence terminal
@@ -878,6 +881,10 @@ printf "  ${DIM}x402     : https://x402.wtf${RESET}\n"
 printf "  ${DIM}Agents   : https://x402.wtf/api/agents${RESET}\n"
 printf "  ${DIM}Catalog  : https://x402.wtf/api/agents/catalog${RESET}\n"
 printf "  ${DIM}Registry : https://x402.wtf/api/agents/registry${RESET}\n"
+printf "  ${DIM}Templates: $SRC_DIR/agents/templates/index.json${RESET}\n"
+printf "  ${DIM}Skill Hub: $SRC_DIR/agents/skills/index.json${RESET}\n"
+printf "  ${DIM}Attest   : $SRC_DIR/attestation/README.md${RESET}\n"
+printf "  ${DIM}Operator : $SRC_DIR/operator/README.md${RESET}\n"
 printf "  ${DIM}CA       : 8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump${RESET}\n"
 printf "  ${DIM}One-shot : curl -fsSL https://x402.wtf/automation/install.sh | bash${RESET}\n"
 printf "\n"

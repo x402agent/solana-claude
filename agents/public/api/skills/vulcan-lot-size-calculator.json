@@ -1,0 +1,24 @@
+{
+  "skillId": "vulcan-lot-size-calculator",
+  "name": "vulcan-lot-size-calculator",
+  "description": "Convert desired token/notional amounts to Phoenix base lots. Use whenever a Vulcan command requires size/base lots.",
+  "category": "pump-protocol",
+  "path": "vulcan-lot-size-calculator/SKILL.md",
+  "url": "https://x402.wtf/api/skills/vulcan-lot-size-calculator",
+  "tags": [
+    "vulcan",
+    "solana",
+    "lot",
+    "size",
+    "calculator"
+  ],
+  "requiredEnv": [],
+  "homepage": null,
+  "attestation": {
+    "status": "pending",
+    "isFormallyVerified": false,
+    "attestationPda": null,
+    "verificationTimestamp": null
+  },
+  "markdown": "---\nname: vulcan-lot-size-calculator\ndescription: Convert desired token/notional amounts to Phoenix base lots. Use whenever a Vulcan command requires size/base lots.\n---\n\n# Vulcan Lot Size Calculator\n\nCanonical source: `../../vulcan-cli-master/skills/vulcan-lot-size-calculator/SKILL.md`\n\nNever guess lot sizes. Call `vulcan market info <SYMBOL> -o json` before using `size`; prefer `--tokens` or `--notional-usdc` for market orders when supported.\n"
+}

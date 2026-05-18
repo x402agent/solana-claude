@@ -1,0 +1,21 @@
+{
+  "skillId": "eightctl",
+  "name": "eightctl",
+  "description": "Control Eight Sleep pods (status, temperature, alarms, schedules).",
+  "category": "pump-protocol",
+  "path": "eightctl/SKILL.md",
+  "url": "https://x402.wtf/api/skills/eightctl",
+  "tags": [
+    "eightctl",
+    "solana"
+  ],
+  "requiredEnv": [],
+  "homepage": null,
+  "attestation": {
+    "status": "pending",
+    "isFormallyVerified": false,
+    "attestationPda": null,
+    "verificationTimestamp": null
+  },
+  "markdown": "---\nname: eightctl\ndescription: Control Eight Sleep pods (status, temperature, alarms, schedules).\nhomepage: https://eightctl.sh\nmetadata: {\"clawdbot\":{\"emoji\":\"🎛️\",\"requires\":{\"bins\":[\"eightctl\"]},\"install\":[{\"id\":\"go\",\"kind\":\"go\",\"module\":\"github.com/steipete/eightctl/cmd/eightctl@latest\",\"bins\":[\"eightctl\"],\"label\":\"Install eightctl (go)\"}]}}\n---\n\n# eightctl\n\nUse `eightctl` for Eight Sleep pod control. Requires auth.\n\nAuth\n- Config: `~/.config/eightctl/config.yaml`\n- Env: `EIGHTCTL_EMAIL`, `EIGHTCTL_PASSWORD`\n\nQuick start\n- `eightctl status`\n- `eightctl on|off`\n- `eightctl temp 20`\n\nCommon tasks\n- Alarms: `eightctl alarm list|create|dismiss`\n- Schedules: `eightctl schedule list|create|update`\n- Audio: `eightctl audio state|play|pause`\n- Base: `eightctl base info|angle`\n\nNotes\n- API is unofficial and rate-limited; avoid repeated logins.\n- Confirm before changing temperature or alarms.\n"
+}

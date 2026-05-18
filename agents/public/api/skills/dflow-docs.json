@@ -1,0 +1,22 @@
+{
+  "skillId": "dflow-docs",
+  "name": "dflow-docs",
+  "description": "Discover and use DFlow documentation, Agent CLI, Trading API, Metadata API, Proof KYC, prediction markets, and the hosted DFlow docs MCP. Use before implementing DFlow features or when field-level endpoint details are needed.",
+  "category": "pump-protocol",
+  "path": "dflow-docs/SKILL.md",
+  "url": "https://x402.wtf/api/skills/dflow-docs",
+  "tags": [
+    "dflow",
+    "solana",
+    "docs"
+  ],
+  "requiredEnv": [],
+  "homepage": null,
+  "attestation": {
+    "status": "pending",
+    "isFormallyVerified": false,
+    "attestationPda": null,
+    "verificationTimestamp": null
+  },
+  "markdown": "---\nname: dflow-docs\ndescription: \"Discover and use DFlow documentation, Agent CLI, Trading API, Metadata API, Proof KYC, prediction markets, and the hosted DFlow docs MCP. Use before implementing DFlow features or when field-level endpoint details are needed.\"\nmetadata:\n  source: https://pond.dflow.net/llms.txt\n  mcp-server: https://pond.dflow.net/mcp\n  docs-index: skills/dflow-docs/llms.txt\n---\n\n# DFlow Docs\n\nUse this skill as the DFlow routing layer for agents in this repo.\n\n## Required First Step\n\nBefore exploring individual pages, read the local documentation index:\n\n```bash\nsed -n '1,220p' skills/dflow-docs/llms.txt\n```\n\nThe canonical remote index is:\n\n```text\nhttps://pond.dflow.net/llms.txt\n```\n\nRefresh the local copy when needed:\n\n```bash\ncurl -fsSL https://pond.dflow.net/llms.txt -o skills/dflow-docs/llms.txt\n```\n\n## Reference Entrypoints\n\n- Local index: `skills/dflow-docs/llms.txt`\n- Hosted docs MCP: `https://pond.dflow.net/mcp`\n\nIf a field shape, endpoint parameter, error code, or compliance detail matters, prefer the hosted DFlow docs MCP or the local OpenAPI spec over memory.\n\n## Agent CLI\n\nInstall:\n\n```bash\ncurl -fsS https://cli.dflow.net | sh\n```\n\nSet up:\n\n```bash\ndflow setup\n```\n\nCommon read-only commands:\n\n```bash\ndflow whoami\ndflow positions\ndflow guardrails show\n```\n\nTrading commands submit real transactions. Only run them when the operator explicitly asks for live execution and local DFlow guardrails have been checked.\n\n## Skill Routing\n\nUse the focused skill when the task matches:\n\n- `dflow-spot-trading`: Solana spot swaps, quotes, sponsored swaps, priority fees.\n- `dflow-kalshi-trading`: buy, sell, redeem YES/NO prediction market tokens.\n- `dflow-kalshi-market-scanner`: discover/filter events, markets, series, tags, candles.\n- `dflow-kalshi-market-data`: orderbook, live data, trades, WebSocket streams.\n- `dflow-kalshi-portfolio`: positions, P&L, rent reclaim.\n- `dflow-proof-kyc`: wallet identity verification for Kalshi markets.\n- `dflow-platform-fees`: builder fees through `platformFeeBps` or `platformFeeScale`.\n- `dflow-phantom-connect`: full-stack Phantom wallet apps with DFlow trading.\n\n## Safety Defaults\n\n- CLI amounts are atomic units, not UI amounts.\n- Prediction market buys require Proof KYC and jurisdiction checks.\n- Kalshi maintenance is Thursdays, 3:00 AM to 5:00 AM ET.\n- Use `dflow guardrails show` before autonomous execution.\n- Do not ask for or print private keys, vault passwords, mnemonics, or exported wallet material.\n"
+}

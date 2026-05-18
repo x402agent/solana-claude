@@ -1,0 +1,23 @@
+{
+  "skillId": "vulcan-portfolio-intel",
+  "name": "vulcan-portfolio-intel",
+  "description": "Phoenix portfolio snapshots: margin, positions, resting orders, funding exposure, PnL, and account reporting.",
+  "category": "pump-protocol",
+  "path": "vulcan-portfolio-intel/SKILL.md",
+  "url": "https://x402.wtf/api/skills/vulcan-portfolio-intel",
+  "tags": [
+    "vulcan",
+    "solana",
+    "portfolio",
+    "intel"
+  ],
+  "requiredEnv": [],
+  "homepage": null,
+  "attestation": {
+    "status": "pending",
+    "isFormallyVerified": false,
+    "attestationPda": null,
+    "verificationTimestamp": null
+  },
+  "markdown": "---\nname: vulcan-portfolio-intel\ndescription: Phoenix portfolio snapshots: margin, positions, resting orders, funding exposure, PnL, and account reporting.\n---\n\n# Vulcan Portfolio Intel\n\nCanonical source: `../../vulcan-cli-master/skills/vulcan-portfolio-intel/SKILL.md`\n\nUse `vulcan portfolio -o json`, `position list`, `trade orders`, and history commands for user-visible account summaries.\n"
+}

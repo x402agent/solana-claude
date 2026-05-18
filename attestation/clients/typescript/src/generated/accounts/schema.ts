@@ -38,7 +38,7 @@ import {
   type MaybeAccount,
   type MaybeEncodedAccount,
   type ReadonlyUint8Array,
-} from '@solana/kit';
+} from "@solana/kit";
 
 export type Schema = {
   discriminator: number;
@@ -56,28 +56,28 @@ export type SchemaArgs = Schema;
 /** Gets the encoder for {@link SchemaArgs} account data. */
 export function getSchemaEncoder(): Encoder<SchemaArgs> {
   return getStructEncoder([
-    ['discriminator', getU8Encoder()],
-    ['credential', getAddressEncoder()],
-    ['name', addEncoderSizePrefix(getBytesEncoder(), getU32Encoder())],
-    ['description', addEncoderSizePrefix(getBytesEncoder(), getU32Encoder())],
-    ['layout', addEncoderSizePrefix(getBytesEncoder(), getU32Encoder())],
-    ['fieldNames', addEncoderSizePrefix(getBytesEncoder(), getU32Encoder())],
-    ['isPaused', getBooleanEncoder()],
-    ['version', getU8Encoder()],
+    ["discriminator", getU8Encoder()],
+    ["credential", getAddressEncoder()],
+    ["name", addEncoderSizePrefix(getBytesEncoder(), getU32Encoder())],
+    ["description", addEncoderSizePrefix(getBytesEncoder(), getU32Encoder())],
+    ["layout", addEncoderSizePrefix(getBytesEncoder(), getU32Encoder())],
+    ["fieldNames", addEncoderSizePrefix(getBytesEncoder(), getU32Encoder())],
+    ["isPaused", getBooleanEncoder()],
+    ["version", getU8Encoder()],
   ]);
 }
 
 /** Gets the decoder for {@link Schema} account data. */
 export function getSchemaDecoder(): Decoder<Schema> {
   return getStructDecoder([
-    ['discriminator', getU8Decoder()],
-    ['credential', getAddressDecoder()],
-    ['name', addDecoderSizePrefix(getBytesDecoder(), getU32Decoder())],
-    ['description', addDecoderSizePrefix(getBytesDecoder(), getU32Decoder())],
-    ['layout', addDecoderSizePrefix(getBytesDecoder(), getU32Decoder())],
-    ['fieldNames', addDecoderSizePrefix(getBytesDecoder(), getU32Decoder())],
-    ['isPaused', getBooleanDecoder()],
-    ['version', getU8Decoder()],
+    ["discriminator", getU8Decoder()],
+    ["credential", getAddressDecoder()],
+    ["name", addDecoderSizePrefix(getBytesDecoder(), getU32Decoder())],
+    ["description", addDecoderSizePrefix(getBytesDecoder(), getU32Decoder())],
+    ["layout", addDecoderSizePrefix(getBytesDecoder(), getU32Decoder())],
+    ["fieldNames", addDecoderSizePrefix(getBytesDecoder(), getU32Decoder())],
+    ["isPaused", getBooleanDecoder()],
+    ["version", getU8Decoder()],
   ]);
 }
 
@@ -87,24 +87,24 @@ export function getSchemaCodec(): Codec<SchemaArgs, Schema> {
 }
 
 export function decodeSchema<TAddress extends string = string>(
-  encodedAccount: EncodedAccount<TAddress>
+  encodedAccount: EncodedAccount<TAddress>,
 ): Account<Schema, TAddress>;
 export function decodeSchema<TAddress extends string = string>(
-  encodedAccount: MaybeEncodedAccount<TAddress>
+  encodedAccount: MaybeEncodedAccount<TAddress>,
 ): MaybeAccount<Schema, TAddress>;
 export function decodeSchema<TAddress extends string = string>(
-  encodedAccount: EncodedAccount<TAddress> | MaybeEncodedAccount<TAddress>
+  encodedAccount: EncodedAccount<TAddress> | MaybeEncodedAccount<TAddress>,
 ): Account<Schema, TAddress> | MaybeAccount<Schema, TAddress> {
   return decodeAccount(
     encodedAccount as MaybeEncodedAccount<TAddress>,
-    getSchemaDecoder()
+    getSchemaDecoder(),
   );
 }
 
 export async function fetchSchema<TAddress extends string = string>(
   rpc: Parameters<typeof fetchEncodedAccount>[0],
   address: Address<TAddress>,
-  config?: FetchAccountConfig
+  config?: FetchAccountConfig,
 ): Promise<Account<Schema, TAddress>> {
   const maybeAccount = await fetchMaybeSchema(rpc, address, config);
   assertAccountExists(maybeAccount);
@@ -114,7 +114,7 @@ export async function fetchSchema<TAddress extends string = string>(
 export async function fetchMaybeSchema<TAddress extends string = string>(
   rpc: Parameters<typeof fetchEncodedAccount>[0],
   address: Address<TAddress>,
-  config?: FetchAccountConfig
+  config?: FetchAccountConfig,
 ): Promise<MaybeAccount<Schema, TAddress>> {
   const maybeAccount = await fetchEncodedAccount(rpc, address, config);
   return decodeSchema(maybeAccount);
@@ -123,7 +123,7 @@ export async function fetchMaybeSchema<TAddress extends string = string>(
 export async function fetchAllSchema(
   rpc: Parameters<typeof fetchEncodedAccounts>[0],
   addresses: Array<Address>,
-  config?: FetchAccountsConfig
+  config?: FetchAccountsConfig,
 ): Promise<Account<Schema>[]> {
   const maybeAccounts = await fetchAllMaybeSchema(rpc, addresses, config);
   assertAccountsExist(maybeAccounts);
@@ -133,7 +133,7 @@ export async function fetchAllSchema(
 export async function fetchAllMaybeSchema(
   rpc: Parameters<typeof fetchEncodedAccounts>[0],
   addresses: Array<Address>,
-  config?: FetchAccountsConfig
+  config?: FetchAccountsConfig,
 ): Promise<MaybeAccount<Schema>[]> {
   const maybeAccounts = await fetchEncodedAccounts(rpc, addresses, config);
   return maybeAccounts.map((maybeAccount) => decodeSchema(maybeAccount));

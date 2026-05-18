@@ -1,0 +1,22 @@
+{
+  "skillId": "pumpfun-trading",
+  "name": "pumpfun-trading",
+  "description": "Buy and sell tokens on Pump.fun bonding curves and AMM pools",
+  "category": "pump-protocol",
+  "path": "pumpfun-trading/SKILL.md",
+  "url": "https://x402.wtf/api/skills/pumpfun-trading",
+  "tags": [
+    "pumpfun",
+    "solana",
+    "trading"
+  ],
+  "requiredEnv": [],
+  "homepage": null,
+  "attestation": {
+    "status": "pending",
+    "isFormallyVerified": false,
+    "attestationPda": null,
+    "verificationTimestamp": null
+  },
+  "markdown": "---\ndescription: Buy and sell tokens on Pump.fun bonding curves and AMM pools\n---\n\n# PumpFun Trading\n\nExecute buy and sell trades on the Pump.fun protocol using the native Pump SDK. Supports both bonding curve trading (pre-graduation) and AMM pool trading (post-graduation).\n\n## Prerequisites\n\n- Funded Solana wallet via `nanosolana birth`\n- `HELIUS_RPC_URL` configured\n- Understanding of bonding curve mechanics\n\n## Trading Flow\n\n### 1. Check Token State\n\nBefore trading, always check if the token is on the bonding curve or has graduated:\n\n```typescript\nconst sdk = new OnlinePumpSdk(connection);\nconst summary = await sdk.fetchBondingCurveSummary(mint);\n\nif (summary.isGraduated) {\n  // Use AMM trading instructions\n} else {\n  // Use bonding curve trading instructions\n}\n```\n\n### 2. Buy on Bonding Curve\n\n```typescript\nimport { OnlinePumpSdk, getBuyTokenAmountFromSolAmount } from \"nanosolana\";\nimport BN from \"bn.js\";\n\nconst sdk = new OnlinePumpSdk(connection);\n\n// Fetch state\nconst [buyState, global, feeConfig] = await Promise.all([\n  sdk.fetchBuyState(mint, user),\n  sdk.fetchGlobal(),\n  sdk.fetchFeeConfig(),\n]);\n\n// Calculate expected tokens\nconst solAmount = new BN(100_000_000); // 0.1 SOL\nconst expectedTokens = getBuyTokenAmountFromSolAmount({\n  global, feeConfig,\n  mintSupply: buyState.bondingCurve.tokenTotalSupply,\n  bondingCurve: buyState.bondingCurve,\n  amount: solAmount,\n});\n\n// Build instructions\nconst buyIxs = await sdk.buyInstructions({\n  ...buyState, mint, user,\n  amount: expectedTokens,\n  solAmount,\n  slippage: 0.05, // 5%\n});\n```\n\n### 3. Sell on Bonding Curve\n\n```typescript\nimport { getSellSolAmountFromTokenAmount } from \"nanosolana\";\n\nconst [sellState, global, feeConfig] = await Promise.all([\n  sdk.fetchSellState(mint, user),\n  sdk.fetchGlobal(),\n  sdk.fetchFeeConfig(),\n]);\n\nconst tokenAmount = new BN(1_000_000_000);\nconst expectedSol = getSellSolAmountFromTokenAmount({\n  global, feeConfig,\n  mintSupply: sellState.bondingCurve.tokenTotalSupply,\n  bondingCurve: sellState.bondingCurve,\n  amount: tokenAmount,\n});\n\nconst sellIxs = await sdk.sellInstructions({\n  ...sellState, mint, user,\n  amount: tokenAmount,\n  solAmount: expectedSol,\n  slippage: 0.05,\n});\n```\n\n## Risk Management\n\n| Control | Value |\n|---------|-------|\n| Always use slippage | 3-5% recommended |\n| Check `bondingCurve.complete` | Before trading |\n| Use `BN` for all amounts | Never use JS `number` |\n| Max position per trade | Follow Kelly Criterion |\n| Circuit breaker | -10% daily → pause 24h |\n\n## Integration with Swarm\n\nSwarm agents with the `sniper`, `momentum`, and `graduation` roles use this skill automatically via the OODA trading loop.\n"
+}

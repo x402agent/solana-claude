@@ -1,0 +1,22 @@
+{
+  "skillId": "vulcan-onboarding",
+  "name": "vulcan-onboarding",
+  "description": "First-run Vulcan setup for paper trading, wallet, registration, collateral, MCP skills, and live readiness.",
+  "category": "pump-protocol",
+  "path": "vulcan-onboarding/SKILL.md",
+  "url": "https://x402.wtf/api/skills/vulcan-onboarding",
+  "tags": [
+    "vulcan",
+    "solana",
+    "onboarding"
+  ],
+  "requiredEnv": [],
+  "homepage": null,
+  "attestation": {
+    "status": "pending",
+    "isFormallyVerified": false,
+    "attestationPda": null,
+    "verificationTimestamp": null
+  },
+  "markdown": "---\nname: vulcan-onboarding\ndescription: First-run Vulcan setup for paper trading, wallet, registration, collateral, MCP skills, and live readiness.\n---\n\n# Vulcan Onboarding\n\nCanonical source: `../../vulcan-cli-master/skills/vulcan-onboarding/SKILL.md`\n\nStart new users with `vulcan agent health -o json`, paper trading, and only then live setup if requested.\n"
+}

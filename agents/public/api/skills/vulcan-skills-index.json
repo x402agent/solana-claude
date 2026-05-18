@@ -1,0 +1,23 @@
+{
+  "skillId": "vulcan-skills-index",
+  "name": "vulcan-skills-index",
+  "description": "Index for the bundled Vulcan skill pack exposed through solana-clawd. Use to discover the correct focused Vulcan skill.",
+  "category": "pump-protocol",
+  "path": "vulcan-skills-index/SKILL.md",
+  "url": "https://x402.wtf/api/skills/vulcan-skills-index",
+  "tags": [
+    "vulcan",
+    "solana",
+    "skills",
+    "index"
+  ],
+  "requiredEnv": [],
+  "homepage": null,
+  "attestation": {
+    "status": "pending",
+    "isFormallyVerified": false,
+    "attestationPda": null,
+    "verificationTimestamp": null
+  },
+  "markdown": "---\nname: vulcan-skills-index\ndescription: Index for the bundled Vulcan skill pack exposed through solana-clawd. Use to discover the correct focused Vulcan skill.\n---\n\n# Vulcan Skills Index\n\nCanonical source: `../../vulcan-cli-master/skills/INDEX.md`\n\nIncluded focused skills:\n\n- `vulcan`\n- `vulcan-quickstart`\n- `vulcan-execution-modes`\n- `vulcan-risk-management`\n- `vulcan-error-recovery`\n- `vulcan-trade-execution`\n- `vulcan-lot-size-calculator`\n- `vulcan-tpsl-management`\n- `vulcan-twap-execution`\n- `vulcan-grid-trading`\n- `vulcan-ta-strategy`\n- `vulcan-market-intel`\n- `vulcan-technical-analysis`\n- `vulcan-portfolio-intel`\n- `vulcan-margin-operations`\n- `vulcan-onboarding`\n- `vulcan-position-management`\n"
+}

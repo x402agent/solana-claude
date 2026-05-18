@@ -4,6 +4,29 @@
 
 A discoverable, self-hosting hub for Solana-native AI agents. Every agent in the [`src/`](./src/) directory is automatically indexed into a catalog ([`agents-catalog.json`](./agents-catalog.json)), served via REST and MCP, and surfaced at [x402.wtf/agents](https://x402.wtf/agents) with install / chat / mint buttons. Works with any MCP-compatible client — Clawd Desktop, Cursor, ClawdOS, Windsurf.
 
+## 🦞 Verification Layer
+
+The agent hub now sits directly on top of the new [`../attestation/README.md`](../attestation/README.md) verification surface.
+
+That layer is what turns OpenClawd from a plain JSON catalog into a trust-bearing system:
+
+- **skills** can carry formal proof hashes
+- **agents** can be born with attested identity records
+- **plugins** can be published with audit-backed attestation metadata
+- **MCP servers** can eventually advertise verified tool-surface receipts
+
+Key local verification surfaces:
+
+- [`../attestation/README.md`](../attestation/README.md)
+- [`./skills/solana-attestation-skill/`](./skills/solana-attestation-skill/)
+- [`./agent-template-attested.json`](./agent-template-attested.json)
+- [`../plugin.delivery/plugin-template-attested.json`](../plugin.delivery/plugin-template-attested.json)
+- [`./templates/solana-attestation-agent.template.json`](./templates/solana-attestation-agent.template.json)
+
+```text
+skill → proof → attestation → registry → deploy rail
+```
+
 ## 🔗 openclawd Ecosystem
 
 | Surface              | URL                                                                           | Status             |
@@ -92,6 +115,7 @@ Result (May 2026 generated snapshot — regenerate any time with `node build-cat
 - **23 featured agents** across the catalog and **43 one-shots** on the deploy rail.
 - **Template registry live** — the generated catalog now emits **5 templates** from [`templates/`](./templates/), plus a dedicated template index at [`templates/index.json`](./templates/index.json).
 - **Skills hub live** — [`skills/index.json`](./skills/index.json) now exposes the OpenClawd skill registry with formal-verification metadata and a published skill schema.
+- **Attestation layer live** — [`../attestation/README.md`](../attestation/README.md) now vendors the Solana Attestation Service and maps it onto skills, agents, plugins, and MCP server verification flows.
 - **Metaplex skill baked in** — every agent in the catalog carries capability metadata for Agent Registry, Genesis, Core, Token Metadata, Bubblegum, and Candy Machine. The hub surfaces per-agent badges so users can filter by "can launch tokens" or "can mint NFTs".
 - **Solana-native schema v1** — [`schema/clawdAgentSchema.v1.json`](./schema/clawdAgentSchema.v1.json) extends Sperax v1 with `solana.capabilities`, `solana.metaplexSkills`, `solana.programDeps`, `onchain`, `payment`, `agentToken`, `a2a`, `endpoints`, and `deploy` blocks.
 - **Author/homepage rebrand** — every agent now points at `https://x402.wtf/agents/{id}` with `clawd` + `solana` tags.
@@ -175,6 +199,7 @@ The live catalog is the canonical machine-readable surface for the site:
 - [`templates/index.json`](./templates/index.json) — reusable agent template index
 - [`skills/index.json`](./skills/index.json) — OpenClawd skills hub with verification metadata
 - [`agents-manifest.json`](./agents-manifest.json) — discovery manifest for crawlers and clients
+- [`../attestation/README.md`](../attestation/README.md) — SAS-backed verification layer for skills, agents, plugins, and MCP servers
 
 Public endpoints:
 

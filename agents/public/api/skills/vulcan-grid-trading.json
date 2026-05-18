@@ -1,0 +1,23 @@
+{
+  "skillId": "vulcan-grid-trading",
+  "name": "vulcan-grid-trading",
+  "description": "Grid trading with layered limit orders on Phoenix perpetuals. Use for grid setup, monitoring, pausing/stopping, and live/paper grid strategy safety.",
+  "category": "pump-protocol",
+  "path": "vulcan-grid-trading/SKILL.md",
+  "url": "https://x402.wtf/api/skills/vulcan-grid-trading",
+  "tags": [
+    "vulcan",
+    "solana",
+    "grid",
+    "trading"
+  ],
+  "requiredEnv": [],
+  "homepage": null,
+  "attestation": {
+    "status": "pending",
+    "isFormallyVerified": false,
+    "attestationPda": null,
+    "verificationTimestamp": null
+  },
+  "markdown": "---\nname: vulcan-grid-trading\ndescription: Grid trading with layered limit orders on Phoenix perpetuals. Use for grid setup, monitoring, pausing/stopping, and live/paper grid strategy safety.\n---\n\n# Vulcan Grid Trading\n\nCanonical source: `../../vulcan-cli-master/skills/vulcan-grid-trading/SKILL.md`\n\nPrefer Vulcan's first-class grid runner over custom schedulers. Use detached monitoring for long-running runs and report each fill/replacement with full signatures.\n"
+}

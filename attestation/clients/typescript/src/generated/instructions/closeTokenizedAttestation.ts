@@ -28,9 +28,9 @@ import {
   type TransactionSigner,
   type WritableAccount,
   type WritableSignerAccount,
-} from '@solana/kit';
-import { SOLANA_ATTESTATION_SERVICE_PROGRAM_ADDRESS } from '../programs';
-import { getAccountMetaFactory, type ResolvedAccount } from '../shared';
+} from "@solana/kit";
+import { SOLANA_ATTESTATION_SERVICE_PROGRAM_ADDRESS } from "../programs";
+import { getAccountMetaFactory, type ResolvedAccount } from "../shared";
 
 export const CLOSE_TOKENIZED_ATTESTATION_DISCRIMINATOR = 11;
 
@@ -44,21 +44,17 @@ export type CloseTokenizedAttestationInstruction<
   TAccountAuthority extends string | AccountMeta<string> = string,
   TAccountCredential extends string | AccountMeta<string> = string,
   TAccountAttestation extends string | AccountMeta<string> = string,
-  TAccountEventAuthority extends
-    | string
-    | AccountMeta<string> = 'DzSpKpST2TSyrxokMXchFz3G2yn5WEGoxzpGEUDjCX4g',
-  TAccountSystemProgram extends
-    | string
-    | AccountMeta<string> = '11111111111111111111111111111111',
-  TAccountAttestationProgram extends
-    | string
-    | AccountMeta<string> = '22zoJMtdu4tQc2PzL74ZUT7FrwgB1Udec8DdW4yw4BdG',
+  TAccountEventAuthority extends string | AccountMeta<string> =
+    "DzSpKpST2TSyrxokMXchFz3G2yn5WEGoxzpGEUDjCX4g",
+  TAccountSystemProgram extends string | AccountMeta<string> =
+    "11111111111111111111111111111111",
+  TAccountAttestationProgram extends string | AccountMeta<string> =
+    "22zoJMtdu4tQc2PzL74ZUT7FrwgB1Udec8DdW4yw4BdG",
   TAccountAttestationMint extends string | AccountMeta<string> = string,
   TAccountSasPda extends string | AccountMeta<string> = string,
   TAccountAttestationTokenAccount extends string | AccountMeta<string> = string,
-  TAccountTokenProgram extends
-    | string
-    | AccountMeta<string> = 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+  TAccountTokenProgram extends string | AccountMeta<string> =
+    "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb",
   TRemainingAccounts extends readonly AccountMeta<string>[] = [],
 > = Instruction<TProgram> &
   InstructionWithData<ReadonlyUint8Array> &
@@ -111,16 +107,16 @@ export type CloseTokenizedAttestationInstructionDataArgs = {};
 
 export function getCloseTokenizedAttestationInstructionDataEncoder(): FixedSizeEncoder<CloseTokenizedAttestationInstructionDataArgs> {
   return transformEncoder(
-    getStructEncoder([['discriminator', getU8Encoder()]]),
+    getStructEncoder([["discriminator", getU8Encoder()]]),
     (value) => ({
       ...value,
       discriminator: CLOSE_TOKENIZED_ATTESTATION_DISCRIMINATOR,
-    })
+    }),
   );
 }
 
 export function getCloseTokenizedAttestationInstructionDataDecoder(): FixedSizeDecoder<CloseTokenizedAttestationInstructionData> {
-  return getStructDecoder([['discriminator', getU8Decoder()]]);
+  return getStructDecoder([["discriminator", getU8Decoder()]]);
 }
 
 export function getCloseTokenizedAttestationInstructionDataCodec(): FixedSizeCodec<
@@ -129,7 +125,7 @@ export function getCloseTokenizedAttestationInstructionDataCodec(): FixedSizeCod
 > {
   return combineCodec(
     getCloseTokenizedAttestationInstructionDataEncoder(),
-    getCloseTokenizedAttestationInstructionDataDecoder()
+    getCloseTokenizedAttestationInstructionDataDecoder(),
   );
 }
 
@@ -175,8 +171,8 @@ export function getCloseTokenizedAttestationInstruction<
   TAccountSasPda extends string,
   TAccountAttestationTokenAccount extends string,
   TAccountTokenProgram extends string,
-  TProgramAddress extends
-    Address = typeof SOLANA_ATTESTATION_SERVICE_PROGRAM_ADDRESS,
+  TProgramAddress extends Address =
+    typeof SOLANA_ATTESTATION_SERVICE_PROGRAM_ADDRESS,
 >(
   input: CloseTokenizedAttestationInput<
     TAccountPayer,
@@ -191,7 +187,7 @@ export function getCloseTokenizedAttestationInstruction<
     TAccountAttestationTokenAccount,
     TAccountTokenProgram
   >,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): CloseTokenizedAttestationInstruction<
   TProgramAddress,
   TAccountPayer,
@@ -238,22 +234,22 @@ export function getCloseTokenizedAttestationInstruction<
   // Resolve default values.
   if (!accounts.eventAuthority.value) {
     accounts.eventAuthority.value =
-      'DzSpKpST2TSyrxokMXchFz3G2yn5WEGoxzpGEUDjCX4g' as Address<'DzSpKpST2TSyrxokMXchFz3G2yn5WEGoxzpGEUDjCX4g'>;
+      "DzSpKpST2TSyrxokMXchFz3G2yn5WEGoxzpGEUDjCX4g" as Address<"DzSpKpST2TSyrxokMXchFz3G2yn5WEGoxzpGEUDjCX4g">;
   }
   if (!accounts.systemProgram.value) {
     accounts.systemProgram.value =
-      '11111111111111111111111111111111' as Address<'11111111111111111111111111111111'>;
+      "11111111111111111111111111111111" as Address<"11111111111111111111111111111111">;
   }
   if (!accounts.attestationProgram.value) {
     accounts.attestationProgram.value =
-      '22zoJMtdu4tQc2PzL74ZUT7FrwgB1Udec8DdW4yw4BdG' as Address<'22zoJMtdu4tQc2PzL74ZUT7FrwgB1Udec8DdW4yw4BdG'>;
+      "22zoJMtdu4tQc2PzL74ZUT7FrwgB1Udec8DdW4yw4BdG" as Address<"22zoJMtdu4tQc2PzL74ZUT7FrwgB1Udec8DdW4yw4BdG">;
   }
   if (!accounts.tokenProgram.value) {
     accounts.tokenProgram.value =
-      'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb' as Address<'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb'>;
+      "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb" as Address<"TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb">;
   }
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.payer),
@@ -317,11 +313,11 @@ export function parseCloseTokenizedAttestationInstruction<
 >(
   instruction: Instruction<TProgram> &
     InstructionWithAccounts<TAccountMetas> &
-    InstructionWithData<ReadonlyUint8Array>
+    InstructionWithData<ReadonlyUint8Array>,
 ): ParsedCloseTokenizedAttestationInstruction<TProgram, TAccountMetas> {
   if (instruction.accounts.length < 11) {
     // TODO: Coded error.
-    throw new Error('Not enough accounts');
+    throw new Error("Not enough accounts");
   }
   let accountIndex = 0;
   const getNextAccount = () => {
@@ -345,7 +341,7 @@ export function parseCloseTokenizedAttestationInstruction<
       tokenProgram: getNextAccount(),
     },
     data: getCloseTokenizedAttestationInstructionDataDecoder().decode(
-      instruction.data
+      instruction.data,
     ),
   };
 }

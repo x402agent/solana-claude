@@ -102,6 +102,15 @@ The attestation path is wired into this runtime through:
 - [`../plugin.delivery/plugin-template-attested.json`](../plugin.delivery/plugin-template-attested.json)
 - [`../agents/templates/solana-attestation-agent.template.json`](../agents/templates/solana-attestation-agent.template.json)
 
+This is not just an agent-identity path. The verification layer is designed to sign and surface:
+
+- formally verified **skills**
+- attested **agents**
+- audited **plugins**
+- verified **MCP servers**
+
+The runtime is where those surfaces become operational. The attestation layer is where they become provable.
+
 ---
 
 ## Runtime API surface
@@ -211,6 +220,12 @@ The attestation template is the bridge into the formal verification path: it def
 ## Formal Skill Hub
 
 The generated skill hub lives at [`../agents/skills/index.json`](../agents/skills/index.json). It is the machine-readable registry for skills that have normalized metadata, category assignment, and formal verification fields.
+
+The intended graduation path is:
+
+```text
+local skill → generated skill hub → proof_hash → SAS attestation → trusted runtime surface
+```
 
 Every current entry is cataloged below one by one:
 

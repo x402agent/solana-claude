@@ -27,7 +27,7 @@ class TestSecurityValidatorPaths:
         test_file.touch()
 
         result = SecurityValidator.sanitize_path("test.txt", base_dir)
-        assert result == test_file
+        assert result == test_file.resolve()
 
         # Cleanup
         test_file.unlink()

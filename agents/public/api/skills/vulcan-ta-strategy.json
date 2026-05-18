@@ -1,0 +1,23 @@
+{
+  "skillId": "vulcan-ta-strategy",
+  "name": "vulcan-ta-strategy",
+  "description": "Technical-analysis-driven Phoenix strategy runner using declarative rules and Vulcan strategy ledgers.",
+  "category": "pump-protocol",
+  "path": "vulcan-ta-strategy/SKILL.md",
+  "url": "https://x402.wtf/api/skills/vulcan-ta-strategy",
+  "tags": [
+    "vulcan",
+    "solana",
+    "ta",
+    "strategy"
+  ],
+  "requiredEnv": [],
+  "homepage": null,
+  "attestation": {
+    "status": "pending",
+    "isFormallyVerified": false,
+    "attestationPda": null,
+    "verificationTimestamp": null
+  },
+  "markdown": "---\nname: vulcan-ta-strategy\ndescription: Technical-analysis-driven Phoenix strategy runner using declarative rules and Vulcan strategy ledgers.\n---\n\n# Vulcan TA Strategy\n\nCanonical source: `../../vulcan-cli-master/skills/vulcan-ta-strategy/SKILL.md`\n\nPrefer Vulcan's TA strategy runner over custom loops. Collect execution mode, triggers, caps, TP/SL intent, and safety policy before launch.\n"
+}

@@ -28,9 +28,9 @@ import {
   type TransactionSigner,
   type WritableAccount,
   type WritableSignerAccount,
-} from '@solana/kit';
-import { SOLANA_ATTESTATION_SERVICE_PROGRAM_ADDRESS } from '../programs';
-import { getAccountMetaFactory, type ResolvedAccount } from '../shared';
+} from "@solana/kit";
+import { SOLANA_ATTESTATION_SERVICE_PROGRAM_ADDRESS } from "../programs";
+import { getAccountMetaFactory, type ResolvedAccount } from "../shared";
 
 export const CLOSE_ATTESTATION_DISCRIMINATOR = 7;
 
@@ -44,15 +44,12 @@ export type CloseAttestationInstruction<
   TAccountAuthority extends string | AccountMeta<string> = string,
   TAccountCredential extends string | AccountMeta<string> = string,
   TAccountAttestation extends string | AccountMeta<string> = string,
-  TAccountEventAuthority extends
-    | string
-    | AccountMeta<string> = 'DzSpKpST2TSyrxokMXchFz3G2yn5WEGoxzpGEUDjCX4g',
-  TAccountSystemProgram extends
-    | string
-    | AccountMeta<string> = '11111111111111111111111111111111',
-  TAccountAttestationProgram extends
-    | string
-    | AccountMeta<string> = '22zoJMtdu4tQc2PzL74ZUT7FrwgB1Udec8DdW4yw4BdG',
+  TAccountEventAuthority extends string | AccountMeta<string> =
+    "DzSpKpST2TSyrxokMXchFz3G2yn5WEGoxzpGEUDjCX4g",
+  TAccountSystemProgram extends string | AccountMeta<string> =
+    "11111111111111111111111111111111",
+  TAccountAttestationProgram extends string | AccountMeta<string> =
+    "22zoJMtdu4tQc2PzL74ZUT7FrwgB1Udec8DdW4yw4BdG",
   TRemainingAccounts extends readonly AccountMeta<string>[] = [],
 > = Instruction<TProgram> &
   InstructionWithData<ReadonlyUint8Array> &
@@ -91,13 +88,13 @@ export type CloseAttestationInstructionDataArgs = {};
 
 export function getCloseAttestationInstructionDataEncoder(): FixedSizeEncoder<CloseAttestationInstructionDataArgs> {
   return transformEncoder(
-    getStructEncoder([['discriminator', getU8Encoder()]]),
-    (value) => ({ ...value, discriminator: CLOSE_ATTESTATION_DISCRIMINATOR })
+    getStructEncoder([["discriminator", getU8Encoder()]]),
+    (value) => ({ ...value, discriminator: CLOSE_ATTESTATION_DISCRIMINATOR }),
   );
 }
 
 export function getCloseAttestationInstructionDataDecoder(): FixedSizeDecoder<CloseAttestationInstructionData> {
-  return getStructDecoder([['discriminator', getU8Decoder()]]);
+  return getStructDecoder([["discriminator", getU8Decoder()]]);
 }
 
 export function getCloseAttestationInstructionDataCodec(): FixedSizeCodec<
@@ -106,7 +103,7 @@ export function getCloseAttestationInstructionDataCodec(): FixedSizeCodec<
 > {
   return combineCodec(
     getCloseAttestationInstructionDataEncoder(),
-    getCloseAttestationInstructionDataDecoder()
+    getCloseAttestationInstructionDataDecoder(),
   );
 }
 
@@ -137,8 +134,8 @@ export function getCloseAttestationInstruction<
   TAccountEventAuthority extends string,
   TAccountSystemProgram extends string,
   TAccountAttestationProgram extends string,
-  TProgramAddress extends
-    Address = typeof SOLANA_ATTESTATION_SERVICE_PROGRAM_ADDRESS,
+  TProgramAddress extends Address =
+    typeof SOLANA_ATTESTATION_SERVICE_PROGRAM_ADDRESS,
 >(
   input: CloseAttestationInput<
     TAccountPayer,
@@ -149,7 +146,7 @@ export function getCloseAttestationInstruction<
     TAccountSystemProgram,
     TAccountAttestationProgram
   >,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): CloseAttestationInstruction<
   TProgramAddress,
   TAccountPayer,
@@ -185,18 +182,18 @@ export function getCloseAttestationInstruction<
   // Resolve default values.
   if (!accounts.eventAuthority.value) {
     accounts.eventAuthority.value =
-      'DzSpKpST2TSyrxokMXchFz3G2yn5WEGoxzpGEUDjCX4g' as Address<'DzSpKpST2TSyrxokMXchFz3G2yn5WEGoxzpGEUDjCX4g'>;
+      "DzSpKpST2TSyrxokMXchFz3G2yn5WEGoxzpGEUDjCX4g" as Address<"DzSpKpST2TSyrxokMXchFz3G2yn5WEGoxzpGEUDjCX4g">;
   }
   if (!accounts.systemProgram.value) {
     accounts.systemProgram.value =
-      '11111111111111111111111111111111' as Address<'11111111111111111111111111111111'>;
+      "11111111111111111111111111111111" as Address<"11111111111111111111111111111111">;
   }
   if (!accounts.attestationProgram.value) {
     accounts.attestationProgram.value =
-      '22zoJMtdu4tQc2PzL74ZUT7FrwgB1Udec8DdW4yw4BdG' as Address<'22zoJMtdu4tQc2PzL74ZUT7FrwgB1Udec8DdW4yw4BdG'>;
+      "22zoJMtdu4tQc2PzL74ZUT7FrwgB1Udec8DdW4yw4BdG" as Address<"22zoJMtdu4tQc2PzL74ZUT7FrwgB1Udec8DdW4yw4BdG">;
   }
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.payer),
@@ -245,11 +242,11 @@ export function parseCloseAttestationInstruction<
 >(
   instruction: Instruction<TProgram> &
     InstructionWithAccounts<TAccountMetas> &
-    InstructionWithData<ReadonlyUint8Array>
+    InstructionWithData<ReadonlyUint8Array>,
 ): ParsedCloseAttestationInstruction<TProgram, TAccountMetas> {
   if (instruction.accounts.length < 7) {
     // TODO: Coded error.
-    throw new Error('Not enough accounts');
+    throw new Error("Not enough accounts");
   }
   let accountIndex = 0;
   const getNextAccount = () => {

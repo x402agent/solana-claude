@@ -1,0 +1,23 @@
+{
+  "skillId": "vulcan-execution-modes",
+  "name": "vulcan-execution-modes",
+  "description": "Canonical Vulcan execution mode taxonomy: Observe, Paper, Dry-Run, Confirm-Each, Auto-Execute. Use before launching strategies or live-capable perps flows.",
+  "category": "pump-protocol",
+  "path": "vulcan-execution-modes/SKILL.md",
+  "url": "https://x402.wtf/api/skills/vulcan-execution-modes",
+  "tags": [
+    "vulcan",
+    "solana",
+    "execution",
+    "modes"
+  ],
+  "requiredEnv": [],
+  "homepage": null,
+  "attestation": {
+    "status": "pending",
+    "isFormallyVerified": false,
+    "attestationPda": null,
+    "verificationTimestamp": null
+  },
+  "markdown": "---\nname: vulcan-execution-modes\ndescription: Canonical Vulcan execution mode taxonomy: Observe, Paper, Dry-Run, Confirm-Each, Auto-Execute. Use before launching strategies or live-capable perps flows.\n---\n\n# Vulcan Execution Modes\n\nCanonical source: `../../vulcan-cli-master/skills/vulcan-execution-modes/SKILL.md`\n\nDefault user-facing mode is Paper unless the user explicitly selects a live mode. Live `confirm_each` and `auto_execute` require explicit approval and collected safety parameters.\n"
+}

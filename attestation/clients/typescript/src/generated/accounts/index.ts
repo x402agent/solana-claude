@@ -6,6 +6,6 @@
  * @see https://github.com/codama-idl/codama
  */
 
-export * from './attestation';
-export * from './credential';
-export * from './schema';
+export * from "./attestation";
+export * from "./credential";
+export * from "./schema";

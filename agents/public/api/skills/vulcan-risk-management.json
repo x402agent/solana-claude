@@ -1,0 +1,23 @@
+{
+  "skillId": "vulcan-risk-management",
+  "name": "vulcan-risk-management",
+  "description": "Risk checks for Phoenix perps: margin health, leverage tiers, liquidation distance, notional caps, exposure, stops, and strategy guardrails.",
+  "category": "pump-protocol",
+  "path": "vulcan-risk-management/SKILL.md",
+  "url": "https://x402.wtf/api/skills/vulcan-risk-management",
+  "tags": [
+    "vulcan",
+    "solana",
+    "risk",
+    "management"
+  ],
+  "requiredEnv": [],
+  "homepage": null,
+  "attestation": {
+    "status": "pending",
+    "isFormallyVerified": false,
+    "attestationPda": null,
+    "verificationTimestamp": null
+  },
+  "markdown": "---\nname: vulcan-risk-management\ndescription: Risk checks for Phoenix perps: margin health, leverage tiers, liquidation distance, notional caps, exposure, stops, and strategy guardrails.\n---\n\n# Vulcan Risk Management\n\nCanonical source: `../../vulcan-cli-master/skills/vulcan-risk-management/SKILL.md`\n\nBefore live exposure, check margin, positions, market conditions, max notional, per-step caps, TP/SL intent, liquidation distance, and pause/stop triggers.\n"
+}

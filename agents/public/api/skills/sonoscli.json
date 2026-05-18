@@ -1,0 +1,21 @@
+{
+  "skillId": "sonoscli",
+  "name": "sonoscli",
+  "description": "Control Sonos speakers (discover/status/play/volume/group).",
+  "category": "pump-protocol",
+  "path": "sonoscli/SKILL.md",
+  "url": "https://x402.wtf/api/skills/sonoscli",
+  "tags": [
+    "sonoscli",
+    "solana"
+  ],
+  "requiredEnv": [],
+  "homepage": null,
+  "attestation": {
+    "status": "pending",
+    "isFormallyVerified": false,
+    "attestationPda": null,
+    "verificationTimestamp": null
+  },
+  "markdown": "---\nname: sonoscli\ndescription: Control Sonos speakers (discover/status/play/volume/group).\nhomepage: https://sonoscli.sh\nmetadata: {\"clawdbot\":{\"emoji\":\"🔊\",\"requires\":{\"bins\":[\"sonos\"]},\"install\":[{\"id\":\"go\",\"kind\":\"go\",\"module\":\"github.com/steipete/sonoscli/cmd/sonos@latest\",\"bins\":[\"sonos\"],\"label\":\"Install sonoscli (go)\"}]}}\n---\n\n# Sonos CLI\n\nUse `sonos` to control Sonos speakers on the local network.\n\nQuick start\n- `sonos discover`\n- `sonos status --name \"Kitchen\"`\n- `sonos play|pause|stop --name \"Kitchen\"`\n- `sonos volume set 15 --name \"Kitchen\"`\n\nCommon tasks\n- Grouping: `sonos group status|join|unjoin|party|solo`\n- Favorites: `sonos favorites list|open`\n- Queue: `sonos queue list|play|clear`\n- Spotify search (via SMAPI): `sonos smapi search --service \"Spotify\" --category tracks \"query\"`\n\nNotes\n- If SSDP fails, specify `--ip <speaker-ip>`.\n- Spotify Web API search is optional and requires `SPOTIFY_CLIENT_ID/SECRET`.\n"
+}

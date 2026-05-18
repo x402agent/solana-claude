@@ -1,0 +1,23 @@
+{
+  "skillId": "phantom-wallet-mcp",
+  "name": "phantom-wallet-mcp",
+  "description": ">",
+  "category": "wallet",
+  "path": "phantom-wallet-mcp/SKILL.md",
+  "url": "https://x402.wtf/api/skills/phantom-wallet-mcp",
+  "tags": [
+    "phantom",
+    "solana",
+    "wallet",
+    "mcp"
+  ],
+  "requiredEnv": [],
+  "homepage": null,
+  "attestation": {
+    "status": "pending",
+    "isFormallyVerified": false,
+    "attestationPda": null,
+    "verificationTimestamp": null
+  },
+  "markdown": "---\nname: phantom-wallet-mcp\ndescription: >\n  Execute wallet operations through the Phantom MCP server. Use when the user\n  wants to interact with their Phantom wallet directly — get addresses, transfer\n  SOL or SPL tokens, buy/swap tokens, sign transactions, and sign messages across\n  Solana, Ethereum, Bitcoin, and Sui. Requires the @phantom/mcp-server to be\n  configured as an MCP server.\nlicense: MIT\nmetadata:\n  author: phantom\n  version: \"1.0\"\n  homepage: https://github.com/phantom/phantom-connect-cursor-plugin\n---\n\n# Phantom Wallet MCP\n\nUse the `phantom` MCP server to interact with the user's Phantom wallet directly — no SDK integration code needed.\n\n## Setup\n\nAdd the Phantom MCP server to your MCP configuration:\n\n```json\n{\n  \"mcpServers\": {\n    \"phantom\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"@phantom/mcp-server\"],\n      \"env\": {\n        \"PHANTOM_APP_ID\": \"<your-app-id>\"\n      }\n    }\n  }\n}\n```\n\nGet your `PHANTOM_APP_ID` from [Phantom Portal](https://portal.phantom.com). On first use, the server opens a browser for OAuth authentication via Google or Apple login.\n\n## Available Tools\n\n| Tool | Description |\n|------|-------------|\n| `get_wallet_addresses` | Get blockchain addresses (Solana, Ethereum, Bitcoin, Sui) for the connected wallet |\n| `transfer_tokens` | Transfer SOL or SPL tokens on Solana — builds, signs, and sends the transaction |\n| `buy_token` | Fetch Solana swap quotes from Phantom API; optionally sign and send |\n| `sign_transaction` | Sign a transaction (base64url for Solana, RLP hex for Ethereum) |\n| `sign_message` | Sign a UTF-8 message with automatic chain-specific routing |\n\n## Supported Networks\n\n| Chain | Networks | CAIP-2 Examples |\n|-------|----------|-----------------|\n| Solana | mainnet, devnet, testnet | `solana:mainnet`, `solana:devnet` |\n| Ethereum | Mainnet, Sepolia, Polygon, Base, Arbitrum | `eip155:1`, `eip155:137` |\n| Bitcoin | Mainnet | `bip122:000000000019d6689c085ae165831e93` |\n| Sui | Mainnet, Testnet | `sui:mainnet` |\n\n## Examples\n\n### Get wallet addresses\n\nRetrieve the user's wallet addresses across all supported chains:\n\n```\nUse the phantom MCP's get_wallet_addresses tool to list the user's addresses.\n```\n\nReturns addresses for each connected chain (Solana, Ethereum, Bitcoin, Sui).\n\n### Transfer SOL\n\nSend SOL to a recipient address:\n\n```\nUse the phantom MCP's transfer_tokens tool:\n- token: \"SOL\"\n- recipientAddress: \"<recipient>\"\n- amount: \"0.1\"\n- network: \"solana:mainnet\"\n```\n\nThe MCP handles transaction building, signing, and submission.\n\n### Transfer SPL tokens\n\nSend any SPL token by its mint address:\n\n```\nUse the phantom MCP's transfer_tokens tool:\n- token: \"<token-mint-address>\"\n- recipientAddress: \"<recipient>\"\n- amount: \"10\"\n- network: \"solana:mainnet\"\n```\n\n### Buy / swap tokens\n\nGet a swap quote and optionally execute it:\n\n```\nUse the phantom MCP's buy_token tool:\n- tokenMint: \"<token-mint-to-buy>\"\n- amount: \"1000000\"  (in lamports for SOL input)\n- network: \"solana:mainnet\"\n```\n\n### Sign a message\n\nSign a UTF-8 message for verification or authentication:\n\n```\nUse the phantom MCP's sign_message tool:\n- message: \"Hello, verifying ownership\"\n- network: \"solana:mainnet\"\n```\n\nThe MCP routes to the correct chain-specific signing based on the network parameter.\n\n## Important Notes\n\n- **Preview software** — use a separate wallet with minimal funds for testing\n- Sessions persist locally in `~/.phantom-mcp/session.json`\n- The MCP server runs via stdio transport (launched by `npx -y @phantom/mcp-server`)\n- Token transfers on Solana support both native SOL and any SPL token\n- Swap quotes come from Phantom's API and include fee and slippage info\n"
+}

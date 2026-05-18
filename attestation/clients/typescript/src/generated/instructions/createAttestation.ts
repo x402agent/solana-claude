@@ -38,9 +38,9 @@ import {
   type TransactionSigner,
   type WritableAccount,
   type WritableSignerAccount,
-} from '@solana/kit';
-import { SOLANA_ATTESTATION_SERVICE_PROGRAM_ADDRESS } from '../programs';
-import { getAccountMetaFactory, type ResolvedAccount } from '../shared';
+} from "@solana/kit";
+import { SOLANA_ATTESTATION_SERVICE_PROGRAM_ADDRESS } from "../programs";
+import { getAccountMetaFactory, type ResolvedAccount } from "../shared";
 
 export const CREATE_ATTESTATION_DISCRIMINATOR = 6;
 
@@ -55,9 +55,8 @@ export type CreateAttestationInstruction<
   TAccountCredential extends string | AccountMeta<string> = string,
   TAccountSchema extends string | AccountMeta<string> = string,
   TAccountAttestation extends string | AccountMeta<string> = string,
-  TAccountSystemProgram extends
-    | string
-    | AccountMeta<string> = '11111111111111111111111111111111',
+  TAccountSystemProgram extends string | AccountMeta<string> =
+    "11111111111111111111111111111111",
   TRemainingAccounts extends readonly AccountMeta<string>[] = [],
 > = Instruction<TProgram> &
   InstructionWithData<ReadonlyUint8Array> &
@@ -103,21 +102,21 @@ export type CreateAttestationInstructionDataArgs = {
 export function getCreateAttestationInstructionDataEncoder(): Encoder<CreateAttestationInstructionDataArgs> {
   return transformEncoder(
     getStructEncoder([
-      ['discriminator', getU8Encoder()],
-      ['nonce', getAddressEncoder()],
-      ['data', addEncoderSizePrefix(getBytesEncoder(), getU32Encoder())],
-      ['expiry', getI64Encoder()],
+      ["discriminator", getU8Encoder()],
+      ["nonce", getAddressEncoder()],
+      ["data", addEncoderSizePrefix(getBytesEncoder(), getU32Encoder())],
+      ["expiry", getI64Encoder()],
     ]),
-    (value) => ({ ...value, discriminator: CREATE_ATTESTATION_DISCRIMINATOR })
+    (value) => ({ ...value, discriminator: CREATE_ATTESTATION_DISCRIMINATOR }),
   );
 }
 
 export function getCreateAttestationInstructionDataDecoder(): Decoder<CreateAttestationInstructionData> {
   return getStructDecoder([
-    ['discriminator', getU8Decoder()],
-    ['nonce', getAddressDecoder()],
-    ['data', addDecoderSizePrefix(getBytesDecoder(), getU32Decoder())],
-    ['expiry', getI64Decoder()],
+    ["discriminator", getU8Decoder()],
+    ["nonce", getAddressDecoder()],
+    ["data", addDecoderSizePrefix(getBytesDecoder(), getU32Decoder())],
+    ["expiry", getI64Decoder()],
   ]);
 }
 
@@ -127,7 +126,7 @@ export function getCreateAttestationInstructionDataCodec(): Codec<
 > {
   return combineCodec(
     getCreateAttestationInstructionDataEncoder(),
-    getCreateAttestationInstructionDataDecoder()
+    getCreateAttestationInstructionDataDecoder(),
   );
 }
 
@@ -148,9 +147,9 @@ export type CreateAttestationInput<
   schema: Address<TAccountSchema>;
   attestation: Address<TAccountAttestation>;
   systemProgram?: Address<TAccountSystemProgram>;
-  nonce: CreateAttestationInstructionDataArgs['nonce'];
-  data: CreateAttestationInstructionDataArgs['data'];
-  expiry: CreateAttestationInstructionDataArgs['expiry'];
+  nonce: CreateAttestationInstructionDataArgs["nonce"];
+  data: CreateAttestationInstructionDataArgs["data"];
+  expiry: CreateAttestationInstructionDataArgs["expiry"];
 };
 
 export function getCreateAttestationInstruction<
@@ -160,8 +159,8 @@ export function getCreateAttestationInstruction<
   TAccountSchema extends string,
   TAccountAttestation extends string,
   TAccountSystemProgram extends string,
-  TProgramAddress extends
-    Address = typeof SOLANA_ATTESTATION_SERVICE_PROGRAM_ADDRESS,
+  TProgramAddress extends Address =
+    typeof SOLANA_ATTESTATION_SERVICE_PROGRAM_ADDRESS,
 >(
   input: CreateAttestationInput<
     TAccountPayer,
@@ -171,7 +170,7 @@ export function getCreateAttestationInstruction<
     TAccountAttestation,
     TAccountSystemProgram
   >,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): CreateAttestationInstruction<
   TProgramAddress,
   TAccountPayer,
@@ -205,10 +204,10 @@ export function getCreateAttestationInstruction<
   // Resolve default values.
   if (!accounts.systemProgram.value) {
     accounts.systemProgram.value =
-      '11111111111111111111111111111111' as Address<'11111111111111111111111111111111'>;
+      "11111111111111111111111111111111" as Address<"11111111111111111111111111111111">;
   }
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.payer),
@@ -219,7 +218,7 @@ export function getCreateAttestationInstruction<
       getAccountMeta(accounts.systemProgram),
     ],
     data: getCreateAttestationInstructionDataEncoder().encode(
-      args as CreateAttestationInstructionDataArgs
+      args as CreateAttestationInstructionDataArgs,
     ),
     programAddress,
   } as CreateAttestationInstruction<
@@ -258,11 +257,11 @@ export function parseCreateAttestationInstruction<
 >(
   instruction: Instruction<TProgram> &
     InstructionWithAccounts<TAccountMetas> &
-    InstructionWithData<ReadonlyUint8Array>
+    InstructionWithData<ReadonlyUint8Array>,
 ): ParsedCreateAttestationInstruction<TProgram, TAccountMetas> {
   if (instruction.accounts.length < 6) {
     // TODO: Coded error.
-    throw new Error('Not enough accounts');
+    throw new Error("Not enough accounts");
   }
   let accountIndex = 0;
   const getNextAccount = () => {

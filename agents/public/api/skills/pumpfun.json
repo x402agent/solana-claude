@@ -1,0 +1,21 @@
+{
+  "skillId": "pumpfun",
+  "name": "pumpfun",
+  "description": "Launch and trade tokens on Pump.fun bonding curves. Create memecoins, buy/sell tokens, check prices, and collect creator fees on Solana.",
+  "category": "pump-protocol",
+  "path": "pumpfun/SKILL.md",
+  "url": "https://x402.wtf/api/skills/pumpfun",
+  "tags": [
+    "pumpfun",
+    "solana"
+  ],
+  "requiredEnv": [],
+  "homepage": null,
+  "attestation": {
+    "status": "pending",
+    "isFormallyVerified": false,
+    "attestationPda": null,
+    "verificationTimestamp": null
+  },
+  "markdown": "---\nname: pumpfun\ndescription: \"Launch and trade tokens on Pump.fun bonding curves. Create memecoins, buy/sell tokens, check prices, and collect creator fees on Solana.\"\n---\n\n# Pump.fun Skill\n\nLaunch and trade tokens on Pump.fun's bonding curve protocol on Solana.\n\n## Token Launch\n\nCreate a new token on pump.fun with metadata:\n```bash\n# Launch a new token\npumpfun launch --name \"My Token\" --symbol \"MTK\" --description \"A cool memecoin\" --image \"./logo.png\"\n\n# Launch with initial buy\npumpfun launch --name \"My Token\" --symbol \"MTK\" --description \"A cool memecoin\" --initial-buy 0.5\n```\n\n## Trading\n\nBuy tokens from a bonding curve:\n```bash\n# Buy tokens with 0.1 SOL\npumpfun buy <mint_address> --sol 0.1 --slippage 5\n\n# Get a buy quote first\npumpfun quote buy <mint_address> --sol 0.1\n```\n\nSell tokens to a bonding curve:\n```bash\n# Sell tokens\npumpfun sell <mint_address> --amount 1000000 --slippage 5\n\n# Get a sell quote first\npumpfun quote sell <mint_address> --amount 1000000\n```\n\n## Token Info\n\nCheck token price and bonding curve state:\n```bash\n# Get current price\npumpfun price <mint_address>\n\n# Get bonding curve progress (% to graduation)\npumpfun progress <mint_address>\n\n# Get full bonding curve state\npumpfun info <mint_address>\n```\n\n## Creator Fees\n\nCollect accumulated creator fees:\n```bash\n# Check claimable fees\npumpfun fees check <creator_address>\n\n# Collect fees\npumpfun fees collect\n```\n\n## Key Concepts\n\n- **Bonding Curve**: Automated market maker that provides liquidity for new tokens\n- **Graduation**: When a token reaches ~85 SOL in the bonding curve, it migrates to PumpSwap AMM\n- **Mayhem Mode**: New token creation mode using Token2022 program\n- **Slippage**: Percentage tolerance for price changes during trade execution\n\n## Program IDs\n\n- Pump Program: `6EF8rrecthR5Dkzon8Nwu78hRvfCKubJ14M5uBEwF6P`\n- PumpSwap: `pAMMBay6oceH9fJKBRHGP5D4bD4sWpmSwMn52FMfXEA`\n- Mayhem: `MAyhSmzXzV1pTf7LsNkrNwkWKTo4ougAJ1PPg47MD4e`\n"
+}

@@ -1,0 +1,23 @@
+{
+  "skillId": "vulcan-margin-operations",
+  "name": "vulcan-margin-operations",
+  "description": "Vulcan/Phoenix collateral, deposits, withdrawals, transfers, isolated margin, leverage tiers, and margin health.",
+  "category": "pump-protocol",
+  "path": "vulcan-margin-operations/SKILL.md",
+  "url": "https://x402.wtf/api/skills/vulcan-margin-operations",
+  "tags": [
+    "vulcan",
+    "solana",
+    "margin",
+    "operations"
+  ],
+  "requiredEnv": [],
+  "homepage": null,
+  "attestation": {
+    "status": "pending",
+    "isFormallyVerified": false,
+    "attestationPda": null,
+    "verificationTimestamp": null
+  },
+  "markdown": "---\nname: vulcan-margin-operations\ndescription: Vulcan/Phoenix collateral, deposits, withdrawals, transfers, isolated margin, leverage tiers, and margin health.\n---\n\n# Vulcan Margin Operations\n\nCanonical source: `../../vulcan-cli-master/skills/vulcan-margin-operations/SKILL.md`\n\nUse `vulcan margin status` and strategy preflight before live exposure. Deposits, withdrawals, transfers, and collateral changes are dangerous and require confirmation.\n"
+}

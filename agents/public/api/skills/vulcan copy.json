@@ -1,0 +1,21 @@
+{
+  "skillId": "vulcan copy",
+  "name": "vulcan",
+  "description": "Entry-point skill for Phoenix perpetuals through Vulcan/Rise SDK inside solana-clawd. Use before answering or acting on Vulcan, Phoenix DEX, Solana perps, paper trading, live trading, margin, TP/SL, TWAP, grid, TA strategies, or perps agent setup.",
+  "category": "pump-protocol",
+  "path": "vulcan copy/SKILL.md",
+  "url": "https://x402.wtf/api/skills/vulcan%20copy",
+  "tags": [
+    "vulcan copy",
+    "solana"
+  ],
+  "requiredEnv": [],
+  "homepage": null,
+  "attestation": {
+    "status": "pending",
+    "isFormallyVerified": false,
+    "attestationPda": null,
+    "verificationTimestamp": null
+  },
+  "markdown": "---\nname: vulcan\ndescription: Entry-point skill for Phoenix perpetuals through Vulcan/Rise SDK inside solana-clawd. Use before answering or acting on Vulcan, Phoenix DEX, Solana perps, paper trading, live trading, margin, TP/SL, TWAP, grid, TA strategies, or perps agent setup.\n---\n\n# Vulcan Skill Pack\n\nCanonical source: `../../vulcan-cli-master/skills/vulcan/SKILL.md`\n\nLoad order for solana-clawd perps work:\n\n1. Read `../../vulcan-cli-master/CONTEXT.md`.\n2. Read `../../vulcan-cli-master/skills/INDEX.md`.\n3. Read this entry skill's canonical source.\n4. Load focused skills from `skills/vulcan-*` as needed.\n\nNon-negotiable runtime rules:\n\n- Paper and dry-run modes must never require wallet signing.\n- Live/dangerous operations require explicit user approval and Vulcan `--yes` or MCP `acknowledged=true`.\n- Before opening exposure, inspect market, margin, and current positions.\n- Never guess lot sizes; use `vulcan-lot-size-calculator`.\n- Never read, print, export, or infer private keys, wallet passwords, or MCP config secrets.\n- Report every execution event and full transaction signature immediately.\n\nThis wrapper exists so solana-clawd exposes the bundled Vulcan skill pack from its own `skills/` catalog while preserving Vulcan's upstream docs as authoritative.\n"
+}

@@ -1,0 +1,23 @@
+{
+  "skillId": "gateway-node-ops",
+  "name": "gateway-node-ops",
+  "description": "How to spawn a SolanaOS Gateway and connect headless nodes",
+  "category": "pump-protocol",
+  "path": "gateway-node-ops/SKILL.md",
+  "url": "https://x402.wtf/api/skills/gateway-node-ops",
+  "tags": [
+    "gateway",
+    "solana",
+    "node",
+    "ops"
+  ],
+  "requiredEnv": [],
+  "homepage": null,
+  "attestation": {
+    "status": "pending",
+    "isFormallyVerified": false,
+    "attestationPda": null,
+    "verificationTimestamp": null
+  },
+  "markdown": "---\ndescription: How to spawn a SolanaOS Gateway and connect headless nodes\n---\n\n# SolanaOS Gateway + Node Workflow\n\n## Prerequisites\n\nEnsure the following tools are installed:\n- `tmux` — `brew install tmux`\n- `tailscale` — https://tailscale.com/download\n- `solanaos` — `npm install -g solanaos`\n- `go` — https://go.dev/dl/\n\n## Build SolanaOS\n\n// turbo\n```bash\ncd /Users/8bit/Downloads/nanosolana-go && go build -ldflags=\"-s -w\" -o build/solanaos .\n```\n\n## Spawn the Gateway (Quick)\n\n### Option A: Via SolanaOS CLI\n\n// turbo\n```bash\nsolanaos node gateway-spawn\n```\n\nThis will:\n1. Check for tmux, solanaos, and tailscale\n2. Detect your Tailscale IP\n3. Start `solanaos gateway` in a detached tmux session\n4. Print connection info for remote nodes\n\n### Option B: Via Shell Script\n\n// turbo\n```bash\n./scripts/gateway-spawn.sh\n```\n\nSame result, but works without building SolanaOS first.\n\n## Pair a Node\n\nFrom the hardware device (Orin Nano, RPi, etc.), run:\n\n```bash\nsolanaos node pair --bridge <TAILSCALE_IP>:18790 --display-name \"My Orin Nano\"\n```\n\nThen approve from the gateway host:\n```bash\nsolanaos nodes approve <requestId>\n```\n\n## Run the Node\n\n```bash\nsolanaos node run --bridge <TAILSCALE_IP>:18790\n```\n\n## Auto-Spawn at Daemon Launch\n\nTo make the daemon automatically spawn a gateway at startup:\n\n```bash\nGATEWAY_AUTO_SPAWN=true solanaos daemon\n```\n\nOr set in `.env`:\n```\nGATEWAY_AUTO_SPAWN=true\nGATEWAY_SPAWN_PORT=18790\nGATEWAY_USE_TAILSCALE=true\n```\n\n## Manage the Gateway\n\n// turbo\n```bash\n# Check status\n./scripts/gateway-spawn.sh --status\n\n# Kill the gateway\nsolanaos node gateway-kill\n\n# Or via script\n./scripts/gateway-spawn.sh --kill\n\n# Attach to see gateway logs\ntmux attach -t solanaos-gw\n```\n\n## Cross-Compile for Hardware\n\n```bash\n# Raspberry Pi (ARM64)\nGOOS=linux GOARCH=arm64 go build -ldflags=\"-s -w\" -o build/solanaos-linux-arm64 .\n\n# NVIDIA Orin Nano (ARM64)\nGOOS=linux GOARCH=arm64 go build -ldflags=\"-s -w\" -o build/solanaos-orin .\n```\n\n## Termius SSH Workflow\n\n1. Add your Tailscale host in Termius (use Tailscale IP)\n2. SSH in and run: `solanaos node gateway-spawn`\n3. From a second Termius tab: `solanaos node run --bridge <IP>:18790`\n"
+}

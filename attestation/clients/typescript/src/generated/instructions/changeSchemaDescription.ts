@@ -34,9 +34,9 @@ import {
   type TransactionSigner,
   type WritableAccount,
   type WritableSignerAccount,
-} from '@solana/kit';
-import { SOLANA_ATTESTATION_SERVICE_PROGRAM_ADDRESS } from '../programs';
-import { getAccountMetaFactory, type ResolvedAccount } from '../shared';
+} from "@solana/kit";
+import { SOLANA_ATTESTATION_SERVICE_PROGRAM_ADDRESS } from "../programs";
+import { getAccountMetaFactory, type ResolvedAccount } from "../shared";
 
 export const CHANGE_SCHEMA_DESCRIPTION_DISCRIMINATOR = 4;
 
@@ -50,9 +50,8 @@ export type ChangeSchemaDescriptionInstruction<
   TAccountAuthority extends string | AccountMeta<string> = string,
   TAccountCredential extends string | AccountMeta<string> = string,
   TAccountSchema extends string | AccountMeta<string> = string,
-  TAccountSystemProgram extends
-    | string
-    | AccountMeta<string> = '11111111111111111111111111111111',
+  TAccountSystemProgram extends string | AccountMeta<string> =
+    "11111111111111111111111111111111",
   TRemainingAccounts extends readonly AccountMeta<string>[] = [],
 > = Instruction<TProgram> &
   InstructionWithData<ReadonlyUint8Array> &
@@ -91,20 +90,20 @@ export type ChangeSchemaDescriptionInstructionDataArgs = {
 export function getChangeSchemaDescriptionInstructionDataEncoder(): Encoder<ChangeSchemaDescriptionInstructionDataArgs> {
   return transformEncoder(
     getStructEncoder([
-      ['discriminator', getU8Encoder()],
-      ['description', addEncoderSizePrefix(getUtf8Encoder(), getU32Encoder())],
+      ["discriminator", getU8Encoder()],
+      ["description", addEncoderSizePrefix(getUtf8Encoder(), getU32Encoder())],
     ]),
     (value) => ({
       ...value,
       discriminator: CHANGE_SCHEMA_DESCRIPTION_DISCRIMINATOR,
-    })
+    }),
   );
 }
 
 export function getChangeSchemaDescriptionInstructionDataDecoder(): Decoder<ChangeSchemaDescriptionInstructionData> {
   return getStructDecoder([
-    ['discriminator', getU8Decoder()],
-    ['description', addDecoderSizePrefix(getUtf8Decoder(), getU32Decoder())],
+    ["discriminator", getU8Decoder()],
+    ["description", addDecoderSizePrefix(getUtf8Decoder(), getU32Decoder())],
   ]);
 }
 
@@ -114,7 +113,7 @@ export function getChangeSchemaDescriptionInstructionDataCodec(): Codec<
 > {
   return combineCodec(
     getChangeSchemaDescriptionInstructionDataEncoder(),
-    getChangeSchemaDescriptionInstructionDataDecoder()
+    getChangeSchemaDescriptionInstructionDataDecoder(),
   );
 }
 
@@ -132,7 +131,7 @@ export type ChangeSchemaDescriptionInput<
   /** Credential the Schema is associated with */
   schema: Address<TAccountSchema>;
   systemProgram?: Address<TAccountSystemProgram>;
-  description: ChangeSchemaDescriptionInstructionDataArgs['description'];
+  description: ChangeSchemaDescriptionInstructionDataArgs["description"];
 };
 
 export function getChangeSchemaDescriptionInstruction<
@@ -141,8 +140,8 @@ export function getChangeSchemaDescriptionInstruction<
   TAccountCredential extends string,
   TAccountSchema extends string,
   TAccountSystemProgram extends string,
-  TProgramAddress extends
-    Address = typeof SOLANA_ATTESTATION_SERVICE_PROGRAM_ADDRESS,
+  TProgramAddress extends Address =
+    typeof SOLANA_ATTESTATION_SERVICE_PROGRAM_ADDRESS,
 >(
   input: ChangeSchemaDescriptionInput<
     TAccountPayer,
@@ -151,7 +150,7 @@ export function getChangeSchemaDescriptionInstruction<
     TAccountSchema,
     TAccountSystemProgram
   >,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): ChangeSchemaDescriptionInstruction<
   TProgramAddress,
   TAccountPayer,
@@ -183,10 +182,10 @@ export function getChangeSchemaDescriptionInstruction<
   // Resolve default values.
   if (!accounts.systemProgram.value) {
     accounts.systemProgram.value =
-      '11111111111111111111111111111111' as Address<'11111111111111111111111111111111'>;
+      "11111111111111111111111111111111" as Address<"11111111111111111111111111111111">;
   }
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.payer),
@@ -196,7 +195,7 @@ export function getChangeSchemaDescriptionInstruction<
       getAccountMeta(accounts.systemProgram),
     ],
     data: getChangeSchemaDescriptionInstructionDataEncoder().encode(
-      args as ChangeSchemaDescriptionInstructionDataArgs
+      args as ChangeSchemaDescriptionInstructionDataArgs,
     ),
     programAddress,
   } as ChangeSchemaDescriptionInstruction<
@@ -232,11 +231,11 @@ export function parseChangeSchemaDescriptionInstruction<
 >(
   instruction: Instruction<TProgram> &
     InstructionWithAccounts<TAccountMetas> &
-    InstructionWithData<ReadonlyUint8Array>
+    InstructionWithData<ReadonlyUint8Array>,
 ): ParsedChangeSchemaDescriptionInstruction<TProgram, TAccountMetas> {
   if (instruction.accounts.length < 5) {
     // TODO: Coded error.
-    throw new Error('Not enough accounts');
+    throw new Error("Not enough accounts");
   }
   let accountIndex = 0;
   const getNextAccount = () => {
@@ -254,7 +253,7 @@ export function parseChangeSchemaDescriptionInstruction<
       systemProgram: getNextAccount(),
     },
     data: getChangeSchemaDescriptionInstructionDataDecoder().decode(
-      instruction.data
+      instruction.data,
     ),
   };
 }

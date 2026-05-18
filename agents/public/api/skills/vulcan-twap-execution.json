@@ -1,0 +1,23 @@
+{
+  "skillId": "vulcan-twap-execution",
+  "name": "vulcan-twap-execution",
+  "description": "TWAP strategy execution on Phoenix perps using Vulcan's first-class runner, tick logs, ledgers, status/monitor/finalize controls.",
+  "category": "pump-protocol",
+  "path": "vulcan-twap-execution/SKILL.md",
+  "url": "https://x402.wtf/api/skills/vulcan-twap-execution",
+  "tags": [
+    "vulcan",
+    "solana",
+    "twap",
+    "execution"
+  ],
+  "requiredEnv": [],
+  "homepage": null,
+  "attestation": {
+    "status": "pending",
+    "isFormallyVerified": false,
+    "attestationPda": null,
+    "verificationTimestamp": null
+  },
+  "markdown": "---\nname: vulcan-twap-execution\ndescription: TWAP strategy execution on Phoenix perps using Vulcan's first-class runner, tick logs, ledgers, status/monitor/finalize controls.\n---\n\n# Vulcan TWAP Execution\n\nCanonical source: `../../vulcan-cli-master/skills/vulcan-twap-execution/SKILL.md`\n\nPrefer `vulcan strategy twap start` or MCP `vulcan_strategy_twap_start`. Report every slice, fill, dry-run action, paper fill ID, and transaction signature immediately.\n"
+}

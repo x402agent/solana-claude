@@ -32,9 +32,9 @@ import {
   type TransactionSigner,
   type WritableAccount,
   type WritableSignerAccount,
-} from '@solana/kit';
-import { SOLANA_ATTESTATION_SERVICE_PROGRAM_ADDRESS } from '../programs';
-import { getAccountMetaFactory, type ResolvedAccount } from '../shared';
+} from "@solana/kit";
+import { SOLANA_ATTESTATION_SERVICE_PROGRAM_ADDRESS } from "../programs";
+import { getAccountMetaFactory, type ResolvedAccount } from "../shared";
 
 export const CHANGE_AUTHORIZED_SIGNERS_DISCRIMINATOR = 3;
 
@@ -47,9 +47,8 @@ export type ChangeAuthorizedSignersInstruction<
   TAccountPayer extends string | AccountMeta<string> = string,
   TAccountAuthority extends string | AccountMeta<string> = string,
   TAccountCredential extends string | AccountMeta<string> = string,
-  TAccountSystemProgram extends
-    | string
-    | AccountMeta<string> = '11111111111111111111111111111111',
+  TAccountSystemProgram extends string | AccountMeta<string> =
+    "11111111111111111111111111111111",
   TRemainingAccounts extends readonly AccountMeta<string>[] = [],
 > = Instruction<TProgram> &
   InstructionWithData<ReadonlyUint8Array> &
@@ -85,20 +84,20 @@ export type ChangeAuthorizedSignersInstructionDataArgs = {
 export function getChangeAuthorizedSignersInstructionDataEncoder(): Encoder<ChangeAuthorizedSignersInstructionDataArgs> {
   return transformEncoder(
     getStructEncoder([
-      ['discriminator', getU8Encoder()],
-      ['signers', getArrayEncoder(getAddressEncoder())],
+      ["discriminator", getU8Encoder()],
+      ["signers", getArrayEncoder(getAddressEncoder())],
     ]),
     (value) => ({
       ...value,
       discriminator: CHANGE_AUTHORIZED_SIGNERS_DISCRIMINATOR,
-    })
+    }),
   );
 }
 
 export function getChangeAuthorizedSignersInstructionDataDecoder(): Decoder<ChangeAuthorizedSignersInstructionData> {
   return getStructDecoder([
-    ['discriminator', getU8Decoder()],
-    ['signers', getArrayDecoder(getAddressDecoder())],
+    ["discriminator", getU8Decoder()],
+    ["signers", getArrayDecoder(getAddressDecoder())],
   ]);
 }
 
@@ -108,7 +107,7 @@ export function getChangeAuthorizedSignersInstructionDataCodec(): Codec<
 > {
   return combineCodec(
     getChangeAuthorizedSignersInstructionDataEncoder(),
-    getChangeAuthorizedSignersInstructionDataDecoder()
+    getChangeAuthorizedSignersInstructionDataDecoder(),
   );
 }
 
@@ -123,7 +122,7 @@ export type ChangeAuthorizedSignersInput<
   /** Credential the Schema is associated with */
   credential: Address<TAccountCredential>;
   systemProgram?: Address<TAccountSystemProgram>;
-  signers: ChangeAuthorizedSignersInstructionDataArgs['signers'];
+  signers: ChangeAuthorizedSignersInstructionDataArgs["signers"];
 };
 
 export function getChangeAuthorizedSignersInstruction<
@@ -131,8 +130,8 @@ export function getChangeAuthorizedSignersInstruction<
   TAccountAuthority extends string,
   TAccountCredential extends string,
   TAccountSystemProgram extends string,
-  TProgramAddress extends
-    Address = typeof SOLANA_ATTESTATION_SERVICE_PROGRAM_ADDRESS,
+  TProgramAddress extends Address =
+    typeof SOLANA_ATTESTATION_SERVICE_PROGRAM_ADDRESS,
 >(
   input: ChangeAuthorizedSignersInput<
     TAccountPayer,
@@ -140,7 +139,7 @@ export function getChangeAuthorizedSignersInstruction<
     TAccountCredential,
     TAccountSystemProgram
   >,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): ChangeAuthorizedSignersInstruction<
   TProgramAddress,
   TAccountPayer,
@@ -170,10 +169,10 @@ export function getChangeAuthorizedSignersInstruction<
   // Resolve default values.
   if (!accounts.systemProgram.value) {
     accounts.systemProgram.value =
-      '11111111111111111111111111111111' as Address<'11111111111111111111111111111111'>;
+      "11111111111111111111111111111111" as Address<"11111111111111111111111111111111">;
   }
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.payer),
@@ -182,7 +181,7 @@ export function getChangeAuthorizedSignersInstruction<
       getAccountMeta(accounts.systemProgram),
     ],
     data: getChangeAuthorizedSignersInstructionDataEncoder().encode(
-      args as ChangeAuthorizedSignersInstructionDataArgs
+      args as ChangeAuthorizedSignersInstructionDataArgs,
     ),
     programAddress,
   } as ChangeAuthorizedSignersInstruction<
@@ -215,11 +214,11 @@ export function parseChangeAuthorizedSignersInstruction<
 >(
   instruction: Instruction<TProgram> &
     InstructionWithAccounts<TAccountMetas> &
-    InstructionWithData<ReadonlyUint8Array>
+    InstructionWithData<ReadonlyUint8Array>,
 ): ParsedChangeAuthorizedSignersInstruction<TProgram, TAccountMetas> {
   if (instruction.accounts.length < 4) {
     // TODO: Coded error.
-    throw new Error('Not enough accounts');
+    throw new Error("Not enough accounts");
   }
   let accountIndex = 0;
   const getNextAccount = () => {
@@ -236,7 +235,7 @@ export function parseChangeAuthorizedSignersInstruction<
       systemProgram: getNextAccount(),
     },
     data: getChangeAuthorizedSignersInstructionDataDecoder().decode(
-      instruction.data
+      instruction.data,
     ),
   };
 }

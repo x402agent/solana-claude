@@ -25,9 +25,9 @@ import {
   type ReadonlySignerAccount,
   type ReadonlyUint8Array,
   type TransactionSigner,
-} from '@solana/kit';
-import { SOLANA_ATTESTATION_SERVICE_PROGRAM_ADDRESS } from '../programs';
-import { getAccountMetaFactory, type ResolvedAccount } from '../shared';
+} from "@solana/kit";
+import { SOLANA_ATTESTATION_SERVICE_PROGRAM_ADDRESS } from "../programs";
+import { getAccountMetaFactory, type ResolvedAccount } from "../shared";
 
 export const EMIT_EVENT_DISCRIMINATOR = 228;
 
@@ -37,9 +37,8 @@ export function getEmitEventDiscriminatorBytes() {
 
 export type EmitEventInstruction<
   TProgram extends string = typeof SOLANA_ATTESTATION_SERVICE_PROGRAM_ADDRESS,
-  TAccountEventAuthority extends
-    | string
-    | AccountMeta<string> = 'DzSpKpST2TSyrxokMXchFz3G2yn5WEGoxzpGEUDjCX4g',
+  TAccountEventAuthority extends string | AccountMeta<string> =
+    "DzSpKpST2TSyrxokMXchFz3G2yn5WEGoxzpGEUDjCX4g",
   TRemainingAccounts extends readonly AccountMeta<string>[] = [],
 > = Instruction<TProgram> &
   InstructionWithData<ReadonlyUint8Array> &
@@ -59,13 +58,13 @@ export type EmitEventInstructionDataArgs = {};
 
 export function getEmitEventInstructionDataEncoder(): FixedSizeEncoder<EmitEventInstructionDataArgs> {
   return transformEncoder(
-    getStructEncoder([['discriminator', getU8Encoder()]]),
-    (value) => ({ ...value, discriminator: EMIT_EVENT_DISCRIMINATOR })
+    getStructEncoder([["discriminator", getU8Encoder()]]),
+    (value) => ({ ...value, discriminator: EMIT_EVENT_DISCRIMINATOR }),
   );
 }
 
 export function getEmitEventInstructionDataDecoder(): FixedSizeDecoder<EmitEventInstructionData> {
-  return getStructDecoder([['discriminator', getU8Decoder()]]);
+  return getStructDecoder([["discriminator", getU8Decoder()]]);
 }
 
 export function getEmitEventInstructionDataCodec(): FixedSizeCodec<
@@ -74,7 +73,7 @@ export function getEmitEventInstructionDataCodec(): FixedSizeCodec<
 > {
   return combineCodec(
     getEmitEventInstructionDataEncoder(),
-    getEmitEventInstructionDataDecoder()
+    getEmitEventInstructionDataDecoder(),
   );
 }
 
@@ -84,11 +83,11 @@ export type EmitEventInput<TAccountEventAuthority extends string = string> = {
 
 export function getEmitEventInstruction<
   TAccountEventAuthority extends string,
-  TProgramAddress extends
-    Address = typeof SOLANA_ATTESTATION_SERVICE_PROGRAM_ADDRESS,
+  TProgramAddress extends Address =
+    typeof SOLANA_ATTESTATION_SERVICE_PROGRAM_ADDRESS,
 >(
   input: EmitEventInput<TAccountEventAuthority>,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): EmitEventInstruction<TProgramAddress, TAccountEventAuthority> {
   // Program address.
   const programAddress =
@@ -106,10 +105,10 @@ export function getEmitEventInstruction<
   // Resolve default values.
   if (!accounts.eventAuthority.value) {
     accounts.eventAuthority.value =
-      'DzSpKpST2TSyrxokMXchFz3G2yn5WEGoxzpGEUDjCX4g' as Address<'DzSpKpST2TSyrxokMXchFz3G2yn5WEGoxzpGEUDjCX4g'>;
+      "DzSpKpST2TSyrxokMXchFz3G2yn5WEGoxzpGEUDjCX4g" as Address<"DzSpKpST2TSyrxokMXchFz3G2yn5WEGoxzpGEUDjCX4g">;
   }
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [getAccountMeta(accounts.eventAuthority)],
     data: getEmitEventInstructionDataEncoder().encode({}),
@@ -134,11 +133,11 @@ export function parseEmitEventInstruction<
 >(
   instruction: Instruction<TProgram> &
     InstructionWithAccounts<TAccountMetas> &
-    InstructionWithData<ReadonlyUint8Array>
+    InstructionWithData<ReadonlyUint8Array>,
 ): ParsedEmitEventInstruction<TProgram, TAccountMetas> {
   if (instruction.accounts.length < 1) {
     // TODO: Coded error.
-    throw new Error('Not enough accounts');
+    throw new Error("Not enough accounts");
   }
   let accountIndex = 0;
   const getNextAccount = () => {
