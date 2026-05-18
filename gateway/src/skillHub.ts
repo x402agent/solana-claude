@@ -219,6 +219,7 @@ router.get('/api/skills/slug/:slug/card.svg', cacheHeaders(600), (req: Request, 
 
 // ── POST /api/skills/register ──────────────────────────────────────────────
 
+<<<<<<< HEAD
 const registerRouteLimiter = rateLimit({
   windowMs: 60 * 1000,
   max: 20,
@@ -227,6 +228,9 @@ const registerRouteLimiter = rateLimit({
 });
 
 router.post('/api/skills/register', registerRouteLimiter, async (req: Request, res: Response) => {
+=======
+router.post('/api/skills/register', async (req: Request, res: Response) => {
+>>>>>>> 15ee54919 (Claude/gasless agent minting xw vb3 (#148))
   const { slug, name, kind, authority, metadata_uri, component_path, kani_verified } = req.body ?? {};
 
   if (!slug || !authority) {

@@ -9,15 +9,26 @@
  */
 
 import { readFileSync, existsSync, readdirSync, statSync } from 'node:fs';
+<<<<<<< HEAD
 import { join, resolve, extname, relative, sep } from 'node:path';
+=======
+import { join, resolve, extname } from 'node:path';
+>>>>>>> 15ee54919 (Claude/gasless agent minting xw vb3 (#148))
 
 const REPO_ROOT = resolve(import.meta.dirname ?? __dirname, '..');
 
 function isPathWithinRoot(targetPath: string, rootPath: string): boolean {
   const resolvedRoot = resolve(rootPath);
   const resolvedTarget = resolve(targetPath);
+<<<<<<< HEAD
   const rel = relative(resolvedRoot, resolvedTarget);
   return rel === '' || (!rel.startsWith(`..${sep}`) && rel !== '..' && !rel.startsWith('..') && !resolve(rel).startsWith(sep));
+=======
+  const rel = resolvedTarget.startsWith(resolvedRoot)
+    ? resolvedTarget.slice(resolvedRoot.length)
+    : `..${resolvedTarget}`;
+  return resolvedTarget === resolvedRoot || (rel.startsWith('/') || rel.startsWith('\\'));
+>>>>>>> 15ee54919 (Claude/gasless agent minting xw vb3 (#148))
 }
 
 // ---------------------------------------------------------------------------
