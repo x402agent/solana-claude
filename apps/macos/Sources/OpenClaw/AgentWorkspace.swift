@@ -4,6 +4,7 @@ import OSLog
 enum AgentWorkspace {
     private static let logger = Logger(subsystem: "ai.openclaw", category: "workspace")
     static let agentsFilename = "AGENTS.md"
+    static let bundledAgentsDirectoryName = "agents"
     static let soulFilename = "SOUL.md"
     static let identityFilename = "IDENTITY.md"
     static let userFilename = "USER.md"
@@ -119,6 +120,7 @@ enum AgentWorkspace {
             try self.defaultBootstrapTemplate().write(to: bootstrapURL, atomically: true, encoding: .utf8)
             self.logger.info("Created BOOTSTRAP.md at \(bootstrapURL.path, privacy: .public)")
         }
+        try self.seedBundledAgentsIfAvailable(workspaceURL: workspaceURL)
         return agentsURL
     }
 
@@ -185,6 +187,10 @@ enum AgentWorkspace {
         - Keep a short daily log at memory/YYYY-MM-DD.md (create memory/ if needed).
         - On session start, read today + yesterday if present.
         - Capture durable facts, preferences, and decisions; avoid secrets.
+
+        ## Included agent packs
+        - If an `agents/` folder is present here, treat it as a local catalog of installable agent definitions.
+        - Prefer reading `agents/README.md`, `agents/agents-catalog.json`, and `agents/agents-manifest.json` before guessing what is available.
 
         ## Customize
         - Add your preferred style, rules, and "memory" here.
@@ -289,6 +295,60 @@ enum AgentWorkspace {
         return fallback
     }
 
+    private static func seedBundledAgentsIfAvailable(workspaceURL: URL) throws {
+        let destination = workspaceURL.appendingPathComponent(self.bundledAgentsDirectoryName, isDirectory: true)
+        guard !FileManager().fileExists(atPath: destination.path) else { return }
+        guard let source = self.findBundledAgentsDirectory() else { return }
+
+        do {
+            try FileManager().createSymbolicLink(at: destination, withDestinationURL: source)
+            self.logger.info("Linked bundled agents at \(destination.path, privacy: .public)")
+        } catch {
+            self.logger.warning(
+                "Failed to link bundled agents from \(source.path, privacy: .public): \(error.localizedDescription, privacy: .public)")
+        }
+    }
+
+    private static func findBundledAgentsDirectory() -> URL? {
+        let env = ProcessInfo.processInfo.environment
+        let cwd = URL(fileURLWithPath: FileManager().currentDirectoryPath, isDirectory: true)
+        let candidates: [String?] = [
+            env["SOLANA_CLAWD_AGENTS_DIR"],
+            Bundle.main.resourceURL?.appendingPathComponent(self.bundledAgentsDirectoryName, isDirectory: true).path,
+            self.devAgentsDirectoryURL()?.path,
+            cwd.appendingPathComponent(self.bundledAgentsDirectoryName, isDirectory: true).path,
+            FileManager().homeDirectoryForCurrentUser
+                .appendingPathComponent("Downloads/ClawdBrowser/agents", isDirectory: true).path,
+        ]
+
+        for rawPath in candidates {
+            guard let rawPath else { continue }
+            let expanded = (rawPath as NSString).expandingTildeInPath
+            let url = URL(fileURLWithPath: expanded, isDirectory: true)
+            if self.isValidBundledAgentsDirectory(url) {
+                return url
+            }
+        }
+
+        return nil
+    }
+
+    private static func isValidBundledAgentsDirectory(_ url: URL) -> Bool {
+        let fm = FileManager()
+        var isDir: ObjCBool = false
+        guard fm.fileExists(atPath: url.path, isDirectory: &isDir), isDir.boolValue else { return false }
+
+        let catalogPath = url.appendingPathComponent("agents-catalog.json").path
+        let manifestPath = url.appendingPathComponent("agents-manifest.json").path
+        let srcURL = url.appendingPathComponent("src", isDirectory: true)
+        var srcIsDir: ObjCBool = false
+
+        return fm.fileExists(atPath: catalogPath)
+            && fm.fileExists(atPath: manifestPath)
+            && fm.fileExists(atPath: srcURL.path, isDirectory: &srcIsDir)
+            && srcIsDir.boolValue
+    }
+
     private static func templateURLs(named: String) -> [URL] {
         var urls: [URL] = []
         if let resource = Bundle.main.url(
@@ -326,6 +386,17 @@ enum AgentWorkspace {
         return repoRoot.appendingPathComponent("docs")
             .appendingPathComponent(self.templateDirname)
             .appendingPathComponent(named)
+    }
+
+    private static func devAgentsDirectoryURL() -> URL? {
+        let sourceURL = URL(fileURLWithPath: #filePath)
+        let repoRoot = sourceURL
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+        return repoRoot.appendingPathComponent(self.bundledAgentsDirectoryName, isDirectory: true)
     }
 
     private static func stripFrontMatter(_ content: String) -> String {

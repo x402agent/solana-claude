@@ -31,6 +31,15 @@ struct AgentWorkspaceTests {
             .appendingPathComponent("openclaw-ws-\(UUID().uuidString)", isDirectory: true)
         defer { try? FileManager().removeItem(at: tmp) }
 
+        let catalog = FileManager().temporaryDirectory
+            .appendingPathComponent("solana-clawd-agents-\(UUID().uuidString)", isDirectory: true)
+        defer { try? FileManager().removeItem(at: catalog) }
+        try FileManager().createDirectory(at: catalog.appendingPathComponent("src", isDirectory: true), withIntermediateDirectories: true)
+        try "{}".write(to: catalog.appendingPathComponent("agents-catalog.json"), atomically: true, encoding: .utf8)
+        try "{}".write(to: catalog.appendingPathComponent("agents-manifest.json"), atomically: true, encoding: .utf8)
+        setenv("SOLANA_CLAWD_AGENTS_DIR", catalog.path, 1)
+        defer { unsetenv("SOLANA_CLAWD_AGENTS_DIR") }
+
         let agentsURL = try AgentWorkspace.bootstrap(workspaceURL: tmp)
         #expect(FileManager().fileExists(atPath: agentsURL.path))
 
@@ -40,9 +49,11 @@ struct AgentWorkspaceTests {
         let identityURL = tmp.appendingPathComponent(AgentWorkspace.identityFilename)
         let userURL = tmp.appendingPathComponent(AgentWorkspace.userFilename)
         let bootstrapURL = tmp.appendingPathComponent(AgentWorkspace.bootstrapFilename)
+        let bundledAgentsURL = tmp.appendingPathComponent(AgentWorkspace.bundledAgentsDirectoryName, isDirectory: true)
         #expect(FileManager().fileExists(atPath: identityURL.path))
         #expect(FileManager().fileExists(atPath: userURL.path))
         #expect(FileManager().fileExists(atPath: bootstrapURL.path))
+        #expect(FileManager().fileExists(atPath: bundledAgentsURL.path))
 
         let second = try AgentWorkspace.bootstrap(workspaceURL: tmp)
         #expect(second == agentsURL)
