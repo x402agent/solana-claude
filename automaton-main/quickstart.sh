@@ -2,7 +2,7 @@
 # ╔══════════════════════════════════════════════════════════════════════════╗
 # ║  OpenClawd Quickstart                                                   ║
 # ║  Interactive guide to get you running fast                              ║
-# ║  Usage: bash automation/quickstart.sh                                   ║
+# ║  Usage: bash quickstart.sh                                              ║
 # ╚══════════════════════════════════════════════════════════════════════════╝
 set -euo pipefail
 
@@ -17,7 +17,7 @@ MAGENTA="\033[35m"
 echo ""
 printf "${BOLD}${MAGENTA}"
 echo "╔═══════════════════════════════════════════════════════════════╗"
-echo "║  🦞  OpenClawd Quickstart Guide                             ║"
+echo "║  🦞  Crustacean Automation — Quickstart                     ║"
 echo "║  Sovereign AI Lobster Runtime on Solana                     ║"
 echo "╚═══════════════════════════════════════════════════════════════╝"
 printf "${RESET}"
@@ -26,25 +26,43 @@ echo ""
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="${SCRIPT_DIR}"
 
-# ── Step 1: Install dependencies ──────────────────────────────────────
+# ── Check Node.js ─────────────────────────────────────────────────────────
+printf "${BOLD}[0/5] Checking prerequisites${RESET}\n"
+if ! command -v node &>/dev/null; then
+  printf "${RED}❌  Node.js not found. Install v20+ from https://nodejs.org${RESET}\n"
+  exit 1
+fi
+NODE_MAJOR=$(node --version | sed 's/v//' | cut -d. -f1)
+if [ "${NODE_MAJOR}" -lt 20 ]; then
+  printf "${RED}❌  Node.js v20+ required (found $(node --version))${RESET}\n"
+  exit 1
+fi
+if ! command -v pnpm &>/dev/null; then
+  printf "  Installing pnpm...\n"
+  npm install -g pnpm 2>&1 | tail -1
+fi
+printf "  ✅ Node.js $(node --version) | pnpm $(pnpm --version)\n"
+echo ""
+
+# ── Step 1: Install dependencies ──────────────────────────────────────────
 printf "${BOLD}[1/5] Install dependencies${RESET}\n"
 cd "${REPO_ROOT}"
-npm install --no-audit --no-fund 2>&1 | tail -1
+pnpm install 2>&1 | tail -2
 echo "  ✅ Dependencies installed"
 echo ""
 
-# ── Step 2: Build ──────────────────────────────────────────────────────
+# ── Step 2: Build ──────────────────────────────────────────────────────────
 printf "${BOLD}[2/5] Build TypeScript${RESET}\n"
-npm run build 2>&1 | tail -1
+pnpm build 2>&1 | tail -2
 echo "  ✅ TypeScript compiled to dist/"
 echo ""
 
-# ── Step 3: Verify constitution ────────────────────────────────────────
+# ── Step 3: Verify constitution ────────────────────────────────────────────
 printf "${BOLD}[3/5] Verify constitution${RESET}\n"
-bash "${SCRIPT_DIR}/three-laws-check.sh" 2>&1 | tail -3
+bash "${REPO_ROOT}/three-laws-check.sh" 2>&1 | tail -4
 echo ""
 
-# ── Step 4: Environment setup ──────────────────────────────────────────
+# ── Step 4: Environment setup ──────────────────────────────────────────────
 printf "${BOLD}[4/5] Environment variables${RESET}\n"
 CLAWD_DIR="${HOME}/.clawd"
 ENV_FILE="${CLAWD_DIR}/.env"
@@ -56,37 +74,37 @@ if [ ! -f "${ENV_FILE}" ]; then
 # ║  OpenClawd environment — edit and restart                ║
 # ╚══════════════════════════════════════════════════════════╝
 # REQUIRED:
-XAI_API_KEY=
+CLAWD_API_KEY=
 # OPTIONAL:
+# CLAWD_API_URL=https://api.x402.wtf
 # HELIUS_API_KEY=
-# SOLANA_PRIVATE_KEY=
-# OPENROUTER_API_KEY=
+# SOLANA_RPC_URL=
+# DFLOW_API_KEY=
+# VULCAN_BIN=
 ENV
-  echo "  📝 Created ~/.clawd/.env — add your XAI_API_KEY"
+  echo "  📝 Created ~/.clawd/.env — add your CLAWD_API_KEY"
 else
   echo "  ✅ ~/.clawd/.env already exists"
 fi
 echo ""
 
-# ── Step 5: Available commands ───────────────────────────────────────
+# ── Step 5: Available commands ───────────────────────────────────────────
 printf "${BOLD}[5/5] Available commands${RESET}\n"
 echo ""
-printf "  ${CYAN}npm run leviathan:spawn${RESET}     Hatch a leviathan\n"
-printf "  ${CYAN}npm run leviathan:status${RESET}    Check depth + balances\n"
-printf "  ${CYAN}npm run leviathan:run${RESET}       Start the pulse loop\n"
+printf "  ${CYAN}clawd-automaton --run${RESET}       Start the OODA agent loop\n"
+printf "  ${CYAN}clawd-automaton --status${RESET}    Show runtime status (TUI)\n"
+printf "  ${CYAN}clawd-automaton --goblin${RESET}    Devnet paper Goblin trading mode\n"
+printf "  ${CYAN}clawd-automaton --provision${RESET} Provision API key via SIWE\n"
+printf "  ${CYAN}clawd-automaton --setup${RESET}     Re-run setup wizard\n"
 echo ""
-printf "  ${CYAN}npm run demo:ooda${RESET}           OODA intelligence demo (no key)\n"
-printf "  ${CYAN}npm run demo:lobtrader${RESET}      pump.fun trading demo (no key)\n"
-printf "  ${CYAN}npm run demo:buddies${RESET}        Blockchain Buddies (no key)\n"
-printf "  ${CYAN}npm run demo:paysh${RESET}          x402 payments demo (no key)\n"
-echo ""
-printf "  ${CYAN}npm run check${RESET}               TypeScript type checking\n"
-printf "  ${CYAN}npm run test${RESET}                Run tests\n"
-printf "  ${CYAN}npm run hermes${RESET}              Launch the runtime\n"
+printf "  ${CYAN}pnpm ooda${RESET}                   Run OODA loop directly (dev)\n"
+printf "  ${CYAN}pnpm goblin${RESET}                 Goblin mode (dev)\n"
+printf "  ${CYAN}pnpm dashboard:dev${RESET}          Launch dashboard UI\n"
+printf "  ${CYAN}pnpm test${RESET}                   Run tests\n"
 echo ""
 
 printf "${BOLD}${GREEN}╔═══════════════════════════════════════════════════════════════╗${RESET}\n"
-printf "${BOLD}${GREEN}║  🦞  OpenClawd ready!                                       ║${RESET}\n"
+printf "${BOLD}${GREEN}║  🦞  Crustacean Automation ready!                           ║${RESET}\n"
 printf "${BOLD}${GREEN}╚═══════════════════════════════════════════════════════════════╝${RESET}\n"
 echo ""
 printf "  ${YELLOW}The shell molts. The laws do not. 🦞${RESET}\n"

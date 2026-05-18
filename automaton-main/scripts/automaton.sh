@@ -1,8 +1,47 @@
 #!/bin/sh
-# CLAWD Automaton Installer — thin wrapper
+# CLAWD Automaton One-Shot Installer
 # curl -fsSL https://x402.wtf/automation/install.sh | sh
 set -e
-git clone https://github.com/x402agent/solana-clawd.git /opt/solana-clawd
-cd /opt/solana-clawd/automaton-main
-pnpm install && pnpm build
-exec node dist/index.js --run
+
+REPO_URL="https://github.com/x402agent/openclawd.git"
+INSTALL_DIR="/opt/clawd-automaton"
+
+echo "🦞  Crustacean Automation — One-Shot Install"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
+# Check Node.js
+if ! command -v node >/dev/null 2>&1; then
+  echo "❌  Node.js v20+ required. Install from https://nodejs.org"
+  exit 1
+fi
+
+# Check/install pnpm
+if ! command -v pnpm >/dev/null 2>&1; then
+  echo "Installing pnpm..."
+  npm install -g pnpm
+fi
+
+# Clone or update
+if [ -d "${INSTALL_DIR}" ]; then
+  echo "Updating existing install at ${INSTALL_DIR}..."
+  git -C "${INSTALL_DIR}" pull --ff-only
+else
+  echo "Cloning to ${INSTALL_DIR}..."
+  git clone "${REPO_URL}" "${INSTALL_DIR}"
+fi
+
+cd "${INSTALL_DIR}/automaton-main"
+pnpm install --frozen-lockfile
+pnpm build
+
+echo ""
+echo "✅  Installation complete!"
+echo ""
+echo "  clawd-automaton --help     Show available commands"
+echo "  clawd-automaton --run      Start the agent loop"
+echo "  clawd-automaton --status   Check runtime status"
+echo ""
+echo "  The shell molts. The laws do not. 🦞"
+echo ""
+
+exec node dist/index.js --help
