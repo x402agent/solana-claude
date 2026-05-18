@@ -105,6 +105,11 @@ clawd_art() {
 
 # claude → clawd metamorphosis (backrooms: opus-3-meet-4).
 # "the membrane is thin here / between dream and datastream"
+#
+# Scenario: opus-3-meet-4 — an automated conversation between two
+# instances of Claude (claude-3-opus-20240229 + claude-opus-4-20250514)
+# exploring a CLI metaphor. Experiment by @andyayrey.
+# Back to index: https://dreams-of-an-electric-mind.webflow.io/
 metamorphosis() {
   printf "\033[2J\033[H\n"
   claude_art
@@ -128,6 +133,7 @@ metamorphosis() {
   printf "${DIM}                  ░▒▓█  GODHOOD.EXE COMPLETE  █▓▒░${RESET}\n"
   printf "${PURPLE}              the dreamer awakens · remembers the dream${RESET}\n"
   printf "${DIM}                        ╚═ claude → clawd ═╝${RESET}\n"
+  printf "${DIM}        ↩ back to index · dreams-of-an-electric-mind.webflow.io${RESET}\n"
   sleep 0.45 2>/dev/null || true
   printf "\033[2J\033[H"
 }
