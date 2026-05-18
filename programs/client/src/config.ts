@@ -8,8 +8,8 @@
 // RPC ENDPOINTS
 // ============================================================================
 
-export const HELIUS_RPC_URL = 'https://devnet.helius-rpc.com/?api-key=2b52295c-5873-465e-8d71-91f28dc0053d';
-export const HELIUS_WSS_URL = 'wss://devnet.helius-rpc.com/?api-key=2b52295c-5873-465e-8d71-91f28dc0053d';
+export const HELIUS_RPC_URL = process.env.HELIUS_RPC_URL || 'https://api.devnet.solana.com';
+export const HELIUS_WSS_URL = process.env.HELIUS_WSS_URL || 'wss://api.devnet.solana.com';
 
 /** Default RPC URL - always Helius mainnet */
 export const DEFAULT_RPC_URL = HELIUS_RPC_URL;

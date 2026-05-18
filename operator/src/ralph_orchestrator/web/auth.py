@@ -24,10 +24,11 @@ ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("RALPH_TOKEN_EXPIRE_MINUTES", "1440"
 DEFAULT_USERNAME = os.getenv("RALPH_WEB_USERNAME", "admin")
 DEFAULT_PASSWORD_HASH = os.getenv("RALPH_WEB_PASSWORD_HASH", None)
 
-# If no password hash is provided, generate one for the default password
+# If no password hash is provided, hash an explicit env password or a random
+# one-time local password. Avoid shipping a predictable public default.
 if not DEFAULT_PASSWORD_HASH:
     pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-    default_password = os.getenv("RALPH_WEB_PASSWORD", "admin123")
+    default_password = os.getenv("RALPH_WEB_PASSWORD") or secrets.token_urlsafe(18)
     DEFAULT_PASSWORD_HASH = pwd_context.hash(default_password)
 
 # Password hashing

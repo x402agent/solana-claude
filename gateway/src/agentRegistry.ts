@@ -40,7 +40,17 @@ const router = Router();
 // Agent definitions — single source of truth
 // ---------------------------------------------------------------------------
 
-const BASE_URL = process.env.GATEWAY_BASE_URL ?? 'https://solanaclawd.com';
+const BASE_URL = process.env.GATEWAY_BASE_URL ?? 'https://x402.wtf';
+const EXTERNAL_AGENT_REGISTRY_NAME = process.env.EXTERNAL_AGENT_REGISTRY_NAME ?? 'x402wtf';
+const EXTERNAL_AGENT_REGISTRY_ENDPOINT_ID =
+  process.env.EXTERNAL_AGENT_REGISTRY_ENDPOINT_ID ??
+  'urn:endpoint:projects-1013652097839:projects:1013652097839:locations:global:agentregistry:services:endpoint-x402wtf-994c-cc25cb307175';
+const EXTERNAL_AGENT_REGISTRY_RESOURCE =
+  process.env.EXTERNAL_AGENT_REGISTRY_RESOURCE ??
+  'projects/1013652097839/locations/global/services/endpoint-x402wtf-994c-cc25cb307175';
+const EXTERNAL_AGENT_REGISTRY_DESTINATION_URL =
+  process.env.EXTERNAL_AGENT_REGISTRY_DESTINATION_URL ??
+  'https://x402.wtf/agents/registry';
 const VERSION = '2.1.0';
 const SPAWN_DATE = '2025-01-01T00:00:00Z';
 
@@ -143,6 +153,16 @@ function cacheHeaders(maxAge: number): Record<string, string> {
   return { 'Cache-Control': `public, max-age=${maxAge}` };
 }
 
+function buildExternalRegistryInfo() {
+  return {
+    name: EXTERNAL_AGENT_REGISTRY_NAME,
+    endpoint_id: EXTERNAL_AGENT_REGISTRY_ENDPOINT_ID,
+    resource: EXTERNAL_AGENT_REGISTRY_RESOURCE,
+    destination_url: EXTERNAL_AGENT_REGISTRY_DESTINATION_URL,
+    location: 'global',
+  };
+}
+
 function buildMetaplexMetadata(agent: AgentDef) {
   return {
     schema_version: 'v1.0',
@@ -192,6 +212,7 @@ router.get('/registry', (_req: Request, res: Response) => {
     schema: 'clawd-agent-registry-v1',
     version: VERSION,
     base_url: BASE_URL,
+    external_agent_registry: buildExternalRegistryInfo(),
     agents: AGENT_IDS.map((id) => {
       const a = AGENTS[id];
       return {
@@ -254,8 +275,10 @@ router.get('/identity', (_req: Request, res: Response) => {
       schema: 'clawd-agent-v1',
       templates: AGENT_IDS.map((id) => `${BASE_URL}/sas/agent${id}.json`),
     },
+    external_agent_registry: buildExternalRegistryInfo(),
     links: {
       registry: `${BASE_URL}/registry`,
+      google_agent_registry: EXTERNAL_AGENT_REGISTRY_DESTINATION_URL,
       openai_plugin: `${BASE_URL}/.well-known/ai-plugin.json`,
       feed: `${BASE_URL}/feed.json`,
     },
@@ -304,6 +327,7 @@ for (const id of AGENT_IDS) {
         },
       },
       contact: `clawd@solanaclawd.com`,
+      external_agent_registry: buildExternalRegistryInfo(),
       legal_info_url: `${BASE_URL}/identity`,
     });
   });
@@ -350,6 +374,7 @@ for (const id of AGENT_IDS) {
         registry: 'Metaplex Agent Registry',
         metadata_uri: `${BASE_URL}/metadata/agent${id}.json`,
       },
+      external_agent_registry: buildExternalRegistryInfo(),
       endpoints: {
         paid_inference: `${BASE_URL}/agent${id}`,
         free_metadata: `${BASE_URL}/metadata/agent${id}.json`,

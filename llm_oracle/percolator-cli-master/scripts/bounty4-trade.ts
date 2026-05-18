@@ -88,7 +88,7 @@ function loadKeypair(): Keypair {
   }
 }
 function loadRpc(): string {
-  return process.env.SOLANA_RPC_URL ?? "https://mainnet.helius-rpc.com/?api-key=2b52295c-5873-465e-8d71-91f28dc0053d";
+  return process.env.SOLANA_RPC_URL ?? "https://api.mainnet-beta.solana.com";
 }
 
 const payer = loadKeypair();

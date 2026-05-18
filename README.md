@@ -439,6 +439,16 @@ OPENCLAWD_AGENTS_CATALOG=https://x402.wtf/api/agents/catalog
 OPENCLAWD_AGENTS_REGISTRY=https://x402.wtf/api/agents/registry
 ```
 
+The public gateway and the Google Agent Registry endpoint should stay aligned:
+
+```text
+GATEWAY_BASE_URL=https://x402.wtf
+EXTERNAL_AGENT_REGISTRY_NAME=x402wtf
+EXTERNAL_AGENT_REGISTRY_ENDPOINT_ID=urn:endpoint:projects-1013652097839:projects:1013652097839:locations:global:agentregistry:services:endpoint-x402wtf-994c-cc25cb307175
+EXTERNAL_AGENT_REGISTRY_RESOURCE=projects/1013652097839/locations/global/services/endpoint-x402wtf-994c-cc25cb307175
+EXTERNAL_AGENT_REGISTRY_DESTINATION_URL=https://x402.wtf/agents/registry
+```
+
 Mint a preset agent gaslessly:
 
 ```bash
