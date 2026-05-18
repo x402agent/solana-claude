@@ -9,6 +9,10 @@ export interface Env {
   USDC_MINT: string;
   CLAWD_MINT: string;
   CLAWD_VAULT_PROGRAM: string;
+  /** Optional p-token program id override. */
+  P_TOKEN_PROGRAM_ID?: string;
+  /** Set to "0" or "false" to force classic SPL Token payments. */
+  USE_P_TOKEN?: string;
   REGISTRY_SEED: string;
   PINATA_GATEWAY: string;
   SPLIT_OWNER_BPS: number;
@@ -51,7 +55,21 @@ export interface SolanaPaymentRequirement {
     recentBlockhash?: string;
     /** optional memo to tag the payment with the agent + caller */
     memo?: string;
+    /** which token program to use — "p-token" opts into SIMD-0266 lower CUs */
+    tokenProgram?: "spl" | "p-token";
+    /** concrete p-token program id clients should compile against */
+    pTokenProgramId?: string;
+    /** p-token batch: multiple outputs in a single instruction */
+    batchOutputs?: BatchOutput[];
   };
+}
+
+/** One recipient in a p-token batch transfer instruction. */
+export interface BatchOutput {
+  /** base58 ATA owner (not ATA address) */
+  payTo: string;
+  /** amount in base units */
+  amount: string;
 }
 
 /** Agent entry fetched from the on-chain registry. */
@@ -64,6 +82,9 @@ export interface AgentRecord {
   splitBuybackBps?: number;
   splitTreasuryBps?: number;
   splitOperatorBps?: number;
+  buybackRecipient?: string;
+  treasuryRecipient?: string;
+  operatorRecipient?: string;
   /** IPFS CID of the agent manifest (A2A agent card + pricing) */
   manifestCid: string;
   /** Per-method pricing in USDC base units */
@@ -118,6 +139,15 @@ export interface AP2IntentMandate {
     resource: string;
     exp: number;
   };
+}
+
+/** p-token network status — cached result of program detection. */
+export interface PTokenStatus {
+  active: boolean;
+  programId: string;
+  /** CU savings vs SPL for a single transferChecked — informational */
+  cuSavingsPerTransfer: number;
+  checkedAt: number; // epoch ms
 }
 
 /** Settlement receipt — what we write to IPFS after a successful payment. */
