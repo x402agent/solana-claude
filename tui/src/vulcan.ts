@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { spawn, spawnSync } from 'node:child_process';
+import { spawn } from 'node:child_process';
 
 export interface VulcanMarket {
   symbol: string;
@@ -23,36 +23,48 @@ export function normalizeSymbol(symbol?: string): string {
   return (symbol || 'SOL').replace(/-PERP$/i, '').toUpperCase();
 }
 
-export function resolveVulcanBinary(): string | null {
-  const direct = spawnSync('vulcan', ['version'], { stdio: 'ignore' });
-  if (direct.status === 0) return 'vulcan';
+function resolveClawdPerpsCli(): { command: string; args: string[] } | null {
+  const distCli = path.resolve(process.cwd(), 'packages/clawd-perps/dist/cli.js');
+  if (fs.existsSync(distCli)) {
+    return { command: 'node', args: [distCli] };
+  }
 
-  const candidates = [
-    path.resolve(process.cwd(), 'vulcan-cli-master/target/debug/vulcan'),
-    path.resolve(process.env.HOME || '', '.local/bin/vulcan'),
-  ];
-  return candidates.find(candidate => fs.existsSync(candidate)) ?? null;
+  const srcCli = path.resolve(process.cwd(), 'packages/clawd-perps/src/cli.ts');
+  if (fs.existsSync(srcCli)) {
+    return { command: 'node', args: ['--import', 'tsx/esm', srcCli] };
+  }
+
+  return null;
 }
 
 export function vulcanInstallHint(): string {
-  return 'curl -fsSL https://github.com/Ellipsis-Labs/vulcan-cli/releases/latest/download/install.sh | sh';
+  return 'npm --prefix packages/clawd-perps install --workspaces=false --package-lock=false && npm --prefix packages/clawd-perps run build';
 }
 
 export function runVulcanJson(args: string[], timeoutMs = 12_000): Promise<VulcanResult> {
-  const vulcan = resolveVulcanBinary();
-  if (!vulcan) {
-    return Promise.resolve({ ok: false, stdout: '', stderr: 'Vulcan CLI not installed', status: 127 });
+  const cli = resolveClawdPerpsCli();
+  if (!cli) {
+    return Promise.resolve({
+      ok: false,
+      stdout: '',
+      stderr: 'Rise-powered clawd-perps CLI not found',
+      status: 127,
+    });
   }
 
-  const finalArgs = args.includes('-o') || args.includes('--output') ? args : [...args, '-o', 'json'];
+  const mappedArgs = mapLegacyArgs(args);
   return new Promise(resolve => {
-    const child = spawn(vulcan, finalArgs, { stdio: ['ignore', 'pipe', 'pipe'] });
+    const child = spawn(cli.command, [...cli.args, 'perps', ...mappedArgs], { stdio: ['ignore', 'pipe', 'pipe'] });
     let stdout = '';
     let stderr = '';
     const timer = setTimeout(() => child.kill('SIGTERM'), timeoutMs);
 
-    child.stdout.on('data', chunk => { stdout += chunk.toString(); });
-    child.stderr.on('data', chunk => { stderr += chunk.toString(); });
+    child.stdout.on('data', chunk => {
+      stdout += chunk.toString();
+    });
+    child.stderr.on('data', chunk => {
+      stderr += chunk.toString();
+    });
     child.on('close', status => {
       clearTimeout(timer);
       let json: unknown;
@@ -66,13 +78,31 @@ export function runVulcanJson(args: string[], timeoutMs = 12_000): Promise<Vulca
   });
 }
 
+function mapLegacyArgs(args: string[]): string[] {
+  if (args[0] === 'market' && args[1] === 'list') return ['market', 'list'];
+  if (args[0] === 'market' && args[1] === 'ticker') return ['market', 'ticker', `${normalizeSymbol(args[2])}-PERP`];
+  if (args[0] === 'portfolio') return ['account', 'portfolio'];
+  if (args[0] === 'position' && args[1] === 'list') return ['position', 'list'];
+  if (args[0] === 'agent' && args[1] === 'health') return ['health'];
+
+  if (args[0] === 'paper' && (args[1] === 'buy' || args[1] === 'sell')) {
+    const side = args[1] === 'buy' ? 'buy' : 'sell';
+    const symbol = `${normalizeSymbol(args[2])}-PERP`;
+    const notionalIndex = args.indexOf('--notional-usdc');
+    const size = notionalIndex >= 0 ? args[notionalIndex + 1] ?? '100' : '100';
+    return ['order', 'place', symbol, '--side', side, '--type', 'market', '--size', size];
+  }
+
+  return args;
+}
+
 export async function loadVulcanMarkets(): Promise<{ markets: VulcanMarket[]; source: 'live' | 'fallback'; status: string }> {
   const result = await runVulcanJson(['market', 'list']);
   if (!result.ok || !result.json) {
     return {
       markets: fallbackMarkets(),
       source: 'fallback',
-      status: result.stderr || `Vulcan unavailable. Install with: ${vulcanInstallHint()}`,
+      status: result.stderr || `clawd-perps unavailable. Build with: ${vulcanInstallHint()}`,
     };
   }
 
@@ -80,7 +110,7 @@ export async function loadVulcanMarkets(): Promise<{ markets: VulcanMarket[]; so
   return {
     markets,
     source: 'live',
-    status: `${markets.length} Phoenix markets loaded from Vulcan`,
+    status: `${markets.length} Phoenix markets loaded from Rise SDK`,
   };
 }
 
@@ -120,14 +150,23 @@ function normalizeMarkets(payload: unknown): VulcanMarket[] {
         ? (payload as any).data
         : [];
 
-  const markets = rows.map((row: any) => ({
-    symbol: normalizeSymbol(row.symbol ?? row.market ?? row.name),
-    markPrice: numberFrom(row.markPrice ?? row.mark_price ?? row.price ?? row.index_price),
-    fundingRate: numberFrom(row.fundingRate ?? row.funding_rate ?? row.funding),
-    openInterest: numberFrom(row.openInterest ?? row.open_interest ?? row.oi),
-    volume24h: numberFrom(row.volume24h ?? row.volume_24h ?? row.volume),
-    change24h: numberFrom(row.change24h ?? row.change_24h ?? row.price_change_24h),
-  })).filter((market: VulcanMarket) => market.symbol && market.markPrice > 0);
+  const markets = rows
+    .map((row: any) => ({
+      symbol: normalizeSymbol(row.symbol ?? row.market ?? row.name),
+      markPrice: numberFrom(
+        row.markPrice ??
+          row.mark_price ??
+          row.price ??
+          row.mid ??
+          row.bestBid?.[0] ??
+          row.bestAsk?.[0],
+      ),
+      fundingRate: numberFrom(row.fundingRate ?? row.funding_rate ?? row.funding),
+      openInterest: numberFrom(row.openInterest ?? row.open_interest ?? row.oi),
+      volume24h: numberFrom(row.volume24h ?? row.volume_24h ?? row.volume),
+      change24h: numberFrom(row.change24h ?? row.change_24h ?? row.price_change_24h),
+    }))
+    .filter((market: VulcanMarket) => market.symbol);
 
   return markets.length > 0 ? markets : fallbackMarkets();
 }

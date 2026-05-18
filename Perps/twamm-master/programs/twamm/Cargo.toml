@@ -1,0 +1,37 @@
+[package]
+name = "twamm"
+version = "0.1.0"
+description = "Solana Permissionless TWAMM"
+authors = ["Solana Maintainers <maintainers@solana.foundation>"]
+repository = "https://github.com/askibin/twamm"
+categories = ["finance"]
+keywords = ["solana", "dex", "twamm", "amm"]
+license = "Apache-2.0"
+homepage = "https://solana.com/"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "lib"]
+name = "twamm"
+
+[features]
+no-entrypoint = []
+no-idl = []
+no-log-ix-name = []
+cpi = ["no-entrypoint"]
+test = []
+default = []
+
+[profile.release]
+lto = true
+codegen-units = 1
+overflow-checks = true
+
+[dependencies]
+anchor-lang = { version = "0.31.0", features = ["init-if-needed"] }
+anchor-spl = "0.31.0"
+solana-security-txt = "1.1.1"
+pyth-sdk-solana = "0.10.1"
+ahash = "0.8"
+num-traits = "0.2"
+num = "0.4"

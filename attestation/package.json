@@ -7,7 +7,10 @@
   "license": "MIT",
   "scripts": {
     "generate-clients": "node ./scripts/generate-clients.js",
-    "generate-idl": "shank idl -r program -o idl"
+    "generate-idl": "shank idl -r program -o idl",
+    "qedgen:spec": "printf '%s\n' 'QEDGen entrypoint: use attestation/idl/solana_attestation_service.json and attestation/formal_verification/SPEC.md as the canonical SAS proof target.'",
+    "qedgen:build": "cd formal_verification && lake build",
+    "verify:agent-template": "npx tsx ../formal_verification/gate.ts verify --path ../agents/agent-template-attested.json"
   },
   "dependencies": {
     "@codama/nodes-from-anchor": "^1.3.0",

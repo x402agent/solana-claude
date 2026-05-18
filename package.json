@@ -62,6 +62,9 @@
     "attestation:install": "npm --prefix attestation install",
     "attestation:generate-idl": "npm --prefix attestation run generate-idl",
     "attestation:generate-clients": "npm --prefix attestation run generate-clients",
+    "attestation:qedgen:spec": "npm --prefix attestation run qedgen:spec",
+    "attestation:qedgen:build": "npm --prefix attestation run qedgen:build",
+    "attestation:verify:agent-template": "npm --prefix attestation run verify:agent-template",
     "operator:test": "cd operator && PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 uv run --extra dev pytest -q -p pytest_asyncio.plugin",
     "agentwallet:build": "npm --prefix packages/agentwallet install --legacy-peer-deps && npm --prefix packages/agentwallet run build",
     "agentwallet:start": "npm --prefix packages/agentwallet start",
@@ -154,7 +157,9 @@
     "pinocchio:ptoken:launch-plan": "node scripts/ptoken-launch-planner.mjs plan",
     "pinocchio:ptoken:curve-quote": "node scripts/ptoken-launch-planner.mjs quote",
     "programs:map": "node scripts/programs-map.mjs list",
-    "programs:show": "node scripts/programs-map.mjs show"
+    "programs:show": "node scripts/programs-map.mjs show",
+    "perps:audit": "node scripts/perps-secret-audit.mjs",
+    "perps:workspace:build": "npm --prefix Perps/clawd-agents-perps run build"
   },
   "dependencies": {
     "@ai-sdk/xai": "^1.2.0",

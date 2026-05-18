@@ -1,4 +1,5 @@
 # Secrets and local credentials
+.local-secrets/
 .env
 .env.*
 !.env.example
@@ -42,6 +43,20 @@ keypair.json
 id.json
 wallet.json
 **/target/deploy/*-keypair.json
+Perps/**/.env
+Perps/**/.env.*
+!Perps/**/*.env.example
+!Perps/**/*.example.env
+Perps/**/*.pem
+Perps/**/*.key
+Perps/**/id.json
+Perps/**/wallet.json
+Perps/**/*-keypair.json
+Perps/**/test-ledger/
+Perps/**/.anchor/
+Perps/**/node_modules/
+Perps/**/dist/
+Perps/**/build/
 
 # Logs and local databases
 *.log

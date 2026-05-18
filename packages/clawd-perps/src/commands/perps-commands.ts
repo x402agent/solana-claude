@@ -189,13 +189,13 @@ Environment variables:
     .command("deposit <amount>")
     .description("Build a deposit transaction")
     .option("--mint <address>", "Token mint (default: USDC)")
-    .action(async (amount, opts) => print(await perps.buildDeposit(Number(amount), opts.mint)));
+    .action(async (amount) => print(await perps.buildDeposit(Number(amount))));
 
   marginCmd
     .command("withdraw <amount>")
     .description("Build a withdrawal transaction")
     .option("--mint <address>", "Token mint (default: USDC)")
-    .action(async (amount, opts) => print(await perps.buildWithdraw(Number(amount), opts.mint)));
+    .action(async (amount) => print(await perps.buildWithdraw(Number(amount))));
 
   marginCmd
     .command("collateral <market> <amount>")

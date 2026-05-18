@@ -10,6 +10,8 @@ export interface PerpsConfig {
   apiUrl: string;
   apiKey?: string;
   walletName?: string;
+  traderPdaIndex?: number;
+  traderSubaccountIndex?: number;
 }
 
 export interface MarketInfo {
@@ -17,6 +19,10 @@ export interface MarketInfo {
   baseAsset: string;
   quoteAsset: string;
   marketAddress: string;
+  markPrice?: number | null;
+  spotPrice?: number | null;
+  openInterest?: number | null;
+  status?: string;
 }
 
 export interface Ticker {

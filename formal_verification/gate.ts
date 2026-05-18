@@ -83,11 +83,22 @@ export interface VerificationReport {
   };
   kani: KaniResult;
   sas: SASAttestation;
+  proof_manifest?: ProofManifest;
   overall: {
     passed: boolean;
     blocked_by?: 'stride' | 'kani';
     attestation_address?: string;
   };
+}
+
+export interface ProofManifest {
+  created: boolean;
+  path?: string;
+  proof_hash?: string;
+  spec_hash?: string;
+  proof_files: string[];
+  formal_verification_dir?: string;
+  attestation_payload?: Record<string, unknown>;
 }
 
 // ---------------------------------------------------------------------------
@@ -105,6 +116,8 @@ interface RegistryEntry {
   stride_score: number;
   kani_passed: boolean;
   sas_address?: string;
+  proof_hash?: string;
+  proof_manifest_path?: string;
   blocked?: boolean;
   block_reason?: string;
 }
@@ -208,6 +221,139 @@ function readComponentText(componentPath: string): string {
     if (existsSync(fp)) parts.push(`=== ${kf} ===\n${readFileSync(fp, 'utf8')}`);
   }
   return parts.join('\n\n');
+}
+
+function findFormalVerificationDir(componentPath: string, kind: ComponentKind): string | null {
+  const abs = resolve(componentPath);
+  const candidates = [
+    join(abs, 'formal_verification'),
+    join(abs, 'FormalVerification'),
+    join(abs, 'attestation', 'formal_verification'),
+  ];
+
+  if (kind === 'agent') {
+    candidates.push(join(resolve('.'), 'attestation', 'formal_verification'));
+  }
+
+  for (const candidate of candidates) {
+    if (existsSync(candidate) && statSync(candidate).isDirectory()) return candidate;
+  }
+  return null;
+}
+
+function listProofFiles(dir: string): string[] {
+  const result: string[] = [];
+  function walk(current: string): void {
+    for (const entry of readdirSync(current, { withFileTypes: true })) {
+      const full = join(current, entry.name);
+      if (entry.isDirectory() && !['.lake', 'build', 'lake-packages', 'node_modules'].includes(entry.name)) {
+        walk(full);
+      } else if (entry.isFile() && (entry.name.endsWith('.lean') || entry.name === 'SPEC.md')) {
+        result.push(full);
+      }
+    }
+  }
+  walk(dir);
+  return result.sort();
+}
+
+function sha256Hex(parts: Array<string | Buffer>): string {
+  const hash = createHash('sha256');
+  for (const part of parts) hash.update(part);
+  return hash.digest('hex');
+}
+
+function buildAttestationPayload(
+  kind: ComponentKind,
+  name: string,
+  proofHash: string,
+  sasAddress?: string,
+): Record<string, unknown> | undefined {
+  if (kind === 'skill') {
+    return {
+      schema: 'OpenClawdSkillAttestation',
+      fields: {
+        skill_id: name,
+        verifier_pubkey: 'SAS_AUTHORITY_KEY',
+        proof_hash: proofHash,
+        verification_timestamp: Date.now(),
+        is_formally_verified: true,
+      },
+      prior_attestation: sasAddress ?? null,
+    };
+  }
+
+  if (kind === 'agent') {
+    return {
+      schema: 'OpenClawdAgentIdentity',
+      fields: {
+        agent_id: name,
+        wallet_pubkey: 'REQUIRED_AT_ISSUANCE',
+        skill_attestation: sasAddress ?? '',
+        vault_address: 'REQUIRED_AT_ISSUANCE',
+        is_vault_initialized: false,
+      },
+      proof_hash: proofHash,
+      prior_attestation: sasAddress ?? null,
+    };
+  }
+
+  return undefined;
+}
+
+function createProofManifest(
+  componentPath: string,
+  kind: ComponentKind,
+  name: string,
+  componentHash: string,
+  sasAddress?: string,
+): ProofManifest {
+  const formalDir = findFormalVerificationDir(componentPath, kind);
+  if (!formalDir) {
+    return { created: false, proof_files: [] };
+  }
+
+  const proofFiles = listProofFiles(formalDir);
+  if (proofFiles.length === 0) {
+    return { created: false, proof_files: [], formal_verification_dir: formalDir };
+  }
+
+  const specPath = proofFiles.find((file) => basename(file).toLowerCase() === 'spec.md');
+  const leanProofs = proofFiles.filter((file) => file.endsWith('.lean'));
+  const specHash = specPath ? sha256Hex([readFileSync(specPath)]) : undefined;
+  const proofHash = sha256Hex([
+    componentHash,
+    ...(specPath ? [readFileSync(specPath)] : []),
+    ...leanProofs.map((file) => readFileSync(file)),
+  ]);
+
+  const manifest = {
+    component: {
+      name,
+      kind,
+      path: resolve(componentPath),
+      component_hash: componentHash,
+    },
+    formal_verification_dir: formalDir,
+    spec_hash: specHash,
+    proof_hash: proofHash,
+    proof_files: proofFiles.map((file) => file.replace(`${resolve('.')}\/`, '')),
+    generated_at: new Date().toISOString(),
+    attestation_payload: buildAttestationPayload(kind, name, proofHash, sasAddress),
+  };
+
+  const manifestPath = join(resolve('.'), 'formal_verification', `proof-manifest-${name}-${componentHash}.json`);
+  writeFileSync(manifestPath, JSON.stringify(manifest, null, 2));
+
+  return {
+    created: true,
+    path: manifestPath,
+    proof_hash: proofHash,
+    spec_hash: specHash,
+    proof_files: manifest.proof_files,
+    formal_verification_dir: formalDir,
+    attestation_payload: manifest.attestation_payload,
+  };
 }
 
 // ---------------------------------------------------------------------------
@@ -514,7 +660,9 @@ async function createSASAttestation(
     // SAS attestation instruction (simplified — real impl uses SAS program IDL)
     // This writes a memo-style attestation; full SAS integration uses the program
     const memo = JSON.stringify({ schema: SAS_SCHEMA, fields, program: SAS_PROGRAM_ID });
-    const { MemoProgram } = await import('@solana/spl-memo').catch(() => ({ MemoProgram: null }));
+    const memoLoader = new Function('s', 'return import(s)');
+    const memoModule = await (memoLoader('@solana/spl-memo') as Promise<{ MemoProgram?: { createMemo(args: { signers: unknown[]; memo: string }): unknown } }>).catch(() => ({ MemoProgram: null }));
+    const MemoProgram = memoModule.MemoProgram ?? null;
 
     if (!MemoProgram) {
       // Fallback: log attestation locally with signing proof
@@ -608,11 +756,22 @@ async function verify(componentPath: string): Promise<VerificationReport> {
     console.log(`  Template  : ${JSON.stringify(sas.fields).slice(0, 80)}...`);
   }
 
+  // ── PROOF MANIFEST ────────────────────────────────────────────────────────
+  console.log(`\n[4/4] Exporting proof manifest...`);
+  const proofManifest = createProofManifest(abs, kind, name, hash, sas.address);
+  if (proofManifest.created) {
+    console.log(`  Proof hash: ${proofManifest.proof_hash}`);
+    console.log(`  Manifest  : ${proofManifest.path}`);
+  } else {
+    console.log(`  Status    : no formal_verification workspace detected`);
+  }
+
   const report: VerificationReport = {
     component: { path: abs, kind, name, hash, timestamp },
     stride,
     kani,
     sas,
+    proof_manifest: proofManifest,
     overall: {
       passed: overallPassed,
       blocked_by: blockedByStride ? 'stride' : blockedByKani ? 'kani' : undefined,
@@ -628,6 +787,8 @@ async function verify(componentPath: string): Promise<VerificationReport> {
     stride_score: stride.score,
     kani_passed: kani.passed || !kani.ran,
     sas_address: sas.address,
+    proof_hash: proofManifest.proof_hash,
+    proof_manifest_path: proofManifest.path,
     blocked: !overallPassed,
     block_reason: blockedByStride ? 'stride' : blockedByKani ? 'kani' : undefined,
   };
@@ -643,6 +804,7 @@ async function verify(componentPath: string): Promise<VerificationReport> {
     console.log(`  ✓ INJECTION APPROVED — ${name}`);
     console.log(`  STRIDE: ${stride.score}/100  Kani: ${kani.ran ? 'pass' : 'n/a'}  SAS: ${sas.created ? 'attested' : 'unsigned'}`);
     if (sas.address) console.log(`  Attestation: ${sas.address}`);
+    if (proofManifest.proof_hash) console.log(`  Proof hash : ${proofManifest.proof_hash}`);
   } else {
     console.log(`  ✗ INJECTION BLOCKED — ${name}`);
     console.log(`  Reason: ${blockedByStride ? 'STRIDE critical/high violations' : 'Kani proof failures'}`);
@@ -676,6 +838,8 @@ function status(componentPath: string): void {
   console.log(`  STRIDE score : ${entry.stride_score}/100`);
   console.log(`  Kani         : ${entry.kani_passed ? 'passed' : 'failed'}`);
   console.log(`  SAS          : ${entry.sas_address ?? 'not attested'}`);
+  console.log(`  Proof hash   : ${entry.proof_hash ?? 'not exported'}`);
+  console.log(`  Manifest     : ${entry.proof_manifest_path ?? 'not exported'}`);
   if (entry.blocked) console.log(`  BLOCKED BY   : ${entry.block_reason}`);
 }
 

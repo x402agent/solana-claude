@@ -204,6 +204,55 @@ Formal verification via QEDGen produces Lean 4 proofs that are stored as `proof_
 
 That is the entire point of this layer: the runtime can still move fast, but the parts that matter can be **proved, signed, and surfaced**.
 
+### SAS Program Proof Workspace
+
+This repo now includes a concrete QEDGen-oriented proof workspace for the SAS
+program itself:
+
+- [`formal_verification/README.md`](./formal_verification/README.md)
+- [`formal_verification/SPEC.md`](./formal_verification/SPEC.md)
+- [`formal_verification/AttestationProofs.lean`](./formal_verification/AttestationProofs.lean)
+
+Build it from the repo root:
+
+```bash
+npm run attestation:qedgen:build
+```
+
+The proof scope currently focuses on:
+
+- authority-gated schema and credential mutations
+- authorized attestation issuance
+- terminal attestation closure semantics
+
+### Agent Handoff Artifact
+
+The repo verification gate now exports a machine-readable proof manifest for
+agent and skill attestation flows:
+
+```bash
+npx tsx formal_verification/gate.ts verify --path agents/agent-template-attested.json
+```
+
+That produces:
+
+```text
+formal_verification/proof-manifest-<name>-<hash>.json
+```
+
+The manifest includes:
+
+- `proof_hash`
+- `spec_hash`
+- proof file list
+- inferred SAS attestation payload stub for skills or agents
+
+This is the handoff contract between:
+
+1. Lean / QEDGen proof artifacts
+2. the repo verification gate
+3. the Solana attestation notary / agent birth flow
+
 ---
 
 ## Repo Layout
@@ -278,4 +327,3 @@ This layer is meant to feed directly into:
 The long-term OpenClawd shape is simple:
 
 **skills get verified, agents get born, plugins get audited, MCP servers get attested, and the lobster keeps moving.**
-

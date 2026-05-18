@@ -206,3 +206,48 @@ now backed by Kani harnesses. Previous status was **Open** for all properties.
 | Funding term bounded | Open | Kani harness written |
 
 Run `cargo kani` in `formal_verification/` to execute all proofs.
+
+---
+
+## QEDGen Integration
+
+The repo also carries a Lean 4 / QEDGen verification path for Solana programs
+that need stronger proof artifacts than the repo-wide gate provides.
+
+### Current Program Workspace
+
+The Solana Attestation Service is wired here:
+
+- [`attestation/formal_verification/README.md`](../attestation/formal_verification/README.md)
+- [`attestation/formal_verification/SPEC.md`](../attestation/formal_verification/SPEC.md)
+- [`attestation/formal_verification/AttestationProofs.lean`](../attestation/formal_verification/AttestationProofs.lean)
+
+### Commands
+
+```bash
+# Build the SAS Lean proofs
+npm run attestation:qedgen:build
+
+# Show the canonical SAS QEDGen target
+npm run attestation:qedgen:spec
+
+# Verify the attested agent template and export a proof manifest
+npm run attestation:verify:agent-template
+```
+
+### Positioning
+
+Use the repo-root gate when you want:
+
+- STRIDE/SIREN triage
+- Kani model checking
+- SAS receipt issuance
+
+Use the QEDGen workspace when you want:
+
+- Lean 4 proof artifacts
+- instruction-level authorization and lifecycle proofs
+- proof hashes suitable for attestation metadata
+
+The gate now exports `formal_verification/proof-manifest-*.json` files that can
+be consumed by SAS issuance flows for skills and agents.
