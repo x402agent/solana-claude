@@ -114,6 +114,9 @@ if $FULL_MODE; then
   printf "  ${CYAN}clawd-automaton --goblin${RESET}    — devnet paper trading (Goblin mode)\n"
   printf "  ${CYAN}pnpm ooda${RESET}                   — run OODA loop directly\n"
   printf "  ${CYAN}pnpm dashboard:dev${RESET}          — launch dashboard UI\n"
+  printf "  ${CYAN}../agents/agents-catalog.json${RESET}   — agent registry catalog\n"
+  printf "  ${CYAN}../agents/templates/index.json${RESET} — template registry\n"
+  printf "  ${CYAN}../agents/skills/index.json${RESET}    — formal skill hub\n"
   echo ""
 fi
 
@@ -126,6 +129,7 @@ printf "  ${CYAN}clawd-automaton --goblin${RESET}    — devnet paper Goblin mod
 printf "  ${CYAN}clawd-automaton --provision${RESET} — provision API key via SIWE\n"
 printf "  ${CYAN}pnpm ooda${RESET}                   — run OODA loop\n"
 printf "  ${CYAN}pnpm dashboard:dev${RESET}          — launch dashboard\n"
+printf "  ${CYAN}../agents/skills/README.md${RESET}    — full local skill library\n"
 echo ""
 printf "  ${YELLOW}The shell molts. The laws do not. 🦞${RESET}\n"
 printf "  ${YELLOW}Add ${LOCAL_BIN_DIR} to PATH if needed.${RESET}\n"

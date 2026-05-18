@@ -147,6 +147,242 @@ Dashboard includes:
 
 ---
 
+## Agent + Skill Registry
+
+This runtime now ships against three distinct catalog surfaces in the sibling [`agents`](../agents) workspace:
+
+- [`../agents/agents-catalog.json`](../agents/agents-catalog.json) — the site-facing agent catalog
+- [`../agents/agents-manifest.json`](../agents/agents-manifest.json) — route/access manifest for agents, templates, and skills
+- [`../agents/templates/index.json`](../agents/templates/index.json) — the new template registry
+- [`../agents/skills/index.json`](../agents/skills/index.json) — the formal skill hub with verification metadata
+- [`../agents/skills/README.md`](../agents/skills/README.md) — the broader local skill library, documented one-by-one
+- [`../agents/skills/skill-schema.v1.json`](../agents/skills/skill-schema.v1.json) — the formal verification schema for skills
+
+Current generated catalog state:
+
+- `134` agents
+- `43` one-shots
+- `23` featured agents
+- `5` templates
+- `20` formalized skill-hub entries
+- `114` top-level local skills with `SKILL.md`
+
+The important distinction is:
+
+- `agents-catalog.json` is the public agent registry used by the site
+- `templates/index.json` is the reusable agent-template registry
+- `skills/index.json` is the machine-readable, schema-backed skill hub
+- `skills/README.md` is the expanded operator-facing skill directory
+
+---
+
+## Template Registry
+
+The new template registry is published from [`../agents/templates`](../agents/templates) and currently includes:
+
+| Template | File | Purpose |
+| -------- | ---- | ------- |
+| `defi-analyst` | [`../agents/templates/defi-analyst.template.json`](../agents/templates/defi-analyst.template.json) | DeFi protocol analyst with yield math, liquidation thresholds, and audit-aware risk analysis |
+| `firecrawl-researcher` | [`../agents/templates/firecrawl-researcher.template.json`](../agents/templates/firecrawl-researcher.template.json) | Domain-locked Firecrawl research agent with sourced summaries |
+| `screener` | [`../agents/templates/screener.template.json`](../agents/templates/screener.template.json) | Skeptical Solana risk screener for launches, protocols, and collections |
+| `solana-attestation-agent` | [`../agents/templates/solana-attestation-agent.template.json`](../agents/templates/solana-attestation-agent.template.json) | OpenClawd spawn notary for SAS credentials, schemas, MPL Core minting, and verification flows |
+| `trading-agent` | [`../agents/templates/trading-agent.template.json`](../agents/templates/trading-agent.template.json) | Solana trading agent with Jupiter routing, slippage, priority fee, and Jito-aware guidance |
+
+The attestation template is the bridge into the formal verification path: it defines the on-chain skill and agent identity schemas used to graduate skills from plain local instructions into verifiable registry entries.
+
+---
+
+## Formal Skill Hub
+
+The generated skill hub lives at [`../agents/skills/index.json`](../agents/skills/index.json). It is the machine-readable registry for skills that have normalized metadata, category assignment, and formal verification fields.
+
+Every current entry is cataloged below one by one:
+
+| Skill | Category | Verification | Purpose |
+| ----- | -------- | ------------ | ------- |
+| `pump-admin-ops` | `pump-protocol` | `pending` | Pump protocol admin and authority operations |
+| `pump-ai-agents` | `pump-protocol` | `pending` | AI-agent integration layer and MCP-facing context for Pump |
+| `pump-bonding-curve` | `pump-protocol` | `pending` | Bonding-curve pricing, fee math, and reserve logic |
+| `pump-build-release` | `pump-protocol` | `pending` | Pump SDK build, release, and distribution pipeline |
+| `pump-claims-readonly` | `pump-protocol` | `pending` | Read-only claims, fees, rewards, and balance inspection |
+| `pump-fee-sharing` | `pump-protocol` | `pending` | Creator fee-share configuration and allocation |
+| `pump-fee-system` | `pump-protocol` | `pending` | Protocol fee arithmetic and collection logic |
+| `pump-mcp-server` | `pump-protocol` | `pending` | MCP server surface for Pump tools, resources, and prompts |
+| `pump-rust-vanity` | `pump-protocol` | `pending` | High-performance Rust vanity-address generation |
+| `pump-sdk-core` | `typescript` | `pending` | Core offline-first Pump TypeScript SDK |
+| `pump-security` | `security` | `pending` | Security hardening and audit checklist for Pump codepaths |
+| `pump-shell-scripts` | `pump-protocol` | `pending` | Production Bash operations for Pump and Solana tooling |
+| `pump-solana-architecture` | `solana-dev` | `pending` | PDA/account-layout architecture across Pump programs |
+| `pump-solana-dev` | `solana-dev` | `pending` | Solana development patterns used in Pump SDK |
+| `pump-solana-wallet` | `wallet` | `pending` | Secure wallet generation and handling patterns |
+| `pump-testing` | `pump-protocol` | `pending` | Multi-language tests, fuzzing, benches, and CI quality gates |
+| `pump-token-incentives` | `pump-protocol` | `pending` | Volume-based PUMP reward and incentive system |
+| `pump-token-lifecycle` | `pump-protocol` | `pending` | Token creation through graduation and AMM migration |
+| `pump-ts-vanity` | `typescript` | `pending` | Educational TypeScript vanity generator |
+| `sponge-wallet` | `wallet` | `pending` | Wallet, swaps, bridges, and x402-paid external service access |
+
+Formal verification metadata is defined in [`../agents/skills/skill-schema.v1.json`](../agents/skills/skill-schema.v1.json), and the attestation path is designed to be completed by the `solana-attestation-agent` template.
+
+---
+
+## Expanded Local Skill Library
+
+The broader operator skill library lives in [`../agents/skills`](../agents/skills). Today there are `114` top-level skills with `SKILL.md`. These are the human-facing local capabilities; some are already in the formal hub, some are not yet normalized into the generated registry.
+
+### Dev Tools / Agents
+
+- `clawdhub`
+- `coding-agent`
+- `github`
+- `mcporter`
+- `openclaw-claude-code-skill-main`
+- `session-logs`
+- `tmux`
+
+### Local / Web Services
+
+- `blogwatcher`
+- `food-order`
+- `goplaces`
+- `local-places`
+- `ordercli`
+- `weather`
+
+### Media / Devices
+
+- `blucli`
+- `camsnap`
+- `canvas`
+- `gifgrep`
+- `nano-banana-pro`
+- `nano-pdf`
+- `openai-image-gen`
+- `openai-whisper`
+- `openai-whisper-api`
+- `openhue`
+- `peekaboo`
+- `sag`
+- `songsee`
+- `sonoscli`
+- `spotify-player`
+- `summarize`
+- `video-frames`
+- `voice-call`
+
+### Productivity / Messaging
+
+- `1password`
+- `apple-notes`
+- `apple-reminders`
+- `bear-notes`
+- `bluebubbles`
+- `discord`
+- `gog`
+- `himalaya`
+- `imsg`
+- `notion`
+- `obsidian`
+- `slack`
+- `things-mac`
+- `trello`
+- `wacli`
+
+### Solana / Blockchain
+
+- `clawdex`
+- `dex-screener-scanner`
+- `dflow-docs`
+- `dflow-kalshi-market-data`
+- `dflow-kalshi-market-scanner`
+- `dflow-kalshi-portfolio`
+- `dflow-kalshi-trading`
+- `dflow-phantom-connect`
+- `dflow-platform-fees`
+- `dflow-proof-kyc`
+- `dflow-spot-trading`
+- `gateway-node-ops`
+- `model-usage`
+- `phantom-wallet-mcp`
+- `pump-admin-ops`
+- `pump-ai-agents`
+- `pump-bonding-curve`
+- `pump-build-release`
+- `pump-claims-readonly`
+- `pump-fee-sharing`
+- `pump-fee-system`
+- `pump-mcp-server`
+- `pump-rust-vanity`
+- `pump-sdk-core`
+- `pump-security`
+- `pump-shell-scripts`
+- `pump-solana-architecture`
+- `pump-solana-dev`
+- `pump-solana-wallet`
+- `pump-testing`
+- `pump-token-incentives`
+- `pump-token-lifecycle`
+- `pump-ts-vanity`
+- `pumpfun`
+- `pumpfun-analytics`
+- `pumpfun-fees`
+- `pumpfun-launcher`
+- `pumpfun-trading`
+- `solana-clawd`
+- `solana-clawd-agentic-commerce`
+- `solana-formal-verification`
+- `sponge-wallet`
+- `swarm-orchestrator`
+- `swarm-orchestrator copy`
+- `ultrathink-blockchain`
+- `vulcan`
+- `vulcan copy`
+- `vulcan-error-recovery`
+- `vulcan-execution-modes`
+- `vulcan-grid-trading`
+- `vulcan-lot-size-calculator`
+- `vulcan-margin-operations`
+- `vulcan-market-intel`
+- `vulcan-onboarding`
+- `vulcan-portfolio-intel`
+- `vulcan-position-management`
+- `vulcan-quickstart`
+- `vulcan-risk-management`
+- `vulcan-skills-index`
+- `vulcan-ta-strategy`
+- `vulcan-technical-analysis`
+- `vulcan-tpsl-management`
+- `vulcan-trade-execution`
+- `vulcan-twap-execution`
+
+### Utilities / Experimental
+
+- `bird`
+- `bird copy`
+- `eightctl`
+- `gemini`
+
+For the full one-by-one descriptions, open [`../agents/skills/README.md`](../agents/skills/README.md). That file is the operator handbook; `skills/index.json` is the machine-readable registry.
+
+---
+
+## Clawd Vault
+
+The runtime now exposes a canonical three-tier memory layer at [`src/vault/index.ts`](src/vault/index.ts), exported through the package as `clawd-automaton/vault/index.js`.
+
+- `KNOWN` — explicit user or agent facts with provenance
+- `LEARNED` — durable conclusions derived from repeated interaction
+- `INFERRED` — short-lived working memory and scratch state
+
+Persistence order:
+
+1. In-memory buffer
+2. Vault JSONL on disk
+3. Honcho-backed durable session memory
+
+This is the memory substrate intended to pair with the agent registry, the skill hub, and the attestation flow.
+
+---
+
 ## Payment model
 
 Two settlement rails:
