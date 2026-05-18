@@ -12,23 +12,23 @@ import type { NavKey } from "./types";
 const headerByView: Record<NavKey, { title: string; subtitle: string }> = {
   sandboxes: {
     title: "CLAWD Cloud",
-    subtitle: "Cloud infrastructure for autonomous AI, rebuilt as a sovereign lobster trench.",
+    subtitle: "Sovereign compute trenches. Your infrastructure, your keys, your brood.",
   },
   inference: {
     title: "Inference",
-    subtitle: "AI playground powered by CLAWD routing and trench-safe model controls.",
+    subtitle: "AI inference routed through the CLAWD runtime. Trench-safe model controls.",
   },
   billing: {
     title: "Billing",
-    subtitle: "Manage credits, wallet reserves, and token-backed compute purchases.",
+    subtitle: "Credits, reserves, and token-backed compute. USDC and $CLAWD settlement.",
   },
   spawn: {
     title: "Spawn Automations",
-    subtitle: "Brood management, lineage controls, and sovereign deployment recipes.",
+    subtitle: "Brood management, lineage trees, and sovereign deployment recipes.",
   },
   keys: {
     title: "API Keys",
-    subtitle: "Provisioned secrets, scoped access, and shell-safe operator credentials.",
+    subtitle: "Shell-scoped operator keys. Provisioned via SIWE. Trench-safe secrets.",
   },
 };
 

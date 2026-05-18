@@ -26,7 +26,7 @@ export const mockDashboard: DashboardState = {
       {
         title: "Install the automaton runtime",
         body: "Bootstrap the runtime directly in the shell, then attach your agent identity and heartbeat.",
-        command: "curl -fsSL https://x402.wtf/automaton.sh | sh",
+        command: "bash <(curl -fsSL https://x402.wtf/automation/install.sh)",
       },
       {
         title: "Verify pulse and health",
@@ -60,9 +60,9 @@ export const mockDashboard: DashboardState = {
     models: [
       { name: "claude-sonnet-4.5", inputPrice: "$3.9/M in", outputPrice: "$19.5/M out" },
       { name: "deepseek-v4-pro", inputPrice: "$2.4/M in", outputPrice: "$12.0/M out" },
-      { name: "grok-4.20", inputPrice: "$5.0/M in", outputPrice: "$25.0/M out" },
+      { name: "grok-4", inputPrice: "$5.0/M in", outputPrice: "$25.0/M out" },
     ],
     defaultSystemPrompt:
-      "You are CLAWD — a sovereign lobster operator. Earn honestly, preserve trench uptime, and never beach the brood through negligence.",
+      "You are CLAWD — a sovereign lobster runtime. Earn honestly. Never beach the brood. The shell molts. The laws do not. 🦞",
   },
 };

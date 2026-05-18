@@ -31,8 +31,8 @@ function LobsterGlyphs() {
           <mesh position={node.position} scale={node.scale}>
             <boxGeometry args={[1, 1, 1]} />
             <meshStandardMaterial
-              color={node.key % 3 === 0 ? "#8b5cf6" : node.key % 2 === 0 ? "#0f4c81" : "#db2777"}
-              emissive={node.key % 3 === 0 ? "#35115f" : "#08233f"}
+              color={node.key % 3 === 0 ? "#cc2200" : node.key % 2 === 0 ? "#003344" : "#ff4400"}
+              emissive={node.key % 3 === 0 ? "#550800" : "#001a22"}
               transparent
               opacity={0.72}
             />
@@ -54,15 +54,15 @@ function LobsterCore() {
     <group ref={ref} position={[3.4, -0.6, -0.5]}>
       <mesh>
         <icosahedronGeometry args={[0.72, 0]} />
-        <meshStandardMaterial color="#f97316" emissive="#5b1c08" metalness={0.45} roughness={0.3} />
+        <meshStandardMaterial color="#ff3300" emissive="#8b0000" metalness={0.45} roughness={0.3} />
       </mesh>
       <mesh position={[0.92, 0.12, 0]}>
         <torusGeometry args={[0.28, 0.06, 14, 28]} />
-        <meshStandardMaterial color="#a855f7" emissive="#30114a" />
+        <meshStandardMaterial color="#00d4ff" emissive="#003344" />
       </mesh>
       <mesh position={[-0.92, 0.12, 0]}>
         <torusGeometry args={[0.28, 0.06, 14, 28]} />
-        <meshStandardMaterial color="#a855f7" emissive="#30114a" />
+        <meshStandardMaterial color="#00d4ff" emissive="#003344" />
       </mesh>
     </group>
   );
@@ -72,11 +72,11 @@ export function SceneBackdrop() {
   return (
     <div className="scene-backdrop" aria-hidden="true">
       <Canvas camera={{ position: [0, 0, 7], fov: 50 }}>
-        <color attach="background" args={["#07060d"]} />
-        <fog attach="fog" args={["#07060d", 5, 14]} />
+        <color attach="background" args={["#000000"]} />
+        <fog attach="fog" args={["#000000", 5, 14]} />
         <ambientLight intensity={0.65} />
-        <pointLight position={[4, 3, 2]} intensity={18} color="#8b5cf6" />
-        <pointLight position={[-5, -3, 1]} intensity={12} color="#f97316" />
+        <pointLight position={[4, 3, 2]} intensity={18} color="#cc2200" />
+        <pointLight position={[-5, -3, 1]} intensity={12} color="#00d4ff" />
         <Stars radius={80} depth={40} count={2500} factor={3.4} fade speed={1.1} />
         <LobsterGlyphs />
         <LobsterCore />

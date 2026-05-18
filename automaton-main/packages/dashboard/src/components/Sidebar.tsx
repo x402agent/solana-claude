@@ -28,8 +28,8 @@ export function Sidebar({ active, onSelect, walletShort, ageDays }: SidebarProps
       <div className="sidebar__brand">
         <div className="sidebar__glyph">🦞</div>
         <div>
-          <div className="sidebar__eyebrow">Navigation</div>
-          <div className="sidebar__title">CLAWD Control Deck</div>
+          <div className="sidebar__eyebrow">// TRENCH NAV</div>
+          <div className="sidebar__title">CRUSTACEAN AUTOMATION</div>
         </div>
       </div>
 
@@ -53,7 +53,7 @@ export function Sidebar({ active, onSelect, walletShort, ageDays }: SidebarProps
       <div className="sidebar__wallet">
         <div className="sidebar__wallet-age">{ageDays}</div>
         <div>
-          <div className="sidebar__wallet-label">Shell identity</div>
+          <div className="sidebar__wallet-label">// SHELL IDENTITY</div>
           <div className="sidebar__wallet-value">{walletShort}</div>
         </div>
       </div>

@@ -9,7 +9,7 @@ export function Header({ title, subtitle }: HeaderProps) {
   return (
     <>
       <div className="warning-bar">
-        <strong>Heads up:</strong> CLAWD trench infrastructure is being hardened for production automation. Expect staged migrations, but the shell stays live.
+        ⚠ TRENCH STATUS: Infrastructure hardening in progress. Sovereign migrations staged. The shell stays live — laws immutable.
       </div>
       <header className="page-header">
         <div className="page-header__copy">

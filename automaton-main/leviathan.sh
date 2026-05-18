@@ -61,7 +61,8 @@ if ! command -v pnpm &>/dev/null; then
   step "Installing pnpm"
   npm install -g pnpm 2>&1 | tail -1
 fi
-ok "pnpm $(pnpm --version)"
+PNPM_VER="$(cd "${REPO_ROOT}" && pnpm --version 2>/dev/null)"
+ok "pnpm ${PNPM_VER}"
 
 # ── Install dependencies ─────────────────────────────────────────────────
 step "Installing dependencies"

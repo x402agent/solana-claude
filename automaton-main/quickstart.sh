@@ -41,7 +41,8 @@ if ! command -v pnpm &>/dev/null; then
   printf "  Installing pnpm...\n"
   npm install -g pnpm 2>&1 | tail -1
 fi
-printf "  ✅ Node.js $(node --version) | pnpm $(pnpm --version)\n"
+PNPM_VER="$(cd "${REPO_ROOT}" && pnpm --version 2>/dev/null)"
+printf "  ✅ Node.js $(node --version) | pnpm ${PNPM_VER}\n"
 echo ""
 
 # ── Step 1: Install dependencies ──────────────────────────────────────────
