@@ -27,6 +27,7 @@ import {
 import { supabase } from './supabase.js';
 import agentRegistryRouter from './agentRegistry.js';
 import gaslessMintRouter from './gaslessMint.js';
+import skillHubRouter from './skillHub.js';
 
 // ---------------------------------------------------------------------------
 // HTTP Gateway (Express)
@@ -39,6 +40,8 @@ const PORT = parseInt(process.env.GATEWAY_PORT ?? '8080', 10);
 app.use('/', agentRegistryRouter);
 // Gasless Metaplex minting endpoints
 app.use('/', gaslessMintRouter);
+// Skill Hub — formally verified skill registry
+app.use('/', skillHubRouter);
 
 app.get('/health', (_req, res) => {
   res.json({

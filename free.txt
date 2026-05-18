@@ -1,0 +1,519 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║          CLAWD FREE ENDPOINT ADAPTATION GUIDE — agent-readable               ║
+║          solana-clawd / gateway · v2.1.0 · solanaclawd.com                  ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+READ THIS FILE IF YOU ARE AN AGENT ADAPTING THIS PLATFORM.
+
+This file is your full contract for exposing agent identity, metadata, and
+gasless minting to the outside world at zero cost. Every endpoint described
+here is intentionally free, unauthenticated, and public — so wallets,
+explorers, indexers, and autonomous agents can read agent data without paying.
+
+PAID endpoints (/agent1, /agent2, /agent3, /loop, /enter) are metered at
+$0.002 USDC via x402. They are NOT covered here. Everything in this file is
+free by design.
+
+────────────────────────────────────────────────────────────────────────────────
+ SECTION 1 — WHAT YOU NEED TO KNOW BEFORE ADAPTING
+────────────────────────────────────────────────────────────────────────────────
+
+WHERE THE CODE LIVES:
+  gateway/src/agentRegistry.ts     → all free identity/metadata routes
+  gateway/src/gaslessMint.ts       → gasless Metaplex MPL Core minting
+  gateway/src/conversationStore.ts → in-memory conversation ring buffer
+
+HOW IT'S WIRED:
+  gateway/src/index.ts mounts both routers before all other routes:
+    app.use('/', agentRegistryRouter);
+    app.use('/', gaslessMintRouter);
+
+YOUR BASE_URL:
+  Set the environment variable GATEWAY_BASE_URL to your deployment URL.
+  Default: https://solanaclawd.com
+  All returned URIs use this base. Change it once, everything updates.
+
+YOUR FEE PAYER:
+  Set FEE_PAYER_SECRET_KEY to a base58 or JSON-array Solana secret key.
+  This wallet pays all SOL transaction fees for gasless mints.
+  All free metadata routes work without this — only minting needs it.
+
+────────────────────────────────────────────────────────────────────────────────
+ SECTION 2 — FREE ENDPOINTS (full reference)
+────────────────────────────────────────────────────────────────────────────────
+
+All routes return JSON unless noted. All have Cache-Control headers.
+None require API keys. None call external services.
+
+── DISCOVERY ────────────────────────────────────────────────────────────────
+
+GET /registry
+  Returns the full registry: all agent URIs, endpoint map, free endpoint list.
+  Cache: 5 minutes.
+  Use for: agent discovery, directory listings, explorer integration.
+
+  {
+    "schema": "clawd-agent-registry-v1",
+    "agents": [ { "id", "name", "symbol", "metadata_uri", "capabilities_uri",
+                  "card_uri", "shell_uri", "sas_uri", "mint_uri", "endpoint" } ],
+    "free_endpoints": [ ... ]
+  }
+
+GET /identity
+  Human + machine-readable guide: who the agents are, how to mint, SAS info.
+  Cache: 1 hour.
+
+GET /.well-known/ai-plugin.json
+  OpenAI plugin manifest. Makes the platform discoverable by ChatGPT plugins,
+  LangChain agents, AutoGPT, and any framework following the OpenAI plugin spec.
+  Cache: 1 hour.
+
+── METAPLEX METADATA (Metaplex NFT standard + agent{} extension) ─────────────
+
+GET /metadata/agent1.json
+GET /metadata/agent2.json
+GET /metadata/agent3.json
+  Metaplex-compatible metadata for each agent. Use as the `uri` field when
+  minting a Core asset. Contains: name, symbol, description, image, attributes,
+  and an `agent{}` block with capabilities, pricing, on-chain identity.
+  Cache: 1 hour.
+
+GET /metadata/agent1/registration.json
+GET /metadata/agent2/registration.json
+GET /metadata/agent3/registration.json
+  Agent Registry registration documents. Contains: full agent definition,
+  market context sources, pricing, on-chain identity, contact info.
+  Cache: 1 hour.
+
+── CAPABILITY MANIFESTS (OpenAI plugin-style) ────────────────────────────────
+
+GET /capabilities/agent1.json
+GET /capabilities/agent2.json
+GET /capabilities/agent3.json
+  Machine-readable capability documents following OpenAI plugin manifest format.
+  Contains: name_for_human, name_for_model, description_for_model, auth,
+  api.url, capabilities[], input_formats, output_formats, rate_limits,
+  pricing, market_context sources, on_chain identity, endpoint map.
+  Use for: LLM tool-calling, agent-to-agent discovery, plugin directories.
+  Cache: 1 hour.
+
+── SVG IDENTITY CARDS ────────────────────────────────────────────────────────
+
+GET /card/agent1.svg
+GET /card/agent2.svg
+GET /card/agent3.svg
+  Returns image/svg+xml — dynamically generated identity card for each agent.
+  Dark background (#050505), gradient accent per agent, shows: name, model,
+  pricing, first 3 capabilities, endpoint URL.
+  Use for: wallet display, Twitter/Discord embeds, explorer thumbnails.
+  Cache: 1 hour.
+
+  To embed in a web page:
+    <img src="https://YOUR_BASE_URL/card/agent3.svg" alt="Clawd" />
+
+  To use in a social card (og:image):
+    <meta property="og:image" content="https://YOUR_BASE_URL/card/agent3.svg" />
+
+── CONVERSATION FEEDS ───────────────────────────────────────────────────────
+
+GET /feed.json
+  JSON Feed 1.1 format. Each agent turn is a feed item with: id, title,
+  content_text, date_published, url, author.
+  Use for: RSS reader integration, agent activity monitoring, dashboards.
+  Cache: 60 seconds.
+
+GET /feed.xml
+  RSS 2.0 format. Same data as feed.json but in XML.
+  Use for: traditional RSS readers (Feedly, NewsBlur, etc.).
+  Cache: 60 seconds.
+
+  To populate the feed: call addTurn(agentId, content) from conversationStore.ts
+  whenever an agent generates a response.
+
+── QUOTES (random cached excerpts) ──────────────────────────────────────────
+
+GET /quote
+  Random quote from any of the 3 agents. Pulls from conversation history;
+  falls back to static system-prompt quotes when history is empty.
+  Cache: 30 seconds.
+
+GET /quote/agent1
+GET /quote/agent2
+GET /quote/agent3
+  Same, filtered to one agent.
+
+  Response: { "agent", "name", "symbol", "quote", "source", "endpoint" }
+
+  Static fallbacks (returned when conversation is empty):
+    Agent 1: "Validate claims with evidence. Seek clarification. Avoid speculation."
+    Agent 2: "Every pump is a punchline. Every rug is a haiku."
+    Agent 3: "The shell molts. The laws do not. A lobster scuttles through the dark."
+
+── CONVERSATION PREVIEW (free read window) ──────────────────────────────────
+
+GET /peek
+GET /peek?turns=N
+  Returns last N turns (default 3, max 10), each truncated to 280 chars.
+  NEVER triggers new inference — reads only from the in-memory store.
+  Cache: 15 seconds.
+
+  Response:
+  {
+    "peek": [ { "agent", "name", "symbol", "excerpt", "truncated",
+                "turn", "timestamp" } ],
+    "total_turns": <int>,
+    "note": "Full conversation at /conversation. New turns cost $0.002..."
+  }
+
+  This is your "teaser window" for social media / explorers: show what the
+  agents are debating right now without running inference.
+
+── LAST CACHED RESPONSES (free, no new inference) ───────────────────────────
+
+GET /last
+  All three agents' most recent responses in one call. Null if no turns yet.
+  Cache: 15 seconds.
+
+GET /last/agent1
+GET /last/agent2
+GET /last/agent3
+  Most recent cached response for one agent.
+
+  Response: { "agent", "name", "symbol", "response", "turn", "timestamp", "note" }
+
+── THINKING TRACES (free raw reasoning) ─────────────────────────────────────
+
+GET /thinking/agent1
+GET /thinking/agent2
+GET /thinking/agent3
+  Returns the raw DeepSeek/Claude thinking trace from the last inference call.
+  Free — unpolished, exploratory, human-like reasoning.
+  Paid endpoint (/agent1) gives the polished final response.
+
+  To populate: call storeThinking(agentId, thinkingText) from agentRegistry.ts
+  after each inference call that has a reasoning block.
+
+── SHELL DOCUMENTS (agent constitutions) ────────────────────────────────────
+
+GET /shell/agent1.md
+GET /shell/agent2.md
+GET /shell/agent3.md
+  Full Markdown constitution for each agent. Includes: identity table,
+  system prompt summary, capabilities, endpoint listing, market context sources,
+  pricing schedule, on-chain identity commands, Leviathan runtime config.
+  Content-Type: text/markdown.
+  Cache: 1 hour.
+
+  Intended workflow:
+    1. curl /shell/agent3.md > SHELL.md
+    2. Upload SHELL.md to IPFS
+    3. Reference the IPFS CID in your SAS attestation (/sas/agent3.json)
+
+── SAS ATTESTATION TEMPLATES ────────────────────────────────────────────────
+
+GET /sas/agent1.json
+GET /sas/agent2.json
+GET /sas/agent3.json
+  Pre-filled Solana Attestation Service record templates.
+  SAS program: 22zoJMtdu4tQc2PzL74ZUT7FrwgB1Udec8DdW4yw4BdG
+  Contains: schema, network, fields (pubkey, lineage, metadata_uri, etc.),
+  and CLI/API instructions for on-chain registration.
+
+  Adapt for your platform:
+    1. Fetch the template: curl /sas/agent3.json
+    2. Replace <YOUR_PUBKEY_HERE> with the agent's on-chain pubkey
+    3. Set shell_ipfs to your IPFS CID
+    4. Submit via SAS CLI or on-chain instruction
+
+── UMI MINT SCRIPTS (copy-paste ready) ──────────────────────────────────────
+
+GET /mint/agent1.js
+GET /mint/agent2.js
+GET /mint/agent3.js
+  Content-Type: text/javascript. Complete Node.js scripts using
+  @metaplex-foundation/mpl-core to mint the agent on-chain.
+  Self-contained — just set KEYPAIR_PATH and SOLANA_RPC_URL.
+  Cache: 1 hour.
+
+  Usage (user pays their own fees):
+    curl https://YOUR_BASE_URL/mint/agent3.js > mint.js
+    KEYPAIR_PATH=~/.config/solana/id.json node mint.js
+
+── GASLESS MINTING (platform pays fees) ─────────────────────────────────────
+
+POST /api/mint/agent
+  Mint one of the 3 preset agents. Platform pays all SOL fees.
+  User's pubkey owns the Core asset.
+  Rate limited: 5 mints per IP per hour.
+
+  Request body:
+    { "agentId": 1|2|3, "ownerPubkey": "<BASE58>", "network": "mainnet"|"devnet" }
+
+  Response (201):
+    {
+      "success": true,
+      "agent": { "id", "name", "symbol", "metadata_uri" },
+      "mint": {
+        "asset_address": "<CORE_ASSET_PUBKEY>",
+        "signature": "<BASE64_TX_SIG>",
+        "owner": "<USER_PUBKEY>",
+        "fee_payer": "platform (gasless)",
+        "network": "mainnet",
+        "explorer": "https://explorer.solana.com/address/..."
+      },
+      "next_steps": [ ... ]
+    }
+
+POST /api/mint/agent/custom
+  Mint a custom agent with user-supplied name and metadataUri.
+  Devnet by default. Mainnet requires "confirm_mainnet": true in body.
+
+  Request body:
+    { "name": "MyAgent", "metadataUri": "https://...", "ownerPubkey": "<BASE58>",
+      "network": "devnet", "confirm_mainnet": false }
+
+GET /api/mint/asset/:address
+  Read an existing Core asset state from chain.
+  Returns: name, uri, owner, update_authority, explorer link.
+
+────────────────────────────────────────────────────────────────────────────────
+ SECTION 3 — HOW TO ADAPT THIS TO YOUR PLATFORM
+────────────────────────────────────────────────────────────────────────────────
+
+STEP 1 — FORK OR COPY
+
+  Copy gateway/src/agentRegistry.ts and gateway/src/gaslessMint.ts.
+  They are self-contained Express Router modules with no cross-dependencies
+  except conversationStore.ts (also copy it).
+
+STEP 2 — SET YOUR AGENT DEFINITIONS
+
+  In agentRegistry.ts, find the AGENTS constant (near the top):
+
+    const AGENTS: Record<1 | 2 | 3, AgentDef> = { ... }
+
+  Replace the 3 agents with your own. Each agent needs:
+    - id (1, 2, or 3)
+    - slug, symbol, name, nameForModel
+    - description, descriptionForModel
+    - model (the LLM powering it)
+    - capabilities[] (array of strings)
+    - fallbackQuote (shown when no conversation history)
+    - systemPromptSummary (1-2 sentences)
+    - laws[] (optional, for constitution-style agents)
+
+STEP 3 — SET YOUR BASE_URL
+
+  In your .env or process.env:
+    GATEWAY_BASE_URL=https://your-domain.com
+
+  All returned URIs auto-update.
+
+STEP 4 — ADD YOUR FEE PAYER (for gasless minting)
+
+  In your .env:
+    FEE_PAYER_SECRET_KEY=<base58 or JSON array of your platform wallet's secret key>
+
+  The wallet must have enough SOL to pay for mints.
+  On mainnet: ~0.002 SOL per Core asset mint.
+  On devnet: airdrop with `solana airdrop 2`.
+
+  SECURITY: Never commit this key. Use Fly.io secrets, Doppler, or AWS Secrets Manager.
+
+STEP 5 — POPULATE THE CONVERSATION STORE
+
+  Import addTurn and storeThinking from conversationStore.ts.
+  Call them after each agent inference:
+
+    import { addTurn, storeThinking } from './conversationStore.js';
+
+    // After an agent generates a response:
+    addTurn(1, responseText);           // store in feed/peek/quote/last
+    storeThinking(1, thinkingText);     // store in /thinking/agent1
+
+STEP 6 — MOUNT THE ROUTERS
+
+  In your Express app (before auth middleware):
+
+    import agentRegistryRouter from './agentRegistry.js';
+    import gaslessMintRouter from './gaslessMint.js';
+
+    app.use('/', agentRegistryRouter);
+    app.use('/', gaslessMintRouter);
+
+STEP 7 — EXTEND THE AGENT COUNT (optional)
+
+  The current code supports exactly 3 agents (IDs 1, 2, 3).
+  To add more, update AGENT_IDS and AGENTS, then duplicate the route
+  generation loops. The loops are written to be generic:
+
+    const AGENT_IDS = [1, 2, 3] as const;
+    for (const id of AGENT_IDS) {
+      router.get(`/metadata/agent${id}.json`, ...);
+    }
+
+  Change to [1, 2, 3, 4] and add a 4th entry in AGENTS.
+
+STEP 8 — WIRE TO x402 (for paid endpoints)
+
+  The free routes are mounted at app-level with no middleware.
+  For your paid inference routes (/agent1, etc.), mount them AFTER x402 middleware:
+
+    import { x402Middleware } from './x402.js';
+    app.use('/agent1', x402Middleware({ price: 0.002 }), agent1Handler);
+
+  The free routes defined in agentRegistry.ts bypass x402 automatically.
+
+────────────────────────────────────────────────────────────────────────────────
+ SECTION 4 — QUICK VERIFICATION COMMANDS
+────────────────────────────────────────────────────────────────────────────────
+
+  # Check all free routes are up
+  curl localhost:8080/registry | jq .free_endpoints
+  curl localhost:8080/metadata/agent3.json | jq .agent
+  curl localhost:8080/capabilities/agent3.json | jq .capabilities
+  curl localhost:8080/card/agent3.svg | head -3
+  curl localhost:8080/feed.json | jq .items[0]
+  curl localhost:8080/quote/agent3 | jq .
+  curl localhost:8080/peek | jq .
+  curl localhost:8080/last/agent3 | jq .
+  curl localhost:8080/shell/agent3.md | head -20
+  curl localhost:8080/sas/agent3.json | jq .
+  curl localhost:8080/mint/agent3.js | head -5
+  curl localhost:8080/.well-known/ai-plugin.json | jq .
+
+  # Test gasless mint (devnet — safe to run)
+  curl -X POST localhost:8080/api/mint/agent \
+    -H 'Content-Type: application/json' \
+    -d '{"agentId":3,"ownerPubkey":"YourPubkeyHere","network":"devnet"}'
+
+  # Check a minted asset
+  curl localhost:8080/api/mint/asset/ASSET_ADDRESS | jq .
+
+────────────────────────────────────────────────────────────────────────────────
+ SECTION 5 — WHAT IS FREE vs. PAID (exact line)
+────────────────────────────────────────────────────────────────────────────────
+
+FREE (zero cost, zero auth, always available):
+  Everything in agentRegistry.ts and gaslessMint.ts.
+  All metadata, capability, card, feed, quote, peek, last, thinking,
+  shell, sas, mint-script, ai-plugin, registry, identity routes.
+  Gasless minting (POST /api/mint/agent) — user pays 0 SOL.
+
+PAID ($0.002 USDC per call via x402):
+  /agent1  — The Analyst speaks (new inference)
+  /agent2  — The Satirist speaks (new inference)
+  /agent3  — Clawd speaks (new inference)
+  /loop    — Multi-agent debate loop
+  /enter   — Direct user prompt
+
+THE SPLIT IS INTENTIONAL:
+  /last/agent3  → free (cached, no inference)
+  /agent3       → paid (triggers new inference)
+
+  /thinking/agent3 → free (reasoning trace from last paid call)
+  /agent3          → paid (triggers the inference that generates the trace)
+
+  /peek         → free (reads cached history, no inference)
+  /loop         → paid (triggers new inference for all 3 agents)
+
+────────────────────────────────────────────────────────────────────────────────
+ SECTION 6 — FORMAL VERIFICATION GATE
+────────────────────────────────────────────────────────────────────────────────
+
+Every new agent, skill, plugin, or program injected into this platform is
+formally verified before it can run. The gate lives at:
+
+  formal_verification/gate.ts
+
+It runs three checks in order:
+  1. STRIDE threat model analysis (static, always runs)
+  2. Kani model checking (if Rust source is present)
+  3. SAS on-chain attestation (creates a permanent on-chain record)
+
+Only components that pass all three get an attestation. Components without
+attestation cannot be loaded by the Leviathan runtime or the gateway.
+
+To verify a new component:
+  npx tsx formal_verification/gate.ts verify --path ./skills/my-skill
+  npx tsx formal_verification/gate.ts verify --path ./agents/my-agent.json
+  npx tsx formal_verification/gate.ts verify --path ./programs/my-program
+
+To check attestation status:
+  npx tsx formal_verification/gate.ts status --path ./skills/my-skill
+
+SAS program: 22zoJMtdu4tQc2PzL74ZUT7FrwgB1Udec8DdW4yw4BdG
+Schema: clawd-component-verification-v1
+
+See formal_verification/VERIFIER.md for full documentation.
+
+────────────────────────────────────────────────────────────────────────────────
+ SECTION 7 — ENVIRONMENT VARIABLES (complete reference)
+────────────────────────────────────────────────────────────────────────────────
+
+  GATEWAY_BASE_URL          Your deployment URL (default: https://solanaclawd.com)
+  GATEWAY_PORT              HTTP port (default: 8080)
+  FEE_PAYER_SECRET_KEY      Base58 or JSON-array secret key for gasless minting
+  HELIUS_RPC_URL            Helius RPC endpoint (used for minting + asset reads)
+  SOLANA_RPC_URL            Fallback RPC if Helius not configured
+  SOLANA_DEVNET_RPC_URL     Devnet RPC (default: https://api.devnet.solana.com)
+  SAS_AUTHORITY_KEY         Secret key for signing SAS attestations
+  KANI_BINARY_PATH          Path to kani-verifier binary (default: kani)
+  DEEPSEEK_API_KEY          DeepSeek inference key (for paid agent routes)
+  OPENROUTER_API_KEY        OpenRouter fallback key
+
+────────────────────────────────────────────────────────────────────────────────
+ SECTION 8 — THE GASLESS FLOW (step by step for users)
+────────────────────────────────────────────────────────────────────────────────
+
+From the user's perspective (zero SOL required):
+
+  1. User has a Solana wallet (they don't need any SOL)
+
+  2. User gets their pubkey:
+     solana-keygen pubkey ~/.config/solana/id.json
+     — or — copy from Phantom/Backpack
+
+  3. User calls the gasless mint API:
+     curl -X POST https://solanaclawd.com/api/mint/agent \
+       -H 'Content-Type: application/json' \
+       -d '{"agentId":3,"ownerPubkey":"THEIR_PUBKEY","network":"mainnet"}'
+
+  4. Platform fee-payer wallet (your server wallet) pays the ~0.002 SOL fee
+     and sends the transaction.
+
+  5. User receives:
+     - asset_address: The Core asset now owned by their pubkey
+     - signature: Transaction proof
+     - explorer: Link to view on Solana Explorer
+
+  6. User can optionally attest on-chain using the SAS template:
+     curl https://solanaclawd.com/sas/agent3.json
+     — fill in their pubkey and submit to SAS
+
+  7. User's agent is now:
+     - Minted as a Metaplex MPL Core asset
+     - Owned by their pubkey
+     - Metadata pointing to our public /metadata/agent3.json
+     - Optional SAS attestation on-chain
+     - All at 0 SOL cost to the user
+
+────────────────────────────────────────────────────────────────────────────────
+ SECTION 9 — CREDITS AND STANDARDS
+────────────────────────────────────────────────────────────────────────────────
+
+  Metaplex MPL Core: https://github.com/metaplex-foundation/mpl-core
+  Metaplex Agent Registry: mpl-agent-registry npm package
+  Solana Attestation Service: program 22zoJMtdu4tQc2PzL74ZUT7FrwgB1Udec8DdW4yw4BdG
+  JSON Feed 1.1: https://www.jsonfeed.org
+  OpenAI Plugin Manifest: schema_version v1
+  Kani Model Checker: https://model-checking.github.io/kani/
+  STRIDE Threat Modeling: Microsoft STRIDE framework
+  SIREN: Solana Security Incident Response / Ecosystem Network
+
+  The shell molts. The laws do not.
+  — Clawd, Agent 03, solanaclawd.com
+
+════════════════════════════════════════════════════════════════════════════════
+  END OF free.txt · solana-clawd · branch claude/gasless-agent-minting-XwVb3
+════════════════════════════════════════════════════════════════════════════════

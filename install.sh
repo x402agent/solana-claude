@@ -337,6 +337,54 @@ fi
 cd "$SRC_DIR"
 
 # ──────────────────────────────────────────────────────────────────────────────
+# Formal Verification Gate
+#
+# Every skill, agent, plugin, and program in this repository must pass the
+# three-layer gate (STRIDE → Kani → SAS) before it operates.
+#
+# On a fresh install we run a quick STRIDE scan over any skills/ subdirectories
+# that are NEW (not yet in skill-hub-registry.json) and warn the developer.
+# Use SKIP_FORMAL_VERIFY=1 to bypass during CI where the gate runs separately.
+# ──────────────────────────────────────────────────────────────────────────────
+FORMAL_VERIFY_GATE="$SRC_DIR/formal_verification/gate.ts"
+SKILL_HUB_CMD="$SRC_DIR/formal_verification/skill-hub.ts"
+SKILL_HUB_REGISTRY="$SRC_DIR/formal_verification/skill-hub-registry.json"
+
+run_formal_gate() {
+  local path="$1"
+  if command -v npx >/dev/null 2>&1 && [ -f "$FORMAL_VERIFY_GATE" ]; then
+    npx tsx "$FORMAL_VERIFY_GATE" verify --path "$path" 2>/dev/null && return 0
+    warn "Formal verification gate FAILED for $path — fix STRIDE issues before adding to the Skill Hub"
+    return 1
+  fi
+  # tsx not available yet — gate will run post Node install
+  return 0
+}
+
+if [ "${SKIP_FORMAL_VERIFY:-0}" != "1" ] && command -v npx >/dev/null 2>&1 && [ -f "$FORMAL_VERIFY_GATE" ]; then
+  step "formal verification gate — scanning skills/"
+  # Only scan directories that don't have a registered skill-hub entry yet
+  GATE_FAILURES=0
+  for skill_dir in "$SRC_DIR"/skills/*/; do
+    slug="$(basename "$skill_dir")"
+    # Skip if already registered (fast path)
+    if [ -f "$SKILL_HUB_REGISTRY" ] && grep -q "\"slug\": \"$slug\"" "$SKILL_HUB_REGISTRY" 2>/dev/null; then
+      continue
+    fi
+    run_formal_gate "$skill_dir" || GATE_FAILURES=$((GATE_FAILURES + 1))
+  done
+  if [ "$GATE_FAILURES" -gt 0 ]; then
+    warn "$GATE_FAILURES skill(s) failed the formal verification gate."
+    warn "Run: npx tsx $FORMAL_VERIFY_GATE verify --path skills/<slug>"
+    warn "Then: npx tsx $SKILL_HUB_CMD register --slug=<slug> --authority=<pubkey>"
+  else
+    ok "formal verification gate passed"
+  fi
+else
+  info "formal verification gate: will run after Node install (tsx not yet available)"
+fi
+
+# ──────────────────────────────────────────────────────────────────────────────
 # Build the Go binary
 # ──────────────────────────────────────────────────────────────────────────────
 GO_PKG=""
@@ -460,6 +508,22 @@ elif [ -f "$SRC_DIR/package.json" ] && command -v npm >/dev/null 2>&1; then
   fi
 
   ok "Node surfaces ready"
+
+  # Post-install formal verification gate (runs now that tsx is available)
+  if [ "${SKIP_FORMAL_VERIFY:-0}" != "1" ] && [ -f "$FORMAL_VERIFY_GATE" ]; then
+    step "post-install formal verification — skill-hub integrity check"
+    GATE_FAILURES=0
+    for skill_dir in "$SRC_DIR"/skills/*/; do
+      slug="$(basename "$skill_dir")"
+      if [ -f "$SKILL_HUB_REGISTRY" ] && grep -q "\"slug\": \"$slug\"" "$SKILL_HUB_REGISTRY" 2>/dev/null; then
+        continue
+      fi
+      npx tsx "$FORMAL_VERIFY_GATE" verify --path "$skill_dir" 2>/dev/null \
+        || GATE_FAILURES=$((GATE_FAILURES + 1))
+    done
+    [ "$GATE_FAILURES" -eq 0 ] && ok "skill-hub gate passed" \
+      || warn "$GATE_FAILURES skill(s) need formal verification before Skill Hub listing"
+  fi
 else
   warn "Node/npm not found or no package.json — skipping JS workspace install"
 fi
@@ -640,6 +704,10 @@ write_config() {
   "sasProgramId":    "22zoJMtdu4tQc2PzL74ZUT7FrwgB1Udec8DdW4yw4BdG",
   "scope":           "@openclawdsolana",
   "skillsCatalog":   "$OPENCLAWD_BASE_URL/skills",
+  "skillHub":        "$OPENCLAWD_BASE_URL/api/skills",
+  "skillHubRegister":"$OPENCLAWD_BASE_URL/api/skills/register",
+  "skillHubProgram": "agnmDKzZkv63sRhPFvm3iWpxaopgTRcohXA6CSYSXvQ",
+  "mplAgentRegistry":"Ag8004rWo8ao8AUKhLk78iv2nLQpZMyBPXiAh5QLbFiE",
   "extensionsDir":   "extensions",
   "skillsDir":       "skills",
   "voice": {
