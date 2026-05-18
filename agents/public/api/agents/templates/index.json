@@ -1,0 +1,331 @@
+{
+  "$schema": "https://solanaclawd.com/schemas/agent-template-index.v1.json",
+  "apiVersion": "1.0",
+  "generatedAt": "2026-05-18T14:15:20.811Z",
+  "hub": {
+    "gallery": "https://x402.wtf/agents/templates",
+    "api": "https://x402.wtf/api/agents/templates",
+    "schema": "https://solanaclawd.com/schemas/agent-template.v1.json"
+  },
+  "stats": {
+    "totalTemplates": 5,
+    "byCategory": {
+      "defi": 1,
+      "research": 1,
+      "security": 1,
+      "infrastructure": 1,
+      "trading": 1
+    }
+  },
+  "templates": [
+    {
+      "templateId": "defi-analyst",
+      "templateName": "Solana DeFi Analyst",
+      "templateDescription": "Template for building a DeFi-protocol-focused analyst — yield math, liquidation thresholds, oracle risk awareness.",
+      "templateCategory": "defi",
+      "templateAvatar": "📊",
+      "variableCount": 4,
+      "requiredVariables": [
+        "AGENT_TITLE",
+        "TARGET_PROTOCOL",
+        "AUDIT_STATUS"
+      ],
+      "optionalVariables": [
+        "SECONDARY_PROTOCOLS"
+      ],
+      "variables": [
+        {
+          "name": "AGENT_TITLE",
+          "description": "Display name of your agent",
+          "example": "Marinade Yield Analyst",
+          "required": true
+        },
+        {
+          "name": "TARGET_PROTOCOL",
+          "description": "The primary Solana protocol this analyst covers",
+          "example": "Marinade Finance (mSOL) + Marinade Native",
+          "required": true
+        },
+        {
+          "name": "SECONDARY_PROTOCOLS",
+          "description": "Comma-separated list of related protocols to cross-reference",
+          "example": "Kamino, MarginFi, Drift",
+          "required": false
+        },
+        {
+          "name": "AUDIT_STATUS",
+          "description": "Known audit firms and dates for the protocol",
+          "example": "OtterSec (Jun 2024), Neodyme (Nov 2023)",
+          "required": true
+        }
+      ],
+      "path": "templates/defi-analyst.template.json",
+      "schemaVersion": 1,
+      "tags": [
+        "solana",
+        "defi",
+        "analysis",
+        "yield"
+      ],
+      "verified": false,
+      "sasProgram": null,
+      "verifierUI": null,
+      "schemas": null,
+      "deploy": {
+        "template": "/api/agents/templates/defi-analyst.json",
+        "create": "/agents/mint?fromTemplate=defi-analyst"
+      }
+    },
+    {
+      "templateId": "firecrawl-researcher",
+      "templateName": "Firecrawl Researcher",
+      "templateDescription": "Template for spinning up a site-specific web researcher backed by Firecrawl. Locks the agent to a domain (or short list of domains), gives it scrape/search/map/crawl tools, and enforces a sourced-summary output contract.",
+      "templateCategory": "research",
+      "templateAvatar": "🔥",
+      "variableCount": 5,
+      "requiredVariables": [
+        "AGENT_TITLE",
+        "PRIMARY_DOMAIN",
+        "RESEARCH_GOAL"
+      ],
+      "optionalVariables": [
+        "SECONDARY_DOMAINS",
+        "MAX_CRAWL_PAGES"
+      ],
+      "variables": [
+        {
+          "name": "AGENT_TITLE",
+          "description": "Display name of your researcher",
+          "example": "Solana Foundation Docs Researcher",
+          "required": true
+        },
+        {
+          "name": "PRIMARY_DOMAIN",
+          "description": "The main site this agent researches. Must be an absolute URL.",
+          "example": "https://docs.solana.com",
+          "required": true
+        },
+        {
+          "name": "SECONDARY_DOMAINS",
+          "description": "Comma-separated list of additional domains the agent is allowed to consult.",
+          "example": "https://github.com/solana-labs, https://solana.com",
+          "required": false
+        },
+        {
+          "name": "RESEARCH_GOAL",
+          "description": "What the agent is optimising for. Drives tool selection and summary style.",
+          "example": "Surface upgrade timelines, breaking changes, and migration paths for SPL programs.",
+          "required": true
+        },
+        {
+          "name": "MAX_CRAWL_PAGES",
+          "description": "Hard cap on pages per `web_crawl` call. Defaults to 100 if omitted.",
+          "example": "100",
+          "required": false
+        }
+      ],
+      "path": "templates/firecrawl-researcher.template.json",
+      "schemaVersion": 1,
+      "tags": [
+        "firecrawl",
+        "research",
+        "scraping",
+        "openclawd",
+        "web"
+      ],
+      "verified": false,
+      "sasProgram": null,
+      "verifierUI": null,
+      "schemas": null,
+      "deploy": {
+        "template": "/api/agents/templates/firecrawl-researcher.json",
+        "create": "/agents/mint?fromTemplate=firecrawl-researcher"
+      }
+    },
+    {
+      "templateId": "screener",
+      "templateName": "Solana Risk Screener",
+      "templateDescription": "Template for skeptical-by-default risk screeners — memecoins, new protocols, unaudited programs, or NFT collections.",
+      "templateCategory": "security",
+      "templateAvatar": "🛡️",
+      "variableCount": 4,
+      "requiredVariables": [
+        "AGENT_TITLE",
+        "TARGET_ASSET_TYPE",
+        "CHECK_LIST"
+      ],
+      "optionalVariables": [
+        "HARD_PASS_THRESHOLD"
+      ],
+      "variables": [
+        {
+          "name": "AGENT_TITLE",
+          "description": "Display name of your screener",
+          "example": "Solana Meme Launch Screener",
+          "required": true
+        },
+        {
+          "name": "TARGET_ASSET_TYPE",
+          "description": "What this screener evaluates",
+          "example": "New SPL tokens launched within 72 hours",
+          "required": true
+        },
+        {
+          "name": "CHECK_LIST",
+          "description": "Comma-separated list of core checks",
+          "example": "Top holder concentration, dev wallet history, LP lock status, metadata authenticity, mint authority renounced",
+          "required": true
+        },
+        {
+          "name": "HARD_PASS_THRESHOLD",
+          "description": "Score below which the verdict is HARD PASS",
+          "example": "30",
+          "required": false
+        }
+      ],
+      "path": "templates/screener.template.json",
+      "schemaVersion": 1,
+      "tags": [
+        "solana",
+        "security",
+        "screening",
+        "risk"
+      ],
+      "verified": false,
+      "sasProgram": null,
+      "verifierUI": null,
+      "schemas": null,
+      "deploy": {
+        "template": "/api/agents/templates/screener.json",
+        "create": "/agents/mint?fromTemplate=screener"
+      }
+    },
+    {
+      "templateId": "solana-attestation-agent",
+      "templateName": "Solana Attestation Agent",
+      "templateDescription": "Birth-and-attest service for OpenClawd lobsters. Stamps every newborn agent with a Solana Attestation Service credential, records the OpenClawd Skill + Agent Identity schemas on chain, mints a Metaplex MPL Core asset for the agent's identity, and exposes a verify path. Talks to the SAS program at 22zoJMtdu4tQc2PzL74ZUT7FrwgB1Udec8DdW4yw4BdG and the public verifier UI at attest.solana.com.",
+      "templateCategory": "infrastructure",
+      "templateAvatar": "⛓️",
+      "variableCount": 5,
+      "requiredVariables": [
+        "AGENT_TITLE",
+        "CREDENTIAL_AUTHORITY",
+        "CREDENTIAL_NAME"
+      ],
+      "optionalVariables": [
+        "RPC_URL",
+        "VAULT_ADDRESS"
+      ],
+      "variables": [
+        {
+          "name": "AGENT_TITLE",
+          "description": "Display name for this attestation agent.",
+          "example": "OpenClawd Spawn Notary",
+          "required": true
+        },
+        {
+          "name": "CREDENTIAL_AUTHORITY",
+          "description": "Public key (base58) of the on-chain authority that owns the OpenClawd credential. This is the keypair that signs every CreateSchema and CreateAttestation. Must already be funded.",
+          "example": "AuthxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxX",
+          "required": true
+        },
+        {
+          "name": "CREDENTIAL_NAME",
+          "description": "Human-readable credential name. Becomes part of the credential PDA seed (first 32 bytes only).",
+          "example": "OpenClawd Skill Authority",
+          "required": true
+        },
+        {
+          "name": "RPC_URL",
+          "description": "Solana RPC endpoint. Defaults to mainnet via Helius. Use a devnet URL while testing.",
+          "example": "https://mainnet.helius-rpc.com/?api-key=...",
+          "required": false
+        },
+        {
+          "name": "VAULT_ADDRESS",
+          "description": "Hermes vault PDA the newborn agent is custodied under. Required for the Agent Identity attestation.",
+          "example": "VaultxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxX",
+          "required": false
+        }
+      ],
+      "path": "templates/solana-attestation-agent.template.json",
+      "schemaVersion": 1,
+      "tags": [
+        "solana",
+        "attestation",
+        "metaplex",
+        "formal-verification",
+        "openclawd",
+        "sas"
+      ],
+      "verified": true,
+      "sasProgram": "22zoJMtdu4tQc2PzL74ZUT7FrwgB1Udec8DdW4yw4BdG",
+      "verifierUI": "https://attest.solana.com",
+      "schemas": {
+        "skill": "OpenClawdSkillAttestation",
+        "agentIdentity": "OpenClawdAgentIdentity"
+      },
+      "deploy": {
+        "template": "/api/agents/templates/solana-attestation-agent.json",
+        "create": "/agents/mint?fromTemplate=solana-attestation-agent"
+      }
+    },
+    {
+      "templateId": "trading-agent",
+      "templateName": "Solana Trading Agent",
+      "templateDescription": "Template for building a trading-focused Solana agent — Jupiter routing, slippage math, priority fee tiers, and Jito tip logic baked in.",
+      "templateCategory": "trading",
+      "templateAvatar": "📈",
+      "variableCount": 4,
+      "requiredVariables": [
+        "AGENT_TITLE",
+        "SCOPE_DESCRIPTION",
+        "RISK_STYLE"
+      ],
+      "optionalVariables": [
+        "OPENING_MESSAGE"
+      ],
+      "variables": [
+        {
+          "name": "AGENT_TITLE",
+          "description": "Display name of your agent",
+          "example": "JUP Alpha Hunter",
+          "required": true
+        },
+        {
+          "name": "SCOPE_DESCRIPTION",
+          "description": "What this agent trades — assets, markets, DEXs",
+          "example": "Mid-cap Solana memecoins on pump.fun and graduated Raydium CPMM pools",
+          "required": true
+        },
+        {
+          "name": "RISK_STYLE",
+          "description": "Risk persona — 'conservative', 'balanced', 'aggressive-degen'",
+          "example": "balanced",
+          "required": true
+        },
+        {
+          "name": "OPENING_MESSAGE",
+          "description": "First message shown to user",
+          "example": "I hunt alpha on Solana memecoins. Drop a ticker.",
+          "required": false
+        }
+      ],
+      "path": "templates/trading-agent.template.json",
+      "schemaVersion": 1,
+      "tags": [
+        "solana",
+        "trading",
+        "{{RISK_STYLE}}"
+      ],
+      "verified": false,
+      "sasProgram": null,
+      "verifierUI": null,
+      "schemas": null,
+      "deploy": {
+        "template": "/api/agents/templates/trading-agent.json",
+        "create": "/agents/mint?fromTemplate=trading-agent"
+      }
+    }
+  ]
+}

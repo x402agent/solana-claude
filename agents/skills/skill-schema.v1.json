@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://solanaclawd.com/schemas/skill-schema.v1.json",
+  "title": "OpenClawd Skill Attestation",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "skill_id",
+    "verifier_pubkey",
+    "proof_hash",
+    "verification_timestamp",
+    "is_formally_verified"
+  ],
+  "properties": {
+    "skill_id": {
+      "type": "string",
+      "description": "Stable skill identifier matching the folder name under agents/skills/."
+    },
+    "verifier_pubkey": {
+      "type": "string",
+      "description": "Base58 Solana public key for the verifier or authority that signed the attestation."
+    },
+    "proof_hash": {
+      "type": "string",
+      "description": "Digest of the audited skill artifact bundle or formal proof package."
+    },
+    "verification_timestamp": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Unix timestamp in milliseconds for the verification event."
+    },
+    "is_formally_verified": {
+      "type": "boolean",
+      "description": "True only when the skill has passed the OpenClawd verification workflow and has an issued attestation."
+    }
+  }
+}

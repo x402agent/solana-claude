@@ -6,8 +6,8 @@
   "image": "https://x402.wtf/nich.jpg",
   "external_url": "https://x402.wtf/agents/wallet-security-advisor",
   "active": true,
-  "createdAt": "2024-12-16",
-  "updatedAt": "2026-05-17T17:58:23.377Z",
+  "createdAt": "2026-04-16",
+  "updatedAt": "2026-05-18T14:15:20.811Z",
   "tags": [
     "security",
     "wallet",
@@ -15,7 +15,10 @@
     "best-practices",
     "hardware",
     "clawd",
-    "solana-clawd"
+    "solana",
+    "phantom",
+    "solflare",
+    "ledger"
   ],
   "categories": [
     "security"
@@ -62,7 +65,9 @@
     "token-gated"
   ],
   "metaplex": {
-    "programs": [],
+    "programs": [
+      "agent-registry"
+    ],
     "sdk": "@metaplex-foundation/mpl-agent-registry",
     "expectedIdentity": {
       "asset": null,
@@ -79,7 +84,10 @@
   },
   "openclawd": {
     "identifier": "wallet-security-advisor",
-    "capabilities": [],
+    "capabilities": [
+      "read-only",
+      "a2a-message"
+    ],
     "payment": null,
     "agentToken": null
   }

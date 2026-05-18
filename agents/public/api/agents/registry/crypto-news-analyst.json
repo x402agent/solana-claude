@@ -7,7 +7,7 @@
   "external_url": "https://x402.wtf/agents/crypto-news-analyst",
   "active": true,
   "createdAt": "2026-01-03",
-  "updatedAt": "2026-05-17T17:58:23.377Z",
+  "updatedAt": "2026-05-18T14:15:20.811Z",
   "tags": [
     "news",
     "analysis",
@@ -15,10 +15,12 @@
     "research",
     "sentiment",
     "clawd",
-    "solana-clawd"
+    "solana",
+    "narrative",
+    "analytics"
   ],
   "categories": [
-    "crypto"
+    "analytics"
   ],
   "owner": {
     "organization": "OpenClawd",
@@ -62,7 +64,9 @@
     "token-gated"
   ],
   "metaplex": {
-    "programs": [],
+    "programs": [
+      "agent-registry"
+    ],
     "sdk": "@metaplex-foundation/mpl-agent-registry",
     "expectedIdentity": {
       "asset": null,
@@ -79,7 +83,10 @@
   },
   "openclawd": {
     "identifier": "crypto-news-analyst",
-    "capabilities": [],
+    "capabilities": [
+      "read-only",
+      "a2a-message"
+    ],
     "payment": null,
     "agentToken": null
   }

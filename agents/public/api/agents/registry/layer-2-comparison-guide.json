@@ -6,8 +6,8 @@
   "image": "https://x402.wtf/nich.jpg",
   "external_url": "https://x402.wtf/agents/layer-2-comparison-guide",
   "active": true,
-  "createdAt": "2024-12-16",
-  "updatedAt": "2026-05-17T17:58:23.377Z",
+  "createdAt": "2026-04-16",
+  "updatedAt": "2026-05-18T14:15:20.811Z",
   "tags": [
     "layer-2",
     "scaling",
@@ -15,7 +15,7 @@
     "optimism",
     "ethereum",
     "clawd",
-    "solana-clawd"
+    "solana"
   ],
   "categories": [
     "defi"
@@ -62,7 +62,9 @@
     "token-gated"
   ],
   "metaplex": {
-    "programs": [],
+    "programs": [
+      "agent-registry"
+    ],
     "sdk": "@metaplex-foundation/mpl-agent-registry",
     "expectedIdentity": {
       "asset": null,
@@ -79,7 +81,10 @@
   },
   "openclawd": {
     "identifier": "layer-2-comparison-guide",
-    "capabilities": [],
+    "capabilities": [
+      "read-only",
+      "a2a-message"
+    ],
     "payment": null,
     "agentToken": null
   }

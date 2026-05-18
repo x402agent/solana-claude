@@ -4,7 +4,12 @@
     "getAgentsByLanguage": "GET /index.{locale}.json",
     "getSingleAgent": "GET /{agent-id}.json",
     "getSingleAgentLocalized": "GET /{agent-id}.{locale}.json",
-    "getManifest": "GET /agents-manifest.json"
+    "getManifest": "GET /agents-manifest.json",
+    "getTemplateIndex": "GET /api/agents/templates/index.json",
+    "getTemplate": "GET /api/agents/templates/{template-id}.json",
+    "getSkillIndex": "GET /api/skills/index.json",
+    "getSkill": "GET /api/skills/{skill-id}.json",
+    "getSkillSchema": "GET /api/skills/skill-schema.v1.json"
   },
   "agents": {
     "clawd": {
@@ -253,16 +258,21 @@
     }
   },
   "apiVersion": "1.0",
-  "categories": ["trading", "defi", "portfolio", "security", "education"],
-  "description": "Production-ready AI agent definitions API - 59 specialized agents for DeFi, portfolio management, trading, and Web3 workflows",
-  "documentation": "https://clawd.click/docs/API.md",
+  "categories": ["trading", "defi", "security", "education", "governance", "research", "infrastructure", "tools", "crypto", "programming"],
+  "description": "OpenClawd agent registry and template hub — Solana-native agents, installable templates, and formally attestable skills for x402.wtf.",
+  "documentation": "https://x402.wtf/agents/docs/API.md",
   "endpoints": {
     "allAgentsEnglish": "https://clawd.click/index.json",
     "allAgentsByLanguage": "https://clawd.click/index.{locale}.json",
     "singleAgent": "https://clawd.click/{agent-id}.json",
     "singleAgentByLanguage": "https://clawd.click/{agent-id}.{locale}.json",
     "manifest": "https://clawd.click/agents-manifest.json",
-    "schema": "https://clawd.click/schema/clawdAgentSchema_v1.json"
+    "schema": "https://clawd.click/schema/clawdAgentSchema_v1.json",
+    "templateIndex": "https://x402.wtf/api/agents/templates/index.json",
+    "template": "https://x402.wtf/api/agents/templates/{template-id}.json",
+    "skillIndex": "https://x402.wtf/api/skills/index.json",
+    "skill": "https://x402.wtf/api/skills/{skill-id}.json",
+    "skillSchema": "https://x402.wtf/api/skills/skill-schema.v1.json"
   },
   "features": [
     "59 specialized AI agents",
@@ -274,22 +284,26 @@
     "Universal compatibility",
     "No vendor lock-in",
     "Machine-readable indexes",
-    "Automated i18n workflow"
+    "Automated i18n workflow",
+    "One-shot agent template registry",
+    "Formally attestable OpenClawd skill hub"
   ],
-  "homepage": "https://github.com/nirholas/defi-agents",
+  "homepage": "https://x402.wtf/agents",
   "license": "MIT",
-  "name": "DeFi Agents API",
+  "name": "OpenClawd Agents API",
   "repository": {
     "type": "git",
-    "url": "https://github.com/nirholas/defi-agents.git"
+    "url": "https://github.com/x402agent/openclawd.git"
   },
   "schemaVersion": 1,
   "stats": {
-    "totalAgents": 60,
+    "totalAgents": 134,
+    "totalTemplates": 5,
+    "totalSkills": 20,
     "supportedLanguages": 18,
-    "categories": 5,
+    "categories": 10,
     "clawdAgents": 24,
-    "defiAgents": 36
+    "defiAgents": 68
   },
   "supportedLanguages": [
     "en-US",
@@ -311,14 +325,12 @@
     "tr-TR",
     "vi-VN"
   ],
-  "updated": "2025-12-21",
+  "updated": "2026-05-18",
   "usage": {
-    "curl": "curl https://clawd.click/index.json",
-    "python": "import requests; agents = requests.get('https://clawd.click/index.json').json()",
-    "javascript": "const agents = await fetch('https://clawd.click/index.json').then(r => r.json())",
-    "documentation": "https://github.com/nirholas/defi-agents/blob/main/docs/API.md"
+    "curl": "curl https://x402.wtf/api/agents/agents-catalog.json",
+    "python": "import requests; agents = requests.get('https://x402.wtf/api/agents/agents-catalog.json').json()",
+    "javascript": "const agents = await fetch('https://x402.wtf/api/agents/agents-catalog.json').then(r => r.json())",
+    "documentation": "https://x402.wtf/agents/docs/API.md"
   },
   "version": "1.0.0"
 }
-
-

@@ -1,0 +1,93 @@
+{
+  "schemaVersion": "erc-8004-agent-registration-v1",
+  "protocol": "metaplex-agent-registry",
+  "name": "Solana Validator Picker",
+  "description": "Pick a validator or LST by commission, uptime, MEV rewards, and decentralization impact",
+  "image": "https://x402.wtf/nich.jpg",
+  "external_url": "https://x402.wtf/agents/solana-validator-picker",
+  "active": true,
+  "createdAt": "2026-04-16",
+  "updatedAt": "2026-05-18T14:15:20.811Z",
+  "tags": [
+    "solana",
+    "staking",
+    "validator",
+    "lst",
+    "governance",
+    "one-shot",
+    "clawd"
+  ],
+  "categories": [
+    "education"
+  ],
+  "owner": {
+    "organization": "OpenClawd",
+    "website": "https://x402.wtf",
+    "token": {
+      "symbol": "CLAWD",
+      "chain": "solana",
+      "mint": "8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump"
+    }
+  },
+  "services": [
+    {
+      "name": "web",
+      "endpoint": "https://x402.wtf/agents/solana-validator-picker"
+    },
+    {
+      "name": "A2A",
+      "endpoint": "https://x402.wtf/api/agents/a2a",
+      "version": "0.3.0"
+    },
+    {
+      "name": "catalog",
+      "endpoint": "https://x402.wtf/api/agents/catalog/solana-validator-picker.json"
+    },
+    {
+      "name": "registration",
+      "endpoint": "https://x402.wtf/api/agents/registry/solana-validator-picker.json"
+    }
+  ],
+  "registrations": [
+    {
+      "agentId": "openclawd:solana-validator-picker",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration",
+      "registrationUri": "https://x402.wtf/api/agents/registry/solana-validator-picker.json"
+    }
+  ],
+  "supportedTrust": [
+    "reputation",
+    "crypto-economic",
+    "token-gated"
+  ],
+  "metaplex": {
+    "programs": [
+      "agent-registry"
+    ],
+    "sdk": "@metaplex-foundation/mpl-agent-registry",
+    "expectedIdentity": {
+      "asset": null,
+      "agentIdentityPda": null,
+      "assetSignerPda": null,
+      "executiveProfilePda": null
+    },
+    "registrationFlow": [
+      "mint MPL Core agent asset",
+      "register AgentIdentity with this registrationUri",
+      "optionally register an executive profile",
+      "delegate execution only after operator review"
+    ]
+  },
+  "openclawd": {
+    "identifier": "solana-validator-picker",
+    "capabilities": [
+      "stake",
+      "unstake",
+      "read-only",
+      "a2a-message"
+    ],
+    "payment": null,
+    "agentToken": null
+  }
+}

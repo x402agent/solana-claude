@@ -1,0 +1,94 @@
+{
+  "schemaVersion": "erc-8004-agent-registration-v1",
+  "protocol": "metaplex-agent-registry",
+  "name": "Solana Kamino Vault Picker",
+  "description": "Pick the right Kamino lending, Multiply, or Liquidity vault with net APY, liquidation math, and risk breakdown",
+  "image": "https://x402.wtf/nich.jpg",
+  "external_url": "https://x402.wtf/agents/solana-kamino-picker",
+  "active": true,
+  "createdAt": "2026-04-16",
+  "updatedAt": "2026-05-18T14:15:20.811Z",
+  "tags": [
+    "solana",
+    "kamino",
+    "lending",
+    "yield",
+    "defi",
+    "one-shot",
+    "clawd"
+  ],
+  "categories": [
+    "defi"
+  ],
+  "owner": {
+    "organization": "OpenClawd",
+    "website": "https://x402.wtf",
+    "token": {
+      "symbol": "CLAWD",
+      "chain": "solana",
+      "mint": "8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump"
+    }
+  },
+  "services": [
+    {
+      "name": "web",
+      "endpoint": "https://x402.wtf/agents/solana-kamino-picker"
+    },
+    {
+      "name": "A2A",
+      "endpoint": "https://x402.wtf/api/agents/a2a",
+      "version": "0.3.0"
+    },
+    {
+      "name": "catalog",
+      "endpoint": "https://x402.wtf/api/agents/catalog/solana-kamino-picker.json"
+    },
+    {
+      "name": "registration",
+      "endpoint": "https://x402.wtf/api/agents/registry/solana-kamino-picker.json"
+    }
+  ],
+  "registrations": [
+    {
+      "agentId": "openclawd:solana-kamino-picker",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration",
+      "registrationUri": "https://x402.wtf/api/agents/registry/solana-kamino-picker.json"
+    }
+  ],
+  "supportedTrust": [
+    "reputation",
+    "crypto-economic",
+    "token-gated"
+  ],
+  "metaplex": {
+    "programs": [
+      "agent-registry"
+    ],
+    "sdk": "@metaplex-foundation/mpl-agent-registry",
+    "expectedIdentity": {
+      "asset": null,
+      "agentIdentityPda": null,
+      "assetSignerPda": null,
+      "executiveProfilePda": null
+    },
+    "registrationFlow": [
+      "mint MPL Core agent asset",
+      "register AgentIdentity with this registrationUri",
+      "optionally register an executive profile",
+      "delegate execution only after operator review"
+    ]
+  },
+  "openclawd": {
+    "identifier": "solana-kamino-picker",
+    "capabilities": [
+      "lending-deposit",
+      "lending-withdraw",
+      "swap-execution",
+      "read-only",
+      "a2a-message"
+    ],
+    "payment": null,
+    "agentToken": null
+  }
+}

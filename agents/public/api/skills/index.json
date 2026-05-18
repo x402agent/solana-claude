@@ -1,0 +1,503 @@
+{
+  "$schema": "https://solanaclawd.com/schemas/skill-hub.v1.json",
+  "apiVersion": "1.0",
+  "generatedAt": "2026-05-18T14:15:20.811Z",
+  "hub": {
+    "gallery": "https://x402.wtf/skills",
+    "api": "https://x402.wtf/api/skills",
+    "attestation": "https://attest.solana.com",
+    "sasProgram": "22zoJMtdu4tQc2PzL74ZUT7FrwgB1Udec8DdW4yw4BdG",
+    "credentialAuthority": "8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump"
+  },
+  "formalVerification": {
+    "schema": "skill-schema.v1.json",
+    "sasSchema": "OpenClawdSkillAttestation",
+    "layoutBytes": [
+      12,
+      32,
+      12,
+      8,
+      1
+    ],
+    "fieldNames": [
+      "skill_id",
+      "verifier_pubkey",
+      "proof_hash",
+      "verification_timestamp",
+      "is_formally_verified"
+    ],
+    "verifierUI": "https://attest.solana.com",
+    "workflowDoc": "https://x402.wtf/skills/verify"
+  },
+  "stats": {
+    "totalSkills": 20,
+    "verifiedSkills": 0,
+    "pendingVerification": 20,
+    "byCategory": {
+      "pump-protocol": 13,
+      "typescript": 2,
+      "security": 1,
+      "solana-dev": 2,
+      "wallet": 2
+    }
+  },
+  "skills": [
+    {
+      "skillId": "pump-admin-ops",
+      "name": "pump-admin-ops",
+      "description": "Admin and authority operations for the Pump protocol — set coin creator, update token incentives, set IDL authority, claim cashback, Mayhem mode, and BothPrograms cross-program admin instructions.",
+      "category": "pump-protocol",
+      "path": "pump-admin-ops/SKILL.md",
+      "url": "https://x402.wtf/api/skills/pump-admin-ops",
+      "tags": [
+        "pump",
+        "solana",
+        "admin",
+        "ops"
+      ],
+      "requiredEnv": [
+        "SOLANA_RPC_URL"
+      ],
+      "homepage": "https://github.com/nirholas/pump-fun-sdk",
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "pump-ai-agents",
+      "name": "pump-ai-agents",
+      "description": "AI agent integration layer for the Pump SDK — agent instruction files, .well-known discovery, LLM context documents, 15+ skill files, MCP server prompts, and terminal management rules for GitHub Copilot, Claude, and Gemini.",
+      "category": "pump-protocol",
+      "path": "pump-ai-agents/SKILL.md",
+      "url": "https://x402.wtf/api/skills/pump-ai-agents",
+      "tags": [
+        "pump",
+        "solana",
+        "ai",
+        "agents"
+      ],
+      "requiredEnv": [],
+      "homepage": "https://github.com/nirholas/pump-fun-sdk",
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "pump-bonding-curve",
+      "name": "pump-bonding-curve",
+      "description": "Constant-product AMM bonding curve math for Pump token pricing — buy/sell quoting, fee-aware calculations, market cap computation, tiered fees, ceiling division, virtual vs real reserves, and edge-case handling.",
+      "category": "pump-protocol",
+      "path": "pump-bonding-curve/SKILL.md",
+      "url": "https://x402.wtf/api/skills/pump-bonding-curve",
+      "tags": [
+        "pump",
+        "solana",
+        "bonding",
+        "curve"
+      ],
+      "requiredEnv": [],
+      "homepage": "https://github.com/nirholas/pump-fun-sdk",
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "pump-build-release",
+      "name": "pump-build-release",
+      "description": "Build and release pipeline for the Pump SDK — tsup TypeScript builds, Cargo release profiles, semantic release with commitizen, npm publishing, linting, Makefile targets, Vercel deployment, and MCP server distribution.",
+      "category": "pump-protocol",
+      "path": "pump-build-release/SKILL.md",
+      "url": "https://x402.wtf/api/skills/pump-build-release",
+      "tags": [
+        "pump",
+        "solana",
+        "build",
+        "release"
+      ],
+      "requiredEnv": [],
+      "homepage": "https://github.com/nirholas/pump-fun-sdk",
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "pump-claims-readonly",
+      "name": "pump-claims-readonly",
+      "description": "Read-only query methods for PumpFun claims — unclaimed token rewards, creator vault balances, volume accumulators, distributable fees, and current-day token previews across Pump and PumpAMM programs.",
+      "category": "pump-protocol",
+      "path": "pump-claims-readonly/SKILL.md",
+      "url": "https://x402.wtf/api/skills/pump-claims-readonly",
+      "tags": [
+        "pump",
+        "solana",
+        "claims",
+        "readonly"
+      ],
+      "requiredEnv": [
+        "SOLANA_RPC_URL"
+      ],
+      "homepage": "https://github.com/nirholas/pump-fun-sdk",
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "pump-fee-sharing",
+      "name": "pump-fee-sharing",
+      "description": "Configure and distribute creator fees to multiple shareholders using the PumpFees program with BPS-based share allocation, admin management, and cross-program fee consolidation for graduated tokens.",
+      "category": "pump-protocol",
+      "path": "pump-fee-sharing/SKILL.md",
+      "url": "https://x402.wtf/api/skills/pump-fee-sharing",
+      "tags": [
+        "pump",
+        "solana",
+        "fee",
+        "sharing"
+      ],
+      "requiredEnv": [
+        "SOLANA_RPC_URL"
+      ],
+      "homepage": "https://github.com/nirholas/pump-fun-sdk",
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "pump-fee-system",
+      "name": "pump-fee-system",
+      "description": "Complete Pump protocol fee system — tiered protocol fees based on market cap, creator fee collection across two programs, basis point arithmetic, and ceiling division for dust-safe calculations.",
+      "category": "pump-protocol",
+      "path": "pump-fee-system/SKILL.md",
+      "url": "https://x402.wtf/api/skills/pump-fee-system",
+      "tags": [
+        "pump",
+        "solana",
+        "fee",
+        "system"
+      ],
+      "requiredEnv": [],
+      "homepage": "https://github.com/nirholas/pump-fun-sdk",
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "pump-mcp-server",
+      "name": "pump-mcp-server",
+      "description": "Model Context Protocol server exposing 53 tools, 3 resource types, and 3 prompts for AI agent consumption — quoting, building transactions, fee management, analytics, AMM operations, social fees, wallet operations over stdio transport.",
+      "category": "pump-protocol",
+      "path": "pump-mcp-server/SKILL.md",
+      "url": "https://x402.wtf/api/skills/pump-mcp-server",
+      "tags": [
+        "pump",
+        "solana",
+        "mcp",
+        "server"
+      ],
+      "requiredEnv": [],
+      "homepage": "https://github.com/nirholas/pump-fun-sdk",
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "pump-rust-vanity",
+      "name": "pump-rust-vanity",
+      "description": "Production-grade multi-threaded Rust vanity address generator for Solana — 100K+ keys/sec using Rayon parallel iterators with solana-sdk, Base58 pattern matching, prefix/suffix support, security-hardened file output, and Criterion benchmarks.",
+      "category": "pump-protocol",
+      "path": "pump-rust-vanity/SKILL.md",
+      "url": "https://x402.wtf/api/skills/pump-rust-vanity",
+      "tags": [
+        "pump",
+        "solana",
+        "rust",
+        "vanity"
+      ],
+      "requiredEnv": [],
+      "homepage": "https://github.com/nirholas/pump-fun-sdk",
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "pump-sdk-core",
+      "name": "pump-sdk-core",
+      "description": "Build and extend the core Pump SDK — an offline-first TypeScript SDK that constructs Solana TransactionInstructions for token creation, buying, selling, migration, and creator fee collection across three on-chain programs (Pump, PumpAMM, PumpFees).",
+      "category": "typescript",
+      "path": "pump-sdk-core/SKILL.md",
+      "url": "https://x402.wtf/api/skills/pump-sdk-core",
+      "tags": [
+        "pump",
+        "solana",
+        "sdk",
+        "core"
+      ],
+      "requiredEnv": [
+        "SOLANA_RPC_URL"
+      ],
+      "homepage": "https://github.com/nirholas/pump-fun-sdk",
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "pump-security",
+      "name": "pump-security",
+      "description": "Defense-in-depth security across Rust, TypeScript, and Bash for the Pump SDK — cryptographic key handling, memory zeroization, secure file I/O, input validation, privilege management, dependency auditing, and a 60+ item security checklist.",
+      "category": "security",
+      "path": "pump-security/SKILL.md",
+      "url": "https://x402.wtf/api/skills/pump-security",
+      "tags": [
+        "pump",
+        "solana",
+        "security"
+      ],
+      "requiredEnv": [],
+      "homepage": "https://github.com/nirholas/pump-fun-sdk",
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "pump-shell-scripts",
+      "name": "pump-shell-scripts",
+      "description": "Production-quality Bash scripts for Solana vanity generation, keypair verification, batch operations, dependency auditing, and test orchestration — with security-hardened patterns including file permissions, input validation, and cleanup traps.",
+      "category": "pump-protocol",
+      "path": "pump-shell-scripts/SKILL.md",
+      "url": "https://x402.wtf/api/skills/pump-shell-scripts",
+      "tags": [
+        "pump",
+        "solana",
+        "shell",
+        "scripts"
+      ],
+      "requiredEnv": [],
+      "homepage": "https://github.com/nirholas/pump-fun-sdk",
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "pump-solana-architecture",
+      "name": "pump-solana-architecture",
+      "description": "Design and derive Program Derived Addresses (PDAs) and account layouts across the Pump ecosystem's four Solana programs — global singletons, per-token accounts, per-user accumulators, and cross-program coordination patterns.",
+      "category": "solana-dev",
+      "path": "pump-solana-architecture/SKILL.md",
+      "url": "https://x402.wtf/api/skills/pump-solana-architecture",
+      "tags": [
+        "pump",
+        "solana",
+        "architecture"
+      ],
+      "requiredEnv": [],
+      "homepage": "https://github.com/nirholas/pump-fun-sdk",
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "pump-solana-dev",
+      "name": "pump-solana-dev",
+      "description": "Solana development patterns used in the Pump SDK — Anchor IDL-based program interaction, SPL Token and Token-2022 management, transaction construction with instruction composition, RPC batching, and cross-program coordination.",
+      "category": "solana-dev",
+      "path": "pump-solana-dev/SKILL.md",
+      "url": "https://x402.wtf/api/skills/pump-solana-dev",
+      "tags": [
+        "pump",
+        "solana",
+        "dev"
+      ],
+      "requiredEnv": [
+        "SOLANA_RPC_URL"
+      ],
+      "homepage": "https://github.com/nirholas/pump-fun-sdk",
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "pump-solana-wallet",
+      "name": "pump-solana-wallet",
+      "description": "Secure Solana wallet generation using official Solana Labs libraries — Ed25519 keypairs, memory zeroization, vanity address generation, offline-only operation, and multi-language implementations (Rust, TypeScript, Bash).",
+      "category": "wallet",
+      "path": "pump-solana-wallet/SKILL.md",
+      "url": "https://x402.wtf/api/skills/pump-solana-wallet",
+      "tags": [
+        "pump",
+        "solana",
+        "wallet"
+      ],
+      "requiredEnv": [],
+      "homepage": "https://github.com/nirholas/pump-fun-sdk",
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "pump-testing",
+      "name": "pump-testing",
+      "description": "Multi-language test infrastructure for the Pump SDK — Rust unit/integration/security/performance tests, TypeScript Jest tests, Python fuzz tests, shell test orchestration, Criterion benchmarks, and CI quality gates.",
+      "category": "pump-protocol",
+      "path": "pump-testing/SKILL.md",
+      "url": "https://x402.wtf/api/skills/pump-testing",
+      "tags": [
+        "pump",
+        "solana",
+        "testing"
+      ],
+      "requiredEnv": [],
+      "homepage": "https://github.com/nirholas/pump-fun-sdk",
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "pump-token-incentives",
+      "name": "pump-token-incentives",
+      "description": "Volume-based PUMP token reward system with day-indexed epochs, pro-rata distribution, accumulator tracking, and cross-program claiming on Solana.",
+      "category": "pump-protocol",
+      "path": "pump-token-incentives/SKILL.md",
+      "url": "https://x402.wtf/api/skills/pump-token-incentives",
+      "tags": [
+        "pump",
+        "solana",
+        "token",
+        "incentives"
+      ],
+      "requiredEnv": [
+        "SOLANA_RPC_URL"
+      ],
+      "homepage": "https://github.com/nirholas/pump-fun-sdk",
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "pump-token-lifecycle",
+      "name": "pump-token-lifecycle",
+      "description": "Full token lifecycle from creation through bonding curve trading, graduation detection, AMM migration, fee collection, and volume tracking on Solana using PumpSdk and OnlinePumpSdk.",
+      "category": "pump-protocol",
+      "path": "pump-token-lifecycle/SKILL.md",
+      "url": "https://x402.wtf/api/skills/pump-token-lifecycle",
+      "tags": [
+        "pump",
+        "solana",
+        "token",
+        "lifecycle"
+      ],
+      "requiredEnv": [
+        "SOLANA_RPC_URL"
+      ],
+      "homepage": "https://github.com/nirholas/pump-fun-sdk",
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "pump-ts-vanity",
+      "name": "pump-ts-vanity",
+      "description": "Educational single-threaded TypeScript vanity address generator for Solana using @solana/web3.js with async iteration, event-loop yielding, streaming generator API, and best-effort memory zeroization.",
+      "category": "typescript",
+      "path": "pump-ts-vanity/SKILL.md",
+      "url": "https://x402.wtf/api/skills/pump-ts-vanity",
+      "tags": [
+        "pump",
+        "solana",
+        "ts",
+        "vanity"
+      ],
+      "requiredEnv": [],
+      "homepage": "https://github.com/nirholas/pump-fun-sdk",
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "sponge-wallet",
+      "name": "sponge-wallet",
+      "description": "Crypto wallet, token swaps, cross-chain bridges, and access to paid external services (search, image gen, web scraping, AI, and more) via x402 payments.",
+      "category": "wallet",
+      "path": "sponge-wallet/SKILL.md",
+      "url": "https://x402.wtf/api/skills/sponge-wallet",
+      "tags": [
+        "sponge",
+        "solana",
+        "wallet"
+      ],
+      "requiredEnv": [
+        "SPONGE_API_KEY"
+      ],
+      "homepage": null,
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    }
+  ],
+  "verificationFlow": [
+    "1. build skill implementation and tests",
+    "2. compute proof_hash from the audited skill artifact bundle",
+    "3. issue OpenClawdSkillAttestation via the Solana Attestation Agent",
+    "4. verify attestation on attest.solana.com",
+    "5. attestation_pda recorded in skills/index.json, isFormallyVerified set to true"
+  ]
+}

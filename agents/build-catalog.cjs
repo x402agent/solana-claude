@@ -11,12 +11,15 @@ const path = require("path");
 const ROOT = __dirname;
 const SRC_DIR = path.join(ROOT, "src");
 const TEMPLATES_DIR = path.join(ROOT, "templates");
+const SKILLS_DIR = path.join(ROOT, "skills");
+const SKILL_SCHEMA_FILE = path.join(SKILLS_DIR, "skill-schema.v1.json");
 const OUTPUT = path.join(ROOT, "agents-catalog.json");
 const PUBLIC_DIR = path.join(ROOT, "public");
 const PUBLIC_API_DIR = path.join(PUBLIC_DIR, "api", "agents");
 const PUBLIC_CATALOG_DIR = path.join(PUBLIC_API_DIR, "catalog");
 const PUBLIC_TEMPLATES_DIR = path.join(PUBLIC_API_DIR, "templates");
 const PUBLIC_REGISTRY_DIR = path.join(PUBLIC_API_DIR, "registry");
+const PUBLIC_SKILLS_DIR = path.join(PUBLIC_DIR, "api", "skills");
 const WELL_KNOWN_DIR = path.join(PUBLIC_DIR, ".well-known");
 const HOST = "https://x402.wtf";
 const CLAWD_MINT = "8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump";
@@ -93,19 +96,155 @@ function loadTemplates() {
 
   return files.map((f) => {
     const raw = readJson(path.join(TEMPLATES_DIR, f));
+    const variables = raw.variables || [];
+    const tags = raw.agent?.meta?.tags || [];
     return {
       templateId: raw.templateId,
-      name: raw.templateName,
-      description: raw.templateDescription,
-      category: raw.templateCategory,
-      avatar: raw.templateAvatar || "🧩",
-      variables: raw.variables || [],
+      templateName: raw.templateName,
+      templateDescription: raw.templateDescription,
+      templateCategory: raw.templateCategory,
+      templateAvatar: raw.templateAvatar || "🧩",
+      variableCount: variables.length,
+      requiredVariables: variables.filter((v) => v.required).map((v) => v.name),
+      optionalVariables: variables.filter((v) => !v.required).map((v) => v.name),
+      variables,
+      path: `templates/${f}`,
+      schemaVersion: raw.agent?.schemaVersion || 1,
+      tags,
+      verified: raw.registry?.verified === true,
+      sasProgram: raw.registry?.attestation_service || null,
+      verifierUI: raw.registry?.attestation_service ? "https://attest.solana.com" : null,
+      schemas: raw.schemas
+        ? {
+            skill: raw.schemas.skill?.name || null,
+            agentIdentity: raw.schemas.agent_identity?.name || null,
+          }
+        : null,
       deploy: {
         template: `/api/agents/templates/${encodeURIComponent(raw.templateId)}.json`,
         create: `/agents/mint?fromTemplate=${encodeURIComponent(raw.templateId)}`,
       },
     };
   });
+}
+
+function parseFrontMatter(raw) {
+  if (!raw.startsWith("---\n")) return { attributes: {}, body: raw };
+  const end = raw.indexOf("\n---\n", 4);
+  if (end === -1) return { attributes: {}, body: raw };
+  const frontMatter = raw.slice(4, end);
+  const body = raw.slice(end + 5);
+  return { attributes: parseSimpleYaml(frontMatter), body };
+}
+
+function parseSimpleYaml(source) {
+  const root = {};
+  const stack = [{ indent: -1, value: root }];
+  const lines = source.split("\n");
+
+  for (const line of lines) {
+    if (!line.trim() || line.trim().startsWith("#")) continue;
+    const indent = line.match(/^ */)[0].length;
+    const trimmed = line.trim();
+
+    while (stack.length > 1 && indent <= stack[stack.length - 1].indent) {
+      stack.pop();
+    }
+
+    const current = stack[stack.length - 1].value;
+
+    if (trimmed.startsWith("- ")) {
+      const item = coerceYamlScalar(trimmed.slice(2).trim());
+      if (!Array.isArray(current)) continue;
+      current.push(item);
+      continue;
+    }
+
+    const sep = trimmed.indexOf(":");
+    if (sep === -1) continue;
+    const key = trimmed.slice(0, sep).trim();
+    const rawValue = trimmed.slice(sep + 1).trim();
+
+    if (rawValue === "") {
+      const nextMeaningful = findNextMeaningfulLine(lines, lines.indexOf(line) + 1);
+      const child = nextMeaningful && nextMeaningful.trim().startsWith("- ") ? [] : {};
+      current[key] = child;
+      stack.push({ indent, value: child });
+      continue;
+    }
+
+    current[key] = coerceYamlScalar(rawValue);
+  }
+
+  return root;
+}
+
+function findNextMeaningfulLine(lines, startIndex) {
+  for (let i = startIndex; i < lines.length; i += 1) {
+    if (lines[i].trim() && !lines[i].trim().startsWith("#")) return lines[i];
+  }
+  return null;
+}
+
+function coerceYamlScalar(value) {
+  const unquoted =
+    (value.startsWith('"') && value.endsWith('"')) ||
+    (value.startsWith("'") && value.endsWith("'"))
+      ? value.slice(1, -1)
+      : value;
+  if (unquoted === "true") return true;
+  if (unquoted === "false") return false;
+  if (/^-?\d+(\.\d+)?$/.test(unquoted)) return Number(unquoted);
+  return unquoted;
+}
+
+function inferSkillCategory(skillId) {
+  if (skillId.startsWith("pump-security")) return "security";
+  if (skillId.includes("wallet")) return "wallet";
+  if (skillId.includes("ts-") || skillId.includes("typescript") || skillId.includes("sdk")) return "typescript";
+  if (skillId.includes("solana")) return "solana-dev";
+  return "pump-protocol";
+}
+
+function loadSkills() {
+  if (!fs.existsSync(SKILLS_DIR)) return [];
+  const entries = fs
+    .readdirSync(SKILLS_DIR, { withFileTypes: true })
+    .filter((entry) => entry.isDirectory())
+    .map((entry) => entry.name)
+    .sort();
+
+  return entries
+    .filter((skillId) => fs.existsSync(path.join(SKILLS_DIR, skillId, "SKILL.md")))
+    .map((skillId) => {
+      const raw = fs.readFileSync(path.join(SKILLS_DIR, skillId, "SKILL.md"), "utf8");
+      const { attributes } = parseFrontMatter(raw);
+      const description = attributes.description || "";
+      const openclaw = attributes.metadata?.openclaw || {};
+      return {
+        skillId,
+        name: attributes.name || skillId,
+        description,
+        category: inferSkillCategory(skillId),
+        path: `${skillId}/SKILL.md`,
+        url: `${HOST}/api/skills/${encodeURIComponent(skillId)}`,
+        tags: Array.from(
+          new Set(
+            [skillId.split("-")[0], "solana"]
+              .concat(skillId.split("-"))
+              .filter(Boolean)
+          )
+        ),
+        requiredEnv: Array.isArray(openclaw.requires?.env) ? openclaw.requires.env : [],
+        homepage: openclaw.homepage || null,
+        attestation: {
+          status: "pending",
+          isFormallyVerified: false,
+          attestationPda: null,
+          verificationTimestamp: null,
+        },
+      };
+    });
 }
 
 function countByCategory(agents) {
@@ -119,6 +258,7 @@ function countByCategory(agents) {
 function build() {
   const agents = loadAgents();
   const templates = loadTemplates();
+  const skills = loadSkills();
 
   const oneShots = agents.filter((a) => a.oneShot);
   const featured = agents.filter((a) => a.featured);
@@ -221,13 +361,83 @@ function build() {
 
   const registrationDocs = buildRegistrationDocs(agents, catalog.generatedAt);
   const acpRegistry = buildAcpRegistry(agents, templates, catalog, registrationDocs);
+  const templateIndex = buildTemplateIndex(templates, catalog.generatedAt);
+  const skillsIndex = buildSkillsIndex(skills, catalog.generatedAt);
 
   writeJson(OUTPUT, catalog);
-  writeStaticApi(catalog, agents, templates, registrationDocs, acpRegistry);
+  writeJson(path.join(TEMPLATES_DIR, "index.json"), templateIndex);
+  writeJson(path.join(SKILLS_DIR, "index.json"), skillsIndex);
+  writeStaticApi(catalog, agents, templates, skills, templateIndex, skillsIndex, registrationDocs, acpRegistry);
   console.log(`✅ Wrote ${OUTPUT}`);
   console.log(`   ${agents.length} agents (${oneShots.length} one-shots, ${featured.length} featured)`);
   console.log(`   ${templates.length} templates`);
+  console.log(`   ${skills.length} skills`);
   console.log(`   static API: ${path.relative(ROOT, PUBLIC_API_DIR)}`);
+}
+
+function buildTemplateIndex(templates, generatedAt) {
+  const byCategory = {};
+  for (const template of templates) {
+    byCategory[template.templateCategory] = (byCategory[template.templateCategory] || 0) + 1;
+  }
+
+  return {
+    $schema: "https://solanaclawd.com/schemas/agent-template-index.v1.json",
+    apiVersion: "1.0",
+    generatedAt,
+    hub: {
+      gallery: `${HOST}/agents/templates`,
+      api: `${HOST}/api/agents/templates`,
+      schema: "https://solanaclawd.com/schemas/agent-template.v1.json",
+    },
+    stats: {
+      totalTemplates: templates.length,
+      byCategory,
+    },
+    templates,
+  };
+}
+
+function buildSkillsIndex(skills, generatedAt) {
+  const byCategory = {};
+  for (const skill of skills) {
+    byCategory[skill.category] = (byCategory[skill.category] || 0) + 1;
+  }
+
+  return {
+    $schema: "https://solanaclawd.com/schemas/skill-hub.v1.json",
+    apiVersion: "1.0",
+    generatedAt,
+    hub: {
+      gallery: `${HOST}/skills`,
+      api: `${HOST}/api/skills`,
+      attestation: "https://attest.solana.com",
+      sasProgram: "22zoJMtdu4tQc2PzL74ZUT7FrwgB1Udec8DdW4yw4BdG",
+      credentialAuthority: CLAWD_MINT,
+    },
+    formalVerification: {
+      schema: "skill-schema.v1.json",
+      sasSchema: "OpenClawdSkillAttestation",
+      layoutBytes: [12, 32, 12, 8, 1],
+      fieldNames: ["skill_id", "verifier_pubkey", "proof_hash", "verification_timestamp", "is_formally_verified"],
+      verifierUI: "https://attest.solana.com",
+      workflowDoc: `${HOST}/skills/verify`,
+    },
+    stats: {
+      totalSkills: skills.length,
+      verifiedSkills: skills.filter((skill) => skill.attestation.isFormallyVerified).length,
+      pendingVerification: skills.filter((skill) => !skill.attestation.isFormallyVerified).length,
+      byCategory,
+    },
+    skills,
+    verificationFlow: [
+      "1. build skill implementation and tests",
+      "2. compute proof_hash from the audited skill artifact bundle",
+      "3. issue OpenClawdSkillAttestation via the Solana Attestation Agent",
+      "4. verify attestation on attest.solana.com",
+      "5. attestation_pda recorded in skills/index.json, isFormallyVerified set to true",
+    ],
+  };
 }
 
 function buildRegistrationDocs(agents, generatedAt) {
@@ -361,8 +571,9 @@ function buildAcpRegistry(agents, templates, catalog, registrationDocs) {
   };
 }
 
-function writeStaticApi(catalog, agents, templates, registrationDocs, acpRegistry) {
+function writeStaticApi(catalog, agents, templates, skills, templateIndex, skillsIndex, registrationDocs, acpRegistry) {
   fs.rmSync(PUBLIC_API_DIR, { recursive: true, force: true });
+  fs.rmSync(PUBLIC_SKILLS_DIR, { recursive: true, force: true });
 
   writeJson(path.join(PUBLIC_API_DIR, "index.json"), {
     name: "OpenClawd Agents API",
@@ -380,6 +591,11 @@ function writeStaticApi(catalog, agents, templates, registrationDocs, acpRegistr
   writeJson(path.join(PUBLIC_API_DIR, "agents-catalog.json"), catalog);
   writeJson(path.join(PUBLIC_API_DIR, "acp-registry.json"), acpRegistry);
   writeJson(path.join(WELL_KNOWN_DIR, "acp.json"), acpRegistry);
+  writeJson(path.join(PUBLIC_TEMPLATES_DIR, "index.json"), templateIndex);
+  writeJson(path.join(PUBLIC_SKILLS_DIR, "index.json"), skillsIndex);
+  if (fs.existsSync(SKILL_SCHEMA_FILE)) {
+    writeJson(path.join(PUBLIC_SKILLS_DIR, "skill-schema.v1.json"), readJson(SKILL_SCHEMA_FILE));
+  }
   copyStaticMetadata();
 
   for (const agent of agents) {
@@ -414,6 +630,15 @@ function writeStaticApi(catalog, agents, templates, registrationDocs, acpRegistr
     if (fs.existsSync(sourcePath)) {
       writeJson(path.join(PUBLIC_TEMPLATES_DIR, `${template.templateId}.json`), readJson(sourcePath));
     }
+  }
+
+  for (const skill of skills) {
+    const sourcePath = path.join(SKILLS_DIR, skill.skillId, "SKILL.md");
+    if (!fs.existsSync(sourcePath)) continue;
+    writeJson(path.join(PUBLIC_SKILLS_DIR, `${skill.skillId}.json`), {
+      ...skill,
+      markdown: fs.readFileSync(sourcePath, "utf8"),
+    });
   }
 }
 

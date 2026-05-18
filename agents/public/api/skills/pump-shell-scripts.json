@@ -1,0 +1,23 @@
+{
+  "skillId": "pump-shell-scripts",
+  "name": "pump-shell-scripts",
+  "description": "Production-quality Bash scripts for Solana vanity generation, keypair verification, batch operations, dependency auditing, and test orchestration — with security-hardened patterns including file permissions, input validation, and cleanup traps.",
+  "category": "pump-protocol",
+  "path": "pump-shell-scripts/SKILL.md",
+  "url": "https://x402.wtf/api/skills/pump-shell-scripts",
+  "tags": [
+    "pump",
+    "solana",
+    "shell",
+    "scripts"
+  ],
+  "requiredEnv": [],
+  "homepage": "https://github.com/nirholas/pump-fun-sdk",
+  "attestation": {
+    "status": "pending",
+    "isFormallyVerified": false,
+    "attestationPda": null,
+    "verificationTimestamp": null
+  },
+  "markdown": "---\nname: pump-shell-scripts\ndescription: \"Production-quality Bash scripts for Solana vanity generation, keypair verification, batch operations, dependency auditing, and test orchestration — with security-hardened patterns including file permissions, input validation, and cleanup traps.\"\nmetadata:\n  openclaw:\n    homepage: https://github.com/nirholas/pump-fun-sdk\n    requires:\n      bins:\n        - bash\n        - solana-keygen\n---\n\n# Shell Scripting & CLI Tools — Production Bash Scripts\n\nProduction-quality Bash scripts for vanity generation, keypair verification, batch operations, dependency auditing, and test orchestration with security-hardened patterns.\n\n## Scripts Overview\n\n| Script | Purpose |\n|--------|---------|\n| `scripts/utils.sh` | Shared library (colors, logging, validation, cleanup) |\n| `scripts/generate-vanity.sh` | Vanity address generation via solana-keygen |\n| `scripts/batch-generate.sh` | Parallel batch generation |\n| `scripts/verify-keypair.sh` | 7-point keypair verification |\n| `scripts/test-rust.sh` | 10-step Rust test orchestration |\n| `tools/audit-dependencies.sh` | Dependency security audit |\n| `tools/check-file-permissions.sh` | File permission validation |\n| `tools/verify-keypair.ts` | TypeScript 9-point verifier |\n\n## Keypair Verification (7 Points)\n\n```bash\nverify_keypair() {\n    # 1. File exists\n    # 2. Valid JSON array\n    # 3. Exactly 64 bytes\n    # 4. File permissions are 0600\n    # 5. solana-keygen verify passes\n    # 6. Public key matches filename\n    # 7. Re-derive public key from secret matches\n}\n```\n\n## Security Patterns\n\n```bash\n# Cleanup trap\ntrap 'cleanup_temp_files' EXIT ERR INT TERM\n\n# File permissions\nchmod 600 \"$keypair_file\"\n\n# Input validation\nvalidate_base58() {\n    [[ \"$1\" =~ ^[1-9A-HJ-NP-Za-km-z]+$ ]] || die \"Invalid Base58\"\n}\n\n# No shell injection\n# Use \"$var\" (quoted) everywhere, never $var\n```\n\n## Makefile Integration\n\n| Target | Description |\n|--------|-------------|\n| `make test-rust` | Run Rust test suite |\n| `make bench` | Run Criterion benchmarks |\n| `make generate` | Generate a vanity address |\n| `make verify` | Verify a keypair file |\n| `make audit` | Audit dependencies |\n\n## Patterns to Follow\n\n- Source `scripts/utils.sh` in all scripts for shared utilities\n- Use `set -euo pipefail` at the top of every script\n- Quote all variable expansions: `\"$var\"` not `$var`\n- Use `trap` for cleanup of temporary files\n- Validate all user input (Base58, paths, integers)\n- Set `chmod 600` on any keypair file immediately after creation\n\n## Common Pitfalls\n\n- `solana-keygen verify` expects the address as the first argument, not the file\n- `shred` is not available on all systems — check with `command -v`\n- `mktemp` patterns differ between macOS and Linux\n- `read -r` is essential to prevent backslash interpretation\n- Always use `[[ ]]` over `[ ]` for conditionals\n\n"
+}

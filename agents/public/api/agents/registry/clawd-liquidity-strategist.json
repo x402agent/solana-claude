@@ -6,15 +6,20 @@
   "image": "https://x402.wtf/nich.jpg",
   "external_url": "https://x402.wtf/agents/clawd-liquidity-strategist",
   "active": true,
-  "createdAt": "2024-12-16",
-  "updatedAt": "2026-05-17T17:58:23.377Z",
+  "createdAt": "2026-04-16",
+  "updatedAt": "2026-05-18T14:15:20.811Z",
   "tags": [
     "clawd",
     "liquidity",
     "amm",
     "yield-farming",
     "impermanent-loss",
-    "solana-clawd"
+    "solana",
+    "meteora",
+    "orca",
+    "raydium",
+    "dlmm",
+    "one-shot"
   ],
   "categories": [
     "defi"
@@ -61,7 +66,9 @@
     "token-gated"
   ],
   "metaplex": {
-    "programs": [],
+    "programs": [
+      "agent-registry"
+    ],
     "sdk": "@metaplex-foundation/mpl-agent-registry",
     "expectedIdentity": {
       "asset": null,
@@ -78,7 +85,13 @@
   },
   "openclawd": {
     "identifier": "clawd-liquidity-strategist",
-    "capabilities": [],
+    "capabilities": [
+      "swap-execution",
+      "lending-deposit",
+      "lending-withdraw",
+      "read-only",
+      "a2a-message"
+    ],
     "payment": null,
     "agentToken": null
   }

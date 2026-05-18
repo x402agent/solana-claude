@@ -6,8 +6,8 @@
   "image": "https://x402.wtf/nich.jpg",
   "external_url": "https://x402.wtf/agents/defi-yield-farmer",
   "active": true,
-  "createdAt": "2024-12-16",
-  "updatedAt": "2026-05-17T17:58:23.377Z",
+  "createdAt": "2026-04-16",
+  "updatedAt": "2026-05-18T14:15:20.811Z",
   "tags": [
     "defi",
     "yield-farming",
@@ -15,7 +15,11 @@
     "strategy",
     "optimization",
     "clawd",
-    "solana-clawd"
+    "solana",
+    "kamino",
+    "meteora",
+    "drift",
+    "one-shot"
   ],
   "categories": [
     "defi"
@@ -62,7 +66,9 @@
     "token-gated"
   ],
   "metaplex": {
-    "programs": [],
+    "programs": [
+      "agent-registry"
+    ],
     "sdk": "@metaplex-foundation/mpl-agent-registry",
     "expectedIdentity": {
       "asset": null,
@@ -79,7 +85,13 @@
   },
   "openclawd": {
     "identifier": "defi-yield-farmer",
-    "capabilities": [],
+    "capabilities": [
+      "lending-deposit",
+      "lending-withdraw",
+      "swap-execution",
+      "read-only",
+      "a2a-message"
+    ],
     "payment": null,
     "agentToken": null
   }

@@ -7,7 +7,7 @@
   "external_url": "https://x402.wtf/agents/pump-fun-sdk-expert",
   "active": true,
   "createdAt": "2026-02-27",
-  "updatedAt": "2026-05-17T17:58:23.377Z",
+  "updatedAt": "2026-05-18T14:15:20.811Z",
   "tags": [
     "pump-fun",
     "solana",
@@ -18,10 +18,12 @@
     "amm",
     "fee-sharing",
     "clawd",
-    "solana-clawd"
+    "pumpfun",
+    "dev-tools",
+    "x402"
   ],
   "categories": [
-    "defi"
+    "dev-tools"
   ],
   "owner": {
     "organization": "OpenClawd",
@@ -65,7 +67,9 @@
     "token-gated"
   ],
   "metaplex": {
-    "programs": [],
+    "programs": [
+      "agent-registry"
+    ],
     "sdk": "@metaplex-foundation/mpl-agent-registry",
     "expectedIdentity": {
       "asset": null,
@@ -82,7 +86,12 @@
   },
   "openclawd": {
     "identifier": "pump-fun-sdk-expert",
-    "capabilities": [],
+    "capabilities": [
+      "payment-gated",
+      "x402",
+      "read-only",
+      "a2a-message"
+    ],
     "payment": null,
     "agentToken": null
   }

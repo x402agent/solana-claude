@@ -17,6 +17,10 @@
     "./state/database.js": {
       "types": "./dist/state/database.d.ts",
       "default": "./dist/state/database.js"
+    },
+    "./vault/index.js": {
+      "types": "./dist/vault/index.d.ts",
+      "default": "./dist/vault/index.js"
     }
   },
   "bin": {

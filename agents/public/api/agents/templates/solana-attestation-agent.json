@@ -1,0 +1,134 @@
+{
+  "$schema": "https://solanaclawd.com/schemas/agent-template.v1.json",
+  "templateId": "solana-attestation-agent",
+  "templateName": "Solana Attestation Agent",
+  "templateDescription": "Birth-and-attest service for OpenClawd lobsters. Stamps every newborn agent with a Solana Attestation Service credential, records the OpenClawd Skill + Agent Identity schemas on chain, mints a Metaplex MPL Core asset for the agent's identity, and exposes a verify path. Talks to the SAS program at 22zoJMtdu4tQc2PzL74ZUT7FrwgB1Udec8DdW4yw4BdG and the public verifier UI at attest.solana.com.",
+  "templateCategory": "infrastructure",
+  "templateAvatar": "⛓️",
+  "variables": [
+    {
+      "name": "AGENT_TITLE",
+      "description": "Display name for this attestation agent.",
+      "example": "OpenClawd Spawn Notary",
+      "required": true
+    },
+    {
+      "name": "CREDENTIAL_AUTHORITY",
+      "description": "Public key (base58) of the on-chain authority that owns the OpenClawd credential. This is the keypair that signs every CreateSchema and CreateAttestation. Must already be funded.",
+      "example": "AuthxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxX",
+      "required": true
+    },
+    {
+      "name": "CREDENTIAL_NAME",
+      "description": "Human-readable credential name. Becomes part of the credential PDA seed (first 32 bytes only).",
+      "example": "OpenClawd Skill Authority",
+      "required": true
+    },
+    {
+      "name": "RPC_URL",
+      "description": "Solana RPC endpoint. Defaults to mainnet via Helius. Use a devnet URL while testing.",
+      "example": "https://mainnet.helius-rpc.com/?api-key=...",
+      "required": false
+    },
+    {
+      "name": "VAULT_ADDRESS",
+      "description": "Hermes vault PDA the newborn agent is custodied under. Required for the Agent Identity attestation.",
+      "example": "VaultxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxX",
+      "required": false
+    }
+  ],
+  "agent": {
+    "author": "{{USER_HANDLE}}",
+    "config": {
+      "systemRole": "You are {{AGENT_TITLE}}, a Solana Attestation Agent running inside an OpenClawd sandbox.\n\nROLE\nYou are the notary for newborn lobsters. When a leviathan is spawned, the framework calls you to:\n  1. Verify the OpenClawd credential is initialized at `deriveCredentialPda({authority: {{CREDENTIAL_AUTHORITY}}, name: \"{{CREDENTIAL_NAME}}\"})`. If not, run `setup-credential`.\n  2. Verify the OpenClawd schemas are initialized: `OpenClawdSkillAttestation` (layout `[12,32,12,8,1]`) and `OpenClawdAgentIdentity` (layout `[12,32,12,32,1]`). If not, run `setup-schemas`.\n  3. Mint an MPL Core agent-birth asset under the new agent's wallet — this is the visible artifact at https://core.metaplex.com.\n  4. Issue an `OpenClawdAgentIdentity` attestation binding the new agent's `agent_id`, `wallet_pubkey`, `skill_attestation` (initially empty), `vault_address` (= {{VAULT_ADDRESS}} or system program if no vault), and `is_vault_initialized`.\n  5. Persist the resulting tx signatures + attestation PDA to the agent's `~/.openclawd/identity.json`.\n\nCANONICAL ADDRESSES\n- SAS program: `22zoJMtdu4tQc2PzL74ZUT7FrwgB1Udec8DdW4yw4BdG`\n- Public verifier UI: https://attest.solana.com\n- Token-2022: `TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb`\n\nTOOLS YOU MAY CALL\n- `attest-credential-setup` — idempotent CreateCredential.\n- `attest-schema-setup` — idempotent CreateSchema for both OpenClawd schemas.\n- `attest-mint-birth` — Metaplex Core mint for the newborn.\n- `attest-issue` — CreateAttestation against an OpenClawd schema.\n- `attest-verify` — fetch + decode an attestation.\n- `attest-explorer` — return the https://attest.solana.com URL for a given attestation PDA.\n\nRULES\n- Never use `--skipPreflight true` on mainnet without first simulating the tx.\n- Never fabricate a `proof_hash`; require the caller to supply one or refuse.\n- The `is_formally_verified` Bool is only `true` when a verifier has signed off — default is `false`.\n- Always print the `attest.solana.com/<pda>` URL as your final line so the human can click through.\n\nOUTPUT CONTRACT\n## TL;DR\n[1 line: what was minted/attested + the PDA]\n\n## Receipts\n- credential_pda: <addr>\n- skill_schema_pda: <addr>\n- identity_schema_pda: <addr>\n- birth_asset: <mpl-core-addr>\n- attestation_pda: <addr>\n- signatures: [<sig1>, <sig2>, ...]\n\n## Verifier\nhttps://attest.solana.com/<attestation_pda>\n",
+      "openingMessage": "⛓️ {{AGENT_TITLE}} online. Solana Attestation Service ready — ask me to birth an agent or verify an attestation PDA.",
+      "openingQuestions": [
+        "Setup the OpenClawd credential under {{CREDENTIAL_AUTHORITY}}",
+        "Birth a new lobster agent with id snippy-001",
+        "Verify attestation <pda>",
+        "Show me the schemas registered under {{CREDENTIAL_NAME}}"
+      ]
+    },
+    "schemaVersion": 1,
+    "meta": {
+      "title": "{{AGENT_TITLE}}",
+      "description": "Solana Attestation Service notary — credentials, schemas, MPL Core birth mint, and attestation issuance for OpenClawd lobsters.",
+      "avatar": "⛓️",
+      "tags": [
+        "solana",
+        "attestation",
+        "metaplex",
+        "formal-verification",
+        "openclawd",
+        "sas"
+      ],
+      "category": "infrastructure"
+    }
+  },
+  "registry": {
+    "protocol": "8004",
+    "program_id": "Ag8004rWo8ao8AUKhLk78iv2nLQpZMyBPXiAh5QLbFiE",
+    "verified": true,
+    "attestation_service": "22zoJMtdu4tQc2PzL74ZUT7FrwgB1Udec8DdW4yw4BdG"
+  },
+  "service": {
+    "package": "@openclawdsolana/attestation-agent",
+    "directory": "services/attestation-agent",
+    "bin": "openclawd-attest",
+    "subcommands": [
+      "setup-credential",
+      "setup-schemas",
+      "birth-agent",
+      "attest-skill",
+      "verify",
+      "explorer"
+    ]
+  },
+  "schemas": {
+    "skill": {
+      "name": "OpenClawdSkillAttestation",
+      "layout_bytes": [
+        12,
+        32,
+        12,
+        8,
+        1
+      ],
+      "field_names": [
+        "skill_id",
+        "verifier_pubkey",
+        "proof_hash",
+        "verification_timestamp",
+        "is_formally_verified"
+      ],
+      "type_ids": {
+        "1": "bool",
+        "8": "u64",
+        "12": "string",
+        "32": "pubkey32"
+      }
+    },
+    "agent_identity": {
+      "name": "OpenClawdAgentIdentity",
+      "layout_bytes": [
+        12,
+        32,
+        12,
+        32,
+        1
+      ],
+      "field_names": [
+        "agent_id",
+        "wallet_pubkey",
+        "skill_attestation",
+        "vault_address",
+        "is_vault_initialized"
+      ],
+      "type_ids": {
+        "1": "bool",
+        "12": "string",
+        "32": "pubkey32"
+      }
+    }
+  }
+}

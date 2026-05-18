@@ -1,0 +1,53 @@
+"""Base tool classes for Solana Trading Agent"""
+
+from typing import Any, Optional
+from pydantic import BaseModel
+
+
+class ToolResult(BaseModel):
+    """Tool execution result."""
+    success: bool
+    content: str = ""
+    error: Optional[str] = None
+
+
+class Tool:
+    """Base class for all tools."""
+
+    @property
+    def name(self) -> str:
+        """Tool name - must be unique."""
+        raise NotImplementedError
+
+    @property
+    def description(self) -> str:
+        """Tool description for the LLM."""
+        raise NotImplementedError
+
+    @property
+    def parameters(self) -> dict[str, Any]:
+        """Tool parameters schema (JSON Schema format)."""
+        raise NotImplementedError
+
+    async def execute(self, *args, **kwargs) -> ToolResult:
+        """Execute the tool with arbitrary arguments."""
+        raise NotImplementedError
+
+    def to_schema(self) -> dict[str, Any]:
+        """Convert tool to Anthropic tool schema."""
+        return {
+            "name": self.name,
+            "description": self.description,
+            "input_schema": self.parameters,
+        }
+
+    def to_openai_schema(self) -> dict[str, Any]:
+        """Convert tool to OpenAI tool schema."""
+        return {
+            "type": "function",
+            "function": {
+                "name": self.name,
+                "description": self.description,
+                "parameters": self.parameters,
+            },
+        }
