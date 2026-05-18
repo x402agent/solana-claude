@@ -11,6 +11,7 @@ import {
   type VulcanExecutionIntent,
   type VulcanExecutionPlan,
 } from "./adapters/vulcan.js";
+import { summarizeVulcanCatalog } from "./vulcanCatalog.js";
 
 export interface MarketMakerIntent {
   symbol: string;
@@ -80,14 +81,23 @@ export class ClawdPerpsRuntime {
   }
 
   async getRuntimeHealth() {
-    const [health, markets] = await Promise.all([this.rise.health(), this.rise.listMarkets()]);
+    const [health, markets, vulcan] = await Promise.all([
+      this.rise.health(),
+      this.rise.listMarkets(),
+      summarizeVulcanCatalog(this.repoRoot),
+    ]);
     return {
       health,
       mode: resolveTradingMode(this.config),
       walletConfigured: Boolean(this.config.wallet),
       trackedMarkets: markets.length,
       allowedSymbols: this.config.risk.allowedSymbols,
+      vulcan,
     };
+  }
+
+  async getVulcanCatalogSummary() {
+    return summarizeVulcanCatalog(this.repoRoot);
   }
 
   previewObserve(symbol: string, expectedSpreadBps?: number): TraderActionPreview {

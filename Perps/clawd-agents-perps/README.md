@@ -19,6 +19,7 @@ single integration surface that agents can use safely.
 
 - `src/adapters/phoenixRise.ts`: wraps `packages/clawd-perps` for live Phoenix reads
 - `src/adapters/vulcan.ts`: generates Vulcan CLI execution plans
+- `src/vulcanCatalog.ts`: loads the upstream Vulcan command catalog and MCP contract
 - `src/marketMaker.ts`: Clawd runtime for observe, paper, and live previews
 - `src/telegram.ts`: Telegram command handler surface
 - `src/frontend.ts`: frontend status payload builder
@@ -31,3 +32,10 @@ single integration surface that agents can use safely.
 - live mode requires explicit env flags and runtime preflight
 - symbol, notional, leverage, spread, and wallet presence are checked before live routes
 - signing belongs in wallet/runtime integration, not this workspace
+
+## Vulcan Integration
+
+- reads `vulcan-cli-master/agents/tool-catalog.json` as the canonical command inventory
+- reads `vulcan-cli-master/.mcp.json` to surface the upstream MCP launch contract
+- exposes Vulcan catalog status to Telegram and frontend consumers
+- keeps Rise as the market-read source of truth while using Vulcan for execution planning and compatibility

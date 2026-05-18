@@ -13,6 +13,7 @@ export interface TelegramPerpsResponse {
 
 export const TELEGRAM_PERPS_COMMANDS: TelegramPerpsCommand[] = [
   { command: "/perps", description: "Show runtime status and safety mode" },
+  { command: "/perps_vulcan", description: "Show integrated Vulcan CLI and MCP status" },
   { command: "/perps_markets", description: "List tracked Phoenix perp markets" },
   { command: "/perps_positions", description: "Show current perp positions" },
   { command: "/perps_paper_long", description: "Preview a paper long route" },
@@ -51,6 +52,16 @@ export async function handleTelegramPerpsCommand(
         ok: true,
         text: `Perps mode=${status.mode} walletConfigured=${status.walletConfigured} trackedMarkets=${status.trackedMarkets}`,
         data: status,
+      };
+    }
+    case "/perps_vulcan": {
+      const catalog = await runtime.getVulcanCatalogSummary();
+      return {
+        ok: true,
+        text:
+          `Vulcan cli=${catalog.cliVersion} groups=${catalog.groupCount} commands=${catalog.commandCount} ` +
+          `dangerous=${catalog.dangerousCommands}`,
+        data: catalog,
       };
     }
     case "/perps_markets": {
