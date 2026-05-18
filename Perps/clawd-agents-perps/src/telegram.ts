@@ -1,4 +1,5 @@
 import { ClawdPerpsRuntime } from "./marketMaker.js";
+import { buildPerpsFrontendStatus } from "./frontend.js";
 
 export interface TelegramPerpsCommand {
   command: string;
@@ -38,6 +39,14 @@ function readNotional(args: string[], fallback = 100): number {
   return Number.isFinite(value) && value > 0 ? value : fallback;
 }
 
+function joinLines(lines: string[]): string {
+  return lines.filter(Boolean).join("\n");
+}
+
+function formatBlocking(blocking: string[]): string {
+  return blocking.length > 0 ? blocking.join(" | ") : "no blocking conditions";
+}
+
 export async function handleTelegramPerpsCommand(
   runtime: ClawdPerpsRuntime,
   text: string,
@@ -47,20 +56,30 @@ export async function handleTelegramPerpsCommand(
 
   switch (command) {
     case "/perps": {
-      const status = await runtime.getRuntimeHealth();
+      const [status, frontend] = await Promise.all([
+        runtime.getRuntimeHealth(),
+        buildPerpsFrontendStatus(runtime),
+      ]);
       return {
         ok: true,
-        text: `Perps mode=${status.mode} walletConfigured=${status.walletConfigured} trackedMarkets=${status.trackedMarkets}`,
-        data: status,
+        text: joinLines([
+          `${frontend.modeLabel} | ${status.trackedMarkets} markets in view`,
+          frontend.headline,
+          frontend.subheadline,
+          `wallet=${status.walletConfigured ? "wired" : "missing"} | symbols=${status.allowedSymbols.join(", ")}`,
+        ]),
+        data: { ...status, frontend },
       };
     }
     case "/perps_vulcan": {
       const catalog = await runtime.getVulcanCatalogSummary();
       return {
         ok: true,
-        text:
-          `Vulcan cli=${catalog.cliVersion} groups=${catalog.groupCount} commands=${catalog.commandCount} ` +
-          `dangerous=${catalog.dangerousCommands}`,
+        text: joinLines([
+          "Vulcan bridge is mounted and readable.",
+          `cli=${catalog.cliVersion} | groups=${catalog.groupCount} | commands=${catalog.commandCount}`,
+          `dangerous routes=${catalog.dangerousCommands} | MCP=${catalog.mcpServer ? "present" : "missing"}`,
+        ]),
         data: catalog,
       };
     }
@@ -68,7 +87,10 @@ export async function handleTelegramPerpsCommand(
       const markets = await runtime.listMarkets();
       return {
         ok: true,
-        text: `Tracked markets: ${markets.map((market) => market.symbol).join(", ")}`,
+        text: joinLines([
+          "Market tape is live.",
+          `${markets.length} tracked symbols: ${markets.map((market) => market.symbol).join(", ")}`,
+        ]),
         data: markets,
       };
     }
@@ -76,7 +98,12 @@ export async function handleTelegramPerpsCommand(
       const positions = await runtime.getPositions();
       return {
         ok: true,
-        text: "Current positions snapshot",
+        text: joinLines([
+          "Current position snapshot loaded.",
+          Array.isArray(positions) && positions.length > 0
+            ? `${positions.length} position rows returned from the read plane.`
+            : "No active position rows returned.",
+        ]),
         data: positions,
       };
     }
@@ -85,8 +112,15 @@ export async function handleTelegramPerpsCommand(
       return {
         ok: preview.preflight.ok,
         text: preview.preflight.ok
-          ? `Paper long preview ready for ${preview.symbol} at ${preview.notionalUsd} USDC.`
-          : `Paper long blocked: ${preview.preflight.blocking.join(" ")}`,
+          ? joinLines([
+              `Paper long route staged for ${preview.symbol}.`,
+              `${preview.notionalUsd} USDC notional | adapter=${preview.route.adapter} | execution=${preview.execution}`,
+              "This is rehearsal flow only. No real funds should move.",
+            ])
+          : joinLines([
+              `Paper long route blocked for ${preview.symbol}.`,
+              formatBlocking(preview.preflight.blocking),
+            ]),
         data: preview,
       };
     }
@@ -95,8 +129,15 @@ export async function handleTelegramPerpsCommand(
       return {
         ok: preview.preflight.ok,
         text: preview.preflight.ok
-          ? `Paper short preview ready for ${preview.symbol} at ${preview.notionalUsd} USDC.`
-          : `Paper short blocked: ${preview.preflight.blocking.join(" ")}`,
+          ? joinLines([
+              `Paper short route staged for ${preview.symbol}.`,
+              `${preview.notionalUsd} USDC notional | adapter=${preview.route.adapter} | execution=${preview.execution}`,
+              "The engine can rehearse the move without opening live exposure.",
+            ])
+          : joinLines([
+              `Paper short route blocked for ${preview.symbol}.`,
+              formatBlocking(preview.preflight.blocking),
+            ]),
         data: preview,
       };
     }
@@ -105,8 +146,15 @@ export async function handleTelegramPerpsCommand(
       return {
         ok: preview.preflight.ok,
         text: preview.preflight.ok
-          ? `Live long preview allowed for ${preview.symbol}.`
-          : `Live long blocked: ${preview.preflight.blocking.join(" ")}`,
+          ? joinLines([
+              `Live long preview is open for ${preview.symbol}.`,
+              `${preview.notionalUsd} USDC notional cleared the current gate set.`,
+              "This is still a preview path until signing and submission are wired.",
+            ])
+          : joinLines([
+              `Live long remains blocked for ${preview.symbol}.`,
+              formatBlocking(preview.preflight.blocking),
+            ]),
         data: preview,
       };
     }
@@ -115,8 +163,15 @@ export async function handleTelegramPerpsCommand(
       return {
         ok: preview.preflight.ok,
         text: preview.preflight.ok
-          ? `Live short preview allowed for ${preview.symbol}.`
-          : `Live short blocked: ${preview.preflight.blocking.join(" ")}`,
+          ? joinLines([
+              `Live short preview is open for ${preview.symbol}.`,
+              `${preview.notionalUsd} USDC notional cleared the current gate set.`,
+              "Execution is described here, not blindly triggered here.",
+            ])
+          : joinLines([
+              `Live short remains blocked for ${preview.symbol}.`,
+              formatBlocking(preview.preflight.blocking),
+            ]),
         data: preview,
       };
     }
