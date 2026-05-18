@@ -1,6 +1,6 @@
 # 🤖 Solana Clawd Agents — Hub, Catalog, and Deploy API
 
-> **124 production-ready AI agents for the Solana ecosystem — DeFi, payments, trading, governance, security, tools, crypto research, education, and programming. The generated x402 catalog currently exposes 1 one-shot deploy, 2 featured agents, the REST catalog, and the registry API.**
+> **134 production-ready AI agents for the Solana ecosystem — DeFi, payments, trading, governance, security, tools, analytics, research, infrastructure, NFT, and programming. The generated x402 catalog currently exposes 43 one-shot deploys, 23 featured agents, 5 templates, the REST catalog, the registry API, and the skills hub.**
 
 A discoverable, self-hosting hub for Solana-native AI agents. Every agent in the [`src/`](./src/) directory is automatically indexed into a catalog ([`agents-catalog.json`](./agents-catalog.json)), served via REST and MCP, and surfaced at [x402.wtf/agents](https://x402.wtf/agents) with install / chat / mint buttons. Works with any MCP-compatible client — Clawd Desktop, Cursor, ClawdOS, Windsurf.
 
@@ -71,15 +71,15 @@ Result (May 2026 generated snapshot — regenerate any time with `node build-cat
 
 | Stat                          | Value                |
 | ----------------------------- | -------------------- |
-| Total agents                  | **124**              |
-| One-shots (on the hub rail)   | **1**                |
-| Featured (top-of-page)        | **2**                |
-| Metaplex-enabled              | **0** in the generated catalog rollup |
-| Trading-capable (swap-execution) | **0** in the generated catalog rollup |
-| Launch-capable (Genesis / bonding curve / agent token) | **0** in the generated catalog rollup |
-| Mint-capable (Core / Bubblegum / Candy Machine) | **0** in the generated catalog rollup |
-| Categories                    | 9 (see below)        |
-| Templates                     | 0                    |
+| Total agents                  | **134**              |
+| One-shots (on the hub rail)   | **43**               |
+| Featured (top-of-page)        | **23**               |
+| Metaplex-enabled              | **51** in the generated catalog rollup |
+| Trading-capable (swap-execution) | **12** in the generated catalog rollup |
+| Launch-capable (Genesis / bonding curve / agent token) | **1** in the generated catalog rollup |
+| Mint-capable (Core / Bubblegum / Candy Machine) | **2** in the generated catalog rollup |
+| Categories                    | 11 (see below)       |
+| Templates                     | 5                    |
 
 - **CLAWD Router integration**: every agent exposes `endpoints.a2a` (`POST /api/agents/a2a`), `endpoints.mint-as-agent` (`POST /api/agents/mint`), and `endpoints.catalog`. CLAWD holders get priority routing acknowledged in-prompt. See [`scripts/clawdify-agents.cjs`](./scripts/clawdify-agents.cjs) for per-agent profiles.
 - **Solana-native systemRole preamble**: lamports/CU priority fees, Jito tip guidance, deny-first on signatures, "not financial advice" disclaimers baked in.
@@ -88,9 +88,10 @@ Result (May 2026 generated snapshot — regenerate any time with `node build-cat
 
 ### New this release
 
-- **Catalog + deploy flow** — [`agents-catalog.json`](./agents-catalog.json) aggregates all 124 agents with per-agent Install / Chat / Mint URLs where declared. Served via `GET /api/agents/catalog` and rendered at [/agents](https://x402.wtf/agents) with one-shot badges, featured rail, and category chips.
-- **2 featured agents** across the catalog. See the [Featured Rail](#-featured-rail) table.
-- **Template endpoint reserved** — the current generated catalog emits 0 templates. Add `templates/*.template.json` and rerun `node build-catalog.cjs` when template configs are restored.
+- **Catalog + deploy flow** — [`agents-catalog.json`](./agents-catalog.json) aggregates all 134 agents with per-agent Install / Chat / Mint URLs where declared. Served via `GET /api/agents/catalog` and rendered at [/agents](https://x402.wtf/agents) with one-shot badges, featured rail, and category chips.
+- **23 featured agents** across the catalog and **43 one-shots** on the deploy rail.
+- **Template registry live** — the generated catalog now emits **5 templates** from [`templates/`](./templates/), plus a dedicated template index at [`templates/index.json`](./templates/index.json).
+- **Skills hub live** — [`skills/index.json`](./skills/index.json) now exposes the OpenClawd skill registry with formal-verification metadata and a published skill schema.
 - **Metaplex skill baked in** — every agent in the catalog carries capability metadata for Agent Registry, Genesis, Core, Token Metadata, Bubblegum, and Candy Machine. The hub surfaces per-agent badges so users can filter by "can launch tokens" or "can mint NFTs".
 - **Solana-native schema v1** — [`schema/clawdAgentSchema.v1.json`](./schema/clawdAgentSchema.v1.json) extends Sperax v1 with `solana.capabilities`, `solana.metaplexSkills`, `solana.programDeps`, `onchain`, `payment`, `agentToken`, `a2a`, `endpoints`, and `deploy` blocks.
 - **Author/homepage rebrand** — every agent now points at `https://x402.wtf/agents/{id}` with `clawd` + `solana` tags.
@@ -99,7 +100,7 @@ Result (May 2026 generated snapshot — regenerate any time with `node build-cat
 
 ## ✨ Key Features
 
-- ✅ **124 Production-Ready Agents** — across DeFi, payments, trading, governance, security, tools, crypto research, education, and programming
+- ✅ **134 Production-Ready Agents** — across DeFi, payments, trading, governance, security, tools, analytics, research, infrastructure, NFT, and programming
 - ✅ **CLAWD Router Native** — every agent declares its `endpoints.a2a` + `mint-as-agent` + catalog routes for [x402.wtf/agents](https://x402.wtf/agents) and [ClawdRouter-main](../ClawdRouter-main/)
 - ✅ **Metaplex Skill Native** — Agent Registry, Genesis, Core, Token Metadata, Bubblegum, Candy Machine capabilities baked into the schema
 - ✅ **18 Languages** — Automated i18n translation workflow ([Learn More →](./docs/I18N_WORKFLOW.md))
@@ -133,11 +134,17 @@ Result (May 2026 generated snapshot — regenerate any time with `node build-cat
 # API root
 curl https://x402.wtf/api/agents | jq .
 
-# Full catalog (124 agents, 1 one-shot, 2 featured, 0 templates)
+# Full catalog (134 agents, 43 one-shots, 23 featured, 5 templates)
 curl https://x402.wtf/api/agents/catalog | jq '.stats'
 
 # Single agent as pure JSON
 curl https://x402.wtf/api/agents/catalog/solana-pumpfun-bot.json
+
+# Template index
+curl https://x402.wtf/api/agents/templates/index.json | jq '.stats'
+
+# Skills hub index
+curl https://x402.wtf/api/skills/index.json | jq '.stats'
 
 # Registry
 curl https://x402.wtf/api/agents/registry | jq .
@@ -160,21 +167,39 @@ node scripts/patch-agents.cjs     # cosmetic pass (summary + featured)
 
 ---
 
-## 🏷️ Categories (9)
+## 🗂️ Agent Catalog
+
+The live catalog is the canonical machine-readable surface for the site:
+
+- [`agents-catalog.json`](./agents-catalog.json) — full generated agent catalog
+- [`templates/index.json`](./templates/index.json) — reusable agent template index
+- [`skills/index.json`](./skills/index.json) — OpenClawd skills hub with verification metadata
+- [`agents-manifest.json`](./agents-manifest.json) — discovery manifest for crawlers and clients
+
+Public endpoints:
+
+- `GET /api/agents/catalog`
+- `GET /api/agents/templates/index.json`
+- `GET /api/skills/index.json`
+- `GET /api/agents/registry`
+
+## 🏷️ Categories (11)
 
 Every agent is filed into one of the valid categories the hub renders as filter chips. See `stats.byCategory` in the catalog for the live count.
 
 | Category       | Icon | Focus                                           | Count |
 | -------------- | ---- | ----------------------------------------------- | ----- |
-| **defi**       | 💰   | Yield, lending, LP, staking, perps, swaps       | 68    |
+| **defi**       | 💰   | Yield, lending, LP, staking, perps, swaps       | 66    |
 | **payments**   | 💸   | x402, USDC rails, settlement, paid APIs         | 25    |
-| **trading**    | 📈   | Routing, alpha, airdrops, memecoins             | 7     |
-| **crypto**     | 🔎   | Crypto research and market context              | 6     |
-| **tools**      | 🛠️   | Developer and operator tooling                  | 6     |
-| **security**   | 🛡️   | Risk scoring, audits, wallet safety             | 6     |
-| **governance** | 🗳️   | Realms, proposals, delegation                   | 3     |
-| **education**  | 📚   | Onboarding and explainers                       | 2     |
-| **programming** | 💻  | Coding and implementation support               | 1     |
+| **trading**    | 📈   | Routing, alpha, airdrops, memecoins             | 8     |
+| **security**   | 🛡️   | Risk scoring, audits, wallet safety             | 8     |
+| **education**  | 📚   | Onboarding and explainers                       | 6     |
+| **analytics**  | 📊   | Dashboards, trackers, portfolio analytics       | 11    |
+| **research**   | 🔎   | Web and market research                         | 1     |
+| **governance** | 🗳️   | Realms, proposals, delegation                   | 2     |
+| **infrastructure** | 🏗️ | Attestation, runtime, platform services      | 1     |
+| **dev-tools**  | 🛠️   | Developer and operator tooling                  | 4     |
+| **nft**        | 🎨   | NFT tooling and launch surfaces                 | 2     |
 
 ---
 
@@ -191,21 +216,25 @@ These surface at the top of [x402.wtf/agents](https://x402.wtf/agents). They are
 
 ## 🎯 Full One-Shot Rail
 
-Any agent with `oneShot: true` surfaces on the `/agents` deploy rail. The current generated one-shot is:
-
-`solana-pumpfun-bot`.
+Any agent with `oneShot: true` surfaces on the `/agents` deploy rail. The current generated catalog exposes **43 one-shots**.
 
 ---
 
 ## 🧩 Templates
 
-The template route is reserved, but this generated snapshot emits **0 templates**. Add `templates/*.template.json` and rerun `node build-catalog.cjs` to publish template configs.
+The generated snapshot emits **5 templates**:
+
+- `defi-analyst`
+- `firecrawl-researcher`
+- `screener`
+- `solana-attestation-agent`
+- `trading-agent`
 
 ---
 
 ## 🎨 Metaplex Skill Coverage
 
-Schema-backed agents may declare Metaplex capabilities via `solana.metaplexSkills`. The hub renders these as badges; the runtime uses them to scope delegated asset-signer permissions on minted agents. The current generated catalog rollup reports **0 Metaplex-enabled agents**; add `solana.metaplexSkills` to agent JSON and rerun `node build-catalog.cjs` to enable those filters.
+Schema-backed agents may declare Metaplex capabilities via `solana.metaplexSkills`. The hub renders these as badges; the runtime uses them to scope delegated asset-signer permissions on minted agents. The current generated catalog rollup reports **51 Metaplex-enabled agents**.
 
 | Program | Skill ID | What it unlocks |
 | ------- | -------- | --------------- |
