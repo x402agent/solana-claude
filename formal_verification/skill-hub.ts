@@ -374,9 +374,10 @@ export function getSkillBySlug(slug: string): SkillHubEntry | undefined {
 
 export function revokeSkill(skillId: string, authority: string): void {
   assertSafeRegistryKey(skillId);
+  if (!/^[0-9a-f]{64}$/.test(skillId)) throw new Error(`Invalid skill id: ${skillId}`);
   const registry = loadRegistry();
+  if (!Object.hasOwn(registry.skills, skillId)) throw new Error(`Skill ${skillId} not found`);
   const entry = registry.skills[skillId];
-  if (!entry) throw new Error(`Skill ${skillId} not found`);
   if (entry.authority !== authority) throw new Error('Not the skill authority');
   entry.active = false;
   saveRegistry(registry);
