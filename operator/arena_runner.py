@@ -18,7 +18,7 @@ Environment (all optional, safe defaults):
     IMPERIAL_API_KEY      — required for order routing
     IMPERIAL_WALLET       — operator wallet pubkey
     IMPERIAL_PROFILE_INDEX— account profile index (default 0)
-    IMPERIAL_API_BASE     — gateway base URL (default https://api.imperialdex.io)
+    IMPERIAL_API_BASE     — gateway base URL (default https://api.imperial.space/api/v1)
     IMPERIAL_LIVE         — "true" enables live submission (default: dry_run)
     IMPERIAL_MAX_SIZE_USD — hard cap per order USD (default 100)
     IMPERIAL_ALLOWED_SYMS — comma-separated override for tracked symbols
@@ -59,12 +59,17 @@ def _load_dotenv(path: Path) -> None:
             if key and key not in os.environ:
                 os.environ[key] = val
 
-_load_dotenv(Path(__file__).parent / ".env")
+OPERATOR_DIR = Path(__file__).parent
+BACKROOM_DIR = OPERATOR_DIR.parent / "openclawd-framework" / "multiagents-infinite-backroom"
+BACKROOM_API = BACKROOM_DIR / "api"
+
+# Load envs: backroom .env.local first (lowest priority), then backroom .env,
+# then operator .env — so operator-local values always win.
+_load_dotenv(BACKROOM_DIR / ".env.local")
+_load_dotenv(BACKROOM_DIR / ".env")
+_load_dotenv(OPERATOR_DIR / ".env")
 
 # ── Paths ────────────────────────────────────────────────────────────────────
-
-OPERATOR_DIR = Path(__file__).parent
-BACKROOM_API = OPERATOR_DIR.parent / "openclawd-framework" / "multiagents-infinite-backroom" / "api"
 AGENT_DIR = OPERATOR_DIR / ".agent"
 EXECUTIONS_FILE = OPERATOR_DIR / "arena_executions.json"
 SCRATCHPAD_FILE = AGENT_DIR / "scratchpad.md"
@@ -78,7 +83,7 @@ if str(BACKROOM_API) not in sys.path:
 DEFAULT_SYMBOLS = ["SOL", "BTC", "ETH", "DOGE", "SUI"]
 PHOENIX_API_BASE = "https://perp-api.phoenix.trade"
 
-IMPERIAL_API_BASE = os.getenv("IMPERIAL_API_BASE", "https://api.imperialdex.io")
+IMPERIAL_API_BASE = os.getenv("IMPERIAL_API_BASE", "https://api.imperial.space/api/v1")
 IMPERIAL_API_KEY = os.getenv("IMPERIAL_API_KEY", "")
 IMPERIAL_WALLET = os.getenv("IMPERIAL_WALLET", "")
 IMPERIAL_PROFILE_INDEX = int(os.getenv("IMPERIAL_PROFILE_INDEX", "0"))
@@ -239,7 +244,7 @@ def _fetch_imperial_marks() -> dict[str, float] | None:
     now = int(time.time())
     if _imperial_marks_cache and now - _imperial_marks_cache[0] < _CACHE_TTL:
         return _imperial_marks_cache[1]
-    result = _http_get(f"{IMPERIAL_API_BASE}/perps/marks", IMPERIAL_API_KEY)
+    result = _http_get(f"{IMPERIAL_API_BASE}/mark-prices", IMPERIAL_API_KEY)
     if result:
         _imperial_marks_cache = (now, result)
     return result
@@ -252,7 +257,7 @@ def _fetch_imperial_funding() -> Any:
     now = int(time.time())
     if _imperial_funding_cache and now - _imperial_funding_cache[0] < _CACHE_TTL:
         return _imperial_funding_cache[1]
-    result = _http_get(f"{IMPERIAL_API_BASE}/perps/funding", IMPERIAL_API_KEY)
+    result = _http_get(f"{IMPERIAL_API_BASE}/funding-rates", IMPERIAL_API_KEY)
     if result:
         _imperial_funding_cache = (now, result)
     return result
@@ -370,7 +375,7 @@ def route_order(signal: AgentSignal, dry_run: bool = True) -> ExecutionRecord:
         error = "IMPERIAL_API_KEY not set — order blocked"
         status = "blocked"
     else:
-        url = f"{IMPERIAL_API_BASE}/perps/order/imperial"
+        url = f"{IMPERIAL_API_BASE}/mobile/orders"
         response = _http_post(url, payload, IMPERIAL_API_KEY)
         if response is not None:
             status = "preview" if dry_run else "submitted"
