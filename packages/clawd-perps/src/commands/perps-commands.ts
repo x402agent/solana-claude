@@ -358,6 +358,14 @@ Environment variables:
     .action((args: string[]) => runClawdPerpsAgent(args.length ? args : ["status"], { fallbackPython: true }));
 
   cmd
+    .command("onchain-mm")
+    .description("Phoenix on-chain market-maker status/build/plan/run through the Clawd agent")
+    .allowUnknownOption(true)
+    .allowExcessArguments(true)
+    .argument("[args...]", "Arguments passed to clawd-agents-perps onchain-mm")
+    .action((args: string[]) => runClawdPerpsAgent(["onchain-mm", ...(args.length ? args : ["status"])], { fallbackPython: false }));
+
+  cmd
     .command("python-agent")
     .description("Run the Python Phoenix perps agent directly")
     .allowUnknownOption(true)

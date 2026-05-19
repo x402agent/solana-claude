@@ -4,6 +4,12 @@ import { buildPerpsFrontendStatus } from "./frontend.js";
 import { ClawdPerpsRuntime } from "./marketMaker.js";
 import { handleTelegramPerpsCommand } from "./telegram.js";
 import { ImperialClient } from "./imperialAgent.js";
+import {
+  buildOnchainMarketMaker,
+  buildOnchainMarketMakerPlan,
+  getOnchainMarketMakerStatus,
+  runOnchainMarketMaker,
+} from "./onchainMarketMaker.js";
 
 type ParsedArgs = {
   command: string;
@@ -76,6 +82,10 @@ Usage:
   clawd-agents-perps imperial-health
   clawd-agents-perps imperial-scan --symbols SOL,BTC,ETH --size 100
   clawd-agents-perps imperial-cycle SOL --size 100
+  clawd-agents-perps onchain-mm status
+  clawd-agents-perps onchain-mm build
+  clawd-agents-perps onchain-mm plan --market <pubkey> --ticker SOL-USD
+  clawd-agents-perps onchain-mm run --market <pubkey> --yes
 
 Safety:
   Defaults are observe/paper. Live previews remain blocked unless the runtime
@@ -84,9 +94,70 @@ Safety:
 `);
 }
 
+function printOnchainMmHelp(): void {
+  console.log(`clawd-agents-perps onchain-mm
+
+Usage:
+  clawd-agents-perps onchain-mm status
+  clawd-agents-perps onchain-mm build [--release]
+  clawd-agents-perps onchain-mm plan [--market <pubkey>] [--ticker SOL-USD] [--rpc-url local]
+  clawd-agents-perps onchain-mm run --market <pubkey> --yes
+
+Environment:
+  CLAWD_ONCHAIN_MM_ROOT    Path to Perps/phoenix-onchain-market-maker-master
+  CLAWD_ONCHAIN_MM_MARKET  Phoenix market pubkey
+  CLAWD_ONCHAIN_MM_TICKER  Coinbase ticker, default SOL-USD
+  CLAWD_ONCHAIN_MM_RPC_URL RPC alias/url, default local/SOLANA_RPC_URL
+  CLAWD_ONCHAIN_MM_LIVE=true and OPERATOR_CONFIRMED=true required for run
+`);
+}
+
 async function main() {
   const parsed = parseArgs(process.argv.slice(2));
   const createRuntime = () => new ClawdPerpsRuntime(undefined, repoRoot());
+
+  if (parsed.command === "onchain-mm") {
+    const subcommand = parsed.rest[0] || "status";
+    const runOptions = {
+      market: typeof parsed.options.market === "string" ? parsed.options.market : undefined,
+      ticker: typeof parsed.options.ticker === "string" ? parsed.options.ticker : undefined,
+      rpcUrl: typeof parsed.options["rpc-url"] === "string" ? parsed.options["rpc-url"] : undefined,
+      keypairPath: typeof parsed.options["keypair-path"] === "string" ? parsed.options["keypair-path"] : undefined,
+      quoteEdgeBps: asNumber(parsed.options["quote-edge-bps"], 3),
+      quoteSize: asNumber(parsed.options["quote-size"], 100_000_000),
+      refreshMs: asNumber(parsed.options["refresh-ms"], 2000),
+      priceImprovement: typeof parsed.options["price-improvement"] === "string" ? parsed.options["price-improvement"] : undefined,
+      postOnly: parsed.options["post-only"] !== false,
+      release: Boolean(parsed.options.release),
+      yes: Boolean(parsed.options.yes),
+    };
+
+    switch (subcommand) {
+      case "help":
+      case "--help":
+      case "-h":
+        printOnchainMmHelp();
+        return;
+      case "status":
+        printJson(getOnchainMarketMakerStatus());
+        return;
+      case "build":
+      case "install":
+        printJson(buildOnchainMarketMaker({ release: Boolean(parsed.options.release) }));
+        return;
+      case "plan":
+        printJson(buildOnchainMarketMakerPlan(runOptions));
+        return;
+      case "run":
+        runOnchainMarketMaker(runOptions);
+        return;
+      default:
+        console.error(`Unknown onchain-mm command: ${subcommand}`);
+        printOnchainMmHelp();
+        process.exitCode = 1;
+        return;
+    }
+  }
 
   switch (parsed.command) {
     case "help":
