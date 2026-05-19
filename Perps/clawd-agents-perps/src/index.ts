@@ -7,3 +7,4 @@ export * from './adapters/phoenixRise.js';
 export * from './adapters/vulcan.js';
 export * from './vulcanCatalog.js';
 export * from './imperialAgent.js';
+export * from './imperialBot.js';
