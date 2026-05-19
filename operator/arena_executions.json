@@ -388,5 +388,31 @@
     "status": "blocked",
     "error": "IMPERIAL_API_KEY not set \u2014 order blocked",
     "tx_signature": null
+  },
+  {
+    "id": "imp-53a24165",
+    "ts": 1779218789619,
+    "wallet": "",
+    "profile_index": 0,
+    "venue": "phoenix-imperial",
+    "symbol": "SOL",
+    "side": "long",
+    "action": "increase",
+    "size_usd": 100.0,
+    "dry_run": true,
+    "request": {
+      "symbol": "SOL",
+      "side": 0,
+      "action": 0,
+      "profileIndex": 0,
+      "sizeUsd": 100.0,
+      "orderType": 0,
+      "underwriter": 2,
+      "dry_run": true
+    },
+    "response": null,
+    "status": "blocked",
+    "error": "IMPERIAL_API_KEY not set \u2014 order blocked",
+    "tx_signature": null
   }
 ]
