@@ -53,7 +53,7 @@ The one-shot installer (`curl -fsSL https://x402.wtf/automation/install.sh | bas
 
 - installs `@openclawdsolana/clawd-perps`
 - builds and links the bundled Vulcan CLI when Cargo is available
-- writes `~/.clawd/.env` defaults for `CLAWD_PERPS_API_URL`, `CLAWD_PERPS_RPC_URL`, `CLAWD_PERPS_AGENT_PATH`, `VULCAN_BIN`, and `PHOENIX_DEFAULT_MODE`
+- writes `~/.clawd/.env` defaults for `CLAWD_PERPS_API_URL`, `CLAWD_PERPS_RPC_URL`, `CLAWD_PERPS_AGENT_PATH`, `VULCAN_BIN`, `PHOENIX_DEFAULT_MODE`, `IMPERIAL_API_BASE`, `IMPERIAL_API_KEY`, `IMPERIAL_WALLET`, and `IMPERIAL_PROFILE_INDEX`
 - sends a best-effort install relay to the Backroom API at `/stream/human`
 
 Skip local perps setup with `--no-perps`. Disable the relay with `CLAWD_PERPS_NO_RELAY=1`.
