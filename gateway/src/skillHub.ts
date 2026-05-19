@@ -219,7 +219,14 @@ router.get('/api/skills/slug/:slug/card.svg', cacheHeaders(600), (req: Request, 
 
 // ── POST /api/skills/register ──────────────────────────────────────────────
 
-router.post('/api/skills/register', async (req: Request, res: Response) => {
+const registerRouteLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: 20,
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+router.post('/api/skills/register', registerRouteLimiter, async (req: Request, res: Response) => {
   const { slug, name, kind, authority, metadata_uri, component_path, kani_verified } = req.body ?? {};
 
   if (!slug || !authority) {

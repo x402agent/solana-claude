@@ -9,17 +9,15 @@
  */
 
 import { readFileSync, existsSync, readdirSync, statSync } from 'node:fs';
-import { join, resolve, extname } from 'node:path';
+import { join, resolve, extname, relative, sep } from 'node:path';
 
 const REPO_ROOT = resolve(import.meta.dirname ?? __dirname, '..');
 
 function isPathWithinRoot(targetPath: string, rootPath: string): boolean {
   const resolvedRoot = resolve(rootPath);
   const resolvedTarget = resolve(targetPath);
-  const rel = resolvedTarget.startsWith(resolvedRoot)
-    ? resolvedTarget.slice(resolvedRoot.length)
-    : `..${resolvedTarget}`;
-  return resolvedTarget === resolvedRoot || (rel.startsWith('/') || rel.startsWith('\\'));
+  const rel = relative(resolvedRoot, resolvedTarget);
+  return rel === '' || (!rel.startsWith(`..${sep}`) && rel !== '..' && !rel.startsWith('..') && !resolve(rel).startsWith(sep));
 }
 
 // ---------------------------------------------------------------------------

@@ -1,0 +1,164 @@
+name: Skill Hub Verification
+
+on:
+  pull_request:
+    paths:
+      - 'skills/**'
+      - 'agents/**'
+      - 'formal_verification/**'
+  push:
+    branches:
+      - main
+      - 'claude/**'
+    paths:
+      - 'skills/**'
+      - 'agents/**'
+
+jobs:
+  verify-skills:
+    name: Formal Verification Gate
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund --legacy-peer-deps
+        working-directory: .
+
+      - name: Detect changed skills
+        id: changed
+        run: |
+          BASE=${{ github.event.pull_request.base.sha || 'HEAD^' }}
+          CHANGED=$(git diff --name-only $BASE HEAD -- 'skills/*/' | grep -oP 'skills/[^/]+' | sort -u || true)
+          echo "dirs=$CHANGED" >> "$GITHUB_OUTPUT"
+          echo "Changed skill dirs: $CHANGED"
+
+      - name: Run STRIDE gate on changed skills
+        if: steps.changed.outputs.dirs != ''
+        run: |
+          FAILED=0
+          for dir in ${{ steps.changed.outputs.dirs }}; do
+            if [ -d "$dir" ] && [ "$(basename "$dir")" != "SKILL_HUB.md" ]; then
+              echo "::group::Verifying $dir"
+              npx tsx formal_verification/gate.ts verify --path "$dir" || {
+                echo "::error::STRIDE gate FAILED for $dir"
+                FAILED=$((FAILED + 1))
+              }
+              echo "::endgroup::"
+            fi
+          done
+          [ "$FAILED" -eq 0 ] || exit 1
+
+      - name: Run STRIDE gate on changed agents
+        run: |
+          BASE=${{ github.event.pull_request.base.sha || 'HEAD^' }}
+          CHANGED_AGENTS=$(git diff --name-only $BASE HEAD -- 'agents/**/*.json' || true)
+          FAILED=0
+          for f in $CHANGED_AGENTS; do
+            [ -f "$f" ] || continue
+            echo "::group::Verifying $f"
+            npx tsx formal_verification/gate.ts verify --path "$f" || {
+              echo "::error::STRIDE gate FAILED for $f"
+              FAILED=$((FAILED + 1))
+            }
+            echo "::endgroup::"
+          done
+          [ "$FAILED" -eq 0 ] || exit 1
+
+      - name: Validate skill manifests (if any *.skill-manifest.json added)
+        run: |
+          BASE=${{ github.event.pull_request.base.sha || 'HEAD^' }}
+          MANIFESTS=$(git diff --name-only $BASE HEAD | grep '\.skill-manifest\.json$' || true)
+          for f in $MANIFESTS; do
+            [ -f "$f" ] || continue
+            node -e "
+              const fs = require('fs');
+              const data = JSON.parse(fs.readFileSync('$f', 'utf8'));
+              if (!data.slug || !data.author?.solana_pubkey) {
+                console.error('Invalid manifest: missing slug or author.solana_pubkey');
+                process.exit(1);
+              }
+              if (data.schema_version !== '1.0') {
+                console.error('Invalid manifest: schema_version must be 1.0');
+                process.exit(1);
+              }
+              console.log('Manifest OK:', data.slug);
+            "
+          done
+
+      - name: Post PR summary
+        if: github.event_name == 'pull_request' && always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const outcome = '${{ job.status }}';
+            const changed = '${{ steps.changed.outputs.dirs }}' || '(none)';
+            const body = [
+              '## Skill Hub Verification',
+              '',
+              outcome === 'success'
+                ? '✅ All changed skills passed the STRIDE + formal verification gate.'
+                : '❌ One or more skills failed the STRIDE gate. See logs above.',
+              '',
+              '**Changed skill directories:**',
+              changed.split(' ').filter(Boolean).map(d => `- \`${d}\``).join('\n') || '- (none)',
+              '',
+              '**Gate requirements:**',
+              '- STRIDE score ≥ 60 for skills/plugins/MCP servers',
+              '- STRIDE score ≥ 70 for agents',
+              '- Zero critical STRIDE violations',
+              '',
+              'Run locally: `npx tsx formal_verification/gate.ts verify --path skills/<slug>`',
+            ].join('\n');
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body,
+            });
+
+  validate-catalog:
+    name: Validate catalog.json
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check catalog.json is valid JSON
+        run: node -e "JSON.parse(require('fs').readFileSync('skills/catalog.json','utf8')); console.log('catalog.json OK')"
+
+      - name: Check for duplicate slugs
+        run: |
+          node -e "
+            const catalog = JSON.parse(require('fs').readFileSync('skills/catalog.json','utf8'));
+            const slugs = catalog.map(e => e.slug);
+            const dupes = slugs.filter((s, i) => slugs.indexOf(s) !== i);
+            if (dupes.length) { console.error('Duplicate slugs:', dupes); process.exit(1); }
+            console.log('No duplicate slugs in', slugs.length, 'entries');
+          "
+
+      - name: Check skill directories match catalog entries
+        run: |
+          node -e "
+            const fs = require('fs');
+            const catalog = JSON.parse(fs.readFileSync('skills/catalog.json','utf8'));
+            const dirs = fs.readdirSync('skills').filter(f =>
+              fs.statSync('skills/' + f).isDirectory()
+            );
+            const missing = dirs.filter(d => !catalog.find(e => e.slug === d));
+            if (missing.length) {
+              console.warn('Dirs without catalog entry (add to catalog.json):', missing);
+            }
+            console.log('Catalog check complete.');
+          "
