@@ -128,9 +128,13 @@ export function deriveSkillId(slug: string, kind: ComponentKind, specHash: strin
  * If a real spec file exists, hash its contents; otherwise hash the slug.
  */
 export function computeSpecHash(slugOrPath: string): string {
+  // Defensive validation at sink: this function must only operate on slug-safe input.
+  assertSafeSlug(slugOrPath);
+  const safeSlug = slugOrPath;
+
   const bases = [
-    path.resolve(SKILLS_ROOT, slugOrPath),
-    path.resolve(REPO_ROOT, slugOrPath),
+    path.resolve(SKILLS_ROOT, safeSlug),
+    path.resolve(REPO_ROOT, safeSlug),
   ].filter((base, index) => isPathWithinRoot(base, index === 0 ? SKILLS_ROOT : REPO_ROOT));
 
   for (const base of bases) {
@@ -142,7 +146,7 @@ export function computeSpecHash(slugOrPath: string): string {
     }
   }
   // Fallback: hash the slug itself
-  return crypto.createHash('sha256').update(slugOrPath).digest('hex');
+  return crypto.createHash('sha256').update(safeSlug).digest('hex');
 }
 
 // ── Verification gate ──────────────────────────────────────────────────────
