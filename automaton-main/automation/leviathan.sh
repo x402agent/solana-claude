@@ -230,6 +230,10 @@ bootstrap_perps() {
   ensure_env_line "$env_file" "CLAWD_PERPS_AGENT_PATH" "$REPO_ROOT/solana-python-agent/perps_agent.py"
   ensure_env_line "$env_file" "VULCAN_BIN" "$LOCAL_BIN_DIR/vulcan"
   ensure_env_line "$env_file" "PHOENIX_DEFAULT_MODE" "paper"
+  ensure_env_line "$env_file" "IMPERIAL_API_BASE" "https://api.imperial.space/api/v1"
+  ensure_env_line "$env_file" "IMPERIAL_API_KEY" ""
+  ensure_env_line "$env_file" "IMPERIAL_WALLET" ""
+  ensure_env_line "$env_file" "IMPERIAL_PROFILE_INDEX" "0"
   ok "Wrote Phoenix perps defaults to $env_file"
 
   relay_perps_install

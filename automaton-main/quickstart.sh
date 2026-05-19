@@ -141,6 +141,7 @@ CLAWD_API_KEY=
 # SOLANA_RPC_URL=
 # DFLOW_API_KEY=
 # VULCAN_BIN=
+# IMPERIAL_API_KEY=
 ENV
   echo "  📝 Created ~/.clawd/.env — add your CLAWD_API_KEY"
 else
@@ -151,6 +152,10 @@ ensure_env_line "${ENV_FILE}" "CLAWD_PERPS_RPC_URL" "https://api.mainnet-beta.so
 ensure_env_line "${ENV_FILE}" "CLAWD_PERPS_AGENT_PATH" "${SCRIPT_DIR}/../solana-python-agent/perps_agent.py"
 ensure_env_line "${ENV_FILE}" "VULCAN_BIN" "${LOCAL_BIN_DIR}/vulcan"
 ensure_env_line "${ENV_FILE}" "PHOENIX_DEFAULT_MODE" "paper"
+ensure_env_line "${ENV_FILE}" "IMPERIAL_API_BASE" "https://api.imperial.space/api/v1"
+ensure_env_line "${ENV_FILE}" "IMPERIAL_API_KEY" ""
+ensure_env_line "${ENV_FILE}" "IMPERIAL_WALLET" ""
+ensure_env_line "${ENV_FILE}" "IMPERIAL_PROFILE_INDEX" "0"
 echo "  ✅ Phoenix perps env defaults ready"
 echo ""
 
