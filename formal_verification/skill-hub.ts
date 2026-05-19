@@ -128,7 +128,6 @@ export function deriveSkillId(slug: string, kind: ComponentKind, specHash: strin
  * If a real spec file exists, hash its contents; otherwise hash the slug.
  */
 export function computeSpecHash(slugOrPath: string): string {
-<<<<<<< HEAD
   // Defensive validation at sink: this function must only operate on slug-safe input.
   assertSafeSlug(slugOrPath);
   const safeSlug = slugOrPath;
@@ -137,33 +136,20 @@ export function computeSpecHash(slugOrPath: string): string {
     path.resolve(SKILLS_ROOT, safeSlug),
     path.resolve(REPO_ROOT, safeSlug),
   ].filter((base, index) => isPathWithinRoot(base, index === 0 ? SKILLS_ROOT : REPO_ROOT));
+
+  for (const base of bases) {
+    for (const c of ['SPEC.md', 'spec.md', 'README.md'].map((name) => path.resolve(base, name))) {
+      if (!isPathWithinRoot(c, REPO_ROOT)) continue;
       if (!fs.existsSync(c)) continue;
 
       const realCandidate = fs.realpathSync(c);
       if (!isPathWithinRoot(realCandidate, REPO_ROOT)) continue;
 
       return crypto.createHash('sha256').update(fs.readFileSync(realCandidate)).digest('hex');
-=======
-  const bases = [
-    path.resolve(SKILLS_ROOT, slugOrPath),
-    path.resolve(REPO_ROOT, slugOrPath),
-  ].filter((base, index) => isPathWithinRoot(base, index === 0 ? SKILLS_ROOT : REPO_ROOT));
-
-  for (const base of bases) {
-    for (const c of ['SPEC.md', 'spec.md', 'README.md'].map((name) => path.resolve(base, name))) {
->>>>>>> 15ee54919 (Claude/gasless agent minting xw vb3 (#148))
-      if (!isPathWithinRoot(c, REPO_ROOT)) continue;
-      if (fs.existsSync(c)) {
-        return crypto.createHash('sha256').update(fs.readFileSync(c)).digest('hex');
-      }
     }
   }
   // Fallback: hash the slug itself
-<<<<<<< HEAD
   return crypto.createHash('sha256').update(safeSlug).digest('hex');
-=======
-  return crypto.createHash('sha256').update(slugOrPath).digest('hex');
->>>>>>> 15ee54919 (Claude/gasless agent minting xw vb3 (#148))
 }
 
 // ── Verification gate ──────────────────────────────────────────────────────
@@ -388,22 +374,15 @@ export function getSkillBySlug(slug: string): SkillHubEntry | undefined {
 
 export function revokeSkill(skillId: string, authority: string): void {
   assertSafeRegistryKey(skillId);
-<<<<<<< HEAD
   if (!/^[0-9a-f]{64}$/.test(skillId)) throw new Error(`Invalid skill id: ${skillId}`);
   const registry = loadRegistry();
   if (!Object.hasOwn(registry.skills, skillId)) throw new Error(`Skill ${skillId} not found`);
   const entry = registry.skills[skillId];
-=======
-  const registry = loadRegistry();
-  const entry = registry.skills[skillId];
-  if (!entry) throw new Error(`Skill ${skillId} not found`);
->>>>>>> 15ee54919 (Claude/gasless agent minting xw vb3 (#148))
   if (entry.authority !== authority) throw new Error('Not the skill authority');
   entry.active = false;
   saveRegistry(registry);
 }
 
-<<<<<<< HEAD
 // ── Manifest types ─────────────────────────────────────────────────────────
 
 export interface SkillManifest {
@@ -764,8 +743,6 @@ export function searchSkills(query: string, limit = 20): SkillHubEntry[] {
 
 export { loadRegistry };
 
-=======
->>>>>>> 15ee54919 (Claude/gasless agent minting xw vb3 (#148))
 // ── CLI entry point ────────────────────────────────────────────────────────
 
 if (process.argv[1] === import.meta.filename || process.argv[1]?.endsWith('skill-hub.ts')) {
