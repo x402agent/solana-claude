@@ -112,6 +112,7 @@
     "automation:build": "pnpm --dir automaton-main exec tsx automation/index.ts --build",
     "automation:spawn": "pnpm --dir automaton-main exec tsx automation/index.ts --spawn",
     "automation:ci": "pnpm --dir automaton-main exec tsx automation/index.ts --ci",
+    "automation:perps": "bash automaton-main/automation/leviathan.sh --status --no-install",
     "automation:full": "bash automaton-main/automation/leviathan.sh --full",
     "automation:hermes": "bash automaton-main/automation/leviathan.sh --hermes",
     "automation:brain": "bash automaton-main/automation/leviathan.sh --brain",

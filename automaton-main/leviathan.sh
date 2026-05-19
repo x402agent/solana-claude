@@ -49,8 +49,12 @@ NO_PERPS=false
 PERPS_PACKAGE="${PERPS_PACKAGE:-@openclawdsolana/clawd-perps}"
 CLAWD_DIR="${CLAWD_DIR:-$HOME/.clawd}"
 CLAWD_BACKROOM_URL="${CLAWD_BACKROOM_URL:-https://backrooms.x402.wtf}"
-[[ "${1:-}" == "--full" ]] && FULL_MODE=true
-[[ "${1:-}" == "--no-perps" || "${2:-}" == "--no-perps" ]] && NO_PERPS=true
+for arg in "$@"; do
+  case "$arg" in
+    --full) FULL_MODE=true ;;
+    --no-perps) NO_PERPS=true ;;
+  esac
+done
 
 ensure_env_line() {
   local file="$1" key="$2" value="$3"

@@ -41,6 +41,8 @@
   "scripts": {
     "build": "tsc",
     "dev": "tsx watch src/index.ts",
+    "perps:bootstrap": "bash leviathan.sh --status --no-install",
+    "perps:context": "clawd-perps perps vulcan context",
     "test": "vitest run",
     "clean": "rm -rf dist"
   },

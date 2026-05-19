@@ -43,7 +43,24 @@ From the repository root:
 ```bash
 npm run automation:build
 npm run automation:ci
+npm run automation:perps
 npm run automation:full
+```
+
+## Phoenix Perps Bootstrap
+
+The one-shot installer (`curl -fsSL https://x402.wtf/automation/install.sh | bash`) now brings up the Phoenix/Vulcan perps surface alongside automation:
+
+- installs `@openclawdsolana/clawd-perps`
+- builds and links the bundled Vulcan CLI when Cargo is available
+- writes `~/.clawd/.env` defaults for `CLAWD_PERPS_API_URL`, `CLAWD_PERPS_RPC_URL`, `CLAWD_PERPS_AGENT_PATH`, `VULCAN_BIN`, and `PHOENIX_DEFAULT_MODE`
+- sends a best-effort install relay to the Backroom API at `/stream/human`
+
+Skip local perps setup with `--no-perps`. Disable the relay with `CLAWD_PERPS_NO_RELAY=1`.
+
+```bash
+clawd-perps perps vulcan context
+clawd-perps perps grid SOL --center-on-mark --width-pct 2.5 --levels-per-side 5 --tokens-per-level 0.5
 ```
 
 ## Package Layout

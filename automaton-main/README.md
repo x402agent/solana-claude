@@ -58,6 +58,8 @@ clawd-automaton --help
 clawd-automaton --run
 clawd-automaton --status
 clawd-automaton --goblin
+clawd-perps perps vulcan context
+clawd-perps perps grid SOL --center-on-mark --width-pct 2.5 --levels-per-side 5 --tokens-per-level 0.5
 ```
 
 Or without a global install:
@@ -85,6 +87,8 @@ bash leviathan.sh
 ```
 
 Both `leviathan.sh` and `quickstart.sh` link `dist/index.js` to `~/.local/bin/clawd-automaton` so the CLI is usable after a source install. If `~/.local/bin` is not on your `PATH`, add it in your shell profile.
+
+The one-shot automation installer also bootstraps Phoenix perps by installing `@openclawdsolana/clawd-perps`, building/linking Vulcan when Cargo is available, writing `~/.clawd/.env` defaults, and relaying a public Phoenix/Vulcan/Imperial install signal to the Backroom API. Use `--no-perps` or `CLAWD_NO_PERPS=1` to skip local perps setup, and `CLAWD_PERPS_NO_RELAY=1` to disable the relay.
 
 ---
 
@@ -123,6 +127,10 @@ The runtime is where those surfaces become operational. The attestation layer is
 | `SOLANA_RPC_URL` | Solana RPC endpoint |
 | `DFLOW_API_KEY` | DFlow trading API key |
 | `VULCAN_BIN` | Path to Vulcan perps CLI binary |
+| `CLAWD_PERPS_API_URL` | Phoenix perps API endpoint |
+| `CLAWD_PERPS_RPC_URL` | Solana RPC endpoint used by `clawd-perps` |
+| `CLAWD_PERPS_AGENT_PATH` | Python Phoenix perps agent path |
+| `CLAWD_PERPS_NO_RELAY` | Disable Backroom install relay when set to `1` |
 
 ---
 

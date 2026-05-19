@@ -191,6 +191,7 @@ ensure_env_line() {
 
 bootstrap_perps() {
   [ "$NO_PERPS" -eq 1 ] && { ok "Skipping Phoenix/Vulcan perps (--no-perps)"; return 0; }
+  [ "$DO_CI" -eq 1 ] && { ok "Skipping Phoenix/Vulcan perps in CI mode"; return 0; }
 
   step "Bootstrapping Phoenix/Vulcan perps"
   mkdir -p "$LOCAL_BIN_DIR" "$CLAWD_DIR"
