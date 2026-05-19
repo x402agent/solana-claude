@@ -26,7 +26,9 @@
     "start": "node dist/cli.js",
     "typecheck": "tsc --noEmit",
     "vulcan": "node dist/cli.js perps vulcan",
-    "agent": "node dist/cli.js perps agent"
+    "agent": "node dist/cli.js perps agent",
+    "harness": "node dist/cli.js perps harness",
+    "tui": "node dist/cli.js perps tui"
   },
   "keywords": [
     "clawd",
