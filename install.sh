@@ -28,6 +28,8 @@
 #   --xai-key=KEY        Seed XAI_API_KEY in the workspace .env (interactive otherwise).
 #   --no-build           Skip Go binary build (use prebuilt or skip native).
 #   --no-node            Skip Node workspace install/build.
+#   --no-vulcan          Skip Phoenix/Vulcan perps bootstrap.
+#   --no-python          Skip Python perps agent dependency bootstrap.
 #   --reset-config       Overwrite an existing config.json.
 #   --quiet              Suppress informational chatter; keep ✓/! lines only.
 #   --no-banner          Skip the ASCII banner (CI-friendly).
@@ -52,6 +54,8 @@ BRANCH="main"
 WITH_WEB=0
 NO_BUILD=0
 NO_NODE=0
+NO_VULCAN=0
+NO_PYTHON=0
 RESET_CONFIG=0
 QUIET=0
 NO_BANNER=0
@@ -227,6 +231,8 @@ for arg in "$@"; do
     --with-web)        WITH_WEB=1 ;;
     --no-build)        NO_BUILD=1 ;;
     --no-node)         NO_NODE=1 ;;
+    --no-vulcan)       NO_VULCAN=1 ;;
+    --no-python)       NO_PYTHON=1 ;;
     --reset-config)    RESET_CONFIG=1 ;;
     --quiet|-q)        QUIET=1 ;;
     --no-banner)       NO_BANNER=1 ;;
@@ -416,6 +422,64 @@ else
   ln -sf "$BIN_DIR/openclawd" "$BIN_DIR/openclawdsolana"
   ln -sf "$BIN_DIR/openclawd" "$BIN_DIR/clawd"
   ok "installed $BIN_DIR/openclawd (aliases: openclawdsolana, clawd)"
+fi
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Phoenix perps — Vulcan CLI + Python strategy agent
+# ──────────────────────────────────────────────────────────────────────────────
+PERPS_AGENT_PATH="$SRC_DIR/solana-python-agent/perps_agent.py"
+PERPS_VENV="$WORKSPACE/perps-venv"
+VULCAN_BIN_PATH="$SRC_DIR/vulcan-cli-master/target/debug/vulcan"
+
+if [ "$NO_VULCAN" = "1" ]; then
+  info "skipping Phoenix/Vulcan bootstrap (--no-vulcan)"
+elif command -v cargo >/dev/null 2>&1 && [ -f "$SRC_DIR/vulcan-cli-master/Cargo.toml" ]; then
+  step "building Phoenix Vulcan CLI"
+  ( cd "$SRC_DIR/vulcan-cli-master" && cargo build -p vulcan ) \
+    && {
+      install -m 0755 "$VULCAN_BIN_PATH" "$BIN_DIR/vulcan"
+      ok "installed $BIN_DIR/vulcan"
+    } \
+    || warn "Vulcan build failed — install Rust/Cargo or run: cargo build -p vulcan"
+elif command -v vulcan >/dev/null 2>&1; then
+  VULCAN_BIN_PATH="$(command -v vulcan)"
+  ln -sf "$VULCAN_BIN_PATH" "$BIN_DIR/vulcan" 2>/dev/null || true
+  ok "using existing Vulcan CLI at $VULCAN_BIN_PATH"
+else
+  warn "Vulcan CLI not found — install Rust/Cargo or run the official Vulcan installer"
+fi
+
+if [ "$NO_PYTHON" = "1" ]; then
+  info "skipping Python perps agent bootstrap (--no-python)"
+elif command -v python3 >/dev/null 2>&1 && [ -f "$PERPS_AGENT_PATH" ]; then
+  step "preparing Python Phoenix perps agent"
+  python3 -m py_compile "$PERPS_AGENT_PATH" \
+    && ok "perps_agent.py syntax check passed" \
+    || warn "perps_agent.py syntax check failed"
+
+  if python3 -m venv "$PERPS_VENV" >/dev/null 2>&1; then
+    "$PERPS_VENV/bin/python" -m pip install --upgrade pip >/dev/null 2>&1 || true
+    "$PERPS_VENV/bin/pip" install -r "$SRC_DIR/solana-python-agent/requirements.txt" >/dev/null 2>&1 \
+      && ok "Python perps venv ready at $PERPS_VENV" \
+      || warn "Python perps dependency install failed — run: $PERPS_VENV/bin/pip install -r solana-python-agent/requirements.txt"
+    ln -sf "$PERPS_VENV/bin/python" "$BIN_DIR/clawd-perps-python" 2>/dev/null || true
+  else
+    warn "python3 venv unavailable — perps agent will use system python3"
+  fi
+
+  cat > "$BIN_DIR/clawd-phoenix" <<PERPSEOF
+#!/usr/bin/env bash
+set -euo pipefail
+export CLAWD_PERPS_AGENT_PATH="${PERPS_AGENT_PATH}"
+export VULCAN_BIN="${BIN_DIR}/vulcan"
+PY="${PERPS_VENV}/bin/python"
+[ -x "\$PY" ] || PY="\${PYTHON:-python3}"
+exec "\$PY" "${PERPS_AGENT_PATH}" "\$@"
+PERPSEOF
+  chmod 0755 "$BIN_DIR/clawd-phoenix"
+  ok "installed $BIN_DIR/clawd-phoenix → Python Phoenix/Vulcan agent"
+else
+  warn "python3 or perps_agent.py not found — skipping Python perps agent bootstrap"
 fi
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -704,6 +768,14 @@ write_config() {
   "agentsCatalog":   "$OPENCLAWD_AGENTS_URL/catalog",
   "agentsRegistry":  "$OPENCLAWD_AGENTS_URL/registry",
   "solanaRpc":       "https://api.mainnet-beta.solana.com",
+  "phoenix": {
+    "apiUrl":        "https://perp-api.phoenix.trade",
+    "rpcUrl":        "https://api.mainnet-beta.solana.com",
+    "agentPath":     "$PERPS_AGENT_PATH",
+    "vulcanBin":     "$BIN_DIR/vulcan",
+    "defaultMode":   "paper",
+    "liveRequiresYes": true
+  },
   "sasProgramId":    "22zoJMtdu4tQc2PzL74ZUT7FrwgB1Udec8DdW4yw4BdG",
   "scope":           "@openclawdsolana",
   "skillsCatalog":   "$OPENCLAWD_BASE_URL/skills",
@@ -775,6 +847,13 @@ OPENCLAWD_AGENTS_REGISTRY=$OPENCLAWD_AGENTS_URL/registry
 HELIUS_API_KEY=
 BIRDEYE_API_KEY=
 SOLANA_RPC_URL=https://api.mainnet-beta.solana.com
+
+# ── Phoenix perpetuals via Vulcan/Rise SDK ───────────────────────────────────
+CLAWD_PERPS_API_URL=https://perp-api.phoenix.trade
+CLAWD_PERPS_RPC_URL=https://api.mainnet-beta.solana.com
+CLAWD_PERPS_AGENT_PATH=$PERPS_AGENT_PATH
+VULCAN_BIN=$BIN_DIR/vulcan
+PHOENIX_DEFAULT_MODE=paper
 
 # ── Telegram gateway (optional) ───────────────────────────────────────────────
 TELEGRAM_BOT_TOKEN=
@@ -850,6 +929,8 @@ printf "  ${PURPLE}3.${RESET}  Launch a TUI (pick your surface):\n"
 printf "       ${GREEN}clawd${RESET}              ${DIM}# @openclawdsolana/clawd — Leviathan TUI (Grok, Solana, MCP)${RESET}\n"
 printf "       ${GREEN}clawd-standalone${RESET}   ${DIM}# @openclawdsolana/clawd-standalone — lightweight, no Leviathan${RESET}\n"
 printf "       ${GREEN}clawd-perps${RESET}        ${DIM}# @openclawdsolana/clawd-perps — Phoenix Perpetuals CLI${RESET}\n"
+printf "       ${GREEN}clawd-perps perps vulcan health${RESET}  ${DIM}# npm CLI → Python agent/Vulcan${RESET}\n"
+printf "       ${GREEN}clawd-phoenix grid SOL --center-on-mark --width-pct 2 --levels-per-side 3 --tokens-per-level 0.1${RESET}\n"
 printf "       ${GREEN}agentwallet${RESET}        ${DIM}# agentwallet-vault — encrypted keypair vault + HTTP server${RESET}\n"
 printf "       ${GREEN}clawd-automaton${RESET}    ${DIM}# clawd-automaton — automation runtime + cloud dashboard${RESET}\n"
 printf "       ${GREEN}clawd-code${RESET}         ${DIM}# clawd-code-cli — Grok / OpenRouter / Ollama / OpenAI${RESET}\n"
