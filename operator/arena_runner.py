@@ -5,6 +5,7 @@ Arena Runner — Imperial Perps Trading Loop
 Fetches Phoenix/Imperial market data, runs the 4-agent scoring arena,
 routes actionable signals through Imperial (dry_run by default),
 and writes an audit trail to arena_executions.json + .agent/scratchpad.md.
+Also pushes each pass to Convex for real-time visualization.
 
 Usage:
     python arena_runner.py
@@ -23,6 +24,8 @@ Environment (all optional, safe defaults):
     IMPERIAL_ALLOWED_SYMS — comma-separated override for tracked symbols
     BACKROOM_API_URL      — backroom FastAPI URL for enriched market data
                             (falls back to direct Phoenix API if unset)
+    CONVEX_SITE_URL       — Convex HTTP actions URL for real-time push
+    ARENA_INGEST_SECRET   — Bearer token checked by /arena/ingest endpoint
 """
 from __future__ import annotations
 
@@ -66,6 +69,10 @@ IMPERIAL_ALLOWED_SYMS = [
     for s in os.getenv("IMPERIAL_ALLOWED_SYMS", ",".join(DEFAULT_SYMBOLS)).split(",")
     if s.strip()
 ]
+
+# Convex real-time push
+CONVEX_SITE_URL = os.getenv("CONVEX_SITE_URL", "").rstrip("/")
+ARENA_INGEST_SECRET = os.getenv("ARENA_INGEST_SECRET", "")
 
 # ── Arena agents (mirrors backroom trading_arena.py) ────────────────────────
 
@@ -449,6 +456,101 @@ def update_scratchpad(
     SCRATCHPAD_FILE.write_text("".join(lines))
 
 
+# ── Convex real-time push ─────────────────────────────────────────────────────
+
+def push_to_convex(
+    pass_num: int,
+    mode: str,
+    symbols: list[str],
+    markets: list[MarketView],
+    signals: list[AgentSignal],
+    records: list[ExecutionRecord],
+) -> None:
+    if not CONVEX_SITE_URL:
+        return
+
+    long_count = sum(1 for s in signals if s.decision == "buy")
+    short_count = sum(1 for s in signals if s.decision == "sell")
+    watch_count = sum(1 for s in signals if s.decision == "watch")
+    mood: str
+    if long_count > short_count:
+        mood = "risk-on"
+    elif short_count > long_count:
+        mood = "risk-off"
+    else:
+        mood = "mixed"
+
+    payload = {
+        "passNum": pass_num,
+        "mode": mode,
+        "symbols": symbols,
+        "marketCount": len(markets),
+        "mood": mood,
+        "longCount": long_count,
+        "shortCount": short_count,
+        "watchCount": watch_count,
+        "executionCount": len(records),
+        "ts": int(time.time() * 1000),
+        "signals": [
+            {
+                "agentName": s.agent_name,
+                "symbol": s.symbol,
+                "decision": s.decision,
+                "confidence": s.confidence,
+                "score": s.score,
+                "rationale": s.rationale,
+            }
+            for s in signals
+        ],
+        "markets": [
+            {
+                "symbol": m.symbol,
+                "markPrice": m.mark_price,
+                "oraclePrice": m.oracle_price,
+                "midPrice": m.mid_price,
+                "fundingRate": m.funding_rate,
+                "annualFunding": m.annual_funding,
+                "openInterest": m.open_interest,
+                "basisPct": m.basis_pct,
+                "spreadBps": m.spread_bps,
+                **({"imperialMark": m.imperial_mark} if m.imperial_mark is not None else {}),
+                **({"imperialFunding": m.imperial_funding} if m.imperial_funding is not None else {}),
+            }
+            for m in markets
+        ],
+        "executions": [
+            {
+                "externalId": r.id,
+                "wallet": r.wallet,
+                "venue": r.venue,
+                "symbol": r.symbol,
+                "side": r.side,
+                "action": r.action,
+                "sizeUsd": r.size_usd,
+                "dryRun": r.dry_run,
+                "status": r.status,
+                **({"error": r.error} if r.error else {}),
+                **({"txSignature": r.tx_signature} if r.tx_signature else {}),
+            }
+            for r in records
+        ],
+    }
+
+    headers: dict[str, str] = {"Content-Type": "application/json"}
+    if ARENA_INGEST_SECRET:
+        headers["Authorization"] = f"Bearer {ARENA_INGEST_SECRET}"
+
+    url = f"{CONVEX_SITE_URL}/arena/ingest"
+    data = json.dumps(payload).encode()
+    req = urllib.request.Request(url, data=data, headers=headers, method="POST")
+    try:
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            result = json.loads(resp.read().decode())
+            print(f"  [convex] pushed pass {pass_num} → runId={result.get('runId', '?')}")
+    except Exception as exc:
+        print(f"  [convex] push failed: {exc}", file=sys.stderr)
+
+
 # ── Main loop ────────────────────────────────────────────────────────────────
 
 def run_pass(pass_num: int, symbols: list[str], live: bool) -> dict[str, Any]:
@@ -488,6 +590,7 @@ def run_pass(pass_num: int, symbols: list[str], live: bool) -> dict[str, Any]:
     if records:
         append_executions(records)
     update_scratchpad(pass_num, markets, signals, records)
+    push_to_convex(pass_num, "live" if live else "dry-run", symbols, markets, signals, records)
 
     long_count = sum(1 for s in signals if s.decision == "buy")
     short_count = sum(1 for s in signals if s.decision == "sell")
