@@ -3,6 +3,7 @@ export { buildPerpsCommand } from "./commands/perps-commands.js";
 export { sendRelay, fetchSnapshot, buildImperialRelay } from "./relay-client.js";
 export { runPerpsTui } from "./tui.js";
 export { runPerpsHarness } from "./harness.js";
+export { getOnchainMmStatus, buildOnchainMmPlan, buildOnchainMm, runOnchainMm } from "./onchain-market-maker.js";
 export type {
   ToolResult,
   PerpsConfig,
