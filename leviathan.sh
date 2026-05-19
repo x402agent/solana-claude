@@ -17,6 +17,7 @@
 #   CLAWD_DIR=PATH           Override install directory (default: ~/.openclawd)
 #   CLAWD_QUIET=1            Skip animated banner
 #   CLAWD_PACKAGE=NAME       Override npm package (default: @openclawdsolana/clawd)
+#   CLAWD_NO_VULCAN=1        Skip Vulcan CLI bootstrap
 
 set -euo pipefail
 umask 022
@@ -30,6 +31,8 @@ CLAWD_QUIET="${CLAWD_QUIET:-0}"
 CLAWD_PACKAGE="${CLAWD_PACKAGE:-@openclawdsolana/clawd}"
 LEVIATHAN_PACKAGE="@openclawdsolana/leviathan"
 SDK_PACKAGE="@openclawd/solana-sdk"
+PERPS_PACKAGE="@openclawdsolana/clawd-perps"
+CLAWD_NO_VULCAN="${CLAWD_NO_VULCAN:-0}"
 SESSION_ID="$(LC_ALL=C tr -dc 'a-f0-9' </dev/urandom 2>/dev/null | head -c 16 || date +%s | sha256sum 2>/dev/null | head -c 16 || date +%s)"
 
 # ─── Colors ───────────────────────────────────────────────────────────────────
@@ -196,6 +199,28 @@ else
   spin_stop; warn "leviathan install failed — try: npm install -g $LEVIATHAN_PACKAGE"
 fi
 
+spin_start "installing $PERPS_PACKAGE"
+if npm_global_install "$PERPS_PACKAGE"; then
+  spin_stop; ok "installed $PERPS_PACKAGE"
+else
+  spin_stop; warn "clawd-perps install failed — try: npm install -g $PERPS_PACKAGE"
+fi
+
+if [ "$CLAWD_NO_VULCAN" = "1" ]; then
+  info "skipping Vulcan CLI bootstrap (CLAWD_NO_VULCAN=1)"
+elif command -v vulcan >/dev/null 2>&1; then
+  ok "vulcan ready at $(command -v vulcan)"
+elif command -v curl >/dev/null 2>&1; then
+  step "installing Vulcan CLI for Phoenix perps"
+  if curl -fsSL https://github.com/Ellipsis-Labs/vulcan-cli/releases/latest/download/install.sh | sh; then
+    ok "Vulcan installer completed"
+  else
+    warn "Vulcan installer failed — clawd-perps can still use CLAWD_PERPS_AGENT_PATH or VULCAN_BIN later"
+  fi
+else
+  warn "curl not found — skipping Vulcan installer"
+fi
+
 # ─── Verify binaries ─────────────────────────────────────────────────────────
 CLAWD_BIN="$(command -v clawd 2>/dev/null || echo '')"
 if [ -z "$CLAWD_BIN" ]; then
@@ -284,7 +309,14 @@ if [ ! -f "$CFG" ]; then
   "packages": {
     "clawd": "$CLAWD_PACKAGE",
     "leviathan": "$LEVIATHAN_PACKAGE",
-    "sdk": "$SDK_PACKAGE"
+    "sdk": "$SDK_PACKAGE",
+    "perps": "$PERPS_PACKAGE"
+  },
+  "phoenix": {
+    "apiUrl": "https://perp-api.phoenix.trade",
+    "rpcUrl": "https://api.mainnet-beta.solana.com",
+    "defaultMode": "paper",
+    "liveRequiresYes": true
   }
 }
 CFGEOF
@@ -307,6 +339,13 @@ DEEPSEEK_API_KEY=
 HELIUS_API_KEY=
 SOLANA_RPC_URL=https://api.mainnet-beta.solana.com
 SOLANA_PRIVATE_KEY=
+
+# ── Phoenix perpetuals via clawd-perps + Vulcan ───────────────────────────────
+CLAWD_PERPS_API_URL=https://perp-api.phoenix.trade
+CLAWD_PERPS_RPC_URL=https://api.mainnet-beta.solana.com
+CLAWD_PERPS_AGENT_PATH=
+VULCAN_BIN=vulcan
+PHOENIX_DEFAULT_MODE=paper
 
 # ── x402 payments ─────────────────────────────────────────────────────────────
 X402_SVM_PRIVATE_KEY=
@@ -362,6 +401,8 @@ printf "  ${ORANGE}4.${RESET}  Run the sovereign runtime:\n"
 printf "       ${AMBER}leviathan --spawn${RESET}          ${DIM}# first-time identity wizard${RESET}\n"
 printf "       ${AMBER}leviathan --run${RESET}            ${DIM}# start OODA pulse loop${RESET}\n"
 printf "       ${AMBER}leviathan --status${RESET}         ${DIM}# depth + balances${RESET}\n"
+printf "       ${AMBER}clawd-perps perps vulcan health${RESET} ${DIM}# Phoenix/Vulcan perps health${RESET}\n"
+printf "       ${AMBER}clawd-perps perps grid SOL --center-on-mark --width-pct 2 --levels-per-side 3 --tokens-per-level 0.1${RESET}\n"
 printf "\n"
 printf "  ${ORANGE}5.${RESET}  Run demos:\n"
 printf "       ${AMBER}clawd examples run ooda${RESET}    ${DIM}# OODA loop (no key needed)${RESET}\n"
