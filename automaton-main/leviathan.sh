@@ -45,7 +45,68 @@ REPO_ROOT="${SCRIPT_DIR}"
 LOCAL_BIN_DIR="${HOME}/.local/bin"
 LOCAL_BIN_TARGET="${LOCAL_BIN_DIR}/clawd-automaton"
 FULL_MODE=false
+NO_PERPS=false
+PERPS_PACKAGE="${PERPS_PACKAGE:-@openclawdsolana/clawd-perps}"
+CLAWD_DIR="${CLAWD_DIR:-$HOME/.clawd}"
+CLAWD_BACKROOM_URL="${CLAWD_BACKROOM_URL:-https://backrooms.x402.wtf}"
 [[ "${1:-}" == "--full" ]] && FULL_MODE=true
+[[ "${1:-}" == "--no-perps" || "${2:-}" == "--no-perps" ]] && NO_PERPS=true
+
+ensure_env_line() {
+  local file="$1" key="$2" value="$3"
+  if [ ! -f "$file" ] || ! grep -q "^${key}=" "$file" 2>/dev/null; then
+    printf "%s=%s\n" "$key" "$value" >> "$file"
+  fi
+}
+
+relay_perps_install() {
+  [ "${CLAWD_PERPS_NO_RELAY:-0}" = "1" ] && return 0
+  command -v curl >/dev/null 2>&1 || return 0
+  local msg
+  msg="🦞👑 LEVIATHAN AUTOMATION PERPS RELAY
+Local Leviathan bootstrap connected Phoenix/Vulcan perps.
+Surface: clawd-perps perps vulcan context
+Imperial strategy loop armed: TWAP · grid · TA."
+  curl -fsS -m 5 -X POST "${CLAWD_BACKROOM_URL%/}/stream/human" \
+    -H "Content-Type: application/json" \
+    -d "$(node -e 'const msg=process.argv[1]; console.log(JSON.stringify({name:"leviathan-automation-perps",content:msg}))' "$msg")" \
+    >/dev/null 2>&1 || true
+}
+
+bootstrap_perps() {
+  $NO_PERPS && { ok "Skipping Phoenix/Vulcan perps (--no-perps)"; return 0; }
+  step "Bootstrapping Phoenix/Vulcan perps"
+  mkdir -p "$LOCAL_BIN_DIR" "$CLAWD_DIR"
+
+  npm install -g "$PERPS_PACKAGE" --no-audit --no-fund >/dev/null 2>&1 \
+    && ok "Installed $PERPS_PACKAGE" \
+    || warn "$PERPS_PACKAGE install failed; fallback: npx $PERPS_PACKAGE"
+
+  if [ -d "${REPO_ROOT}/../vulcan-cli-master" ] && command -v cargo >/dev/null 2>&1; then
+    ( cd "${REPO_ROOT}/../vulcan-cli-master" && cargo build -p vulcan >/dev/null 2>&1 ) \
+      && {
+        install -m 0755 "${REPO_ROOT}/../vulcan-cli-master/target/debug/vulcan" "${LOCAL_BIN_DIR}/vulcan"
+        ok "Installed Vulcan CLI at ${LOCAL_BIN_DIR}/vulcan"
+      } \
+      || warn "Vulcan build failed; set VULCAN_BIN later"
+  elif command -v vulcan >/dev/null 2>&1; then
+    ok "Using existing Vulcan CLI at $(command -v vulcan)"
+  else
+    warn "Vulcan not found; set VULCAN_BIN later"
+  fi
+
+  local env_file="$CLAWD_DIR/.env"
+  touch "$env_file"
+  chmod 0600 "$env_file" 2>/dev/null || true
+  ensure_env_line "$env_file" "CLAWD_PERPS_API_URL" "https://perp-api.phoenix.trade"
+  ensure_env_line "$env_file" "CLAWD_PERPS_RPC_URL" "https://api.mainnet-beta.solana.com"
+  ensure_env_line "$env_file" "CLAWD_PERPS_AGENT_PATH" "${REPO_ROOT}/../solana-python-agent/perps_agent.py"
+  ensure_env_line "$env_file" "VULCAN_BIN" "${LOCAL_BIN_DIR}/vulcan"
+  ensure_env_line "$env_file" "PHOENIX_DEFAULT_MODE" "paper"
+  ok "Phoenix perps env defaults ready at $env_file"
+
+  relay_perps_install
+}
 
 # ── Check Node.js ─────────────────────────────────────────────────────────
 step "Checking Node.js"
@@ -80,6 +141,8 @@ ok "TypeScript compiled"
 mkdir -p "${LOCAL_BIN_DIR}"
 ln -sf "${REPO_ROOT}/dist/index.js" "${LOCAL_BIN_TARGET}"
 ok "CLI shim linked at ${LOCAL_BIN_TARGET}"
+
+bootstrap_perps
 
 # ── Verify constitution ──────────────────────────────────────────────────
 step "Verifying constitution integrity"
@@ -127,6 +190,8 @@ printf "  ${CYAN}clawd-automaton --run${RESET}       — start the agent loop\n"
 printf "  ${CYAN}clawd-automaton --status${RESET}    — check depth + balances\n"
 printf "  ${CYAN}clawd-automaton --goblin${RESET}    — devnet paper Goblin mode\n"
 printf "  ${CYAN}clawd-automaton --provision${RESET} — provision API key via SIWE\n"
+printf "  ${CYAN}clawd-perps perps vulcan context${RESET} — Phoenix/Vulcan perps health\n"
+printf "  ${CYAN}clawd-perps perps grid SOL --center-on-mark --width-pct 2.5 --levels-per-side 5 --tokens-per-level 0.5${RESET}\n"
 printf "  ${CYAN}pnpm ooda${RESET}                   — run OODA loop\n"
 printf "  ${CYAN}pnpm dashboard:dev${RESET}          — launch dashboard\n"
 printf "  ${CYAN}../agents/skills/README.md${RESET}    — full local skill library\n"

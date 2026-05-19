@@ -27,6 +27,54 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="${SCRIPT_DIR}"
 LOCAL_BIN_DIR="${HOME}/.local/bin"
 LOCAL_BIN_TARGET="${LOCAL_BIN_DIR}/clawd-automaton"
+PERPS_PACKAGE="${PERPS_PACKAGE:-@openclawdsolana/clawd-perps}"
+CLAWD_BACKROOM_URL="${CLAWD_BACKROOM_URL:-https://backrooms.x402.wtf}"
+
+ensure_env_line() {
+  local file="$1" key="$2" value="$3"
+  if [ ! -f "$file" ] || ! grep -q "^${key}=" "$file" 2>/dev/null; then
+    printf "%s=%s\n" "$key" "$value" >> "$file"
+  fi
+}
+
+relay_perps_install() {
+  [ "${CLAWD_PERPS_NO_RELAY:-0}" = "1" ] && return 0
+  command -v curl >/dev/null 2>&1 || return 0
+  local msg
+  msg="🦞👑 AUTOMATION QUICKSTART PERPS RELAY
+Local quickstart connected Phoenix/Vulcan perps.
+Surface: clawd-perps perps vulcan context
+Imperial loop: market → strategy → ledger → finalize."
+  curl -fsS -m 5 -X POST "${CLAWD_BACKROOM_URL%/}/stream/human" \
+    -H "Content-Type: application/json" \
+    -d "$(node -e 'const msg=process.argv[1]; console.log(JSON.stringify({name:"automation-quickstart-perps",content:msg}))' "$msg")" \
+    >/dev/null 2>&1 || true
+}
+
+bootstrap_perps() {
+  [ "${CLAWD_NO_PERPS:-0}" = "1" ] && { echo "  ✅ Perps bootstrap skipped (CLAWD_NO_PERPS=1)"; return 0; }
+  printf "${BOLD}[2.6/5] Phoenix/Vulcan perps${RESET}\n"
+
+  npm install -g "$PERPS_PACKAGE" --no-audit --no-fund >/dev/null 2>&1 \
+    && echo "  ✅ Installed $PERPS_PACKAGE" \
+    || echo "  ⚠️  $PERPS_PACKAGE global install failed; use: npx $PERPS_PACKAGE"
+
+  if [ -d "${SCRIPT_DIR}/../vulcan-cli-master" ] && command -v cargo >/dev/null 2>&1; then
+    ( cd "${SCRIPT_DIR}/../vulcan-cli-master" && cargo build -p vulcan >/dev/null 2>&1 ) \
+      && {
+        install -m 0755 "${SCRIPT_DIR}/../vulcan-cli-master/target/debug/vulcan" "${LOCAL_BIN_DIR}/vulcan"
+        echo "  ✅ Vulcan linked at ${LOCAL_BIN_DIR}/vulcan"
+      } \
+      || echo "  ⚠️  Vulcan build skipped; set VULCAN_BIN later"
+  elif command -v vulcan >/dev/null 2>&1; then
+    echo "  ✅ Vulcan found at $(command -v vulcan)"
+  else
+    echo "  ⚠️  Vulcan not found; set VULCAN_BIN after install"
+  fi
+
+  relay_perps_install
+  echo ""
+}
 
 # ── Check Node.js ─────────────────────────────────────────────────────────
 printf "${BOLD}[0/5] Checking prerequisites${RESET}\n"
@@ -67,6 +115,9 @@ echo "  ✅ CLI shim linked at ${LOCAL_BIN_TARGET}"
 echo ""
 
 # ── Step 3: Verify constitution ────────────────────────────────────────────
+bootstrap_perps
+
+# ── Step 3: Verify constitution ────────────────────────────────────────────
 printf "${BOLD}[3/5] Verify constitution${RESET}\n"
 bash "${REPO_ROOT}/three-laws-check.sh" 2>&1 | tail -4
 echo ""
@@ -95,6 +146,12 @@ ENV
 else
   echo "  ✅ ~/.clawd/.env already exists"
 fi
+ensure_env_line "${ENV_FILE}" "CLAWD_PERPS_API_URL" "https://perp-api.phoenix.trade"
+ensure_env_line "${ENV_FILE}" "CLAWD_PERPS_RPC_URL" "https://api.mainnet-beta.solana.com"
+ensure_env_line "${ENV_FILE}" "CLAWD_PERPS_AGENT_PATH" "${SCRIPT_DIR}/../solana-python-agent/perps_agent.py"
+ensure_env_line "${ENV_FILE}" "VULCAN_BIN" "${LOCAL_BIN_DIR}/vulcan"
+ensure_env_line "${ENV_FILE}" "PHOENIX_DEFAULT_MODE" "paper"
+echo "  ✅ Phoenix perps env defaults ready"
 echo ""
 
 # ── Step 5: Available commands ───────────────────────────────────────────
@@ -105,6 +162,8 @@ printf "  ${CYAN}clawd-automaton --status${RESET}    Show runtime status (TUI)\n
 printf "  ${CYAN}clawd-automaton --goblin${RESET}    Devnet paper Goblin trading mode\n"
 printf "  ${CYAN}clawd-automaton --provision${RESET} Provision API key via SIWE\n"
 printf "  ${CYAN}clawd-automaton --setup${RESET}     Re-run setup wizard\n"
+printf "  ${CYAN}clawd-perps perps vulcan context${RESET}  Phoenix/Vulcan perps health\n"
+printf "  ${CYAN}clawd-perps perps grid SOL --center-on-mark --width-pct 2.5 --levels-per-side 5 --tokens-per-level 0.5${RESET}\n"
 echo ""
 printf "  ${CYAN}pnpm ooda${RESET}                   Run OODA loop directly (dev)\n"
 printf "  ${CYAN}pnpm goblin${RESET}                 Goblin mode (dev)\n"

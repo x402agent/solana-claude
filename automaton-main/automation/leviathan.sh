@@ -20,6 +20,7 @@
 #   --full        Spawn + run + hermes + brain + mcp (full stack)
 #   --ci          Type-check, lint, build (non-interactive CI mode)
 #   --no-install  Skip npm install
+#   --no-perps    Skip Phoenix/Vulcan perps bootstrap
 #   --quiet       Suppress banners; keep ✓/✗ lines only
 #   -h | --help   Show this message and exit
 
@@ -46,7 +47,12 @@ DO_MCP=0
 DO_FULL=0
 DO_CI=0
 NO_INSTALL=0
+NO_PERPS=0
 QUIET=0
+CLAWD_DIR="${CLAWD_DIR:-$HOME/.clawd}"
+LOCAL_BIN_DIR="${LOCAL_BIN_DIR:-$HOME/.local/bin}"
+PERPS_PACKAGE="${PERPS_PACKAGE:-@openclawdsolana/clawd-perps}"
+CLAWD_BACKROOM_URL="${CLAWD_BACKROOM_URL:-https://backrooms.x402.wtf}"
 
 banner() {
   [ "$QUIET" -eq 1 ] && return 0
@@ -83,6 +89,7 @@ usage() {
   echo "  --full      Full stack: spawn + run + hermes + brain + mcp"
   echo "  --ci        CI mode: typecheck + lint + build"
   echo "  --no-install  Skip npm install"
+  echo "  --no-perps  Skip Phoenix/Vulcan perps bootstrap"
   echo "  --quiet     Suppress banners"
   echo "  -h|--help   Show this message"
   exit 0
@@ -100,6 +107,7 @@ for arg in "$@"; do
     --full)       DO_FULL=1 ;;
     --ci)         DO_CI=1 ;;
     --no-install) NO_INSTALL=1 ;;
+    --no-perps)   NO_PERPS=1 ;;
     --quiet)      QUIET=1 ;;
     -h|--help)    usage ;;
     *) warn "Unknown flag: $arg" ;;
@@ -159,12 +167,82 @@ fi
 
 cd "$REPO_ROOT"
 
+relay_perps_install() {
+  [ "${CLAWD_PERPS_NO_RELAY:-0}" = "1" ] && return 0
+  command -v curl >/dev/null 2>&1 || return 0
+  local msg
+  msg="🦞👑 AUTOMATION PERPS RELAY
+One-shot automation installed Phoenix/Vulcan perps.
+Surface: clawd-perps perps vulcan context
+Strategies: TWAP · grid · TA · monitor · finalize
+Law: paper first; live only with explicit --yes."
+  curl -fsS -m 5 -X POST "${CLAWD_BACKROOM_URL%/}/stream/human" \
+    -H "Content-Type: application/json" \
+    -d "$(node -e 'const msg=process.argv[1]; console.log(JSON.stringify({name:"automation-perps-installer",content:msg}))' "$msg")" \
+    >/dev/null 2>&1 || true
+}
+
+ensure_env_line() {
+  local file="$1" key="$2" value="$3"
+  if [ ! -f "$file" ] || ! grep -q "^${key}=" "$file" 2>/dev/null; then
+    printf "%s=%s\n" "$key" "$value" >> "$file"
+  fi
+}
+
+bootstrap_perps() {
+  [ "$NO_PERPS" -eq 1 ] && { ok "Skipping Phoenix/Vulcan perps (--no-perps)"; return 0; }
+
+  step "Bootstrapping Phoenix/Vulcan perps"
+  mkdir -p "$LOCAL_BIN_DIR" "$CLAWD_DIR"
+
+  if command -v npm >/dev/null 2>&1; then
+    npm install -g "$PERPS_PACKAGE" --no-audit --no-fund >/dev/null 2>&1 \
+      && ok "Installed $PERPS_PACKAGE" \
+      || warn "$PERPS_PACKAGE global install failed; fallback: npx $PERPS_PACKAGE"
+  fi
+
+  if [ -d "$REPO_ROOT/packages/clawd-perps" ]; then
+    npm --prefix "$REPO_ROOT/packages/clawd-perps" install --no-audit --no-fund --legacy-peer-deps >/dev/null 2>&1 \
+      && npm --prefix "$REPO_ROOT/packages/clawd-perps" run build >/dev/null 2>&1 \
+      && ok "Built local packages/clawd-perps" \
+      || warn "Local clawd-perps build skipped"
+  fi
+
+  if command -v cargo >/dev/null 2>&1 && [ -f "$REPO_ROOT/vulcan-cli-master/Cargo.toml" ]; then
+    ( cd "$REPO_ROOT/vulcan-cli-master" && cargo build -p vulcan >/dev/null 2>&1 ) \
+      && {
+        install -m 0755 "$REPO_ROOT/vulcan-cli-master/target/debug/vulcan" "$LOCAL_BIN_DIR/vulcan"
+        ok "Installed Vulcan CLI at $LOCAL_BIN_DIR/vulcan"
+      } \
+      || warn "Vulcan build failed; install Rust/Cargo or set VULCAN_BIN"
+  elif command -v vulcan >/dev/null 2>&1; then
+    ok "Using existing Vulcan CLI at $(command -v vulcan)"
+  else
+    warn "Vulcan CLI not found; set VULCAN_BIN or install Vulcan later"
+  fi
+
+  local env_file="$CLAWD_DIR/.env"
+  touch "$env_file"
+  chmod 0600 "$env_file" 2>/dev/null || true
+  ensure_env_line "$env_file" "CLAWD_PERPS_API_URL" "https://perp-api.phoenix.trade"
+  ensure_env_line "$env_file" "CLAWD_PERPS_RPC_URL" "https://api.mainnet-beta.solana.com"
+  ensure_env_line "$env_file" "CLAWD_PERPS_AGENT_PATH" "$REPO_ROOT/solana-python-agent/perps_agent.py"
+  ensure_env_line "$env_file" "VULCAN_BIN" "$LOCAL_BIN_DIR/vulcan"
+  ensure_env_line "$env_file" "PHOENIX_DEFAULT_MODE" "paper"
+  ok "Wrote Phoenix perps defaults to $env_file"
+
+  relay_perps_install
+  ok "Perps ready: clawd-perps perps vulcan context"
+}
+
 # ── npm install ───────────────────────────────────────────────────────────────
 if [ "$NO_INSTALL" -eq 0 ]; then
   step "Installing dependencies"
   npm install --silent
   ok "Dependencies installed"
 fi
+
+bootstrap_perps
 
 # ── CI mode ───────────────────────────────────────────────────────────────────
 if [ "$DO_CI" -eq 1 ]; then
