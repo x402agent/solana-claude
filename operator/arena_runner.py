@@ -41,6 +41,26 @@ from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import Any
 
+# Load .env from operator directory if python-dotenv is available, else parse manually
+def _load_dotenv(path: Path) -> None:
+    if not path.exists():
+        return
+    try:
+        from dotenv import load_dotenv  # type: ignore
+        load_dotenv(path, override=False)
+    except ImportError:
+        for line in path.read_text().splitlines():
+            line = line.strip()
+            if not line or line.startswith("#") or "=" not in line:
+                continue
+            key, _, val = line.partition("=")
+            key = key.strip()
+            val = val.strip().strip("'\"")
+            if key and key not in os.environ:
+                os.environ[key] = val
+
+_load_dotenv(Path(__file__).parent / ".env")
+
 # ── Paths ────────────────────────────────────────────────────────────────────
 
 OPERATOR_DIR = Path(__file__).parent
