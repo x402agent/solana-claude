@@ -63,11 +63,11 @@ OPERATOR_DIR = Path(__file__).parent
 BACKROOM_DIR = OPERATOR_DIR.parent / "openclawd-framework" / "multiagents-infinite-backroom"
 BACKROOM_API = BACKROOM_DIR / "api"
 
-# Load envs: backroom .env.local first (lowest priority), then backroom .env,
-# then operator .env — so operator-local values always win.
+# Load envs: operator .env first (highest priority), then backroom .env.local
+# as a fallback for anything not set locally.
+_load_dotenv(OPERATOR_DIR / ".env")
 _load_dotenv(BACKROOM_DIR / ".env.local")
 _load_dotenv(BACKROOM_DIR / ".env")
-_load_dotenv(OPERATOR_DIR / ".env")
 
 # ── Paths ────────────────────────────────────────────────────────────────────
 AGENT_DIR = OPERATOR_DIR / ".agent"
@@ -572,33 +572,19 @@ def push_to_convex(
         ],
     }
 
-    # Use the /clawd/data key-value endpoint (always available)
-    kv_body = {
-        "agentId": "arena-runner",
-        "key": f"arena:pass:{pass_num}",
-        "value": json.dumps(payload),
-        "contentType": "application/json",
-        "tags": ["arena", "perps"],
-    }
-    # Also write a stable "latest" key for easy frontend polling
-    kv_latest = {**kv_body, "key": "arena:latest"}
+    headers: dict[str, str] = {"Content-Type": "application/json"}
+    if ARENA_INGEST_SECRET:
+        headers["Authorization"] = f"Bearer {ARENA_INGEST_SECRET}"
 
-    url = f"{CONVEX_SITE_URL}/clawd/data"
-    for body in [kv_body, kv_latest]:
-        data = json.dumps(body).encode()
-        req = urllib.request.Request(
-            url, data=data,
-            headers={"Content-Type": "application/json"},
-            method="POST",
-        )
-        try:
-            with urllib.request.urlopen(req, timeout=10) as resp:
-                result = json.loads(resp.read().decode())
-                if body["key"] == "arena:latest":
-                    print(f"  [convex] pushed pass {pass_num} → key=arena:latest id={result.get('_id', '?')}")
-        except Exception as exc:
-            print(f"  [convex] push failed ({body['key']}): {exc}", file=sys.stderr)
-            break
+    url = f"{CONVEX_SITE_URL}/arena/ingest"
+    data = json.dumps(payload).encode()
+    req = urllib.request.Request(url, data=data, headers=headers, method="POST")
+    try:
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            result = json.loads(resp.read().decode())
+            print(f"  [convex] pushed pass {pass_num} → runId={result.get('runId', '?')}")
+    except Exception as exc:
+        print(f"  [convex] push failed: {exc}", file=sys.stderr)
 
 
 # ── Main loop ────────────────────────────────────────────────────────────────
