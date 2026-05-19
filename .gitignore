@@ -23,7 +23,7 @@ clawd-terminal
 .wrangler
 **/.wrangler/
 **/.wrangler
-
+operator
 # Dependencies and package manager caches
 node_modules/
 .pnpm-store/
