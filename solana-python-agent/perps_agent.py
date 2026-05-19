@@ -72,12 +72,12 @@ class SolanaClawdPerpsAgent:
 
     @staticmethod
     def _resolve_vulcan() -> str:
-        found = shutil.which("vulcan")
-        if found:
-            return found
         local = VULCAN_ROOT / "target" / "debug" / "vulcan"
         if local.exists():
             return str(local)
+        found = shutil.which("vulcan")
+        if found:
+            return found
         home_local = Path.home() / ".local" / "bin" / "vulcan"
         if home_local.exists():
             return str(home_local)
@@ -153,13 +153,23 @@ class SolanaClawdPerpsAgent:
         self,
         symbol: str,
         side: str,
-        notional_usdc: float,
+        notional_usdc: float | None,
+        tokens: float | None,
         slices: int,
         interval_seconds: int,
         mode: str = "paper",
+        margin_mode: str = "cross",
+        isolated_collateral: float | None = None,
+        run_label: str | None = None,
+        detached: bool = False,
+        guardrails: dict[str, float | int | None] | None = None,
         approved: bool = False,
     ) -> dict[str, Any]:
         mode = normalize_mode(mode)
+        if notional_usdc is None and tokens is None:
+            raise PerpsAgentError("TWAP requires --notional-usdc or --tokens.")
+        if notional_usdc is not None and tokens is not None:
+            raise PerpsAgentError("TWAP accepts either --notional-usdc or --tokens, not both.")
         args = [
             "strategy",
             "twap",
@@ -168,30 +178,212 @@ class SolanaClawdPerpsAgent:
             normalize_symbol(symbol),
             "--side",
             normalize_side(side),
-            "--notional-usdc",
-            str(notional_usdc),
             "--slices",
             str(slices),
             "--interval-seconds",
             str(interval_seconds),
             "--mode",
             mode,
+            "--margin-mode",
+            normalize_margin_mode(margin_mode),
         ]
-        if mode in {"confirm_each", "auto_execute"}:
+        if notional_usdc is not None:
+            args.extend(["--notional-usdc", str(notional_usdc)])
+        if tokens is not None:
+            args.extend(["--tokens", str(tokens)])
+        append_optional(args, "--isolated-collateral", isolated_collateral)
+        append_optional(args, "--run-label", run_label)
+        append_guardrails(args, guardrails)
+        if detached:
+            args.append("--detached")
+        if mode in LIVE_MODES:
             if not approved:
                 raise PerpsAgentError(f"Live TWAP mode '{mode}' refused: pass --yes after explicit operator approval.")
             args.append("--yes")
         return self.vulcan(args, output="json").json_data
 
-    def monitor(self, run_id: str) -> dict[str, Any]:
-        return self.vulcan(["strategy", "monitor", run_id], output="json").json_data
+    def grid(
+        self,
+        symbol: str,
+        levels_per_side: int,
+        lower_price: float | None = None,
+        upper_price: float | None = None,
+        center_on_mark: bool = False,
+        width_pct: float | None = None,
+        tokens_per_level: float | None = None,
+        size_lots_per_level: int | None = None,
+        bid_levels: list[str] | None = None,
+        ask_levels: list[str] | None = None,
+        take_profit_spacing: float | None = None,
+        stop_loss_spacing: float | None = None,
+        interval_seconds: int = 60,
+        ticks: int = 60,
+        run_until_stopped: bool = False,
+        stale_after_seconds: int | None = None,
+        mode: str = "paper",
+        margin_mode: str = "cross",
+        isolated_collateral: float | None = None,
+        run_label: str | None = None,
+        slide: bool = False,
+        detached: bool = False,
+        guardrails: dict[str, float | int | None] | None = None,
+        approved: bool = False,
+    ) -> dict[str, Any]:
+        mode = normalize_mode(mode)
+        if center_on_mark and width_pct is None:
+            raise PerpsAgentError("Grid --center-on-mark requires --width-pct.")
+        if not center_on_mark and (lower_price is None or upper_price is None):
+            raise PerpsAgentError("Grid requires --lower-price and --upper-price unless --center-on-mark is set.")
+        if tokens_per_level is None and size_lots_per_level is None and not (bid_levels or ask_levels):
+            raise PerpsAgentError("Grid requires --tokens-per-level, --size-lots-per-level, or custom levels.")
+        if tokens_per_level is not None and size_lots_per_level is not None:
+            raise PerpsAgentError("Grid accepts either --tokens-per-level or --size-lots-per-level, not both.")
 
-    def finalize(self, run_id: str, cancel_orders: bool = False, close_position: bool = False, approved: bool = False) -> dict[str, Any]:
+        args = [
+            "strategy",
+            "grid",
+            "start",
+            "--symbol",
+            normalize_symbol(symbol),
+            "--levels-per-side",
+            str(levels_per_side),
+            "--interval-seconds",
+            str(interval_seconds),
+            "--ticks",
+            str(ticks),
+            "--mode",
+            mode,
+            "--margin-mode",
+            normalize_margin_mode(margin_mode),
+        ]
+        append_optional(args, "--lower-price", lower_price)
+        append_optional(args, "--upper-price", upper_price)
+        append_optional(args, "--width-pct", width_pct)
+        append_optional(args, "--tokens-per-level", tokens_per_level)
+        append_optional(args, "--size-lots-per-level", size_lots_per_level)
+        append_repeatable(args, "--bid-level", bid_levels)
+        append_repeatable(args, "--ask-level", ask_levels)
+        append_optional(args, "--take-profit-spacing", take_profit_spacing)
+        append_optional(args, "--stop-loss-spacing", stop_loss_spacing)
+        append_optional(args, "--stale-after-seconds", stale_after_seconds)
+        append_optional(args, "--isolated-collateral", isolated_collateral)
+        append_optional(args, "--run-label", run_label)
+        append_guardrails(args, guardrails)
+        for enabled, flag in [
+            (center_on_mark, "--center-on-mark"),
+            (run_until_stopped, "--run-until-stopped"),
+            (slide, "--slide"),
+            (detached, "--detached"),
+        ]:
+            if enabled:
+                args.append(flag)
+        if mode in LIVE_MODES:
+            if not approved:
+                raise PerpsAgentError(f"Live grid mode '{mode}' refused: pass --yes after explicit operator approval.")
+            args.append("--yes")
+        return self.vulcan(args, output="json").json_data
+
+    def ta(
+        self,
+        config_file: str | None,
+        config_json: str | None,
+        mode: str = "paper",
+        max_ticks: int = 60,
+        run_until_stopped: bool = False,
+        run_label: str | None = None,
+        detached: bool = False,
+        guardrails: dict[str, float | int | None] | None = None,
+        approved: bool = False,
+    ) -> dict[str, Any]:
+        mode = normalize_mode(mode)
+        if bool(config_file) == bool(config_json):
+            raise PerpsAgentError("TA requires exactly one of --config-file or --config-json.")
+        args = ["strategy", "ta", "start", "--mode", mode, "--max-ticks", str(max_ticks)]
+        append_optional(args, "--config-file", config_file)
+        append_optional(args, "--config-json", config_json)
+        append_optional(args, "--run-label", run_label)
+        append_guardrails(args, guardrails)
+        if run_until_stopped:
+            args.append("--run-until-stopped")
+        if detached:
+            args.append("--detached")
+        if mode in LIVE_MODES:
+            if not approved:
+                raise PerpsAgentError(f"Live TA mode '{mode}' refused: pass --yes after explicit operator approval.")
+            args.append("--yes")
+        return self.vulcan(args, output="json").json_data
+
+    def runs(self, limit: int = 20) -> dict[str, Any]:
+        return self.vulcan(["strategy", "runs", "--limit", str(limit)], output="json").json_data
+
+    def status(self, run_id: str, since_tick: int | None = None, include_ledger: bool = False) -> dict[str, Any]:
+        args = ["strategy", "status", run_id]
+        append_optional(args, "--since-tick", since_tick)
+        if include_ledger:
+            args.append("--include-ledger")
+        return self.vulcan(args, output="json").json_data
+
+    def monitor(self, run_id: str, include_ledger: bool = False) -> dict[str, Any]:
+        args = ["strategy", "monitor", run_id]
+        if include_ledger:
+            args.append("--include-ledger")
+        return self.vulcan(args, output="json").json_data
+
+    def wait_next_tick(
+        self,
+        run_id: str,
+        after_tick: int | None = None,
+        timeout_seconds: int = 90,
+        include_ledger: bool = False,
+    ) -> dict[str, Any]:
+        args = ["strategy", "wait-next-tick", run_id, "--timeout-seconds", str(timeout_seconds)]
+        append_optional(args, "--after-tick", after_tick)
+        if include_ledger:
+            args.append("--include-ledger")
+        return self.vulcan(args, output="json").json_data
+
+    def report(self, run_id: str) -> dict[str, Any]:
+        return self.vulcan(["strategy", "report", run_id], output="json").json_data
+
+    def reconcile_grid(self, run_id: str) -> dict[str, Any]:
+        return self.vulcan(["strategy", "reconcile-grid", run_id], output="json").json_data
+
+    def control(self, action: str, run_id: str, reason: str | None = None) -> dict[str, Any]:
+        if action not in {"pause", "stop"}:
+            raise PerpsAgentError("control action must be pause or stop")
+        args = ["strategy", action, run_id]
+        append_optional(args, "--reason", reason)
+        return self.vulcan(args, output="json").json_data
+
+    def resume(self, run_id: str, from_step: int | None = None, strategy_type: str | None = None) -> dict[str, Any]:
+        args = ["strategy"]
+        if strategy_type in {"twap", "grid", "ta"}:
+            args.append(strategy_type)
+        elif strategy_type:
+            raise PerpsAgentError("strategy type must be twap, grid, ta, or omitted")
+        args.extend(["resume", run_id])
+        append_optional(args, "--from-step", from_step)
+        return self.vulcan(args, output="json").json_data
+
+    def finalize(
+        self,
+        run_id: str,
+        reason: str | None = None,
+        cancel_orders: bool = False,
+        close_position: bool = False,
+        wait: bool = False,
+        timeout_seconds: int = 90,
+        approved: bool = False,
+    ) -> dict[str, Any]:
         args = ["strategy", "finalize", run_id]
+        append_optional(args, "--reason", reason)
         if cancel_orders:
             args.append("--cancel-orders")
         if close_position:
             args.append("--close-position")
+        if wait:
+            args.append("--wait")
+        args.extend(["--timeout-seconds", str(timeout_seconds)])
         if cancel_orders or close_position:
             if not approved:
                 raise PerpsAgentError("Finalize cleanup refused: pass --yes after explicit operator approval.")
@@ -269,11 +461,44 @@ def normalize_side(side: str) -> str:
 
 
 def normalize_mode(mode: str) -> str:
-    normalized = (mode or "paper").replace("-", "_").lower()
-    allowed = {"paper", "dry_run", "confirm_each", "auto_execute"}
+    normalized = (mode or "paper").replace("_", "-").lower()
+    allowed = {"paper", "dry-run", "confirm-each", "auto-execute"}
     if normalized not in allowed:
         raise PerpsAgentError(f"mode must be one of {sorted(allowed)}")
     return normalized
+
+
+def normalize_margin_mode(mode: str) -> str:
+    normalized = (mode or "cross").replace("_", "-").lower()
+    allowed = {"cross", "isolated"}
+    if normalized not in allowed:
+        raise PerpsAgentError(f"margin mode must be one of {sorted(allowed)}")
+    return normalized
+
+
+LIVE_MODES = {"confirm-each", "auto-execute"}
+
+
+def append_optional(args: list[str], flag: str, value: Any | None) -> None:
+    if value is not None:
+        args.extend([flag, str(value)])
+
+
+def append_repeatable(args: list[str], flag: str, values: list[str] | None) -> None:
+    for value in values or []:
+        args.extend([flag, value])
+
+
+def append_guardrails(args: list[str], guardrails: dict[str, float | int | None] | None) -> None:
+    for key, flag in [
+        ("max_total_notional_usdc", "--max-total-notional-usdc"),
+        ("max_step_notional_usdc", "--max-step-notional-usdc"),
+        ("max_price_drift_bps", "--max-price-drift-bps"),
+        ("max_exposure_ratio", "--max-exposure-ratio"),
+        ("reconcile_attempts", "--reconcile-attempts"),
+        ("reconcile_delay_ms", "--reconcile-delay-ms"),
+    ]:
+        append_optional(args, flag, (guardrails or {}).get(key))
 
 
 def print_json(data: Any) -> None:
@@ -314,22 +539,119 @@ def build_parser() -> argparse.ArgumentParser:
     twap = sub.add_parser("twap", help="Start a TWAP strategy, paper by default")
     twap.add_argument("symbol")
     twap.add_argument("--side", choices=["buy", "sell", "long", "short"], required=True)
-    twap.add_argument("--notional-usdc", type=float, required=True)
+    twap_size = twap.add_mutually_exclusive_group(required=True)
+    twap_size.add_argument("--notional-usdc", type=float)
+    twap_size.add_argument("--tokens", type=float)
     twap.add_argument("--slices", type=int, default=5)
     twap.add_argument("--interval-seconds", type=int, default=30)
-    twap.add_argument("--mode", default="paper", choices=["paper", "dry_run", "confirm_each", "auto_execute"])
+    add_strategy_common_args(twap)
+    twap.add_argument("--margin-mode", default="cross", choices=["cross", "isolated"])
+    twap.add_argument("--isolated-collateral", type=float)
     twap.add_argument("--yes", action="store_true", help="Required for live modes")
+
+    grid = sub.add_parser("grid", help="Start a grid strategy, paper by default")
+    grid.add_argument("symbol")
+    grid.add_argument("--lower-price", type=float)
+    grid.add_argument("--upper-price", type=float)
+    grid.add_argument("--center-on-mark", action="store_true")
+    grid.add_argument("--width-pct", type=float)
+    grid.add_argument("--levels-per-side", type=int, required=True)
+    grid_size = grid.add_mutually_exclusive_group()
+    grid_size.add_argument("--tokens-per-level", type=float)
+    grid_size.add_argument("--size-lots-per-level", type=int)
+    grid.add_argument("--bid-level", action="append", dest="bid_levels")
+    grid.add_argument("--ask-level", action="append", dest="ask_levels")
+    grid.add_argument("--take-profit-spacing", type=float)
+    grid.add_argument("--stop-loss-spacing", type=float)
+    grid.add_argument("--interval-seconds", type=int, default=60)
+    grid.add_argument("--ticks", type=int, default=60)
+    grid.add_argument("--run-until-stopped", action="store_true")
+    grid.add_argument("--stale-after-seconds", type=int)
+    add_strategy_common_args(grid)
+    grid.add_argument("--margin-mode", default="cross", choices=["cross", "isolated"])
+    grid.add_argument("--isolated-collateral", type=float)
+    grid.add_argument("--slide", action="store_true")
+    grid.add_argument("--yes", action="store_true", help="Required for live modes")
+
+    ta = sub.add_parser("ta", help="Start a TA strategy from JSON config, paper by default")
+    ta_config = ta.add_mutually_exclusive_group(required=True)
+    ta_config.add_argument("--config-file")
+    ta_config.add_argument("--config-json")
+    ta.add_argument("--max-ticks", type=int, default=60)
+    ta.add_argument("--run-until-stopped", action="store_true")
+    add_strategy_common_args(ta)
+    ta.add_argument("--yes", action="store_true", help="Required for live modes")
+
+    runs = sub.add_parser("runs", help="List persisted strategy runs")
+    runs.add_argument("--limit", type=int, default=20)
+
+    status = sub.add_parser("status", help="Show latest strategy status")
+    status.add_argument("run_id")
+    status.add_argument("--since-tick", type=int)
+    status.add_argument("--include-ledger", action="store_true")
 
     monitor = sub.add_parser("monitor", help="Monitor a strategy run")
     monitor.add_argument("run_id")
+    monitor.add_argument("--include-ledger", action="store_true")
+
+    wait = sub.add_parser("wait-next-tick", help="Wait for a new strategy tick")
+    wait.add_argument("run_id")
+    wait.add_argument("--after-tick", type=int)
+    wait.add_argument("--timeout-seconds", type=int, default=90)
+    wait.add_argument("--include-ledger", action="store_true")
+
+    report = sub.add_parser("report", help="Show final or latest strategy report")
+    report.add_argument("run_id")
+
+    reconcile = sub.add_parser("reconcile-grid", help="Inspect live grid orders against the persisted ledger")
+    reconcile.add_argument("run_id")
+
+    pause = sub.add_parser("pause", help="Request a strategy pause")
+    pause.add_argument("run_id")
+    pause.add_argument("--reason")
+
+    stop = sub.add_parser("stop", help="Request a strategy stop")
+    stop.add_argument("run_id")
+    stop.add_argument("--reason")
+
+    resume = sub.add_parser("resume", help="Resume a paused/incomplete strategy run")
+    resume.add_argument("run_id")
+    resume.add_argument("--from-step", type=int)
+    resume.add_argument("--strategy-type", choices=["twap", "grid", "ta"])
 
     finalize = sub.add_parser("finalize", help="Finalize a strategy run")
     finalize.add_argument("run_id")
+    finalize.add_argument("--reason")
     finalize.add_argument("--cancel-orders", action="store_true")
     finalize.add_argument("--close-position", action="store_true")
+    finalize.add_argument("--wait", action="store_true")
+    finalize.add_argument("--timeout-seconds", type=int, default=90)
     finalize.add_argument("--yes", action="store_true", help="Required for cleanup actions")
 
     return parser
+
+
+def add_strategy_common_args(parser: argparse.ArgumentParser) -> None:
+    parser.add_argument("--mode", default="paper", choices=["paper", "dry-run", "dry_run", "confirm-each", "confirm_each", "auto-execute", "auto_execute"])
+    parser.add_argument("--run-label")
+    parser.add_argument("--detached", action="store_true")
+    parser.add_argument("--max-total-notional-usdc", type=float)
+    parser.add_argument("--max-step-notional-usdc", type=float)
+    parser.add_argument("--max-price-drift-bps", type=float)
+    parser.add_argument("--max-exposure-ratio", type=float)
+    parser.add_argument("--reconcile-attempts", type=int)
+    parser.add_argument("--reconcile-delay-ms", type=int)
+
+
+def guardrails_from_args(args: argparse.Namespace) -> dict[str, float | int | None]:
+    return {
+        "max_total_notional_usdc": getattr(args, "max_total_notional_usdc", None),
+        "max_step_notional_usdc": getattr(args, "max_step_notional_usdc", None),
+        "max_price_drift_bps": getattr(args, "max_price_drift_bps", None),
+        "max_exposure_ratio": getattr(args, "max_exposure_ratio", None),
+        "reconcile_attempts": getattr(args, "reconcile_attempts", None),
+        "reconcile_delay_ms": getattr(args, "reconcile_delay_ms", None),
+    }
 
 
 def main(argv: Iterable[str] | None = None) -> int:
@@ -355,11 +677,80 @@ def main(argv: Iterable[str] | None = None) -> int:
         elif args.command == "live-market-order":
             print_json(agent.live_market_order(args.side, args.symbol, args.notional_usdc, args.yes))
         elif args.command == "twap":
-            print_json(agent.twap(args.symbol, args.side, args.notional_usdc, args.slices, args.interval_seconds, args.mode, args.yes))
+            print_json(agent.twap(
+                args.symbol,
+                args.side,
+                args.notional_usdc,
+                args.tokens,
+                args.slices,
+                args.interval_seconds,
+                args.mode,
+                args.margin_mode,
+                args.isolated_collateral,
+                args.run_label,
+                args.detached,
+                guardrails_from_args(args),
+                args.yes,
+            ))
+        elif args.command == "grid":
+            print_json(agent.grid(
+                args.symbol,
+                args.levels_per_side,
+                args.lower_price,
+                args.upper_price,
+                args.center_on_mark,
+                args.width_pct,
+                args.tokens_per_level,
+                args.size_lots_per_level,
+                args.bid_levels,
+                args.ask_levels,
+                args.take_profit_spacing,
+                args.stop_loss_spacing,
+                args.interval_seconds,
+                args.ticks,
+                args.run_until_stopped,
+                args.stale_after_seconds,
+                args.mode,
+                args.margin_mode,
+                args.isolated_collateral,
+                args.run_label,
+                args.slide,
+                args.detached,
+                guardrails_from_args(args),
+                args.yes,
+            ))
+        elif args.command == "ta":
+            print_json(agent.ta(
+                args.config_file,
+                args.config_json,
+                args.mode,
+                args.max_ticks,
+                args.run_until_stopped,
+                args.run_label,
+                args.detached,
+                guardrails_from_args(args),
+                args.yes,
+            ))
+        elif args.command == "runs":
+            print_json(agent.runs(args.limit))
+        elif args.command == "status":
+            print_json(agent.status(args.run_id, args.since_tick, args.include_ledger))
         elif args.command == "monitor":
-            print_json(agent.monitor(args.run_id))
+            print_json(agent.monitor(args.run_id, args.include_ledger))
+        elif args.command == "wait-next-tick":
+            print_json(agent.wait_next_tick(args.run_id, args.after_tick, args.timeout_seconds, args.include_ledger))
+        elif args.command == "report":
+            print_json(agent.report(args.run_id))
+        elif args.command == "reconcile-grid":
+            print_json(agent.reconcile_grid(args.run_id))
+        elif args.command == "pause":
+            print_json(agent.control("pause", args.run_id, args.reason))
+        elif args.command == "stop":
+            print_json(agent.control("stop", args.run_id, args.reason))
+        elif args.command == "resume":
+            print_json(agent.resume(args.run_id, args.from_step, args.strategy_type))
         elif args.command == "finalize":
-            print_json(agent.finalize(args.run_id, args.cancel_orders, args.close_position, args.yes))
+            print_json(agent.finalize(args.run_id, args.reason, args.cancel_orders, args.close_position, args.wait, args.timeout_seconds, args.yes))
         else:
             parser.error(f"unknown command: {args.command}")
         return 0

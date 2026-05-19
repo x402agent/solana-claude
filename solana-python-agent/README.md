@@ -68,7 +68,17 @@ python perps_agent.py paper-init --balance 10000
 python perps_agent.py paper-order buy SOL --notional-usdc 100
 
 # Strategy runner, paper by default
-python perps_agent.py twap SOL --side buy --notional-usdc 500 --slices 5 --interval-seconds 30
+python perps_agent.py twap SOL --side buy --notional-usdc 500 --slices 5 --interval-seconds 30 --detached
+python perps_agent.py grid SOL --center-on-mark --width-pct 2.5 --levels-per-side 5 --tokens-per-level 0.5 --run-until-stopped --detached
+python perps_agent.py ta --config-file ./ema-cross-sol.json --run-until-stopped --detached
+
+# Strategy lifecycle
+python perps_agent.py runs
+python perps_agent.py monitor <run-id>
+python perps_agent.py wait-next-tick <run-id> --timeout-seconds 120
+python perps_agent.py pause <run-id> --reason "checking risk"
+python perps_agent.py resume <run-id>
+python perps_agent.py finalize <run-id> --cancel-orders --close-position --wait --yes
 
 # Live readiness and live-gated execution
 python perps_agent.py preflight
@@ -80,6 +90,7 @@ From the existing CLI:
 ```bash
 python cli.py --perps health
 python cli.py --perps market SOL
+python cli.py --perps grid SOL --center-on-mark --width-pct 2.5 --levels-per-side 5 --tokens-per-level 0.5 --detached
 ```
 
 Live Phoenix actions remain gated twice: the Python agent requires `--yes`, and Vulcan still enforces its own dangerous-operation confirmation and wallet/margin checks.
