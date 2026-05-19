@@ -1,7 +1,7 @@
 # @openclawdsolana/clawd-perps
 
 **Phoenix Perpetuals DEX CLI integration for the OpenClawd framework.**  
-Trade perps on Solana from the terminal or import the `ClaWDPerps` class directly into your agent code.
+Trade perps on Solana from TypeScript market tools, or bring up the Python Phoenix agent and Vulcan CLI for strategies, lifecycle controls, and live-gated execution.
 
 Part of the [OpenClawd](https://solanaclawd.com) framework.
 
@@ -58,6 +58,13 @@ clawd-perps perps history pnl
 
 # API health
 clawd-perps perps health
+
+# Python Phoenix agent + Vulcan strategy surface
+clawd-perps perps vulcan health
+clawd-perps perps agent market SOL
+clawd-perps perps twap SOL --side buy --notional-usdc 500 --slices 5 --detached
+clawd-perps perps grid SOL --center-on-mark --width-pct 2.5 --levels-per-side 5 --tokens-per-level 0.5 --detached
+clawd-perps perps monitor <run-id>
 ```
 
 Or without a global install:
@@ -104,6 +111,8 @@ CLAWD_PERPS_API_URL=    # Phoenix perps API (default: https://perp-api.phoenix.t
 CLAWD_PERPS_RPC_URL=    # Solana RPC (default: https://api.mainnet-beta.solana.com)
 CLAWD_PERPS_API_KEY=    # Bearer token for authenticated endpoints (optional)
 CLAWD_PERPS_WALLET=     # Trader wallet address / public key
+CLAWD_PERPS_AGENT_PATH= # Optional path to solana-python-agent/perps_agent.py
+VULCAN_BIN=             # Optional Vulcan binary override
 ```
 
 ---
@@ -118,12 +127,18 @@ CLAWD_PERPS_WALLET=     # Trader wallet address / public key
 | `order` | `list`, `show`, `place`, `cancel` |
 | `margin` | `deposit`, `withdraw`, `collateral` |
 | `history` | `trades`, `orders`, `funding`, `pnl` |
+| `agent` | Pass-through to `perps_agent.py` (`health`, `market`, `twap`, `grid`, `ta`, lifecycle) |
+| `vulcan` | Pass-through to Python agent when available, or raw Vulcan with `--raw` |
+| strategy aliases | `twap`, `grid`, `ta`, `runs`, `status`, `monitor`, `wait-next-tick`, `report`, `pause`, `stop`, `resume`, `finalize` |
 
 ---
 
 ## Architecture
 
-`clawd-perps` is a pure TypeScript HTTP client — it targets the [Phoenix Perpetuals](https://phoenix.trade) REST API at `https://perp-api.phoenix.trade`. No Vulcan binary is required. Transaction-building endpoints return serialized Solana transactions that you sign with any wallet (Phantom, Backpack, `@solana/web3.js`, etc.).
+`clawd-perps` has two execution paths:
+
+- TypeScript market/account/order helpers target the [Phoenix Perpetuals](https://phoenix.trade) REST API at `https://perp-api.phoenix.trade`.
+- Strategy and lifecycle commands delegate to the Python Phoenix agent (`solana-python-agent/perps_agent.py`), which in turn calls Vulcan/Rise SDK. Set `CLAWD_PERPS_AGENT_PATH` when running outside the monorepo. Use `VULCAN_BIN` to point at a specific Vulcan binary.
 
 The `ClaWDPerps` class follows the same tool pattern as other clawd tools (`DFlowTool`, `KalshiTool`, etc.) and can be plugged directly into the Clawd Leviathan agent runtime.
 
