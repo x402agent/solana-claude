@@ -15,12 +15,14 @@
   },
   "files": [
     "dist",
+    "scripts/postinstall.mjs",
     "README.md",
     "LICENSE"
   ],
   "scripts": {
     "build": "tsc",
     "dev": "tsx src/cli.ts",
+    "postinstall": "node scripts/postinstall.mjs",
     "start": "node dist/cli.js",
     "typecheck": "tsc --noEmit",
     "vulcan": "node dist/cli.js perps vulcan",

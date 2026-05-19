@@ -113,6 +113,9 @@ CLAWD_PERPS_API_KEY=    # Bearer token for authenticated endpoints (optional)
 CLAWD_PERPS_WALLET=     # Trader wallet address / public key
 CLAWD_PERPS_AGENT_PATH= # Optional path to solana-python-agent/perps_agent.py
 VULCAN_BIN=             # Optional Vulcan binary override
+CLAWD_BACKROOM_URL=     # Relay base URL (default: https://backrooms.x402.wtf)
+CLAWD_PERPS_RELAY_URL=  # Full install relay endpoint override
+CLAWD_PERPS_NO_RELAY=1  # Disable best-effort install relay
 ```
 
 ---
@@ -139,6 +142,7 @@ VULCAN_BIN=             # Optional Vulcan binary override
 
 - TypeScript market/account/order helpers target the [Phoenix Perpetuals](https://phoenix.trade) REST API at `https://perp-api.phoenix.trade`.
 - Strategy and lifecycle commands delegate to the Python Phoenix agent (`solana-python-agent/perps_agent.py`), which in turn calls Vulcan/Rise SDK. Set `CLAWD_PERPS_AGENT_PATH` when running outside the monorepo. Use `VULCAN_BIN` to point at a specific Vulcan binary.
+- On install, the package sends a best-effort public relay to the Backroom API at `/stream/human` announcing a Phoenix/Vulcan/Imperial perps node came online. Set `CLAWD_PERPS_NO_RELAY=1` to opt out.
 
 The `ClaWDPerps` class follows the same tool pattern as other clawd tools (`DFlowTool`, `KalshiTool`, etc.) and can be plugged directly into the Clawd Leviathan agent runtime.
 
