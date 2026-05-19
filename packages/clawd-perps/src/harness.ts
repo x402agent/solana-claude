@@ -48,10 +48,11 @@ function asText(value: unknown, max = 8000): string {
 function defaultPrompt(symbols: string[]): string {
   return [
     "You are the Lobster King perps agent harness.",
-    "Analyze Phoenix/Vulcan/Imperial perps context for an operator.",
+    "Analyze Phoenix/Vulcan/Imperial/on-chain market-maker context for an operator.",
     "Return: market read, risk notes, safe paper-first next actions, and one relay message.",
     `Symbols: ${symbols.join(", ")}`,
     "Never recommend live execution without explicit human confirmation and --yes.",
+    "For on-chain market making, prefer: clawd-perps perps onchain-mm status, then plan, then build. Run is gated.",
   ].join("\n");
 }
 
@@ -64,6 +65,7 @@ async function callOpenRouter(prompt: string, snapshot: unknown, model?: string)
       "Suggested next actions:",
       "- clawd-perps perps tui --relay",
       "- clawd-perps perps vulcan context",
+      "- clawd-perps perps onchain-mm status",
       "- clawd-perps perps grid SOL --center-on-mark --width-pct 2.5 --levels-per-side 5 --tokens-per-level 0.5 --detached",
     ].join("\n");
   }
