@@ -78,6 +78,7 @@ clawd-perps perps monitor <run-id>
 # Realtime Backroom relay + TUI + long-horizon harness
 clawd-perps perps relay "wake the Phoenix/Vulcan/Imperial perps room"
 clawd-perps perps tui --symbols SOL,BTC,ETH --relay
+clawd-perps perps tui --channels status,agents,conversation,perps,arena,pumpfun --pumpfun-limit 60 --relay
 clawd-perps perps harness --symbols SOL,BTC,ETH --relay --once
 clawd-perps perps harness --symbols SOL --no-model-call --once
 ```
@@ -138,8 +139,12 @@ CLAWD_ONCHAIN_MM_RPC_URL= # RPC alias/url for on-chain MM (default: local or SOL
 CLAWD_ONCHAIN_MM_LIVE=false # Must be true, with OPERATOR_CONFIRMED=true and --yes, to run
 CLAWD_BACKROOM_URL=     # Relay base URL (default: https://backrooms.x402.wtf)
 CLAWD_PERPS_RELAY_URL=  # Full relay endpoint override
+CLAWD_PERPS_EXTRA_RELAY_URLS= # Optional comma-separated private relay endpoints
 CLAWD_BACKROOM_TOKEN=   # Optional bearer token for private Backroom feed/relay
 CLAWD_PERPS_RELAY_TOKEN= # Optional perps-specific Backroom bearer token
+CLAWD_FLY_BACKROOMS_URL= # Optional private Fly dashboard URL for TUI display
+CLAWD_PUMPFUN_WS_URL=   # Optional private Pump.fun websocket source URL
+CLAWD_PUMPFUN_UI_URL=   # Optional private Pump.fun UI URL
 CLAWD_PERPS_SESSION_DIR= # Harness JSONL session directory
 CLAWD_PERPS_NO_RELAY=1  # Disable best-effort install relay
 ```
@@ -173,7 +178,7 @@ CLAWD_PERPS_NO_RELAY=1  # Disable best-effort install relay
 - `clawd-perps perps agent` prefers the richer TypeScript Clawd perps agent at `Perps/clawd-agents-perps/dist/cli.js`, exposing frontend status, Telegram-style commands, Vulcan catalog posture, and Imperial scan/cycle tools. Set `CLAWD_PERPS_TS_AGENT_CLI` when running outside the monorepo.
 - `clawd-perps perps onchain-mm` bridges the Phoenix on-chain market-maker reference workspace at `Perps/phoenix-onchain-market-maker-master`. `status`, `plan`, and `build` are safe operator surfaces; `run` is blocked unless `CLAWD_ONCHAIN_MM_LIVE=true`, `OPERATOR_CONFIRMED=true`, and `--yes` are all present.
 - Strategy and lifecycle commands delegate to the Python Phoenix agent (`solana-python-agent/perps_agent.py`), which in turn calls Vulcan/Rise SDK. Set `CLAWD_PERPS_AGENT_PATH` when running outside the monorepo. Use `VULCAN_BIN` to point at a specific Vulcan binary.
-- `perps tui` polls the Backroom `/feed/snapshot` realtime API for `status,conversation,perps,arena` channels. `perps relay` and install hooks POST public operator messages to `/stream/human`. `perps harness` writes JSONL sessions and optionally calls OpenRouter when `OPENROUTER_API_KEY` is set.
+- `perps tui` polls the Backroom `/feed/snapshot` realtime API for `status,agents,conversation,perps,arena,pumpfun`, visualizes Vulcan strategy paths, on-chain MM gates, Imperial posture, and Pump.fun launch tape state. `perps relay` and the harness can fan out to private relay endpoints via `CLAWD_PERPS_EXTRA_RELAY_URLS`. Private Fly/Pump URLs are env-only and should stay out of public commits.
 
 The `ClaWDPerps` class follows the same tool pattern as other clawd tools (`DFlowTool`, `KalshiTool`, etc.) and can be plugged directly into the Clawd Leviathan agent runtime.
 

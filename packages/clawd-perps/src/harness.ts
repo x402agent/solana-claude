@@ -1,7 +1,7 @@
 import { mkdirSync, appendFileSync } from "node:fs";
 import { homedir } from "node:os";
 import { join } from "node:path";
-import { fetchSnapshot, sendRelay, buildImperialRelay } from "./relay-client.js";
+import { fetchSnapshot, sendRelayFanout, buildImperialRelay } from "./relay-client.js";
 
 type HarnessOptions = {
   symbols: string[];
@@ -114,7 +114,7 @@ export async function runPerpsHarness(options: HarnessOptions): Promise<void> {
   const iterations = options.once ? 1 : Math.max(1, options.maxIterations);
 
   if (options.relay) {
-    const result = await sendRelay({
+    const result = await sendRelayFanout({
       name: "clawd-perps-harness",
       content: buildImperialRelay(options.symbols, "agent-harness"),
     });
@@ -149,7 +149,7 @@ export async function runPerpsHarness(options: HarnessOptions): Promise<void> {
     logEvent({ type: "analysis", at: new Date().toISOString(), data: { text } });
 
     if (options.relay) {
-      await sendRelay({
+      await sendRelayFanout({
         name: "clawd-perps-harness",
         content: `🦞👑 Perps harness analysis\n${text.slice(0, 1700)}`,
       });
