@@ -1,237 +1,390 @@
 /**
- * Imperial Perps Agent
+ * Imperial Perps Agent — real Imperial Trading API client
  *
- * OODA loop: observe Phoenix/Imperial market tape → orient with signal scoring →
- * decide (buy/sell/watch) → route to Imperial /mobile/orders (dry_run by default) →
- * return audit record.
+ * Base: https://api.imperial.space/api/v1
+ * Auth: JWT obtained via connect → exchange flow (or pre-set IMPERIAL_JWT env var)
  *
  * Environment:
- *   IMPERIAL_API_KEY        — required for authenticated Imperial routes
- *   IMPERIAL_WALLET         — operator wallet pubkey (never a private key)
- *   IMPERIAL_PROFILE_INDEX  — Imperial account profile (default 0)
- *   IMPERIAL_API_BASE       — override Imperial gateway (default https://api.imperialdex.io)
- *   IMPERIAL_LIVE           — set "true" to enable live submission (dry_run: false)
- *   IMPERIAL_MAX_SIZE_USD   — hard cap per order (default 100)
- *   IMPERIAL_ALLOWED_SYMS   — comma-separated allowlist (default SOL,ETH,BTC)
+ *   IMPERIAL_JWT             — pre-issued JWT (skip auth flow)
+ *   IMPERIAL_WALLET          — operator wallet pubkey (base58, never private key)
+ *   IMPERIAL_PROFILE_INDEX   — subaccount index 0..5 (default 0)
+ *   IMPERIAL_LIVE            — "true" to enable live submission
+ *   IMPERIAL_MAX_SIZE_USD    — hard cap per order in USD (default 100)
+ *   IMPERIAL_ALLOWED_SYMS    — comma-separated allowlist (default SOL,ETH,BTC)
+ *   IMPERIAL_SLIPPAGE_BPS    — default slippage (default 50)
  */
 
-// ─── Config ─────────────────────────────────────────────────────────────────
+export const IMPERIAL_BASE = "https://api.imperial.space/api/v1";
+
+// ─── Underwriter / venue codes ────────────────────────────────────────────────
+
+export type Underwriter = 0 | 1 | 2 | 3;
+export const Underwriter = {
+  Jupiter: 0 as Underwriter,
+  Flash: 1 as Underwriter,
+  Phoenix: 2 as Underwriter,
+  GMTrade: 3 as Underwriter,
+} as const;
+
+export const UNDERWRITER_LABELS: Record<Underwriter, string> = {
+  0: "Jupiter",
+  1: "Flash Trade",
+  2: "Phoenix",
+  3: "GMTrade",
+};
+
+// ─── Order type codes ─────────────────────────────────────────────────────────
+
+export type OrderType =
+  | 0  // Market
+  | 1  // Limit
+  | 2  // StopLimit
+  | 3  // LandMine
+  | 4  // Ratchet
+  | 6  // RatchetEntry
+  | 9  // DCA
+  | 10 // FibRatchet
+  | 11 // FibRatchetEntry
+  | 12 // DcaClose
+  | 13 // DcaTimeClose
+  | 14 // DcaRatchetClose
+  | 15 // DcaTime
+  | 16;// DcaRatchet
+
+export const ORDER_TYPE_NAMES: Record<number, string> = {
+  0: "Market", 1: "Limit", 2: "StopLimit", 3: "LandMine",
+  4: "Ratchet", 6: "RatchetEntry", 9: "DCA", 10: "FibRatchet",
+  11: "FibRatchetEntry", 12: "DcaClose", 13: "DcaTimeClose",
+  14: "DcaRatchetClose", 15: "DcaTime", 16: "DcaRatchet",
+};
+
+// ─── Config ───────────────────────────────────────────────────────────────────
 
 export interface ImperialConfig {
-  apiKey: string;
+  jwt: string;
   wallet: string;
   profileIndex: number;
-  apiBase: string;
   live: boolean;
   maxSizeUsd: number;
   allowedSymbols: string[];
+  slippageBps: number;
+  base: string;
 }
 
 export function loadImperialConfig(env: NodeJS.ProcessEnv = process.env): ImperialConfig {
   return {
-    apiKey: env.IMPERIAL_API_KEY ?? "",
+    jwt: env.IMPERIAL_JWT ?? "",
     wallet: env.IMPERIAL_WALLET ?? "",
     profileIndex: Number(env.IMPERIAL_PROFILE_INDEX ?? 0),
-    apiBase: env.IMPERIAL_API_BASE ?? "https://api.imperialdex.io",
     live: env.IMPERIAL_LIVE === "true",
     maxSizeUsd: Number(env.IMPERIAL_MAX_SIZE_USD ?? 100),
     allowedSymbols: (env.IMPERIAL_ALLOWED_SYMS ?? "SOL,ETH,BTC")
       .split(",")
       .map((s) => s.trim().toUpperCase())
       .filter(Boolean),
+    slippageBps: Number(env.IMPERIAL_SLIPPAGE_BPS ?? 50),
+    base: env.IMPERIAL_API_BASE ?? IMPERIAL_BASE,
   };
 }
 
-// ─── Market data shapes ──────────────────────────────────────────────────────
+// ─── HTTP helpers ─────────────────────────────────────────────────────────────
 
-export interface ImperialMarketView {
+/** sizeUsd in human dollars → 6-decimal fixed point (1_000_000 = $1) */
+export function usdToFixed(usd: number): number {
+  return Math.round(usd * 1_000_000);
+}
+
+/** 6-decimal fixed point → human dollars */
+export function fixedToUsd(fixed: number): number {
+  return fixed / 1_000_000;
+}
+
+async function imperialGet<T>(base: string, path: string, jwt?: string): Promise<T> {
+  const res = await fetch(`${base}${path}`, {
+    headers: jwt ? { Authorization: `Bearer ${jwt}` } : {},
+  });
+  if (!res.ok) {
+    const body = await res.text().catch(() => "");
+    throw new Error(`GET ${path} → ${res.status}: ${body}`);
+  }
+  return res.json() as Promise<T>;
+}
+
+async function imperialPost<T>(
+  base: string,
+  path: string,
+  body: unknown,
+  jwt?: string,
+): Promise<T> {
+  const res = await fetch(`${base}${path}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      ...(jwt ? { Authorization: `Bearer ${jwt}` } : {}),
+    },
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) {
+    const text = await res.text().catch(() => "");
+    throw new Error(`POST ${path} → ${res.status}: ${text}`);
+  }
+  return res.json() as Promise<T>;
+}
+
+// ─── Auth types ───────────────────────────────────────────────────────────────
+
+export interface ConnectResponse {
+  code: string;
+}
+
+export interface ExchangeResponse {
+  jwt: string;
+  expires_at: string;
+}
+
+// ─── Order request shapes ─────────────────────────────────────────────────────
+
+export interface ExtraData {
+  // Ratchet / FibRatchet
+  worstPrice?: number;
+  ratchetSize?: number;
+  // LandMine
+  waitPrice?: number;
+  waitDuration?: number;
+  // DCA
+  dcaStartPrice?: number;
+  dcaEndPrice?: number;
+  dcaNumLegs?: number;
+  // DcaClose
+  dcaCloseStartPrice?: number;
+  dcaCloseEndPrice?: number;
+  dcaCloseNumLegs?: number;
+  // DcaTimeClose
+  dcaCloseIntervalSeconds?: number;
+  // DcaRatchetClose
+  dcaCloseRatchetSize?: number;
+  // DcaTime
+  dcaIntervalSeconds?: number;
+  // DcaRatchet
+  dcaRatchetSize?: number;
+}
+
+export interface MobileCreateOrderRequest {
+  wallet: string;
+  profileIndex: number;
+  action: 0 | 1; // 0=Increase, 1=Decrease
+  side: 0 | 1;   // 0=long, 1=short
+  underwriter: Underwriter;
+  orderType: OrderType;
+  sizeUsd: number;           // 6-decimal fixed point
+  collateralAmount: number;  // collateral mint native units
+  slippageBps: number;
+  fundingStatus: 0 | 1;     // 0=funded, 1=pending
+  priority: number;
+  triggerPrice: number;      // oracle scale 1e9
+  triggerCondition: 0 | 1;  // 0=Above, 1=Below
+  symbol?: string | null;
+  marketMint?: string | null;
+  marketPrice?: number;
+  parentOrderPda?: string | null;
+  phoenixNative?: unknown | null;
+  extraData?: ExtraData | null;
+}
+
+export interface MobileOrderResponse {
+  success: boolean;
+  error: string | null;
+  orderPda: string | null;
+  signature: string | null;
+}
+
+export interface MobileBatchRequest {
+  entry: MobileCreateOrderRequest;
+  closeOrders?: MobileCreateOrderRequest[];
+}
+
+export interface MobileBatchResponse {
+  entry: MobileOrderResponse;
+  closeOrders: MobileOrderResponse[];
+}
+
+export interface MobileCancelRequest {
+  wallet: string;
+  profileIndex: number;
+  orderPda: string;
+}
+
+export interface MobileCollateralRequest {
+  wallet: string;
+  profileIndex: number;
+  action: 0 | 1;  // 0=add, 1=remove
+  marketMint: string;
+  side: 0 | 1;
+  underwriter: Underwriter;
+  collateralAmount: number;
+  price: number;
+  slippageBps: number;
+}
+
+export interface MobileUpdateRequest {
+  wallet: string;
+  profileIndex: number;
+  orderPda: string;
+  sizeUsd?: number;
+  triggerPrice?: number;
+  slippageBps?: number;
+  closeBps?: number;
+  priority?: number;
+  proOrderUpdate?: {
+    type: string;
+    worstPrice?: number;
+    ratchetSize?: number;
+    waitPrice?: number;
+    waitDurationSeconds?: number;
+  } | null;
+}
+
+export interface DepositBuildTxRequest {
+  wallet: string;
+  profileIndex: number;
+  amount: number; // USDC native units (6-decimal)
+  mode: "deposit" | "withdraw";
+}
+
+// ─── Read response shapes ─────────────────────────────────────────────────────
+
+export interface ProfileBalance {
+  profileIndex: number;
+  profilePda: string;
+  usdc: number;
+}
+
+export interface BalancesResponse {
+  wallet: string;
+  profiles: ProfileBalance[];
+}
+
+export interface FundingRateEntry {
   symbol: string;
-  markPrice: number | null;
-  oraclePrice: number | null;
-  midPrice: number | null;
-  fundingRateCurrent: number | null;
-  fundingRateAnnualized: number | null;
-  openInterestUsd: number | null;
-  basisPct: number | null;
-  spreadBps: number | null;
-  topBid: number | null;
-  topAsk: number | null;
-  candles: CandleBar[];
-  imperialMarkOverlay: number | null;
-  imperialFundingOverlay: number | null;
+  venue: string;
+  source: string;
+  longFundingRatePerHourPercent: number | null;
+  shortFundingRatePerHourPercent: number | null;
+  longBorrowRatePerHourPercent: number | null;
+  shortBorrowRatePerHourPercent: number | null;
 }
 
-export interface CandleBar {
-  ts: number;
-  open: number;
-  high: number;
-  low: number;
-  close: number;
-  volume: number;
+export interface MarkPriceEntry {
+  symbol: string;
+  venue: string;
+  source: string;
+  price: number;
+  fetchedAtUnixMs: number;
 }
 
-export interface ImperialDepth {
+export interface RouteRecommendation {
+  underwriter: Underwriter;
+  venue: string;
+  estimatedFee: number;
+  reason: string;
+}
+
+export interface PhoenixDepthSnapshot {
   symbol: string;
   bids: [number, number][];
   asks: [number, number][];
 }
 
-export interface ImperialAccountBalances {
-  wallet: string;
-  equity: number | null;
-  availableMargin: number | null;
-  usedMargin: number | null;
-}
-
-export interface ImperialPosition {
-  symbol: string;
-  side: "long" | "short";
-  sizeUsd: number;
-  entryPrice: number;
-  markPrice: number;
-  unrealizedPnl: number;
-  leverage: number;
-}
-
-// ─── Signal scoring ──────────────────────────────────────────────────────────
+// ─── Signal scoring ───────────────────────────────────────────────────────────
 
 export type AgentDecision = "buy" | "sell" | "watch";
+
+export interface ImperialMarketSnapshot {
+  symbol: string;
+  markPrice: number | null;
+  fundingRates: FundingRateEntry[];
+  depth: PhoenixDepthSnapshot | null;
+}
 
 export interface AgentSignal {
   symbol: string;
   decision: AgentDecision;
-  confidence: number; // 0–1
+  confidence: number;
   scores: {
     momentum: number;
     funding: number;
-    basis: number;
     liquidity: number;
   };
   rationale: string;
+  snapshot: ImperialMarketSnapshot;
 }
 
-export function scoreMarket(market: ImperialMarketView): AgentSignal {
-  const scores = {
-    momentum: 0,
-    funding: 0,
-    basis: 0,
-    liquidity: 0,
-  };
+export function scoreImperialMarket(snap: ImperialMarketSnapshot): AgentSignal {
+  const scores = { momentum: 0, funding: 0, liquidity: 0 };
 
-  // Momentum: mark vs oracle drift
-  if (market.markPrice !== null && market.oraclePrice !== null && market.oraclePrice > 0) {
-    const drift = (market.markPrice - market.oraclePrice) / market.oraclePrice;
-    // Positive drift → mark premium → fade with sell signal; negative → buy signal
-    scores.momentum = Math.max(-1, Math.min(1, -drift * 50));
+  // Funding: find Phoenix funding, average long rate
+  const phoenixFunding = snap.fundingRates.filter((r) => r.venue === "phoenix");
+  if (phoenixFunding.length > 0) {
+    const avgLong =
+      phoenixFunding.reduce((acc, r) => acc + (r.longFundingRatePerHourPercent ?? 0), 0) /
+      phoenixFunding.length;
+    // > 0 longs pay shorts → crowded long → sell bias
+    scores.funding = Math.max(-1, Math.min(1, -avgLong * 20));
   }
 
-  // Funding: elevated positive funding = crowded longs → fade bias
-  if (market.fundingRateCurrent !== null) {
-    const annRate = market.fundingRateAnnualized ?? market.fundingRateCurrent * 8760;
-    // > 100% annualized: short bias; < -100%: long bias
-    scores.funding = Math.max(-1, Math.min(1, -annRate / 200));
+  // Liquidity: Phoenix depth spread
+  if (snap.depth?.bids.length && snap.depth.asks.length) {
+    const bid = snap.depth.bids[0]?.[0] ?? 0;
+    const ask = snap.depth.asks[0]?.[0] ?? 0;
+    if (bid > 0) {
+      const spreadBps = ((ask - bid) / bid) * 10000;
+      scores.liquidity = spreadBps < 10 ? 1 : spreadBps < 30 ? 0.5 : 0;
+    }
   }
 
-  // Basis: mark stretched above oracle = expensive
-  if (market.basisPct !== null) {
-    scores.basis = Math.max(-1, Math.min(1, -market.basisPct * 20));
-  }
-
-  // Liquidity: tight spread = good entry, wide spread = avoid
-  if (market.spreadBps !== null) {
-    scores.liquidity = market.spreadBps < 10 ? 1 : market.spreadBps < 30 ? 0.5 : 0;
+  // Momentum: mark vs mid
+  if (snap.markPrice !== null && snap.depth?.bids.length && snap.depth.asks.length) {
+    const bid = snap.depth.bids[0]?.[0] ?? 0;
+    const ask = snap.depth.asks[0]?.[0] ?? 0;
+    if (bid > 0 && ask > 0) {
+      const mid = (bid + ask) / 2;
+      const drift = (snap.markPrice - mid) / mid;
+      scores.momentum = Math.max(-1, Math.min(1, -drift * 50));
+    }
   }
 
   const composite =
-    scores.momentum * 0.35 +
-    scores.funding * 0.30 +
-    scores.basis * 0.20 +
-    scores.liquidity * 0.15;
+    scores.momentum * 0.40 +
+    scores.funding * 0.40 +
+    scores.liquidity * 0.20;
 
   const confidence = Math.min(1, Math.abs(composite));
   const THRESHOLD = 0.25;
+  const decision: AgentDecision =
+    composite > THRESHOLD ? "buy" : composite < -THRESHOLD ? "sell" : "watch";
 
-  let decision: AgentDecision = "watch";
-  if (composite > THRESHOLD) {
-    decision = "buy";
-  } else if (composite < -THRESHOLD) {
-    decision = "sell";
-  }
-
-  const rationale = buildRationale(market, scores, composite, decision);
-
-  return { symbol: market.symbol, decision, confidence, scores, rationale };
-}
-
-function buildRationale(
-  market: ImperialMarketView,
-  scores: AgentSignal["scores"],
-  composite: number,
-  decision: AgentDecision,
-): string {
+  const phoenixRate = phoenixFunding[0];
   const parts: string[] = [];
-  if (market.fundingRateAnnualized !== null) {
-    parts.push(`funding ${(market.fundingRateAnnualized * 100).toFixed(1)}% ann`);
+  if (phoenixRate?.longFundingRatePerHourPercent !== null && phoenixRate !== undefined) {
+    const ann = (phoenixRate.longFundingRatePerHourPercent ?? 0) * 8760;
+    parts.push(`funding ${ann.toFixed(1)}% ann`);
   }
-  if (market.basisPct !== null) {
-    parts.push(`basis ${(market.basisPct * 100).toFixed(2)}%`);
-  }
-  if (market.spreadBps !== null) {
-    parts.push(`spread ${market.spreadBps.toFixed(1)}bps`);
+  if (scores.liquidity > 0) {
+    parts.push(`liquidity ${scores.liquidity.toFixed(2)}`);
   }
   parts.push(`composite ${composite.toFixed(3)}`);
-  return `${decision.toUpperCase()} — ${parts.join(" | ")}`;
-}
 
-// ─── Order shapes ────────────────────────────────────────────────────────────
-
-/** Imperial /mobile/orders payload */
-export interface ImperialOrderPayload {
-  symbol: string;
-  /** 0 = long, 1 = short */
-  side: 0 | 1;
-  /** 0 = increase, 1 = decrease (reduce-only) */
-  action: 0 | 1;
-  profileIndex: number;
-  sizeUsd: number;
-  /** 0 = market */
-  orderType: 0;
-  /** 2 = Phoenix via Imperial */
-  underwriter: 2;
-  dry_run: boolean;
-}
-
-export type ImperialSide = 0 | 1;
-
-function decisionToSide(decision: "buy" | "sell"): ImperialSide {
-  return decision === "buy" ? 0 : 1;
-}
-
-export function buildOrderPayload(
-  signal: AgentSignal,
-  opts: {
-    profileIndex: number;
-    sizeUsd: number;
-    dryRun: boolean;
-    action?: 0 | 1;
-  },
-): ImperialOrderPayload {
-  if (signal.decision === "watch") {
-    throw new Error("Cannot build order payload for watch signal.");
-  }
   return {
-    symbol: signal.symbol,
-    side: decisionToSide(signal.decision),
-    action: opts.action ?? 0,
-    profileIndex: opts.profileIndex,
-    sizeUsd: opts.sizeUsd,
-    orderType: 0,
-    underwriter: 2,
-    dry_run: opts.dryRun,
+    symbol: snap.symbol,
+    decision,
+    confidence,
+    scores,
+    rationale: `${decision.toUpperCase()} — ${parts.join(" | ")}`,
+    snapshot: snap,
   };
 }
 
-// ─── Audit trail ─────────────────────────────────────────────────────────────
+// ─── Audit trail ──────────────────────────────────────────────────────────────
 
 export type ExecutionStatus = "preview" | "submitted" | "failed" | "blocked";
 
@@ -240,334 +393,458 @@ export interface ExecutionRecord {
   ts: number;
   wallet: string;
   profileIndex: number;
-  venue: "phoenix-imperial";
-  underwriter: 2;
+  venue: string;
+  underwriter: Underwriter;
   symbol: string;
   side: "long" | "short";
   action: "increase" | "decrease";
-  orderType: "market";
+  orderType: string;
   sizeUsd: number;
   dryRun: boolean;
-  request: ImperialOrderPayload;
+  request: unknown;
   response: unknown;
   status: ExecutionStatus;
   error?: string;
   txSignature?: string;
+  orderPda?: string;
 }
 
 function makeId(): string {
   return `imp-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 }
 
-// ─── HTTP helper ─────────────────────────────────────────────────────────────
+// ─── Main client class ────────────────────────────────────────────────────────
 
-async function imperialFetch<T>(
-  base: string,
-  path: string,
-  apiKey: string,
-  opts: RequestInit = {},
-): Promise<T> {
-  const url = `${base.replace(/\/$/, "")}${path}`;
-  const res = await fetch(url, {
-    ...opts,
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${apiKey}`,
-      ...(opts.headers ?? {}),
-    },
-  });
-  if (!res.ok) {
-    const body = await res.text().catch(() => "");
-    throw new Error(`Imperial ${path} → HTTP ${res.status}: ${body}`);
-  }
-  return res.json() as Promise<T>;
-}
-
-// ─── Agent class ─────────────────────────────────────────────────────────────
-
-export class ImperialPerpsAgent {
-  readonly config: ImperialConfig;
+export class ImperialClient {
+  config: ImperialConfig;
 
   constructor(config?: Partial<ImperialConfig>) {
     this.config = { ...loadImperialConfig(), ...config };
   }
 
-  // ── Market data ──
+  get jwt(): string {
+    return this.config.jwt;
+  }
 
-  async fetchMarks(): Promise<Record<string, number>> {
-    return imperialFetch<Record<string, number>>(
-      this.config.apiBase,
-      "/perps/marks",
-      this.config.apiKey,
+  get wallet(): string {
+    return this.config.wallet;
+  }
+
+  // ── Auth ──
+
+  /**
+   * Exchange a pre-signed connect code for a JWT.
+   * The caller must sign imperial:mobile-connect:{wallet}:{nonce} externally.
+   */
+  async exchangeCode(code: string): Promise<ExchangeResponse> {
+    const data = await imperialPost<ExchangeResponse>(
+      this.config.base,
+      "/mobile/exchange",
+      { code },
     );
+    this.config.jwt = data.jwt;
+    return data;
   }
 
-  async fetchFunding(): Promise<Record<string, { current: number; annualized: number }>> {
-    return imperialFetch(this.config.apiBase, "/perps/funding", this.config.apiKey);
+  /** Revoke the current JWT (call on bot shutdown). */
+  async revokeJwt(): Promise<void> {
+    if (!this.config.jwt) return;
+    await imperialPost(this.config.base, "/mobile/revoke", { jwt: this.config.jwt });
+    this.config.jwt = "";
   }
 
-  async fetchDepth(symbol: string): Promise<ImperialDepth> {
-    return imperialFetch<ImperialDepth>(
-      this.config.apiBase,
-      `/perps/depth/${encodeURIComponent(symbol)}`,
-      this.config.apiKey,
-    );
+  // ── Public reads (no auth) ──
+
+  async getStatus(): Promise<unknown> {
+    return imperialGet(this.config.base, "/status");
   }
 
-  // ── Account ──
-
-  async fetchBalances(): Promise<ImperialAccountBalances> {
-    return imperialFetch<ImperialAccountBalances>(
-      this.config.apiBase,
-      "/perps/account/balances",
-      this.config.apiKey,
-    );
+  async getFundingRates(): Promise<FundingRateEntry[]> {
+    return imperialGet<FundingRateEntry[]>(this.config.base, "/funding-rates");
   }
 
-  async fetchPositions(): Promise<ImperialPosition[]> {
-    return imperialFetch<ImperialPosition[]>(
-      this.config.apiBase,
-      "/perps/account/positions",
-      this.config.apiKey,
-    );
+  async getMarkPrices(): Promise<MarkPriceEntry[]> {
+    return imperialGet<MarkPriceEntry[]>(this.config.base, "/mark-prices");
   }
 
-  async fetchOrders(): Promise<unknown[]> {
-    return imperialFetch<unknown[]>(
-      this.config.apiBase,
-      "/perps/account/orders",
-      this.config.apiKey,
-    );
+  async getPhoenixMarkPrices(): Promise<MarkPriceEntry[]> {
+    return imperialGet<MarkPriceEntry[]>(this.config.base, "/phoenix/mark-prices");
   }
 
-  // ── Market overview (Phoenix + Imperial overlay) ──
+  async getPhoenixDepth(symbol?: string): Promise<PhoenixDepthSnapshot | PhoenixDepthSnapshot[]> {
+    const path = symbol
+      ? `/phoenix/depth?symbol=${encodeURIComponent(symbol)}`
+      : "/phoenix/depth";
+    return imperialGet(this.config.base, path);
+  }
 
-  async fetchMarketOverview(symbols?: string[]): Promise<ImperialMarketView[]> {
-    const targets = (symbols ?? this.config.allowedSymbols).map((s) => s.toUpperCase());
+  async getPhoenixMarkets(): Promise<unknown> {
+    return imperialGet(this.config.base, "/phoenix/markets");
+  }
 
-    const [marks, funding] = await Promise.all([
-      this.fetchMarks().catch(() => ({}) as Record<string, number>),
-      this.fetchFunding().catch(
-        () => ({}) as Record<string, { current: number; annualized: number }>,
-      ),
-    ]);
+  async getFlashMarkets(): Promise<unknown> {
+    return imperialGet(this.config.base, "/flash/markets");
+  }
 
-    return targets.map((symbol) => {
-      const markPrice = marks[symbol] ?? null;
-      const fundingInfo = funding[symbol] ?? null;
-      return {
-        symbol,
-        markPrice,
-        oraclePrice: null, // enriched by Phoenix if available
-        midPrice: markPrice,
-        fundingRateCurrent: fundingInfo?.current ?? null,
-        fundingRateAnnualized: fundingInfo?.annualized ?? null,
-        openInterestUsd: null,
-        basisPct: null,
-        spreadBps: null,
-        topBid: null,
-        topAsk: null,
-        candles: [],
-        imperialMarkOverlay: markPrice,
-        imperialFundingOverlay: fundingInfo?.current ?? null,
-      };
+  async getGMTradeMarkets(): Promise<unknown> {
+    return imperialGet(this.config.base, "/gmtrade/markets");
+  }
+
+  async getGMTradeFundingRates(): Promise<unknown> {
+    return imperialGet(this.config.base, "/gmtrade/funding-rates");
+  }
+
+  async getPositions(wallet?: string): Promise<unknown> {
+    const path = wallet ? `/positions?wallet=${wallet}` : `/positions?wallet=${this.config.wallet}`;
+    return imperialGet(this.config.base, path);
+  }
+
+  async getOrders(wallet?: string): Promise<unknown> {
+    const path = wallet ? `/orders?wallet=${wallet}` : `/orders?wallet=${this.config.wallet}`;
+    return imperialGet(this.config.base, path);
+  }
+
+  async getPassthroughOrders(wallet?: string): Promise<unknown> {
+    const w = wallet ?? this.config.wallet;
+    return imperialGet(this.config.base, `/passthrough/users/${w}/orders`);
+  }
+
+  async getRoute(asset: string, side: 0 | 1, notional: number): Promise<RouteRecommendation> {
+    const params = new URLSearchParams({
+      asset,
+      side: String(side),
+      notional: String(notional),
     });
+    return imperialGet<RouteRecommendation>(this.config.base, `/route?${params}`);
   }
 
-  /** Enrich a market view with live depth data */
-  async enrichWithDepth(view: ImperialMarketView): Promise<ImperialMarketView> {
-    try {
-      const depth = await this.fetchDepth(view.symbol);
-      const topBid = depth.bids[0]?.[0] ?? null;
-      const topAsk = depth.asks[0]?.[0] ?? null;
-      const spreadBps =
-        topBid !== null && topAsk !== null && topBid > 0
-          ? ((topAsk - topBid) / topBid) * 10000
-          : null;
-      const midPrice = topBid !== null && topAsk !== null ? (topBid + topAsk) / 2 : view.midPrice;
-      return { ...view, topBid, topAsk, spreadBps, midPrice };
-    } catch {
-      return view;
+  async getPriorityFee(): Promise<unknown> {
+    return imperialGet(this.config.base, "/priority-fee");
+  }
+
+  async getTrades(wallet?: string): Promise<unknown> {
+    const path = wallet ? `/trades?wallet=${wallet}` : `/trades?wallet=${this.config.wallet}`;
+    return imperialGet(this.config.base, path);
+  }
+
+  // ── Auth reads ──
+
+  async getBalances(): Promise<BalancesResponse> {
+    this.requireJwt();
+    return imperialGet<BalancesResponse>(this.config.base, "/mobile/balances", this.config.jwt);
+  }
+
+  // ── Trading ──
+
+  private requireJwt(): void {
+    if (!this.config.jwt) {
+      throw new Error(
+        "No Imperial JWT. Set IMPERIAL_JWT env var or complete connect/exchange flow.",
+      );
     }
   }
 
-  // ── Signal scoring ──
-
-  scoreMarket(market: ImperialMarketView): AgentSignal {
-    return scoreMarket(market);
+  private requireLive(context: string): void {
+    if (!this.config.live) {
+      throw new Error(
+        `${context}: live mode not enabled. Set IMPERIAL_LIVE=true to submit real orders.`,
+      );
+    }
   }
 
-  // ── Order routing ──
-
-  /** Build and validate an order payload, enforcing hard limits */
-  prepareOrder(
-    signal: AgentSignal,
-    opts: { sizeUsd?: number; dryRun?: boolean; action?: 0 | 1 } = {},
-  ): ImperialOrderPayload {
-    if (signal.decision === "watch") {
-      throw new Error(`Signal is 'watch' — no order to prepare for ${signal.symbol}.`);
-    }
-    const sym = signal.symbol.toUpperCase();
+  /** Build a baseline order request with all required fields. */
+  buildOrderRequest(opts: {
+    symbol: string;
+    side: 0 | 1;
+    action: 0 | 1;
+    sizeUsd: number;
+    underwriter?: Underwriter;
+    orderType?: OrderType;
+    collateralAmount?: number;
+    slippageBps?: number;
+    triggerPrice?: number;
+    triggerCondition?: 0 | 1;
+    fundingStatus?: 0 | 1;
+    priority?: number;
+    extraData?: ExtraData | null;
+    parentOrderPda?: string | null;
+  }): MobileCreateOrderRequest {
+    const sym = opts.symbol.toUpperCase();
     if (!this.config.allowedSymbols.includes(sym)) {
       throw new Error(`${sym} is not in IMPERIAL_ALLOWED_SYMS.`);
     }
-    const sizeUsd = Math.min(opts.sizeUsd ?? this.config.maxSizeUsd, this.config.maxSizeUsd);
-    if (sizeUsd <= 0) {
-      throw new Error("Order size must be positive.");
-    }
-    const dryRun = opts.dryRun ?? !this.config.live;
-    return buildOrderPayload(signal, {
+    const sizeFixed = usdToFixed(Math.min(opts.sizeUsd, this.config.maxSizeUsd));
+    if (sizeFixed <= 0) throw new Error("Order size must be positive.");
+
+    return {
+      wallet: this.config.wallet,
       profileIndex: this.config.profileIndex,
-      sizeUsd,
-      dryRun,
       action: opts.action,
-    });
+      side: opts.side,
+      underwriter: opts.underwriter ?? Underwriter.Phoenix,
+      orderType: opts.orderType ?? 0,
+      sizeUsd: sizeFixed,
+      collateralAmount: opts.collateralAmount ?? sizeFixed,
+      slippageBps: opts.slippageBps ?? this.config.slippageBps,
+      fundingStatus: opts.fundingStatus ?? 0,
+      priority: opts.priority ?? 0,
+      triggerPrice: opts.triggerPrice ?? 0,
+      triggerCondition: opts.triggerCondition ?? 0,
+      symbol: sym,
+      extraData: opts.extraData ?? null,
+      parentOrderPda: opts.parentOrderPda ?? null,
+    };
   }
 
-  /** POST to /perps/order/imperial — dry_run:true returns preview without submitting */
-  async routeOrder(payload: ImperialOrderPayload): Promise<unknown> {
-    return imperialFetch(this.config.apiBase, "/perps/order/imperial", this.config.apiKey, {
-      method: "POST",
-      body: JSON.stringify(payload),
-    });
-  }
-
-  /** GET the canonical route for a symbol+side without submitting */
-  async fetchRoute(symbol: string, side: ImperialSide): Promise<unknown> {
-    const params = new URLSearchParams({ symbol, side: String(side) });
-    return imperialFetch(
-      this.config.apiBase,
-      `/perps/route?${params}`,
-      this.config.apiKey,
-    );
-  }
-
-  // ── Full OODA cycle ──
-
-  /**
-   * Observe → Orient → Decide → Act for one symbol.
-   *
-   * Always dry_run unless IMPERIAL_LIVE=true is set.
-   * Returns a full ExecutionRecord for the audit trail.
-   */
-  async runCycle(
-    symbol: string,
-    opts: { sizeUsd?: number; forceDecision?: AgentDecision } = {},
-  ): Promise<{ signal: AgentSignal; record: ExecutionRecord | null }> {
-    const sym = symbol.toUpperCase();
-
-    // Observe
-    const views = await this.fetchMarketOverview([sym]);
-    const rawView = views[0];
-    if (!rawView) {
-      throw new Error(`No market data returned for ${sym}.`);
-    }
-    const view = await this.enrichWithDepth(rawView);
-
-    // Orient
-    const signal = opts.forceDecision
-      ? { ...this.scoreMarket(view), decision: opts.forceDecision }
-      : this.scoreMarket(view);
-
-    // Decide
-    if (signal.decision === "watch") {
-      return { signal, record: null };
-    }
-
-    // Act
-    const payload = this.prepareOrder(signal, {
-      sizeUsd: opts.sizeUsd,
-      dryRun: !this.config.live,
-    });
-
-    let response: unknown;
-    let status: ExecutionStatus;
-    let error: string | undefined;
-    let txSignature: string | undefined;
-
-    try {
-      if (!this.config.apiKey) {
-        throw new Error("IMPERIAL_API_KEY is not configured — cannot route order.");
-      }
-      response = await this.routeOrder(payload);
-      status = payload.dry_run ? "preview" : "submitted";
-      // Extract tx signature if present
-      const resp = response as Record<string, unknown>;
-      txSignature =
-        typeof resp?.txSignature === "string"
-          ? resp.txSignature
-          : typeof resp?.signature === "string"
-            ? resp.signature
-            : undefined;
-    } catch (err) {
-      response = null;
-      status = "failed";
-      error = err instanceof Error ? err.message : String(err);
-    }
+  /** Submit a single order. Dry-run when IMPERIAL_LIVE is not set. */
+  async placeOrder(
+    req: MobileCreateOrderRequest,
+    dryRun = !this.config.live,
+  ): Promise<{ response: MobileOrderResponse; record: ExecutionRecord }> {
+    this.requireJwt();
+    if (!dryRun) this.requireLive("placeOrder");
 
     const record: ExecutionRecord = {
       id: makeId(),
       ts: Date.now(),
       wallet: this.config.wallet,
       profileIndex: this.config.profileIndex,
-      venue: "phoenix-imperial",
-      underwriter: 2,
-      symbol: sym,
-      side: payload.side === 0 ? "long" : "short",
-      action: payload.action === 0 ? "increase" : "decrease",
-      orderType: "market",
-      sizeUsd: payload.sizeUsd,
-      dryRun: payload.dry_run,
-      request: payload,
-      response,
-      status,
-      error,
-      txSignature,
+      venue: UNDERWRITER_LABELS[req.underwriter],
+      underwriter: req.underwriter,
+      symbol: req.symbol ?? "?",
+      side: req.side === 0 ? "long" : "short",
+      action: req.action === 0 ? "increase" : "decrease",
+      orderType: ORDER_TYPE_NAMES[req.orderType] ?? String(req.orderType),
+      sizeUsd: fixedToUsd(req.sizeUsd),
+      dryRun,
+      request: req,
+      response: null,
+      status: dryRun ? "preview" : "submitted",
     };
 
+    if (dryRun) {
+      record.response = { dry_run: true, payload: req };
+      return { response: { success: true, error: null, orderPda: null, signature: null }, record };
+    }
+
+    try {
+      const response = await imperialPost<MobileOrderResponse>(
+        this.config.base,
+        "/mobile/orders",
+        req,
+        this.config.jwt,
+      );
+      record.response = response;
+      record.status = response.success ? "submitted" : "failed";
+      record.error = response.error ?? undefined;
+      record.txSignature = response.signature ?? undefined;
+      record.orderPda = response.orderPda ?? undefined;
+      return { response, record };
+    } catch (err) {
+      record.status = "failed";
+      record.error = err instanceof Error ? err.message : String(err);
+      record.response = null;
+      return {
+        response: { success: false, error: record.error, orderPda: null, signature: null },
+        record,
+      };
+    }
+  }
+
+  /** Submit entry + TP/SL legs in one atomic batch request. */
+  async placeBatch(
+    req: MobileBatchRequest,
+    dryRun = !this.config.live,
+  ): Promise<{ response: MobileBatchResponse; records: ExecutionRecord[] }> {
+    this.requireJwt();
+    if (!dryRun) this.requireLive("placeBatch");
+
+    if (dryRun) {
+      const mock: MobileBatchResponse = {
+        entry: { success: true, error: null, orderPda: null, signature: null },
+        closeOrders: (req.closeOrders ?? []).map(() => ({
+          success: true,
+          error: null,
+          orderPda: null,
+          signature: null,
+        })),
+      };
+      return { response: mock, records: [] };
+    }
+
+    const response = await imperialPost<MobileBatchResponse>(
+      this.config.base,
+      "/mobile/orders/batch",
+      req,
+      this.config.jwt,
+    );
+
+    const records: ExecutionRecord[] = [];
+    const entryRecord: ExecutionRecord = {
+      id: makeId(),
+      ts: Date.now(),
+      wallet: this.config.wallet,
+      profileIndex: this.config.profileIndex,
+      venue: UNDERWRITER_LABELS[req.entry.underwriter],
+      underwriter: req.entry.underwriter,
+      symbol: req.entry.symbol ?? "?",
+      side: req.entry.side === 0 ? "long" : "short",
+      action: "increase",
+      orderType: ORDER_TYPE_NAMES[req.entry.orderType] ?? String(req.entry.orderType),
+      sizeUsd: fixedToUsd(req.entry.sizeUsd),
+      dryRun: false,
+      request: req.entry,
+      response: response.entry,
+      status: response.entry.success ? "submitted" : "failed",
+      error: response.entry.error ?? undefined,
+      txSignature: response.entry.signature ?? undefined,
+      orderPda: response.entry.orderPda ?? undefined,
+    };
+    records.push(entryRecord);
+
+    return { response, records };
+  }
+
+  async cancelOrder(req: MobileCancelRequest): Promise<MobileOrderResponse> {
+    this.requireJwt();
+    return imperialPost<MobileOrderResponse>(
+      this.config.base,
+      "/mobile/orders/cancel",
+      req,
+      this.config.jwt,
+    );
+  }
+
+  async updateOrder(req: MobileUpdateRequest): Promise<MobileOrderResponse> {
+    this.requireJwt();
+    return imperialPost<MobileOrderResponse>(
+      this.config.base,
+      "/mobile/orders/update",
+      req,
+      this.config.jwt,
+    );
+  }
+
+  async editCollateral(req: MobileCollateralRequest): Promise<MobileOrderResponse> {
+    this.requireJwt();
+    return imperialPost<MobileOrderResponse>(
+      this.config.base,
+      "/mobile/orders/collateral",
+      req,
+      this.config.jwt,
+    );
+  }
+
+  async buildDepositTx(req: DepositBuildTxRequest): Promise<{ transaction: string }> {
+    return imperialPost<{ transaction: string }>(
+      this.config.base,
+      "/deposit/build-tx",
+      req,
+    );
+  }
+
+  async syncProfile(wallet?: string, index?: number): Promise<unknown> {
+    const w = wallet ?? this.config.wallet;
+    const i = index ?? this.config.profileIndex;
+    return imperialPost(this.config.base, `/passthrough/users/${w}/profiles/${i}/sync`, {});
+  }
+
+  async registerPhoenix(wallet?: string, profileIndex?: number): Promise<unknown> {
+    return imperialPost(this.config.base, "/phoenix/register", {
+      wallet: wallet ?? this.config.wallet,
+      profileIndex: profileIndex ?? this.config.profileIndex,
+    });
+  }
+
+  // ── Market snapshot + OODA ──
+
+  /** Fetch a full market snapshot for signal scoring. */
+  async fetchSnapshot(symbol: string): Promise<ImperialMarketSnapshot> {
+    const sym = symbol.toUpperCase();
+    const [fundingRates, marks, depth] = await Promise.allSettled([
+      this.getFundingRates(),
+      this.getMarkPrices(),
+      this.getPhoenixDepth(sym).catch(() => null),
+    ]);
+
+    const allFunding =
+      fundingRates.status === "fulfilled" ? fundingRates.value : [];
+    const allMarks =
+      marks.status === "fulfilled" ? marks.value : [];
+    const rawDepth = depth.status === "fulfilled" ? depth.value : null;
+
+    const markEntry = allMarks.find(
+      (m) => m.symbol.toUpperCase() === sym && m.venue === "phoenix",
+    ) ?? allMarks.find((m) => m.symbol.toUpperCase() === sym);
+
+    const depthSnap = Array.isArray(rawDepth)
+      ? (rawDepth as PhoenixDepthSnapshot[]).find((d) => d.symbol.toUpperCase() === sym) ?? null
+      : (rawDepth as PhoenixDepthSnapshot | null);
+
+    return {
+      symbol: sym,
+      markPrice: markEntry?.price ?? null,
+      fundingRates: allFunding.filter((r) => r.symbol.toUpperCase() === sym),
+      depth: depthSnap,
+    };
+  }
+
+  /** Full OODA cycle: observe → score → decide → optionally route. */
+  async runCycle(
+    symbol: string,
+    opts: { sizeUsd?: number; autoRoute?: boolean } = {},
+  ): Promise<{ signal: AgentSignal; record: ExecutionRecord | null }> {
+    const snap = await this.fetchSnapshot(symbol);
+    const signal = scoreImperialMarket(snap);
+
+    if (signal.decision === "watch" || !opts.autoRoute) {
+      return { signal, record: null };
+    }
+
+    const req = this.buildOrderRequest({
+      symbol: signal.symbol,
+      side: signal.decision === "buy" ? 0 : 1,
+      action: 0,
+      sizeUsd: opts.sizeUsd ?? this.config.maxSizeUsd,
+    });
+    const { record } = await this.placeOrder(req, !this.config.live);
     return { signal, record };
   }
 
-  /**
-   * Scan all allowed symbols, score each, return ranked signals and any
-   * execution records for actionable markets.
-   */
+  /** Scan all allowed symbols and return ranked signals. */
   async runScan(opts: { sizeUsd?: number; autoRoute?: boolean } = {}): Promise<{
     signals: AgentSignal[];
     records: ExecutionRecord[];
   }> {
-    const views = await Promise.all(
-      this.config.allowedSymbols.map((sym) =>
-        this.fetchMarketOverview([sym])
-          .then((v) => v[0])
-          .then((v) => (v ? this.enrichWithDepth(v) : null)),
-      ),
+    const snaps = await Promise.all(
+      this.config.allowedSymbols.map((sym) => this.fetchSnapshot(sym)),
     );
 
-    const signals: AgentSignal[] = [];
+    const signals = snaps.map((s) => scoreImperialMarket(s));
+    signals.sort((a, b) => b.confidence - a.confidence);
+
     const records: ExecutionRecord[] = [];
-
-    for (const view of views) {
-      if (!view) continue;
-      const signal = this.scoreMarket(view);
-      signals.push(signal);
-
-      if (opts.autoRoute && signal.decision !== "watch") {
+    if (opts.autoRoute) {
+      for (const sig of signals.filter((s) => s.decision !== "watch")) {
         try {
-          const { record } = await this.runCycle(view.symbol, { sizeUsd: opts.sizeUsd });
+          const req = this.buildOrderRequest({
+            symbol: sig.symbol,
+            side: sig.decision === "buy" ? 0 : 1,
+            action: 0,
+            sizeUsd: opts.sizeUsd ?? this.config.maxSizeUsd,
+          });
+          const { record } = await this.placeOrder(req);
           if (record) records.push(record);
         } catch {
-          // individual market failures don't abort the scan
+          // continue
         }
       }
     }
 
-    // Rank by confidence descending
-    signals.sort((a, b) => b.confidence - a.confidence);
     return { signals, records };
   }
 
-  /** Quick health summary: config validity + account state */
+  /** Health summary. */
   async healthCheck(): Promise<{
     configured: boolean;
     live: boolean;
@@ -575,46 +852,38 @@ export class ImperialPerpsAgent {
     profileIndex: number;
     allowedSymbols: string[];
     maxSizeUsd: number;
-    balances: ImperialAccountBalances | null;
-    openPositions: number;
+    slippageBps: number;
+    jwtPresent: boolean;
+    apiStatus: unknown;
     warnings: string[];
   }> {
     const warnings: string[] = [];
-    if (!this.config.apiKey) warnings.push("IMPERIAL_API_KEY not set — all routes will fail.");
-    if (!this.config.wallet) warnings.push("IMPERIAL_WALLET not set — no wallet context.");
-    if (this.config.live) warnings.push("LIVE MODE ENABLED — orders will submit to chain.");
+    if (!this.config.jwt) warnings.push("No JWT — trading endpoints will fail.");
+    if (!this.config.wallet) warnings.push("No wallet configured.");
+    if (this.config.live) warnings.push("LIVE MODE — orders submit on-chain.");
 
-    let balances: ImperialAccountBalances | null = null;
-    let openPositions = 0;
-    if (this.config.apiKey) {
-      try {
-        balances = await this.fetchBalances();
-      } catch {
-        warnings.push("Could not fetch account balances.");
-      }
-      try {
-        const positions = await this.fetchPositions();
-        openPositions = positions.length;
-      } catch {
-        warnings.push("Could not fetch positions.");
-      }
+    let apiStatus: unknown = null;
+    try {
+      apiStatus = await this.getStatus();
+    } catch {
+      warnings.push("Imperial API /status unreachable.");
     }
 
     return {
-      configured: Boolean(this.config.apiKey && this.config.wallet),
+      configured: Boolean(this.config.jwt && this.config.wallet),
       live: this.config.live,
       wallet: this.config.wallet,
       profileIndex: this.config.profileIndex,
       allowedSymbols: this.config.allowedSymbols,
       maxSizeUsd: this.config.maxSizeUsd,
-      balances,
-      openPositions,
+      slippageBps: this.config.slippageBps,
+      jwtPresent: Boolean(this.config.jwt),
+      apiStatus,
       warnings,
     };
   }
 }
 
-/** Convenience factory */
-export function createImperialAgent(config?: Partial<ImperialConfig>): ImperialPerpsAgent {
-  return new ImperialPerpsAgent(config);
+export function createImperialClient(config?: Partial<ImperialConfig>): ImperialClient {
+  return new ImperialClient(config);
 }
