@@ -4,6 +4,7 @@ import { runClawdPerpsAgent, runPerpsAgent, runVulcan } from "../vulcan-runner.j
 import { buildImperialRelay, sendRelay } from "../relay-client.js";
 import { runPerpsTui } from "../tui.js";
 import { runPerpsHarness } from "../harness.js";
+import { buildOnchainMm, buildOnchainMmPlan, getOnchainMmStatus, runOnchainMm } from "../onchain-market-maker.js";
 import type { ToolResult, CandleParams, OrderParams, TpSlParams } from "../types.js";
 
 function print(r: ToolResult) {
@@ -26,6 +27,22 @@ function parseSymbols(raw?: string): string[] {
 function parsePositiveInt(raw: string | undefined, fallback: number): number {
   const value = Number(raw);
   return Number.isFinite(value) && value > 0 ? Math.floor(value) : fallback;
+}
+
+function readOnchainMmOptions(opts: Record<string, unknown>) {
+  return {
+    market: typeof opts.market === "string" ? opts.market : undefined,
+    ticker: typeof opts.ticker === "string" ? opts.ticker : undefined,
+    rpcUrl: typeof opts.rpcUrl === "string" ? opts.rpcUrl : undefined,
+    keypairPath: typeof opts.keypairPath === "string" ? opts.keypairPath : undefined,
+    quoteEdgeBps: parsePositiveInt(typeof opts.quoteEdgeBps === "string" ? opts.quoteEdgeBps : undefined, 3),
+    quoteSize: parsePositiveInt(typeof opts.quoteSize === "string" ? opts.quoteSize : undefined, 100_000_000),
+    refreshMs: parsePositiveInt(typeof opts.refreshMs === "string" ? opts.refreshMs : undefined, 2000),
+    priceImprovement: typeof opts.priceImprovement === "string" ? opts.priceImprovement : undefined,
+    postOnly: opts.postOnly !== false,
+    release: Boolean(opts.release),
+    yes: Boolean(opts.yes),
+  };
 }
 
 export function buildPerpsCommand(): Command {
@@ -362,11 +379,41 @@ Environment variables:
 
   cmd
     .command("onchain-mm")
-    .description("Phoenix on-chain market-maker status/build/plan/run through the Clawd agent")
-    .allowUnknownOption(true)
-    .allowExcessArguments(true)
-    .argument("[args...]", "Arguments passed to clawd-agents-perps onchain-mm")
-    .action((args: string[]) => runClawdPerpsAgent(["onchain-mm", ...(args.length ? args : ["status"])], { fallbackPython: false }));
+    .description("Phoenix on-chain market-maker status/build/plan/run")
+    .argument("[action]", "status | build | install | plan | run", "status")
+    .option("--market <pubkey>", "Phoenix market pubkey")
+    .option("--ticker <ticker>", "Coinbase ticker used by the reference runner", "SOL-USD")
+    .option("--rpc-url <url>", "RPC URL or alias: local, dev, main")
+    .option("--keypair-path <path>", "Solana keypair path passed to the mm runner")
+    .option("--quote-edge-bps <n>", "Quote edge in basis points", "3")
+    .option("--quote-size <n>", "Quote size in quote atoms", "100000000")
+    .option("--refresh-ms <n>", "Quote refresh frequency", "2000")
+    .option("--price-improvement <mode>", "join | dime | ignore", "ignore")
+    .option("--no-post-only", "Allow non-post-only orders")
+    .option("--release", "Build/run release binary")
+    .option("--yes", "Required for gated run")
+    .action((action: string, opts: Record<string, unknown>) => {
+      const mmOptions = readOnchainMmOptions(opts);
+      if (action === "status") {
+        print({ success: true, data: getOnchainMmStatus(), output: JSON.stringify(getOnchainMmStatus(), null, 2) });
+        return;
+      }
+      if (action === "build" || action === "install") {
+        const result = buildOnchainMm(mmOptions);
+        print({ success: result.ok, data: result, output: JSON.stringify(result, null, 2), ...(result.ok ? {} : { error: result.error || "build failed" }) });
+        return;
+      }
+      if (action === "plan") {
+        const plan = buildOnchainMmPlan(mmOptions);
+        print({ success: true, data: plan, output: JSON.stringify(plan, null, 2) });
+        return;
+      }
+      if (action === "run") {
+        runOnchainMm(mmOptions);
+        return;
+      }
+      print({ success: false, error: `unknown onchain-mm action: ${action}` });
+    });
 
   cmd
     .command("python-agent")
