@@ -136,9 +136,12 @@ export function computeSpecHash(slugOrPath: string): string {
     path.resolve(SKILLS_ROOT, safeSlug),
     path.resolve(REPO_ROOT, safeSlug),
   ].filter((base, index) => isPathWithinRoot(base, index === 0 ? SKILLS_ROOT : REPO_ROOT));
+      if (!fs.existsSync(c)) continue;
 
-  for (const base of bases) {
-    for (const c of ['SPEC.md', 'spec.md', 'README.md'].map((name) => path.resolve(base, name))) {
+      const realCandidate = fs.realpathSync(c);
+      if (!isPathWithinRoot(realCandidate, REPO_ROOT)) continue;
+
+      return crypto.createHash('sha256').update(fs.readFileSync(realCandidate)).digest('hex');
       if (!isPathWithinRoot(c, REPO_ROOT)) continue;
       if (fs.existsSync(c)) {
         return crypto.createHash('sha256').update(fs.readFileSync(c)).digest('hex');
