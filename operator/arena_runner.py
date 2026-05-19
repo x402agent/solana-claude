@@ -371,14 +371,25 @@ def route_order(signal: AgentSignal, dry_run: bool = True) -> ExecutionRecord:
     error = None
     tx_sig = None
 
-    if not IMPERIAL_API_KEY:
+    if dry_run:
+        # Return a local preview — never touch Imperial in dry-run (mirrors backroom behavior)
+        response = {
+            "ok": True,
+            "mode": "dry-run",
+            "source": "imperial-preview",
+            "payload": payload,
+            "note": "Preview only. Set IMPERIAL_LIVE=true to submit.",
+        }
+        status = "preview"
+    elif not IMPERIAL_API_KEY:
         error = "IMPERIAL_API_KEY not set — order blocked"
         status = "blocked"
     else:
+        payload["wallet"] = IMPERIAL_WALLET
         url = f"{IMPERIAL_API_BASE}/mobile/orders"
         response = _http_post(url, payload, IMPERIAL_API_KEY)
         if response is not None:
-            status = "preview" if dry_run else "submitted"
+            status = "submitted"
             tx_sig = (response or {}).get("txSignature") or (response or {}).get("signature")
         else:
             status = "failed"
