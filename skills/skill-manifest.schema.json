@@ -1,0 +1,114 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://solanaclawd.com/schemas/skill-manifest-v1.json",
+  "title": "Clawd Skill Manifest",
+  "description": "Submission package for the Clawd Skill Hub. POST this to /api/skills/submit.",
+  "type": "object",
+  "required": ["schema_version", "slug", "name", "kind", "author"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0",
+      "description": "Always '1.0'"
+    },
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]{1,62}[a-z0-9]$",
+      "description": "URL-safe lowercase identifier, 3-64 chars, hyphens allowed in the middle"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 80,
+      "description": "Human-readable display name"
+    },
+    "description": {
+      "type": "string",
+      "maxLength": 1000,
+      "description": "What this skill does — shown in the hub listing"
+    },
+    "kind": {
+      "type": "string",
+      "enum": ["skill", "agent", "plugin", "mcp_server", "program"],
+      "description": "Component kind. Agents require STRIDE ≥ 70; all others ≥ 60"
+    },
+    "category": {
+      "type": "string",
+      "maxLength": 64,
+      "description": "Grouping category, e.g. 'DeFi', 'AI / Agents', 'DevOps'"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Semver version string"
+    },
+    "author": {
+      "type": "object",
+      "required": ["solana_pubkey"],
+      "additionalProperties": false,
+      "properties": {
+        "name": { "type": "string", "maxLength": 80 },
+        "solana_pubkey": {
+          "type": "string",
+          "pattern": "^[1-9A-HJ-NP-Za-km-z]{32,44}$",
+          "description": "Base58 Solana public key — becomes the on-chain skill authority"
+        },
+        "github": { "type": "string", "maxLength": 40 },
+        "x_handle": { "type": "string", "maxLength": 40 },
+        "url": { "type": "string", "format": "uri", "maxLength": 200 }
+      }
+    },
+    "source": {
+      "type": "object",
+      "description": "Where to fetch the skill source for STRIDE analysis. Either source or content must be provided.",
+      "oneOf": [
+        {
+          "required": ["type", "url"],
+          "properties": {
+            "type": { "const": "github" },
+            "url": { "type": "string", "format": "uri" },
+            "branch": { "type": "string", "default": "main" },
+            "sha": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+            "subdirectory": { "type": "string" }
+          }
+        },
+        {
+          "required": ["type", "url"],
+          "properties": {
+            "type": { "const": "url" },
+            "url": { "type": "string", "format": "uri", "description": "Direct HTTPS URL to a .zip or .tar.gz archive" }
+          }
+        }
+      ]
+    },
+    "content": {
+      "type": "object",
+      "description": "Inline skill content — use instead of source for small skills.",
+      "additionalProperties": false,
+      "properties": {
+        "readme": { "type": "string", "maxLength": 65536 },
+        "skill_md": { "type": "string", "maxLength": 65536 },
+        "package_json": { "type": "string", "maxLength": 16384 },
+        "index_ts": { "type": "string", "maxLength": 65536 },
+        "spec_md": { "type": "string", "maxLength": 65536 }
+      }
+    },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string", "maxLength": 32 },
+      "maxItems": 10,
+      "description": "Discovery tags"
+    },
+    "license": {
+      "type": "string",
+      "maxLength": 64,
+      "description": "SPDX license identifier, e.g. 'MIT', 'Apache-2.0'"
+    },
+    "metadata_uri": {
+      "type": "string",
+      "format": "uri",
+      "description": "Optional override for the on-chain metadata URI. Defaults to /api/skills/slug/<slug>/metadata.json"
+    }
+  }
+}
