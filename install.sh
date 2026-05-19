@@ -428,6 +428,9 @@ fi
 # Phoenix perps — Vulcan CLI + Python strategy agent
 # ──────────────────────────────────────────────────────────────────────────────
 PERPS_AGENT_PATH="$SRC_DIR/solana-python-agent/perps_agent.py"
+PERPS_TS_AGENT_DIR="$SRC_DIR/Perps/clawd-agents-perps"
+PERPS_TS_AGENT_CLI="$PERPS_TS_AGENT_DIR/dist/cli.js"
+ONCHAIN_MM_ROOT="$SRC_DIR/Perps/phoenix-onchain-market-maker-master"
 PERPS_VENV="$WORKSPACE/perps-venv"
 VULCAN_BIN_PATH="$SRC_DIR/vulcan-cli-master/target/debug/vulcan"
 
@@ -480,6 +483,45 @@ PERPSEOF
   ok "installed $BIN_DIR/clawd-phoenix → Python Phoenix/Vulcan agent"
 else
   warn "python3 or perps_agent.py not found — skipping Python perps agent bootstrap"
+fi
+
+if [ "$NO_NODE" = "1" ]; then
+  info "skipping Clawd TypeScript perps agent bootstrap (--no-node)"
+elif command -v npm >/dev/null 2>&1 && [ -f "$PERPS_TS_AGENT_DIR/package.json" ]; then
+  step "preparing Clawd TypeScript perps agent + on-chain MM harness"
+  ( cd "$PERPS_TS_AGENT_DIR" && npm install --no-audit --no-fund >/dev/null 2>&1 && npm run build >/dev/null 2>&1 ) \
+    && {
+      ln -sf "$PERPS_TS_AGENT_CLI" "$BIN_DIR/clawd-agents-perps" 2>/dev/null || true
+      ok "installed $BIN_DIR/clawd-agents-perps → TypeScript perps agent"
+    } \
+    || warn "Clawd TypeScript perps agent build failed — run: npm --prefix Perps/clawd-agents-perps run build"
+else
+  warn "Clawd TypeScript perps agent not found — clawd-perps will fall back to Python/Vulcan"
+fi
+
+if [ "$NO_VULCAN" = "1" ]; then
+  info "skipping Phoenix on-chain market-maker bootstrap (--no-vulcan)"
+elif [ -f "$ONCHAIN_MM_ROOT/Cargo.toml" ]; then
+  cat > "$BIN_DIR/clawd-onchain-mm" <<MMEOF
+#!/usr/bin/env bash
+set -euo pipefail
+export CLAWD_ONCHAIN_MM_ROOT="${ONCHAIN_MM_ROOT}"
+export CLAWD_PERPS_TS_AGENT_CLI="${PERPS_TS_AGENT_CLI}"
+exec clawd-perps perps onchain-mm "\$@"
+MMEOF
+  chmod 0755 "$BIN_DIR/clawd-onchain-mm"
+  ok "installed $BIN_DIR/clawd-onchain-mm → Phoenix on-chain MM bridge"
+
+  if command -v cargo >/dev/null 2>&1 && [ "${CLAWD_BUILD_ONCHAIN_MM:-0}" = "1" ]; then
+    step "building Phoenix on-chain market-maker mm binary"
+    ( cd "$ONCHAIN_MM_ROOT" && cargo build -p mm >/dev/null 2>&1 ) \
+      && ok "Phoenix on-chain market-maker built" \
+      || warn "Phoenix on-chain market-maker build failed — run: clawd-perps perps onchain-mm build"
+  else
+    info "on-chain MM Rust build is available via: clawd-perps perps onchain-mm build"
+  fi
+else
+  warn "Phoenix on-chain market-maker workspace not found — set CLAWD_ONCHAIN_MM_ROOT later"
 fi
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -637,6 +679,7 @@ elif command -v npm >/dev/null 2>&1; then
   for LINK_SPEC in \
       "packages/clawd/dist/index.js:clawd-pkg" \
       "packages/clawd-perps/dist/cli.js:clawd-perps" \
+      "Perps/clawd-agents-perps/dist/cli.js:clawd-agents-perps" \
       "packages/agentwallet/dist/cli.js:agentwallet"; do
     JS_REL="${LINK_SPEC%%:*}"
     BIN_NAME="${LINK_SPEC##*:}"
@@ -852,8 +895,14 @@ SOLANA_RPC_URL=https://api.mainnet-beta.solana.com
 CLAWD_PERPS_API_URL=https://perp-api.phoenix.trade
 CLAWD_PERPS_RPC_URL=https://api.mainnet-beta.solana.com
 CLAWD_PERPS_AGENT_PATH=$PERPS_AGENT_PATH
+CLAWD_PERPS_TS_AGENT_CLI=$PERPS_TS_AGENT_CLI
 VULCAN_BIN=$BIN_DIR/vulcan
 PHOENIX_DEFAULT_MODE=paper
+CLAWD_ONCHAIN_MM_ROOT=$ONCHAIN_MM_ROOT
+CLAWD_ONCHAIN_MM_MARKET=
+CLAWD_ONCHAIN_MM_TICKER=SOL-USD
+CLAWD_ONCHAIN_MM_RPC_URL=local
+CLAWD_ONCHAIN_MM_LIVE=false
 
 # ── Telegram gateway (optional) ───────────────────────────────────────────────
 TELEGRAM_BOT_TOKEN=
@@ -929,6 +978,8 @@ printf "  ${PURPLE}3.${RESET}  Launch a TUI (pick your surface):\n"
 printf "       ${GREEN}clawd${RESET}              ${DIM}# @openclawdsolana/clawd — Leviathan TUI (Grok, Solana, MCP)${RESET}\n"
 printf "       ${GREEN}clawd-standalone${RESET}   ${DIM}# @openclawdsolana/clawd-standalone — lightweight, no Leviathan${RESET}\n"
 printf "       ${GREEN}clawd-perps${RESET}        ${DIM}# @openclawdsolana/clawd-perps — Phoenix Perpetuals CLI${RESET}\n"
+printf "       ${GREEN}clawd-perps perps tui --relay${RESET}  ${DIM}# Lobster King realtime perps TUI${RESET}\n"
+printf "       ${GREEN}clawd-perps perps onchain-mm status${RESET}  ${DIM}# Phoenix on-chain MM bridge${RESET}\n"
 printf "       ${GREEN}clawd-perps perps vulcan health${RESET}  ${DIM}# npm CLI → Python agent/Vulcan${RESET}\n"
 printf "       ${GREEN}clawd-phoenix grid SOL --center-on-mark --width-pct 2 --levels-per-side 3 --tokens-per-level 0.1${RESET}\n"
 printf "       ${GREEN}agentwallet${RESET}        ${DIM}# agentwallet-vault — encrypted keypair vault + HTTP server${RESET}\n"

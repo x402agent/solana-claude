@@ -81,7 +81,7 @@ function render(snapshot: any, symbols: string[], status: string) {
   const width = process.stdout.columns || 100;
   const title = "🦞👑 LOBSTER KING PERPS TUI";
   console.log(`${colors.orange}${colors.bold}${title}${colors.reset}`);
-  console.log(`${colors.amber}Phoenix realtime feed · Vulcan strategy harness · Imperial relay${colors.reset}`);
+  console.log(`${colors.amber}Phoenix realtime feed · Vulcan strategy harness · Imperial relay · on-chain MM guardrails${colors.reset}`);
   console.log(`${colors.dim}${"─".repeat(Math.min(width, 100))}${colors.reset}`);
   console.log(line("symbols", symbols.join(", ")));
   console.log(line("relay", status));
@@ -107,7 +107,7 @@ function render(snapshot: any, symbols: string[], status: string) {
 
   console.log("");
   console.log(`${colors.amber}${colors.bold}HOTKEYS${colors.reset}`);
-  console.log("  q quit   r relay wakeup   g print grid command   h print harness command");
+  console.log("  q quit   r relay wakeup   g print grid   m print on-chain MM plan   h print harness");
 }
 
 export async function runPerpsTui(options: TuiOptions): Promise<void> {
@@ -141,6 +141,9 @@ export async function runPerpsTui(options: TuiOptions): Promise<void> {
     }
     if (key === "h") {
       console.log("\nclawd-perps perps harness --symbols SOL,BTC,ETH --relay\n");
+    }
+    if (key === "m") {
+      console.log("\nclawd-perps perps onchain-mm plan --market <PHOENIX_MARKET> --ticker SOL-USD --rpc-url local\n");
     }
   };
 

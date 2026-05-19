@@ -4,8 +4,8 @@
   <img alt="Lobster King Phoenix Perps" src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=800&size=28&pause=900&color=FF5F1F&center=true&vCenter=true&width=900&lines=%F0%9F%A6%9E%F0%9F%91%91+LOBSTER+KING+PERPS+ONLINE;%F0%9F%94%A5+PHOENIX+MARKETS+%2B+VULCAN+STRATEGIES;%E2%9A%A1+CLAWD+AGENTS+%2B+IMPERIAL+RELAY;%F0%9F%93%A1+REALTIME+BACKROOM+TUI" />
 </p>
 
-**Phoenix Perpetuals DEX CLI, realtime TUI, and agent harness for the OpenClawd framework.**  
-Trade perps on Solana from TypeScript market tools, bring up the Clawd TypeScript agent, or delegate strategies/lifecycle controls through the Python Phoenix agent and Vulcan CLI.
+**Phoenix Perpetuals DEX CLI, realtime TUI, agent harness, and gated on-chain market-maker bridge for the OpenClawd framework.**  
+Trade perps on Solana from TypeScript market tools, bring up the Clawd TypeScript agent, inspect the Phoenix on-chain MM reference implementation, or delegate strategies/lifecycle controls through the Python Phoenix agent and Vulcan CLI.
 
 Part of the [OpenClawd](https://solanaclawd.com) framework.
 
@@ -67,6 +67,9 @@ clawd-perps perps health
 clawd-perps perps vulcan health
 clawd-perps perps agent status
 clawd-perps perps agent telegram "/perps"
+clawd-perps perps onchain-mm status
+clawd-perps perps onchain-mm plan --market <PHOENIX_MARKET> --ticker SOL-USD --rpc-url local
+clawd-perps perps onchain-mm build
 clawd-perps perps python-agent market SOL
 clawd-perps perps twap SOL --side buy --notional-usdc 500 --slices 5 --detached
 clawd-perps perps grid SOL --center-on-mark --width-pct 2.5 --levels-per-side 5 --tokens-per-level 0.5 --detached
@@ -128,6 +131,11 @@ CLAWD_PERPS_MODEL=      # Optional OpenRouter model override
 CLAWD_PERPS_AGENT_PATH= # Optional path to solana-python-agent/perps_agent.py
 CLAWD_PERPS_TS_AGENT_CLI= # Optional path to Perps/clawd-agents-perps/dist/cli.js
 VULCAN_BIN=             # Optional Vulcan binary override
+CLAWD_ONCHAIN_MM_ROOT=  # Optional path to Perps/phoenix-onchain-market-maker-master
+CLAWD_ONCHAIN_MM_MARKET= # Phoenix market pubkey for on-chain MM plans
+CLAWD_ONCHAIN_MM_TICKER= # Coinbase ticker for on-chain MM fair price (default: SOL-USD)
+CLAWD_ONCHAIN_MM_RPC_URL= # RPC alias/url for on-chain MM (default: local or SOLANA_RPC_URL)
+CLAWD_ONCHAIN_MM_LIVE=false # Must be true, with OPERATOR_CONFIRMED=true and --yes, to run
 CLAWD_BACKROOM_URL=     # Relay base URL (default: https://backrooms.x402.wtf)
 CLAWD_PERPS_RELAY_URL=  # Full relay endpoint override
 CLAWD_BACKROOM_TOKEN=   # Optional bearer token for private Backroom feed/relay
@@ -149,6 +157,7 @@ CLAWD_PERPS_NO_RELAY=1  # Disable best-effort install relay
 | `margin` | `deposit`, `withdraw`, `collateral` |
 | `history` | `trades`, `orders`, `funding`, `pnl` |
 | `agent` | Clawd TypeScript perps agent from `Perps/clawd-agents-perps` (`status`, `frontend`, `telegram`, `imperial-scan`, previews) |
+| `onchain-mm` | Phoenix on-chain market-maker bridge (`status`, `build`, `plan`, gated `run`) |
 | `python-agent` | Direct pass-through to `perps_agent.py` (`health`, `market`, `twap`, `grid`, `ta`, lifecycle) |
 | `vulcan` | Pass-through to Python agent when available, or raw Vulcan with `--raw` |
 | realtime | `relay`, `tui`, `harness` |
@@ -162,6 +171,7 @@ CLAWD_PERPS_NO_RELAY=1  # Disable best-effort install relay
 
 - TypeScript market/account/order helpers target the [Phoenix Perpetuals](https://phoenix.trade) REST API at `https://perp-api.phoenix.trade`.
 - `clawd-perps perps agent` prefers the richer TypeScript Clawd perps agent at `Perps/clawd-agents-perps/dist/cli.js`, exposing frontend status, Telegram-style commands, Vulcan catalog posture, and Imperial scan/cycle tools. Set `CLAWD_PERPS_TS_AGENT_CLI` when running outside the monorepo.
+- `clawd-perps perps onchain-mm` bridges the Phoenix on-chain market-maker reference workspace at `Perps/phoenix-onchain-market-maker-master`. `status`, `plan`, and `build` are safe operator surfaces; `run` is blocked unless `CLAWD_ONCHAIN_MM_LIVE=true`, `OPERATOR_CONFIRMED=true`, and `--yes` are all present.
 - Strategy and lifecycle commands delegate to the Python Phoenix agent (`solana-python-agent/perps_agent.py`), which in turn calls Vulcan/Rise SDK. Set `CLAWD_PERPS_AGENT_PATH` when running outside the monorepo. Use `VULCAN_BIN` to point at a specific Vulcan binary.
 - `perps tui` polls the Backroom `/feed/snapshot` realtime API for `status,conversation,perps,arena` channels. `perps relay` and install hooks POST public operator messages to `/stream/human`. `perps harness` writes JSONL sessions and optionally calls OpenRouter when `OPENROUTER_API_KEY` is set.
 

@@ -344,8 +344,14 @@ SOLANA_PRIVATE_KEY=
 CLAWD_PERPS_API_URL=https://perp-api.phoenix.trade
 CLAWD_PERPS_RPC_URL=https://api.mainnet-beta.solana.com
 CLAWD_PERPS_AGENT_PATH=
+CLAWD_PERPS_TS_AGENT_CLI=
 VULCAN_BIN=vulcan
 PHOENIX_DEFAULT_MODE=paper
+CLAWD_ONCHAIN_MM_ROOT=
+CLAWD_ONCHAIN_MM_MARKET=
+CLAWD_ONCHAIN_MM_TICKER=SOL-USD
+CLAWD_ONCHAIN_MM_RPC_URL=local
+CLAWD_ONCHAIN_MM_LIVE=false
 
 # ── x402 payments ─────────────────────────────────────────────────────────────
 X402_SVM_PRIVATE_KEY=
@@ -402,6 +408,8 @@ printf "       ${AMBER}leviathan --spawn${RESET}          ${DIM}# first-time ide
 printf "       ${AMBER}leviathan --run${RESET}            ${DIM}# start OODA pulse loop${RESET}\n"
 printf "       ${AMBER}leviathan --status${RESET}         ${DIM}# depth + balances${RESET}\n"
 printf "       ${AMBER}clawd-perps perps vulcan health${RESET} ${DIM}# Phoenix/Vulcan perps health${RESET}\n"
+printf "       ${AMBER}clawd-perps perps tui --relay${RESET} ${DIM}# Lobster King perps TUI${RESET}\n"
+printf "       ${AMBER}clawd-perps perps onchain-mm status${RESET} ${DIM}# Phoenix on-chain MM bridge${RESET}\n"
 printf "       ${AMBER}clawd-perps perps grid SOL --center-on-mark --width-pct 2 --levels-per-side 3 --tokens-per-level 0.1${RESET}\n"
 printf "\n"
 printf "  ${ORANGE}5.${RESET}  Run demos:\n"

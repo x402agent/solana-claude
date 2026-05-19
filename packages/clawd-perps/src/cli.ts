@@ -6,7 +6,7 @@ import { buildPerpsCommand } from "./commands/perps-commands.js";
 const program = new Command()
   .name("clawd-perps")
   .description("ClaWD Perps — Phoenix Perpetuals DEX CLI powered by the OpenClawd framework")
-  .version("1.2.0");
+  .version("1.3.0");
 
 program.addCommand(buildPerpsCommand());
 
