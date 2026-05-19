@@ -122,7 +122,17 @@ export async function runPerpsHarness(options: HarnessOptions): Promise<void> {
 
   for (let i = 0; i < iterations; i++) {
     console.log(`${c.purple}${c.bold}iteration ${i + 1}/${iterations}${c.reset}`);
-    const snapshot = await fetchSnapshot(options.symbols);
+    let snapshot: unknown;
+    try {
+      snapshot = await fetchSnapshot(options.symbols);
+    } catch (error) {
+      snapshot = {
+        error: error instanceof Error ? error.message : "snapshot unavailable",
+        symbols: options.symbols,
+        hint: "Set CLAWD_BACKROOM_TOKEN or CLAWD_PERPS_RELAY_TOKEN if this feed requires auth.",
+      };
+      console.log(`${c.amber}snapshot unavailable; continuing with deterministic context${c.reset}`);
+    }
     logEvent({ type: "snapshot", at: new Date().toISOString(), data: snapshot });
 
     const text = options.noModel
