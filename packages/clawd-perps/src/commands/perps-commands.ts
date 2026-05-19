@@ -1,7 +1,7 @@
 import { Command } from "commander";
 import { ClaWDPerps } from "../perps-tool.js";
 import { runClawdPerpsAgent, runPerpsAgent, runVulcan } from "../vulcan-runner.js";
-import { buildImperialRelay, sendRelay } from "../relay-client.js";
+import { buildImperialRelay, sendRelayFanout } from "../relay-client.js";
 import { runPerpsTui } from "../tui.js";
 import { runPerpsHarness } from "../harness.js";
 import { buildOnchainMm, buildOnchainMmPlan, getOnchainMmStatus, runOnchainMm } from "../onchain-market-maker.js";
@@ -60,6 +60,8 @@ Environment variables:
   CLAWD_PERPS_MODEL     OpenRouter model for harness analysis
   CLAWD_BACKROOM_URL    Realtime relay base URL (default: https://backrooms.x402.wtf)
   CLAWD_PERPS_RELAY_URL Full relay POST endpoint override
+  CLAWD_PERPS_EXTRA_RELAY_URLS Comma-separated private relay POST endpoints
+  CLAWD_PUMPFUN_WS_URL  Optional private Pump.fun websocket source
   CLAWD_PERPS_SESSION_DIR Harness JSONL session directory
   CLAWD_PERPS_TS_AGENT_CLI TypeScript clawd-agents-perps CLI path (optional)
   CLAWD_PERPS_AGENT_PATH Python Phoenix/Vulcan agent path (optional)
@@ -310,7 +312,7 @@ Environment variables:
     .action(async (message: string[], opts: { symbols: string; name: string }) => {
       const symbols = parseSymbols(opts.symbols);
       const content = message.length ? message.join(" ") : buildImperialRelay(symbols, "manual");
-      const result = await sendRelay({ name: opts.name, content });
+      const result = await sendRelayFanout({ name: opts.name, content });
       print({
         success: result.ok,
         data: result,
@@ -324,11 +326,15 @@ Environment variables:
     .description("Open the Lobster King Phoenix/Vulcan/Imperial perps realtime TUI")
     .option("--symbols <csv>", "Symbols to track", "SOL,BTC,ETH")
     .option("--interval-ms <n>", "Snapshot refresh interval", "2500")
+    .option("--channels <csv>", "Backroom feed channels", "status,agents,conversation,perps,arena,pumpfun")
+    .option("--pumpfun-limit <n>", "Pump.fun tokens to request in snapshots", "40")
     .option("--relay", "Announce the TUI to the Backroom realtime relay")
-    .action(async (opts: { symbols: string; intervalMs: string; relay?: boolean }) => {
+    .action(async (opts: { symbols: string; intervalMs: string; channels: string; pumpfunLimit: string; relay?: boolean }) => {
       await runPerpsTui({
         symbols: parseSymbols(opts.symbols),
         intervalMs: parsePositiveInt(opts.intervalMs, 2500),
+        channels: opts.channels,
+        pumpfunLimit: parsePositiveInt(opts.pumpfunLimit, 40),
         relay: Boolean(opts.relay),
       });
     });

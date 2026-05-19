@@ -6,6 +6,14 @@
 !**/.env.example
 !**/.env.sample
 !**/.env.template
+*.local
+*.secret
+*.secrets
+.clawd/
+.vulcan/
+**/.clawd/
+**/.vulcan/
+**/strategy-runs/
 .npmrc
 .netrc
 *.pem
