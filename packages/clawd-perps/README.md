@@ -130,6 +130,8 @@ CLAWD_PERPS_TS_AGENT_CLI= # Optional path to Perps/clawd-agents-perps/dist/cli.j
 VULCAN_BIN=             # Optional Vulcan binary override
 CLAWD_BACKROOM_URL=     # Relay base URL (default: https://backrooms.x402.wtf)
 CLAWD_PERPS_RELAY_URL=  # Full relay endpoint override
+CLAWD_BACKROOM_TOKEN=   # Optional bearer token for private Backroom feed/relay
+CLAWD_PERPS_RELAY_TOKEN= # Optional perps-specific Backroom bearer token
 CLAWD_PERPS_SESSION_DIR= # Harness JSONL session directory
 CLAWD_PERPS_NO_RELAY=1  # Disable best-effort install relay
 ```
