@@ -1,5 +1,6 @@
 import { Command } from "commander";
 import { ClaWDPerps } from "../perps-tool.js";
+import { runPerpsAgent, runVulcan } from "../vulcan-runner.js";
 import type { ToolResult, CandleParams, OrderParams, TpSlParams } from "../types.js";
 
 function print(r: ToolResult) {
@@ -22,6 +23,8 @@ Environment variables:
   CLAWD_PERPS_RPC_URL   Solana RPC        (default: https://api.mainnet-beta.solana.com)
   CLAWD_PERPS_API_KEY   Bearer token for authenticated endpoints (optional)
   CLAWD_PERPS_WALLET    Trader wallet address / public key
+  CLAWD_PERPS_AGENT_PATH Python Phoenix/Vulcan agent path (optional)
+  VULCAN_BIN            Vulcan binary override (optional)
 `);
 
   // ── market ─────────────────────────────────────────────────────────────────
@@ -255,6 +258,53 @@ Environment variables:
     .command("health")
     .description("Check Phoenix perps API health")
     .action(async () => print(await perps.health()));
+
+  // ── Vulcan / Python strategy agent ────────────────────────────────────────
+  cmd
+    .command("agent")
+    .description("Run the Python Phoenix perps agent (health, market, strategies, lifecycle)")
+    .allowUnknownOption(true)
+    .allowExcessArguments(true)
+    .argument("[args...]", "Arguments passed to perps_agent.py")
+    .action((args: string[]) => runPerpsAgent(args.length ? args : ["health"], { requirePythonAgent: true }));
+
+  cmd
+    .command("vulcan")
+    .description("Run Vulcan directly, or the Python agent when CLAWD_PERPS_AGENT_PATH is available")
+    .allowUnknownOption(true)
+    .allowExcessArguments(true)
+    .argument("[args...]", "Arguments passed to Vulcan")
+    .option("--raw", "Bypass the Python agent and invoke the Vulcan binary directly")
+    .action((args: string[], opts: { raw?: boolean }) => {
+      if (opts.raw) runVulcan(args.length ? args : ["--help"]);
+      runPerpsAgent(args.length ? args : ["health"]);
+    });
+
+  for (const name of [
+    "context",
+    "preflight",
+    "twap",
+    "grid",
+    "ta",
+    "runs",
+    "status",
+    "monitor",
+    "wait-next-tick",
+    "report",
+    "reconcile-grid",
+    "pause",
+    "stop",
+    "resume",
+    "finalize",
+  ]) {
+    cmd
+      .command(name)
+      .description(`Delegate to Python Phoenix/Vulcan agent: ${name}`)
+      .allowUnknownOption(true)
+      .allowExcessArguments(true)
+      .argument("[args...]", `Arguments passed to perps_agent.py ${name}`)
+      .action((args: string[]) => runPerpsAgent([name, ...args], { requirePythonAgent: true }));
+  }
 
   return cmd;
 }
