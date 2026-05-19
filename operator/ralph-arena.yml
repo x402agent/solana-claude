@@ -1,0 +1,38 @@
+# Ralph Orchestrator — Imperial Perps Trading Arena
+# Run with: ralph -c ralph-arena.yml
+
+agent: claude
+prompt_file: PROMPT-arena.md
+max_iterations: 288          # 24 hours at ~5-min iterations
+max_runtime: 86400           # 24-hour hard cap
+checkpoint_interval: 12      # git checkpoint every ~1 hour
+retry_delay: 10              # wait 10s before retrying on error
+verbose: false
+
+# Resource limits (generous for continuous trading loop)
+max_tokens: 10000000
+max_cost: 20.0
+context_window: 200000
+context_threshold: 0.8
+
+# Features
+archive_prompts: true
+git_checkpoint: true
+enable_metrics: true
+dry_run: false
+
+# Telemetry
+iteration_telemetry: true
+output_preview_length: 1000
+
+# Safety
+max_prompt_size: 10485760
+allow_unsafe_paths: false
+
+adapters:
+  claude:
+    enabled: true
+    timeout: 300
+    max_retries: 3
+    tool_permissions:
+      allow_all: true        # arena runner needs shell + file access
