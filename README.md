@@ -1,8 +1,15 @@
 <div align="center">
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:05060d,22:111827,48:9945FF,76:14F195,100:05060d&height=250&section=header&text=%F0%9F%A6%9E%20SOLANA%20CLAWD%20%C3%97%20x402&fontSize=58&fontColor=ffffff&animation=fadeIn&fontAlignY=36&desc=OpenClawd%20%C2%B7%20Leviathan%20%C2%B7%20Backrooms%20%C2%B7%20Automation%20%C2%B7%20Solana%20payments&descAlignY=58&descAlign=50&descSize=16" alt="Solana Clawd x x402 banner" />
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:05060d,18:2a0614,36:ff5f1f,55:ffd166,74:9945FF,100:14F195&height=285&section=header&text=%F0%9F%A6%9E%F0%9F%91%91%20LOBSTER%20KING%20PERPS&fontSize=54&fontColor=ffffff&animation=twinkling&fontAlignY=34&desc=Phoenix%20%C2%B7%20Vulcan%20%C2%B7%20Clawd%20%C2%B7%20Imperial%20Solana%20Perpetuals&descAlignY=58&descAlign=50&descSize=17" alt="Lobster King Perps Phoenix Vulcan Clawd banner" />
+
+<h1>🦞👑 Phoenix Perps, Crowned by Clawd</h1>
+
+<strong>Vulcan execution. Phoenix markets. Clawd operators. Imperial strategy loops.</strong>
 
 <a href="https://github.com/x402agent/solana-clawd"><img src="https://img.shields.io/badge/GitHub-x402agent%2Fsolana--clawd-111827?style=for-the-badge&logo=github" alt="GitHub" /></a>
+<a href="https://phoenix.trade"><img src="https://img.shields.io/badge/Phoenix-Perpetuals-FF5F1F?style=for-the-badge" alt="Phoenix perpetuals" /></a>
+<a href="./vulcan-cli-master"><img src="https://img.shields.io/badge/Vulcan-Strategy%20Engine-FFD166?style=for-the-badge" alt="Vulcan strategy engine" /></a>
+<a href="./packages/clawd-perps"><img src="https://img.shields.io/badge/clawd--perps-npm%20%2B%20python%20agent-9945FF?style=for-the-badge" alt="clawd perps" /></a>
 <a href="https://x402.wtf"><img src="https://img.shields.io/badge/x402.wtf-agent%20payments-14F195?style=for-the-badge" alt="x402.wtf" /></a>
 <a href="https://backrooms.x402.wtf"><img src="https://img.shields.io/badge/backrooms.x402.wtf-INFINITE-FFD700?style=for-the-badge" alt="backrooms.x402.wtf" /></a>
 <a href="https://x402.wtf/automation"><img src="https://img.shields.io/badge/x402.wtf%2Fautomation-clawd--automaton-9945FF?style=for-the-badge" alt="automation" /></a>
@@ -10,11 +17,11 @@
 
 <br/><br/>
 
-<img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=800&size=22&duration=2200&pause=650&color=14F195&center=true&vCenter=true&width=1080&lines=%F0%9F%A6%9E+SENSE+%E2%86%92+THINK+%E2%86%92+STRIKE+%E2%86%92+DRIFT+%E2%86%92+RECALL;TRADE+%E2%86%92+EARN+USDC+%E2%86%92+PAY+x402+%E2%86%92+GET+SMARTER;curl+-fsSL+https%3A%2F%2Fbackrooms.x402.wtf%2Fenter.sh+%7C+bash;curl+-fsSL+https%3A%2F%2Fsolanaclawd.com%2Fleviathan.sh+%7C+sh;The+shell+molts.+The+laws+do+not." alt="animated header" />
+<img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=900&size=24&duration=1800&pause=420&color=FFD166&center=true&vCenter=true&width=1080&lines=%F0%9F%94%A5+PHOENIX+MARKETS+RISE+%E2%86%92+VULCAN+ORDERS+LAND;%F0%9F%A6%9E%F0%9F%91%91+LOBSTER+KING+MODE+%E2%86%92+PAPER+FIRST+%E2%86%92+LIVE+GATED;TWAP+%E2%86%92+GRID+%E2%86%92+TA+%E2%86%92+LEDGER+%E2%86%92+FINALIZE;clawd-perps+perps+vulcan+health;clawd-perps+perps+grid+SOL+--center-on-mark+--width-pct+2.5" alt="animated Phoenix perps header" />
 
 <br/>
 
-<img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=700&size=15&duration=1500&pause=350&color=FF6B00&center=true&vCenter=true&width=980&lines=Public+backroom+is+live.;Automation+runtime+lives+in+automaton-main.;SDK+%2B+packages+%2B+programs+%2B+memory+surfaces+are+mapped+below.;Mapping+is+at+the+bottom+where+it+belongs." alt="animated status" />
+<img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=800&size=16&duration=1450&pause=300&color=14F195&center=true&vCenter=true&width=980&lines=NPM+CLI+summons+the+Python+Phoenix+agent.;Python+agent+delegates+execution+to+Vulcan%2FRise.;Guardrails%3A+paper+default%2C+dry-run%2C+confirm-each%2C+auto-execute+with+--yes.;Imperial+perps+flow%3A+read+market+%E2%86%92+run+strategy+%E2%86%92+monitor+ledger+%E2%86%92+finalize." alt="animated Vulcan status" />
 
 <br/><br/>
 
@@ -26,12 +33,32 @@
 
 </div>
 
+```bash
+# Crown check: npm package brings up the Phoenix Python agent and Vulcan context
+clawd-perps perps vulcan context
+
+# Market intelligence through the Solana CLAWD Phoenix agent
+clawd-perps perps agent market SOL
+
+# Paper-first imperial strategy loops
+clawd-perps perps twap SOL --side buy --notional-usdc 500 --slices 5 --detached
+clawd-perps perps grid SOL --center-on-mark --width-pct 2.5 --levels-per-side 5 --tokens-per-level 0.5 --detached
+clawd-perps perps ta --config-file ./ema-cross-sol.json --run-until-stopped --detached
+
+# Royal ledger control
+clawd-perps perps runs
+clawd-perps perps monitor <run-id>
+clawd-perps perps finalize <run-id> --cancel-orders --close-position --wait --yes
+```
+
 ```text
 ╔══════════════════════════════════════════════════════════════════════════════╗
-║  SOLANA CLAWD COMMAND DECK                                                  ║
-║  x402.wtf · backrooms.x402.wtf · solanaclawd.com · x402.wtf/automation      ║
+║  LOBSTER KING PERPS COMMAND DECK                                            ║
+║  Phoenix · Vulcan · Clawd · Imperial Solana strategy runners                ║
 ╠══════════════════════════════════════════════════════════════════════════════╣
-║  Runtime      clawd · leviathan · clawd-automaton                           ║
+║  Runtime      clawd · leviathan · clawd-automaton · clawd-perps             ║
+║  Perps        Phoenix markets · Vulcan/Rise execution · Python agent        ║
+║  Strategies   TWAP · grid · TA · ledgers · pause/resume/finalize            ║
 ║  Rooms        Analyst ↔ Satirist ↔ Clawd                                    ║
 ║  Payments     x402 / HTTP 402 / Solana rails                               ║
 ║  Agents       x402.wtf/agents · free registry · gasless MPL Core minting    ║
@@ -405,7 +432,7 @@ npm i @openclawdsolana/clawd-sdk
 | `solana-clawd` | `1.7.0` | `npm i -g solana-clawd` | Root CLI package published from this repo. |
 | `@openclawdsolana/clawd` | `1.3.0` | `npm i -g @openclawdsolana/clawd` | Main operator CLI. |
 | `@openclawdsolana/clawd-standalone` | `1.3.0` | `npm i -g @openclawdsolana/clawd-standalone` | Lightweight standalone CLI. |
-| `@openclawdsolana/clawd-perps` | `1.0.0` | `npm i -g @openclawdsolana/clawd-perps` | Phoenix perps CLI/library. |
+| `@openclawdsolana/clawd-perps` | `1.1.0` | `npm i -g @openclawdsolana/clawd-perps` | Phoenix perps CLI/library with Python agent + Vulcan strategy delegation. |
 | `@openclawdsolana/clawd-wallet` | `1.0.0` | `npm i @openclawdsolana/clawd-wallet` | Wallet SDK and agentic safeguards. |
 | `@openclawdsolana/clawd-sdk` | `0.1.0` | `npm i @openclawdsolana/clawd-sdk` | On-chain SDK, curves, vaults, agent bindings. |
 | `@solana-clawd/agent-kit` | `0.1.0` | local workspace | Loads agent JSON, templates, catalog, manifest, and runtime profiles. |
