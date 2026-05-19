@@ -31,6 +31,8 @@ If one of those jobs is blurry, the whole perp stack gets sloppy.
 
 ## Layout
 
+- `src/cli.ts`
+  runnable agent entry point used by `clawd-perps perps agent`
 - `src/adapters/phoenixRise.ts`
   Rise-powered Phoenix read plane for markets, tickers, positions, and health
 - `src/adapters/vulcan.ts`
@@ -62,6 +64,24 @@ If one of those jobs is blurry, the whole perp stack gets sloppy.
 - reads `vulcan-cli-master/.mcp.json` to surface the upstream MCP launch contract
 - exposes Vulcan catalog posture to Telegram and frontend consumers
 - keeps Rise as the market-read source of truth while using Vulcan for execution planning and operational compatibility
+
+## CLI Agent Surface
+
+Build it, then launch it directly or through the npm perps package:
+
+```bash
+npm --prefix Perps/clawd-agents-perps run build
+
+node Perps/clawd-agents-perps/dist/cli.js status
+node Perps/clawd-agents-perps/dist/cli.js frontend
+node Perps/clawd-agents-perps/dist/cli.js telegram "/perps"
+node Perps/clawd-agents-perps/dist/cli.js imperial-scan --symbols SOL,BTC,ETH --size 100
+
+clawd-perps perps agent status
+clawd-perps perps agent telegram "/perps_vulcan"
+```
+
+The npm `clawd-perps` package resolves this CLI automatically inside the monorepo, or from `CLAWD_PERPS_TS_AGENT_CLI` in external installs. If it is missing, `clawd-perps perps agent` falls back to the Python Phoenix/Vulcan agent.
 
 ## Reading Order
 

@@ -68,7 +68,7 @@ export function createMarketCache(): MarketCache {
 
 // ─── Simple typed event emitter ───────────────────────────────────────────────
 
-class TypedEmitter<Events extends Record<string, unknown>> {
+class TypedEmitter<Events extends object> {
   private listeners: Partial<{ [K in keyof Events]: Listener<Events[K]>[] }> = {};
 
   on<K extends keyof Events>(event: K, listener: Listener<Events[K]>): this {

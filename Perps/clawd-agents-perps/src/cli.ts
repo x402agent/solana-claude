@@ -86,7 +86,7 @@ Safety:
 
 async function main() {
   const parsed = parseArgs(process.argv.slice(2));
-  const runtime = new ClawdPerpsRuntime(undefined, repoRoot());
+  const createRuntime = () => new ClawdPerpsRuntime(undefined, repoRoot());
 
   switch (parsed.command) {
     case "help":
@@ -95,25 +95,38 @@ async function main() {
       printHelp();
       return;
     case "status":
-    case "health":
+    case "health": {
+      const runtime = createRuntime();
       printJson(await runtime.getRuntimeHealth());
       return;
-    case "frontend":
+    }
+    case "frontend": {
+      const runtime = createRuntime();
       printJson(await buildPerpsFrontendStatus(runtime));
       return;
-    case "telegram":
+    }
+    case "telegram": {
+      const runtime = createRuntime();
       printJson(await handleTelegramPerpsCommand(runtime, parsed.rest.join(" ") || "/perps"));
       return;
-    case "vulcan":
+    }
+    case "vulcan": {
+      const runtime = createRuntime();
       printJson(await runtime.getVulcanCatalogSummary());
       return;
-    case "paper-long":
+    }
+    case "paper-long": {
+      const runtime = createRuntime();
       printJson(runtime.previewPaperTrade(parsed.rest[0] || "SOL", "buy", asNumber(parsed.options.notional, 100)));
       return;
-    case "paper-short":
+    }
+    case "paper-short": {
+      const runtime = createRuntime();
       printJson(runtime.previewPaperTrade(parsed.rest[0] || "SOL", "sell", asNumber(parsed.options.notional, 100)));
       return;
-    case "live-long":
+    }
+    case "live-long": {
+      const runtime = createRuntime();
       printJson(
         runtime.previewLiveTrade(
           parsed.rest[0] || "SOL",
@@ -123,7 +136,9 @@ async function main() {
         ),
       );
       return;
-    case "live-short":
+    }
+    case "live-short": {
+      const runtime = createRuntime();
       printJson(
         runtime.previewLiveTrade(
           parsed.rest[0] || "SOL",
@@ -133,6 +148,7 @@ async function main() {
         ),
       );
       return;
+    }
     case "imperial-health": {
       const client = new ImperialClient();
       printJson(await client.healthCheck());

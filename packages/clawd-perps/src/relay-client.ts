@@ -26,6 +26,11 @@ export function snapshotUrl(symbols: string[], channels = "status,conversation,p
   return `${backroomBaseUrl()}/feed/snapshot?${params.toString()}`;
 }
 
+function authHeaders(): Record<string, string> {
+  const token = process.env.CLAWD_BACKROOM_TOKEN || process.env.CLAWD_PERPS_RELAY_TOKEN;
+  return token ? { Authorization: `Bearer ${token}` } : {};
+}
+
 export async function sendRelay(message: RelayMessage): Promise<RelayResult> {
   const url = relayUrl();
   try {
@@ -33,7 +38,7 @@ export async function sendRelay(message: RelayMessage): Promise<RelayResult> {
     const timeout = setTimeout(() => controller.abort(), 5000);
     const res = await fetch(url, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", ...authHeaders() },
       body: JSON.stringify({
         name: message.name || "clawd-perps",
         content: message.content.slice(0, 2000),
@@ -59,7 +64,7 @@ export async function sendRelay(message: RelayMessage): Promise<RelayResult> {
 
 export async function fetchSnapshot(symbols: string[]): Promise<unknown> {
   const res = await fetch(snapshotUrl(symbols), {
-    headers: { accept: "application/json" },
+    headers: { accept: "application/json", ...authHeaders() },
   });
   if (!res.ok) {
     throw new Error(`snapshot failed: ${res.status} ${res.statusText}`);
