@@ -47,6 +47,9 @@ Environment variables:
   CLAWD_PERPS_TS_AGENT_CLI TypeScript clawd-agents-perps CLI path (optional)
   CLAWD_PERPS_AGENT_PATH Python Phoenix/Vulcan agent path (optional)
   VULCAN_BIN            Vulcan binary override (optional)
+  CLAWD_ONCHAIN_MM_ROOT Phoenix on-chain market-maker workspace path
+  CLAWD_ONCHAIN_MM_MARKET Phoenix market pubkey for on-chain MM plans
+  CLAWD_ONCHAIN_MM_LIVE Must be true, with OPERATOR_CONFIRMED=true and --yes, for on-chain MM run
 `);
 
   // ── market ─────────────────────────────────────────────────────────────────
