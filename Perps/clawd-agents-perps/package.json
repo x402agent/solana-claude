@@ -4,8 +4,12 @@
   "private": true,
   "type": "module",
   "description": "Unified perpetuals integration surface for Clawd agents on Solana",
+  "bin": {
+    "clawd-agents-perps": "dist/cli.js"
+  },
   "scripts": {
     "build": "tsc -p tsconfig.json",
+    "start": "node dist/cli.js status",
     "typecheck": "tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {

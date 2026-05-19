@@ -8,6 +8,10 @@ type RunnerOptions = {
   requirePythonAgent?: boolean;
 };
 
+type AgentRunnerOptions = {
+  fallbackPython?: boolean;
+};
+
 function packageRoot(): string {
   return resolve(dirname(fileURLToPath(import.meta.url)), "..");
 }
@@ -28,6 +32,17 @@ function findPythonAgent(): string | null {
 
   for (const base of repoRootCandidates()) {
     const candidate = resolve(base, "solana-python-agent", "perps_agent.py");
+    if (existsSync(candidate)) return candidate;
+  }
+  return null;
+}
+
+function findClawdAgentsPerpsCli(): string | null {
+  const explicit = process.env.CLAWD_PERPS_TS_AGENT_CLI;
+  if (explicit && existsSync(explicit)) return explicit;
+
+  for (const base of repoRootCandidates()) {
+    const candidate = resolve(base, "Perps", "clawd-agents-perps", "dist", "cli.js");
     if (existsSync(candidate)) return candidate;
   }
   return null;
@@ -72,6 +87,26 @@ export function runPerpsAgent(args: string[], options: RunnerOptions = {}): neve
   }
 
   process.exit(run(vulcanBin(), args));
+}
+
+export function runClawdPerpsAgent(args: string[], options: AgentRunnerOptions = {}): never {
+  const cli = findClawdAgentsPerpsCli();
+  if (cli) {
+    process.exit(run(process.execPath, [cli, ...args]));
+  }
+
+  if (options.fallbackPython !== false) {
+    runPerpsAgent(args, { requirePythonAgent: false });
+  }
+
+  console.error(
+    [
+      "error: Clawd TypeScript perps agent not found.",
+      "Build Perps/clawd-agents-perps with npm --prefix Perps/clawd-agents-perps run build,",
+      "or set CLAWD_PERPS_TS_AGENT_CLI=/path/to/Perps/clawd-agents-perps/dist/cli.js.",
+    ].join(" "),
+  );
+  process.exit(2);
 }
 
 export function runVulcan(args: string[]): never {

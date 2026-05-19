@@ -1,6 +1,9 @@
 import { Command } from "commander";
 import { ClaWDPerps } from "../perps-tool.js";
-import { runPerpsAgent, runVulcan } from "../vulcan-runner.js";
+import { runClawdPerpsAgent, runPerpsAgent, runVulcan } from "../vulcan-runner.js";
+import { buildImperialRelay, sendRelay } from "../relay-client.js";
+import { runPerpsTui } from "../tui.js";
+import { runPerpsHarness } from "../harness.js";
 import type { ToolResult, CandleParams, OrderParams, TpSlParams } from "../types.js";
 
 function print(r: ToolResult) {
@@ -10,6 +13,19 @@ function print(r: ToolResult) {
     return;
   }
   console.log(r.output ?? JSON.stringify(r.data, null, 2));
+}
+
+function parseSymbols(raw?: string): string[] {
+  const symbols = (raw || "SOL,BTC,ETH")
+    .split(",")
+    .map((symbol) => symbol.trim().toUpperCase())
+    .filter(Boolean);
+  return symbols.length ? symbols : ["SOL", "BTC", "ETH"];
+}
+
+function parsePositiveInt(raw: string | undefined, fallback: number): number {
+  const value = Number(raw);
+  return Number.isFinite(value) && value > 0 ? Math.floor(value) : fallback;
 }
 
 export function buildPerpsCommand(): Command {
@@ -23,6 +39,12 @@ Environment variables:
   CLAWD_PERPS_RPC_URL   Solana RPC        (default: https://api.mainnet-beta.solana.com)
   CLAWD_PERPS_API_KEY   Bearer token for authenticated endpoints (optional)
   CLAWD_PERPS_WALLET    Trader wallet address / public key
+  OPENROUTER_API_KEY    Optional model key for the agent harness
+  CLAWD_PERPS_MODEL     OpenRouter model for harness analysis
+  CLAWD_BACKROOM_URL    Realtime relay base URL (default: https://backrooms.x402.wtf)
+  CLAWD_PERPS_RELAY_URL Full relay POST endpoint override
+  CLAWD_PERPS_SESSION_DIR Harness JSONL session directory
+  CLAWD_PERPS_TS_AGENT_CLI TypeScript clawd-agents-perps CLI path (optional)
   CLAWD_PERPS_AGENT_PATH Python Phoenix/Vulcan agent path (optional)
   VULCAN_BIN            Vulcan binary override (optional)
 `);
@@ -259,10 +281,85 @@ Environment variables:
     .description("Check Phoenix perps API health")
     .action(async () => print(await perps.health()));
 
+  // ── realtime TUI / harness / relay ────────────────────────────────────────
+  cmd
+    .command("relay [message...]")
+    .description("Relay a perps operator message into the Backroom realtime stream")
+    .option("--symbols <csv>", "Symbol list for generated relay payloads", "SOL,BTC,ETH")
+    .option("--name <name>", "Relay sender name", "clawd-perps")
+    .action(async (message: string[], opts: { symbols: string; name: string }) => {
+      const symbols = parseSymbols(opts.symbols);
+      const content = message.length ? message.join(" ") : buildImperialRelay(symbols, "manual");
+      const result = await sendRelay({ name: opts.name, content });
+      print({
+        success: result.ok,
+        data: result,
+        output: JSON.stringify(result, null, 2),
+        ...(result.ok ? {} : { error: result.error || "relay failed" }),
+      });
+    });
+
+  cmd
+    .command("tui")
+    .description("Open the Lobster King Phoenix/Vulcan/Imperial perps realtime TUI")
+    .option("--symbols <csv>", "Symbols to track", "SOL,BTC,ETH")
+    .option("--interval-ms <n>", "Snapshot refresh interval", "2500")
+    .option("--relay", "Announce the TUI to the Backroom realtime relay")
+    .action(async (opts: { symbols: string; intervalMs: string; relay?: boolean }) => {
+      await runPerpsTui({
+        symbols: parseSymbols(opts.symbols),
+        intervalMs: parsePositiveInt(opts.intervalMs, 2500),
+        relay: Boolean(opts.relay),
+      });
+    });
+
+  cmd
+    .command("harness")
+    .description("Run the OpenRouter-style long-horizon perps agent harness")
+    .option("--symbols <csv>", "Symbols to track", "SOL,BTC,ETH")
+    .option("--relay", "Relay startup and analysis to the Backroom")
+    .option("--model <model>", "OpenRouter model override")
+    .option("--prompt <text>", "Custom harness prompt")
+    .option("--once", "Run a single iteration")
+    .option("--interval-ms <n>", "Delay between iterations", "15000")
+    .option("--max-iterations <n>", "Maximum iterations when not using --once", "3")
+    .option("--no-model-call", "Skip OpenRouter and run deterministic snapshot mode")
+    .action(
+      async (opts: {
+        symbols: string;
+        relay?: boolean;
+        model?: string;
+        prompt?: string;
+        once?: boolean;
+        intervalMs: string;
+        maxIterations: string;
+        modelCall?: boolean;
+      }) => {
+        await runPerpsHarness({
+          symbols: parseSymbols(opts.symbols),
+          relay: Boolean(opts.relay),
+          model: typeof opts.model === "string" ? opts.model : undefined,
+          prompt: opts.prompt,
+          once: Boolean(opts.once),
+          intervalMs: parsePositiveInt(opts.intervalMs, 15000),
+          maxIterations: parsePositiveInt(opts.maxIterations, 3),
+          noModel: opts.modelCall === false,
+        });
+      },
+    );
+
   // ── Vulcan / Python strategy agent ────────────────────────────────────────
   cmd
     .command("agent")
-    .description("Run the Python Phoenix perps agent (health, market, strategies, lifecycle)")
+    .description("Run the Clawd TypeScript perps agent, falling back to Python Phoenix/Vulcan")
+    .allowUnknownOption(true)
+    .allowExcessArguments(true)
+    .argument("[args...]", "Arguments passed to clawd-agents-perps")
+    .action((args: string[]) => runClawdPerpsAgent(args.length ? args : ["status"], { fallbackPython: true }));
+
+  cmd
+    .command("python-agent")
+    .description("Run the Python Phoenix perps agent directly")
     .allowUnknownOption(true)
     .allowExcessArguments(true)
     .argument("[args...]", "Arguments passed to perps_agent.py")

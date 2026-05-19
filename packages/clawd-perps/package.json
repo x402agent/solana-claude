@@ -1,7 +1,7 @@
 {
   "name": "@openclawdsolana/clawd-perps",
-  "version": "1.1.0",
-  "description": "ClaWD Perps — Phoenix Perpetuals DEX CLI integration for OpenClawd. Provides TypeScript market tools and delegates strategies/lifecycle to the Python Phoenix agent and Vulcan CLI.",
+  "version": "1.2.0",
+  "description": "ClaWD Perps — Phoenix, Vulcan, Imperial, and Backroom realtime perps CLI/TUI/agent harness for OpenClawd.",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
