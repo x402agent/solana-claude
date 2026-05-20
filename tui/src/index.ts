@@ -77,7 +77,7 @@ function renderMenu(selected: number): void {
 
   process.stdout.write('\n');
   process.stdout.write(
-    chalk.gray('[↑↓ / 1-6] navigate  [Enter] select  [q] exit') + '\n',
+    chalk.gray('[↑↓ / 1-7] navigate  [Enter] select  [q] exit') + '\n',
   );
 }
 
@@ -128,6 +128,11 @@ async function launchScreen(index: number): Promise<void> {
         break;
       }
       case 5: {
+        const { runAgentKit } = await import('./screens/agentkit.js');
+        await runAgentKit();
+        break;
+      }
+      case 6: {
         // Exit
         process.stdout.write('\x1b[2J\x1b[H');
         process.stdout.write(
