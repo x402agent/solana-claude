@@ -4,7 +4,7 @@ import { FunctionTool, LlmAgent } from "@google/adk";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { z } from "zod";
+import { z } from "zod/v4";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
