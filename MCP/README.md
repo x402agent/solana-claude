@@ -138,7 +138,7 @@ Gateway tools use `GATEWAY_URL` or `CLAWD_GATEWAY_URL`, defaulting to `http://12
 Install or update the MCP server, local package surfaces, and launchers:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/x402agent/solana-clawd/main/mcp/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/x402agent/solana-clawd/main/MCP/install.sh | bash
 ```
 
 The installer:
@@ -149,12 +149,14 @@ The installer:
 - creates launchers in `~/.local/bin`: `solana-clawd-mcp`, `solana-clawd-mcp-http`, `agentwallet`, `clawd`, `clawd-code`, `clawd-leviathan`, `clawd-perps`, `clawd-standalone`, and `clawd-agents-perps`;
 - creates `~/.config/solana-clawd-mcp/.env` for optional API keys and service URLs.
 
+Full package injection requires Node.js 20-22 because the repository package engines are `>=20 <23`. Use `--skip-packages` for an MCP-only install on newer Node versions.
+
 Common overrides:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/x402agent/solana-clawd/main/mcp/install.sh | bash -s -- --branch=newnew
-curl -fsSL https://raw.githubusercontent.com/x402agent/solana-clawd/main/mcp/install.sh | bash -s -- --install-dir="$HOME/dev/solana-clawd-mcp"
-curl -fsSL https://raw.githubusercontent.com/x402agent/solana-clawd/main/mcp/install.sh | bash -s -- --skip-packages
+curl -fsSL https://raw.githubusercontent.com/x402agent/solana-clawd/main/MCP/install.sh | bash -s -- --branch=newnew
+curl -fsSL https://raw.githubusercontent.com/x402agent/solana-clawd/main/MCP/install.sh | bash -s -- --install-dir="$HOME/dev/solana-clawd-mcp"
+curl -fsSL https://raw.githubusercontent.com/x402agent/solana-clawd/main/MCP/install.sh | bash -s -- --skip-packages
 ```
 
 MCP client config:

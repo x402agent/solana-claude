@@ -42,12 +42,49 @@ for name in "${dir_names[@]}"; do
   find_expr+=(-name "${name}")
 done
 
+submodules=()
+while IFS=' ' read -r _ path; do
+  if [ -n "${path:-}" ] && [ -d "${path}" ]; then
+    submodules+=("${path}")
+  fi
+done < <(git config --file .gitmodules --get-regexp '^submodule\..*\.path$' 2>/dev/null || true)
+
 removed=0
+
+is_ignored_generated_path() {
+  local path="$1"
+  local clean_path="${path#./}"
+  local submodule
+  local rel_path
+
+  case "${clean_path}" in
+    .DS_Store|*/.DS_Store)
+      return 0
+      ;;
+  esac
+
+  if git check-ignore -q -- "${clean_path}" 2>/dev/null; then
+    return 0
+  fi
+
+  for submodule in "${submodules[@]}"; do
+    case "${clean_path}" in
+      "${submodule}"/*)
+        rel_path="${clean_path#"${submodule}/"}"
+        if (cd "${submodule}" && git check-ignore -q -- "${rel_path}" 2>/dev/null); then
+          return 0
+        fi
+        ;;
+    esac
+  done
+
+  return 1
+}
 
 remove_path() {
   local path="$1"
 
-  if ! git check-ignore -q -- "${path}"; then
+  if ! is_ignored_generated_path "${path}"; then
     return
   fi
 
@@ -60,22 +97,14 @@ remove_path() {
   removed=$((removed + 1))
 }
 
-while IFS= read -r -d '' dir; do
-  remove_path "${dir}"
+while IFS= read -r -d '' path; do
+  remove_path "${path}"
 done < <(
   find . \
     -path './.git' -prune -o \
     -path './.local-secrets' -prune -o \
-    -type d \( "${find_expr[@]}" \) -print0
-)
-
-while IFS= read -r -d '' file; do
-  remove_path "${file}"
-done < <(
-  find . \
-    -path './.git' -prune -o \
-    -path './.local-secrets' -prune -o \
-    -type f -name '.DS_Store' -print0
+    \( -type d \( "${find_expr[@]}" \) -print0 -prune \) -o \
+    \( -type f -name '.DS_Store' -print0 \)
 )
 
 if [ "${dry_run}" -eq 1 ]; then

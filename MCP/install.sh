@@ -2,7 +2,7 @@
 # One-shot installer for the solana-clawd MCP server.
 #
 # Usage:
-#   curl -fsSL https://raw.githubusercontent.com/x402agent/solana-clawd/main/mcp/install.sh | bash
+#   curl -fsSL https://raw.githubusercontent.com/x402agent/solana-clawd/main/MCP/install.sh | bash
 #
 # Environment overrides:
 #   SOLANA_CLAWD_MCP_REPO_URL     Git repository to clone.
@@ -22,13 +22,14 @@ REPO_URL="${SOLANA_CLAWD_MCP_REPO_URL:-https://github.com/x402agent/solana-clawd
 BRANCH="${SOLANA_CLAWD_MCP_BRANCH:-main}"
 INSTALL_ROOT="${SOLANA_CLAWD_MCP_HOME:-$HOME/.solana-clawd-mcp}"
 REPO_DIR="$INSTALL_ROOT/solana-clawd"
-MCP_DIR="$REPO_DIR/mcp"
+MCP_DIR="$REPO_DIR/MCP"
 BIN_DIR="${SOLANA_CLAWD_MCP_BIN_DIR:-$HOME/.local/bin}"
 CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/solana-clawd-mcp"
 ENV_FILE="${SOLANA_CLAWD_MCP_ENV:-$CONFIG_DIR/.env}"
 STDIO_BIN="$BIN_DIR/solana-clawd-mcp"
 HTTP_BIN="$BIN_DIR/solana-clawd-mcp-http"
 NODE_MIN_MAJOR=20
+NODE_MAX_MAJOR_WITH_PACKAGES=22
 QUIET=0
 SKIP_BUILD=0
 SKIP_PACKAGES="${SOLANA_CLAWD_MCP_SKIP_PACKAGES:-0}"
@@ -65,7 +66,7 @@ usage() {
 One-shot installer for the solana-clawd MCP server.
 
 Usage:
-  curl -fsSL https://raw.githubusercontent.com/x402agent/solana-clawd/main/mcp/install.sh | bash
+  curl -fsSL https://raw.githubusercontent.com/x402agent/solana-clawd/main/MCP/install.sh | bash
 
 Flags:
   --branch=NAME        Install a branch or tag. Default: main
@@ -96,7 +97,7 @@ for arg in "$@"; do
 done
 
 REPO_DIR="$INSTALL_ROOT/solana-clawd"
-MCP_DIR="$REPO_DIR/mcp"
+MCP_DIR="$REPO_DIR/MCP"
 STDIO_BIN="$BIN_DIR/solana-clawd-mcp"
 HTTP_BIN="$BIN_DIR/solana-clawd-mcp-http"
 
@@ -114,6 +115,27 @@ abs_path() {
 
 node_major() {
   node --version | sed 's/^v//' | cut -d. -f1
+}
+
+validate_node_version() {
+  NODE_MAJOR="$(node_major)"
+  [ "$NODE_MAJOR" -ge "$NODE_MIN_MAJOR" ] || fail "Node.js $NODE_MIN_MAJOR+ is required. Found $(node --version)."
+
+  if [ "$SKIP_BUILD" != "1" ] && [ "$SKIP_PACKAGES" != "1" ] && [ "$NODE_MAJOR" -gt "$NODE_MAX_MAJOR_WITH_PACKAGES" ]; then
+    fail "Full package injection requires Node.js 20-22 because this repo declares engines >=20 <23. Found $(node --version). Use Node 22 LTS or rerun with --skip-packages for MCP-only install."
+  fi
+}
+
+resolve_mcp_dir() {
+  if [ -d "$REPO_DIR/MCP" ]; then
+    printf '%s\n' "$REPO_DIR/MCP"
+    return
+  fi
+  if [ -d "$REPO_DIR/mcp" ]; then
+    printf '%s\n' "$REPO_DIR/mcp"
+    return
+  fi
+  fail "MCP package not found under $REPO_DIR."
 }
 
 clone_or_update() {
@@ -136,6 +158,7 @@ clone_or_update() {
 }
 
 build_mcp() {
+  MCP_DIR="$(resolve_mcp_dir)"
   [ -d "$MCP_DIR" ] || fail "MCP package not found at $MCP_DIR"
   cd "$MCP_DIR"
 
@@ -337,7 +360,7 @@ Injected local packages:
   Perps/clawd-agents-perps
 
 One-shot reinstall/update:
-  curl -fsSL https://raw.githubusercontent.com/x402agent/solana-clawd/main/mcp/install.sh | bash
+  curl -fsSL https://raw.githubusercontent.com/x402agent/solana-clawd/main/MCP/install.sh | bash
 
 EOF
 
@@ -352,8 +375,7 @@ main() {
   need_cmd node
   need_cmd npm
 
-  NODE_MAJOR="$(node_major)"
-  [ "$NODE_MAJOR" -ge "$NODE_MIN_MAJOR" ] || fail "Node.js $NODE_MIN_MAJOR+ is required. Found $(node --version)."
+  validate_node_version
 
   info "Installing solana-clawd MCP"
   info "repo: $REPO_URL"
@@ -361,6 +383,7 @@ main() {
   info "install root: $(abs_path "$INSTALL_ROOT")"
 
   clone_or_update
+  MCP_DIR="$(resolve_mcp_dir)"
   build_local_packages
   build_protocol_package
   build_mcp
