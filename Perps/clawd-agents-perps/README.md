@@ -27,7 +27,7 @@ OI delta
 ### Signal Regimes
 
 | Regime | Condition |
-|---|---|
+| --- | --- |
 | `LONG_CONTINUATION` | price ↑ + OI ↑ + funding sane + spread tight |
 | `SHORT_CONTINUATION` | price ↓ + OI ↑ + funding sane + spread tight |
 | `SHORTS_CLOSING` | price ↑ + OI ↓ (do not chase) |
@@ -112,7 +112,7 @@ clawd_perps_oi_risk_gate({ symbol: "SOL-PERP", notionalUsdc: 500, side: "long" }
 
 ### OODA Loop Integration
 
-```
+```text
 Phoenix reads the tape.
 RPC verifies the chain.
 Percolator guards the invariants.
@@ -145,7 +145,7 @@ This is the Observe layer of the perps OODA loop — OI as a live agent-grade ri
 ## Layout
 
 | File | Role |
-|---|---|
+| --- | --- |
 | `src/signals/oi-core.ts` | Core OI signal — regime classifier, scorer, gate checks, `buildClawdOiCoreSignal` |
 | `src/adapters/phoenix-rise.ts` | Phoenix Rise HTTP adapter — mark price, OI, funding, orderbook, mock support |
 | `src/adapters/perp-account-oi.ts` | Raw Solana RPC account decoder for on-chain program OI reads |
@@ -204,7 +204,7 @@ clawd-perps perps agent status
 ### Signal CLI Options
 
 | Option | Default | Description |
-|---|---|---|
+| --- | --- | --- |
 | `--mock` | false | Use hardcoded mock tick (no RPC/HTTP needed) |
 | `--mode` | `paper` | `observe`, `paper`, `dry-run`, `confirm-each`, `auto-execute` |
 | `--rpc-url` | env | Solana RPC URL |
