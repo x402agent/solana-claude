@@ -71,8 +71,8 @@ export function renderHeader(state: DashboardState, width: number): string[] {
   );
 
   // Badges row
-  const badgeLine = `  ${NOUS_BADGE}  ${PAYSH_BADGE}  ${chalk.hex('#00eeff').bold('SOLANA')}  ${chalk.hex('#ff00ff').bold('A2A')}  ${chalk.hex('#00ff99').bold('MCP')}  ${packageBadge(state.sdkPackageCount)}  ${vaultBadge(state.walletVault.available, state.walletVault.walletCount)}  `;
-  const badgePlain = `     NOUS    pay.sh    SOLANA   A2A   MCP    PKG ${String(state.sdkPackageCount).padStart(2, '0')}    VAULT ${state.walletVault.available ? String(state.walletVault.walletCount) : 'OFF'}    `;
+  const badgeLine = `  ${PAYSH_BADGE}  ${chalk.hex('#00eeff').bold('SOLANA')}  ${chalk.hex('#ff00ff').bold('A2A')}  ${chalk.hex('#00ff99').bold('MCP')}  ${packageBadge(state.sdkPackageCount)}  ${vaultBadge(state.walletVault.available, state.walletVault.walletCount)}  `;
+  const badgePlain = `     pay.sh    SOLANA   A2A   MCP    PKG ${String(state.sdkPackageCount).padStart(2, '0')}    VAULT ${state.walletVault.available ? String(state.walletVault.walletCount) : 'OFF'}    `;
   const badgePad = Math.max(0, width - badgePlain.length);
   lines.push(
     chalk.cyan('║') + badgeLine + ' '.repeat(badgePad) + chalk.cyan('║'),

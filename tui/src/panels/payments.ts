@@ -21,7 +21,7 @@ function shortSig(sig: string): string {
 export function renderPayments(state: DashboardState, height: number): string[] {
   const lines: string[] = [];
   const { usdcBalance, clawdBalance, lastPayment, totalSpent, a2aConnections,
-    confidentialMode, darkDefiArmed, payshStatus, activeModel, nousOnline } = state;
+    confidentialMode, darkDefiArmed, payshStatus, activeModel } = state;
 
   lines.push(chalk.cyan('┌─ x402 PAYMENTS & PROTOCOLS ───┐'));
 
@@ -60,7 +60,6 @@ export function renderPayments(state: DashboardState, height: number): string[] 
 
   // Agent / model
   lines.push(`│  ${chalk.cyan('INFERENCE')}                     │`);
-  lines.push(`│   ${statusDot(nousOnline)} Nous Research         │`);
   const modelLabel = activeModel.toUpperCase().slice(0, 20).padEnd(20);
   lines.push(`│   Model: ${chalk.hex('#ff00ff')(modelLabel.slice(0, 14)).padEnd(24)}│`);
 

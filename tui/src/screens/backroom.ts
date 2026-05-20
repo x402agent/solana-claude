@@ -113,7 +113,7 @@ export async function runBackroom(): Promise<void> {
         state.lastPayment = {
           amount,
           asset: 'USDC',
-          resource: '/nous/hermes/analyze',
+          resource: '/clawd/analyze',
           signature: [...Array(44)].map(() =>
             'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz123456789'[Math.floor(Math.random() * 58)],
           ).join(''),
@@ -123,7 +123,7 @@ export async function runBackroom(): Promise<void> {
         };
         state.totalSpent += amount;
         state.usdcBalance = Math.max(0, state.usdcBalance - amount);
-        addLog(state, 'PAY', `pay.sh: ${amount.toFixed(4)} USDC → /nous/hermes/analyze`, 'pay');
+        addLog(state, 'PAY', `pay.sh: ${amount.toFixed(4)} USDC → /clawd/analyze`, 'pay');
       }
 
       renderFrame(state);
