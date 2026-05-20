@@ -12,6 +12,7 @@
 .clawd/
 .vulcan/
 .gitlawb/
+.claude/settings.local.json
 **/.clawd/
 **/.vulcan/
 **/.gitlawb/

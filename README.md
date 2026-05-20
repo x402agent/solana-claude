@@ -248,6 +248,29 @@ Secrets stay out of git. Put real Gemini keys, RPC URLs, API keys, and wallet ma
 
 ---
 
+## Repository Galaxy
+
+<div align="center">
+
+<img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=900&size=17&duration=1500&pause=280&color=FFD166&center=true&vCenter=true&width=1000&lines=one+repo+%E2%86%92+agents+%E2%86%92+gateway+%E2%86%92+perps+%E2%86%92+attestations+%E2%86%92+MCP+%E2%86%92+ADK;public+code+is+shareable+%E2%80%94+local+secrets+never+leave+the+machine;designed+for+screenshots%2C+forks%2C+agent+discovery%2C+and+private+gitlawb+mirrors" alt="Repository galaxy" />
+
+</div>
+
+| Zone | Paths | Publish posture |
+| --- | --- | --- |
+| Agent interface | `.claude`, `.github`, `adk`, `agent-kit`, `agents`, `mcp`, `skills` | Track source and examples only; local Claude settings stay ignored |
+| Gateway + governance | `gateway`, `x402`, `attestation`, `formal_verification`, `docs`, `examples` | Track public code, proofs, manifests, and templates |
+| Solana execution | `amm`, `perps`, `programs`, `pump-fun`, `pinocchio`, `llm_oracle`, `vulcan-cli-master` | Track source and examples; never commit keys or live `.env` files |
+| Apps + operators | `apps`, `tui`, `chrome-extension`, `operator`, `clawd-cloud-os`, `tailclawd` | Track app source; `tui/.env`, `tui/dist`, and `tui/node_modules` stay local-only |
+| Automation + memory | `automaton-main`, `leviathan`, `MemeBRain`, `moltbook-agent`, `ooda`, `deep-clawd`, `data` | Track source/config templates; private data dumps stay local-only |
+| SDK + packages | `packages`, `sdk`, `clawdcli`, `clawdrouter`, `openShell`, `email-worker`, `scripts` | Track reusable package source and automation |
+| Local-only vaults | `.local-secrets`, `openclawd-framework`, `UltraThink-SKill`, `node_modules` | Ignored. Do not push to GitHub, gitlawb, npm, or deployment artifacts |
+| Root docs/config | `.env.example`, `.gitattributes`, `.gitignore`, `.gitmodules`, `.nvmrc`, `biome.json`, `bun.lock`, `bunfig.toml`, `CONTRIBUTING.md`, `HACKATHON.md`, `install.sh`, `leviathan.sh`, `LICENSE`, `MIGRATE.md`, `netlify.toml`, `package-lock.json`, `package.json`, `README.md`, `SECURITY.md`, `skills-lock.json`, `SOUL.md`, `STARTHERE`, `STARTHERE.md`, `STRATEGY.md`, `TRADE.md`, `tsconfig*.json` | Track public project metadata and non-secret examples |
+
+Viral surface area is deliberate: animated docs, explicit agent maps, private gateway manifests, verifiable Solana receipts, and x402 routes are all visible. Private material is not.
+
+---
+
 <div align="center">
 
 <img src="https://capsule-render.vercel.app/api?type=rect&color=0:14F195,50:9945FF,100:FF5F1F&height=3" alt="" />

@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git status --short)",
+      "Bash(git diff --stat)",
+      "Bash(npm --prefix gateway run build)",
+      "Bash(npx tsc -p adk/tsconfig.json --noEmit)"
+    ]
+  }
+}
