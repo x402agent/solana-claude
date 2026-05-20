@@ -26,6 +26,10 @@ function readJson<T>(relativePath: string): T {
   return JSON.parse(fs.readFileSync(path.join(repoRoot, relativePath), "utf8")) as T;
 }
 
+function adkParameters<T>(schema: T) {
+  return schema as any;
+}
+
 function readJsonFile<T>(filePath: string): T {
   return JSON.parse(fs.readFileSync(filePath, "utf8")) as T;
 }
@@ -94,7 +98,7 @@ const getAgentCatalogStats = new FunctionTool({
   name: "get_agent_catalog_stats",
   description:
     "Get OpenClawd agent catalog and Metaplex registry stats, including trading-capable and mint-capable agent counts.",
-  parameters: z.object({}),
+  parameters: adkParameters(z.object({})),
   execute: () => {
     const catalog = readJson<any>("agents/agents-catalog.json");
     const manifest = readJson<any>("agents/agents-manifest.json");
@@ -131,12 +135,12 @@ const searchAgentCatalog = new FunctionTool({
   name: "search_agent_catalog",
   description:
     "Search the OpenClawd agent catalog and registry for agents by identifier, name, category, tag, or capability.",
-  parameters: z.object({
+  parameters: adkParameters(z.object({
     query: z.string().describe("Search query, such as perps, x402, wallet guardian, or mint."),
     category: z.string().optional().describe("Optional category filter."),
     limit: z.number().optional().describe("Maximum results to return, default 8."),
-  }),
-  execute: ({ query, category, limit }) => {
+  })),
+  execute: ({ query, category, limit }: any) => {
     const catalog = readJson<any>("agents/agents-catalog.json");
     const sources = readAgentSourceFiles();
     const normalizedQuery = query.toLowerCase().trim();
@@ -184,7 +188,7 @@ const searchAgentCatalog = new FunctionTool({
 const getPrivateDestinations = new FunctionTool({
   name: "get_private_destinations",
   description: "List the private Google ADK destination URLs wired to the Clawd registry and catalog.",
-  parameters: z.object({}),
+  parameters: adkParameters(z.object({})),
   execute: () => ({
     status: "success",
     privacy: {
@@ -199,33 +203,33 @@ const getPrivateDestinations = new FunctionTool({
 const getTokenPrice = new FunctionTool({
   name: "get_token_price",
   description: "Get current Solana token price data by known symbol (SOL, USDC, CLAWD) or mint address.",
-  parameters: z.object({
+  parameters: adkParameters(z.object({
     token: z.string().describe("Token symbol or Solana mint address."),
-  }),
-  execute: ({ token }) => jupiterJson(`/price/v3?ids=${encodeURIComponent(resolveKnownMint(token))}`),
+  })),
+  execute: ({ token }: any) => jupiterJson(`/price/v3?ids=${encodeURIComponent(resolveKnownMint(token))}`),
 });
 
 const getTokenSearch = new FunctionTool({
   name: "get_token_search",
   description: "Search Solana tokens by symbol or name. Use before swaps when a mint address is ambiguous.",
-  parameters: z.object({
+  parameters: adkParameters(z.object({
     query: z.string().describe("Token symbol or name."),
-  }),
-  execute: ({ query }) => jupiterJson(`/tokens/v2/search?query=${encodeURIComponent(query)}`),
+  })),
+  execute: ({ query }: any) => jupiterJson(`/tokens/v2/search?query=${encodeURIComponent(query)}`),
 });
 
 const prepareJupiterSwap = new FunctionTool({
   name: "prepare_jupiter_swap",
   description:
     "Prepare a Jupiter swap quote and unsigned transaction for user review. This never signs or submits. Requires exact base-unit amountAtomic.",
-  parameters: z.object({
+  parameters: adkParameters(z.object({
     inputMint: z.string().describe("Input token symbol or mint address."),
     outputMint: z.string().describe("Output token symbol or mint address."),
     amountAtomic: z.string().describe("Exact input amount in base units/lamports."),
     walletAddress: z.string().describe("Wallet that will review and sign the transaction."),
     slippageBps: z.number().optional().describe("Slippage tolerance in basis points, default 100."),
-  }),
-  execute: ({ inputMint, outputMint, amountAtomic, walletAddress, slippageBps }) => {
+  })),
+  execute: ({ inputMint, outputMint, amountAtomic, walletAddress, slippageBps }: any) => {
     const params = new URLSearchParams({
       inputMint: resolveKnownMint(inputMint),
       outputMint: resolveKnownMint(outputMint),
