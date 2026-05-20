@@ -459,7 +459,7 @@ const CATEGORIES: KitCategory[] = [
 
 // ─── Layout helpers ───────────────────────────────────────────────────────────
 
-const ANSI_RE = new RegExp('\\[[0-9;]*m', 'g');
+const ANSI_RE = /\u001b\[[0-9;]*m/g;
 
 function visible(s: string): number {
   return s.replace(ANSI_RE, '').length;
