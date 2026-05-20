@@ -203,8 +203,7 @@ async function main(): Promise<void> {
         // Number keys 1-7
         const numMatch = chunk.match(/^[1-7]$/);
         if (numMatch) {
-          const idx = parseInt(chunk, 10) - 1;
-          selected = idx;
+          selected = parseInt(chunk, 10) - 1;
           launch = true;
         }
 
