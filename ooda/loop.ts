@@ -51,6 +51,10 @@ const { values: flags } = parseArgs({
     llm:            { type: 'boolean', default: false },
     mode:           { type: 'string',  default: 'paper' },
     goblin:         { type: 'boolean', default: false },  // 👺 GOBLIN MODE
+    'perps-oi':     { type: 'boolean', default: false },
+    'perps-symbol': { type: 'string',  default: 'SOL-PERP' },
+    'perps-signal-mode': { type: 'string', default: 'paper' },
+    'perps-oi-mock': { type: 'boolean', default: false },
   },
   strict: false,
 });
@@ -64,6 +68,10 @@ const SEED         = parseInt(flags['seed'] as string, 10);
 const COMMIT_EVERY = parseInt(flags['commit-every'] as string, 10);
 const TUI_MODE     = flags['tui'] as boolean;
 const USE_LLM      = flags['llm'] as boolean || GOBLIN_MODE;  // goblin always uses LLM when key available
+const USE_PERPS_OI = flags['perps-oi'] as boolean;
+const PERPS_SYMBOL = flags['perps-symbol'] as string;
+const PERPS_SIGNAL_MODE = flags['perps-signal-mode'] as string;
+const PERPS_OI_MOCK = flags['perps-oi-mock'] as boolean;
 
 // ─── Emit helpers ─────────────────────────────────────────────────────────────
 
@@ -82,6 +90,77 @@ function log(msg: string): void {
 
 function sleep(ms: number): Promise<void> {
   return new Promise(r => setTimeout(r, ms));
+}
+
+type OiSignal = {
+  symbol: string;
+  regime: string;
+  side: 'long' | 'short' | 'flat';
+  score: number;
+  confidence: number;
+  market: {
+    markPrice: number;
+    openInterestUsd: number;
+    openInterestDeltaPct: number;
+    priceDeltaPct: number;
+  };
+  gates: { executable: boolean; reason?: string };
+  action: { stopReason?: string };
+};
+
+function signalToDecision(signal: OiSignal, state: State): unknown {
+  const reason = `perps OI ${signal.regime} score=${Math.round(signal.score)} conf=${signal.confidence.toFixed(2)}`;
+  const current = state.book.positions[0];
+
+  if (!signal.gates.executable || signal.side === 'flat' || signal.confidence < 0.25) {
+    return { action: 'hold', reason: signal.action.stopReason || signal.gates.reason || reason };
+  }
+  if (!current) {
+    return {
+      action: 'open',
+      side: signal.side,
+      size_lamports: 250_000,
+      reason,
+    };
+  }
+  if (current.side !== signal.side && signal.confidence >= 0.4) {
+    return {
+      action: 'close',
+      position_id: current.id,
+      reason: `perps OI flipped ${current.side}->${signal.side}; ${reason}`,
+    };
+  }
+  return { action: 'hold', reason };
+}
+
+async function readPerpsOiSignal(previous?: {
+  ts: number;
+  symbol: string;
+  markPrice: number;
+  openInterestUsd: number;
+}): Promise<OiSignal | undefined> {
+  if (!USE_PERPS_OI) return undefined;
+  try {
+    const mod = await import('../perps/clawd-agents-perps/src/signals/oi-core.ts');
+    return await mod.buildClawdOiCoreSignal({
+      symbol: PERPS_SYMBOL,
+      previous,
+      mode: PERPS_SIGNAL_MODE,
+      mock: PERPS_OI_MOCK,
+    });
+  } catch (error) {
+    log(`[perps-oi] unavailable: ${error instanceof Error ? error.message : String(error)}`);
+    return {
+      symbol: PERPS_SYMBOL,
+      regime: 'DATA_INVALID',
+      side: 'flat',
+      score: 0,
+      confidence: 0,
+      market: { markPrice: 0, openInterestUsd: 0, openInterestDeltaPct: 0, priceDeltaPct: 0 },
+      gates: { executable: false, reason: 'perps-oi-unavailable' },
+      action: { stopReason: 'perps-oi-unavailable' },
+    };
+  }
 }
 
 // ─── Commit journal to git ────────────────────────────────────────────────────
@@ -119,10 +198,11 @@ async function runLoop(): Promise<void> {
 
   const state: State = createState();
   const observer = new SynthObserver(SEED, 150_000, 20);
+  let previousOiTick: { ts: number; symbol: string; markPrice: number; openInterestUsd: number } | undefined;
 
-  log(`[ralph] starting ${TICKS} ticks, sleep=${SLEEP_MS}ms, llm=${USE_LLM}, goblin=${GOBLIN_MODE}`);
+  log(`[ralph] starting ${TICKS} ticks, sleep=${SLEEP_MS}ms, llm=${USE_LLM}, goblin=${GOBLIN_MODE}, perps_oi=${USE_PERPS_OI}`);
   if (TUI_MODE) {
-    emit({ event: 'start', ticks: TICKS, config, goblin: GOBLIN_MODE });
+    emit({ event: 'start', ticks: TICKS, config, goblin: GOBLIN_MODE, perps_oi: USE_PERPS_OI, perps_symbol: PERPS_SYMBOL });
   }
 
   for (let tick = 1; tick <= TICKS; tick++) {
@@ -133,6 +213,15 @@ async function runLoop(): Promise<void> {
     const candles = observer.tick(now);
     const currentPrice = candles[candles.length - 1]!.c;
     const lastDecisions = readLastEntries(3);
+    const perpsOiSignal = await readPerpsOiSignal(previousOiTick);
+    if (perpsOiSignal?.market.markPrice && perpsOiSignal.market.openInterestUsd) {
+      previousOiTick = {
+        ts: Date.now(),
+        symbol: perpsOiSignal.symbol,
+        markPrice: perpsOiSignal.market.markPrice,
+        openInterestUsd: perpsOiSignal.market.openInterestUsd,
+      };
+    }
 
     const obs: Observations = {
       tick,
@@ -140,6 +229,7 @@ async function runLoop(): Promise<void> {
       mode: 'paper',
       network: 'devnet',
       candles: candles.slice(-10),  // send last 10 to model
+      perps_oi_signal: perpsOiSignal,
       book: {
         positions: state.book.positions,
         cash_lamports: state.book.cash_lamports,
@@ -152,6 +242,8 @@ async function runLoop(): Promise<void> {
     try {
       if (USE_LLM && process.env['ANTHROPIC_API_KEY']) {
         rawDecision = await claudeDecision(obs);
+      } else if (perpsOiSignal) {
+        rawDecision = signalToDecision(perpsOiSignal, state);
       } else {
         rawDecision = deterministicDecision(obs);
       }
@@ -235,6 +327,7 @@ async function runLoop(): Promise<void> {
       cash_lamports: state.book.cash_lamports,
       positions: state.book.positions.length,
       consecutive_losses: state.consecutive_losses,
+      perps_oi_signal: perpsOiSignal,
     });
 
     // ── Commit journal ─────────────────────────────────────────────────────

@@ -37,6 +37,7 @@ export interface Observations {
   mode: 'paper';
   network: 'devnet';
   candles: Candle[];
+  perps_oi_signal?: unknown;
   book: { positions: unknown[]; cash_lamports: number };
   last_decisions: TickEntry[];
 }
