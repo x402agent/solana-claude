@@ -10,6 +10,10 @@
 #   SOLANA_CLAWD_MCP_HOME         Install root.
 #   SOLANA_CLAWD_MCP_BIN_DIR      Directory for launcher scripts.
 #   SOLANA_CLAWD_MCP_ENV          Environment file loaded by launchers.
+#   SOLANA_CLAWD_MCP_SKIP_PACKAGES=1
+#                                    Skip packages/* and Perps package builds.
+#   SOLANA_CLAWD_MCP_SKIP_PROTOCOL=1
+#                                    Skip packages/clawd-protocol build probe.
 
 set -euo pipefail
 umask 022
@@ -27,6 +31,18 @@ HTTP_BIN="$BIN_DIR/solana-clawd-mcp-http"
 NODE_MIN_MAJOR=20
 QUIET=0
 SKIP_BUILD=0
+SKIP_PACKAGES="${SOLANA_CLAWD_MCP_SKIP_PACKAGES:-0}"
+SKIP_PROTOCOL="${SOLANA_CLAWD_MCP_SKIP_PROTOCOL:-0}"
+NODE_PACKAGE_DIRS=(
+  "packages/agentwallet"
+  "packages/clawd"
+  "packages/clawd-perps"
+  "packages/clawd-sdk"
+  "packages/clawd-wallet"
+  "packages/cli-standalone"
+  "Perps/clawd-agents-perps"
+)
+PROTOCOL_DIR="packages/clawd-protocol"
 
 if [ -t 1 ] && [ "${NO_COLOR:-}" = "" ]; then
   GREEN=$'\033[32m'
@@ -45,8 +61,11 @@ warn() { printf "${YELLOW}  ! ${RESET}%s\n" "$*"; }
 fail() { printf "${RED}  ERROR ${RESET}%s\n" "$*" >&2; exit 1; }
 
 usage() {
-  sed -n '2,17p' "$0" | sed 's/^# \{0,1\}//'
   cat <<USAGE
+One-shot installer for the solana-clawd MCP server.
+
+Usage:
+  curl -fsSL https://raw.githubusercontent.com/x402agent/solana-clawd/main/mcp/install.sh | bash
 
 Flags:
   --branch=NAME        Install a branch or tag. Default: main
@@ -54,6 +73,8 @@ Flags:
   --bin-dir=PATH       Launcher directory. Default: \$HOME/.local/bin
   --repo-url=URL       Git repository URL.
   --skip-build         Do not run npm install/build.
+  --skip-packages      Do not install/build packages/* and Perps packages.
+  --skip-protocol      Do not probe/build packages/clawd-protocol.
   --quiet              Reduce output.
   -h, --help           Show this help.
 USAGE
@@ -66,6 +87,8 @@ for arg in "$@"; do
     --bin-dir=*) BIN_DIR="${arg#--bin-dir=}" ;;
     --repo-url=*) REPO_URL="${arg#--repo-url=}" ;;
     --skip-build) SKIP_BUILD=1 ;;
+    --skip-packages) SKIP_PACKAGES=1 ;;
+    --skip-protocol) SKIP_PROTOCOL=1 ;;
     --quiet|-q) QUIET=1 ;;
     -h|--help) usage; exit 0 ;;
     *) warn "Ignoring unknown flag: $arg" ;;
@@ -135,6 +158,65 @@ build_mcp() {
   [ -f "$MCP_DIR/dist/http.js" ] || fail "Build did not create dist/http.js"
 }
 
+install_node_package() {
+  pkg_rel="$1"
+  pkg_abs="$REPO_DIR/$pkg_rel"
+
+  if [ ! -f "$pkg_abs/package.json" ]; then
+    warn "Skipping $pkg_rel; package.json not found."
+    return
+  fi
+
+  info "Installing package dependencies: $pkg_rel"
+  if [ -f "$pkg_abs/package-lock.json" ]; then
+    npm --prefix "$pkg_abs" ci --legacy-peer-deps
+  else
+    npm --prefix "$pkg_abs" install --legacy-peer-deps
+  fi
+
+  info "Building package: $pkg_rel"
+  npm --prefix "$pkg_abs" run build --if-present
+}
+
+build_local_packages() {
+  if [ "$SKIP_BUILD" = "1" ] || [ "$SKIP_PACKAGES" = "1" ]; then
+    warn "Skipping local package install/build."
+    return
+  fi
+
+  for pkg in "${NODE_PACKAGE_DIRS[@]}"; do
+    install_node_package "$pkg"
+  done
+}
+
+build_protocol_package() {
+  protocol_abs="$REPO_DIR/$PROTOCOL_DIR"
+
+  if [ "$SKIP_BUILD" = "1" ] || [ "$SKIP_PROTOCOL" = "1" ]; then
+    warn "Skipping clawd-protocol build probe."
+    return
+  fi
+
+  if [ ! -f "$protocol_abs/Cargo.toml" ]; then
+    warn "Skipping $PROTOCOL_DIR; Cargo.toml not found."
+    return
+  fi
+
+  if command -v anchor >/dev/null 2>&1; then
+    info "Building Anchor protocol package: $PROTOCOL_DIR"
+    (cd "$protocol_abs" && anchor build)
+    return
+  fi
+
+  if command -v cargo >/dev/null 2>&1; then
+    info "Building Rust protocol package with cargo: $PROTOCOL_DIR"
+    cargo build --manifest-path "$protocol_abs/Cargo.toml"
+    return
+  fi
+
+  warn "Skipping $PROTOCOL_DIR build; install Anchor or Rust cargo to build the on-chain protocol."
+}
+
 write_env_file() {
   mkdir -p "$CONFIG_DIR"
   if [ -f "$ENV_FILE" ]; then
@@ -156,6 +238,29 @@ write_env_file() {
 # PORT=3001
 ENV
   ok "Created env file: $ENV_FILE"
+}
+
+write_node_launcher() {
+  name="$1"
+  entry="$2"
+
+  if [ ! -f "$entry" ]; then
+    warn "Skipping launcher $name; missing $entry"
+    return
+  fi
+
+  cat >"$BIN_DIR/$name" <<LAUNCHER
+#!/usr/bin/env bash
+set -euo pipefail
+ENV_FILE="\${SOLANA_CLAWD_MCP_ENV:-$ENV_FILE}"
+if [ -f "\$ENV_FILE" ]; then
+  set -a
+  . "\$ENV_FILE"
+  set +a
+fi
+exec node "$entry" "\$@"
+LAUNCHER
+  chmod +x "$BIN_DIR/$name"
 }
 
 write_launchers() {
@@ -187,6 +292,15 @@ LAUNCHER
 
   chmod +x "$STDIO_BIN" "$HTTP_BIN"
   ok "Installed launchers: $STDIO_BIN and $HTTP_BIN"
+
+  write_node_launcher "agentwallet" "$REPO_DIR/packages/agentwallet/dist/cli.js"
+  write_node_launcher "clawd" "$REPO_DIR/packages/clawd/dist/index.js"
+  write_node_launcher "clawd-code" "$REPO_DIR/packages/clawd/dist/index.js"
+  write_node_launcher "clawd-leviathan" "$REPO_DIR/packages/clawd/dist/index.js"
+  write_node_launcher "clawd-perps" "$REPO_DIR/packages/clawd-perps/dist/cli.js"
+  write_node_launcher "clawd-standalone" "$REPO_DIR/packages/cli-standalone/index.js"
+  write_node_launcher "clawd-agents-perps" "$REPO_DIR/Perps/clawd-agents-perps/dist/cli.js"
+  ok "Injected local package launchers into $BIN_DIR"
 }
 
 print_client_config() {
@@ -211,6 +325,16 @@ Claude Desktop / Cursor / VS Code MCP config:
 
 Optional env file:
   $ENV_FILE
+
+Injected local packages:
+  packages/agentwallet
+  packages/clawd
+  packages/clawd-perps
+  packages/clawd-protocol
+  packages/clawd-sdk
+  packages/clawd-wallet
+  packages/cli-standalone
+  Perps/clawd-agents-perps
 
 One-shot reinstall/update:
   curl -fsSL https://raw.githubusercontent.com/x402agent/solana-clawd/main/mcp/install.sh | bash
@@ -237,6 +361,8 @@ main() {
   info "install root: $(abs_path "$INSTALL_ROOT")"
 
   clone_or_update
+  build_local_packages
+  build_protocol_package
   build_mcp
   write_env_file
   write_launchers
