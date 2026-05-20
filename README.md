@@ -39,6 +39,56 @@
 
 <br/>
 
+<table width="100%">
+  <tr>
+    <td align="left" bgcolor="#111827" style="padding:26px 28px;">
+      <h2 align="center">⚡ Featured Agent: Clawd Perps</h2>
+      <p align="center">
+        <strong>The perp nerve center for Solana Clawd agents: Phoenix reads, Rise data, Vulcan routes, Imperial scans, Telegram ops, dashboard payloads, TWAMM automation, and on-chain market-maker previews in one agent-safe surface.</strong>
+      </p>
+      <p>
+        <a href="./perps/clawd-agents-perps/README.md"><strong>Clawd Perps Agent</strong></a>
+        is where the runtime starts acting like an operator instead of a brochure. It observes markets first, builds paper routes second, and keeps live execution behind explicit gates:
+        <code>LIVE_TRADING=true</code>, <code>OPERATOR_CONFIRMED=true</code>, <code>PERPS_SIM_ONLY=false</code>, plus <code>IMPERIAL_LIVE=true</code> for Imperial order submission.
+      </p>
+      <table width="100%">
+        <tr>
+          <th>Surface</th>
+          <th>What it gives the agent</th>
+        </tr>
+        <tr>
+          <td><code>src/marketMaker.ts</code></td>
+          <td>Observe, paper, and gated live-preview orchestration.</td>
+        </tr>
+        <tr>
+          <td><code>src/adapters/phoenixRise.ts</code></td>
+          <td>Phoenix market reads through the Rise plane.</td>
+        </tr>
+        <tr>
+          <td><code>src/adapters/vulcan.ts</code></td>
+          <td>Vulcan-compatible execution plans and route previews.</td>
+        </tr>
+        <tr>
+          <td><code>src/imperialAgent.ts</code> + <code>src/imperialBot.ts</code></td>
+          <td>Imperial health, scans, cycles, and operator command flow.</td>
+        </tr>
+        <tr>
+          <td><code>src/telegram.ts</code> + <code>src/frontend.ts</code></td>
+          <td>Telegram commands and frontend status cards for real operations.</td>
+        </tr>
+      </table>
+      <pre><code class="language-bash">npm --prefix perps/clawd-agents-perps run build
+node perps/clawd-agents-perps/dist/cli.js status
+node perps/clawd-agents-perps/dist/cli.js frontend
+node perps/clawd-agents-perps/dist/cli.js telegram "/perps"
+node perps/clawd-agents-perps/dist/cli.js imperial-scan --symbols SOL,BTC,ETH --size 100
+node perps/clawd-agents-perps/dist/cli.js paper-long SOL --notional 100</code></pre>
+    </td>
+  </tr>
+</table>
+
+<br/>
+
 > **Latest:** Clawd now ships a dedicated [`amm/`](./amm/) AMM/perps aggregator: Phoenix book VWAP, Flash/Jupiter/GMTrade venue adapters, smart routing, paper-first simulations, a typed SDK, `clawd-amm` CLI, and a standalone MCP server with 15 agent tools. The TUI and Agent Kit remain wired into the one-shot installer, while the AMM router gives perps agents a compact execution surface.
 
 | | Command | What it does |
