@@ -47,7 +47,7 @@ export function renderHeader(state: DashboardState, width: number): string[] {
 
   // x402 suffix + tagline
   const tag = `  ${X402_BADGE}  SOVEREIGN AI AGENT ON SOLANA  ${CLAWD_BADGE}`;
-  const tagPlain = `    x402   SOVEREIGN AI AGENT ON SOLANA   $CLAWD `;
+  const tagPlain = '    x402   SOVEREIGN AI AGENT ON SOLANA   $CLAWD ';
   const tagPad = Math.max(0, width - tagPlain.length);
   lines.push(
     chalk.cyan('║') + tag + ' '.repeat(tagPad) + chalk.cyan('║'),
