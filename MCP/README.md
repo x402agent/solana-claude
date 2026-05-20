@@ -194,6 +194,8 @@ Verified on May 20, 2026:
 - `tools/list` included the Agent Kit, Gateway, integration, orchestrator, docs, x402, market, Leviathan, Deep Clawd, Solana, Pump.fun, memory, and chess tools.
 - `agentkit_list_agents` successfully loaded Agent Kit and returned 135 local agents.
 - `integration_status` found the local `agent-kit`, `gateway`, `sdk`, `x402`, `leviathan`, `deep-clawd`, `agents`, and `formal_verification` paths.
+- `gateway` built successfully; local startup requires `HELIUS_RPC_URL` or `GATEKEEPER_RPC_URL`.
+- With `GATEKEEPER_RPC_URL=https://api.mainnet-beta.solana.com` and `GATEWAY_URL=http://127.0.0.1:18080`, the MCP `gateway_health` tool returned Gateway `status: ok`.
 
 Known caveats:
 - The default external Solana MCP federation URL currently returns HTTP 404 during direct discovery. Local MCP startup still works; set `SOLANA_MCP_URL` to a compatible Streamable HTTP MCP endpoint to enable that federated route.
