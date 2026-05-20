@@ -304,6 +304,37 @@ Environment variables:
     .action(async () => print(await perps.health()));
 
   // ── realtime TUI / harness / relay ────────────────────────────────────────
+  const signal = new Command("signal")
+    .description("Clawd Core OI Signal and execution gates")
+    .allowUnknownOption(true)
+    .allowExcessArguments(true);
+
+  signal
+    .command("oi <symbol>")
+    .description("Build a structured Open Interest signal for a market")
+    .allowUnknownOption(true)
+    .allowExcessArguments(true)
+    .argument("[args...]", "Arguments passed to clawd-agents-perps signal oi")
+    .action((symbol: string, args: string[]) => runClawdPerpsAgent(["signal", "oi", symbol, ...args], { fallbackPython: false }));
+
+  signal
+    .command("watch <symbol>")
+    .description("Watch the Open Interest signal in paper/observe mode")
+    .allowUnknownOption(true)
+    .allowExcessArguments(true)
+    .argument("[args...]", "Arguments passed to clawd-agents-perps signal watch")
+    .action((symbol: string, args: string[]) => runClawdPerpsAgent(["signal", "watch", symbol, ...args], { fallbackPython: false }));
+
+  signal
+    .command("risk-gate <symbol>")
+    .description("Evaluate a notional/side against the current OI signal gates")
+    .allowUnknownOption(true)
+    .allowExcessArguments(true)
+    .argument("[args...]", "Arguments passed to clawd-agents-perps signal risk-gate")
+    .action((symbol: string, args: string[]) => runClawdPerpsAgent(["signal", "risk-gate", symbol, ...args], { fallbackPython: false }));
+
+  cmd.addCommand(signal);
+
   cmd
     .command("relay [message...]")
     .description("Relay a perps operator message into the Backroom realtime stream")
@@ -381,7 +412,13 @@ Environment variables:
     .allowUnknownOption(true)
     .allowExcessArguments(true)
     .argument("[args...]", "Arguments passed to clawd-agents-perps")
-    .action((args: string[]) => runClawdPerpsAgent(args.length ? args : ["status"], { fallbackPython: true }));
+    .action(async (args: string[]) => {
+      if (args[0] === "market") {
+        print(await perps.getMarketInfo(args[1] || "SOL"));
+        return;
+      }
+      runClawdPerpsAgent(args.length ? args : ["status"], { fallbackPython: true });
+    });
 
   cmd
     .command("onchain-mm")

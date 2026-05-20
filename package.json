@@ -37,8 +37,8 @@
     "build:watch": "tsc -p tsconfig.build.json --watch",
     "dev": "tsc -p tsconfig.build.json --watch",
     "typecheck": "node scripts/repo-doctor.mjs --typecheck",
-    "agent-kit:build": "cd solana-clawd-agent-kit && pnpm build",
-    "agent-kit:validate": "cd solana-clawd-agent-kit && pnpm validate",
+    "agent-kit:build": "cd agent-kit && pnpm build",
+    "agent-kit:validate": "cd agent-kit && pnpm validate",
     "prebuild": "node -e \"console.log('Building solana-clawd v' + require('./package.json').version)\"",
     "prepublishOnly": "node -e \"require('fs').rmSync('dist', { recursive: true, force: true })\" && tsc -p tsconfig.build.json --noCheck && node -e \"require('fs').chmodSync('dist/entrypoints/clawd.js', 0o755)\"",
     "mcp:build": "cd MCP && npm ci && npm run build",
@@ -50,8 +50,8 @@
     "amm:test": "npm --prefix amm run test:math",
     "amm:mcp": "npm --prefix amm run mcp",
     "amm:cli": "npm --prefix amm run cli --",
-    "packages:install": "set -e; for pkg in packages/agentwallet packages/clawd packages/clawd-perps packages/clawd-sdk packages/clawd-wallet packages/cli-standalone Perps/clawd-agents-perps; do npm --prefix \"$pkg\" install --legacy-peer-deps; done",
-    "packages:build": "set -e; for pkg in packages/agentwallet packages/clawd packages/clawd-perps packages/clawd-sdk packages/clawd-wallet packages/cli-standalone Perps/clawd-agents-perps; do npm --prefix \"$pkg\" run build --if-present; done",
+    "packages:install": "set -e; for pkg in packages/agentwallet packages/clawd packages/clawd-perps packages/clawd-sdk packages/clawd-wallet packages/cli-standalone perps/clawd-agents-perps; do npm --prefix \"$pkg\" install --legacy-peer-deps; done",
+    "packages:build": "set -e; for pkg in packages/agentwallet packages/clawd packages/clawd-perps packages/clawd-sdk packages/clawd-wallet packages/cli-standalone perps/clawd-agents-perps; do npm --prefix \"$pkg\" run build --if-present; done",
     "clawd-protocol:build": "cargo build --manifest-path packages/clawd-protocol/Cargo.toml",
     "sdk:install": "npm --prefix sdk install --legacy-peer-deps",
     "sdk:build": "npm --prefix sdk run build",
@@ -130,9 +130,9 @@
     "repo:audit": "bash scripts/repo-hygiene-audit.sh",
     "repo:clean": "bash scripts/clean-generated.sh",
     "lint": "node scripts/repo-doctor.mjs --lint",
-    "lint:fix": "biome check --write automaton-main/automation beepboop/worker/src clawdrouter/src gateway/src leviathan/src MCP/src sdk/src scripts",
-    "format": "biome format --write automaton-main/automation beepboop/worker/src clawdrouter/src gateway/src leviathan/src MCP/src sdk/src scripts",
-    "format:check": "biome format automaton-main/automation beepboop/worker/src clawdrouter/src gateway/src leviathan/src MCP/src sdk/src scripts",
+    "lint:fix": "biome check --write automaton-main/automation clawdrouter/src gateway/src leviathan/src MCP/src sdk/src scripts",
+    "format": "biome format --write automaton-main/automation clawdrouter/src gateway/src leviathan/src MCP/src sdk/src scripts",
+    "format:check": "biome format automaton-main/automation clawdrouter/src gateway/src leviathan/src MCP/src sdk/src scripts",
     "check": "npm run typecheck && npm run lint",
     "doctor": "node scripts/repo-doctor.mjs",
     "ci": "npm run check && npm run build",
@@ -173,7 +173,7 @@
     "programs:map": "node scripts/programs-map.mjs list",
     "programs:show": "node scripts/programs-map.mjs show",
     "perps:audit": "node scripts/perps-secret-audit.mjs",
-    "perps:workspace:build": "npm --prefix Perps/clawd-agents-perps run build"
+    "perps:workspace:build": "npm --prefix perps/clawd-agents-perps run build"
   },
   "dependencies": {
     "@ai-sdk/xai": "^1.2.0",
@@ -295,7 +295,7 @@
     "packages/clawd-sdk",
     "packages/clawd-wallet",
     "packages/cli-standalone",
-    "solana-clawd-agent-kit/packages/*"
+    "agent-kit/packages/*"
   ],
   "sideEffects": false,
   "keywords": [

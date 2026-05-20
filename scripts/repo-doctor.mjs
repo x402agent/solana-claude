@@ -35,6 +35,10 @@ function ensurePath(relPath) {
   }
 }
 
+function hasPath(relPath) {
+  return existsSync(path.join(repoRoot, relPath));
+}
+
 function ensureInstall(relPath, extraArgs = []) {
   const nodeModules = path.join(repoRoot, relPath, "node_modules");
   if (existsSync(nodeModules)) {
@@ -50,8 +54,8 @@ function ensureNodeVersion() {
     throw new Error(`Node 20+ required. Found ${process.version}.`);
   }
 
-  if (nodeMajor > 22) {
-    log(`[repo-doctor] warning: ${process.version} is newer than the recommended Node 20-22 range.`);
+  if (nodeMajor > 24) {
+    log(`[repo-doctor] warning: ${process.version} is newer than the supported Node 20/22/24 range.`);
   }
 }
 
@@ -71,6 +75,11 @@ function runTypechecks(emit = false) {
 }
 
 function runWorkerChecks() {
+  if (!hasPath("beepboop/worker/src/index.ts") || !hasPath("beepboop/convex/http.ts")) {
+    log("\n[repo-doctor] skip BeepBoop worker checks; optional beepboop workspace is not present.");
+    return;
+  }
+
   ensureInstall("beepboop/worker", ["--ignore-scripts"]);
   ensureInstall("beepboop/convex");
 
@@ -102,8 +111,6 @@ function main() {
     "SECURITY.md",
     ".env.example",
     "docs/REPO_MAP.md",
-    "beepboop/worker/src/index.ts",
-    "beepboop/convex/http.ts",
   ].forEach(ensurePath);
 
   if (mode === "lint") {

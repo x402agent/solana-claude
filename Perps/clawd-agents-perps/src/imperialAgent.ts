@@ -306,6 +306,17 @@ export interface ImperialMarketSnapshot {
   depth: PhoenixDepthSnapshot | null;
 }
 
+function asArray<T>(value: unknown, keys: string[] = []): T[] {
+  if (Array.isArray(value)) return value as T[];
+  if (value && typeof value === "object") {
+    for (const key of keys) {
+      const nested = (value as Record<string, unknown>)[key];
+      if (Array.isArray(nested)) return nested as T[];
+    }
+  }
+  return [];
+}
+
 export interface AgentSignal {
   symbol: string;
   decision: AgentDecision;
@@ -768,9 +779,13 @@ export class ImperialClient {
     ]);
 
     const allFunding =
-      fundingRates.status === "fulfilled" ? fundingRates.value : [];
+      fundingRates.status === "fulfilled"
+        ? asArray<FundingRateEntry>(fundingRates.value, ["fundingRates", "data", "items"])
+        : [];
     const allMarks =
-      marks.status === "fulfilled" ? marks.value : [];
+      marks.status === "fulfilled"
+        ? asArray<MarkPriceEntry>(marks.value, ["markPrices", "marks", "data", "items"])
+        : [];
     const rawDepth = depth.status === "fulfilled" ? depth.value : null;
 
     const markEntry = allMarks.find(
