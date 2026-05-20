@@ -9,6 +9,7 @@ import { createInitialState, addLog } from '../state.js';
 import { fetchMarketData } from '../market.js';
 import { initA2AConnections } from '../a2a.js';
 import { renderFrame, enableRawMode, disableRawMode } from '../renderer.js';
+import { loadPackageInfo, readVaultInfo } from '../sdk.js';
 
 export async function runBackroom(): Promise<void> {
   const state = createInitialState();
@@ -23,6 +24,32 @@ export async function runBackroom(): Promise<void> {
   renderFrame(state);
 
   initA2AConnections(state).catch(() => {/* network not required */});
+
+  Promise.all([loadPackageInfo(), readVaultInfo()])
+    .then(([packages, vault]) => {
+      state.sdkPackages = packages.map(pkg => ({
+        name: pkg.name,
+        version: pkg.version,
+        status: pkg.status,
+        hasDist: pkg.hasDist,
+      }));
+      state.sdkPackageCount = packages.length;
+      state.walletVault = {
+        available: vault.available,
+        path: vault.path,
+        walletCount: vault.wallets.length,
+        activeAddress: vault.wallets[0]?.address ?? null,
+        error: vault.error ?? null,
+      };
+      if (state.walletVault.activeAddress) {
+        state.walletPubkey = state.walletVault.activeAddress;
+      }
+      addLog(state, 'SDK', `Loaded ${packages.length} packages; vault wallets: ${vault.wallets.length}`, 'info');
+      renderFrame(state);
+    })
+    .catch(err => {
+      addLog(state, 'SDK', `SDK probe failed: ${String(err).slice(0, 70)}`, 'warn');
+    });
 
   fetchMarketData(state).catch(err => {
     state.error = String(err);

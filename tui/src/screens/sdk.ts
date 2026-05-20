@@ -17,6 +17,7 @@ import {
   DBC_PROGRAM,
   USDC_MINT,
   TOKEN_2022_PROGRAM,
+  shortAddress,
   type PackageInfo,
   type VaultInfo,
   type EnvProbe,
@@ -53,7 +54,7 @@ function row(label: string, value: string, labelW = 24): string {
 }
 
 function shortAddr(addr: string): string {
-  return addr.slice(0, 6) + '…' + addr.slice(-6);
+  return shortAddress(addr);
 }
 
 // ─── Section renderers ────────────────────────────────────────────────────────

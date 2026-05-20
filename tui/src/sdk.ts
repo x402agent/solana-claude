@@ -9,7 +9,7 @@
 import { readFile, readdir } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { homedir } from 'node:os';
-import { join, resolve } from 'node:path';
+import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 // ─── Known SDK constants (inline to avoid circular deps) ─────────────────────
@@ -23,38 +23,47 @@ export const TOKEN_2022_PROGRAM = 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb';
 // ─── Package registry ─────────────────────────────────────────────────────────
 
 export interface PackageInfo {
+  alias: string;
   name: string;
   version: string;
   description: string;
   status: 'ok' | 'missing' | 'no-dist';
   hasDist: boolean;
   binaries: string[];
+  path: string;
 }
 
-const PACKAGES_ROOT = resolve(
-  fileURLToPath(import.meta.url),
-  '../../../../packages',
-);
+const TUI_SRC_DIR = dirname(fileURLToPath(import.meta.url));
+const REPO_ROOT = resolve(TUI_SRC_DIR, '../..');
 
 const PACKAGE_DIRS: Record<string, string> = {
-  clawd:           'clawd',
-  'clawd-sdk':     'clawd-sdk',
-  'clawd-perps':   'clawd-perps',
-  'clawd-wallet':  'clawd-wallet',
-  'clawd-protocol':'clawd-protocol',
-  agentwallet:     'agentwallet',
-  'cli-standalone':'cli-standalone',
+  clawd: 'packages/clawd',
+  'clawd-sdk': 'packages/clawd-sdk',
+  'clawd-perps': 'packages/clawd-perps',
+  'clawd-wallet': 'packages/clawd-wallet',
+  agentwallet: 'packages/agentwallet',
+  'cli-standalone': 'packages/cli-standalone',
+  'x402-client': 'x402/sdk',
 };
 
 export async function loadPackageInfo(): Promise<PackageInfo[]> {
   const results: PackageInfo[] = [];
 
   for (const [alias, dir] of Object.entries(PACKAGE_DIRS)) {
-    const pkgDir = join(PACKAGES_ROOT, dir);
+    const pkgDir = join(REPO_ROOT, dir);
     const pkgJson = join(pkgDir, 'package.json');
 
     if (!existsSync(pkgJson)) {
-      results.push({ name: alias, version: '—', description: 'not found', status: 'missing', hasDist: false, binaries: [] });
+      results.push({
+        alias,
+        name: alias,
+        version: '-',
+        description: 'not found',
+        status: 'missing',
+        hasDist: false,
+        binaries: [],
+        path: pkgDir,
+      });
       continue;
     }
 
@@ -68,15 +77,26 @@ export async function loadPackageInfo(): Promise<PackageInfo[]> {
       const hasDist = existsSync(join(pkgDir, 'dist'));
       const binaries = raw.bin ? Object.keys(raw.bin) : [];
       results.push({
+        alias,
         name: raw.name ?? alias,
         version: raw.version ?? '?',
         description: (raw.description ?? '').slice(0, 72),
         status: hasDist ? 'ok' : 'no-dist',
         hasDist,
         binaries,
+        path: pkgDir,
       });
     } catch {
-      results.push({ name: alias, version: '?', description: 'read error', status: 'missing', hasDist: false, binaries: [] });
+      results.push({
+        alias,
+        name: alias,
+        version: '?',
+        description: 'read error',
+        status: 'missing',
+        hasDist: false,
+        binaries: [],
+        path: pkgDir,
+      });
     }
   }
 
@@ -182,4 +202,9 @@ export function probeEnv(): EnvProbe[] {
     }
     return { key, label, set, preview };
   });
+}
+
+export function shortAddress(address: string, edge = 6): string {
+  if (address.length <= edge * 2 + 1) return address;
+  return `${address.slice(0, edge)}...${address.slice(-edge)}`;
 }
