@@ -93,6 +93,16 @@ Perps/
 └── twamm-master/                          — TWAMM long-horizon execution primitives
 ```
 
+TWAMM is exposed through the Clawd perps agent CLI for operational automation:
+
+```bash
+node Perps/clawd-agents-perps/dist/cli.js twamm status
+node Perps/clawd-agents-perps/dist/cli.js twamm build-plan
+node Perps/clawd-agents-perps/dist/cli.js twamm crank-plan --token-a <mint> --token-b <mint> --once
+```
+
+The live crank path is blocked unless `CLAWD_TWAMM_LIVE=true`, `OPERATOR_CONFIRMED=true`, and `--yes` are all present.
+
 ---
 
 ## Imperial Trading API

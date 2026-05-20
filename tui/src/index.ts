@@ -34,7 +34,8 @@ const MENU_ITEMS: MenuItem[] = [
   { key: '3', label: '🪪  Agent Registry',    description: 'Browse, mint, and register gasless Solana agents' },
   { key: '4', label: '💰  Wallet',            description: 'Fund + feed the leviathan' },
   { key: '5', label: '🚀  Spawn automaton',   description: 'Launch the sovereign agent runtime' },
-  { key: '6', label: '❌  Exit',              description: 'The backroom will remember you' },
+  { key: '6', label: '🧰  Solana Agent Kit',  description: 'Token · Perps · DeFi · NFT · x402 · Skills — full kit' },
+  { key: '7', label: '❌  Exit',              description: 'The backroom will remember you' },
 ];
 
 // ─── Render helpers ───────────────────────────────────────────────────────────

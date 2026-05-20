@@ -113,14 +113,17 @@ export function getTwammAutomationStatus(): TwammAutomationStatus {
 
 export function buildTwammBuildPlan(options: BuildOptions = {}): TwammAutomationPlan {
   const status = getTwammAutomationStatus();
-  const args = options.skipAppInstall ? ["build"] : ["install", "&&", "anchor", "build"];
+  const warnings = [...status.warnings];
+  if (!options.skipAppInstall && !existsSync(resolve(status.root, "node_modules"))) {
+    warnings.push("Run npm install in the TWAMM root before anchor build, or use the build command to do it automatically.");
+  }
   return {
     mode: "build",
-    command: options.skipAppInstall ? "anchor" : "npm",
+    command: "anchor",
     cwd: status.root,
-    args,
+    args: ["build"],
     env: { RUST_BACKTRACE: process.env.RUST_BACKTRACE || "1" },
-    warnings: status.warnings,
+    warnings,
   };
 }
 
