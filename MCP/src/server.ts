@@ -75,6 +75,7 @@ import { X402_TOOLS, withMeter, enhanceX402WithFacilitator } from "./tools/x402-
 import { LEVIATHAN_TOOLS } from "./tools/leviathan-tools.js";
 import { MARKET_TOOLS } from "./tools/market-tools.js";
 import { DEEP_CLAWD_TOOLS } from "./tools/deep-clawd-tools.js";
+import { createIntegrationTools } from "./tools/integration-tools.js";
 import { getPluginRegistry, type PluginRegistry } from "./plugins/plugin-registry.js";
 import { getFederationBridge, type FederationBridge } from "./federation/federation-bridge.js";
 import { getAgentTaskRouter, type AgentTaskRouter } from "./federation/agent-task-router.js";
@@ -214,6 +215,9 @@ async function buildOrchestrator(
 
   // ── Deep Clawd (DeepSeek trading agent) ──────────────────────────────────
   orch.registerAll(DEEP_CLAWD_TOOLS);
+
+  // ── Local package and service integrations ───────────────────────────────
+  orch.registerAll(createIntegrationTools(REPO_ROOT));
 
   // ── Memory + autoDream ────────────────────────────────────────────────────
 

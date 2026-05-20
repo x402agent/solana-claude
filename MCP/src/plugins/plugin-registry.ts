@@ -98,6 +98,38 @@ export const BUILTIN_PLUGINS: PluginManifest[] = [
     version: "1.0.0",
   },
   {
+    id: "agent-kit",
+    name: "Solana Clawd Agent Kit",
+    modulePath: "agent-kit/packages/agent-kit",
+    toolSources: ["dist/index.js", "src/index.ts"],
+    category: "agents",
+    version: "0.1.0",
+  },
+  {
+    id: "agent-registry",
+    name: "Solana Clawd Agent Registry Helpers",
+    modulePath: "agent-kit/packages/agent-registry",
+    toolSources: ["dist/index.js", "src/index.ts"],
+    category: "agents",
+    version: "0.1.0",
+  },
+  {
+    id: "gateway",
+    name: "CLAWD Gateway HTTP API",
+    modulePath: "gateway",
+    toolSources: ["src/index.ts", "src/agentRegistry.ts", "src/skillHub.ts", "src/solana.ts", "src/birdeye.ts"],
+    category: "orchestrator",
+    version: "1.0.0",
+  },
+  {
+    id: "sdk",
+    name: "Solana Clawd SDK",
+    modulePath: "sdk",
+    toolSources: ["src/index.ts", "package.json"],
+    category: "orchestrator",
+    version: "1.0.0",
+  },
+  {
     id: "programs",
     name: "On-Chain Program Inspection",
     modulePath: "programs",
@@ -113,6 +145,7 @@ export interface LoadedPlugin {
   manifest: PluginManifest;
   tools: Array<[ToolDef, ToolHandler]>;
   enabled: boolean;
+  sourceFiles: string[];
   loadError?: string;
 }
 
@@ -150,6 +183,7 @@ export class PluginRegistry {
   private async loadPlugin(manifest: PluginManifest): Promise<void> {
     const envOk = this._checkEnv(manifest);
     const tools: Array<[ToolDef, ToolHandler]> = [];
+    const sourceFiles = await this._existingToolSources(manifest);
 
     if (envOk) {
       try {
@@ -162,6 +196,7 @@ export class PluginRegistry {
           manifest,
           tools: [],
           enabled: false,
+          sourceFiles,
           loadError: `Load failed: ${err instanceof Error ? err.message : String(err)}`,
         });
         return;
@@ -171,7 +206,8 @@ export class PluginRegistry {
     this.plugins.set(manifest.id, {
       manifest,
       tools,
-      enabled: envOk && tools.length > 0,
+      enabled: envOk && (tools.length > 0 || sourceFiles.length > 0),
+      sourceFiles,
     });
   }
 
@@ -195,18 +231,21 @@ export class PluginRegistry {
       }
     }
 
-    // Fallback: scan for tool definition files  
-    const tools: Array<[ToolDef, ToolHandler]> = [];
+    return null;
+  }
+
+  private async _existingToolSources(manifest: PluginManifest): Promise<string[]> {
+    const found: string[] = [];
     for (const src of manifest.toolSources) {
       const abs = path.resolve(REPO_ROOT, manifest.modulePath, src);
       try {
         await fs.access(abs);
+        found.push(path.relative(REPO_ROOT, abs));
       } catch {
-        continue; // file may not exist yet
+        continue;
       }
     }
-
-    return tools.length > 0 ? tools : null;
+    return found;
   }
 
   /**
@@ -247,6 +286,7 @@ export class PluginRegistry {
     name: string;
     enabled: boolean;
     toolCount: number;
+    sourceFiles: string[];
     error?: string;
   }> {
     return [...this.plugins.values()].map((p) => ({
@@ -254,6 +294,7 @@ export class PluginRegistry {
       name: p.manifest.name,
       enabled: p.enabled,
       toolCount: p.tools.length,
+      sourceFiles: p.sourceFiles,
       error: p.loadError,
     }));
   }
