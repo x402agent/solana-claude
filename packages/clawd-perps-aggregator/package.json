@@ -1,0 +1,84 @@
+{
+  "name": "@openclawdsolana/clawd-perps-aggregator",
+  "version": "0.1.0",
+  "description": "Smart order routing, SDK, and MCP server for Solana perps. Aggregates Phoenix, Flash Trade, Jupiter, and GMTrade behind a single execution surface for humans, dashboards, and AI agents.",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./sdk": {
+      "import": "./dist/sdk/client.js",
+      "types": "./dist/sdk/client.d.ts"
+    },
+    "./aggregator": {
+      "import": "./dist/aggregator/router.js",
+      "types": "./dist/aggregator/router.d.ts"
+    },
+    "./realtime": {
+      "import": "./dist/realtime/marketStream.js",
+      "types": "./dist/realtime/marketStream.d.ts"
+    },
+    "./mcp": {
+      "import": "./dist/mcp/server.js",
+      "types": "./dist/mcp/server.d.ts"
+    }
+  },
+  "bin": {
+    "clawd-perps-aggregator": "dist/cli.js",
+    "clawd-perps-mcp": "dist/mcp/bin.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "dev": "tsx src/cli.ts",
+    "mcp": "node dist/mcp/bin.js",
+    "start": "node dist/cli.js"
+  },
+  "keywords": [
+    "solana",
+    "perps",
+    "perpetuals",
+    "aggregator",
+    "smart-order-router",
+    "sor",
+    "phoenix",
+    "flash-trade",
+    "jupiter",
+    "gmtrade",
+    "mcp",
+    "ai-agent",
+    "trading",
+    "clawd"
+  ],
+  "author": "Clawd",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/x402agent/solana-clawd",
+    "directory": "packages/clawd-perps-aggregator"
+  },
+  "homepage": "https://solanaclawd.com",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0"
+  },
+  "optionalDependencies": {
+    "ws": "^8.18.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.8.0",
+    "tsx": "^4.0.0",
+    "typescript": "^5.9.3"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
