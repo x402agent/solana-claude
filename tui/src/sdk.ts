@@ -46,6 +46,18 @@ const PACKAGE_DIRS: Record<string, string> = {
   'x402-client': 'x402/sdk',
 };
 
+const SDK_NPM_PACKAGES = [
+  '@openclawdsolana/clawd-tui',
+  '@openclawdsolana/clawd',
+  '@openclawdsolana/clawd-sdk',
+  '@openclawdsolana/clawd-standalone',
+  'x402.wtf',
+  '@openclawdsolana/clawd-wallet',
+  'clawd-automaton',
+  'x402agent-nanoclawd-cli',
+  '@openclawdsolana/clawd-perps',
+];
+
 export async function loadPackageInfo(): Promise<PackageInfo[]> {
   const results: PackageInfo[] = [];
 
@@ -90,6 +102,62 @@ export async function loadPackageInfo(): Promise<PackageInfo[]> {
       results.push({
         alias,
         name: alias,
+        version: '?',
+        description: 'read error',
+        status: 'missing',
+        hasDist: false,
+        binaries: [],
+        path: pkgDir,
+      });
+    }
+  }
+
+  for (const name of SDK_NPM_PACKAGES) {
+    const pkgDir = join(REPO_ROOT, 'sdk', 'node_modules', name);
+    const pkgJson = join(pkgDir, 'package.json');
+
+    if (!existsSync(pkgJson)) {
+      results.push({
+        alias: `npm:${name}`,
+        name,
+        version: '-',
+        description: 'not installed in sdk/node_modules',
+        status: 'missing',
+        hasDist: false,
+        binaries: [],
+        path: pkgDir,
+      });
+      continue;
+    }
+
+    try {
+      const raw = JSON.parse(await readFile(pkgJson, 'utf8')) as {
+        version?: string;
+        description?: string;
+        bin?: string | Record<string, string>;
+      };
+      const hasDist = existsSync(join(pkgDir, 'dist'));
+      const binaries = typeof raw.bin === 'string'
+        ? [name.split('/').pop() ?? name]
+        : Object.keys(raw.bin ?? {});
+      const binTargets = typeof raw.bin === 'string'
+        ? [raw.bin]
+        : Object.values(raw.bin ?? {});
+      const hasBinTargets = binTargets.length > 0 && binTargets.every((target) => existsSync(join(pkgDir, target)));
+      results.push({
+        alias: `npm:${name}`,
+        name,
+        version: raw.version ?? '?',
+        description: (raw.description ?? 'sdk npm dependency').slice(0, 72),
+        status: hasDist || binaries.length === 0 || hasBinTargets ? 'ok' : 'no-dist',
+        hasDist,
+        binaries,
+        path: pkgDir,
+      });
+    } catch {
+      results.push({
+        alias: `npm:${name}`,
+        name,
         version: '?',
         description: 'read error',
         status: 'missing',
@@ -186,6 +254,7 @@ export function probeEnv(): EnvProbe[] {
     ['OPERATOR_CONFIRMED',    'Operator confirmed'],
     ['BAGS_API_KEY',          'Bags.fm API key'],
     ['TELEGRAM_BOT_TOKEN',    'Telegram bot token'],
+    ['X402_DEV_KEY',          'x402 developer key'],
     ['X402_API_KEY',          'x402 API key'],
   ];
 

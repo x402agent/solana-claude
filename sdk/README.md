@@ -62,6 +62,18 @@ npm install -g @openclawdsolana/clawd
 clawd --help
 ```
 
+**Full one-shot npm surface installed by `sdk/install.sh` and `sdk/enter.sh`:**
+
+```bash
+npm install -g @openclawdsolana/clawd @openclawdsolana/clawd-tui @openclawdsolana/clawd-sdk @openclawdsolana/clawd-standalone @openclawdsolana/clawd-wallet @openclawdsolana/clawd-perps clawd-automaton x402.wtf x402agent-nanoclawd-cli
+```
+
+Verify the SDK harness after a local install:
+
+```bash
+npm run harness:packages
+```
+
 **Or install the sovereign runtime:**
 
 ```bash

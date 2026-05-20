@@ -757,6 +757,9 @@ npm i -g @openclawdsolana/clawd
 npm i -g @openclawdsolana/clawd-standalone
 npm i -g @openclawdsolana/clawd-perps
 npm i -g clawd-automaton
+npm i -g @openclawdsolana/clawd-tui
+npm i -g x402.wtf
+npm i -g x402agent-nanoclawd-cli
 npm i -g agentwallet-vault
 npm i @openclawdsolana/clawd-wallet
 npm i @openclawdsolana/clawd-sdk
@@ -766,14 +769,17 @@ npm i @openclawdsolana/clawd-sdk
 | --- | ---: | --- | --- |
 | `solana-clawd` | `1.7.0` | `npm i -g solana-clawd` | Root CLI package published from this repo. |
 | `@openclawdsolana/clawd` | `1.3.0` | `npm i -g @openclawdsolana/clawd` | Main operator CLI. |
+| `@openclawdsolana/clawd-tui` | `1.2.1` | `npm i -g @openclawdsolana/clawd-tui` | Solana-aware TUI and Metaplex Agent Registry commands. |
 | `@openclawdsolana/clawd-standalone` | `1.3.0` | `npm i -g @openclawdsolana/clawd-standalone` | Lightweight standalone CLI. |
-| `@openclawdsolana/clawd-perps` | `1.1.0` | `npm i -g @openclawdsolana/clawd-perps` | Phoenix perps CLI/library with Python agent + Vulcan strategy delegation. |
+| `@openclawdsolana/clawd-perps` | `1.0.0` | `npm i -g @openclawdsolana/clawd-perps` | Phoenix perps CLI/library with Python agent + Vulcan strategy delegation. |
 | `@openclawdsolana/clawd-wallet` | `1.0.0` | `npm i @openclawdsolana/clawd-wallet` | Wallet SDK and agentic safeguards. |
 | `@openclawdsolana/clawd-sdk` | `0.1.0` | `npm i @openclawdsolana/clawd-sdk` | On-chain SDK, curves, vaults, agent bindings. |
 | `@solana-clawd/agent-kit` | `0.1.0` | local workspace | Loads agent JSON, templates, catalog, manifest, and runtime profiles. |
 | `@solana-clawd/agent-registry` | `0.1.0` | local workspace | Builds publishable registry documents for Solana Clawd agents. |
 | `agentwallet-vault` | `0.1.0` | `npm i -g agentwallet-vault` | Encrypted Solana/EVM keypair vault. |
-| `clawd-automaton` | `0.2.0` | `npm i -g clawd-automaton` | Automation runtime and dashboard. |
+| `clawd-automaton` | `0.2.1` | `npm i -g clawd-automaton` | Automation runtime and dashboard. |
+| `x402.wtf` | `0.1.1` | `npm i -g x402.wtf` | x402 gateway terminal commands. |
+| `x402agent-nanoclawd-cli` | `1.3.0` | `npm i -g x402agent-nanoclawd-cli` | Nanoclawd CLI package used by the harness. |
 
 ## Agents API
 

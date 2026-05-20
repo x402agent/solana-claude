@@ -759,6 +759,8 @@ elif command -v npm >/dev/null 2>&1; then
   _npm_global_install "@openclawdsolana/clawd-wallet"    "@openclawdsolana/clawd-wallet (Privy wallet + Jupiter swap)"
   _npm_global_install "@openclawdsolana/clawd-standalone" "@openclawdsolana/clawd-standalone (standalone lobster CLI)"
   _npm_global_install "clawd-automaton"                  "clawd-automaton (automation runtime + cloud dashboard)"
+  _npm_global_install "x402.wtf"                         "x402.wtf (x402 gateway terminal)"
+  _npm_global_install "x402agent-nanoclawd-cli"          "x402agent-nanoclawd-cli (nanoclawd CLI)"
   _npm_global_install "agentwallet-vault"                "agentwallet-vault (encrypted keypair vault)"
 
   CLAWD_BIN="$(command -v clawd 2>/dev/null || echo '')"

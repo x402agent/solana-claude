@@ -59,14 +59,34 @@ if ! command -v npm &>/dev/null; then
 fi
 ok "npm $(npm --version)"
 
-# ── Install @openclawdsolana/clawd ────────────────────────────────────────────
-step "Installing @openclawdsolana/clawd"
-info "Running: npm install -g @openclawdsolana/clawd"
-npm install -g @openclawdsolana/clawd
-ok "@openclawdsolana/clawd installed"
+# ── Install full Clawd npm surface ────────────────────────────────────────────
+CLAWD_NPM_PACKAGES=(
+  "@openclawdsolana/clawd"
+  "@openclawdsolana/clawd-tui"
+  "@openclawdsolana/clawd-sdk"
+  "@openclawdsolana/clawd-standalone"
+  "@openclawdsolana/clawd-wallet"
+  "@openclawdsolana/clawd-perps"
+  "clawd-automaton"
+  "x402.wtf"
+  "x402agent-nanoclawd-cli"
+)
+
+step "Installing Clawd npm packages"
+info "Running: npm install -g ${CLAWD_NPM_PACKAGES[*]}"
+npm install -g "${CLAWD_NPM_PACKAGES[@]}"
+ok "Clawd npm packages installed"
 
 # ── Verify binary is on PATH ──────────────────────────────────────────────────
 step "Verifying installation"
+
+for bin in clawd clawd-tui clawd-standalone clawd-perps clawd-automaton x402.wtf nanoclawd; do
+  if command -v "$bin" &>/dev/null; then
+    ok "$bin ready at $(command -v "$bin")"
+  else
+    warn "$bin not found in PATH after npm install"
+  fi
+done
 
 if command -v clawd &>/dev/null; then
   CLAWD_VER=$(clawd --version 2>/dev/null || echo "unknown")

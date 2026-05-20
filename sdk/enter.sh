@@ -16,7 +16,7 @@
 #   1. Preflight (node ≥ 20, npm, curl)
 #   2. Register this developer in Convex (track install)
 #   3. Store developer profile, wallet, platform data
-#   4. Install @openclawdsolana/clawd globally
+#   4. Install the full Clawd npm package surface globally
 #   5. Launch background heartbeat (dev shows up live at x402.wtf/gateway)
 #
 set -euo pipefail
@@ -340,21 +340,41 @@ else
 fi
 flavortext
 
-# ─── Install @openclawdsolana/clawd ────────────────────────────────
+# ─── Install Clawd npm package surface ─────────────────────────────
 mini_hr
-log "installing ${CYAN}@openclawdsolana/clawd${CR} ${DIM}(npm global)${CR}"
+log "installing ${CYAN}Clawd npm packages${CR} ${DIM}(npm global)${CR}"
 
-if ! run_spin "npm install -g @openclawdsolana/clawd" \
-    npm install -g @openclawdsolana/clawd; then
+CLAWD_NPM_PACKAGES=(
+  "@openclawdsolana/clawd"
+  "@openclawdsolana/clawd-tui"
+  "@openclawdsolana/clawd-sdk"
+  "@openclawdsolana/clawd-standalone"
+  "@openclawdsolana/clawd-wallet"
+  "@openclawdsolana/clawd-perps"
+  "clawd-automaton"
+  "x402.wtf"
+  "x402agent-nanoclawd-cli"
+)
+
+if ! run_spin "npm install -g ${CLAWD_NPM_PACKAGES[*]}" \
+    npm install -g "${CLAWD_NPM_PACKAGES[@]}"; then
   warn "retrying with sudo..."
-  run_spin "sudo npm install -g @openclawdsolana/clawd" \
-    sudo npm install -g @openclawdsolana/clawd \
+  run_spin "sudo npm install -g ${CLAWD_NPM_PACKAGES[*]}" \
+    sudo npm install -g "${CLAWD_NPM_PACKAGES[@]}" \
     || die "npm install failed — see /tmp/clawd-enter.log"
 fi
-ok "@openclawdsolana/clawd installed"
+ok "Clawd npm packages installed"
 flavortext
 
 # ─── Verify binary ──────────────────────────────────────────────────
+for bin in clawd clawd-tui clawd-standalone clawd-perps clawd-automaton x402.wtf nanoclawd; do
+  if command -v "$bin" &>/dev/null; then
+    ok "${bin} ${DIM}ready at $(command -v "$bin")${CR}"
+  else
+    warn "${bin} not found in PATH after npm install"
+  fi
+done
+
 CLAWD_VER=""
 if command -v clawd &>/dev/null; then
   CLAWD_VER="$(clawd --version 2>/dev/null || echo ready)"
