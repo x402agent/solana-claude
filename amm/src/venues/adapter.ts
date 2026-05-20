@@ -19,6 +19,7 @@ export interface VenueAdapter {
   getOrderBook(symbol: string): Promise<OrderBook | null>;
   quote(request: QuoteRequest): Promise<VenueQuote>;
   buildOrder(request: OrderBuildRequest): Promise<BuiltOrderTx>;
+  submitOrder(request: OrderBuildRequest): Promise<{ signature: string | null; orderPda: string | null; success: boolean; error?: string | null }>;
   getPositions(wallet: string): Promise<Position[]>;
 }
 

@@ -219,6 +219,17 @@ export class BaseImperialVenueAdapter implements VenueAdapter {
     };
   }
 
+  async submitOrder(request: OrderBuildRequest): Promise<{ signature: string | null; orderPda: string | null; success: boolean; error?: string | null }> {
+    const built = await this.buildOrder(request);
+    const response = await this.transport.placeOrder(built.payload);
+    return {
+      signature: response.signature ?? null,
+      orderPda: response.orderPda ?? null,
+      success: response.success !== false,
+      error: response.error ?? null,
+    };
+  }
+
   async getPositions(wallet: string): Promise<Position[]> {
     const positions = await this.transport.getPositions(wallet).catch(() => []);
     return positions
