@@ -288,6 +288,47 @@ PERPS_SIM_ONLY=true         # paper mode by default
 
 ---
 
+---
+
+## 🧠 UltraThink — Deep-Reasoning Solana Formula
+
+Press **`7`** from the main menu to open the UltraThink reference panel.
+
+**7 sections, keyboard-navigable:**
+
+| # | Section | Content |
+| --- | ------- | ------- |
+| 1 | 🧠 Formula | 8-phase protocol: Context → Intent → Interview → Ultrathink → Plan → Execute → Iterate |
+| 2 | ⚡ Depth Ladder | think / think hard / ultrathink / megathink — token budgets + activation patterns |
+| 3 | 🔗 Blockchain Focus | 5 ultrathink focus areas: TX atomicity, MEV, state races, security, failure modes |
+| 4 | 🚫 Antipatterns | Top 5 mistakes + fix prompts (retry, simulation, timeout, fees, Jito) |
+| 5 | ✅ Never Ship Without | Production checklist + complete one-shot prompt |
+| 6 | 📋 Templates | 4 production prompt templates (sniper, DeFi, Anchor, multi-agent) |
+| 7 | 📦 Install / Use | Skill install commands + catalog entry |
+
+**Navigation:** `1`–`7` jump to section · `↑↓` step through · `←→` pages within section · `b` back
+
+**Skill source:** [agents/skills/ultrathink-blockchain/SKILL.md](../agents/skills/ultrathink-blockchain/SKILL.md)
+
+**Install the skill directly:**
+
+```bash
+bash UltraThink-SKill/install.sh
+# or
+clawdhub install ultrathink-blockchain
+```
+
+**One-shot formula (paste into any Claude session):**
+
+```
+Context: Solana mainnet-beta. Stack: TypeScript, Helius, Birdeye, Jito.
+I want [GOAL].
+Interview me → ultrathink about TX/MEV/races/security → plan → execute.
+Constraints: retry all RPC · simulate all txs · dynamic fees · Jito for swaps · full files.
+```
+
+---
+
 ## Package Structure
 
 ```
