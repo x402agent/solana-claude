@@ -1,0 +1,59 @@
+{
+  "name": "@openclawdsolana/amm",
+  "version": "0.1.0",
+  "description": "OpenClawd AMM and perps venue aggregator with routing, quotes, SDK, CLI, and standalone MCP server.",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./mcp": {
+      "import": "./dist/mcp/server.js",
+      "types": "./dist/mcp/server.d.ts"
+    }
+  },
+  "bin": {
+    "clawd-amm": "dist/cli.js",
+    "clawd-amm-mcp": "dist/mcp/bin.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    ".env.example"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "dev": "tsx src/cli.ts",
+    "cli": "node dist/cli.js",
+    "mcp": "node dist/mcp/bin.js",
+    "test:math": "tsx src/tests/math.test.ts"
+  },
+  "keywords": [
+    "openclawd",
+    "solana",
+    "amm",
+    "perps",
+    "aggregator",
+    "mcp",
+    "imperial",
+    "phoenix"
+  ],
+  "author": "8bit",
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.1",
+    "zod": "^3.24.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.14.0",
+    "tsx": "^4.22.0",
+    "typescript": "^5.8.3"
+  },
+  "engines": {
+    "node": ">=20 <23"
+  }
+}
