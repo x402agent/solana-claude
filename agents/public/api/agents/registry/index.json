@@ -1,9 +1,9 @@
 {
   "schemaVersion": "openclawd.metaplex.registry.index.v1",
-  "generatedAt": "2026-05-18T14:51:51.276Z",
+  "generatedAt": "2026-05-20T17:15:22.480Z",
   "registry": "metaplex-agent-registry",
   "host": "https://x402.wtf",
-  "count": 134,
+  "count": 135,
   "agents": [
     {
       "id": "airdrop-hunter",
@@ -184,6 +184,13 @@
       "id": "governance-proposal-analyst",
       "name": "DAO Governance Proposal Analyst",
       "registrationUri": "https://x402.wtf/api/agents/registry/governance-proposal-analyst.json",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration"
+    },
+    {
+      "id": "imperial-perps-trader",
+      "name": "Imperial Perps Trader",
+      "registrationUri": "https://x402.wtf/api/agents/registry/imperial-perps-trader.json",
       "agentRegistry": "solana:mainnet:metaplex-agent-registry",
       "status": "pending-onchain-registration"
     },

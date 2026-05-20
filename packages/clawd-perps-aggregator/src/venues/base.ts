@@ -144,14 +144,17 @@ export abstract class BaseVenueAdapter implements VenueAdapter {
     const meta = snap.meta;
     const liquidityUsd = meta?.liquidityUsd ?? this.defaults.fallbackLiquidityUsd;
 
-    // Slippage: prefer book VWAP when we have a CLOB.
+    // Slippage is based on execution direction. Closing a long sells into bids;
+    // closing a short buys from asks. Keep the quote side as the user's
+    // position side, but flip the book/AMM side for close actions.
+    const executionSide = executionSideFor(ctx.side, ctx.action);
     const slip = snap.book
-      ? bookVwapSlippage(snap.book, ctx.side, ctx.sizeUsd)
+      ? bookVwapSlippage(snap.book, executionSide, ctx.sizeUsd)
       : ammImpactSlippage({
           markPrice: snap.markPrice,
           liquidityUsd,
           sizeUsd: ctx.sizeUsd,
-          side: ctx.side,
+          side: executionSide,
           impactCoeff: this.defaults.impactCoeff,
         });
 
@@ -168,7 +171,9 @@ export abstract class BaseVenueAdapter implements VenueAdapter {
     let fundingCostUsd = 0;
     if (f) {
       const hours = ctx.holdSeconds / 3600;
-      if (ctx.side === "long" && f.longPerHourPct != null) {
+      if (ctx.action === "close") {
+        fundingCostUsd = 0;
+      } else if (ctx.side === "long" && f.longPerHourPct != null) {
         fundingCostUsd = (f.longPerHourPct / 100) * ctx.sizeUsd * hours;
       } else if (ctx.side === "short" && f.shortPerHourPct != null) {
         // Short funding is reported as -long by Imperial convention; negative = rebate.
@@ -241,6 +246,11 @@ export abstract class BaseVenueAdapter implements VenueAdapter {
       parentOrderPda: null,
     };
   }
+}
+
+function executionSideFor(side: Side, action: "open" | "close"): Side {
+  if (action === "open") return side;
+  return side === "long" ? "short" : "long";
 }
 
 /** Convenience to pick the right adapter from an underwriter code. */

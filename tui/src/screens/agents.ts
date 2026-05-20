@@ -30,7 +30,7 @@ interface AgentCatalog {
   agents?: CatalogAgent[];
 }
 
-type CommandMode = 'preset' | 'custom' | 'registry';
+type CommandMode = 'official' | 'preset' | 'custom' | 'registry';
 
 const HUB_URL = 'https://x402.wtf/agents';
 const API_BASE = 'https://x402.wtf';
@@ -115,6 +115,16 @@ function loadCatalog(): { catalog: AgentCatalog; source: string } {
 }
 
 function commandLines(mode: CommandMode, agent: CatalogAgent, selected: number): string[] {
+  if (mode === 'official') {
+    return [
+      'clawd-agent mint-free --network devnet --owner <YOUR_SOLANA_PUBKEY> \\',
+      `  --name "${agent.title.replace(/"/g, '\\"').slice(0, 32)}" \\`,
+      `  --uri ${API_BASE}/api/agents/catalog/${agent.identifier}.json \\`,
+      `  --description "${agent.description.replace(/"/g, '\\"').slice(0, 80)}" \\`,
+      `  --service MCP=${API_BASE}/api/agents/catalog/${agent.identifier}.json`,
+    ];
+  }
+
   if (mode === 'custom') {
     return [
       `curl -X POST ${API_BASE}/api/mint/agent/custom \\`,
@@ -199,14 +209,14 @@ function render(
     );
   }
 
-  const label = mode === 'custom' ? 'CUSTOM GASLESS MINT' : mode === 'registry' ? 'REGISTER / DISCOVER' : 'PRESET GASLESS MINT';
+  const label = mode === 'official' ? 'OFFICIAL METAPLEX AGENT MINT' : mode === 'custom' ? 'CUSTOM GASLESS MINT' : mode === 'registry' ? 'REGISTER / DISCOVER' : 'PRESET GASLESS MINT';
   process.stdout.write(chalk.cyan('╠') + border + chalk.cyan('╣') + '\n');
   process.stdout.write(boxed(` ${chalk.bold.white(label)}`, width) + '\n');
   for (const line of commandLines(mode, current, selected)) {
     process.stdout.write(boxed(` ${chalk.green(line)}`, width) + '\n');
   }
   process.stdout.write(chalk.cyan('╠') + border + chalk.cyan('╣') + '\n');
-  process.stdout.write(boxed(` ${chalk.gray('[↑↓] browse  [m] preset mint  [c] custom mint  [g] registry  [r] reload  [b] back')}`, width) + '\n');
+  process.stdout.write(boxed(` ${chalk.gray('[↑↓] browse  [o] official mint  [m] gasless  [c] custom  [g] registry  [r] reload  [b] back')}`, width) + '\n');
   process.stdout.write(chalk.cyan('╚') + border + chalk.cyan('╝') + '\n');
 }
 
@@ -219,8 +229,8 @@ export async function runAgents(): Promise<void> {
     .sort((a, b) => a.identifier.localeCompare(b.identifier));
   let selected = agents.findIndex((agent) => agent.identifier === 'solana-clawd-wallet-guardian');
   if (selected < 0) selected = 0;
-  let mode: CommandMode = 'preset';
-  let status = 'Ready: free registry online; mint flow is gasless.';
+  let mode: CommandMode = 'official';
+  let status = 'Ready: official mint uses Metaplex Agent Registry + local signer.';
 
   const redraw = (): void => render(agents, selected, catalog, source, mode, status);
   redraw();
@@ -264,6 +274,12 @@ export async function runAgents(): Promise<void> {
       if (chunk === 'm' || chunk === 'M') {
         mode = 'preset';
         status = 'Preset mint command staged.';
+        redraw();
+        return;
+      }
+      if (chunk === 'o' || chunk === 'O') {
+        mode = 'official';
+        status = 'Official Metaplex mint command staged.';
         redraw();
         return;
       }

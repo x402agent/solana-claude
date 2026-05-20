@@ -18,33 +18,48 @@
 
 ## Quick Start
 
-### 1. Install dependencies
+### 1. Install
 
 ```bash
-cd tui
-npm install
+npm install -g @openclawdsolana/clawd-tui
 ```
 
-### 2. Build
+The one-shot installer also installs this package:
 
 ```bash
-npm run build
+curl -fsSL https://x402.wtf/automation/install.sh | bash
 ```
 
-### 3. Run the TUI
-
-```bash
-npm start
-# or during development:
-npm run dev
-```
-
-You can also invoke via the global bin aliases after linking:
+### 2. Run the TUI
 
 ```bash
 clawd-tui
 # or
 hermes
+```
+
+### 3. Mint a Real Metaplex Agent
+
+```bash
+clawd-agent mint --network devnet --keypair ~/.config/solana/id.json \
+  --name "My AI Agent" \
+  --uri https://example.com/agent-nft.json \
+  --description "Autonomous Solana agent with MCP and x402 services" \
+  --service MCP=https://example.com/mcp \
+  --service A2A=https://example.com/agent-card.json \
+  --yes
+```
+
+The mint command uses `@metaplex-foundation/mpl-agent-registry` `mintAndSubmitAgent`, so it creates the MPL Core asset and Agent Identity PDA in one on-chain transaction. Devnet is the default safe path; mainnet requires `--network mainnet --yes`.
+
+Hosted gasless devnet mint through the private Fly gateway:
+
+```bash
+clawd-agent mint-free --network devnet --owner <YOUR_SOLANA_PUBKEY> \
+  --name "My AI Agent" \
+  --uri https://example.com/agent-nft.json \
+  --description "Autonomous Solana agent with MCP and x402 services" \
+  --service MCP=https://example.com/mcp
 ```
 
 ---
@@ -54,7 +69,7 @@ hermes
 | Key | Action |
 |-----|--------|
 | `↑` / `↓` | Move selection up/down |
-| `1`–`7` | Jump to menu item by number |
+| `1`–`9` | Jump to menu item by number |
 | `Enter` / `Space` | Select highlighted item |
 | `q` / `Ctrl-C` | Quit |
 | `b` / `Esc` | Back to main menu (from any sub-screen) |
@@ -69,10 +84,11 @@ hermes
 | 2 | 📈 Perps | Phoenix perpetuals via Vulcan CLI |
 | 3 | 🪪 Agent Registry | Browse, mint, and register gasless Solana agents |
 | 4 | 💰 Wallet | Fund + feed the leviathan |
-| 5 | 🚀 Spawn Automaton | Launch the sovereign OODA agent runtime |
-| **6** | **🧰 Solana Agent Kit** | **Complete toolkit — token · perps · DeFi · NFT · x402 · skills** |
-| **7** | **🧠 UltraThink** | **Deep-reasoning Solana formula — depth ladder · antipatterns · templates** |
-| 8 | ❌ Exit | The backroom will remember you |
+| 5 | 📦 SDK Explorer | Packages · vault · constants · environment |
+| 6 | 🚀 Spawn Automaton | Launch the sovereign OODA agent runtime |
+| **7** | **🧰 Solana Agent Kit** | **Complete toolkit — token · perps · DeFi · NFT · x402 · skills** |
+| **8** | **🧠 UltraThink** | **Deep-reasoning Solana formula — depth ladder · antipatterns · templates** |
+| 9 | ❌ Exit | The backroom will remember you |
 
 ---
 
@@ -182,6 +198,23 @@ MPL Core minting, gasless agent NFTs, SAS attestations, staking.
 curl -X POST https://x402.wtf/api/mint/agent \
   -H 'Content-Type: application/json' \
   -d '{"agentId":1,"ownerPubkey":"<YOUR_SOLANA_PUBKEY>","network":"mainnet"}'
+```
+
+**Official registered agent mint — local signer, real Agent Identity PDA:**
+
+```bash
+clawd-agent mint --network devnet --keypair ~/.config/solana/id.json \
+  --name "My AI Agent" \
+  --uri https://example.com/agent-nft.json \
+  --description "Autonomous Solana agent" \
+  --service MCP=https://example.com/mcp \
+  --yes
+```
+
+Read and verify the registered agent:
+
+```bash
+clawd-agent read --network devnet --asset <AGENT_CORE_ASSET_ADDRESS>
 ```
 
 ---

@@ -9,6 +9,7 @@
  */
 
 import type {
+  Action,
   FundingRate,
   MarkPrice,
   MarketMeta,
@@ -22,6 +23,7 @@ import type {
 export interface QuoteContext {
   symbol: string;
   side: Side;
+  action: Action;
   sizeUsd: number;
   slippageBps: number;
   holdSeconds: number;

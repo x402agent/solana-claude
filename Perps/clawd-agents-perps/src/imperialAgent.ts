@@ -306,6 +306,17 @@ export interface ImperialMarketSnapshot {
   depth: PhoenixDepthSnapshot | null;
 }
 
+function asArray<T>(value: unknown, keys: string[] = []): T[] {
+  if (Array.isArray(value)) return value as T[];
+  if (value && typeof value === "object") {
+    for (const key of keys) {
+      const nested = (value as Record<string, unknown>)[key];
+      if (Array.isArray(nested)) return nested as T[];
+    }
+  }
+  return [];
+}
+
 export interface AgentSignal {
   symbol: string;
   decision: AgentDecision;
@@ -333,9 +344,10 @@ export function scoreImperialMarket(snap: ImperialMarketSnapshot): AgentSignal {
   }
 
   // Liquidity: Phoenix depth spread
-  if (snap.depth?.bids.length && snap.depth.asks.length) {
-    const bid = snap.depth.bids[0]?.[0] ?? 0;
-    const ask = snap.depth.asks[0]?.[0] ?? 0;
+  const depth = snap.depth;
+  if ((depth?.bids?.length ?? 0) > 0 && (depth?.asks?.length ?? 0) > 0) {
+    const bid = depth?.bids[0]?.[0] ?? 0;
+    const ask = depth?.asks[0]?.[0] ?? 0;
     if (bid > 0) {
       const spreadBps = ((ask - bid) / bid) * 10000;
       scores.liquidity = spreadBps < 10 ? 1 : spreadBps < 30 ? 0.5 : 0;
@@ -343,9 +355,9 @@ export function scoreImperialMarket(snap: ImperialMarketSnapshot): AgentSignal {
   }
 
   // Momentum: mark vs mid
-  if (snap.markPrice !== null && snap.depth?.bids.length && snap.depth.asks.length) {
-    const bid = snap.depth.bids[0]?.[0] ?? 0;
-    const ask = snap.depth.asks[0]?.[0] ?? 0;
+  if (snap.markPrice !== null && (depth?.bids?.length ?? 0) > 0 && (depth?.asks?.length ?? 0) > 0) {
+    const bid = depth?.bids[0]?.[0] ?? 0;
+    const ask = depth?.asks[0]?.[0] ?? 0;
     if (bid > 0 && ask > 0) {
       const mid = (bid + ask) / 2;
       const drift = (snap.markPrice - mid) / mid;
@@ -768,18 +780,26 @@ export class ImperialClient {
     ]);
 
     const allFunding =
-      fundingRates.status === "fulfilled" ? fundingRates.value : [];
+      fundingRates.status === "fulfilled"
+        ? asArray<FundingRateEntry>(fundingRates.value, ["fundingRates", "data", "items"])
+        : [];
     const allMarks =
-      marks.status === "fulfilled" ? marks.value : [];
+      marks.status === "fulfilled"
+        ? asArray<MarkPriceEntry>(marks.value, ["markPrices", "marks", "data", "items"])
+        : [];
     const rawDepth = depth.status === "fulfilled" ? depth.value : null;
 
     const markEntry = allMarks.find(
       (m) => m.symbol.toUpperCase() === sym && m.venue === "phoenix",
     ) ?? allMarks.find((m) => m.symbol.toUpperCase() === sym);
 
-    const depthSnap = Array.isArray(rawDepth)
+    const depthSnapRaw = Array.isArray(rawDepth)
       ? (rawDepth as PhoenixDepthSnapshot[]).find((d) => d.symbol.toUpperCase() === sym) ?? null
       : (rawDepth as PhoenixDepthSnapshot | null);
+    const depthSnap =
+      Array.isArray(depthSnapRaw?.bids) && Array.isArray(depthSnapRaw?.asks)
+        ? depthSnapRaw
+        : null;
 
     return {
       symbol: sym,

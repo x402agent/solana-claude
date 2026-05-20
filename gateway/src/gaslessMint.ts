@@ -115,6 +115,93 @@ async function mintCoreAsset(opts: {
   };
 }
 
+async function mintRegisteredAgent(opts: {
+  ownerPubkey: string;
+  name: string;
+  uri: string;
+  description: string;
+  services: Array<{ name: string; endpoint: string; version?: string }>;
+  network: 'mainnet' | 'devnet';
+}): Promise<{
+  assetAddress: string;
+  signature: string;
+  agentWallet: string;
+  registrationUri?: string;
+  explorerUrl: string;
+}> {
+  const feePayer = process.env.FEE_PAYER_SECRET_KEY ?? process.env.SOLANA_PRIVATE_KEY;
+  if (!feePayer) {
+    throw new Error('FEE_PAYER_SECRET_KEY is not configured on this server');
+  }
+
+  const { createUmi } = await import('@metaplex-foundation/umi-bundle-defaults');
+  const { findAssetSignerPda, mplCore } = await import('@metaplex-foundation/mpl-core');
+  const {
+    keypairIdentity,
+    publicKey: umiPublicKey,
+  } = await import('@metaplex-foundation/umi');
+  const {
+    mintAndSubmitAgent,
+    mplAgentIdentity,
+  } = await import('@metaplex-foundation/mpl-agent-registry');
+  const bs58 = await import('bs58');
+
+  const rpcUrl = opts.network === 'devnet'
+    ? (process.env.SOLANA_DEVNET_RPC_URL ?? 'https://api.devnet.solana.com')
+    : (process.env.HELIUS_RPC_URL ?? process.env.SOLANA_RPC_URL ?? 'https://api.mainnet-beta.solana.com');
+
+  const umi = createUmi(rpcUrl).use(mplCore()).use(mplAgentIdentity());
+
+  let secretBytes: Uint8Array;
+  if (feePayer.startsWith('[')) {
+    secretBytes = Uint8Array.from(JSON.parse(feePayer) as number[]);
+  } else {
+    secretBytes = bs58.default.decode(feePayer);
+  }
+  const feePayerKp = umi.eddsa.createKeypairFromSecretKey(secretBytes);
+  umi.use(keypairIdentity(feePayerKp));
+
+  const network = opts.network === 'devnet' ? 'solana-devnet' : 'solana-mainnet';
+  const result = await mintAndSubmitAgent(umi, {}, {
+    wallet: umiPublicKey(opts.ownerPubkey),
+    network,
+    name: opts.name,
+    uri: opts.uri,
+    agentMetadata: {
+      type: 'agent',
+      name: opts.name,
+      description: opts.description,
+      services: opts.services,
+      registrations: [],
+      supportedTrust: ['reputation', 'crypto-economic'],
+    } as {
+      type: 'agent';
+      name: string;
+      description: string;
+      services: Array<{ name: string; endpoint: string; version?: string }>;
+      registrations: never[];
+      supportedTrust: string[];
+    },
+  });
+
+  const assetAddress = result.assetAddress.toString();
+  const agentWallet = findAssetSignerPda(umi, { asset: umiPublicKey(assetAddress) })[0].toString();
+  const signature = result.signature instanceof Uint8Array
+    ? bs58.default.encode(result.signature)
+    : Array.isArray(result.signature)
+      ? bs58.default.encode(Uint8Array.from(result.signature as number[]))
+      : String(result.signature);
+
+  const cluster = opts.network === 'devnet' ? '?cluster=devnet' : '';
+  return {
+    assetAddress,
+    signature,
+    agentWallet,
+    registrationUri: `https://api.metaplex.com/v1/agents/${assetAddress}?network=${network}`,
+    explorerUrl: `https://explorer.solana.com/address/${assetAddress}${cluster}`,
+  };
+}
+
 // ---------------------------------------------------------------------------
 // POST /api/mint/agent — gasless preset agent mint
 // ---------------------------------------------------------------------------
@@ -249,6 +336,104 @@ router.post('/api/mint/agent/custom', async (req: Request, res: Response) => {
     const msg = (e as Error).message ?? 'Unknown error';
     const status = msg.includes('not configured') ? 503 : 500;
     res.status(status).json({ error: 'Mint failed', detail: msg });
+  }
+});
+
+// ---------------------------------------------------------------------------
+// POST /api/mint/agent/registered — gasless Metaplex Agent Registry mint
+// ---------------------------------------------------------------------------
+router.post('/api/mint/agent/registered', async (req: Request, res: Response) => {
+  const ip = req.ip || req.socket.remoteAddress || 'unknown';
+
+  if (isRateLimited(ip)) {
+    return res.status(429).json({ error: 'Rate limit exceeded', retry_after: 3600 });
+  }
+
+  const {
+    name,
+    metadataUri,
+    description,
+    ownerPubkey,
+    network = 'devnet',
+    services = [],
+    confirm_mainnet,
+  } = req.body as {
+    name: unknown;
+    metadataUri: unknown;
+    description: unknown;
+    ownerPubkey: unknown;
+    network?: string;
+    services?: unknown;
+    confirm_mainnet?: unknown;
+  };
+
+  if (!name || typeof name !== 'string' || name.length < 1 || name.length > 32) {
+    return res.status(400).json({ error: 'name must be 1-32 characters' });
+  }
+  if (!description || typeof description !== 'string' || description.length < 1 || description.length > 500) {
+    return res.status(400).json({ error: 'description must be 1-500 characters' });
+  }
+  if (!metadataUri || !isValidHttpsUrl(String(metadataUri))) {
+    return res.status(400).json({ error: 'metadataUri must be a valid https:// URL' });
+  }
+  if (!ownerPubkey || !isValidPubkey(String(ownerPubkey))) {
+    return res.status(400).json({ error: 'ownerPubkey must be a valid Solana base58 public key' });
+  }
+  if (network !== 'mainnet' && network !== 'devnet') {
+    return res.status(400).json({ error: 'network must be "mainnet" or "devnet"' });
+  }
+  if (network === 'mainnet' && confirm_mainnet !== true) {
+    return res.status(400).json({
+      error: 'Mainnet registered mint requires confirm_mainnet: true',
+      detail: 'Mainnet agent mints are permanent and spend server fee-payer SOL.',
+    });
+  }
+
+  const parsedServices = Array.isArray(services)
+    ? services
+        .filter((svc): svc is { name: string; endpoint: string; version?: string } =>
+          !!svc &&
+          typeof svc === 'object' &&
+          typeof (svc as { name?: unknown }).name === 'string' &&
+          typeof (svc as { endpoint?: unknown }).endpoint === 'string' &&
+          isValidHttpsUrl((svc as { endpoint: string }).endpoint),
+        )
+        .slice(0, 10)
+    : [];
+
+  try {
+    const result = await mintRegisteredAgent({
+      ownerPubkey: String(ownerPubkey),
+      name,
+      uri: String(metadataUri),
+      description,
+      services: parsedServices,
+      network: network as 'mainnet' | 'devnet',
+    });
+
+    res.status(201).json({
+      success: true,
+      standard: 'Metaplex Agent Registry',
+      agent: {
+        name,
+        metadata_uri: String(metadataUri),
+        registration_uri: result.registrationUri,
+      },
+      mint: {
+        asset_address: result.assetAddress,
+        signature: result.signature,
+        owner: ownerPubkey,
+        agent_wallet: result.agentWallet,
+        fee_payer: 'platform (gasless)',
+        rpc: network === 'mainnet' ? 'server Helius RPC' : 'server devnet RPC',
+        network,
+        explorer: result.explorerUrl,
+      },
+    });
+  } catch (e: unknown) {
+    const msg = (e as Error).message ?? 'Unknown error';
+    const status = msg.includes('not configured') ? 503 : 500;
+    res.status(status).json({ error: 'Registered agent mint failed', detail: msg });
   }
 });
 

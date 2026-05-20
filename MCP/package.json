@@ -4,6 +4,10 @@
   "description": "solana-clawd MCP server v3 — Orchestrated Command & Control: Plugin Registry, Federation Bridge, Agent Task Router, Docs System, and PTokenStreamFacilitator for the entire Solana Clawd framework",
   "type": "module",
   "main": "dist/index.js",
+  "bin": {
+    "solana-clawd-mcp": "dist/index.js",
+    "solana-clawd-mcp-http": "dist/http.js"
+  },
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",

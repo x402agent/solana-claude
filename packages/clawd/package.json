@@ -18,6 +18,7 @@
   },
   "files": [
     "dist",
+    "scripts/postinstall.mjs",
     "README.md",
     "LICENSE"
   ],
@@ -26,6 +27,7 @@
     "dev": "tsx src/index.ts",
     "start": "node dist/index.js",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "postinstall": "node scripts/postinstall.mjs",
     "typecheck": "tsc --noEmit"
   },
   "keywords": [
@@ -93,8 +95,7 @@
     "@typescript-eslint/parser": "^8.37.0",
     "eslint": "^9.31.0",
     "tsx": "^4.0.0",
-    "typescript": "^5.9.3",
-    "wrangler": "^4.56.0"
+    "typescript": "^5.9.3"
   },
   "engines": {
     "node": ">=20 <25"

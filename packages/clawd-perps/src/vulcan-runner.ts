@@ -42,8 +42,10 @@ function findClawdAgentsPerpsCli(): string | null {
   if (explicit && existsSync(explicit)) return explicit;
 
   for (const base of repoRootCandidates()) {
-    const candidate = resolve(base, "Perps", "clawd-agents-perps", "dist", "cli.js");
-    if (existsSync(candidate)) return candidate;
+    for (const dir of ["perps", "Perps"]) {
+      const candidate = resolve(base, dir, "clawd-agents-perps", "dist", "cli.js");
+      if (existsSync(candidate)) return candidate;
+    }
   }
   return null;
 }
@@ -102,8 +104,8 @@ export function runClawdPerpsAgent(args: string[], options: AgentRunnerOptions =
   console.error(
     [
       "error: Clawd TypeScript perps agent not found.",
-      "Build Perps/clawd-agents-perps with npm --prefix Perps/clawd-agents-perps run build,",
-      "or set CLAWD_PERPS_TS_AGENT_CLI=/path/to/Perps/clawd-agents-perps/dist/cli.js.",
+      "Build perps/clawd-agents-perps with npm --prefix perps/clawd-agents-perps run build,",
+      "or set CLAWD_PERPS_TS_AGENT_CLI=/path/to/perps/clawd-agents-perps/dist/cli.js.",
     ].join(" "),
   );
   process.exit(2);

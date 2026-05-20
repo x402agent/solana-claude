@@ -19,6 +19,12 @@ const X402_BADGE = chalk.bgMagenta.white.bold(' x402 ');
 const CLAWD_BADGE = chalk.bgCyan.black.bold(' $CLAWD ');
 const NOUS_BADGE = chalk.bgGreen.black.bold(' NOUS ');
 const PAYSH_BADGE = chalk.bgYellow.black.bold(' pay.sh ');
+const packageBadge = (count: number): string =>
+  chalk.bgBlue.white.bold(` PKG ${String(count).padStart(2, '0')} `);
+const vaultBadge = (available: boolean, walletCount: number): string =>
+  available
+    ? chalk.bgGreen.black.bold(` VAULT ${walletCount} `)
+    : chalk.bgRed.white.bold(' VAULT OFF ');
 
 export function renderHeader(state: DashboardState, width: number): string[] {
   const lines: string[] = [];
@@ -66,8 +72,8 @@ export function renderHeader(state: DashboardState, width: number): string[] {
   );
 
   // Badges row
-  const badgeLine = `  ${NOUS_BADGE}  ${PAYSH_BADGE}  ${chalk.hex('#00eeff').bold('SOLANA')}  ${chalk.hex('#ff00ff').bold('A2A')}  ${chalk.hex('#00ff99').bold('MCP')}  `;
-  const badgePlain = `     NOUS    pay.sh    SOLANA   A2A   MCP    `;
+  const badgeLine = `  ${NOUS_BADGE}  ${PAYSH_BADGE}  ${chalk.hex('#00eeff').bold('SOLANA')}  ${chalk.hex('#ff00ff').bold('A2A')}  ${chalk.hex('#00ff99').bold('MCP')}  ${packageBadge(state.sdkPackageCount)}  ${vaultBadge(state.walletVault.available, state.walletVault.walletCount)}  `;
+  const badgePlain = `     NOUS    pay.sh    SOLANA   A2A   MCP    PKG ${String(state.sdkPackageCount).padStart(2, '0')}    VAULT ${state.walletVault.available ? String(state.walletVault.walletCount) : 'OFF'}    `;
   const badgePad = Math.max(0, width - badgePlain.length);
   lines.push(
     chalk.cyan('║') + badgeLine + ' '.repeat(badgePad) + chalk.cyan('║'),

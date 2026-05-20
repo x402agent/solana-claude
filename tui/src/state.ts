@@ -71,6 +71,21 @@ export interface PerpPosition {
   liquidationPrice: number;
 }
 
+export interface SdkPackageState {
+  name: string;
+  version: string;
+  status: 'ok' | 'missing' | 'no-dist';
+  hasDist: boolean;
+}
+
+export interface WalletVaultState {
+  available: boolean;
+  path: string;
+  walletCount: number;
+  activeAddress: string | null;
+  error: string | null;
+}
+
 // ─── Core dashboard state ─────────────────────────────────────────────────────
 
 export interface DashboardState {
@@ -113,8 +128,11 @@ export interface DashboardState {
   perpPositions: PerpPosition[];
   // Wallet
   walletPubkey: string;
+  walletVault: WalletVaultState;
   // SDK
   sdkVersion: string;
+  sdkPackages: SdkPackageState[];
+  sdkPackageCount: number;
   // Automaton
   automatonRunning: boolean;
 }
@@ -149,7 +167,16 @@ export function createInitialState(): DashboardState {
     perpMarkets: [],
     perpPositions: [],
     walletPubkey: 'UNSPAWNED',
+    walletVault: {
+      available: false,
+      path: '',
+      walletCount: 0,
+      activeAddress: null,
+      error: null,
+    },
     sdkVersion: '0.1.0',
+    sdkPackages: [],
+    sdkPackageCount: 0,
     automatonRunning: false,
   };
 }

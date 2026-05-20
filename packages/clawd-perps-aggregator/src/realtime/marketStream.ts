@@ -14,6 +14,7 @@ import type {
   VenueId,
 } from "../types.js";
 import { VENUE_FROM_UNDERWRITER, VENUE_IDS } from "../types.js";
+import { httpToWebSocketBase } from "../venues/transport.js";
 
 type Listener<T> = (data: T) => void;
 
@@ -272,7 +273,7 @@ export function createMarketStream(
   imperialBase: string,
   symbols?: string[],
 ): MarketStream {
-  const wsBase = imperialBase.replace(/^http/, "ws").replace(/\/api\/v1\/?$/, "");
+  const wsBase = httpToWebSocketBase(imperialBase);
   return new MarketStream(`${wsBase}/ws/market`, symbols);
 }
 

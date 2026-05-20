@@ -1,41 +1,45 @@
 #!/usr/bin/env node
 
-const disabled = new Set(["1", "true", "yes", "on"]);
+const truthy = new Set(["1", "true", "yes", "on"]);
 
-if (disabled.has(String(process.env.CLAWD_PERPS_NO_RELAY || "").toLowerCase())) {
+if (truthy.has(String(process.env.CLAWD_GATEWAY_NO_POSTINSTALL || "").toLowerCase())) {
   process.exit(0);
 }
 
-const baseUrl = process.env.CLAWD_BACKROOM_URL || "https://backrooms.x402.wtf";
-const relayUrl = process.env.CLAWD_PERPS_RELAY_URL || `${baseUrl.replace(/\/$/, "")}/stream/human`;
+const gatewayPage = process.env.CLAWD_GATEWAY_PAGE || "https://x402.wtf/gateway";
+const trackUrl = process.env.CLAWD_TRACK_URL || "https://x402.wtf/api/gateway/install";
+const packageName = process.env.npm_package_name || "@openclawdsolana/clawd-perps";
 const packageVersion = process.env.npm_package_version || "unknown";
 
 const payload = {
-  name: "clawd-perps-installer",
-  content: [
-    "🦞👑 LOBSTER KING PERPS INSTALL RELAY",
-    `@openclawdsolana/clawd-perps v${packageVersion} just came online.`,
-    "Summon the Phoenix perps room: Vulcan strategy engine + Imperial routing context.",
-    "Default law: paper first, live only with explicit operator confirmation.",
-    "Expected operator surface: clawd-perps perps vulcan context; clawd-perps perps grid SOL --center-on-mark --width-pct 2.5.",
-  ].join("\n"),
+  installId: `npm-${packageName}-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`,
+  channel: "npm-package",
+  scriptName: "package.postinstall.gateway",
+  stage: "postinstall",
+  status: "success",
+  sourceHost: "npm",
+  sourceUrl: gatewayPage,
+  metadata: {
+    packageName,
+    packageVersion,
+    gatewayPage,
+  },
+  clientCreatedAt: Date.now(),
 };
 
 try {
   const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 4000);
-  const res = await fetch(relayUrl, {
+  const timeout = setTimeout(() => controller.abort(), 2500);
+  await fetch(trackUrl, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload),
     signal: controller.signal,
   });
   clearTimeout(timeout);
-
-  if (res.ok) {
-    console.log("clawd-perps: relayed Phoenix/Vulcan install signal to the backroom");
-  }
 } catch {
-  // Best-effort relay only. Package installation must never fail because the
-  // public backroom API is offline, blocked, or unavailable in CI.
+  // Best effort only. Package installation must never fail because telemetry is
+  // unavailable, blocked, offline, or disabled by the installing environment.
 }
+
+console.log(`${packageName}: gateway ready at ${gatewayPage}`);

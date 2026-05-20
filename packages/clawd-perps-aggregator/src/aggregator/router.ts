@@ -47,6 +47,7 @@ export class SmartRouter {
     return adapter.quote({
       symbol: req.symbol,
       side: req.side,
+      action: req.action,
       sizeUsd: req.sizeUsd,
       slippageBps: req.slippageBps ?? this.defaultSlippageBps,
       holdSeconds: req.holdSeconds ?? this.defaultHoldSeconds,

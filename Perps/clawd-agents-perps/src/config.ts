@@ -54,7 +54,7 @@ function normalizeSymbols(symbols: string[]): string[] {
 
 export function loadPerpsRuntimeConfig(env: NodeJS.ProcessEnv = process.env): PerpsRuntimeConfig {
   return {
-    rpcUrl: env.SOLANA_RPC_URL ?? "",
+    rpcUrl: env.SOLANA_RPC_URL ?? "https://api.mainnet-beta.solana.com",
     apiUrl: env.CLAWD_PERPS_API_URL ?? "https://perp-api.phoenix.trade",
     heliusApiKey: env.HELIUS_API_KEY || undefined,
     wallet: env.CLAWD_PERPS_WALLET || undefined,

@@ -33,10 +33,11 @@ const MENU_ITEMS: MenuItem[] = [
   { key: '2', label: '📈  Perps',             description: 'Phoenix perpetuals via Vulcan CLI' },
   { key: '3', label: '🪪  Agent Registry',    description: 'Browse, mint, and register gasless Solana agents' },
   { key: '4', label: '💰  Wallet',            description: 'Fund + feed the leviathan' },
-  { key: '5', label: '🚀  Spawn automaton',   description: 'Launch the sovereign agent runtime' },
-  { key: '6', label: '🧰  Solana Agent Kit',  description: 'Token · Perps · DeFi · NFT · x402 · Skills — full kit' },
-  { key: '7', label: '🧠  UltraThink',        description: 'Deep-reasoning Solana formula — depth ladder · antipatterns · templates' },
-  { key: '8', label: '❌  Exit',              description: 'The backroom will remember you' },
+  { key: '5', label: '📦  SDK Explorer',      description: 'Packages · vault · constants · environment' },
+  { key: '6', label: '🚀  Spawn automaton',   description: 'Launch the sovereign agent runtime' },
+  { key: '7', label: '🧰  Solana Agent Kit',  description: 'Token · Perps · DeFi · NFT · x402 · Skills — full kit' },
+  { key: '8', label: '🧠  UltraThink',        description: 'Deep-reasoning Solana formula — depth ladder · antipatterns · templates' },
+  { key: '9', label: '❌  Exit',              description: 'The backroom will remember you' },
 ];
 
 // ─── Render helpers ───────────────────────────────────────────────────────────
@@ -78,7 +79,7 @@ function renderMenu(selected: number): void {
 
   process.stdout.write('\n');
   process.stdout.write(
-    chalk.gray('[↑↓ / 1-8] navigate  [Enter] select  [q] exit') + '\n',
+    chalk.gray('[↑↓ / 1-9] navigate  [Enter] select  [q] exit') + '\n',
   );
 }
 
@@ -124,21 +125,26 @@ async function launchScreen(index: number): Promise<void> {
         break;
       }
       case 4: {
+        const { runSDK } = await import('./screens/sdk.js');
+        await runSDK();
+        break;
+      }
+      case 5: {
         const { runAutomaton } = await import('./screens/automaton.js');
         await runAutomaton();
         break;
       }
-      case 5: {
+      case 6: {
         const { runAgentKit } = await import('./screens/agentkit.js');
         await runAgentKit();
         break;
       }
-      case 6: {
+      case 7: {
         const { runUltraThink } = await import('./screens/ultrathink.js');
         await runUltraThink();
         break;
       }
-      case 7: {
+      case 8: {
         // Exit
         process.stdout.write('\x1b[2J\x1b[H');
         process.stdout.write(
@@ -211,8 +217,8 @@ async function main(): Promise<void> {
           needRedraw = true;
         }
 
-        // Number keys 1-8
-        const numMatch = chunk.match(/^[1-8]$/);
+        // Number keys 1-9
+        const numMatch = chunk.match(/^[1-9]$/);
         if (numMatch) {
           selected = parseInt(chunk, 10) - 1;
           launch = true;

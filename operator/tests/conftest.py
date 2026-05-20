@@ -6,6 +6,9 @@
 import os
 import pytest
 
+os.environ.setdefault("RALPH_WEB_PASSWORD", "admin123")
+os.environ.setdefault("RALPH_WEB_SECRET_KEY", "test-secret-key")
+
 
 def pytest_configure(config):
     """Register custom markers."""

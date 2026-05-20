@@ -74,13 +74,35 @@ export interface TransportOpts {
   fetchImpl?: typeof fetch;
 }
 
+function trimTrailingSlashes(value: string): string {
+  let end = value.length;
+  while (end > 0 && value.charCodeAt(end - 1) === 47) {
+    end -= 1;
+  }
+  return value.slice(0, end);
+}
+
+export function httpToWebSocketBase(value: string): string {
+  const trimmed = trimTrailingSlashes(value);
+  const withoutVersion = trimmed.endsWith("/api/v1")
+    ? trimmed.slice(0, -"/api/v1".length)
+    : trimmed;
+  if (withoutVersion.startsWith("https://")) {
+    return `wss://${withoutVersion.slice("https://".length)}`;
+  }
+  if (withoutVersion.startsWith("http://")) {
+    return `ws://${withoutVersion.slice("http://".length)}`;
+  }
+  return withoutVersion;
+}
+
 export class ImperialTransport {
   readonly base: string;
   jwt: string;
   private readonly fetchImpl: typeof fetch;
 
   constructor(opts: TransportOpts) {
-    this.base = opts.base.replace(/\/+$/, "");
+    this.base = trimTrailingSlashes(opts.base);
     this.jwt = opts.jwt ?? "";
     this.fetchImpl = opts.fetchImpl ?? fetch;
   }
@@ -200,6 +222,6 @@ export class ImperialTransport {
 
   /** WebSocket base derived from the HTTP base. */
   wsBase(): string {
-    return this.base.replace(/^http/, "ws").replace(/\/api\/v1\/?$/, "");
+    return httpToWebSocketBase(this.base);
   }
 }

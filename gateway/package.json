@@ -3,13 +3,14 @@
   "version": "1.0.0",
   "description": "Telegram bot + HTTP gateway with Solana/Helius/Birdeye integration",
   "type": "module",
-  "main": "dist/index.js",
+  "main": "dist/gateway/src/index.js",
   "scripts": {
     "build": "tsc",
-    "start": "node dist/index.js",
-    "dev": "tsc --watch & node --watch dist/index.js"
+    "start": "node dist/gateway/src/index.js",
+    "dev": "tsc --watch & node --watch dist/gateway/src/index.js"
   },
   "dependencies": {
+    "@metaplex-foundation/mpl-agent-registry": "^0.2.5",
     "@metaplex-foundation/mpl-core": "^1.10.0",
     "@metaplex-foundation/umi": "^1.5.1",
     "@metaplex-foundation/umi-bundle-defaults": "^1.5.1",

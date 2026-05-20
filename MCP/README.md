@@ -33,6 +33,9 @@ Dynamically discovers, loads, and validates tools from every framework subsystem
 - `skills/` → Agent skill files as callable tools
 - `programs/` → On-chain program inspection tools
 - `agents/` → Agent fleet management
+- `agent-kit/` → Local agent catalog/runtime profile loader
+- `gateway/` → HTTP gateway health, registry, and Skill Hub API
+- `sdk/` → Solana Clawd SDK package visibility
 
 **Key innovation:** replaces the monolithic 50+ tool registration pattern with dynamic discovery. Each subsystem exposes a manifest or entry point, and the registry validates uniqueness and surfaces the full capability map back to the Orchestrator.
 
@@ -75,6 +78,19 @@ On-chain settlement engine for p-token (SIMD-0266) micropayments:
 - **Savings:** up to 98.3% CU reduction vs SPL Token (6,200 → 105 CU per transfer)
 - **Pricing:** $0.0001/token micropayments with ~1% overhead
 
+### 7. Package and Service Integrations (`src/tools/integration-tools.ts`)
+MCP now exposes first-class checks for the local Solana Clawd packages and services:
+- `integration_status` verifies package paths, build artifacts, gateway reachability, and key env wiring.
+- `integration_status` includes the local `packages/*` surfaces: `agentwallet`, `clawd`, `clawd-perps`, `clawd-protocol`, `clawd-sdk`, `clawd-wallet`, and `cli-standalone`.
+- The perps integration also checks `Perps/clawd-agents-perps`.
+- `agentkit_list_agents` loads `@solana-clawd/agent-kit` from `agent-kit/packages/agent-kit/dist` and lists local catalog agents.
+- `agentkit_runtime_profile` builds an Agent Kit runtime profile by identifier.
+- `gateway_health` checks the configured Gateway service.
+- `gateway_registry` reads the Gateway public agent registry.
+- `gateway_skill_catalog` reads the Gateway Skill Hub catalog.
+
+Gateway tools use `GATEWAY_URL` or `CLAWD_GATEWAY_URL`, defaulting to `http://127.0.0.1:8080`.
+
 ## Tool Categories
 
 | Category       | Count | Description |
@@ -90,8 +106,9 @@ On-chain settlement engine for p-token (SIMD-0266) micropayments:
 | chess          | 7     | Chess.com (autonomous agent chess) |
 | federation     | N     | Federated MCP tools from external servers |
 | docs           | 3     | Documentation system (list/get/search) |
-| orchestrator   | 4     | Orchestrator management tools |
+| orchestrator   | 6+    | Orchestrator management, integration status, gateway health |
 | deep-clawd     | 6     | DeepSeek trading agent tools |
+| integrations   | 6     | Agent Kit and Gateway package/service bridge tools |
 
 ## Resources
 
@@ -116,6 +133,54 @@ On-chain settlement engine for p-token (SIMD-0266) micropayments:
 
 ## Running
 
+### One-shot curl install
+
+Install or update the MCP server, local package surfaces, and launchers:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/x402agent/solana-clawd/main/MCP/install.sh | bash
+```
+
+The installer:
+- clones or updates `https://github.com/x402agent/solana-clawd.git` into `~/.solana-clawd-mcp/solana-clawd`;
+- installs and builds `packages/agentwallet`, `packages/clawd`, `packages/clawd-perps`, `packages/clawd-sdk`, `packages/clawd-wallet`, `packages/cli-standalone`, and `Perps/clawd-agents-perps`;
+- probes/builds `packages/clawd-protocol` with `anchor build` when Anchor is available, otherwise `cargo build` when Rust is available;
+- installs and builds this `mcp` package;
+- creates launchers in `~/.local/bin`: `solana-clawd-mcp`, `solana-clawd-mcp-http`, `agentwallet`, `clawd`, `clawd-code`, `clawd-leviathan`, `clawd-perps`, `clawd-standalone`, and `clawd-agents-perps`;
+- creates `~/.config/solana-clawd-mcp/.env` for optional API keys and service URLs.
+
+Full package injection requires Node.js 20-22 because the repository package engines are `>=20 <23`. Use `--skip-packages` for an MCP-only install on newer Node versions.
+
+Common overrides:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/x402agent/solana-clawd/main/MCP/install.sh | bash -s -- --branch=newnew
+curl -fsSL https://raw.githubusercontent.com/x402agent/solana-clawd/main/MCP/install.sh | bash -s -- --install-dir="$HOME/dev/solana-clawd-mcp"
+curl -fsSL https://raw.githubusercontent.com/x402agent/solana-clawd/main/MCP/install.sh | bash -s -- --skip-packages
+```
+
+MCP client config:
+
+```json
+{
+  "mcpServers": {
+    "solana-clawd": {
+      "command": "/Users/YOU/.local/bin/solana-clawd-mcp"
+    }
+  }
+}
+```
+
+### Manual local build
+
+Install and build from this package directory:
+
+```bash
+cd mcp
+npm install
+npm run build
+```
+
 ### STDIO mode (default for Cursor/VS Code/Claude Desktop)
 ```bash
 node dist/index.js
@@ -123,7 +188,7 @@ node dist/index.js
 
 ### HTTP+SSE mode
 ```bash
-node dist/http.js
+PORT=3001 node dist/http.js
 ```
 
 ### Health check
@@ -131,12 +196,53 @@ node dist/http.js
 curl http://localhost:3001/health
 ```
 
+### MCP smoke test
+```bash
+curl -i -s -X POST http://127.0.0.1:3001/mcp \
+  -H 'Content-Type: application/json' \
+  -H 'Accept: application/json, text/event-stream' \
+  -d '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2024-11-05","capabilities":{},"clientInfo":{"name":"smoke","version":"1.0.0"}}}'
+```
+
+Use the returned `mcp-session-id` header to call `tools/list` and confirm these tools are present:
+
+```text
+integration_status
+agentkit_list_agents
+agentkit_runtime_profile
+gateway_health
+gateway_registry
+gateway_skill_catalog
+orchestrator_health
+plugin_status
+```
+
 ## Building
 
 ```bash
-cd MCP
+cd mcp
 npm run build
 ```
+
+## Verified Status
+
+Verified on May 20, 2026:
+- `npm install` completed for `mcp`.
+- `npm run build` completed successfully.
+- `createServer()` initialized successfully.
+- HTTP mode started on `PORT=3099`.
+- `GET /health` returned `status: ok`.
+- MCP `initialize` returned server `solana-clawd` version `3.0.0`.
+- `tools/list` included the Agent Kit, Gateway, integration, orchestrator, docs, x402, market, Leviathan, Deep Clawd, Solana, Pump.fun, memory, and chess tools.
+- `agentkit_list_agents` successfully loaded Agent Kit and returned 135 local agents.
+- `integration_status` found the local `agent-kit`, `gateway`, `sdk`, `x402`, `leviathan`, `deep-clawd`, `agents`, and `formal_verification` paths.
+- `gateway` built successfully; local startup requires `HELIUS_RPC_URL` or `GATEKEEPER_RPC_URL`.
+- With `GATEKEEPER_RPC_URL=https://api.mainnet-beta.solana.com` and `GATEWAY_URL=http://127.0.0.1:18080`, the MCP `gateway_health` tool returned Gateway `status: ok`.
+
+Known caveats:
+- The default external Solana MCP federation URL currently returns HTTP 404 during direct discovery. Local MCP startup still works; set `SOLANA_MCP_URL` to a compatible Streamable HTTP MCP endpoint to enable that federated route.
+- Gateway-backed tools require the Gateway service to be running at `GATEWAY_URL` or `CLAWD_GATEWAY_URL`.
+- Helius, Birdeye, x402, Deep Clawd, and facilitator features require their matching environment variables.
 
 ## Versions
 

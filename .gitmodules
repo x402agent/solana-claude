@@ -13,7 +13,3 @@
 [submodule "openclawd"]
 	path = openclawd
 	url = https://github.com/x402agent/openclawd-stack-publish.git
-
-[submodule "openclawd-framework/pay"]
-	path = openclawd-framework/pay
-	url = https://github.com/solana-foundation/pay.git

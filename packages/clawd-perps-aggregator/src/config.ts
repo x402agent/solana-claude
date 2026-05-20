@@ -64,5 +64,9 @@ export function mergeConfig(
   override?: Partial<AggregatorConfig>,
 ): AggregatorConfig {
   if (!override) return base;
-  return { ...base, ...override };
+  const merged = { ...base, ...override };
+  if (override.live !== undefined && override.paperMode === undefined) {
+    merged.paperMode = !override.live;
+  }
+  return merged;
 }

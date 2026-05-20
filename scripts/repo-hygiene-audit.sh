@@ -71,6 +71,23 @@ if [ "${failures}" -eq 0 ]; then
   pass "No tracked env or credential files detected."
 fi
 
+generated_hits="$(
+  git ls-files | rg \
+    '(^|/)(node_modules|dist|build|target|coverage|__pycache__|\.pytest_cache|\.mypy_cache|\.ruff_cache|\.lake)(/|$)|\.py[cod]$|\.pyo$|\.tsbuildinfo$|\.DS_Store$' \
+    || true
+)"
+
+if [ -n "${generated_hits}" ]; then
+  fail "Tracked generated/cache artifacts found. Remove these from git:"
+  printf "%s\n" "${generated_hits}" | sed -n '1,80p'
+  extra_lines="$(printf "%s\n" "${generated_hits}" | wc -l | tr -d ' ')"
+  if [ "${extra_lines}" -gt 80 ]; then
+    echo "... truncated to first 80 matches"
+  fi
+else
+  pass "No tracked generated/cache artifacts detected."
+fi
+
 content_hits="$(
   git ls-files -z | xargs -0 rg -n --no-messages --color never \
     --glob '!**/node_modules/**' \

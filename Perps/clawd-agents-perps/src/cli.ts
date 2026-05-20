@@ -18,6 +18,8 @@ import {
   getTwammAutomationStatus,
   runTwammCrank,
 } from "./twammAutomation.js";
+import { buildClawdOiCoreSignal, buildOiRiskGate, type SignalMode } from "./signals/oi-core.js";
+import type { OiTick } from "./adapters/phoenix-rise.js";
 
 type ParsedArgs = {
   command: string;
@@ -62,6 +64,31 @@ function asNumber(value: string | boolean | undefined, fallback: number): number
   return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
 }
 
+function asBoolean(value: string | boolean | undefined): boolean {
+  if (typeof value === "boolean") return value;
+  return typeof value === "string" && ["1", "true", "yes", "on"].includes(value.toLowerCase());
+}
+
+function parseSignalMode(value: string | boolean | undefined): SignalMode {
+  if (typeof value !== "string") return "paper";
+  if (["observe", "paper", "dry-run", "confirm-each", "auto-execute"].includes(value)) {
+    return value as SignalMode;
+  }
+  return "paper";
+}
+
+function parseDurationMs(value: string | boolean | undefined, fallbackMs: number): number {
+  if (typeof value !== "string") return fallbackMs;
+  const match = value.trim().match(/^(\d+(?:\.\d+)?)(ms|s|m)?$/i);
+  if (!match) return fallbackMs;
+  const amount = Number(match[1]);
+  const unit = (match[2] ?? "ms").toLowerCase();
+  if (!Number.isFinite(amount) || amount <= 0) return fallbackMs;
+  if (unit === "m") return Math.round(amount * 60_000);
+  if (unit === "s") return Math.round(amount * 1000);
+  return Math.round(amount);
+}
+
 function parseSymbols(value: string | boolean | undefined): string[] | undefined {
   if (typeof value !== "string") return undefined;
   const symbols = value
@@ -90,6 +117,9 @@ Usage:
   clawd-agents-perps imperial-health
   clawd-agents-perps imperial-scan --symbols SOL,BTC,ETH --size 100
   clawd-agents-perps imperial-cycle SOL --size 100
+  clawd-agents-perps signal oi SOL-PERP --rpc-url "$CLAWD_RPC_URL" --lookback 5m -o json
+  clawd-agents-perps signal watch SOL-PERP --rpc-url "$CLAWD_RPC_URL" --interval 5s --mode paper
+  clawd-agents-perps signal risk-gate SOL-PERP --notional 500 --side long
   clawd-agents-perps onchain-mm status
   clawd-agents-perps onchain-mm build
   clawd-agents-perps onchain-mm plan --market <pubkey> --ticker SOL-USD
@@ -103,6 +133,20 @@ Safety:
   Defaults are observe/paper. Live previews remain blocked unless the runtime
   is explicitly armed with LIVE_TRADING=true, OPERATOR_CONFIRMED=true, and
   PERPS_SIM_ONLY=false. Imperial order submission also requires IMPERIAL_LIVE=true.
+`);
+}
+
+function printSignalHelp(): void {
+  console.log(`clawd-agents-perps signal
+
+Usage:
+  clawd-agents-perps signal oi <symbol> [--rpc-url <url>] [--api-url <url>] [--lookback 5m] [--mode paper] [-o json] [--mock]
+  clawd-agents-perps signal watch <symbol> [--rpc-url <url>] [--interval 5s] [--mode paper] [--mock]
+  clawd-agents-perps signal risk-gate <symbol> --notional 500 --side long [--mode paper] [--mock]
+
+Safety:
+  This is an observe/risk signal. It never submits orders. Modes only affect
+  the suggested action payload and stay paper-first by default.
 `);
 }
 
@@ -147,6 +191,74 @@ Environment:
 async function main() {
   const parsed = parseArgs(process.argv.slice(2));
   const createRuntime = () => new ClawdPerpsRuntime(undefined, repoRoot());
+
+  if (parsed.command === "signal") {
+    const subcommand = parsed.rest[0] || "oi";
+    const symbol = parsed.rest[1] || "SOL-PERP";
+    const signalOptions = {
+      symbol,
+      apiUrl: typeof parsed.options["api-url"] === "string" ? parsed.options["api-url"] : undefined,
+      rpcUrl: typeof parsed.options["rpc-url"] === "string" ? parsed.options["rpc-url"] : undefined,
+      mode: parseSignalMode(parsed.options.mode),
+      maxSpreadBps: asNumber(parsed.options["max-spread-bps"], 25),
+      maxFundingAbs: asNumber(parsed.options["max-funding-abs"], 0.0025),
+      minDepthUsd: asNumber(parsed.options["min-depth-usd"], 25_000),
+      mock: asBoolean(parsed.options.mock),
+    };
+
+    switch (subcommand) {
+      case "help":
+      case "--help":
+      case "-h":
+        printSignalHelp();
+        return;
+      case "oi": {
+        printJson(await buildClawdOiCoreSignal(signalOptions));
+        return;
+      }
+      case "risk-gate": {
+        const signal = await buildClawdOiCoreSignal(signalOptions);
+        printJson(
+          buildOiRiskGate({
+            signal,
+            notionalUsdc: asNumber(parsed.options.notional, 500),
+            side: parsed.options.side === "short" ? "short" : "long",
+          }),
+        );
+        return;
+      }
+      case "watch": {
+        const intervalMs = parseDurationMs(parsed.options.interval, 5000);
+        const iterations = asNumber(parsed.options.iterations, Number.POSITIVE_INFINITY);
+        let previous: OiTick | undefined;
+        let count = 0;
+        while (count < iterations) {
+          const signal = await buildClawdOiCoreSignal({ ...signalOptions, previous });
+          printJson(signal);
+          previous = {
+            ts: signal.ts,
+            symbol: signal.symbol,
+            markPrice: signal.market.markPrice,
+            indexPrice: signal.market.indexPrice,
+            openInterestUsd: signal.market.openInterestUsd,
+            fundingRate: signal.market.fundingRate,
+            depthUsd: signal.market.depthUsd,
+            longOiUsd: signal.market.longOiUsd,
+            shortOiUsd: signal.market.shortOiUsd,
+          };
+          count++;
+          if (count >= iterations) return;
+          await new Promise((resolve) => setTimeout(resolve, intervalMs));
+        }
+        return;
+      }
+      default:
+        console.error(`Unknown signal command: ${subcommand}`);
+        printSignalHelp();
+        process.exitCode = 1;
+        return;
+    }
+  }
 
   if (parsed.command === "onchain-mm") {
     const subcommand = parsed.rest[0] || "status";

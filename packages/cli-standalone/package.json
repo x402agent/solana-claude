@@ -11,6 +11,7 @@
   "license": "MIT",
   "scripts": {
     "build": "echo \"clawd-standalone ships pre-built (index.js, no compile step)\"",
+    "postinstall": "node scripts/postinstall.mjs",
     "start": "node index.js"
   },
   "dependencies": {

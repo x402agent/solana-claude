@@ -759,14 +759,23 @@ elif command -v npm >/dev/null 2>&1; then
   _npm_global_install "@openclawdsolana/clawd-wallet"    "@openclawdsolana/clawd-wallet (Privy wallet + Jupiter swap)"
   _npm_global_install "@openclawdsolana/clawd-standalone" "@openclawdsolana/clawd-standalone (standalone lobster CLI)"
   _npm_global_install "clawd-automaton"                  "clawd-automaton (automation runtime + cloud dashboard)"
+  _npm_global_install "x402.wtf"                         "x402.wtf (x402 gateway terminal)"
+  _npm_global_install "x402agent-nanoclawd-cli"          "x402agent-nanoclawd-cli (nanoclawd CLI)"
   _npm_global_install "agentwallet-vault"                "agentwallet-vault (encrypted keypair vault)"
 
   CLAWD_BIN="$(command -v clawd 2>/dev/null || echo '')"
+  CLAWD_AGENT_BIN="$(command -v clawd-agent 2>/dev/null || echo '')"
   if [ -n "$CLAWD_BIN" ]; then
     ok "clawd TUI ready at $CLAWD_BIN"
     ln -sf "$CLAWD_BIN" "$BIN_DIR/clawd" 2>/dev/null || true
   else
     warn "clawd not on PATH — add npm global bin to PATH (see quickstart below)"
+  fi
+  if [ -n "$CLAWD_AGENT_BIN" ]; then
+    ok "Metaplex agent mint CLI ready at $CLAWD_AGENT_BIN"
+    ln -sf "$CLAWD_AGENT_BIN" "$BIN_DIR/clawd-agent" 2>/dev/null || true
+  else
+    warn "clawd-agent not on PATH — fallback: npx -p @openclawdsolana/clawd-tui clawd-agent"
   fi
 else
   warn "clawd npm CLIs skipped — npm not found"
