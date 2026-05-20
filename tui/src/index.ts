@@ -200,8 +200,8 @@ async function main(): Promise<void> {
           needRedraw = true;
         }
 
-        // Number keys 1-6
-        const numMatch = chunk.match(/^[1-6]$/);
+        // Number keys 1-7
+        const numMatch = chunk.match(/^[1-7]$/);
         if (numMatch) {
           const idx = parseInt(chunk, 10) - 1;
           selected = idx;
