@@ -1,6 +1,6 @@
-import { assertSafeNotional, type AggregatorConfig } from "../config.js";
+import { assertSafeNotional } from "../config.js";
 import type { VenueAdapter } from "../venues/adapter.js";
-import type { QuoteRequest, RoutePlan, VenueName, VenueQuote } from "../types.js";
+import type { AggregatorConfig, QuoteRequest, RoutePlan, VenueName, VenueQuote } from "../types.js";
 import { rankQuotes } from "./scoring.js";
 
 export interface RouterOptions {

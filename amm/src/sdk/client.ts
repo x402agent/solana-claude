@@ -1,7 +1,8 @@
-import { assertLiveEnabled, assertSafeNotional, loadConfig, type AggregatorConfig } from "../config.js";
+import { assertLiveEnabled, assertSafeNotional, loadConfig } from "../config.js";
 import { SmartRouter } from "../aggregator/router.js";
 import { createVenueAdapters } from "../venues/registry.js";
 import type {
+  AggregatorConfig,
   AggregatedPosition,
   BuiltOrderTx,
   ExecutedOrder,
@@ -38,6 +39,31 @@ export class PerpsAmmClient {
   async listMarkets(): Promise<Market[]> {
     const nested = await Promise.all(this.adapters.map((adapter) => adapter.listMarkets().catch(() => [])));
     return nested.flat();
+  }
+
+  async funding(symbol: string) {
+    const nested = await Promise.all(this.adapters.map((adapter) => adapter.getFundingRate(symbol).catch(() => null)));
+    return nested.filter((rate) => rate !== null);
+  }
+
+  async marks(symbol: string) {
+    const nested = await Promise.all(this.adapters.map((adapter) => adapter.getMarkPrice(symbol).catch(() => null)));
+    return nested.filter((mark) => mark !== null);
+  }
+
+  async orderBook(symbol: string, venue: VenueName = "phoenix") {
+    return this.router.getAdapter(venue).getOrderBook(symbol);
+  }
+
+  health() {
+    return {
+      paper: this.config.safety.paper,
+      live: this.config.safety.live,
+      maxNotionalUsd: this.config.safety.maxNotionalUsd,
+      allowedSymbols: this.config.safety.allowedSymbols,
+      allowedVenues: this.config.safety.allowedVenues,
+      venues: this.listVenues(),
+    };
   }
 
   async quote(request: QuoteRequest): Promise<VenueQuote[]> {

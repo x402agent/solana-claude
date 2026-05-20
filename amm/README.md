@@ -55,6 +55,9 @@ The MCP server exposes:
 
 - `amm_list_venues`
 - `amm_list_markets`
+- `amm_get_marks`
+- `amm_get_funding`
+- `amm_get_orderbook`
 - `amm_get_quote`
 - `amm_route_trade`
 - `amm_build_order_tx`
@@ -64,6 +67,7 @@ The MCP server exposes:
 - `amm_get_aggregated_positions`
 - `amm_liquidation_risks`
 - `amm_score_market`
+- `amm_health`
 
 ## Safety
 

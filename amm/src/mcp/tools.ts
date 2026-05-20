@@ -12,6 +12,36 @@ export const AMM_TOOLS: Tool[] = [
     inputSchema: { type: "object", properties: {} },
   },
   {
+    name: "amm_get_marks",
+    description: "Get mark prices across enabled venues for a symbol.",
+    inputSchema: {
+      type: "object",
+      properties: { symbol: { type: "string" } },
+      required: ["symbol"],
+    },
+  },
+  {
+    name: "amm_get_funding",
+    description: "Get funding rates across enabled venues for a symbol.",
+    inputSchema: {
+      type: "object",
+      properties: { symbol: { type: "string" } },
+      required: ["symbol"],
+    },
+  },
+  {
+    name: "amm_get_orderbook",
+    description: "Get a venue orderbook when supported. Phoenix is the default.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        symbol: { type: "string" },
+        venue: { type: "string", enum: ["phoenix", "flash", "jupiter", "gmtrade"] },
+      },
+      required: ["symbol"],
+    },
+  },
+  {
     name: "amm_get_quote",
     description: "Quote all enabled venues for a symbol, side, and notional.",
     inputSchema: {
@@ -120,5 +150,10 @@ export const AMM_TOOLS: Tool[] = [
       },
       required: ["symbol"],
     },
+  },
+  {
+    name: "amm_health",
+    description: "Return safety config and enabled venue status.",
+    inputSchema: { type: "object", properties: {} },
   },
 ];

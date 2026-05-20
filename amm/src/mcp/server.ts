@@ -4,7 +4,7 @@ import {
   ListToolsRequestSchema,
 } from "@modelcontextprotocol/sdk/types.js";
 import { createPerpsAmmClient } from "../sdk/client.js";
-import type { OrderSide } from "../types.js";
+import type { OrderSide, VenueName } from "../types.js";
 import { AMM_TOOLS } from "./tools.js";
 
 function text(data: unknown) {
@@ -22,6 +22,11 @@ function side(value: unknown): OrderSide {
   return value === "short" ? "short" : "long";
 }
 
+function venue(value: unknown): VenueName {
+  if (value === "flash" || value === "jupiter" || value === "gmtrade") return value;
+  return "phoenix";
+}
+
 export async function createAmmMcpServer(): Promise<Server> {
   const client = createPerpsAmmClient();
   const server = new Server(
@@ -37,6 +42,12 @@ export async function createAmmMcpServer(): Promise<Server> {
         return text(client.listVenues());
       case "amm_list_markets":
         return text(await client.listMarkets());
+      case "amm_get_marks":
+        return text(await client.marks(String(args.symbol)));
+      case "amm_get_funding":
+        return text(await client.funding(String(args.symbol)));
+      case "amm_get_orderbook":
+        return text(await client.orderBook(String(args.symbol), venue(args.venue)));
       case "amm_get_quote":
         return text(await client.quote({
           symbol: String(args.symbol),
@@ -81,6 +92,8 @@ export async function createAmmMcpServer(): Promise<Server> {
         return text(await client.liquidationRisks(String(args.wallet)));
       case "amm_score_market":
         return text(await client.scoreMarket(String(args.symbol), side(args.side)));
+      case "amm_health":
+        return text(client.health());
       default:
         throw new Error(`Unknown tool: ${request.params.name}`);
     }
