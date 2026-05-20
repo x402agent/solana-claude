@@ -11,9 +11,13 @@
 *.secrets
 .clawd/
 .vulcan/
+.gitlawb/
 **/.clawd/
 **/.vulcan/
+**/.gitlawb/
 **/strategy-runs/
+ucan.json
+identity.pem
 .npmrc
 .netrc
 *.pem
