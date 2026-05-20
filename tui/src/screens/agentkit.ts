@@ -551,22 +551,15 @@ function render(
 
 async function copyToClipboard(text: string): Promise<boolean> {
   const { execFile } = await import('node:child_process');
-  const { promisify } = await import('node:util');
-  const exec = promisify(execFile);
   try {
-    if (process.platform === 'darwin') {
-      const child = execFile('pbcopy');
-      if (child.stdin) {
-        child.stdin.write(text);
-        child.stdin.end();
-      }
-      await new Promise<void>(r => child.on('close', r));
-      return true;
-    }
-    if (process.platform === 'linux') {
-      await exec('xclip', ['-selection', 'clipboard'], { input: text } as Parameters<typeof exec>[1]);
-      return true;
-    }
+    const tool = process.platform === 'darwin' ? 'pbcopy' : 'xclip';
+    const args = process.platform === 'linux' ? ['-selection', 'clipboard'] : [];
+    await new Promise<void>((res, rej) => {
+      const p = execFile(tool, args);
+      if (p.stdin) { p.stdin.write(text); p.stdin.end(); }
+      p.on('close', c => (c === 0 ? res() : rej(new Error(`exit ${c}`))));
+    });
+    return true;
   } catch { /* ignore */ }
   return false;
 }
