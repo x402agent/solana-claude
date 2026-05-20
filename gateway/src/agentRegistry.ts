@@ -51,6 +51,9 @@ const EXTERNAL_AGENT_REGISTRY_RESOURCE =
 const EXTERNAL_AGENT_REGISTRY_DESTINATION_URL =
   process.env.EXTERNAL_AGENT_REGISTRY_DESTINATION_URL ??
   'https://x402.wtf/agents/registry';
+const ADK_PRIVATE_MODE = process.env.CLAWD_ADK_PRIVATE_MODE ?? 'private';
+const ADK_AGENT_ENTRYPOINT = process.env.CLAWD_ADK_AGENT_ENTRYPOINT ?? 'adk/agent.ts';
+const ADK_MODEL = process.env.GOOGLE_ADK_MODEL ?? 'gemini-2.5-flash';
 const VERSION = '2.1.0';
 const SPAWN_DATE = '2025-01-01T00:00:00Z';
 
@@ -163,6 +166,31 @@ function buildExternalRegistryInfo() {
   };
 }
 
+function buildAdkDestinations() {
+  return [
+    { id: 'agent_orchestrator', name: 'Agent Orchestrator API', location: 'global', url: `${BASE_URL}/api/orchestrator` },
+    { id: 'agents_catalog', name: 'Agents Catalog API', location: 'global', url: `${BASE_URL}/api/agents` },
+    { id: 'clawd_chat', name: 'Clawd Chat API', location: 'global', url: `${BASE_URL}/api/clawd` },
+    { id: 'imperial_router', name: 'Imperial Router API', location: 'global', url: `${BASE_URL}/api/imperial` },
+    { id: 'perps_trading_v1', name: 'Perps Trading API v1', location: 'global', url: `${BASE_URL}/api/perps/v1` },
+    { id: 'phoenix_markets', name: 'Phoenix Markets API', location: 'global', url: `${BASE_URL}/api/phoenix/markets` },
+    { id: 'router_v1_chat_completions', name: 'Router v1 Chat Completions (OpenAI-compat)', location: 'global', url: `${BASE_URL}/api/router/v1/chat/completions` },
+    { id: 'x402_agent_chat', name: 'x402 Agent Chat API', location: 'global', url: `${BASE_URL}/api/x402/agent/chat` },
+    { id: 'x402wtf_registry', name: 'x402wtf', location: 'global', url: `${BASE_URL}/agents/registry` },
+  ];
+}
+
+function buildAdkInfo() {
+  return {
+    framework: 'google-adk-typescript',
+    private_mode: ADK_PRIVATE_MODE === 'private',
+    agent_entrypoint: ADK_AGENT_ENTRYPOINT,
+    model: ADK_MODEL,
+    manifest_url: `${BASE_URL}/adk/manifest.json`,
+    destinations: buildAdkDestinations(),
+  };
+}
+
 function buildMetaplexMetadata(agent: AgentDef) {
   return {
     schema_version: 'v1.0',
@@ -213,6 +241,7 @@ router.get('/registry', (_req: Request, res: Response) => {
     version: VERSION,
     base_url: BASE_URL,
     external_agent_registry: buildExternalRegistryInfo(),
+    google_adk: buildAdkInfo(),
     agents: AGENT_IDS.map((id) => {
       const a = AGENTS[id];
       return {
@@ -276,12 +305,45 @@ router.get('/identity', (_req: Request, res: Response) => {
       templates: AGENT_IDS.map((id) => `${BASE_URL}/sas/agent${id}.json`),
     },
     external_agent_registry: buildExternalRegistryInfo(),
+    google_adk: buildAdkInfo(),
     links: {
       registry: `${BASE_URL}/registry`,
       google_agent_registry: EXTERNAL_AGENT_REGISTRY_DESTINATION_URL,
+      google_adk_manifest: `${BASE_URL}/adk/manifest.json`,
       openai_plugin: `${BASE_URL}/.well-known/ai-plugin.json`,
       feed: `${BASE_URL}/feed.json`,
     },
+  });
+});
+
+// ---------------------------------------------------------------------------
+// GET /adk/manifest.json — private Google ADK connection manifest
+// ---------------------------------------------------------------------------
+router.get('/adk/manifest.json', (_req: Request, res: Response) => {
+  res.set(cacheHeaders(300)).json({
+    schema: 'clawd-google-adk-manifest-v1',
+    version: VERSION,
+    base_url: BASE_URL,
+    privacy: {
+      mode: ADK_PRIVATE_MODE,
+      public_discovery: false,
+      note: 'This manifest wires private ADK orchestration to the Clawd registry and agent catalog.',
+    },
+    adk: buildAdkInfo(),
+    registry: {
+      external_agent_registry: buildExternalRegistryInfo(),
+      local_registry: `${BASE_URL}/registry`,
+      catalog: `${BASE_URL}/api/agents`,
+    },
+    installed_agents: AGENT_IDS.map((id) => ({
+      id,
+      name: AGENTS[id].name,
+      slug: AGENTS[id].slug,
+      metadata_uri: `${BASE_URL}/metadata/agent${id}.json`,
+      registration_uri: `${BASE_URL}/metadata/agent${id}/registration.json`,
+      capabilities_uri: `${BASE_URL}/capabilities/agent${id}.json`,
+    })),
+    destinations: buildAdkDestinations(),
   });
 });
 
@@ -328,6 +390,10 @@ for (const id of AGENT_IDS) {
       },
       contact: `clawd@solanaclawd.com`,
       external_agent_registry: buildExternalRegistryInfo(),
+      google_adk: {
+        ...buildAdkInfo(),
+        tools: ['get_agent_catalog_stats', 'search_agent_catalog', 'get_private_destinations'],
+      },
       legal_info_url: `${BASE_URL}/identity`,
     });
   });
@@ -375,6 +441,7 @@ for (const id of AGENT_IDS) {
         metadata_uri: `${BASE_URL}/metadata/agent${id}.json`,
       },
       external_agent_registry: buildExternalRegistryInfo(),
+      google_adk: buildAdkInfo(),
       endpoints: {
         paid_inference: `${BASE_URL}/agent${id}`,
         free_metadata: `${BASE_URL}/metadata/agent${id}.json`,
