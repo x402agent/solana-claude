@@ -1,5 +1,5 @@
 <!-- ╔══════════════════════════════════════════════════════════════════════╗ -->
-<!-- ║  🧰  SOLANA AGENT KIT — START HERE                                  ║ -->
+<!-- ║  🧰  SOLANA CLAWD — START HERE                                      ║ -->
 <!-- ╚══════════════════════════════════════════════════════════════════════╝ -->
 
 <div align="center">
@@ -8,10 +8,34 @@
 
 <table width="100%"><tr><td align="center" bgcolor="#0d1117" style="padding:32px 24px 28px;">
 
-<h2>🧰&nbsp;&nbsp;SOLANA AGENT KIT</h2>
-<p><strong>Complete on-chain agent toolkit — built into the TUI, powered by the lobster stack.</strong></p>
+<h1>Solana Clawd</h1>
+<p><strong>Solana-native agent runtime, MCP command center, AMM/perps router, and $CLAWD payment stack.</strong></p>
 
-<img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=800&size=17&duration=1400&pause=320&color=14F195&center=true&vCenter=true&width=980&lines=%F0%9F%9A%80+Token+Ops+%E2%80%94+pump.fun+%C2%B7+Token-2022+%C2%B7+Raydium+CLMM+%C2%B7+MPL+metadata;%F0%9F%93%88+Trading+%E2%80%94+Phoenix+perps+%C2%B7+Jupiter+spot+%C2%B7+TWAP+%C2%B7+DCA;%F0%9F%92%B0+DeFi+%E2%80%94+Kamino+%C2%B7+Marginfi+%C2%B7+Meteora+DLMM+%C2%B7+Yield+optimizer;%F0%9F%8E%A8+NFT+%E2%80%94+Gasless+MPL+Core+mint+%C2%B7+SAS+attestation+%C2%B7+Staking;%E2%9A%A1+x402+%E2%80%94+USDC+HTTP-402+rails+%C2%B7+Pay-per-call+%C2%B7+Provider+catalog;%F0%9F%A4%96+Automaton+%E2%80%94+Leviathan+%C2%B7+OODA+pulse+%C2%B7+Three+Laws+%C2%B7+Backroom;%F0%9F%A7%A0+Skills+%E2%80%94+ClawdHub+%C2%B7+meme-trader+%C2%B7+meme-launcher+%C2%B7+Catalog+sync" alt="Solana Agent Kit features" />
+<img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=800&size=17&duration=1400&pause=320&color=14F195&center=true&vCenter=true&width=980&lines=%F0%9F%9A%80+Token+Ops+%E2%80%94+pump.fun+%C2%B7+Token-2022+%C2%B7+Raydium+CLMM+%C2%B7+MPL+metadata;%F0%9F%93%88+Trading+%E2%80%94+Phoenix+perps+%C2%B7+Jupiter+spot+%C2%B7+TWAP+%C2%B7+DCA;%F0%9F%92%B0+DeFi+%E2%80%94+Kamino+%C2%B7+Marginfi+%C2%B7+Meteora+DLMM+%C2%B7+Yield+optimizer;%F0%9F%8E%A8+NFT+%E2%80%94+Gasless+MPL+Core+mint+%C2%B7+SAS+attestation+%C2%B7+Staking;%E2%9A%A1+x402+%E2%80%94+USDC+HTTP-402+rails+%C2%B7+Pay-per-call+%C2%B7+Provider+catalog;%F0%9F%A4%96+Automaton+%E2%80%94+Leviathan+%C2%B7+OODA+pulse+%C2%B7+Three+Laws+%C2%B7+Backroom;%F0%9F%A7%A0+Skills+%E2%80%94+ClawdHub+%C2%B7+meme-trader+%C2%B7+meme-launcher+%C2%B7+Catalog+sync" alt="Solana Clawd features" />
+
+<br/>
+
+<table width="100%">
+  <tr>
+    <th colspan="2">$CLAWD Token Contract</th>
+  </tr>
+  <tr>
+    <td><strong>Symbol</strong></td>
+    <td><code>$CLAWD</code></td>
+  </tr>
+  <tr>
+    <td><strong>Network</strong></td>
+    <td>Solana mainnet</td>
+  </tr>
+  <tr>
+    <td><strong>Token / contract address (SPL mint)</strong></td>
+    <td><code>8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump</code></td>
+  </tr>
+  <tr>
+    <td><strong>Burn + lock treasury</strong></td>
+    <td><code>GyZGtA7hEThVHZpj52XC9jX15a8ABtDHTwELjFRWEts4</code></td>
+  </tr>
+</table>
 
 <br/>
 
@@ -74,7 +98,7 @@ clawd-agent mint-free --network devnet --owner <YOUR_SOLANA_PUBKEY> \
 
 <img src="https://capsule-render.vercel.app/api?type=waving&color=0:05060d,12:1a0a2e,28:ff5f1f,50:ffd166,72:9945FF,88:14F195,100:05060d&height=320&section=header&text=%F0%9F%A6%9E%F0%9F%91%91%20LOBSTER%20KING%20PERPS&fontSize=60&fontColor=ffffff&animation=twinkling&fontAlignY=36&desc=Phoenix%20%C2%B7%20Vulcan%20%C2%B7%20Clawd%20%C2%B7%20Imperial%20%E2%80%94%20Sovereign%20Solana%20Perpetuals&descAlignY=58&descAlign=50&descSize=18" alt="Lobster King Perps Phoenix Vulcan Clawd banner" />
 
-<h1>🦞👑 Phoenix Perps, Crowned by Clawd</h1>
+<h2>🦞👑 Phoenix Perps, Crowned by Clawd</h2>
 
 <strong>Vulcan execution. Phoenix markets. Clawd operators. Imperial strategy loops.</strong>
 
