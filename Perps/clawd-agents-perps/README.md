@@ -80,12 +80,17 @@ node Perps/clawd-agents-perps/dist/cli.js status
 node Perps/clawd-agents-perps/dist/cli.js frontend
 node Perps/clawd-agents-perps/dist/cli.js telegram "/perps"
 node Perps/clawd-agents-perps/dist/cli.js imperial-scan --symbols SOL,BTC,ETH --size 100
+node perps/clawd-agents-perps/dist/cli.js signal oi SOL-PERP --mode paper
+node perps/clawd-agents-perps/dist/cli.js signal watch SOL-PERP --interval 5s --mode paper
+node perps/clawd-agents-perps/dist/cli.js signal risk-gate SOL-PERP --notional 500 --side long
 node Perps/clawd-agents-perps/dist/cli.js onchain-mm status
 node Perps/clawd-agents-perps/dist/cli.js onchain-mm plan --market HhHRvLFvZid6FD7C96H93F2MkASjYfYAx8Y2P8KMAr6b --ticker SOL-USD --rpc-url local
 node Perps/clawd-agents-perps/dist/cli.js twamm status
 node Perps/clawd-agents-perps/dist/cli.js twamm crank-plan --token-a So11111111111111111111111111111111111111112 --token-b EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v --once
 
 clawd-perps perps agent status
+clawd-perps perps signal oi SOL-PERP --mode paper
+clawd-perps perps signal watch SOL-PERP --interval 5s --mode paper
 clawd-perps perps agent telegram "/perps_vulcan"
 clawd-perps perps onchain-mm status
 ```
