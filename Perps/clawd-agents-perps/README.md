@@ -41,7 +41,7 @@ OI delta
 
 The signal will not pass `executable: true` if any of these fail:
 
-```
+```text
 OI missing
 data stale (> 15s)
 spread too wide (default > 25 bps)
