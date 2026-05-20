@@ -42,22 +42,6 @@ for name in "${dir_names[@]}"; do
   find_expr+=(-name "${name}")
 done
 
-mapfile -d '' dirs < <(
-  find . \
-    -path './.git' -prune -o \
-    -path './.local-secrets' -prune -o \
-    -type d \( "${find_expr[@]}" \) -print0 \
-    | sort -z
-)
-
-mapfile -d '' ds_store_files < <(
-  find . \
-    -path './.git' -prune -o \
-    -path './.local-secrets' -prune -o \
-    -type f -name '.DS_Store' -print0 \
-    | sort -z
-)
-
 removed=0
 
 remove_path() {
@@ -76,13 +60,23 @@ remove_path() {
   removed=$((removed + 1))
 }
 
-for dir in "${dirs[@]}"; do
+while IFS= read -r -d '' dir; do
   remove_path "${dir}"
-done
+done < <(
+  find . \
+    -path './.git' -prune -o \
+    -path './.local-secrets' -prune -o \
+    -type d \( "${find_expr[@]}" \) -print0
+)
 
-for file in "${ds_store_files[@]}"; do
+while IFS= read -r -d '' file; do
   remove_path "${file}"
-done
+done < <(
+  find . \
+    -path './.git' -prune -o \
+    -path './.local-secrets' -prune -o \
+    -type f -name '.DS_Store' -print0
+)
 
 if [ "${dry_run}" -eq 1 ]; then
   echo "Dry run complete: ${removed} ignored generated path(s) matched."
