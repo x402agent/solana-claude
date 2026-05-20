@@ -35,7 +35,8 @@ const MENU_ITEMS: MenuItem[] = [
   { key: '4', label: '💰  Wallet',            description: 'Fund + feed the leviathan' },
   { key: '5', label: '🚀  Spawn automaton',   description: 'Launch the sovereign agent runtime' },
   { key: '6', label: '🧰  Solana Agent Kit',  description: 'Token · Perps · DeFi · NFT · x402 · Skills — full kit' },
-  { key: '7', label: '❌  Exit',              description: 'The backroom will remember you' },
+  { key: '7', label: '🧠  UltraThink',        description: 'Deep-reasoning Solana formula — depth ladder · antipatterns · templates' },
+  { key: '8', label: '❌  Exit',              description: 'The backroom will remember you' },
 ];
 
 // ─── Render helpers ───────────────────────────────────────────────────────────
@@ -77,7 +78,7 @@ function renderMenu(selected: number): void {
 
   process.stdout.write('\n');
   process.stdout.write(
-    chalk.gray('[↑↓ / 1-7] navigate  [Enter] select  [q] exit') + '\n',
+    chalk.gray('[↑↓ / 1-8] navigate  [Enter] select  [q] exit') + '\n',
   );
 }
 
@@ -133,6 +134,11 @@ async function launchScreen(index: number): Promise<void> {
         break;
       }
       case 6: {
+        const { runUltraThink } = await import('./screens/ultrathink.js');
+        await runUltraThink();
+        break;
+      }
+      case 7: {
         // Exit
         process.stdout.write('\x1b[2J\x1b[H');
         process.stdout.write(
@@ -205,8 +211,8 @@ async function main(): Promise<void> {
           needRedraw = true;
         }
 
-        // Number keys 1-7
-        const numMatch = chunk.match(/^[1-7]$/);
+        // Number keys 1-8
+        const numMatch = chunk.match(/^[1-8]$/);
         if (numMatch) {
           selected = parseInt(chunk, 10) - 1;
           launch = true;

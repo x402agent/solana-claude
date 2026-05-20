@@ -71,7 +71,8 @@ hermes
 | 4 | 💰 Wallet | Fund + feed the leviathan |
 | 5 | 🚀 Spawn Automaton | Launch the sovereign OODA agent runtime |
 | **6** | **🧰 Solana Agent Kit** | **Complete toolkit — token · perps · DeFi · NFT · x402 · skills** |
-| 7 | ❌ Exit | The backroom will remember you |
+| **7** | **🧠 UltraThink** | **Deep-reasoning Solana formula — depth ladder · antipatterns · templates** |
+| 8 | ❌ Exit | The backroom will remember you |
 
 ---
 
