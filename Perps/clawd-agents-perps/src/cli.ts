@@ -10,6 +10,14 @@ import {
   getOnchainMarketMakerStatus,
   runOnchainMarketMaker,
 } from "./onchainMarketMaker.js";
+import {
+  buildTwammAutomation,
+  buildTwammBuildPlan,
+  buildTwammCrankPlan,
+  buildTwammTestPlan,
+  getTwammAutomationStatus,
+  runTwammCrank,
+} from "./twammAutomation.js";
 
 type ParsedArgs = {
   command: string;
@@ -86,11 +94,35 @@ Usage:
   clawd-agents-perps onchain-mm build
   clawd-agents-perps onchain-mm plan --market <pubkey> --ticker SOL-USD
   clawd-agents-perps onchain-mm run --market <pubkey> --yes
+  clawd-agents-perps twamm status
+  clawd-agents-perps twamm build
+  clawd-agents-perps twamm crank-plan --token-a <mint> --token-b <mint>
+  clawd-agents-perps twamm crank --token-a <mint> --token-b <mint> --yes
 
 Safety:
   Defaults are observe/paper. Live previews remain blocked unless the runtime
   is explicitly armed with LIVE_TRADING=true, OPERATOR_CONFIRMED=true, and
   PERPS_SIM_ONLY=false. Imperial order submission also requires IMPERIAL_LIVE=true.
+`);
+}
+
+function printTwammHelp(): void {
+  console.log(`clawd-agents-perps twamm
+
+Usage:
+  clawd-agents-perps twamm status
+  clawd-agents-perps twamm build [--skip-app-install]
+  clawd-agents-perps twamm build-plan [--skip-app-install]
+  clawd-agents-perps twamm test-plan [--cargo]
+  clawd-agents-perps twamm crank-plan [--rpc-url <url>] [--token-a <mint>] [--token-b <mint>] [--wallet <path>] [--once]
+  clawd-agents-perps twamm crank --token-a <mint> --token-b <mint> --yes
+
+Environment:
+  CLAWD_TWAMM_ROOT          Path to Perps/twamm-master
+  CLAWD_TWAMM_RPC_URL       RPC alias/url, default SOLANA_RPC_URL/local
+  CLAWD_TWAMM_TOKEN_A_MINT  Default first token mint
+  CLAWD_TWAMM_TOKEN_B_MINT  Default second token mint
+  CLAWD_TWAMM_LIVE=true and OPERATOR_CONFIRMED=true required for crank
 `);
 }
 
@@ -154,6 +186,52 @@ async function main() {
       default:
         console.error(`Unknown onchain-mm command: ${subcommand}`);
         printOnchainMmHelp();
+        process.exitCode = 1;
+        return;
+    }
+  }
+
+  if (parsed.command === "twamm") {
+    const subcommand = parsed.rest[0] || "status";
+    const crankOptions = {
+      rpcUrl: typeof parsed.options["rpc-url"] === "string" ? parsed.options["rpc-url"] : undefined,
+      tokenAMint: typeof parsed.options["token-a"] === "string" ? parsed.options["token-a"] : undefined,
+      tokenBMint: typeof parsed.options["token-b"] === "string" ? parsed.options["token-b"] : undefined,
+      walletPath: typeof parsed.options.wallet === "string" ? parsed.options.wallet : undefined,
+      once: Boolean(parsed.options.once),
+      yes: Boolean(parsed.options.yes),
+    };
+
+    switch (subcommand) {
+      case "help":
+      case "--help":
+      case "-h":
+        printTwammHelp();
+        return;
+      case "status":
+        printJson(getTwammAutomationStatus());
+        return;
+      case "build-plan":
+        printJson(buildTwammBuildPlan({ skipAppInstall: Boolean(parsed.options["skip-app-install"]) }));
+        return;
+      case "build":
+      case "install":
+        printJson(buildTwammAutomation({ skipAppInstall: Boolean(parsed.options["skip-app-install"]) }));
+        return;
+      case "test-plan":
+        printJson(buildTwammTestPlan({ anchor: !parsed.options.cargo, cargo: Boolean(parsed.options.cargo) }));
+        return;
+      case "crank-plan":
+      case "plan":
+        printJson(buildTwammCrankPlan(crankOptions));
+        return;
+      case "crank":
+      case "run":
+        runTwammCrank(crankOptions);
+        return;
+      default:
+        console.error(`Unknown twamm command: ${subcommand}`);
+        printTwammHelp();
         process.exitCode = 1;
         return;
     }

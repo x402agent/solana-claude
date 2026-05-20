@@ -9,3 +9,4 @@ export * from './vulcanCatalog.js';
 export * from './imperialAgent.js';
 export * from './imperialBot.js';
 export * from './onchainMarketMaker.js';
+export * from './twammAutomation.js';

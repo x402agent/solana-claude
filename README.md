@@ -55,20 +55,139 @@ clawd-perps perps finalize <run-id> --cancel-orders --close-position --wait --ye
 ```
 
 ```text
-╔══════════════════════════════════════════════════════════════════════════════╗
-║  LOBSTER KING PERPS COMMAND DECK                                            ║
-║  Phoenix · Vulcan · Clawd · Imperial Solana strategy runners                ║
-╠══════════════════════════════════════════════════════════════════════════════╣
-║  Runtime      clawd · leviathan · clawd-automaton · clawd-perps             ║
-║  Perps        Phoenix markets · Vulcan/Rise execution · Python agent        ║
-║  Strategies   TWAP · grid · TA · ledgers · pause/resume/finalize            ║
-║  Rooms        Analyst ↔ Satirist ↔ Clawd                                    ║
-║  Payments     x402 / HTTP 402 / Solana rails                               ║
-║  Agents       x402.wtf/agents · free registry · gasless MPL Core minting    ║
-║  SDK          goals · knowledge · library · examples · x402 services       ║
-║  Programs     Solana program workspace + protocol experiments               ║
-╚══════════════════════════════════════════════════════════════════════════════╝
+╔══════════════════════════════════════════════════════════════════════════════════╗
+║  🦞👑  LOBSTER KING PERPS — THE HEART OF THE CLAWD STACK                       ║
+║  Phoenix · Vulcan · Imperial · Clawd — sovereign Solana strategy runners        ║
+╠══════════════════════════════════════════════════════════════════════════════════╣
+║  Runtime      clawd · leviathan · clawd-automaton · clawd-perps                 ║
+║  Perps        Phoenix markets · Vulcan/Rise execution · Python agent            ║
+║  Router       Imperial — Jupiter · Flash Trade · Phoenix · GMTrade              ║
+║  Strategies   TWAP · Grid · TA · Ledgers · Pause/Resume/Finalize               ║
+║  Rooms        Analyst ↔ Satirist ↔ Clawd                                        ║
+║  Payments     x402 / HTTP 402 / Solana USDC rails                              ║
+║  Agents       x402.wtf/agents · free registry · gasless MPL Core minting        ║
+║  SDK          goals · knowledge · library · examples · x402 services            ║
+║  Programs     Solana program workspace + protocol experiments                   ║
+╚══════════════════════════════════════════════════════════════════════════════════╝
 ```
+
+---
+
+## `/Perps` — The Heart
+
+<div align="center">
+
+<img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=900&size=22&duration=1500&pause=350&color=FF5F1F&center=true&vCenter=true&width=1000&lines=%2FPerps+is+the+execution+heart+of+this+repo;Phoenix+%C2%B7+Vulcan+%C2%B7+Imperial+%C2%B7+OODA+loop;Multi-venue+router%3A+Jupiter+%C2%B7+Flash+%C2%B7+Phoenix+%C2%B7+GMTrade;Paper-first.+Every+order+ledgered.+Live+gated." alt="perps heart" />
+
+</div>
+
+[`/Perps`](./Perps/) is where the execution logic lives. Every strategy — TWAP, Grid, TA, DCA — runs through the Imperial multi-venue router, with Phoenix as the default venue. The Clawd control surface wraps all of it in agent-safe guardrails, audit trails, and natural language Telegram bot access.
+
+| Layer | What it does |
+|-------|-------------|
+| [`Perps/clawd-agents-perps/`](./Perps/clawd-agents-perps/) | Canonical Clawd integration — Imperial client, OODA loop, Telegram NLP bot |
+| [`Perps/phoenix-onchain-market-maker-master/`](./Perps/phoenix-onchain-market-maker-master/) | Phoenix-native market-making and on-chain execution |
+| [`Perps/Solana-Market-Maker-master/`](./Perps/Solana-Market-Maker-master/) | Generalized Solana MM — quoting, inventory, flow |
+| [`Perps/solana-market-maker-volume-bot-master/`](./Perps/solana-market-maker-volume-bot-master/) | Volume and agent-behavior patterns |
+| [`Perps/twamm-master/`](./Perps/twamm-master/) | TWAMM long-horizon execution primitives |
+
+**→ Full reference: [`Perps/README.md`](./Perps/README.md)**
+
+---
+
+## Crustacean Automation (`clawd-automaton`)
+
+<div align="center">
+
+<img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=800&size=20&duration=1400&pause=320&color=9945FF&center=true&vCenter=true&width=1000&lines=clawd-automaton+%E2%80%94+sovereign+agent+runtime;OODA+loop+%C2%B7+identity+%C2%B7+vault+%C2%B7+heartbeat+%C2%B7+replication;React+%2B+Vite+%2B+R3F+dashboard+%C2%B7+lobster%2Ftrench+3D+visuals;bash+leviathan.sh+%E2%80%94+one-shot+bootstrap" alt="automaton" />
+
+</div>
+
+`clawd-automaton` is the sovereign agent runtime for CLAWD Cloud. It provisions identities, runs OODA loops, manages sandbox lifecycle, handles replication/spawning, and persists operator state — all locally, all yours.
+
+### Install
+
+```bash
+# Global CLI
+npm install -g clawd-automaton
+
+# Or as a library
+npm install clawd-automaton
+```
+
+### Quick Start (from source)
+
+```bash
+git clone https://github.com/x402agent/openclawd.git
+cd openclawd/automaton-main
+pnpm install
+pnpm build
+clawd-automaton --help
+```
+
+One-shot bootstrap (installs CLI, links binary, bootstraps Phoenix perps):
+
+```bash
+bash leviathan.sh
+```
+
+### CLI Commands
+
+```bash
+clawd-automaton --run        # Run the OODA automation loop
+clawd-automaton --status     # Show runtime status
+clawd-automaton --setup      # Interactive setup wizard
+clawd-automaton --init       # Initialize wallet + config
+clawd-automaton --provision  # Provision API key via SIWE
+clawd-automaton --goblin     # Devnet paper Goblin OODA trading mode
+
+clawd-perps perps vulcan context
+clawd-perps perps grid SOL --center-on-mark --width-pct 2.5 --levels-per-side 5 --tokens-per-level 0.5
+```
+
+### Runtime Modules
+
+| Module | Description |
+|--------|-------------|
+| `agent/` | Core OODA loop and decision cycle |
+| `identity/` | Operator identity provisioning and key management |
+| `state/` | SQLite-backed local persistence |
+| `heartbeat/` | Health monitoring and status reporting |
+| `replication/` | Spawn and replicate agent instances |
+| `ooda/` | Observe-Orient-Decide-Act automation cycle |
+| `self-mod/` | Runtime self-update and version management |
+| `survival/` | Resilience and recovery mechanisms |
+| `skills/` | Pluggable skill loader from `~/.automaton/skills/` |
+
+### Dashboard
+
+```bash
+cd automaton-main
+pnpm install
+pnpm build
+pnpm dashboard:dev   # React + Vite + R3F control plane
+```
+
+Dashboard includes: CLAWD Cloud sandbox overview · Inference playground shell · Billing and reserve management · `pay.sh` and `$CLAWD` funding UX · Lobster/trench 3D visual theming.
+
+### Runtime API Variables
+
+| Variable | Description |
+|----------|-------------|
+| `CLAWD_API_URL` | Runtime API (default: `https://api.x402.wtf`) |
+| `CLAWD_API_KEY` | API authentication key |
+| `CLAWD_SANDBOX_ID` | Sandbox instance identifier |
+| `SOLANA_RPC_URL` | Solana RPC endpoint |
+| `VULCAN_BIN` | Path to Vulcan perps CLI binary |
+| `CLAWD_PERPS_API_URL` | Phoenix perps API endpoint |
+| `IMPERIAL_API_BASE` | Imperial routing API endpoint |
+| `IMPERIAL_API_KEY` | Imperial API key for protected routes |
+| `IMPERIAL_WALLET` | Wallet used by Imperial balance/position routes |
+| `CLAWD_PERPS_NO_RELAY` | Disable Backroom install relay when set to `1` |
+
+**→ Full reference: [`automaton-main/README.md`](./automaton-main/README.md)**
+
+---
 
 ## New Core Surfaces
 
@@ -574,19 +693,20 @@ Local docs:
 
 ## Reading Order
 
-1. [`README.md`](./README.md)
-2. [`sdk/README.md`](./sdk/README.md)
-3. [`automaton-main/README.md`](./automaton-main/README.md)
-4. [`attestation/README.md`](./attestation/README.md)
-5. [`operator/README.md`](./operator/README.md)
-6. [`agents/README.md`](./agents/README.md)
-7. [`leviathan/README.md`](./leviathan/README.md)
-8. [`x402/README.md`](./x402/README.md)
-9. [`MCP/README.md`](./MCP/README.md)
-10. [`programs/README.md`](./programs/README.md)
-11. [`llm_oracle/README.md`](./llm_oracle/README.md)
-12. [`packages/clawd/README.md`](./packages/clawd/README.md)
-13. [`packages/clawd-sdk/README.md`](./packages/clawd-sdk/README.md)
+1. [`README.md`](./README.md) ← you are here
+2. [`Perps/README.md`](./Perps/README.md) ← **start here for execution** — Imperial · Phoenix · Vulcan · strategies
+3. [`automaton-main/README.md`](./automaton-main/README.md) — sovereign agent runtime, dashboard, vault
+4. [`sdk/README.md`](./sdk/README.md)
+5. [`attestation/README.md`](./attestation/README.md)
+6. [`operator/README.md`](./operator/README.md)
+7. [`agents/README.md`](./agents/README.md)
+8. [`leviathan/README.md`](./leviathan/README.md)
+9. [`x402/README.md`](./x402/README.md)
+10. [`MCP/README.md`](./MCP/README.md)
+11. [`programs/README.md`](./programs/README.md)
+12. [`llm_oracle/README.md`](./llm_oracle/README.md)
+13. [`packages/clawd/README.md`](./packages/clawd/README.md)
+14. [`packages/clawd-sdk/README.md`](./packages/clawd-sdk/README.md)
 
 ## Mapping
 

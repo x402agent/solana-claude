@@ -97,6 +97,11 @@ async function do_crank(client: CrankClient) {
       }
     }
 
+    if (process.env.CLAWD_TWAMM_CRANK_ONCE === "true") {
+      client.log("One-shot crank complete");
+      return;
+    }
+
     await sleep(crankDelay);
   }
 })();

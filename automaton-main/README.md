@@ -94,8 +94,9 @@ The one-shot automation installer also bootstraps Phoenix perps by installing `@
 
 ## Adjacent Layers
 
-This runtime now sits beside two new first-class sibling surfaces in the repo:
+This runtime now sits beside three first-class sibling surfaces in the repo:
 
+- [`../Perps/README.md`](../Perps/README.md) — **the execution heart** — Imperial multi-venue router, Phoenix markets, Vulcan strategies, Clawd OODA perps agent, Telegram NLP bot
 - [`../attestation/README.md`](../attestation/README.md) — vendored Solana Attestation Service program, generated clients, IDL, and integration tests for formally verified skills, agents, and plugins
 - [`../operator/README.md`](../operator/README.md) — OpenClawd Operator, the iterative agent-command loop that carries the Llobster Legend orchestration path forward under the OpenClawd banner
 
