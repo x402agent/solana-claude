@@ -1,0 +1,185 @@
+/**
+ * OpenClawd SDK Introspection
+ *
+ * Reads package metadata from the monorepo packages without importing them
+ * at runtime (avoids dependency resolution issues). Also probes the
+ * agentwallet vault directory for wallet addresses.
+ */
+
+import { readFile, readdir } from 'node:fs/promises';
+import { existsSync } from 'node:fs';
+import { homedir } from 'node:os';
+import { join, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+// ─── Known SDK constants (inline to avoid circular deps) ─────────────────────
+
+export const CLAWD_MINT = '8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump';
+export const CLAWD_PROTOCOL_PROGRAM = 'CLAWDpRoToCoLv1pRoGRaM111111111111111111111';
+export const DBC_PROGRAM = 'dbcij3LWUppWqq96dh6gJWwBifmcGfLSB5D4DuSMaqN';
+export const USDC_MINT = 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v';
+export const TOKEN_2022_PROGRAM = 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb';
+
+// ─── Package registry ─────────────────────────────────────────────────────────
+
+export interface PackageInfo {
+  name: string;
+  version: string;
+  description: string;
+  status: 'ok' | 'missing' | 'no-dist';
+  hasDist: boolean;
+  binaries: string[];
+}
+
+const PACKAGES_ROOT = resolve(
+  fileURLToPath(import.meta.url),
+  '../../../../packages',
+);
+
+const PACKAGE_DIRS: Record<string, string> = {
+  clawd:           'clawd',
+  'clawd-sdk':     'clawd-sdk',
+  'clawd-perps':   'clawd-perps',
+  'clawd-wallet':  'clawd-wallet',
+  'clawd-protocol':'clawd-protocol',
+  agentwallet:     'agentwallet',
+  'cli-standalone':'cli-standalone',
+};
+
+export async function loadPackageInfo(): Promise<PackageInfo[]> {
+  const results: PackageInfo[] = [];
+
+  for (const [alias, dir] of Object.entries(PACKAGE_DIRS)) {
+    const pkgDir = join(PACKAGES_ROOT, dir);
+    const pkgJson = join(pkgDir, 'package.json');
+
+    if (!existsSync(pkgJson)) {
+      results.push({ name: alias, version: '—', description: 'not found', status: 'missing', hasDist: false, binaries: [] });
+      continue;
+    }
+
+    try {
+      const raw = JSON.parse(await readFile(pkgJson, 'utf8')) as {
+        name?: string;
+        version?: string;
+        description?: string;
+        bin?: Record<string, string>;
+      };
+      const hasDist = existsSync(join(pkgDir, 'dist'));
+      const binaries = raw.bin ? Object.keys(raw.bin) : [];
+      results.push({
+        name: raw.name ?? alias,
+        version: raw.version ?? '?',
+        description: (raw.description ?? '').slice(0, 72),
+        status: hasDist ? 'ok' : 'no-dist',
+        hasDist,
+        binaries,
+      });
+    } catch {
+      results.push({ name: alias, version: '?', description: 'read error', status: 'missing', hasDist: false, binaries: [] });
+    }
+  }
+
+  return results;
+}
+
+// ─── Wallet vault reader ──────────────────────────────────────────────────────
+
+export interface VaultWallet {
+  id: string;
+  label: string;
+  chainType: string;
+  address: string;
+  paused: boolean;
+  createdAt: string;
+}
+
+export interface VaultInfo {
+  available: boolean;
+  path: string;
+  wallets: VaultWallet[];
+  error?: string;
+}
+
+export async function readVaultInfo(): Promise<VaultInfo> {
+  const vaultPath = process.env['VAULT_PATH'] ?? join(homedir(), '.agentwallet', 'vault');
+
+  if (!existsSync(vaultPath)) {
+    return { available: false, path: vaultPath, wallets: [], error: 'Vault directory not found' };
+  }
+
+  try {
+    const files = await readdir(vaultPath);
+    const jsonFiles = files.filter(f => f.endsWith('.json') && f !== 'index.json');
+    const wallets: VaultWallet[] = [];
+
+    for (const file of jsonFiles.slice(0, 20)) {
+      try {
+        const raw = JSON.parse(await readFile(join(vaultPath, file), 'utf8')) as {
+          id?: string;
+          label?: string;
+          chainType?: string;
+          address?: string;
+          paused?: boolean;
+          createdAt?: string;
+        };
+        if (raw.address) {
+          wallets.push({
+            id: raw.id ?? file,
+            label: raw.label ?? 'unnamed',
+            chainType: raw.chainType ?? 'solana',
+            address: raw.address,
+            paused: raw.paused ?? false,
+            createdAt: raw.createdAt ?? '',
+          });
+        }
+      } catch {
+        // skip malformed entries
+      }
+    }
+
+    return { available: true, path: vaultPath, wallets };
+  } catch (e) {
+    return { available: false, path: vaultPath, wallets: [], error: String(e) };
+  }
+}
+
+// ─── Env variable probe ───────────────────────────────────────────────────────
+
+export interface EnvProbe {
+  key: string;
+  label: string;
+  set: boolean;
+  preview?: string;
+}
+
+export function probeEnv(): EnvProbe[] {
+  const vars: Array<[string, string]> = [
+    ['SOLANA_RPC_URL',        'RPC endpoint'],
+    ['HELIUS_API_KEY',        'Helius API key'],
+    ['CLAWD_PERPS_WALLET',    'Perps wallet key'],
+    ['CLAWD_PERPS_API_URL',   'Perps API URL'],
+    ['VAULT_PASSPHRASE',      'Vault passphrase'],
+    ['OPENAI_API_KEY',        'OpenAI / Grok key'],
+    ['ANTHROPIC_API_KEY',     'Anthropic API key'],
+    ['LIVE_TRADING',          'Live trading flag'],
+    ['OPERATOR_CONFIRMED',    'Operator confirmed'],
+    ['BAGS_API_KEY',          'Bags.fm API key'],
+    ['TELEGRAM_BOT_TOKEN',    'Telegram bot token'],
+    ['X402_API_KEY',          'x402 API key'],
+  ];
+
+  return vars.map(([key, label]) => {
+    const val = process.env[key];
+    const set = val !== undefined && val !== '';
+    let preview: string | undefined;
+    if (set && val) {
+      if (key.toLowerCase().includes('key') || key.toLowerCase().includes('passphrase') || key.toLowerCase().includes('wallet')) {
+        preview = val.slice(0, 4) + '…' + val.slice(-4);
+      } else {
+        preview = val.slice(0, 24) + (val.length > 24 ? '…' : '');
+      }
+    }
+    return { key, label, set, preview };
+  });
+}
