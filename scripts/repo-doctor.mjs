@@ -70,6 +70,9 @@ function runTypechecks(emit = false) {
   ];
 
   for (const [name, tsconfig] of projects) {
+    if (hasPath(path.join(name, "package.json"))) {
+      ensureInstall(name, ["--ignore-scripts", "--legacy-peer-deps"]);
+    }
     run(`${emit ? "build" : "typecheck"} ${name}`, "npx", ["tsc", "-p", tsconfig, ...tscArgs]);
   }
 }
