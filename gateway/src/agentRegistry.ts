@@ -26,6 +26,9 @@
  */
 
 import { Router, Request, Response } from 'express';
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import {
   getLastN,
   getLastForAgent,
@@ -56,6 +59,26 @@ const ADK_AGENT_ENTRYPOINT = process.env.CLAWD_ADK_AGENT_ENTRYPOINT ?? 'adk/agen
 const ADK_MODEL = process.env.GOOGLE_ADK_MODEL ?? 'gemini-2.5-flash';
 const VERSION = '2.1.0';
 const SPAWN_DATE = '2025-01-01T00:00:00Z';
+
+const MODULE_DIR = path.dirname(fileURLToPath(import.meta.url));
+
+function findRepoRoot(): string {
+  let current = MODULE_DIR;
+  for (let i = 0; i < 8; i += 1) {
+    if (fs.existsSync(path.join(current, 'agents', 'agents-catalog.json'))) {
+      return current;
+    }
+    const next = path.dirname(current);
+    if (next === current) break;
+    current = next;
+  }
+  return process.cwd();
+}
+
+const REPO_ROOT = findRepoRoot();
+const AGENTS_CATALOG_PATH = path.join(REPO_ROOT, 'agents', 'agents-catalog.json');
+const AGENTS_MANIFEST_PATH = path.join(REPO_ROOT, 'agents', 'agents-manifest.json');
+const AGENTS_SRC_DIR = path.join(REPO_ROOT, 'agents', 'src');
 
 interface AgentDef {
   id: number;
@@ -180,6 +203,69 @@ function buildAdkDestinations() {
   ];
 }
 
+function readJsonFile<T>(filePath: string, fallback: T): T {
+  try {
+    return JSON.parse(fs.readFileSync(filePath, 'utf8')) as T;
+  } catch {
+    return fallback;
+  }
+}
+
+function catalogEntries(catalog: any) {
+  const byId = new Map<string, any>();
+  for (const section of ['oneShots', 'featured', 'agents'] as const) {
+    const agents = Array.isArray(catalog?.[section]) ? catalog[section] : [];
+    for (const agent of agents) {
+      const id = String(agent.identifier ?? agent.id ?? '');
+      if (id && !byId.has(id)) byId.set(id, { ...agent, catalog_section: section });
+    }
+  }
+  return [...byId.values()];
+}
+
+function installedAgentSourceIds(): string[] {
+  try {
+    return fs
+      .readdirSync(AGENTS_SRC_DIR)
+      .filter((file) => file.endsWith('.json'))
+      .sort()
+      .map((file) => readJsonFile<any>(path.join(AGENTS_SRC_DIR, file), null))
+      .filter(Boolean)
+      .map((agent) => String(agent.identifier ?? agent.id ?? ''))
+      .filter(Boolean);
+  } catch {
+    return [];
+  }
+}
+
+function buildInstalledCatalogInfo() {
+  const catalog = readJsonFile<any>(AGENTS_CATALOG_PATH, {});
+  const manifest = readJsonFile<any>(AGENTS_MANIFEST_PATH, {});
+  const entries = catalogEntries(catalog);
+  const catalogIds = new Set(entries.map((agent) => String(agent.identifier ?? agent.id ?? '')).filter(Boolean));
+  const sourceIds = new Set(installedAgentSourceIds());
+  const missingFromCatalog = [...sourceIds].filter((id) => !catalogIds.has(id));
+  const missingSourceFiles = [...catalogIds].filter((id) => !sourceIds.has(id));
+
+  return {
+    status: missingFromCatalog.length === 0 && missingSourceFiles.length === 0 ? 'complete' : 'mismatch',
+    installed_source_files: sourceIds.size,
+    catalog_entries: catalogIds.size,
+    manifest_groups: Object.keys(manifest.agents ?? {}).length,
+    generated_at: catalog.generatedAt ?? null,
+    stats: catalog.stats ?? null,
+    endpoints: {
+      agents: `${BASE_URL}/api/agents`,
+      catalog: `${BASE_URL}/api/agents/catalog`,
+      registry: `${BASE_URL}/api/agents/registry`,
+      adk_manifest: `${BASE_URL}/adk/manifest.json`,
+    },
+    missing_from_catalog: missingFromCatalog,
+    missing_source_files: missingSourceFiles,
+    note: 'The private ADK agent reads agents/agents-catalog.json and agents/src/*.json so every installed source-backed catalog agent is discoverable through ADK tools.',
+  };
+}
+
 function buildAdkInfo() {
   return {
     framework: 'google-adk-typescript',
@@ -187,6 +273,7 @@ function buildAdkInfo() {
     agent_entrypoint: ADK_AGENT_ENTRYPOINT,
     model: ADK_MODEL,
     manifest_url: `${BASE_URL}/adk/manifest.json`,
+    installed_catalog: buildInstalledCatalogInfo(),
     destinations: buildAdkDestinations(),
   };
 }
@@ -335,6 +422,7 @@ router.get('/adk/manifest.json', (_req: Request, res: Response) => {
       local_registry: `${BASE_URL}/registry`,
       catalog: `${BASE_URL}/api/agents`,
     },
+    installed_catalog: buildInstalledCatalogInfo(),
     installed_agents: AGENT_IDS.map((id) => ({
       id,
       name: AGENTS[id].name,

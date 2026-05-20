@@ -1,5 +1,11 @@
 {
   "private": true,
   "type": "module",
-  "main": "agent.ts"
+  "main": "agent.ts",
+  "scripts": {
+    "check": "tsc --noEmit",
+    "run": "adk run agent.ts",
+    "web": "adk web",
+    "api": "adk api_server"
+  }
 }
