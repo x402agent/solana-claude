@@ -1,5 +1,4 @@
 import { loadPerpsRuntimeConfig, type PerpsRuntimeConfig } from "../config.js";
-import { createPhoenixRiseAdapter } from "./phoenixRise.js";
 
 export type OiTick = {
   ts: number;
@@ -82,6 +81,7 @@ export async function readPhoenixOiTick(args: ReadPhoenixOiTickArgs): Promise<Oi
     ...(args.apiUrl ? { apiUrl: args.apiUrl } : {}),
     ...(args.rpcUrl ? { rpcUrl: args.rpcUrl } : {}),
   };
+  const { createPhoenixRiseAdapter } = await import("./phoenixRise.js");
   const adapter = createPhoenixRiseAdapter(config);
   const baseSymbol = symbol.replace(/-PERP$/i, "");
   const [markets, ticker, orderbook] = await Promise.all([

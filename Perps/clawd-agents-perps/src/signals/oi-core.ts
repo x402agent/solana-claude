@@ -147,11 +147,21 @@ export async function buildClawdOiCoreSignal(args: BuildOiSignalArgs): Promise<C
     rpcUrl: args.rpcUrl,
     mock: args.mock,
   });
+  const previous =
+    args.previous ??
+    (args.mock
+      ? {
+          ...tick,
+          ts: tick.ts - 300_000,
+          markPrice: tick.markPrice * 0.989,
+          openInterestUsd: tick.openInterestUsd * 0.952,
+        }
+      : undefined);
 
   const spreadBps = bps(tick.bestAsk, tick.bestBid);
   const markIndexBasisBps = bps(tick.markPrice, tick.indexPrice);
-  const priceDeltaPct = pct(tick.markPrice, args.previous?.markPrice);
-  const openInterestDeltaPct = pct(tick.openInterestUsd, args.previous?.openInterestUsd);
+  const priceDeltaPct = pct(tick.markPrice, previous?.markPrice);
+  const openInterestDeltaPct = pct(tick.openInterestUsd, previous?.openInterestUsd);
   const skew =
     tick.longOiUsd !== undefined && tick.shortOiUsd !== undefined
       ? (tick.longOiUsd - tick.shortOiUsd) / Math.max(tick.longOiUsd + tick.shortOiUsd, 1)

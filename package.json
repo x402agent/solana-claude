@@ -294,8 +294,7 @@
     "packages/clawd-perps",
     "packages/clawd-sdk",
     "packages/clawd-wallet",
-    "packages/cli-standalone",
-    "agent-kit/packages/*"
+    "packages/cli-standalone"
   ],
   "sideEffects": false,
   "keywords": [

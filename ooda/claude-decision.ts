@@ -12,7 +12,6 @@
  * Sponsor: Anthropic / Claude API
  */
 
-import Anthropic from '@anthropic-ai/sdk';
 import { readFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -22,10 +21,11 @@ import type { TickEntry } from './journal.js';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const RALPH_PATH = join(__dirname, 'RALPH.md');
 
-let _client: Anthropic | null = null;
+let _client: unknown | null = null;
 
-function getClient(): Anthropic {
+async function getClient(): Promise<any> {
   if (!_client) {
+    const { default: Anthropic } = await import('@anthropic-ai/sdk');
     _client = new Anthropic({ apiKey: process.env['ANTHROPIC_API_KEY'] });
   }
   return _client;
@@ -64,7 +64,7 @@ export function buildPrompt(obs: Observations): string {
  * one-JSON-object decision. Override with OODA_MODEL env var.
  */
 export async function claudeDecision(obs: Observations): Promise<unknown> {
-  const client = getClient();
+  const client = await getClient();
   const model = process.env['OODA_MODEL'] ?? 'claude-haiku-4-5-20251001';
   const prompt = buildPrompt(obs);
 
