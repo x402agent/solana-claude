@@ -97,6 +97,73 @@ clawd-agent mint-free --network devnet --owner <YOUR_SOLANA_PUBKEY> \
 
 <br/><br/>
 
+<table width="100%"><tr><td align="left" bgcolor="#0d1117" style="padding:28px 28px 24px;">
+
+<h2 align="center">⚡ MCP Command Center — One Curl, Full Tool Plane</h2>
+
+<p align="center">
+  <strong>The MCP server is the orchestration plane for Solana Clawd:</strong>
+  plugin discovery, MCP federation, agent task routing, docs search, x402 metering,
+  package health, gateway tools, perps tooling, and local launchers.
+</p>
+
+<p align="center">
+  <a href="./MCP/README.md"><img src="https://img.shields.io/badge/MCP%20README-full%20operator%20manual-14F195?style=for-the-badge" alt="MCP README" /></a>
+  <a href="./MCP/install.sh"><img src="https://img.shields.io/badge/install.sh-one--shot%20curl-9945FF?style=for-the-badge" alt="MCP one-shot installer" /></a>
+  <a href="./MCP/src/server.ts"><img src="https://img.shields.io/badge/server.ts-tool%20registry-FFD166?style=for-the-badge" alt="MCP server source" /></a>
+</p>
+
+<pre><code class="language-bash">curl -fsSL https://raw.githubusercontent.com/x402agent/solana-clawd/main/MCP/install.sh | bash</code></pre>
+
+<pre><code class="language-json">{
+  "mcpServers": {
+    "solana-clawd": {
+      "command": "~/.local/bin/solana-clawd-mcp"
+    }
+  }
+}</code></pre>
+
+<table width="100%">
+  <tr>
+    <th>MCP rail</th>
+    <th>What comes online</th>
+  </tr>
+  <tr>
+    <td><strong>Plugin Registry</strong></td>
+    <td>Discovers <code>ooda</code>, <code>leviathan</code>, <code>x402</code>, <code>deep-clawd</code>, <code>skills</code>, <code>programs</code>, <code>agents</code>, <code>agent-kit</code>, <code>gateway</code>, and <code>sdk</code> tools.</td>
+  </tr>
+  <tr>
+    <td><strong>Federation Bridge</strong></td>
+    <td>Connects local, subprocess, remote Streamable HTTP, SSE, and A2A-compatible MCP services.</td>
+  </tr>
+  <tr>
+    <td><strong>Agent Task Router</strong></td>
+    <td>Dispatches work across Leviathan, Deep Clawd, OODA, x402, memory, and orchestrator agent lanes.</td>
+  </tr>
+  <tr>
+    <td><strong>Docs System</strong></td>
+    <td>Exposes <code>list_sections</code>, <code>get_documentation</code>, and <code>search_docs</code> over the framework docs cache.</td>
+  </tr>
+  <tr>
+    <td><strong>x402 Metering</strong></td>
+    <td>Tracks premium tool sessions and optional p-token stream settlement.</td>
+  </tr>
+  <tr>
+    <td><strong>Package Injection</strong></td>
+    <td>Builds and launches <code>agentwallet</code>, <code>clawd</code>, <code>clawd-perps</code>, <code>clawd-sdk</code>, <code>clawd-wallet</code>, <code>cli-standalone</code>, <code>clawd-protocol</code>, and <code>Perps/clawd-agents-perps</code>.</td>
+  </tr>
+</table>
+
+<pre><code class="language-bash">solana-clawd-mcp                         # STDIO for Claude Desktop, Cursor, VS Code
+PORT=3001 solana-clawd-mcp-http          # Streamable HTTP + legacy SSE
+curl http://localhost:3001/health        # health check</code></pre>
+
+<p align="center"><strong>Node 20-22 is required for full package injection.</strong> Use <code>--skip-packages</code> for an MCP-only install on newer Node versions.</p>
+
+</td></tr></table>
+
+<br/><br/>
+
 <img src="sdk/assets/openclawd-banner.svg" alt="OpenClawd banner" width="100%" />
 
 <br/><br/>
