@@ -19,7 +19,7 @@
 |---|---------|-------------|
 | 🚀 | `clawd-tui` → press **6** | Open the full Agent Kit TUI |
 | ⚡ | `clawd-agents-perps paper-long SOL --notional 100` | Simulated Phoenix perp long |
-| 🎨 | `curl -X POST https://x402.wtf/api/mint/agent ...` | Gasless MPL Core agent NFT |
+| 🎨 | `clawd-agent mint --network devnet ... --yes` | Real Metaplex registered agent |
 | 💰 | `clawd balance` + `clawd fund 10` | USDC + CLAWD wallet ops |
 | 🤖 | `bash automaton-main/leviathan.sh --full` | Full runtime bootstrap |
 | 📦 | `clawdhub install meme-trader` | Install a skill from ClawdHub |
@@ -27,6 +27,27 @@
 ```bash
 # One-line install → launches the full TUI with the Agent Kit built in
 curl -fsSL https://solanaclawd.com/leviathan.sh | sh && clawd-tui
+```
+
+The installer includes the official `@openclawdsolana/clawd-tui` package. After the one-shot install, mint a real Metaplex Agent Registry identity with a local funded keypair:
+
+```bash
+clawd-agent mint --network devnet --keypair ~/.config/solana/id.json \
+  --name "My AI Agent" \
+  --uri https://example.com/agent-nft.json \
+  --description "Autonomous Solana agent with MCP and x402 services" \
+  --service MCP=https://example.com/mcp \
+  --yes
+```
+
+For a hosted gasless devnet mint through the private Fly gateway and server-side Helius RPC:
+
+```bash
+clawd-agent mint-free --network devnet --owner <YOUR_SOLANA_PUBKEY> \
+  --name "My AI Agent" \
+  --uri https://example.com/agent-nft.json \
+  --description "Autonomous Solana agent with MCP and x402 services" \
+  --service MCP=https://example.com/mcp
 ```
 
 <a href="./tui/README.md"><img src="https://img.shields.io/badge/TUI%20Docs-Agent%20Kit%20Guide-14F195?style=for-the-badge" alt="TUI Agent Kit docs" /></a>

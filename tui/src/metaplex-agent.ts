@@ -7,7 +7,6 @@ import {
   type Umi,
 } from '@metaplex-foundation/umi';
 import {
-  fetchAgentIdentityV1FromSeeds,
   isAgentApiError,
   isAgentApiNetworkError,
   isAgentValidationError,
@@ -179,7 +178,8 @@ export async function mintRegisteredAgent(
   );
 
   const assetAddress = result.assetAddress.toString();
-  const agentWallet = findAssetSignerPda(umi, { asset: result.assetAddress }).toString();
+  const assetPublicKey = publicKey(assetAddress);
+  const agentWallet = findAssetSignerPda(umi, { asset: assetPublicKey })[0].toString();
   const read = await readRegisteredAgent({
     assetAddress,
     rpcUrl,
@@ -188,7 +188,7 @@ export async function mintRegisteredAgent(
 
   return {
     assetAddress,
-    signature: result.signature.toString(),
+    signature: formatSignature(result.signature),
     owner: owner.toString(),
     agentWallet,
     network,
@@ -214,8 +214,8 @@ export async function readRegisteredAgent(opts: {
   return {
     assetAddress: opts.assetAddress,
     registered: identity !== null || agentIdentity !== undefined,
-    registrationUri: agentIdentity?.uri ?? (identity ? (await fetchAgentIdentityV1FromSeeds(umi, { asset })).agentRegistrationUri : undefined),
-    agentWallet: findAssetSignerPda(umi, { asset }).toString(),
+    registrationUri: agentIdentity?.uri,
+    agentWallet: findAssetSignerPda(umi, { asset })[0].toString(),
     owner: assetData?.owner?.toString(),
     name: assetData?.name,
     uri: assetData?.uri,
@@ -239,6 +239,13 @@ export function formatAgentError(err: unknown): string {
 function explorerUrl(assetAddress: string, network: AgentNetwork): string {
   const cluster = network === 'solana-devnet' ? '?cluster=devnet' : '';
   return `https://explorer.solana.com/address/${assetAddress}${cluster}`;
+}
+
+function formatSignature(signature: unknown): string {
+  if (typeof signature === 'string') return signature;
+  if (signature instanceof Uint8Array) return bs58.encode(signature);
+  if (Array.isArray(signature)) return bs58.encode(Uint8Array.from(signature as number[]));
+  return String(signature);
 }
 
 async function readSecretKey(path: string): Promise<Uint8Array> {

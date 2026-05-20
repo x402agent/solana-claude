@@ -70,12 +70,17 @@ function usage(): void {
   process.stdout.write('Mint and inspect Metaplex Agent Registry identities.\n\n');
   process.stdout.write(`${chalk.white.bold('Commands')}\n`);
   process.stdout.write('  mint       Mint a new MPL Core asset and register Agent Identity in one call\n');
+  process.stdout.write('  mint-free  Ask the hosted Clawd gateway to gaslessly mint a registered agent\n');
   process.stdout.write('  read       Read a registered agent and derive its PDA wallet\n');
   process.stdout.write('  metadata   Generate EIP-8004 agent registration JSON\n\n');
   process.stdout.write(`${chalk.white.bold('Mint example')}\n`);
   process.stdout.write('  clawd-agent mint --network devnet --keypair ~/.config/solana/id.json \\\n');
   process.stdout.write('    --name "My AI Agent" --uri https://example.com/agent-nft.json \\\n');
   process.stdout.write('    --description "Autonomous Solana agent" --service MCP=https://example.com/mcp --yes\n\n');
+  process.stdout.write(`${chalk.white.bold('Hosted free mint example')}\n`);
+  process.stdout.write('  clawd-agent mint-free --network devnet --owner <YOUR_SOLANA_PUBKEY> \\\n');
+  process.stdout.write('    --name "My AI Agent" --uri https://example.com/agent-nft.json \\\n');
+  process.stdout.write('    --description "Autonomous Solana agent" --service MCP=https://example.com/mcp\n\n');
 }
 
 async function main(): Promise<void> {
@@ -133,6 +138,33 @@ async function main(): Promise<void> {
       baseUrl: str(args, 'api-base-url'),
     });
     process.stdout.write(`${JSON.stringify(result, null, 2)}\n`);
+    return;
+  }
+
+  if (command === 'mint-free') {
+    const network = str(args, 'network') ?? 'devnet';
+    if (network === 'mainnet' && !bool(args, 'yes')) {
+      throw new Error('Mainnet hosted mint requires --yes.');
+    }
+    const gateway = str(args, 'gateway') ?? 'https://clawd-agent-gateway.fly.dev';
+    const response = await fetch(`${gateway.replace(/\/$/, '')}/api/mint/agent/registered`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        network,
+        ownerPubkey: requireArg(args, 'owner'),
+        name: requireArg(args, 'name'),
+        metadataUri: requireArg(args, 'uri'),
+        description: requireArg(args, 'description'),
+        services: parseServices(list(args, 'service')),
+        confirm_mainnet: bool(args, 'yes'),
+      }),
+    });
+    const payload = await response.json() as unknown;
+    if (!response.ok) {
+      throw new Error(JSON.stringify(payload, null, 2));
+    }
+    process.stdout.write(`${JSON.stringify(payload, null, 2)}\n`);
     return;
   }
 
