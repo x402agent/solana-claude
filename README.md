@@ -15,11 +15,13 @@
 
 <br/>
 
-> **Latest:** Clawd now ships as an official npm-published TUI package with the Agent Kit wired into the one-shot installer. The CLI supports both local keypair minting and hosted devnet agent minting, backed by the private gateway service and live Metaplex Agent Registry integration. The companion gateway app now includes a login-gated mint panel, Convex-backed mint history, and server-side hosted mint recording.
+> **Latest:** Clawd now ships a dedicated [`amm/`](./amm/) AMM/perps aggregator: Phoenix book VWAP, Flash/Jupiter/GMTrade venue adapters, smart routing, paper-first simulations, a typed SDK, `clawd-amm` CLI, and a standalone MCP server with 15 agent tools. The TUI and Agent Kit remain wired into the one-shot installer, while the AMM router gives perps agents a compact execution surface.
 
 | | Command | What it does |
 |---|---------|-------------|
 | 🚀 | `clawd-tui` → press **6** | Open the full Agent Kit TUI |
+| 🧭 | `npm run amm:build && node amm/dist/cli.js route SOL-PERP long 1000` | Route a paper-first AMM/perps order |
+| 🧩 | `node amm/dist/mcp/bin.js` | Start the standalone AMM MCP tool server |
 | ⚡ | `clawd-agents-perps paper-long SOL --notional 100` | Simulated Phoenix perp long |
 | 🎨 | `clawd-agent mint --network devnet ... --yes` | Real Metaplex registered agent |
 | 💰 | `clawd balance` + `clawd fund 10` | USDC + CLAWD wallet ops |
@@ -60,6 +62,7 @@ clawd-agent mint-free --network devnet --owner <YOUR_SOLANA_PUBKEY> \
 ```
 
 <a href="./tui/README.md"><img src="https://img.shields.io/badge/TUI%20Docs-Agent%20Kit%20Guide-14F195?style=for-the-badge" alt="TUI Agent Kit docs" /></a>
+<a href="./amm/README.md"><img src="https://img.shields.io/badge/AMM%20Router-Phoenix%20%C2%B7%20Jupiter%20%C2%B7%20Flash%20%C2%B7%20GMTrade-FFD166?style=for-the-badge" alt="AMM router docs" /></a>
 <a href="./tui/src/screens/agentkit.ts"><img src="https://img.shields.io/badge/Source-agentkit.ts-9945FF?style=for-the-badge" alt="agentkit source" /></a>
 <a href="./Perps/clawd-agents-perps"><img src="https://img.shields.io/badge/Perps-clawd--agents--perps-FF5F1F?style=for-the-badge" alt="clawd agents perps" /></a>
 
