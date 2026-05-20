@@ -1,10 +1,8 @@
 # x402.wtf Site Agent Handoff: Clawd TUI + One-Shot Install Update
 
-Goal: update x402.wtf so the site, install pages, and TUI-facing copy reflect the full Clawd npm package surface that is now wired into the Solana Clawd repo and SDK harness.
+Goal: update x402.wtf so install pages, terminal panels, API docs, and TUI-facing copy match the full Clawd package surface now wired into this repo.
 
-## What changed in solana-clawd
-
-The repo now treats the following packages as the required one-shot install surface:
+## Required one-shot package surface
 
 ```bash
 @openclawdsolana/clawd@^1.3.0
@@ -18,13 +16,19 @@ x402.wtf@^0.1.1
 x402agent-nanoclawd-cli@^1.3.0
 ```
 
-One-shot global install command:
+Preferred direct npm install CTA:
 
 ```bash
 npm install -g @openclawdsolana/clawd @openclawdsolana/clawd-tui @openclawdsolana/clawd-sdk @openclawdsolana/clawd-standalone @openclawdsolana/clawd-wallet @openclawdsolana/clawd-perps clawd-automaton x402.wtf x402agent-nanoclawd-cli
 ```
 
-Expected CLI binaries after install:
+Preferred curl CTA:
+
+```bash
+curl -fsSL https://install.x402.wtf/enter | bash
+```
+
+## Expected binaries
 
 ```bash
 clawd
@@ -41,21 +45,15 @@ x402-terminal
 nanoclawd
 ```
 
-## Repo files updated
+## Repo changes to mirror on the site
 
-- `sdk/package.json`: declares all required packages and adds:
-  - `harness:packages`
-  - `one-shot:install`
-  - `check` now runs TypeScript plus package harness verification.
-- `sdk/scripts/verify-package-harness.mjs`: validates package declarations, installed package metadata, expected bins, and selected `@openclawdsolana/clawd-sdk` exports.
-- `sdk/install.sh` and `sdk/enter.sh`: install the full npm package surface globally in one shot and verify key bins.
-- `install.sh`: root installer now globally installs `x402.wtf` and `x402agent-nanoclawd-cli` too.
-- `tui/src/sdk.ts`: TUI SDK explorer now reports SDK-installed npm packages from `sdk/node_modules`, not just local package workspaces.
-- `README.md` and `sdk/README.md`: package list and one-shot install docs updated.
+- `sdk/package.json` declares the full package set and exposes `harness:packages` plus `one-shot:install`.
+- `sdk/scripts/verify-package-harness.mjs` verifies package declarations, installed package metadata, expected bins, and key SDK exports.
+- `sdk/install.sh` and `sdk/enter.sh` globally install the full package set.
+- root `install.sh` also installs `x402.wtf` and `x402agent-nanoclawd-cli`.
+- `tui/src/sdk.ts` reports SDK-installed npm packages from `sdk/node_modules`.
 
-## Verification already passing locally
-
-Use these commands as the acceptance criteria for site copy and installer changes:
+## Verification commands
 
 ```bash
 npm --prefix sdk run harness:packages
@@ -64,37 +62,9 @@ npm --prefix sdk run build
 npm --prefix tui run build
 ```
 
-Known environment note: use Node 20, 22, or 24. Node 25 emits engine warnings because the root repo declares `>=20 <23` and `@openclawdsolana/clawd` declares `>=20 <25`.
+Use Node 20, 22, or 24. Node 25 emits engine warnings for this repo and for `@openclawdsolana/clawd`.
 
-## Site updates needed on x402.wtf
-
-Update any install page, terminal panel, API page, docs page, and homepage callout that currently says to install only `@openclawdsolana/clawd`.
-
-Preferred install CTA:
-
-```bash
-curl -fsSL https://install.x402.wtf/enter | bash
-```
-
-Alternate direct npm CTA:
-
-```bash
-npm install -g @openclawdsolana/clawd @openclawdsolana/clawd-tui @openclawdsolana/clawd-sdk @openclawdsolana/clawd-standalone @openclawdsolana/clawd-wallet @openclawdsolana/clawd-perps clawd-automaton x402.wtf x402agent-nanoclawd-cli
-```
-
-Mention that the installer provisions:
-
-- Operator CLI: `clawd`
-- TUI: `clawd-tui` / `hermes`
-- Metaplex Agent Registry tools: `clawd-agent`, `clawd-agent-mint`
-- SDK: `@openclawdsolana/clawd-sdk`
-- Wallet SDK: `@openclawdsolana/clawd-wallet`
-- Perps CLI: `clawd-perps`
-- Automation runtime: `clawd-automaton`
-- x402 terminal: `x402.wtf`, `x402-terminal`
-- Nanoclawd CLI: `nanoclawd`
-
-## Suggested site copy
+## Site copy
 
 Headline:
 
@@ -114,28 +84,21 @@ Verification copy:
 The SDK harness verifies declared packages, installed package metadata, expected CLI bins, and key SDK exports after install.
 ```
 
-## API/install route expectations
-
-Make sure these routes serve current content:
+## x402.wtf route expectations
 
 - `https://install.x402.wtf/enter` serves the updated `sdk/enter.sh`.
-- `https://backrooms.x402.wtf/enter.sh` serves the same updated `sdk/enter.sh` or redirects to it.
-- `https://x402.wtf/install` should show both curl and npm commands.
-- `https://x402.wtf/api` should list x402 terminal package `x402.wtf@0.1.1` and binary commands.
-- `https://x402.wtf/gateway` can show developer install state and package/binary readiness if available.
+- `https://backrooms.x402.wtf/enter.sh` serves the same script or redirects to it.
+- `https://x402.wtf/install` shows both curl and npm install paths.
+- `https://x402.wtf/api` lists `x402.wtf@0.1.1` and the `x402.wtf` / `x402-terminal` binaries.
+- `https://x402.wtf/gateway` can show developer install state and package/binary readiness.
 
-## Acceptance checklist for the site agent
+## Acceptance checklist
 
-- Install command on x402.wtf includes all nine required packages.
-- `clawd-tui`, `x402.wtf`, and `x402agent-nanoclawd-cli` are not omitted anywhere.
-- `clawd-automaton` version is shown as `0.2.1`.
-- `@openclawdsolana/clawd-perps` version is shown as `1.0.0`.
-- Site docs recommend Node 20/22/24, not Node 25.
-- Installer page mentions the expected binaries listed above.
-- Any TUI/package status UI includes the SDK npm package surface, not only local workspaces.
-- Site copy references the SDK harness verification command:
-
-```bash
-npm --prefix sdk run harness:packages
-```
-
+- Install command includes all nine required packages.
+- `clawd-tui`, `x402.wtf`, and `x402agent-nanoclawd-cli` are not omitted.
+- `clawd-automaton` is shown as `0.2.1`.
+- `@openclawdsolana/clawd-perps` is shown as `1.0.0` for the published package.
+- Docs recommend Node 20/22/24.
+- Installer page lists the expected binaries.
+- Package status UI includes SDK npm packages, not only local workspaces.
+- Site copy references `npm --prefix sdk run harness:packages`.

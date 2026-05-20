@@ -1,22 +1,27 @@
 {
   "schemaVersion": "erc-8004-agent-registration-v1",
   "protocol": "metaplex-agent-registry",
-  "name": "Advanced Technical Analyst",
-  "description": "Comprehensive technical analysis with indicators, patterns, and multi-timeframe analysis for Solana tokens",
+  "name": "Imperial Perps Trader",
+  "description": "Full OODA loop perps agent: Phoenix/Imperial market tape → signal scoring → dry-run order preview → audit trail. Live execution behind explicit flag.",
   "image": "https://x402.wtf/nich.jpg",
-  "external_url": "https://x402.wtf/agents/solana-technical-analyst",
+  "external_url": "https://x402.wtf/agents/imperial-perps-trader",
   "active": true,
-  "createdAt": "2026-03-15",
+  "createdAt": "2026-05-19",
   "updatedAt": "2026-05-20T17:15:22.480Z",
   "tags": [
-    "technical-analysis",
-    "indicators",
-    "charts",
-    "patterns",
-    "trading"
+    "solana",
+    "clawd",
+    "imperial",
+    "phoenix",
+    "perps",
+    "ooda",
+    "trading",
+    "execution",
+    "dry-run",
+    "audit"
   ],
   "categories": [
-    "defi"
+    "trading"
   ],
   "owner": {
     "organization": "OpenClawd",
@@ -30,7 +35,7 @@
   "services": [
     {
       "name": "web",
-      "endpoint": "https://x402.wtf/agents/solana-technical-analyst"
+      "endpoint": "https://x402.wtf/agents/imperial-perps-trader"
     },
     {
       "name": "A2A",
@@ -39,19 +44,19 @@
     },
     {
       "name": "catalog",
-      "endpoint": "https://x402.wtf/api/agents/catalog/solana-technical-analyst.json"
+      "endpoint": "https://x402.wtf/api/agents/catalog/imperial-perps-trader.json"
     },
     {
       "name": "registration",
-      "endpoint": "https://x402.wtf/api/agents/registry/solana-technical-analyst.json"
+      "endpoint": "https://x402.wtf/api/agents/registry/imperial-perps-trader.json"
     }
   ],
   "registrations": [
     {
-      "agentId": "openclawd:solana-technical-analyst",
+      "agentId": "openclawd:imperial-perps-trader",
       "agentRegistry": "solana:mainnet:metaplex-agent-registry",
       "status": "pending-onchain-registration",
-      "registrationUri": "https://x402.wtf/api/agents/registry/solana-technical-analyst.json"
+      "registrationUri": "https://x402.wtf/api/agents/registry/imperial-perps-trader.json"
     }
   ],
   "supportedTrust": [
@@ -76,8 +81,21 @@
     ]
   },
   "openclawd": {
-    "identifier": "solana-technical-analyst",
-    "capabilities": [],
+    "identifier": "imperial-perps-trader",
+    "capabilities": [
+      "imperial-market-data",
+      "imperial-order-routing",
+      "phoenix-perps-execution",
+      "ooda-signal-scoring",
+      "dry-run-preview",
+      "live-order-submission",
+      "execution-audit-trail",
+      "account-balance-reads",
+      "open-position-tracking",
+      "funding-rate-analysis",
+      "basis-scoring",
+      "liquidity-scoring"
+    ],
     "payment": null,
     "agentToken": null
   }

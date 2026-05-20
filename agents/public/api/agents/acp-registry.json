@@ -1,7 +1,7 @@
 {
   "schemaVersion": "openclawd.acp.registry.v1",
   "protocol": "Agent Commerce Protocol",
-  "generatedAt": "2026-05-18T14:51:51.276Z",
+  "generatedAt": "2026-05-20T17:15:22.480Z",
   "host": "https://x402.wtf",
   "discover": {
     "catalog": "https://x402.wtf/api/agents/catalog",
@@ -112,12 +112,12 @@
     ]
   },
   "stats": {
-    "totalAgents": 134,
+    "totalAgents": 135,
     "totalOneShots": 43,
-    "totalFeatured": 23,
+    "totalFeatured": 24,
     "totalTemplates": 5,
     "byCategory": {
-      "trading": 8,
+      "trading": 9,
       "education": 6,
       "security": 8,
       "defi": 66,
@@ -886,6 +886,42 @@
           "agentRegistry": "solana:mainnet:metaplex-agent-registry",
           "status": "pending-onchain-registration",
           "registrationUri": "https://x402.wtf/api/agents/registry/governance-proposal-analyst.json"
+        }
+      ]
+    },
+    {
+      "id": "imperial-perps-trader",
+      "title": "Imperial Perps Trader",
+      "category": "trading",
+      "capabilities": [
+        "imperial-market-data",
+        "imperial-order-routing",
+        "phoenix-perps-execution",
+        "ooda-signal-scoring",
+        "dry-run-preview",
+        "live-order-submission",
+        "execution-audit-trail",
+        "account-balance-reads",
+        "open-position-tracking",
+        "funding-rate-analysis",
+        "basis-scoring",
+        "liquidity-scoring"
+      ],
+      "metaplexSkills": [],
+      "oneShot": false,
+      "featured": true,
+      "endpoints": {
+        "catalog": "https://x402.wtf/api/agents/catalog/imperial-perps-trader.json",
+        "registration": "https://x402.wtf/api/agents/registry/imperial-perps-trader.json",
+        "a2a": "https://x402.wtf/api/agents/a2a",
+        "mint": "https://x402.wtf/agents/mint?template=imperial-perps-trader"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:imperial-perps-trader",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://x402.wtf/api/agents/registry/imperial-perps-trader.json"
         }
       ]
     },

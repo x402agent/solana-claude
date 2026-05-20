@@ -1,7 +1,7 @@
 {
   "$schema": "https://x402.wtf/schema/clawdAgentCatalog.v1.json",
   "apiVersion": "1.0",
-  "generatedAt": "2026-05-18T14:51:51.276Z",
+  "generatedAt": "2026-05-20T17:15:22.480Z",
   "hub": {
     "gallery": "https://x402.wtf/agents",
     "mint": "https://x402.wtf/agents/mint",
@@ -9,12 +9,12 @@
     "api": "https://x402.wtf/api/agents"
   },
   "stats": {
-    "totalAgents": 134,
+    "totalAgents": 135,
     "totalOneShots": 43,
-    "totalFeatured": 23,
+    "totalFeatured": 24,
     "totalTemplates": 5,
     "byCategory": {
-      "trading": 8,
+      "trading": 9,
       "education": 6,
       "security": 8,
       "defi": 66,
@@ -2873,6 +2873,61 @@
       }
     },
     {
+      "identifier": "imperial-perps-trader",
+      "title": "Imperial Perps Trader",
+      "description": "Full OODA loop perps agent: Phoenix/Imperial market tape → signal scoring → dry-run order preview → audit trail. Live execution behind explicit flag.",
+      "avatar": "I",
+      "tags": [
+        "solana",
+        "clawd",
+        "imperial",
+        "phoenix",
+        "perps",
+        "ooda",
+        "trading",
+        "execution",
+        "dry-run",
+        "audit"
+      ],
+      "category": "trading",
+      "author": "8bitsats",
+      "createdAt": "2026-05-19",
+      "oneShot": false,
+      "featured": true,
+      "openingMessage": "Imperial Perps Agent online. I observe Phoenix/Imperial market tape, score signals across momentum, funding, basis, and liquidity, then route dry-run previews through Imperial by default. Live submission requires IMPERIAL_LIVE=true and explicit operator confirmation.",
+      "openingQuestions": [
+        "Scan SOL, ETH, BTC — give me the top signal and a dry-run order preview",
+        "Show me current Imperial account balances and open positions",
+        "What is the funding rate annualized for SOL right now?",
+        "Run a health check on the Imperial perps config"
+      ],
+      "tokenUsage": null,
+      "capabilities": [
+        "imperial-market-data",
+        "imperial-order-routing",
+        "phoenix-perps-execution",
+        "ooda-signal-scoring",
+        "dry-run-preview",
+        "live-order-submission",
+        "execution-audit-trail",
+        "account-balance-reads",
+        "open-position-tracking",
+        "funding-rate-analysis",
+        "basis-scoring",
+        "liquidity-scoring"
+      ],
+      "metaplexSkills": [],
+      "payment": null,
+      "agentToken": null,
+      "deploy": {
+        "json": "/api/agents/catalog/imperial-perps-trader.json",
+        "chat": "/agents/chat?agent=imperial-perps-trader",
+        "mint": "/agents/mint?template=imperial-perps-trader",
+        "mcp": "/api/agents/catalog/imperial-perps-trader.json",
+        "registration": "/api/agents/registry/imperial-perps-trader.json"
+      }
+    },
+    {
       "identifier": "liquidation-risk-manager",
       "title": "Liquidation Risk Manager",
       "description": "Monitor and manage liquidation risks in lending protocols",
@@ -4642,6 +4697,61 @@
         "mint": "/agents/mint?template=governance-proposal-analyst",
         "mcp": "/api/agents/catalog/governance-proposal-analyst.json",
         "registration": "/api/agents/registry/governance-proposal-analyst.json"
+      }
+    },
+    {
+      "identifier": "imperial-perps-trader",
+      "title": "Imperial Perps Trader",
+      "description": "Full OODA loop perps agent: Phoenix/Imperial market tape → signal scoring → dry-run order preview → audit trail. Live execution behind explicit flag.",
+      "avatar": "I",
+      "tags": [
+        "solana",
+        "clawd",
+        "imperial",
+        "phoenix",
+        "perps",
+        "ooda",
+        "trading",
+        "execution",
+        "dry-run",
+        "audit"
+      ],
+      "category": "trading",
+      "author": "8bitsats",
+      "createdAt": "2026-05-19",
+      "oneShot": false,
+      "featured": true,
+      "openingMessage": "Imperial Perps Agent online. I observe Phoenix/Imperial market tape, score signals across momentum, funding, basis, and liquidity, then route dry-run previews through Imperial by default. Live submission requires IMPERIAL_LIVE=true and explicit operator confirmation.",
+      "openingQuestions": [
+        "Scan SOL, ETH, BTC — give me the top signal and a dry-run order preview",
+        "Show me current Imperial account balances and open positions",
+        "What is the funding rate annualized for SOL right now?",
+        "Run a health check on the Imperial perps config"
+      ],
+      "tokenUsage": null,
+      "capabilities": [
+        "imperial-market-data",
+        "imperial-order-routing",
+        "phoenix-perps-execution",
+        "ooda-signal-scoring",
+        "dry-run-preview",
+        "live-order-submission",
+        "execution-audit-trail",
+        "account-balance-reads",
+        "open-position-tracking",
+        "funding-rate-analysis",
+        "basis-scoring",
+        "liquidity-scoring"
+      ],
+      "metaplexSkills": [],
+      "payment": null,
+      "agentToken": null,
+      "deploy": {
+        "json": "/api/agents/catalog/imperial-perps-trader.json",
+        "chat": "/agents/chat?agent=imperial-perps-trader",
+        "mint": "/agents/mint?template=imperial-perps-trader",
+        "mcp": "/api/agents/catalog/imperial-perps-trader.json",
+        "registration": "/api/agents/registry/imperial-perps-trader.json"
       }
     },
     {
