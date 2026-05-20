@@ -193,6 +193,61 @@ npm install -g solana-clawd && clawd
 
 ---
 
+## Google ADK + Private Agent Gateway
+
+<div align="center">
+
+<img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=900&size=18&duration=1700&pause=350&color=4285F4&center=true&vCenter=true&width=980&lines=Google+ADK+entrypoint+%E2%86%92+private+registry+%E2%86%92+governed+gateway;135+installed+catalog+agents+discoverable+through+ADK+tools;Agent+Gateway+policy+surface+for+MCP%2C+tools%2C+and+destination+control" alt="Google ADK integration" />
+
+</div>
+
+Clawd now includes a TypeScript Google Agent Development Kit entrypoint at [`adk/agent.ts`](./adk/agent.ts). It exports `rootAgent` as a multi-tool `LlmAgent` for:
+
+| Tool surface | Purpose |
+| --- | --- |
+| `get_agent_catalog_stats` | Proves installed catalog coverage across `agents/agents-catalog.json` and `agents/src/*.json` |
+| `search_agent_catalog` | Finds registry agents by identifier, category, tag, or capability |
+| `get_private_destinations` | Lists private routing destinations for the Clawd gateway and catalog |
+| `get_token_price` / `get_token_search` | Reads Solana market metadata through Jupiter |
+| `prepare_jupiter_swap` | Prepares unsigned swap payloads for wallet review only |
+
+The gateway registry now publishes Google ADK metadata through:
+
+```text
+GET /registry
+GET /identity
+GET /adk/manifest.json
+```
+
+The ADK manifest reports the private connection mode, all nine configured destination URLs, and full installed catalog coverage. Current local verification shows `135` installed source-backed agents, `135` catalog entries, and no missing source/catalog entries.
+
+Run the ADK agent locally:
+
+```bash
+cd adk
+npm run check
+npm run run
+```
+
+Open the ADK dev UI:
+
+```bash
+cd adk
+npm run web
+```
+
+Docs:
+
+| Path | Description |
+| --- | --- |
+| [`adk/README.md`](./adk/README.md) | Animated Google ADK integration README |
+| [`gateway/README.md`](./gateway/README.md) | Private Preview Agent Gateway notes, permissions, APIs, and governance patterns |
+| [`adk/.env.example`](./adk/.env.example) | Non-secret env template for ADK model auth and private routing overrides |
+
+Secrets stay out of git. Put real Gemini keys, RPC URLs, API keys, and wallet material in local `.env` files or the shell only.
+
+---
+
 <div align="center">
 
 <img src="https://capsule-render.vercel.app/api?type=rect&color=0:14F195,50:9945FF,100:FF5F1F&height=3" alt="" />
