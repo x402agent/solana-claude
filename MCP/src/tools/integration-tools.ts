@@ -12,6 +12,9 @@ interface PackageStatus {
   scripts?: Record<string, string>;
   hasDist?: boolean;
   hasNodeModules?: boolean;
+  hasCargoToml?: boolean;
+  hasAnchorToml?: boolean;
+  hasCargoTarget?: boolean;
 }
 
 const PACKAGE_PATHS = [
@@ -25,6 +28,14 @@ const PACKAGE_PATHS = [
   "deep-clawd",
   "agents",
   "formal_verification",
+  "packages/agentwallet",
+  "packages/clawd",
+  "packages/clawd-perps",
+  "packages/clawd-protocol",
+  "packages/clawd-sdk",
+  "packages/clawd-wallet",
+  "packages/cli-standalone",
+  "Perps/clawd-agents-perps",
 ];
 
 async function readJson<T = Record<string, unknown>>(abs: string): Promise<T | null> {
@@ -68,6 +79,9 @@ async function getPackageStatus(repoRoot: string): Promise<PackageStatus[]> {
       scripts: packageJson?.scripts,
       hasDist: await exists(path.join(abs, "dist")),
       hasNodeModules: await exists(path.join(abs, "node_modules")),
+      hasCargoToml: await exists(path.join(abs, "Cargo.toml")),
+      hasAnchorToml: await exists(path.join(abs, "Anchor.toml")),
+      hasCargoTarget: await exists(path.join(abs, "target")),
     };
   }));
 }
@@ -87,7 +101,7 @@ export function createIntegrationTools(repoRoot: string): Array<[ToolDef, ToolHa
     [
       {
         name: "integration_status",
-        description: "[Integration] Verify MCP visibility into agent-kit, gateway, sdk, x402, agents, Leviathan, Deep Clawd, and service packages",
+        description: "[Integration] Verify MCP visibility into agent-kit, gateway, sdk, x402, agents, Leviathan, Deep Clawd, packages/*, perps, and service packages",
         inputSchema: { type: "object", properties: {} },
         category: "orchestrator",
       },
