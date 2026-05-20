@@ -1,4 +1,43 @@
+<!-- ╔══════════════════════════════════════════════════════════════════════╗ -->
+<!-- ║  🧰  SOLANA AGENT KIT — START HERE                                  ║ -->
+<!-- ╚══════════════════════════════════════════════════════════════════════╝ -->
+
 <div align="center">
+
+<img src="https://capsule-render.vercel.app/api?type=rect&color=0:05060d,40:0d1117,60:1a0a2e,100:14F195&height=6&section=header" alt="" />
+
+<table width="100%"><tr><td align="center" bgcolor="#0d1117" style="padding:32px 24px 28px;">
+
+<h2>🧰&nbsp;&nbsp;SOLANA AGENT KIT</h2>
+<p><strong>Complete on-chain agent toolkit — built into the TUI, powered by the lobster stack.</strong></p>
+
+<img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=800&size=17&duration=1400&pause=320&color=14F195&center=true&vCenter=true&width=980&lines=%F0%9F%9A%80+Token+Ops+%E2%80%94+pump.fun+%C2%B7+Token-2022+%C2%B7+Raydium+CLMM+%C2%B7+MPL+metadata;%F0%9F%93%88+Trading+%E2%80%94+Phoenix+perps+%C2%B7+Jupiter+spot+%C2%B7+TWAP+%C2%B7+DCA;%F0%9F%92%B0+DeFi+%E2%80%94+Kamino+%C2%B7+Marginfi+%C2%B7+Meteora+DLMM+%C2%B7+Yield+optimizer;%F0%9F%8E%A8+NFT+%E2%80%94+Gasless+MPL+Core+mint+%C2%B7+SAS+attestation+%C2%B7+Staking;%E2%9A%A1+x402+%E2%80%94+USDC+HTTP-402+rails+%C2%B7+Pay-per-call+%C2%B7+Provider+catalog;%F0%9F%A4%96+Automaton+%E2%80%94+Leviathan+%C2%B7+OODA+pulse+%C2%B7+Three+Laws+%C2%B7+Backroom;%F0%9F%A7%A0+Skills+%E2%80%94+ClawdHub+%C2%B7+meme-trader+%C2%B7+meme-launcher+%C2%B7+Catalog+sync" alt="Solana Agent Kit features" />
+
+<br/>
+
+| | Command | What it does |
+|---|---------|-------------|
+| 🚀 | `clawd-tui` → press **6** | Open the full Agent Kit TUI |
+| ⚡ | `clawd-agents-perps paper-long SOL --notional 100` | Simulated Phoenix perp long |
+| 🎨 | `curl -X POST https://x402.wtf/api/mint/agent ...` | Gasless MPL Core agent NFT |
+| 💰 | `clawd balance` + `clawd fund 10` | USDC + CLAWD wallet ops |
+| 🤖 | `bash automaton-main/leviathan.sh --full` | Full runtime bootstrap |
+| 📦 | `clawdhub install meme-trader` | Install a skill from ClawdHub |
+
+```bash
+# One-line install → launches the full TUI with the Agent Kit built in
+curl -fsSL https://solanaclawd.com/leviathan.sh | sh && clawd-tui
+```
+
+<a href="./tui/README.md"><img src="https://img.shields.io/badge/TUI%20Docs-Agent%20Kit%20Guide-14F195?style=for-the-badge" alt="TUI Agent Kit docs" /></a>
+<a href="./tui/src/screens/agentkit.ts"><img src="https://img.shields.io/badge/Source-agentkit.ts-9945FF?style=for-the-badge" alt="agentkit source" /></a>
+<a href="./Perps/clawd-agents-perps"><img src="https://img.shields.io/badge/Perps-clawd--agents--perps-FF5F1F?style=for-the-badge" alt="clawd agents perps" /></a>
+
+</td></tr></table>
+
+<img src="https://capsule-render.vercel.app/api?type=rect&color=0:14F195,40:9945FF,60:FF5F1F,100:FFD166&height=3&section=header" alt="" />
+
+<br/>
 
 <img src="https://capsule-render.vercel.app/api?type=waving&color=0:05060d,12:1a0a2e,28:ff5f1f,50:ffd166,72:9945FF,88:14F195,100:05060d&height=320&section=header&text=%F0%9F%A6%9E%F0%9F%91%91%20LOBSTER%20KING%20PERPS&fontSize=60&fontColor=ffffff&animation=twinkling&fontAlignY=36&desc=Phoenix%20%C2%B7%20Vulcan%20%C2%B7%20Clawd%20%C2%B7%20Imperial%20%E2%80%94%20Sovereign%20Solana%20Perpetuals&descAlignY=58&descAlign=50&descSize=18" alt="Lobster King Perps Phoenix Vulcan Clawd banner" />
 
