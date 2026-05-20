@@ -60,7 +60,13 @@ const generatedNames = new Set([
   '.cache',
   '.wrangler',
   'build',
+  '__pycache__',
+  '.pytest_cache',
+  '.mypy_cache',
+  '.ruff_cache',
+  '.lake',
   '.venv',
+  'venv',
 ]);
 
 function sh(command, args, options = {}) {

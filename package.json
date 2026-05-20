@@ -121,6 +121,7 @@
     "automation:mcp": "bash automaton-main/automation/leviathan.sh --mcp",
     "setup": "bash scripts/setup.sh",
     "repo:audit": "bash scripts/repo-hygiene-audit.sh",
+    "repo:clean": "bash scripts/clean-generated.sh",
     "lint": "node scripts/repo-doctor.mjs --lint",
     "lint:fix": "biome check --write automaton-main/automation beepboop/worker/src clawdrouter/src gateway/src leviathan/src MCP/src sdk/src scripts",
     "format": "biome format --write automaton-main/automation beepboop/worker/src clawdrouter/src gateway/src leviathan/src MCP/src sdk/src scripts",
