@@ -31,6 +31,13 @@
 curl -fsSL https://solanaclawd.com/leviathan.sh | sh && clawd-tui
 ```
 
+```bash
+# One-shot local MCP server install → builds MCP plus packages/* and perps launchers
+curl -fsSL https://raw.githubusercontent.com/x402agent/solana-clawd/main/mcp/install.sh | bash
+```
+
+The MCP installer wires `packages/agentwallet`, `packages/clawd`, `packages/clawd-perps`, `packages/clawd-protocol`, `packages/clawd-sdk`, `packages/clawd-wallet`, `packages/cli-standalone`, and `Perps/clawd-agents-perps` into the local install. Full MCP details live in [`mcp/README.md`](./mcp/README.md).
+
 The installer includes the official `@openclawdsolana/clawd-tui` package. After the one-shot install, mint a real Metaplex Agent Registry identity with a local funded keypair:
 
 ```bash
