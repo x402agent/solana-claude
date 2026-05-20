@@ -344,9 +344,10 @@ export function scoreImperialMarket(snap: ImperialMarketSnapshot): AgentSignal {
   }
 
   // Liquidity: Phoenix depth spread
-  if (snap.depth?.bids.length && snap.depth.asks.length) {
-    const bid = snap.depth.bids[0]?.[0] ?? 0;
-    const ask = snap.depth.asks[0]?.[0] ?? 0;
+  const depth = snap.depth;
+  if ((depth?.bids?.length ?? 0) > 0 && (depth?.asks?.length ?? 0) > 0) {
+    const bid = depth?.bids[0]?.[0] ?? 0;
+    const ask = depth?.asks[0]?.[0] ?? 0;
     if (bid > 0) {
       const spreadBps = ((ask - bid) / bid) * 10000;
       scores.liquidity = spreadBps < 10 ? 1 : spreadBps < 30 ? 0.5 : 0;
@@ -354,9 +355,9 @@ export function scoreImperialMarket(snap: ImperialMarketSnapshot): AgentSignal {
   }
 
   // Momentum: mark vs mid
-  if (snap.markPrice !== null && snap.depth?.bids.length && snap.depth.asks.length) {
-    const bid = snap.depth.bids[0]?.[0] ?? 0;
-    const ask = snap.depth.asks[0]?.[0] ?? 0;
+  if (snap.markPrice !== null && (depth?.bids?.length ?? 0) > 0 && (depth?.asks?.length ?? 0) > 0) {
+    const bid = depth?.bids[0]?.[0] ?? 0;
+    const ask = depth?.asks[0]?.[0] ?? 0;
     if (bid > 0 && ask > 0) {
       const mid = (bid + ask) / 2;
       const drift = (snap.markPrice - mid) / mid;
@@ -792,9 +793,13 @@ export class ImperialClient {
       (m) => m.symbol.toUpperCase() === sym && m.venue === "phoenix",
     ) ?? allMarks.find((m) => m.symbol.toUpperCase() === sym);
 
-    const depthSnap = Array.isArray(rawDepth)
+    const depthSnapRaw = Array.isArray(rawDepth)
       ? (rawDepth as PhoenixDepthSnapshot[]).find((d) => d.symbol.toUpperCase() === sym) ?? null
       : (rawDepth as PhoenixDepthSnapshot | null);
+    const depthSnap =
+      Array.isArray(depthSnapRaw?.bids) && Array.isArray(depthSnapRaw?.asks)
+        ? depthSnapRaw
+        : null;
 
     return {
       symbol: sym,

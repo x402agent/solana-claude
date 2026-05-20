@@ -414,7 +414,21 @@ Environment variables:
     .argument("[args...]", "Arguments passed to clawd-agents-perps")
     .action(async (args: string[]) => {
       if (args[0] === "market") {
-        print(await perps.getMarketInfo(args[1] || "SOL"));
+        const symbol = (args[1] || "SOL").toUpperCase().replace(/-PERP$/i, "");
+        const markets = await perps.listMarkets();
+        if (!markets.success) {
+          print(markets);
+          return;
+        }
+        const match = Array.isArray(markets.data)
+          ? markets.data.find((market: any) => market.symbol?.toUpperCase() === symbol)
+          : null;
+        print({
+          success: Boolean(match),
+          data: match ?? { symbol },
+          output: JSON.stringify(match ?? { error: `market ${symbol} not found` }, null, 2),
+          ...(match ? {} : { error: `market ${symbol} not found` }),
+        });
         return;
       }
       runClawdPerpsAgent(args.length ? args : ["status"], { fallbackPython: true });
