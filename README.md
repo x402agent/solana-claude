@@ -15,6 +15,8 @@
 
 <br/>
 
+> **Latest:** Clawd now ships as an official npm-published TUI package with the Agent Kit wired into the one-shot installer. The CLI supports both local keypair minting and hosted devnet agent minting, backed by the private gateway service and live Metaplex Agent Registry integration. The companion gateway app now includes a login-gated mint panel, Convex-backed mint history, and server-side hosted mint recording.
+
 | | Command | What it does |
 |---|---------|-------------|
 | 🚀 | `clawd-tui` → press **6** | Open the full Agent Kit TUI |
