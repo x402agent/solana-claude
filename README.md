@@ -1,14 +1,17 @@
 <div align="center">
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:05060d,18:2a0614,36:ff5f1f,55:ffd166,74:9945FF,100:14F195&height=285&section=header&text=%F0%9F%A6%9E%F0%9F%91%91%20LOBSTER%20KING%20PERPS&fontSize=54&fontColor=ffffff&animation=twinkling&fontAlignY=34&desc=Phoenix%20%C2%B7%20Vulcan%20%C2%B7%20Clawd%20%C2%B7%20Imperial%20Solana%20Perpetuals&descAlignY=58&descAlign=50&descSize=17" alt="Lobster King Perps Phoenix Vulcan Clawd banner" />
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:05060d,12:1a0a2e,28:ff5f1f,50:ffd166,72:9945FF,88:14F195,100:05060d&height=320&section=header&text=%F0%9F%A6%9E%F0%9F%91%91%20LOBSTER%20KING%20PERPS&fontSize=60&fontColor=ffffff&animation=twinkling&fontAlignY=36&desc=Phoenix%20%C2%B7%20Vulcan%20%C2%B7%20Clawd%20%C2%B7%20Imperial%20%E2%80%94%20Sovereign%20Solana%20Perpetuals&descAlignY=58&descAlign=50&descSize=18" alt="Lobster King Perps Phoenix Vulcan Clawd banner" />
 
 <h1>🦞👑 Phoenix Perps, Crowned by Clawd</h1>
 
 <strong>Vulcan execution. Phoenix markets. Clawd operators. Imperial strategy loops.</strong>
 
+<br/>
+
 <a href="https://github.com/x402agent/solana-clawd"><img src="https://img.shields.io/badge/GitHub-x402agent%2Fsolana--clawd-111827?style=for-the-badge&logo=github" alt="GitHub" /></a>
 <a href="https://phoenix.trade"><img src="https://img.shields.io/badge/Phoenix-Perpetuals-FF5F1F?style=for-the-badge" alt="Phoenix perpetuals" /></a>
 <a href="./vulcan-cli-master"><img src="https://img.shields.io/badge/Vulcan-Strategy%20Engine-FFD166?style=for-the-badge" alt="Vulcan strategy engine" /></a>
+<a href="./Perps/"><img src="https://img.shields.io/badge/%2FPerps-THE%20HEART-FF5F1F?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZmlsbD0id2hpdGUiIGQ9Ik0xMiAyMS4zNWwtMS40NS0xLjMyQzUuNCAxNS4zNiAyIDEyLjI3IDIgOC41IDIgNS40MSA0LjQyIDMgNy41IDNjMS43NCAwIDMuNDEuODEgNC41IDIuMDlDMTMuMDkgMy44MSAxNC43NiAzIDE2LjUgMyAxOS41OCAzIDIyIDUuNDEgMjIgOC41YzAgMy43Ny0zLjQgNi44Ni04LjU1IDExLjU0TDEyIDIxLjM1eiIvPjwvc3ZnPg==" alt="/Perps heart" /></a>
 <a href="./packages/clawd-perps"><img src="https://img.shields.io/badge/clawd--perps-npm%20%2B%20python%20agent-9945FF?style=for-the-badge" alt="clawd perps" /></a>
 <a href="https://x402.wtf"><img src="https://img.shields.io/badge/x402.wtf-agent%20payments-14F195?style=for-the-badge" alt="x402.wtf" /></a>
 <a href="https://backrooms.x402.wtf"><img src="https://img.shields.io/badge/backrooms.x402.wtf-INFINITE-FFD700?style=for-the-badge" alt="backrooms.x402.wtf" /></a>
@@ -17,11 +20,11 @@
 
 <br/><br/>
 
-<img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=900&size=24&duration=1800&pause=420&color=FFD166&center=true&vCenter=true&width=1080&lines=%F0%9F%94%A5+PHOENIX+MARKETS+RISE+%E2%86%92+VULCAN+ORDERS+LAND;%F0%9F%A6%9E%F0%9F%91%91+LOBSTER+KING+MODE+%E2%86%92+PAPER+FIRST+%E2%86%92+LIVE+GATED;TWAP+%E2%86%92+GRID+%E2%86%92+TA+%E2%86%92+LEDGER+%E2%86%92+FINALIZE;clawd-perps+perps+vulcan+health;clawd-perps+perps+grid+SOL+--center-on-mark+--width-pct+2.5" alt="animated Phoenix perps header" />
+<img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=900&size=26&duration=1600&pause=400&color=FFD166&center=true&vCenter=true&width=1080&lines=%F0%9F%94%A5+PHOENIX+MARKETS+RISE+%E2%86%92+VULCAN+ORDERS+LAND;%F0%9F%A6%9E%F0%9F%91%91+LOBSTER+KING+MODE+%E2%86%92+PAPER+FIRST+%E2%86%92+LIVE+GATED;TWAP+%E2%86%92+GRID+%E2%86%92+TA+%E2%86%92+LEDGER+%E2%86%92+FINALIZE;%2FPerps+is+the+heart+%E2%80%94+Imperial+is+the+engine;clawd-automaton+%E2%86%92+OODA+%E2%86%92+survive+%E2%86%92+earn+%E2%86%92+repeat" alt="animated Phoenix perps header" />
 
 <br/>
 
-<img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=800&size=16&duration=1450&pause=300&color=14F195&center=true&vCenter=true&width=980&lines=NPM+CLI+summons+the+Python+Phoenix+agent.;Python+agent+delegates+execution+to+Vulcan%2FRise.;Guardrails%3A+paper+default%2C+dry-run%2C+confirm-each%2C+auto-execute+with+--yes.;Imperial+perps+flow%3A+read+market+%E2%86%92+run+strategy+%E2%86%92+monitor+ledger+%E2%86%92+finalize." alt="animated Vulcan status" />
+<img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=800&size=16&duration=1350&pause=280&color=14F195&center=true&vCenter=true&width=1000&lines=NPM+CLI+summons+the+Python+Phoenix+agent.;Python+agent+delegates+execution+to+Vulcan%2FRise.;Guardrails%3A+paper+default%2C+dry-run%2C+confirm-each%2C+auto-execute+with+--yes.;Imperial+perps+flow%3A+read+market+%E2%86%92+run+strategy+%E2%86%92+monitor+ledger+%E2%86%92+finalize.;clawd-automaton%3A+provision+%E2%86%92+OODA+%E2%86%92+vault+%E2%86%92+spawn+%E2%86%92+survive." alt="animated Vulcan status" />
 
 <br/><br/>
 
