@@ -10,13 +10,6 @@ import { addLog, type DashboardState, type A2AConnection } from './state.js';
 
 const KNOWN_PEERS: A2AConnection[] = [
   {
-    agentId: 'hermes-nous',
-    endpoint: 'https://api.nousresearch.com/a2a',
-    status: 'disconnected',
-    latencyMs: 0,
-    protocol: 'a2a',
-  },
-  {
     agentId: 'clawd-router',
     endpoint: 'https://router.solanaclawd.com/a2a',
     status: 'disconnected',
@@ -72,7 +65,4 @@ export async function initA2AConnections(state: DashboardState): Promise<void> {
   const paysh = state.a2aConnections.find(c => c.agentId === 'paysh-gate');
   state.payshStatus = paysh?.status === 'connected' ? 'online' : 'offline';
 
-  // Nous online inferred from hermes-nous connection
-  const nous = state.a2aConnections.find(c => c.agentId === 'hermes-nous');
-  state.nousOnline = nous?.status === 'connected';
 }

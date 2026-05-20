@@ -116,7 +116,6 @@ export interface DashboardState {
   memory: MemoryStats;
   // Model
   activeModel: string;
-  nousOnline: boolean;
   // Log
   log: LogEntry[];
   // Runtime
@@ -158,8 +157,7 @@ export function createInitialState(): DashboardState {
     darkDefiArmed: false,
     payshStatus: 'offline',
     memory: { known: 0, learned: 0, inferred: 0 },
-    activeModel: 'hermes-4.3-70b',
-    nousOnline: false,
+    activeModel: 'claude-sonnet-4-6',
     log: [],
     startedAt: Date.now(),
     lastRefresh: 0,

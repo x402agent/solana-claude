@@ -17,7 +17,6 @@ const HERMES_ASCII = [
 
 const X402_BADGE = chalk.bgMagenta.white.bold(' x402 ');
 const CLAWD_BADGE = chalk.bgCyan.black.bold(' $CLAWD ');
-const NOUS_BADGE = chalk.bgGreen.black.bold(' NOUS ');
 const PAYSH_BADGE = chalk.bgYellow.black.bold(' pay.sh ');
 const packageBadge = (count: number): string =>
   chalk.bgBlue.white.bold(` PKG ${String(count).padStart(2, '0')} `);
@@ -47,8 +46,8 @@ export function renderHeader(state: DashboardState, width: number): string[] {
   }
 
   // x402 suffix + tagline
-  const tag = `  ${X402_BADGE}  PRIVATE AI AGENT FOR NOUS RESEARCH  ${CLAWD_BADGE}`;
-  const tagPlain = `    x402   PRIVATE AI AGENT FOR NOUS RESEARCH   $CLAWD `;
+  const tag = `  ${X402_BADGE}  SOVEREIGN AI AGENT ON SOLANA  ${CLAWD_BADGE}`;
+  const tagPlain = `    x402   SOVEREIGN AI AGENT ON SOLANA   $CLAWD `;
   const tagPad = Math.max(0, width - tagPlain.length);
   lines.push(
     chalk.cyan('║') + tag + ' '.repeat(tagPad) + chalk.cyan('║'),
