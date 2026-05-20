@@ -15,10 +15,11 @@
       "types": "./dist/react/index.d.ts"
     }
   },
-  "files": ["dist", "README.md", "LICENSE"],
+  "files": ["dist", "scripts/postinstall.mjs", "README.md", "LICENSE"],
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
+    "postinstall": "node scripts/postinstall.mjs",
     "typecheck": "tsc --noEmit"
   },
   "keywords": [

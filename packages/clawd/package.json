@@ -18,6 +18,7 @@
   },
   "files": [
     "dist",
+    "scripts/postinstall.mjs",
     "README.md",
     "LICENSE"
   ],
@@ -26,6 +27,7 @@
     "dev": "tsx src/index.ts",
     "start": "node dist/index.js",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "postinstall": "node scripts/postinstall.mjs",
     "typecheck": "tsc --noEmit"
   },
   "keywords": [
