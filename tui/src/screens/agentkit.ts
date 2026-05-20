@@ -952,6 +952,8 @@ function nextView(v: ViewMode): ViewMode {
   return VIEW_ORDER[(i + 1) % VIEW_ORDER.length] ?? 'commands';
 }
 
+const EXIT_KEYS = new Set<string>(['b', 'B', '\x1b', '\x03']);
+
 // ─── Main export ──────────────────────────────────────────────────────────────
 
 export async function runAgentKit(): Promise<void> {
@@ -989,6 +991,164 @@ export async function runAgentKit(): Promise<void> {
     redraw();
   });
 
+  // ── Tiny state mutators (defined before Promise to keep nesting level low) ──
+
+  type SyncOrAsyncVoid = () => void | Promise<void>;
+
+  const cmdUp = (): void => {
+    const cat = CATEGORIES[catIdx]!;
+    cmdIdx = (cmdIdx - 1 + cat.commands.length) % cat.commands.length;
+    status = `Command: ${cat.commands[cmdIdx]?.name ?? ''}`;
+  };
+  const cmdDown = (): void => {
+    const cat = CATEGORIES[catIdx]!;
+    cmdIdx = (cmdIdx + 1) % cat.commands.length;
+    status = `Command: ${cat.commands[cmdIdx]?.name ?? ''}`;
+  };
+  const cmdPrevCat = (): void => {
+    catIdx = (catIdx - 1 + CATEGORIES.length) % CATEGORIES.length;
+    cmdIdx = 0;
+    status = `Category: ${CATEGORIES[catIdx]?.label ?? ''}`;
+  };
+  const cmdNextCat = (): void => {
+    catIdx = (catIdx + 1) % CATEGORIES.length;
+    cmdIdx = 0;
+    status = `Category: ${CATEGORIES[catIdx]?.label ?? ''}`;
+  };
+  const cmdCopy = async (): Promise<void> => {
+    const cmd = CATEGORIES[catIdx]!.commands[cmdIdx]?.cmd ?? '';
+    const ok = await copyToClipboard(cmd);
+    copied = ok;
+    status = ok ? 'Copied!' : 'Copy failed — paste manually.';
+  };
+  const cmdEnv = (): void => {
+    const env = CATEGORIES[catIdx]!.commands[cmdIdx]?.env ?? [];
+    status = env.length ? `Required env: ${env.join(', ')}` : 'No env vars required.';
+  };
+
+  const CMD_DISPATCH: Record<string, SyncOrAsyncVoid> = {
+    '\x1b[A': cmdUp, '\x1b[B': cmdDown,
+    '\x1b[D': cmdPrevCat, '\x1b[Z': cmdPrevCat, '\x1b[C': cmdNextCat,
+    c: cmdCopy, C: cmdCopy, e: cmdEnv, E: cmdEnv,
+  };
+
+  const handleCommands = async (chunk: string): Promise<boolean> => {
+    const numMatch = /^[1-7]$/.exec(chunk);
+    if (numMatch) {
+      catIdx = Number.parseInt(chunk, 10) - 1;
+      cmdIdx = 0;
+      status = `Category: ${CATEGORIES[catIdx]?.label ?? ''}`;
+      return true;
+    }
+    const handler = CMD_DISPATCH[chunk];
+    if (!handler) return false;
+    await handler();
+    return true;
+  };
+
+  const filteredAgents = (): CatalogAgent[] => catalogFilter === 0
+    ? (catalog?.agents ?? [])
+    : (catalog?.agents.filter(a => a.category === (CATALOG_CATEGORIES[catalogFilter] ?? '')) ?? []);
+
+  const catAgentUp = (): void => {
+    const agents = filteredAgents();
+    agentIdx = Math.max(0, agentIdx - 1);
+    status = `Agent: ${agents[agentIdx]?.title ?? ''}`;
+  };
+  const catAgentDown = (): void => {
+    const agents = filteredAgents();
+    agentIdx = Math.min(agents.length - 1, agentIdx + 1);
+    status = `Agent: ${agents[agentIdx]?.title ?? ''}`;
+  };
+  const catFilter = (): void => {
+    catalogFilter = (catalogFilter + 1) % CATALOG_CATEGORIES.length;
+    agentIdx = 0;
+    status = `Filter: ${CATALOG_CATEGORIES[catalogFilter] ?? 'all'}`;
+  };
+  const catMint = async (): Promise<void> => {
+    const agent = filteredAgents()[agentIdx];
+    if (!agent) return;
+    const mintCmd = `curl -sX POST https://x402.wtf/api/mint/agent -H 'Content-Type: application/json' -d '{"identifier":"${agent.identifier}"}'`;
+    const ok = await copyToClipboard(mintCmd);
+    status = ok ? '✓ Mint command copied!' : 'Copy failed.';
+  };
+
+  const CAT_DISPATCH: Record<string, SyncOrAsyncVoid> = {
+    '\x1b[A': catAgentUp, '\x1b[B': catAgentDown,
+    f: catFilter, F: catFilter, c: catMint, C: catMint,
+  };
+
+  const handleCatalog = async (chunk: string): Promise<boolean> => {
+    const handler = CAT_DISPATCH[chunk];
+    if (!handler) return false;
+    await handler();
+    return true;
+  };
+
+  const charUp = (): void => {
+    charIdx = Math.max(0, charIdx - 1);
+    status = `Character: ${characters[charIdx]?.name ?? ''}`;
+  };
+  const charDown = (): void => {
+    charIdx = Math.min(characters.length - 1, charIdx + 1);
+    status = `Character: ${characters[charIdx]?.name ?? ''}`;
+  };
+  const charCopy = async (): Promise<void> => {
+    const ch = characters[charIdx];
+    if (!ch) return;
+    const cmd = `curl -sX POST https://x402.wtf/api/agents/deploy -d '{"character":"${ch.file}"}'`;
+    const ok = await copyToClipboard(cmd);
+    status = ok ? '✓ Deploy command copied!' : 'Copy failed.';
+  };
+
+  const CHAR_DISPATCH: Record<string, SyncOrAsyncVoid> = {
+    '\x1b[A': charUp, '\x1b[B': charDown, c: charCopy, C: charCopy,
+  };
+
+  const handleCharacters = async (chunk: string): Promise<boolean> => {
+    const handler = CHAR_DISPATCH[chunk];
+    if (!handler) return false;
+    await handler();
+    return true;
+  };
+
+  const tmplUp = (): void => {
+    tmplIdx = Math.max(0, tmplIdx - 1);
+    status = `Template: ${templates[tmplIdx]?.templateName ?? ''}`;
+  };
+  const tmplDown = (): void => {
+    tmplIdx = Math.min(templates.length - 1, tmplIdx + 1);
+    status = `Template: ${templates[tmplIdx]?.templateName ?? ''}`;
+  };
+  const tmplCopy = async (): Promise<void> => {
+    const tmpl = templates[tmplIdx];
+    if (!tmpl) return;
+    const cmd = `npx clawd-agent template use ${tmpl.templateId} --name "MyAgent"`;
+    const ok = await copyToClipboard(cmd);
+    status = ok ? '✓ Command copied!' : 'Copy failed.';
+  };
+
+  const TMPL_DISPATCH: Record<string, SyncOrAsyncVoid> = {
+    '\x1b[A': tmplUp, '\x1b[B': tmplDown, c: tmplCopy, C: tmplCopy,
+  };
+
+  const handleTemplates = async (chunk: string): Promise<boolean> => {
+    const handler = TMPL_DISPATCH[chunk];
+    if (!handler) return false;
+    await handler();
+    return true;
+  };
+
+  type ViewHandler = (chunk: string) => Promise<boolean>;
+  const VIEW_HANDLERS: Partial<Record<ViewMode, ViewHandler>> = {
+    commands: handleCommands,
+    catalog: handleCatalog,
+    characters: handleCharacters,
+    templates: handleTemplates,
+  };
+
+  // ── Raw stdin setup ──
+
   return new Promise<void>(resolve => {
     const enableRaw = (): void => {
       if (process.stdin.setRawMode) process.stdin.setRawMode(true);
@@ -1001,159 +1161,18 @@ export async function runAgentKit(): Promise<void> {
 
     enableRaw();
 
-    const handleCommands = async (chunk: string): Promise<boolean> => {
-      const cat = CATEGORIES[catIdx]!;
-      if (chunk === '\x1b[A') {
-        cmdIdx = (cmdIdx - 1 + cat.commands.length) % cat.commands.length;
-        status = `Command: ${cat.commands[cmdIdx]?.name ?? ''}`;
-        return true;
-      }
-      if (chunk === '\x1b[B') {
-        cmdIdx = (cmdIdx + 1) % cat.commands.length;
-        status = `Command: ${cat.commands[cmdIdx]?.name ?? ''}`;
-        return true;
-      }
-      if (chunk === '\x1b[D' || chunk === '\x1b[Z') {
-        catIdx = (catIdx - 1 + CATEGORIES.length) % CATEGORIES.length;
-        cmdIdx = 0;
-        status = `Category: ${CATEGORIES[catIdx]?.label ?? ''}`;
-        return true;
-      }
-      if (chunk === '\x1b[C') {
-        catIdx = (catIdx + 1) % CATEGORIES.length;
-        cmdIdx = 0;
-        status = `Category: ${CATEGORIES[catIdx]?.label ?? ''}`;
-        return true;
-      }
-      const numMatch = /^[1-7]$/.exec(chunk);
-      if (numMatch) {
-        catIdx = Number.parseInt(chunk, 10) - 1;
-        cmdIdx = 0;
-        status = `Category: ${CATEGORIES[catIdx]?.label ?? ''}`;
-        return true;
-      }
-      if (chunk === 'c' || chunk === 'C') {
-        const currentCmd = CATEGORIES[catIdx]!.commands[cmdIdx]?.cmd ?? '';
-        const ok = await copyToClipboard(currentCmd);
-        copied = ok;
-        status = ok ? 'Copied!' : 'Copy failed — paste manually.';
-        return true;
-      }
-      if (chunk === 'e' || chunk === 'E') {
-        const envVars = CATEGORIES[catIdx]!.commands[cmdIdx]?.env ?? [];
-        status = envVars.length ? `Required env: ${envVars.join(', ')}` : 'No env vars required.';
-        return true;
-      }
-      return false;
-    };
-
-    const handleCatalog = async (chunk: string): Promise<boolean> => {
-      const agents = catalogFilter === 0
-        ? (catalog?.agents ?? [])
-        : (catalog?.agents.filter(a => a.category === (CATALOG_CATEGORIES[catalogFilter] ?? '')) ?? []);
-
-      if (chunk === '\x1b[A') {
-        agentIdx = Math.max(0, agentIdx - 1);
-        status = `Agent: ${agents[agentIdx]?.title ?? ''}`;
-        return true;
-      }
-      if (chunk === '\x1b[B') {
-        agentIdx = Math.min(agents.length - 1, agentIdx + 1);
-        status = `Agent: ${agents[agentIdx]?.title ?? ''}`;
-        return true;
-      }
-      if (chunk === 'f' || chunk === 'F') {
-        catalogFilter = (catalogFilter + 1) % CATALOG_CATEGORIES.length;
-        agentIdx = 0;
-        status = `Filter: ${CATALOG_CATEGORIES[catalogFilter] ?? 'all'}`;
-        return true;
-      }
-      if (chunk === 'c' || chunk === 'C') {
-        const agent = agents[agentIdx];
-        if (agent) {
-          const mintCmd = `curl -sX POST https://x402.wtf/api/mint/agent -H 'Content-Type: application/json' -d '{"identifier":"${agent.identifier}"}'`;
-          const ok = await copyToClipboard(mintCmd);
-          status = ok ? '✓ Mint command copied!' : 'Copy failed.';
-        }
-        return true;
-      }
-      return false;
-    };
-
-    const handleCharacters = async (chunk: string): Promise<boolean> => {
-      if (chunk === '\x1b[A') {
-        charIdx = Math.max(0, charIdx - 1);
-        status = `Character: ${characters[charIdx]?.name ?? ''}`;
-        return true;
-      }
-      if (chunk === '\x1b[B') {
-        charIdx = Math.min(characters.length - 1, charIdx + 1);
-        status = `Character: ${characters[charIdx]?.name ?? ''}`;
-        return true;
-      }
-      if (chunk === 'c' || chunk === 'C') {
-        const char = characters[charIdx];
-        if (char) {
-          const cmd = `curl -sX POST https://x402.wtf/api/agents/deploy -d '{"character":"${char.file}"}'`;
-          const ok = await copyToClipboard(cmd);
-          status = ok ? '✓ Deploy command copied!' : 'Copy failed.';
-        }
-        return true;
-      }
-      return false;
-    };
-
-    const handleTemplates = async (chunk: string): Promise<boolean> => {
-      if (chunk === '\x1b[A') {
-        tmplIdx = Math.max(0, tmplIdx - 1);
-        status = `Template: ${templates[tmplIdx]?.templateName ?? ''}`;
-        return true;
-      }
-      if (chunk === '\x1b[B') {
-        tmplIdx = Math.min(templates.length - 1, tmplIdx + 1);
-        status = `Template: ${templates[tmplIdx]?.templateName ?? ''}`;
-        return true;
-      }
-      if (chunk === 'c' || chunk === 'C') {
-        const tmpl = templates[tmplIdx];
-        if (tmpl) {
-          const cmd = `npx clawd-agent template use ${tmpl.templateId} --name "MyAgent"`;
-          const ok = await copyToClipboard(cmd);
-          status = ok ? '✓ Command copied!' : 'Copy failed.';
-        }
-        return true;
-      }
-      return false;
-    };
-
     const onData = async (chunk: string): Promise<void> => {
       copied = false;
-
-      if (chunk === 'b' || chunk === 'B' || chunk === '\x1b') {
+      if (EXIT_KEYS.has(chunk)) {
+        if (chunk === '\x03') { disableRaw(); process.exit(0); }
         process.stdin.off('data', onData as (c: string) => void);
         disableRaw();
         resolve();
         return;
       }
-      if (chunk === '\x03') {
-        process.stdin.off('data', onData as (c: string) => void);
-        disableRaw();
-        process.exit(0);
-      }
-
-      if (chunk === '\t') {
-        view = nextView(view);
-        status = `View: ${view}`;
-        redraw();
-        return;
-      }
-
-      let handled = false;
-      if (view === 'commands') handled = await handleCommands(chunk);
-      else if (view === 'catalog') handled = await handleCatalog(chunk);
-      else if (view === 'characters') handled = await handleCharacters(chunk);
-      else if (view === 'templates') handled = await handleTemplates(chunk);
-
+      if (chunk === '\t') { view = nextView(view); status = `View: ${view}`; redraw(); return; }
+      const viewHandler = VIEW_HANDLERS[view];
+      const handled = viewHandler ? await viewHandler(chunk) : false;
       if (handled || view === 'stats') redraw();
     };
 

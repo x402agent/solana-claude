@@ -7,7 +7,7 @@
  *   1. Agent makes a request to a paid API endpoint
  *   2. Server returns HTTP 402 with PAYMENT-REQUIRED header
  *   3. x402 client signs a USDC transfer using Solana keypair (@x402/svm)
- *   4. Agent retries with X-Payment header
+ *   4. Agent retries with PAYMENT-SIGNATURE header
  *   5. Server verifies payment via facilitator and returns data
  *
  * Requirements for production:
@@ -25,13 +25,14 @@ import {
   isX402Enabled,
   getX402Config,
   wrapFetchWithX402,
-  parsePaymentRequirement,
+  decodeX402Payload,
   formatX402Cost,
   getX402Summary,
 } from "../src/services/x402/index.js";
 import {
   USDC_ADDRESSES,
   X402_HEADERS,
+  X402_NETWORK_IDS,
   type PaymentRequirement,
 } from "../src/services/x402/types.js";
 
@@ -52,20 +53,22 @@ if (isServer) {
       return;
     }
 
-    const paymentHeader = req.headers[X402_HEADERS.PAYMENT];
+    const paymentHeader =
+      req.headers[X402_HEADERS.PAYMENT.toLowerCase()] ??
+      req.headers[X402_HEADERS.LEGACY_PAYMENT];
 
     if (!paymentHeader) {
       // Return 402 with PAYMENT-REQUIRED header
       const requirement: PaymentRequirement = {
         scheme: "exact",
-        network: "solana-devnet",
+        network: X402_NETWORK_IDS.SOLANA_DEVNET,
         maxAmountRequired: "100",  // 0.0001 USDC = $0.0001
         resource: `http://localhost:${PORT}/sol-premium`,
         description: "Premium SOL market data with DAS metadata",
         mimeType: "application/json",
         payTo: "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM", // devnet recipient
         maxTimeoutSeconds: 300,
-        asset: USDC_ADDRESSES["solana-devnet"],
+        asset: USDC_ADDRESSES[X402_NETWORK_IDS.SOLANA_DEVNET],
         extra: { name: "USD Coin", decimals: 6 },
       };
 
@@ -83,7 +86,9 @@ if (isServer) {
 
     // Payment header present — validate (simplified for demo)
     try {
-      const decodedPayment = JSON.parse(Buffer.from(paymentHeader as string, "base64").toString());
+      const decodedPayment = decodeX402Payload<{ network: string; payload?: { transaction?: string } }>(
+        paymentHeader as string,
+      );
       console.log(`💰 Payment received: ${decodedPayment.network} — SVM payload present: ${!!decodedPayment.payload?.transaction}`);
 
       // In production: verify payment with x402 facilitator
@@ -127,11 +132,13 @@ if (isServer) {
     console.log(`\n💎 x402 Solana Data Server running at http://localhost:${PORT}`);
     console.log(`📡 Endpoint: GET /sol-premium (requires 0.0001 USDC on Solana Devnet)`);
     console.log(`\nTest with:`);
-    console.log(`  X402_SVM_PRIVATE_KEY=<devnet-key> X402_NETWORK=solana-devnet npx tsx examples/x402-solana.ts`);
+    console.log(`  X402_SVM_PRIVATE_KEY=<devnet-key> X402_NETWORK=${X402_NETWORK_IDS.SOLANA_DEVNET} npx tsx examples/x402-solana.ts`);
   });
 
 } else {
   // ─── Client mode: pay with Solana USDC ────────────────────────────────────
+
+  process.env.X402_ENABLED ??= "true";
 
   console.log("\n🤖 solana-claude x402 Payment Demo");
   console.log("Protocol: x402 (HTTP 402 + PAYMENT-REQUIRED header)");
@@ -167,7 +174,7 @@ if (isServer) {
 
     if (res.status === 402) {
       console.log("\n⚠️  Payment required but could not pay automatically.");
-      console.log("   Set X402_SVM_PRIVATE_KEY and X402_NETWORK=solana-devnet");
+      console.log(`   Set X402_SVM_PRIVATE_KEY and X402_NETWORK=${X402_NETWORK_IDS.SOLANA_DEVNET}`);
       console.log("   Also make sure the server is running: npx tsx examples/x402-solana.ts --server");
     } else if (res.ok) {
       const data = await res.json();

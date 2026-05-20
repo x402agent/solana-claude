@@ -159,7 +159,7 @@ npx tsx examples/x402-solana.ts --server
 npx tsx examples/x402-solana.ts
 
 # With real devnet keypair:
-X402_SVM_PRIVATE_KEY=<base58> X402_NETWORK=solana-devnet npx tsx examples/x402-solana.ts
+X402_SVM_PRIVATE_KEY=<base58> X402_NETWORK=solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1 npx tsx examples/x402-solana.ts
 ```
 
 **or:**

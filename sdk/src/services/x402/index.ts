@@ -5,9 +5,9 @@
  *
  * Wraps Node's fetch() to handle HTTP 402 Payment Required automatically:
  *   1. Request hits a paid endpoint
- *   2. Server returns 402 + X-Payment-Required header
+ *   2. Server returns 402 + PAYMENT-REQUIRED header
  *   3. Client signs a USDC transfer (or simulates in demo mode)
- *   4. Client retries with X-Payment header
+ *   4. Client retries with PAYMENT-SIGNATURE header
  *   5. Server verifies and returns data
  *
  * Production: install @x402/svm + @x402/axios for real on-chain signing.
@@ -15,9 +15,9 @@
  */
 
 import type { PaymentRequirement, PaymentPayload } from "./types.js";
-import { X402_HEADERS, USDC_ADDRESSES } from "./types.js";
+import { X402_HEADERS, USDC_ADDRESSES, X402_NETWORK_IDS } from "./types.js";
 
-export { X402_HEADERS, USDC_ADDRESSES } from "./types.js";
+export { X402_HEADERS, USDC_ADDRESSES, X402_NETWORK_IDS } from "./types.js";
 export type { PaymentRequirement, PaymentPayload } from "./types.js";
 
 // ── Config ─────────────────────────────────────────────────────────────────
@@ -57,15 +57,17 @@ export function isX402Enabled(): boolean {
 }
 
 export function getX402Config(): X402Config {
-  const network = process.env.X402_NETWORK ?? "solana-mainnet";
+  const network = normalizeX402Network(
+    process.env.X402_NETWORK ?? X402_NETWORK_IDS.SOLANA_MAINNET,
+  );
   const privateKey = process.env.X402_SVM_PRIVATE_KEY;
 
   let solana: SolanaSignerConfig | undefined;
-  if (privateKey) {
+  if (privateKey || process.env.X402_ENABLED === "true") {
     solana = {
       publicKey:
-        process.env.X402_SVM_PUBLIC_KEY ?? "(set X402_SVM_PUBLIC_KEY for display)",
-      usdcMint: USDC_ADDRESSES[network] ?? USDC_ADDRESSES["solana-mainnet"],
+        process.env.X402_SVM_PUBLIC_KEY ?? "(simulated x402 payer)",
+      usdcMint: USDC_ADDRESSES[network] ?? USDC_ADDRESSES[X402_NETWORK_IDS.SOLANA_MAINNET],
     };
   }
 
@@ -74,20 +76,93 @@ export function getX402Config(): X402Config {
     primaryNetwork: network,
     maxPaymentPerRequestUSD: parseFloat(process.env.X402_MAX_PER_REQUEST ?? "0.10"),
     maxSessionSpendUSD: parseFloat(process.env.X402_MAX_SESSION ?? "1.00"),
-    facilitatorUrl: process.env.X402_FACILITATOR_URL ?? "https://clawdrouter.fly.dev",
+    facilitatorUrl:
+      process.env.X402_FACILITATOR_URL ??
+      "https://api.cdp.coinbase.com/platform/v2/x402",
     solana,
   };
+}
+
+export function normalizeX402Network(network: string): string {
+  switch (network) {
+    case "solana-mainnet":
+    case "solana":
+      return X402_NETWORK_IDS.SOLANA_MAINNET;
+    case "solana-devnet":
+      return X402_NETWORK_IDS.SOLANA_DEVNET;
+    case "base":
+    case "base-mainnet":
+      return X402_NETWORK_IDS.BASE_MAINNET;
+    case "base-sepolia":
+      return X402_NETWORK_IDS.BASE_SEPOLIA;
+    case "polygon":
+    case "polygon-mainnet":
+      return X402_NETWORK_IDS.POLYGON_MAINNET;
+    case "arbitrum":
+    case "arbitrum-mainnet":
+      return X402_NETWORK_IDS.ARBITRUM_MAINNET;
+    case "world":
+    case "world-mainnet":
+      return X402_NETWORK_IDS.WORLD_MAINNET;
+    default:
+      return network;
+  }
 }
 
 // ── Header parsing ──────────────────────────────────────────────────────────
 
 export function parsePaymentRequirement(header: string): PaymentRequirement[] {
+  const candidates = [header];
+
   try {
-    const decoded = Buffer.from(header, "base64").toString("utf8");
-    const parsed = JSON.parse(decoded);
-    return Array.isArray(parsed) ? (parsed as PaymentRequirement[]) : [parsed as PaymentRequirement];
+    candidates.push(Buffer.from(header, "base64").toString("utf8"));
   } catch {
-    return [];
+    // Leave only the raw candidate.
+  }
+
+  for (const candidate of candidates) {
+    try {
+      const parsed = JSON.parse(candidate);
+      return Array.isArray(parsed) ? (parsed as PaymentRequirement[]) : [parsed as PaymentRequirement];
+    } catch {
+      // Try the next representation.
+    }
+  }
+
+  return [];
+}
+
+export function getPaymentRequirementHeader(headers: Headers): string | null {
+  return (
+    headers.get(X402_HEADERS.PAYMENT_REQUIRED) ??
+    headers.get(X402_HEADERS.LEGACY_PAYMENT_REQUIRED)
+  );
+}
+
+export function setPaymentHeader(headers: Headers, paymentHeader: string): void {
+  headers.set(X402_HEADERS.PAYMENT, paymentHeader);
+}
+
+export function getPaymentHeader(headers: Headers): string | null {
+  return headers.get(X402_HEADERS.PAYMENT) ?? headers.get(X402_HEADERS.LEGACY_PAYMENT);
+}
+
+export function amountRequiredToUSD(requirement: PaymentRequirement): number {
+  const atomicAmount = Number.parseFloat(requirement.maxAmountRequired);
+  const decimals = typeof requirement.extra?.decimals === "number" ? requirement.extra.decimals : 6;
+  if (!Number.isFinite(atomicAmount)) return Number.POSITIVE_INFINITY;
+  return atomicAmount / 10 ** decimals;
+}
+
+export function encodeX402Payload(payload: unknown): string {
+  return Buffer.from(JSON.stringify(payload)).toString("base64");
+}
+
+export function decodeX402Payload<T = unknown>(header: string): T {
+  try {
+    return JSON.parse(Buffer.from(header, "base64").toString("utf8")) as T;
+  } catch {
+    return JSON.parse(header) as T;
   }
 }
 
@@ -130,7 +205,7 @@ async function buildPaymentHeader(
     timestamp: Date.now(),
   };
 
-  return Buffer.from(JSON.stringify(payload)).toString("base64");
+  return encodeX402Payload(payload);
 }
 
 // ── Fetch wrapper ───────────────────────────────────────────────────────────
@@ -144,7 +219,7 @@ export function wrapFetchWithX402(fetchFn: typeof fetch): typeof fetch {
     // Only intercept 402
     if (firstResponse.status !== 402) return firstResponse;
 
-    const requirementsHeader = firstResponse.headers.get(X402_HEADERS.PAYMENT_REQUIRED);
+    const requirementsHeader = getPaymentRequirementHeader(firstResponse.headers);
     if (!requirementsHeader) return firstResponse;
 
     const requirements = parsePaymentRequirement(requirementsHeader);
@@ -152,7 +227,7 @@ export function wrapFetchWithX402(fetchFn: typeof fetch): typeof fetch {
     if (!req) return firstResponse;
 
     // Check price ceiling
-    const amountUSD = parseFloat(req.maxAmountRequired) / 1_000_000;
+    const amountUSD = amountRequiredToUSD(req);
     if (amountUSD > cfg.maxPaymentPerRequestUSD) {
       console.warn(
         `x402: payment $${amountUSD.toFixed(6)} exceeds configured max $${cfg.maxPaymentPerRequestUSD}`,
@@ -174,7 +249,7 @@ export function wrapFetchWithX402(fetchFn: typeof fetch): typeof fetch {
 
     // Retry with payment
     const retryHeaders = new Headers((init?.headers as FetchHeadersInit | undefined) ?? {});
-    retryHeaders.set(X402_HEADERS.PAYMENT, paymentHeader);
+    setPaymentHeader(retryHeaders, paymentHeader);
 
     const paidResponse = await fetchFn(input, { ...init, headers: retryHeaders });
 
