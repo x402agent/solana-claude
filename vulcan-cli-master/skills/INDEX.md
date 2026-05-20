@@ -80,3 +80,13 @@ Position monitoring and management.
 | Skill                                                               | Description                                                    |
 | ------------------------------------------------------------------- | -------------------------------------------------------------- |
 | [vulcan-position-management](./vulcan-position-management/SKILL.md) | List, show, close, reduce positions and attach TP/SL post-hoc. |
+
+
+## Integrations
+
+First-party frontends and runtime integrations that drive Vulcan.
+
+
+| Skill                             | Description                                                                                                                                              |
+| --------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [clawd-tui](./clawd-tui/SKILL.md) | Clawd TUI perps screen: Node.js terminal UI that drives `vulcan` for paper trading on Phoenix. Keys, env vars, bridge architecture, and troubleshooting. |

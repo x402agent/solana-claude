@@ -58,117 +58,42 @@ const SDK_NPM_PACKAGES = [
   '@openclawdsolana/clawd-perps',
 ];
 
+async function loadLocalPackage(alias: string, dir: string): Promise<PackageInfo> {
+  const pkgDir = join(REPO_ROOT, dir);
+  const pkgJson = join(pkgDir, 'package.json');
+  const missing: PackageInfo = { alias, name: alias, version: '-', description: 'not found', status: 'missing', hasDist: false, binaries: [], path: pkgDir };
+  if (!existsSync(pkgJson)) return missing;
+  try {
+    const raw = JSON.parse(await readFile(pkgJson, 'utf8')) as { name?: string; version?: string; description?: string; bin?: Record<string, string> };
+    const hasDist = existsSync(join(pkgDir, 'dist'));
+    return { alias, name: raw.name ?? alias, version: raw.version ?? '?', description: (raw.description ?? '').slice(0, 72), status: hasDist ? 'ok' : 'no-dist', hasDist, binaries: raw.bin ? Object.keys(raw.bin) : [], path: pkgDir };
+  } catch {
+    return { ...missing, version: '?', description: 'read error' };
+  }
+}
+
+async function loadNpmPackage(name: string): Promise<PackageInfo> {
+  const pkgDir = join(REPO_ROOT, 'sdk', 'node_modules', name);
+  const pkgJson = join(pkgDir, 'package.json');
+  const alias = `npm:${name}`;
+  const missing: PackageInfo = { alias, name, version: '-', description: 'not installed in sdk/node_modules', status: 'missing', hasDist: false, binaries: [], path: pkgDir };
+  if (!existsSync(pkgJson)) return missing;
+  try {
+    const raw = JSON.parse(await readFile(pkgJson, 'utf8')) as { version?: string; description?: string; bin?: string | Record<string, string> };
+    const hasDist = existsSync(join(pkgDir, 'dist'));
+    const binaries = typeof raw.bin === 'string' ? [name.split('/').pop() ?? name] : Object.keys(raw.bin ?? {});
+    const binTargets = typeof raw.bin === 'string' ? [raw.bin] : Object.values(raw.bin ?? {});
+    const hasBinTargets = binTargets.length > 0 && binTargets.every(t => existsSync(join(pkgDir, t)));
+    return { alias, name, version: raw.version ?? '?', description: (raw.description ?? 'sdk npm dependency').slice(0, 72), status: hasDist || binaries.length === 0 || hasBinTargets ? 'ok' : 'no-dist', hasDist, binaries, path: pkgDir };
+  } catch {
+    return { ...missing, version: '?', description: 'read error' };
+  }
+}
+
 export async function loadPackageInfo(): Promise<PackageInfo[]> {
-  const results: PackageInfo[] = [];
-
-  for (const [alias, dir] of Object.entries(PACKAGE_DIRS)) {
-    const pkgDir = join(REPO_ROOT, dir);
-    const pkgJson = join(pkgDir, 'package.json');
-
-    if (!existsSync(pkgJson)) {
-      results.push({
-        alias,
-        name: alias,
-        version: '-',
-        description: 'not found',
-        status: 'missing',
-        hasDist: false,
-        binaries: [],
-        path: pkgDir,
-      });
-      continue;
-    }
-
-    try {
-      const raw = JSON.parse(await readFile(pkgJson, 'utf8')) as {
-        name?: string;
-        version?: string;
-        description?: string;
-        bin?: Record<string, string>;
-      };
-      const hasDist = existsSync(join(pkgDir, 'dist'));
-      const binaries = raw.bin ? Object.keys(raw.bin) : [];
-      results.push({
-        alias,
-        name: raw.name ?? alias,
-        version: raw.version ?? '?',
-        description: (raw.description ?? '').slice(0, 72),
-        status: hasDist ? 'ok' : 'no-dist',
-        hasDist,
-        binaries,
-        path: pkgDir,
-      });
-    } catch {
-      results.push({
-        alias,
-        name: alias,
-        version: '?',
-        description: 'read error',
-        status: 'missing',
-        hasDist: false,
-        binaries: [],
-        path: pkgDir,
-      });
-    }
-  }
-
-  for (const name of SDK_NPM_PACKAGES) {
-    const pkgDir = join(REPO_ROOT, 'sdk', 'node_modules', name);
-    const pkgJson = join(pkgDir, 'package.json');
-
-    if (!existsSync(pkgJson)) {
-      results.push({
-        alias: `npm:${name}`,
-        name,
-        version: '-',
-        description: 'not installed in sdk/node_modules',
-        status: 'missing',
-        hasDist: false,
-        binaries: [],
-        path: pkgDir,
-      });
-      continue;
-    }
-
-    try {
-      const raw = JSON.parse(await readFile(pkgJson, 'utf8')) as {
-        version?: string;
-        description?: string;
-        bin?: string | Record<string, string>;
-      };
-      const hasDist = existsSync(join(pkgDir, 'dist'));
-      const binaries = typeof raw.bin === 'string'
-        ? [name.split('/').pop() ?? name]
-        : Object.keys(raw.bin ?? {});
-      const binTargets = typeof raw.bin === 'string'
-        ? [raw.bin]
-        : Object.values(raw.bin ?? {});
-      const hasBinTargets = binTargets.length > 0 && binTargets.every((target) => existsSync(join(pkgDir, target)));
-      results.push({
-        alias: `npm:${name}`,
-        name,
-        version: raw.version ?? '?',
-        description: (raw.description ?? 'sdk npm dependency').slice(0, 72),
-        status: hasDist || binaries.length === 0 || hasBinTargets ? 'ok' : 'no-dist',
-        hasDist,
-        binaries,
-        path: pkgDir,
-      });
-    } catch {
-      results.push({
-        alias: `npm:${name}`,
-        name,
-        version: '?',
-        description: 'read error',
-        status: 'missing',
-        hasDist: false,
-        binaries: [],
-        path: pkgDir,
-      });
-    }
-  }
-
-  return results;
+  const local = await Promise.all(Object.entries(PACKAGE_DIRS).map(([alias, dir]) => loadLocalPackage(alias, dir)));
+  const npm = await Promise.all(SDK_NPM_PACKAGES.map(name => loadNpmPackage(name)));
+  return [...local, ...npm];
 }
 
 // ─── Wallet vault reader ──────────────────────────────────────────────────────
@@ -190,7 +115,7 @@ export interface VaultInfo {
 }
 
 export async function readVaultInfo(): Promise<VaultInfo> {
-  const vaultPath = process.env['VAULT_PATH'] ?? join(homedir(), '.agentwallet', 'vault');
+  const vaultPath = process.env.VAULT_PATH ?? join(homedir(), '.agentwallet', 'vault');
 
   if (!existsSync(vaultPath)) {
     return { available: false, path: vaultPath, wallets: [], error: 'Vault directory not found' };
@@ -248,8 +173,10 @@ export function probeEnv(): EnvProbe[] {
     ['CLAWD_PERPS_WALLET',    'Perps wallet key'],
     ['CLAWD_PERPS_API_URL',   'Perps API URL'],
     ['VAULT_PASSPHRASE',      'Vault passphrase'],
-    ['OPENAI_API_KEY',        'OpenAI / Grok key'],
+    ['OPENAI_API_KEY',        'OpenAI API key'],
     ['ANTHROPIC_API_KEY',     'Anthropic API key'],
+    ['OPENROUTER_API_KEY',    'OpenRouter API key'],
+    ['OPENROUTER_MODEL',      'OpenRouter model (e.g. x-ai/grok-build-0.1)'],
     ['LIVE_TRADING',          'Live trading flag'],
     ['OPERATOR_CONFIRMED',    'Operator confirmed'],
     ['BAGS_API_KEY',          'Bags.fm API key'],
@@ -264,9 +191,9 @@ export function probeEnv(): EnvProbe[] {
     let preview: string | undefined;
     if (set && val) {
       if (key.toLowerCase().includes('key') || key.toLowerCase().includes('passphrase') || key.toLowerCase().includes('wallet')) {
-        preview = val.slice(0, 4) + '…' + val.slice(-4);
+        preview = `${val.slice(0, 4)}…${val.slice(-4)}`;
       } else {
-        preview = val.slice(0, 24) + (val.length > 24 ? '…' : '');
+        preview = `${val.slice(0, 24)}${val.length > 24 ? '…' : ''}`;
       }
     }
     return { key, label, set, preview };
