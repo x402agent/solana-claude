@@ -53,12 +53,13 @@ function extractMeta(yamlBlock) {
 
 function categorize(slug) {
   if (/dflow|kalshi|phantom/.test(slug)) return 'DFlow / Trading';
+  if (/imperial/.test(slug)) return 'Solana / Blockchain';
   if (/^pump-|^pumpfun/.test(slug)) return 'Pump.fun / Token Launch';
   if (/solana|seeker|qedgen|oracle|magicblock/.test(slug)) return 'Solana / Blockchain';
   if (/discord|slack|imsg|bluebubbles|himalaya|voice-call/.test(slug)) return 'Communication';
   if (/apple|bear-notes|notion|obsidian|things|trello|ordercli|session-logs|1password/.test(slug)) return 'Productivity';
-  if (/coding-agent|swarm|gemini|openai-image|openai-whisper|e2b|cua|skill-creator|sag|model-usage/.test(slug)) return 'AI / Agents';
-  if (/gif|video|camsnap|canvas|songsee|sonoscli|spotify|sherpa|peekaboo/.test(slug)) return 'Media';
+  if (/coding-agent|swarm|gemini|openai-image|openai-whisper|e2b|cua|skill-creator|oracle|sag|model-usage/.test(slug)) return 'AI / Agents';
+  if (/gif|video|camsnap|canvas|songsee|sonoscli|spotify|sherpa|tts|peekaboo/.test(slug)) return 'Media';
   if (/gateway|healthcheck|tmux|eightctl|blucli|nano-banana|openhue/.test(slug)) return 'DevOps / Infrastructure';
   if (/browse|blogwatcher|xurl|pdf|summarize|gog|goplaces|weather|wacli|nano-pdf|mcporter/.test(slug)) return 'Web / Research';
   if (/openclaw|clawhub/.test(slug)) return 'Clawd Ecosystem';
