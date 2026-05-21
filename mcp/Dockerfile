@@ -1,16 +1,16 @@
 # solana-clawd MCP Server — Fly.io Dockerfile
-# Deploy: fly launch --config MCP/fly.toml && fly deploy
+# Deploy: fly launch --config mcp/fly.toml && fly deploy
 
 FROM node:22-alpine AS builder
 
 WORKDIR /app
 
 # Copy package files and install deps
-COPY MCP/package.json MCP/package-lock.json MCP/tsconfig.json ./
+COPY mcp/package.json mcp/package-lock.json mcp/tsconfig.json ./
 RUN npm ci
 
 # Copy source and build
-COPY MCP/src ./src
+COPY mcp/src ./src
 RUN npm run build
 
 # ─── Runtime ──────────────────────────────────────────────────────────────────
@@ -19,7 +19,7 @@ FROM node:22-alpine
 WORKDIR /app
 
 # Copy only production deps
-COPY MCP/package.json MCP/package-lock.json ./
+COPY mcp/package.json mcp/package-lock.json ./
 RUN npm ci --omit=dev
 
 # Copy built dist

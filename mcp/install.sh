@@ -2,7 +2,7 @@
 # One-shot installer for the solana-clawd MCP server.
 #
 # Usage:
-#   curl -fsSL https://raw.githubusercontent.com/x402agent/solana-clawd/main/MCP/install.sh | bash
+#   curl -fsSL https://raw.githubusercontent.com/x402agent/solana-clawd/main/mcp/install.sh | bash
 #
 # Environment overrides:
 #   SOLANA_CLAWD_MCP_REPO_URL     Git repository to clone.
@@ -22,7 +22,7 @@ REPO_URL="${SOLANA_CLAWD_MCP_REPO_URL:-https://github.com/x402agent/solana-clawd
 BRANCH="${SOLANA_CLAWD_MCP_BRANCH:-main}"
 INSTALL_ROOT="${SOLANA_CLAWD_MCP_HOME:-$HOME/.solana-clawd-mcp}"
 REPO_DIR="$INSTALL_ROOT/solana-clawd"
-MCP_DIR="$REPO_DIR/MCP"
+MCP_DIR="$REPO_DIR/mcp"
 BIN_DIR="${SOLANA_CLAWD_MCP_BIN_DIR:-$HOME/.local/bin}"
 CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/solana-clawd-mcp"
 ENV_FILE="${SOLANA_CLAWD_MCP_ENV:-$CONFIG_DIR/.env}"
@@ -41,7 +41,7 @@ NODE_PACKAGE_DIRS=(
   "packages/clawd-sdk"
   "packages/clawd-wallet"
   "packages/cli-standalone"
-  "Perps/clawd-agents-perps"
+  "perps/clawd-agents-perps"
 )
 PROTOCOL_DIR="packages/clawd-protocol"
 
@@ -66,7 +66,7 @@ usage() {
 One-shot installer for the solana-clawd MCP server.
 
 Usage:
-  curl -fsSL https://raw.githubusercontent.com/x402agent/solana-clawd/main/MCP/install.sh | bash
+  curl -fsSL https://raw.githubusercontent.com/x402agent/solana-clawd/main/mcp/install.sh | bash
 
 Flags:
   --branch=NAME        Install a branch or tag. Default: main
@@ -97,7 +97,7 @@ for arg in "$@"; do
 done
 
 REPO_DIR="$INSTALL_ROOT/solana-clawd"
-MCP_DIR="$REPO_DIR/MCP"
+MCP_DIR="$REPO_DIR/mcp"
 STDIO_BIN="$BIN_DIR/solana-clawd-mcp"
 HTTP_BIN="$BIN_DIR/solana-clawd-mcp-http"
 
@@ -322,7 +322,7 @@ LAUNCHER
   write_node_launcher "clawd-leviathan" "$REPO_DIR/packages/clawd/dist/index.js"
   write_node_launcher "clawd-perps" "$REPO_DIR/packages/clawd-perps/dist/cli.js"
   write_node_launcher "clawd-standalone" "$REPO_DIR/packages/cli-standalone/index.js"
-  write_node_launcher "clawd-agents-perps" "$REPO_DIR/Perps/clawd-agents-perps/dist/cli.js"
+  write_node_launcher "clawd-agents-perps" "$REPO_DIR/perps/clawd-agents-perps/dist/cli.js"
   ok "Injected local package launchers into $BIN_DIR"
 }
 
@@ -357,10 +357,10 @@ Injected local packages:
   packages/clawd-sdk
   packages/clawd-wallet
   packages/cli-standalone
-  Perps/clawd-agents-perps
+  perps/clawd-agents-perps
 
 One-shot reinstall/update:
-  curl -fsSL https://raw.githubusercontent.com/x402agent/solana-clawd/main/MCP/install.sh | bash
+  curl -fsSL https://raw.githubusercontent.com/x402agent/solana-clawd/main/mcp/install.sh | bash
 
 EOF
 

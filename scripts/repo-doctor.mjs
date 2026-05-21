@@ -63,7 +63,7 @@ function runTypechecks(emit = false) {
   const tscArgs = emit ? [] : ["--noEmit"];
   const projects = [
     ["sdk", "sdk/tsconfig.json"],
-    ["MCP", "MCP/tsconfig.json"],
+    ["mcp", "mcp/tsconfig.json"],
     ["clawdrouter", "clawdrouter/tsconfig.json"],
     ["leviathan", "leviathan/tsconfig.json"],
     ["gateway", "gateway/tsconfig.json"],

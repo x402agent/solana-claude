@@ -35,7 +35,7 @@ const PACKAGE_PATHS = [
   "packages/clawd-sdk",
   "packages/clawd-wallet",
   "packages/cli-standalone",
-  "Perps/clawd-agents-perps",
+  "perps/clawd-agents-perps",
 ];
 
 async function readJson<T = Record<string, unknown>>(abs: string): Promise<T | null> {

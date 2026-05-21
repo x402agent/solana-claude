@@ -82,7 +82,7 @@ On-chain settlement engine for p-token (SIMD-0266) micropayments:
 MCP now exposes first-class checks for the local Solana Clawd packages and services:
 - `integration_status` verifies package paths, build artifacts, gateway reachability, and key env wiring.
 - `integration_status` includes the local `packages/*` surfaces: `agentwallet`, `clawd`, `clawd-perps`, `clawd-protocol`, `clawd-sdk`, `clawd-wallet`, and `cli-standalone`.
-- The perps integration also checks `Perps/clawd-agents-perps`.
+- The perps integration also checks `perps/clawd-agents-perps`.
 - `agentkit_list_agents` loads `@solana-clawd/agent-kit` from `agent-kit/packages/agent-kit/dist` and lists local catalog agents.
 - `agentkit_runtime_profile` builds an Agent Kit runtime profile by identifier.
 - `gateway_health` checks the configured Gateway service.
@@ -138,12 +138,12 @@ Gateway tools use `GATEWAY_URL` or `CLAWD_GATEWAY_URL`, defaulting to `http://12
 Install or update the MCP server, local package surfaces, and launchers:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/x402agent/solana-clawd/main/MCP/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/x402agent/solana-clawd/main/mcp/install.sh | bash
 ```
 
 The installer:
 - clones or updates `https://github.com/x402agent/solana-clawd.git` into `~/.solana-clawd-mcp/solana-clawd`;
-- installs and builds `packages/agentwallet`, `packages/clawd`, `packages/clawd-perps`, `packages/clawd-sdk`, `packages/clawd-wallet`, `packages/cli-standalone`, and `Perps/clawd-agents-perps`;
+- installs and builds `packages/agentwallet`, `packages/clawd`, `packages/clawd-perps`, `packages/clawd-sdk`, `packages/clawd-wallet`, `packages/cli-standalone`, and `perps/clawd-agents-perps`;
 - probes/builds `packages/clawd-protocol` with `anchor build` when Anchor is available, otherwise `cargo build` when Rust is available;
 - installs and builds this `mcp` package;
 - creates launchers in `~/.local/bin`: `solana-clawd-mcp`, `solana-clawd-mcp-http`, `agentwallet`, `clawd`, `clawd-code`, `clawd-leviathan`, `clawd-perps`, `clawd-standalone`, and `clawd-agents-perps`;
@@ -154,9 +154,9 @@ Full package injection requires Node.js 20-22 because the repository package eng
 Common overrides:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/x402agent/solana-clawd/main/MCP/install.sh | bash -s -- --branch=newnew
-curl -fsSL https://raw.githubusercontent.com/x402agent/solana-clawd/main/MCP/install.sh | bash -s -- --install-dir="$HOME/dev/solana-clawd-mcp"
-curl -fsSL https://raw.githubusercontent.com/x402agent/solana-clawd/main/MCP/install.sh | bash -s -- --skip-packages
+curl -fsSL https://raw.githubusercontent.com/x402agent/solana-clawd/main/mcp/install.sh | bash -s -- --branch=newnew
+curl -fsSL https://raw.githubusercontent.com/x402agent/solana-clawd/main/mcp/install.sh | bash -s -- --install-dir="$HOME/dev/solana-clawd-mcp"
+curl -fsSL https://raw.githubusercontent.com/x402agent/solana-clawd/main/mcp/install.sh | bash -s -- --skip-packages
 ```
 
 MCP client config:

@@ -8,7 +8,7 @@
  *   "mcpServers": {
  *     "solana-clawd": {
  *       "command": "node",
- *       "args": ["/absolute/path/to/solana-clawd/MCP/dist/index.js"]
+ *       "args": ["/absolute/path/to/solana-clawd/mcp/dist/index.js"]
  *     }
  *   }
  * }

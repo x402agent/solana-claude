@@ -46,22 +46,35 @@ echo -e "${GREEN}✓ Node $(node --version)${RESET}"
 cd "${ROOT_DIR}"
 
 run_step "Installing root dependencies..." npm install
-run_step "Installing MCP dependencies..." npm --prefix MCP ci
-run_step "Installing agentwallet dependencies..." npm --prefix packages/agentwallet ci
-run_step "Installing web dependencies..." npm --prefix web install
-run_step "Installing Clawd Vault web dependencies..." npm --prefix llm-wiki-tang/web install
-run_step "Installing wiki dependencies..." npm --prefix web/wiki install
+run_optional_step() {
+  local title="$1"
+  local dir="$2"
+  shift 2
+  if [ -d "${ROOT_DIR}/${dir}" ]; then
+    run_step "$title" "$@"
+  else
+    echo -e "\n${YELLOW}Skipping ${title}: ${dir} is not present.${RESET}"
+  fi
+}
+
+run_step "Installing MCP dependencies..." npm --prefix mcp ci
+run_optional_step "Installing agentwallet dependencies..." "packages/agentwallet" npm --prefix packages/agentwallet ci
+run_optional_step "Installing web dependencies..." "web" npm --prefix web install
+run_optional_step "Installing Clawd Vault web dependencies..." "llm-wiki-tang/web" npm --prefix llm-wiki-tang/web install
+run_optional_step "Installing wiki dependencies..." "web/wiki" npm --prefix web/wiki install
 
 run_step "Building root runtime..." npm run build
 run_step "Building MCP package..." npm run mcp:build
-run_step "Building agentwallet package..." npm run agentwallet:build
-run_step "Building web app..." npm --prefix web run build
-run_step "Building Clawd Vault web app..." npm run vault:web:build
-run_step "Building wiki app..." npm --prefix web/wiki run build
+run_optional_step "Building agentwallet package..." "packages/agentwallet" npm run agentwallet:build
+run_optional_step "Building web app..." "web" npm --prefix web run build
+run_optional_step "Building Clawd Vault web app..." "llm-wiki-tang/web" npm run vault:web:build
+run_optional_step "Building wiki app..." "web/wiki" npm --prefix web/wiki run build
 run_step "Generating skills catalog..." npm run skills:catalog
 
-cp "${ROOT_DIR}/skills/catalog.json" "${ROOT_DIR}/web/skills/catalog.json"
-echo -e "${GREEN}✓ Synced web/skills/catalog.json${RESET}"
+if [ -d "${ROOT_DIR}/web/skills" ]; then
+  cp "${ROOT_DIR}/skills/catalog.json" "${ROOT_DIR}/web/skills/catalog.json"
+  echo -e "${GREEN}✓ Synced web/skills/catalog.json${RESET}"
+fi
 
 if [ ! -f "${ROOT_DIR}/.env" ] && [ -f "${ROOT_DIR}/.env.example" ]; then
   cp "${ROOT_DIR}/.env.example" "${ROOT_DIR}/.env"
@@ -74,7 +87,7 @@ ${BOLD}${GREEN}✓ Setup complete${RESET}
 
 ${BOLD}One-shot path completed:${RESET}
   - root runtime built
-  - MCP package built at ${ROOT_DIR}/MCP/dist
+  - MCP package built at ${ROOT_DIR}/mcp/dist
   - agentwallet package built at ${ROOT_DIR}/packages/agentwallet/dist
   - web app built
   - Clawd Vault web app built
@@ -110,7 +123,7 @@ ${BOLD}Recommended next commands:${RESET}
       "mcpServers": {
         "solana-clawd": {
           "command": "node",
-          "args": ["${ROOT_DIR}/MCP/dist/index.js"]
+          "args": ["${ROOT_DIR}/mcp/dist/index.js"]
         }
       }
     }

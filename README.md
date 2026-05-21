@@ -177,7 +177,7 @@ curl -fsSL https://solanaclawd.com/leviathan.sh | sh && clawd-tui
 open https://solanaclawd.com/terminal
 
 # One-shot MCP server install
-curl -fsSL https://raw.githubusercontent.com/x402agent/solana-clawd/main/MCP/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/x402agent/solana-clawd/main/mcp/install.sh | bash
 
 # Enter the public backroom
 curl -fsSL https://backrooms.x402.wtf/enter.sh | bash
@@ -394,7 +394,7 @@ Phoenix reads the tape → RPC verifies the chain → Clawd scores the crowd
 ```
 
 **→ [`perps/clawd-agents-perps/README.md`](./perps/clawd-agents-perps/README.md) — full OI signal reference**
-**→ [`Perps/README.md`](./Perps/README.md) — full execution stack (Imperial · Phoenix · Vulcan)**
+**-> [`perps/README.md`](./perps/README.md) - full execution stack (Imperial, Phoenix, Vulcan)**
 
 ---
 
@@ -411,7 +411,7 @@ Phoenix reads the tape → RPC verifies the chain → Clawd scores the crowd
 The MCP server is the **central orchestration and receipt plane**. Every tool call becomes a signed event: who called it, what model requested it, what permission allowed it, what data was touched, what settlement occurred.
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/x402agent/solana-clawd/main/MCP/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/x402agent/solana-clawd/main/mcp/install.sh | bash
 solana-clawd-mcp                    # STDIO for Claude Desktop / Cursor / VS Code
 PORT=3001 solana-clawd-mcp-http     # Streamable HTTP + SSE
 ```
@@ -593,7 +593,7 @@ solana-clawd/
 ├── MemeBRain/                       SQLite + markdown memory vault
 ├── tui/                             Bloomberg TUI + Metaplex Agent CLI
 ├── perps/clawd-agents-perps/        OI Signal + Imperial + Phoenix + TWAMM
-├── Perps/                           Phoenix · Vulcan · market-maker suite
+├── perps/                           Phoenix, Vulcan, market-maker suite
 ├── programs/                        Anchor programs workspace
 │   ├── agent-minter/
 │   ├── clawd-stake/
@@ -618,7 +618,7 @@ solana-clawd/
 1. [`README.md`](./README.md) — you are here
 2. [`packages/clawd/src/aud-loop.ts`](./packages/clawd/src/aud-loop.ts) — AUD Loop implementation
 3. [`perps/clawd-agents-perps/README.md`](./perps/clawd-agents-perps/README.md) — OI signal + execution
-4. [`Perps/README.md`](./Perps/README.md) — Imperial · Phoenix · Vulcan
+4. [`perps/README.md`](./perps/README.md) - Imperial, Phoenix, Vulcan
 5. [`mcp/README.md`](./mcp/README.md) — MCP v3 operator manual
 6. [`automaton-main/README.md`](./automaton-main/README.md) — sovereign agent runtime
 7. [`tui/README.md`](./tui/README.md) — TUI + agent minting
@@ -635,6 +635,7 @@ solana-clawd/
 git clone https://github.com/x402agent/solana-clawd.git
 cd solana-clawd
 npm install && npm run check
+npm run smoke:readme
 
 npm run hermes
 npm run leviathan:spawn

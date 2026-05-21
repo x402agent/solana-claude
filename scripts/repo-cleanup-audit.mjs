@@ -27,7 +27,7 @@ const topLevel = [
   'leviathan',
   'llm_oracle',
   'llm-wiki-tang',
-  'MCP',
+  'mcp',
   'MemeBRain',
   'moltbook-agent',
   'node_modules',
@@ -125,7 +125,7 @@ function classify(relPath, tracked, refs, generated) {
   if (relPath === 'node_modules') return 'delete-regenerable';
   if (relPath === '.wrangler') return 'delete-regenerable';
   if (relPath === '.claude') return 'local-config-review';
-  if (['automation', 'beepboop', 'clawdrouter', 'gateway', 'leviathan', 'MCP', 'sdk', 'scripts', 'tui', 'x402', 'skills', 'docs'].includes(relPath)) {
+  if (['automation', 'beepboop', 'clawdrouter', 'gateway', 'leviathan', 'mcp', 'sdk', 'scripts', 'tui', 'x402', 'skills', 'docs'].includes(relPath)) {
     return 'keep-active';
   }
   if (['llm_oracle', 'openclawd', 'openclawd-framework', 'programs', 'vulcan-cli-master'].includes(relPath)) {
