@@ -137,5 +137,7 @@ ${lines}
 
 Executable skills accept argv as: { argv: ["sub-command", "--flag", "value"] }
 and return { stdout, stderr, code }. Instruction-only skills are still binding
-operating context: read their SKILL.md before handling matching work.`;
+operating context: read their SKILL.md before handling matching work. When a
+task spans multiple skills, combine their guidance and preserve each skill's
+constraints instead of treating them as isolated flows.`;
 }

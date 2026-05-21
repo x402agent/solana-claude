@@ -17,12 +17,14 @@ export {
 } from './skill-tool.js';
 export { installDefaultSkills, ensureSkillsDir, type InstallResult } from './install.js';
 export {
+  buildSkillGatewayManifest,
   findLocalSkill,
   fetchPublicSkillCatalog,
   getSkillHubEndpoints,
   listLocalSkillsByCategory,
   loadLocalSkillCatalog,
   loadLocalSkillHubManifest,
+  type SkillGatewayManifest,
   type SkillCatalogEntry,
   type SkillHubEntry,
   type SkillHubManifest,

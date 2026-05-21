@@ -64,6 +64,17 @@ export interface SkillHubManifest {
   skills: SkillHubEntry[];
 }
 
+export interface SkillGatewayManifest {
+  endpoints: ReturnType<typeof getSkillHubEndpoints>;
+  localCatalog: SkillCatalogEntry[];
+  localHub: SkillHubManifest | null;
+  route: 'local-first';
+  privacy: {
+    networkCalls: 'opt-in';
+    secrets: 'never-included';
+  };
+}
+
 export function getSkillHubEndpoints() {
   return {
     gallery: OPENCLAWD_PUBLIC_ENDPOINTS.skillGallery,
@@ -79,6 +90,19 @@ export function loadLocalSkillCatalog(): SkillCatalogEntry[] {
 
 export function loadLocalSkillHubManifest(): SkillHubManifest | null {
   return readFirstJson<SkillHubManifest>(INDEX_CANDIDATES);
+}
+
+export function buildSkillGatewayManifest(): SkillGatewayManifest {
+  return {
+    endpoints: getSkillHubEndpoints(),
+    localCatalog: loadLocalSkillCatalog(),
+    localHub: loadLocalSkillHubManifest(),
+    route: 'local-first',
+    privacy: {
+      networkCalls: 'opt-in',
+      secrets: 'never-included',
+    },
+  };
 }
 
 export function findLocalSkill(slug: string): SkillCatalogEntry | null {

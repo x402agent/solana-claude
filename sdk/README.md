@@ -143,7 +143,7 @@ openclawd-framework/
 ├── mcp-server/                  🔧 @pump-fun/mcp-server — Solana MCP tools
 ├── x402/                        💸 @pump-fun/x402 — HTTP 402 payment rails
 ├── examples/                    🧪 9 runnable demos
-├── skills/                      🎯 Installable agent skills
+├── skills/                      🎯 Skill Hub catalog + installable agent skills
 ├── library/                     📚 Prompt + agent definitions
 ├── knowledge/                   🧠 Design notes + internal conventions
 ├── goals/                       🎯 Active goal files for leviathan
@@ -189,7 +189,7 @@ src/
 ├── pulse/daemon       Tail-flick event loop with depth-change detection
 ├── molting/spawn      Spawnling minting + constitution hash gate
 ├── setup/wizard       First-spawn: keypair → hash → Metaplex → SHELL.md
-└── skills/            Registry, parser, tool wrapper, installer
+└── skills/            Registry, parser, gateway catalog, tool wrapper, installer
 ```
 
 **Install:** `npm install -g @openclawdsolana/leviathan`
@@ -425,8 +425,36 @@ const payfetch = wrapFetchWithX402(globalThis.fetch);
 const res = await payfetch("https://api.example.com/premium"); // auto-pays on 402
 ```
 
-**Facilitator:** `https://clawdrouter.fly.dev`
+**Facilitator:** `https://x402.wtf/facilitator` by default, override with `X402_FACILITATOR_URL`.
 **x402 docs:** [x402.wtf](https://x402.wtf)
+
+---
+
+## 🎯 Skill Hub + Gateway
+
+The SDK now ships a bundled Skill Hub snapshot under `sdk/skills/`, including MagicBlock, Imperial, Oracle, Sherpa TTS, Solana Clawd, agentic commerce, DFlow, and Phantom wallet skills. The leviathan registry loads skills from `OPENCLAWD_SKILL_PATH`, `~/.openclawd/skills`, the SDK bundle, and the monorepo `skills/` directory.
+
+Instruction-only skills are injected as operating context. Executable skills are also exposed as `skill.<id>` tools, so related skills can work together inside the same agent loop.
+
+```typescript
+import {
+  buildSkillGatewayManifest,
+  fetchPublicSkillCatalog,
+  loadInstalledSkills,
+} from "@openclawdsolana/leviathan/skills/index.js";
+
+const localGateway = buildSkillGatewayManifest(); // local-first, no network calls
+const installed = loadInstalledSkills();
+const publicCatalog = await fetchPublicSkillCatalog(); // opt-in call to x402.wtf
+```
+
+Public discovery endpoints come from `OPENCLAWD_PUBLIC_ENDPOINTS` and default to `https://solanaclawd.com` plus `https://x402.wtf`. They are URLs only; keys, wallet files, RPC credentials, bearer tokens, and local user skills are not published or embedded in the public catalog.
+
+Refresh the SDK snapshot from the root skill catalog:
+
+```bash
+npm --prefix sdk run skills:sync
+```
 
 ---
 
@@ -533,6 +561,12 @@ X402_SVM_PRIVATE_KEY=     # base58 keypair for USDC payments
 X402_NETWORK=             # solana-mainnet | solana-devnet
 X402_MAX_PER_REQUEST=     # max $ per request (default: 0.10)
 X402_MAX_SESSION=         # session spend cap (default: 1.00)
+X402_FACILITATOR_URL=     # default: https://x402.wtf/facilitator
+
+# ── Public discovery URLs, no secrets ──────────────────────────
+OPENCLAWD_PUBLIC_BASE_URL= # default: https://solanaclawd.com
+X402_WTF_BASE_URL=         # default: https://x402.wtf
+OPENCLAWD_SKILL_PATH=      # optional colon-separated extra skill roots
 
 # ── Optional services ────────────────────────────────────────────
 RESEARCH_API_URL=         # AutoResearch Wiki (default: http://localhost:8000)
