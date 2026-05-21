@@ -617,6 +617,17 @@ elif [ -f "$SRC_DIR/package.json" ] && command -v npm >/dev/null 2>&1; then
     warn "root CLI build produced no dist/entrypoints/clawd.js — skipping bin link"
   fi
 
+  if npm run skills:catalog >/dev/null 2>&1; then
+    ok "skills catalog generated"
+    if [ -d "$SRC_DIR/web/skills" ]; then
+      cp "$SRC_DIR/skills/catalog.json" "$SRC_DIR/web/skills/catalog.json" \
+        && ok "synced web skills catalog" \
+        || warn "failed to sync web skills catalog"
+    fi
+  else
+    warn "skills catalog generation failed"
+  fi
+
   ok "Node surfaces ready"
 
   # Post-install formal verification gate (runs now that tsx is available)
