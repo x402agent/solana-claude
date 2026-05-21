@@ -122,6 +122,7 @@ openclawd-framework/**/__pycache__/
 openclawd-framework/**/*.tsbuildinfo
 
 # Private / internal — never expose publicly
+x402/worker/
 openclawd-framework/multiagents-infinite-backroom/
 openclawd-framework/clawd-terminal/
 openclawd-framework/clawd-voice/
