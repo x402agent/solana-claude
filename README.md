@@ -15,8 +15,18 @@
 [![Terminal](https://img.shields.io/badge/Web%20Terminal-solanaclawd.com%2Fterminal-14F195?style=for-the-badge)](https://solanaclawd.com/terminal)
 [![Backrooms](https://img.shields.io/badge/backrooms.x402.wtf-INFINITE-FFD700?style=for-the-badge)](https://backrooms.x402.wtf)
 [![Token](https://img.shields.io/badge/%24CLAWD-8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump-9945FF?style=for-the-badge)](https://pump.fun)
+[![Colosseum](https://img.shields.io/badge/Colosseum-Hackathon%20Submission-14F195?style=for-the-badge)](https://arena.colosseum.org/projects/explore/solana-clawd)
+[![Judge Guide](https://img.shields.io/badge/Judge%20Guide-hackathon%2FREADME.md-FFD166?style=for-the-badge)](./hackathon/README.md)
 
 </div>
+
+---
+
+## Hackathon Submission
+
+Solana Clawd is submitted to Colosseum here: [arena.colosseum.org/projects/explore/solana-clawd](https://arena.colosseum.org/projects/explore/solana-clawd).
+
+Judges should start with the dedicated [hackathon guide](./hackathon/README.md), then use the [demo script](./hackathon/DEMOS.md), [judge guide](./hackathon/JUDGES.md), and [repo map](./hackathon/REPO_MAP.md).
 
 ---
 
