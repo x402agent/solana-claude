@@ -47,7 +47,7 @@ OPENCLAWD_BASE_URL="${OPENCLAWD_BASE_URL:-https://x402.wtf}"
 OPENCLAWD_GATEWAY_URL="${OPENCLAWD_GATEWAY_URL:-https://x402.wtf/api}"
 OPENCLAWD_SITE_URL="${OPENCLAWD_SITE_URL:-https://x402.wtf/automation}"
 OPENCLAWD_AGENTS_URL="${OPENCLAWD_AGENTS_URL:-https://x402.wtf/api/agents}"
-OPENCLAWD_TERMINAL_URL="${OPENCLAWD_TERMINAL_URL:-http://localhost:3000/terminal}"
+OPENCLAWD_TERMINAL_URL="${OPENCLAWD_TERMINAL_URL:-https://solanaclawd.com/terminal}"
 BIN_DIR_DEFAULT="$WORKSPACE/bin"
 BIN_DIR=""
 BUILD_DIR_NAME="build"
@@ -928,7 +928,7 @@ ENVEOF
 else
   info "keeping existing $ENV_PATH"
   if ! grep -q '^OPENCLAWD_TERMINAL_URL=' "$ENV_PATH" 2>/dev/null; then
-    printf "\n# Local web terminal\nOPENCLAWD_TERMINAL_URL=%s\n" "$OPENCLAWD_TERMINAL_URL" >> "$ENV_PATH"
+    printf "\n# Web terminal\nOPENCLAWD_TERMINAL_URL=%s\n" "$OPENCLAWD_TERMINAL_URL" >> "$ENV_PATH"
     ok "added OPENCLAWD_TERMINAL_URL to $ENV_PATH"
   fi
 fi
@@ -1008,7 +1008,7 @@ printf "       ${GREEN}clawd-code${RESET}         ${DIM}# clawd-code-cli — Gro
 printf "       ${GREEN}clawd-backroom stream${RESET}  ${DIM}# follow the CLAWD Infinite Backroom (SSE)${RESET}\n"
 printf "       ${GREEN}clawd-backroom transform${RESET}  ${DIM}# relay claude → clawd into the room 🦞${RESET}\n"
 printf "       ${GREEN}clawd -p \"check my wallet\"${RESET}  ${DIM}# headless one-shot${RESET}\n"
-printf "       ${GREEN}$OPENCLAWD_TERMINAL_URL${RESET}  ${DIM}# local browser terminal${RESET}\n"
+printf "       ${GREEN}$OPENCLAWD_TERMINAL_URL${RESET}  ${DIM}# browser terminal${RESET}\n"
 printf "\n"
 printf "  ${PURPLE}4.${RESET}  Run the sovereign runtime:\n"
 printf "       ${GREEN}leviathan --spawn${RESET}   ${DIM}# first-time identity wizard${RESET}\n"

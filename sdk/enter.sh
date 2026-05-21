@@ -26,7 +26,7 @@ CONVEX_SITE="${CONVEX_SITE:-https://giddy-dragon-7.convex.site}"
 BACKROOM_URL="${BACKROOM_URL:-https://backrooms.x402.wtf}"
 BACKROOM_3D_URL="${BACKROOM_3D_URL:-https://backroom-3d.fly.dev}"
 GATEWAY_URL="${GATEWAY_URL:-https://x402.wtf/gateway}"
-TERMINAL_URL="${TERMINAL_URL:-http://localhost:3000/terminal}"
+TERMINAL_URL="${TERMINAL_URL:-https://solanaclawd.com/terminal}"
 CLAWD_PROFILE_DIR="${CLAWD_PROFILE_DIR:-$HOME/.clawd}"
 CLAWD_PROFILE_FILE="${CLAWD_PROFILE_FILE:-$CLAWD_PROFILE_DIR/profile.json}"
 CLAWD_ENV_FILE="${CLAWD_PROFILE_DIR}/.env"
@@ -527,7 +527,7 @@ XAI_API_KEY=
 CLAWD_AGENT_ID=${AGENT_ID}
 CLAWD_NAME=${AGENT_NAME}
 
-# ── Local web terminal ──────────────────────────
+# ── Web terminal ────────────────────────────────
 CLAWD_TERMINAL_URL=${TERMINAL_URL}
 ENV
   chmod 600 "$CLAWD_ENV_FILE"
@@ -539,7 +539,7 @@ else
     ok "X402_DEV_KEY added to existing .env"
   fi
   if ! grep -q "^CLAWD_TERMINAL_URL=" "$CLAWD_ENV_FILE" 2>/dev/null; then
-    printf "\n# Local web terminal\nCLAWD_TERMINAL_URL=%s\n" "$TERMINAL_URL" >> "$CLAWD_ENV_FILE"
+    printf "\n# Web terminal\nCLAWD_TERMINAL_URL=%s\n" "$TERMINAL_URL" >> "$CLAWD_ENV_FILE"
     ok "CLAWD_TERMINAL_URL added to existing .env"
   fi
 fi
@@ -586,11 +586,11 @@ printf "  ${BOLD}Commands${CR}\n"
 printf "  ${CYAN}clawd${CR}                — interactive TUI\n"
 printf "  ${CYAN}clawd --help${CR}         — all options\n"
 printf "  ${CYAN}leviathan --spawn${CR}    — spawn sovereign on-chain agent\n"
-printf "  ${CYAN}${TERMINAL_URL}${CR} — local browser terminal\n"
+printf "  ${CYAN}${TERMINAL_URL}${CR} — browser terminal\n"
 printf "\n"
 
 printf "  ${BOLD}Links${CR}\n"
-printf "  ${CYAN}${TERMINAL_URL}${CR} — local browser terminal\n"
+printf "  ${CYAN}${TERMINAL_URL}${CR} — browser terminal\n"
 printf "  ${CYAN}https://x402.wtf/gateway${CR}    — your developer hub\n"
 printf "  ${CYAN}https://install.x402.wtf${CR}    — install hub\n"
 printf "  ${CYAN}https://backrooms.x402.wtf${CR}  — infinite backroom\n"

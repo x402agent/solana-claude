@@ -34,7 +34,7 @@
 [![x402](https://img.shields.io/badge/x402.wtf-payments-1E5AA8?style=for-the-badge)](https://x402.wtf)
 [![Website](https://img.shields.io/badge/solanaclawd.com-website-147D64?style=for-the-badge)](https://solanaclawd.com)
 [![Telegram](https://img.shields.io/badge/t.me/clawdtoken-community-26A5E4?style=for-the-badge&logo=telegram&logoColor=white)](https://t.me/clawdtoken)
-[![Cheshire](https://img.shields.io/badge/cheshireterminal.ai-AI-9B59B6?style=for-the-badge)](https://cheshireterminal.ai)
+[![Terminal](https://img.shields.io/badge/solanaclawd.com%2Fterminal-AI%20Terminal-9B59B6?style=for-the-badge)](https://solanaclawd.com/terminal)
 [![X](https://img.shields.io/badge/@clawddevs-X-000000?style=for-the-badge&logo=x&logoColor=white)](https://x.com/clawddevs)
 
 ---
@@ -53,6 +53,12 @@
 
 ```bash
 curl -fsSL https://solanaclawd.com/install.sh | bash
+```
+
+Open the browser terminal:
+
+```bash
+open https://solanaclawd.com/terminal
 ```
 
 **Or with npm:**
@@ -559,7 +565,7 @@ SOLANA_TRACKER_API_KEY=   # SolanaTracker for trending tokens
 | --- | --- |
 | 🌐 Website | [solanaclawd.com](https://solanaclawd.com) |
 | 💸 x402 Payments | [x402.wtf](https://x402.wtf) |
-| 🤖 AI Terminal | [cheshireterminal.ai](https://cheshireterminal.ai) |
+| 🤖 AI Terminal | [solanaclawd.com/terminal](https://solanaclawd.com/terminal) |
 | 💬 Telegram | [t.me/clawdtoken](https://t.me/clawdtoken) |
 | 🐦 X (Twitter) | [@clawddevs](https://x.com/clawddevs) |
 | 📞 Hotline | 909-413-5567 |

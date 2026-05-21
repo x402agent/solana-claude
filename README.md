@@ -12,6 +12,7 @@
 [![npm](https://img.shields.io/badge/npm-solana--clawd-CB3837?style=for-the-badge&logo=npm)](https://www.npmjs.com/package/solana-clawd)
 [![Phoenix](https://img.shields.io/badge/Phoenix-Perpetuals-FF5F1F?style=for-the-badge)](https://phoenix.trade)
 [![x402](https://img.shields.io/badge/x402.wtf-agent%20payments-14F195?style=for-the-badge)](https://x402.wtf)
+[![Terminal](https://img.shields.io/badge/Web%20Terminal-solanaclawd.com%2Fterminal-14F195?style=for-the-badge)](https://solanaclawd.com/terminal)
 [![Backrooms](https://img.shields.io/badge/backrooms.x402.wtf-INFINITE-FFD700?style=for-the-badge)](https://backrooms.x402.wtf)
 [![Token](https://img.shields.io/badge/%24CLAWD-8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump-9945FF?style=for-the-badge)](https://pump.fun)
 
@@ -170,6 +171,9 @@ $CLAWD is the economic pressure valve of the harness: access, routing stake, age
 # One-line install → full TUI with Agent Kit
 curl -fsSL https://solanaclawd.com/leviathan.sh | sh && clawd-tui
 
+# Open the browser terminal
+open https://solanaclawd.com/terminal
+
 # One-shot MCP server install
 curl -fsSL https://raw.githubusercontent.com/x402agent/solana-clawd/main/MCP/install.sh | bash
 
@@ -189,6 +193,7 @@ npm install -g solana-clawd && clawd
 | 🎨 | `clawd-agent mint --network devnet ... --yes` | Real Metaplex registered agent |
 | 💰 | `clawd balance` + `clawd fund 10` | USDC + CLAWD wallet ops |
 | 🤖 | `bash automaton-main/leviathan.sh --full` | Full runtime bootstrap |
+| 🖥️ | `https://solanaclawd.com/terminal` | Browser terminal |
 | 📦 | `clawdhub install meme-trader` | Install a skill from ClawdHub |
 
 ---

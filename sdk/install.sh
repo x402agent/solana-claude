@@ -6,7 +6,7 @@
 # ╚══════════════════════════════════════════════════════════════════════════╝
 set -euo pipefail
 
-CLAWD_TERMINAL_URL="${CLAWD_TERMINAL_URL:-http://localhost:3000/terminal}"
+CLAWD_TERMINAL_URL="${CLAWD_TERMINAL_URL:-https://solanaclawd.com/terminal}"
 
 # ── Terminal colours ──────────────────────────────────────────────────────────
 RESET="\033[0m"
@@ -150,7 +150,7 @@ XAI_API_KEY=
 # Orchestrator (orchestrator-client example)
 # ORCHESTRATOR_URL=http://localhost:8787
 
-# Local web terminal
+# Web terminal
 CLAWD_TERMINAL_URL=${CLAWD_TERMINAL_URL}
 
 # SolanaTracker (OODA loop example)
@@ -161,7 +161,7 @@ ENV
 else
   info "~/.clawd/.env already exists — skipping"
   if ! grep -q "^CLAWD_TERMINAL_URL=" "$ENV_FILE" 2>/dev/null; then
-    printf "\n# Local web terminal\nCLAWD_TERMINAL_URL=%s\n" "$CLAWD_TERMINAL_URL" >> "$ENV_FILE"
+    printf "\n# Web terminal\nCLAWD_TERMINAL_URL=%s\n" "$CLAWD_TERMINAL_URL" >> "$ENV_FILE"
     ok "CLAWD_TERMINAL_URL added to existing .env"
   fi
 fi
@@ -173,7 +173,7 @@ printf "  ${BOLD}Quick start:${RESET}\n"
 printf "  ${CYAN}1.${RESET} Edit ${BOLD}${ENV_FILE}${RESET} → add your ${BOLD}XAI_API_KEY${RESET}\n"
 printf "  ${CYAN}2.${RESET} Run   ${BOLD}clawd${RESET}            — interactive Grok/xAI TUI\n"
 printf "  ${CYAN}3.${RESET} Run   ${BOLD}clawd --help${RESET}     — all options\n"
-printf "  ${CYAN}4.${RESET} Open  ${BOLD}${CLAWD_TERMINAL_URL}${RESET} — local browser terminal\n"
+printf "  ${CYAN}4.${RESET} Open  ${BOLD}${CLAWD_TERMINAL_URL}${RESET} — browser terminal\n"
 printf "\n"
 
 printf "  ${BOLD}Examples (no key needed for most):${RESET}\n"
