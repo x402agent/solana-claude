@@ -24,6 +24,9 @@ umask 022
 
 # ─── Config ───────────────────────────────────────────────────────────────────
 CLAWD_SITE="${CLAWD_SITE:-https://solanaclawd.com}"
+CLAWD_X402_SITE="${CLAWD_X402_SITE:-https://x402.wtf}"
+CLAWD_SDK_GRAPH_URL="${CLAWD_SDK_GRAPH_URL:-https://x402.wtf/sdk}"
+CLAWD_SDK_MANIFEST_URL="${CLAWD_SDK_MANIFEST_URL:-https://x402.wtf/api/solana-clawd/sdk}"
 CLAWD_DIR="${CLAWD_DIR:-$HOME/.openclawd}"
 CLAWD_BRANCH="${CLAWD_BRANCH:-main}"
 CLAWD_NO_TELEMETRY="${CLAWD_NO_TELEMETRY:-0}"
@@ -429,7 +432,9 @@ printf "       ${DIM}attestation/README.md           # SAS verification layer${R
 printf "       ${DIM}operator/README.md              # OpenClawd Operator loop${RESET}\n"
 printf "\n"
 printf "  ${DIM}Hub  : $CLAWD_SITE${RESET}\n"
-printf "  ${DIM}x402 : x402.wtf${RESET}\n"
+printf "  ${DIM}x402 : $CLAWD_X402_SITE${RESET}\n"
+printf "  ${DIM}SDK  : $CLAWD_SDK_GRAPH_URL${RESET}\n"
+printf "  ${DIM}API  : $CLAWD_SDK_MANIFEST_URL${RESET}\n"
 printf "  ${DIM}CA   : 8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump${RESET}\n"
 printf "  ${DIM}Docs : github.com/x402agent/solana-clawd${RESET}\n"
 printf "\n"
