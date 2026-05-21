@@ -1,7 +1,7 @@
 /**
  * examples/ooda-loop.ts
  *
- * Run one complete OODA trading cycle using the solana-claude agent state.
+ * Run one complete OODA trading cycle using the solana-clawd agent state.
  *
  * OBSERVE → ORIENT → DECIDE → ACT → LEARN
  *
@@ -40,8 +40,8 @@ const log = (phase: string, msg: string) => {
   console.log(`${color}[${phase}]\x1b[0m ${msg}`);
 };
 
-console.log("\n\x1b[1m🤖 solana-claude OODA Loop Demo\x1b[0m");
-console.log("Architecture: Claude Code agentic engine × SolanaOS strategy\n");
+console.log("\n\x1b[1m🤖 solana-clawd OODA Loop Demo\x1b[0m");
+console.log("Architecture: Clawd Code agentic engine × OpenClawd strategy\n");
 
 const task = spawnTask("ooda", "Full OODA trading cycle", "Demo OODA run", { canShowPermissions: true });
 console.log(`Task spawned: ${task.id}\n`);
@@ -106,7 +106,7 @@ if (learnedPrior.length > 0) {
   log("ORIENT", "No LEARNED patterns yet (run more cycles to build memory)");
 }
 
-// Score top 3 trending tokens (adapted from SolanaOS confidence model)
+// Score top 3 trending tokens (adapted from OpenClawd confidence model)
 const scored: Array<{ symbol: string; score: number; rationale: string }> = [];
 
 for (const token of trending.slice(0, 3)) {

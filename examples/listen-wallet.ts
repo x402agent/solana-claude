@@ -28,7 +28,7 @@ if (!apiKey) {
 const client = new HeliusClient({ apiKey });
 const listener = new HeliusListener({ apiKey });
 
-console.log(`\n🌊 solana-claude onchain listener`);
+console.log(`\n🌊 solana-clawd onchain listener`);
 console.log(`📡 Watching wallet: ${wallet.slice(0, 8)}...${wallet.slice(-4)}`);
 console.log(`🔑 Helius RPC: ${client.rpcUrl.replace(apiKey, "***")}\n`);
 
