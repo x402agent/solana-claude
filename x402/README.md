@@ -135,6 +135,7 @@ Payment-Required: <base64-json challenge>
 
 POST /commerce/checkout
 Payment-Signature: <base64 signed Solana transaction>
+X-Payment-Challenge: <original Payment-Required header value>
 201 Created
 Payment-Response: <base64-json receipt>
 ```

@@ -48,6 +48,7 @@ Retry the same request with:
 
 ```http
 Payment-Signature: <base64 signed Solana transaction>
+X-Payment-Challenge: <original Payment-Required header value>
 ```
 
 The order response includes the Solana signature, payer, line items, entitlements, and optional `x-clawd-receipt-cid` if Pinata receipt pinning succeeds.

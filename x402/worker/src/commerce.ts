@@ -17,7 +17,7 @@ import {
   paymentResponseHeader,
   type PaymentResult,
 } from "./protocols/x402";
-import { encodeChallenge } from "./solana/x402";
+import { decodeChallenge, encodeChallenge } from "./solana/x402";
 
 const MERCHANT_API_BASE_URL = "https://merchantapi.googleapis.com";
 const DEFAULT_PRODUCT_BASE_URL = "https://x402.wtf/gateway";
@@ -252,19 +252,24 @@ commerce.post("/checkout", async (c) => {
     return c.json({ error: e instanceof Error ? e.message : String(e) }, 422);
   }
 
-  const resource = new URL(c.req.url).pathname;
-  const challenge = await buildSolanaChallenge(
-    c.env,
-    resource,
-    `Solana Clawd x402 commerce checkout ${quote.id}`,
-    c.env.TREASURY_OWNER,
-    c.env.USDC_MINT,
-    BigInt(quote.totalMicros),
-    6,
-    `clawd-commerce:${quote.id}`,
-  );
-
   const paymentSig = c.req.header("payment-signature") ?? c.req.header("x-payment");
+  const resource = new URL(c.req.url).pathname;
+  let challenge: SolanaPaymentRequirement;
+  const submittedChallenge = c.req.header("x-payment-challenge");
+  if (paymentSig && submittedChallenge) {
+    try {
+      challenge = decodeChallenge(submittedChallenge);
+      validateCheckoutChallenge(challenge, resource, quote, c.env);
+    } catch (e) {
+      return c.json(
+        { error: `invalid payment challenge: ${e instanceof Error ? e.message : String(e)}` },
+        400,
+      );
+    }
+  } else {
+    challenge = await buildCheckoutChallenge(c.env, resource, quote);
+  }
+
   if (!paymentSig) return paymentRequired(quote, challenge);
 
   const expectedPayer = body.value.buyerWallet ?? c.req.header("x-payer") ?? undefined;
@@ -287,6 +292,38 @@ commerce.post("/checkout", async (c) => {
   if (receiptCid) headers["x-clawd-receipt-cid"] = receiptCid;
   return c.json({ order, receiptCid }, 201, headers);
 });
+
+async function buildCheckoutChallenge(
+  env: Env,
+  resource: string,
+  quote: CommerceQuote,
+): Promise<SolanaPaymentRequirement> {
+  return buildSolanaChallenge(
+    env,
+    resource,
+    `Solana Clawd x402 commerce checkout ${quote.id}`,
+    env.TREASURY_OWNER,
+    env.USDC_MINT,
+    BigInt(quote.totalMicros),
+    6,
+    `clawd-commerce:${quote.id}`,
+  );
+}
+
+function validateCheckoutChallenge(
+  challenge: SolanaPaymentRequirement,
+  resource: string,
+  quote: CommerceQuote,
+  env: Env,
+): void {
+  if (challenge.resource !== resource) {
+    throw new Error(`resource mismatch: got ${challenge.resource} want ${resource}`);
+  }
+  if (challenge.payTo !== env.TREASURY_OWNER) throw new Error("recipient mismatch");
+  if (challenge.asset !== env.USDC_MINT) throw new Error("asset mismatch");
+  if (challenge.maxAmountRequired !== quote.totalMicros) throw new Error("amount mismatch");
+  if (challenge.extra.decimals !== 6) throw new Error("decimals mismatch");
+}
 
 function buildCatalog(url: string, env: Env): Record<string, unknown> {
   const origin = new URL(url).origin;

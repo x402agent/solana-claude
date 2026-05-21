@@ -16,6 +16,7 @@ const PAYMENT_HEADERS = new Set([
   "authorization",
   "payment-signature",
   "x-payment",
+  "x-payment-challenge",
   "x-ap2-mandate",
   "x-payer",
 ]);

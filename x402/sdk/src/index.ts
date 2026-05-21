@@ -104,6 +104,7 @@ export async function clawdFetch(
   const first = await fetch(url, { ...opts, headers });
   if (first.status !== 402) return decorate(first);
 
+  const challengeHeader = first.headers.get("payment-required");
   const challenge = await extractChallenge(first, opts.protocol ?? "x402");
   if (!challenge) throw new Error(`402 without parseable challenge`);
   validateChallenge(url, challenge, opts);
@@ -122,6 +123,7 @@ export async function clawdFetch(
   } else {
     paidHeaders.set("payment-signature", signatureB64);
   }
+  if (challengeHeader) paidHeaders.set("x-payment-challenge", challengeHeader);
 
   const paid = await fetch(url, { ...opts, headers: paidHeaders });
   return decorate(paid);
