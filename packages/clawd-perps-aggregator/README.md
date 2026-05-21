@@ -135,6 +135,8 @@ The agent now has the following tools available:
 | `perps_get_funding` | Funding + borrow rates |
 | `perps_get_quote` | Cross-venue quote, depth-aware |
 | `perps_route_trade` | SOR with rationale + candidates |
+| `perps_route_trade_split` | Split-execution router (fans across venues when AMM capacity demands) |
+| `perps_get_pools` | Per-venue AMM pool state + summary (util, capacity, skew, predicted funding, health) |
 | `perps_build_order_tx` | Build payload without submitting |
 | `perps_simulate_order` | Route + check policy + report fillability |
 | `perps_execute_order` | Paper-first execute (live behind env) |
@@ -155,6 +157,8 @@ clawd-perps-aggregator marks SOL
 clawd-perps-aggregator funding SOL
 clawd-perps-aggregator quote SOL long 250
 clawd-perps-aggregator route SOL long 250
+clawd-perps-aggregator route-split SOL long 25000   # AMM-aware split
+clawd-perps-aggregator pools SOL                     # pool state per venue
 clawd-perps-aggregator positions <wallet>
 clawd-perps-aggregator risk <wallet>
 clawd-perps-aggregator mcp                   # start MCP server on stdio
@@ -165,8 +169,7 @@ clawd-perps-aggregator mcp                   # start MCP server on stdio
 ## Smart order routing
 
 The router scores each venue on four normalised components and picks the
-single best venue (split-execution API is in place but unused — flip the
-weights when you want to ship it). Default weights:
+single best venue. Default weights:
 
 | Component | Weight | Direction | Source |
 |-----------|--------|-----------|--------|
@@ -175,16 +178,52 @@ weights when you want to ship it). Default weights:
 | Open Interest | 0.10 | higher better | venue meta |
 | Funding | 0.15 | lower better | hold-weighted funding cost |
 
-Slippage is computed two ways:
+### Slippage / impact model
+
+Three layered models, picked per venue:
 
 - **Phoenix** (CLOB): walks the orderbook to compute the VWAP of a market
   order for the requested USD notional, then converts to bps vs. mid.
-- **Flash / Jupiter / GMTrade** (AMM-style): square-root impact model
-  parameterised by venue liquidity, calibrated against Solana perps pool
-  depths (10k–100k USD ≈ 5–30 bps).
+- **AMM venues with pool state**: `poolImpact()` — base sqrt impact +
+  imbalance premium that prices in pool counterparty risk. Opening into
+  the heavy side is **more expensive** (you're forcing the pool to take
+  on more risk); opening into the light side is rebate-clamped to zero.
+  Refuses to fill orders that breach per-side OI caps.
+- **AMM venues without pool state**: `ammImpactSlippage()` — generic
+  square-root impact parameterised by venue liquidity (fallback).
 
-The router will return an unfillable quote (with a `reason`) when a venue
-either lacks depth or would breach the operator's slippage tolerance.
+The aggregator ships a `PoolStateProvider` hook so operators can inject
+real on-chain pool readers (JLP, Flash, GMTrade) per (venue, symbol);
+when no provider is registered, a `syntheticPoolState()` is derived from
+the venue's current funding signal as a best-effort placeholder.
+
+### Split execution
+
+`PerpsAggregator.routeSplit()` (or MCP `perps_route_trade_split`) fans an
+order across venues when AMM capacity demands it:
+
+1. Quote every venue for the full notional → baseline.
+2. Greedy allocator: re-quote each venue per chunk; allocate to the
+   venue with the lowest **marginal** cost.
+3. Prefer the single-venue plan unless splitting beats it by at least
+   `splitThresholdBps` (default 5 bps), or no single venue can fill the
+   full size.
+
+Tunable: `splitThresholdBps`, `maxLegs` (default 3), `stepUsd` (default
+$100).
+
+### AMM pool views
+
+```typescript
+const pools = await agg.pools("SOL");
+// [{ venue: "flash", pool: { aumUsd, longOiUsd, shortOiUsd, maxLong/Short, ... },
+//    summary: { utilization, capacityUsd, skew, borrowPerHourPct,
+//               predictedFundingLongPerHourPct, health, healthComponents } }, ...]
+```
+
+The summary surfaces the math operators actually care about: how close to
+the cap is each side, what the next-period funding rate would be given
+current OI imbalance, and a composite `health` score in [0,1].
 
 ---
 
@@ -258,29 +297,32 @@ The aggregator inherits the existing Imperial safety contract verbatim:
 
 ```text
 src/
-  types.ts                      core types
+  types.ts                      core types (incl. PoolStateView)
   config.ts                     env-driven AggregatorConfig
   venues/
-    transport.ts                Imperial HTTP transport
-    adapter.ts                  VenueAdapter interface
-    base.ts                     BaseVenueAdapter (shared behavior)
+    transport.ts                Imperial HTTP transport + httpToWebSocketBase
+    adapter.ts                  VenueAdapter interface (with QuoteContext.action)
+    base.ts                     BaseVenueAdapter — action-aware quoting + pool resolution
+    poolState.ts                PoolStateProvider + StaticPoolStateProvider + syntheticPoolState
     phoenix.ts / flash.ts / jupiter.ts / gmtrade.ts
     registry.ts                 buildVenueAdapters()
   aggregator/
     slippage.ts                 book-VWAP and AMM-impact models
+    ammMath.ts                  poolImpact, utilization, predictFunding, borrow ladder, health score
     scoring.ts                  composite venue scoring
-    router.ts                   SmartRouter
+    router.ts                   SmartRouter (single-best-venue)
+    splitRouter.ts              SplitRouter (greedy multi-leg allocator)
   realtime/
     marketStream.ts             WS multiplexer + cache
     positionAggregator.ts       Cross-venue positions + totals
     marketScore.ts              OODA composite signal
   sdk/
-    client.ts                   PerpsAggregator (main entry)
+    client.ts                   PerpsAggregator (main entry) + summarisePool
     transactions.ts             payload + tx helpers
     signing.ts                  base64 tx signing helpers
   mcp/
     server.ts                   MCP server entry
-    tools.ts                    Tool definitions
+    tools.ts                    Tool definitions (17 tools)
     bin.ts                      bin: clawd-perps-mcp
   cli.ts                        bin: clawd-perps-aggregator
   index.ts                      public exports

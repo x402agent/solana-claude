@@ -162,6 +162,47 @@ export function buildTools(agg: PerpsAggregator): McpTool[] {
       },
     },
     {
+      name: "perps_route_trade_split",
+      description:
+        "Split-execution router: fans the order across venues when AMM capacity or slippage demands it. Always returns one route plan with one or more legs and a rationale.",
+      inputSchema: {
+        type: "object",
+        required: ["symbol", "side", "sizeUsd"],
+        properties: {
+          symbol: { type: "string" },
+          side: { type: "string", enum: ["long", "short"] },
+          action: { type: "string", enum: ["open", "close"], default: "open" },
+          sizeUsd: { type: "number" },
+          slippageBps: { type: "number", default: 50 },
+          holdSeconds: { type: "number", default: 3600 },
+          venues: { type: "array", items: { type: "string" } },
+        },
+      },
+      handler: async (input) => {
+        const route = await agg.routeSplit({
+          symbol: asSymbol(input),
+          side: asSide(input),
+          action: asAction(input),
+          sizeUsd: asNumber(input, "sizeUsd"),
+          slippageBps: input.slippageBps as number | undefined,
+          holdSeconds: input.holdSeconds as number | undefined,
+          venues: input.venues as VenueId[] | undefined,
+        });
+        return { route };
+      },
+    },
+    {
+      name: "perps_get_pools",
+      description:
+        "AMM pool state per venue for a symbol: per-side utilization, capacity, OI skew, borrow rates, predicted funding, pool-health score.",
+      inputSchema: {
+        type: "object",
+        required: ["symbol"],
+        properties: { symbol: { type: "string" } },
+      },
+      handler: async (input) => ({ pools: await agg.pools(asSymbol(input)) }),
+    },
+    {
       name: "perps_build_order_tx",
       description:
         "Build the on-wire order payload (and route plan) without submitting. Safe to call without live mode.",

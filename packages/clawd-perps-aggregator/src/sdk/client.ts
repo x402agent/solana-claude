@@ -18,7 +18,17 @@ import { loadAggregatorConfig, mergeConfig } from "../config.js";
 import { ImperialTransport } from "../venues/transport.js";
 import { buildVenueAdapters } from "../venues/registry.js";
 import type { VenueAdapter } from "../venues/adapter.js";
+import { BaseVenueAdapter } from "../venues/base.js";
+import type { PoolStateProvider } from "../venues/poolState.js";
 import { SmartRouter } from "../aggregator/router.js";
+import { SplitRouter } from "../aggregator/splitRouter.js";
+import {
+  borrowRatePerHourPct,
+  oiSkew,
+  poolHealthScore,
+  predictFundingPerHourPct,
+  utilizationFor,
+} from "../aggregator/ammMath.js";
 import { createMarketStream, MarketStream } from "../realtime/marketStream.js";
 import { fetchAggregatedPositions, computeLiquidationRisks } from "../realtime/positionAggregator.js";
 import { scoreMarket, scoreSymbolAllVenues } from "../realtime/marketScore.js";
@@ -29,9 +39,11 @@ import type {
   LiquidationRisk,
   MarketSnapshot,
   OrderRequest,
+  PoolStateView,
   ProfileBalance,
   QuoteRequest,
   RoutePlan,
+  Side,
   SimulateResult,
   VenueId,
   VenueQuote,
@@ -42,6 +54,8 @@ export interface PerpsAggregatorOpts {
   config?: Partial<AggregatorConfig>;
   /** Inject custom adapters (e.g., for testing or direct on-chain). */
   adapters?: Partial<Record<VenueId, VenueAdapter>>;
+  /** Inject on-chain pool state for AMM venues; applied to all base adapters. */
+  poolStateProvider?: PoolStateProvider;
 }
 
 let _execCounter = 0;
@@ -55,6 +69,7 @@ export class PerpsAggregator {
   readonly transport: ImperialTransport;
   readonly adapters: Record<VenueId, VenueAdapter>;
   readonly router: SmartRouter;
+  readonly splitRouter: SplitRouter;
 
   private _stream: MarketStream | null = null;
 
@@ -71,11 +86,28 @@ export class PerpsAggregator {
       }
     }
     this.adapters = built;
+    if (opts.poolStateProvider) {
+      this.setPoolStateProvider(opts.poolStateProvider);
+    }
     this.router = new SmartRouter({
       adapters: this.adapters,
       defaultSlippageBps: this.config.slippageBps,
       defaultHoldSeconds: this.config.defaultHoldSeconds,
     });
+    this.splitRouter = new SplitRouter({
+      adapters: this.adapters,
+      defaultSlippageBps: this.config.slippageBps,
+      defaultHoldSeconds: this.config.defaultHoldSeconds,
+    });
+  }
+
+  /** Apply a pool-state provider to every base-class adapter. */
+  setPoolStateProvider(provider: PoolStateProvider | null): void {
+    for (const adapter of Object.values(this.adapters)) {
+      if (adapter instanceof BaseVenueAdapter) {
+        adapter.setPoolProvider(provider);
+      }
+    }
   }
 
   // ─── Market data ──────────────────────────────────────────────────────────
@@ -127,6 +159,31 @@ export class PerpsAggregator {
     return out;
   }
 
+  // ─── AMM pool views ───────────────────────────────────────────────────────
+
+  /** Per-venue pool state for `symbol` (non-CLOB venues only). */
+  async pools(symbol: string): Promise<{
+    venue: VenueId;
+    symbol: string;
+    pool: PoolStateView | null;
+    summary: PoolSummary | null;
+  }[]> {
+    const sym = symbol.toUpperCase();
+    const out: { venue: VenueId; symbol: string; pool: PoolStateView | null; summary: PoolSummary | null }[] = [];
+    for (const id of Object.keys(this.adapters) as VenueId[]) {
+      const adapter = this.adapters[id];
+      const meta = await adapter.fetchMeta(sym).catch(() => null);
+      const pool = meta?.pool ?? null;
+      out.push({
+        venue: id,
+        symbol: sym,
+        pool,
+        summary: pool ? summarisePool(pool) : null,
+      });
+    }
+    return out;
+  }
+
   // ─── Quotes / routing ─────────────────────────────────────────────────────
 
   async quote(req: QuoteRequest): Promise<VenueQuote[]> {
@@ -135,6 +192,11 @@ export class PerpsAggregator {
 
   async route(req: QuoteRequest): Promise<RoutePlan> {
     return this.router.route(req);
+  }
+
+  /** Split-execution route: fans across venues when AMM capacity demands it. */
+  async routeSplit(req: QuoteRequest): Promise<RoutePlan> {
+    return this.splitRouter.route(req);
   }
 
   // ─── Positions / risk ─────────────────────────────────────────────────────
@@ -360,3 +422,42 @@ export class PerpsAggregator {
 }
 
 export { usdToFixed, fixedToUsd };
+
+// ─── Pool summary helpers ─────────────────────────────────────────────────────
+
+export interface PoolSummary {
+  utilization: { long: number; short: number };
+  capacityUsd: { long: number; short: number };
+  skew: number;
+  borrowPerHourPct: { long: number; short: number };
+  predictedFundingLongPerHourPct: number;
+  health: number;
+  healthComponents: {
+    skewPenalty: number;
+    longUtil: number;
+    shortUtil: number;
+    aumDepth: number;
+  };
+}
+
+export function summarisePool(pool: PoolStateView): PoolSummary {
+  const health = poolHealthScore(pool);
+  return {
+    utilization: {
+      long: utilizationFor(pool, "long"),
+      short: utilizationFor(pool, "short"),
+    },
+    capacityUsd: {
+      long: Math.max(0, pool.maxLongOiUsd - pool.longOiUsd),
+      short: Math.max(0, pool.maxShortOiUsd - pool.shortOiUsd),
+    },
+    skew: oiSkew(pool),
+    borrowPerHourPct: {
+      long: borrowRatePerHourPct(pool, "long"),
+      short: borrowRatePerHourPct(pool, "short"),
+    },
+    predictedFundingLongPerHourPct: predictFundingPerHourPct(pool),
+    health: health.score,
+    healthComponents: health.components,
+  };
+}
