@@ -1,0 +1,92 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e5]:
+    - img [ref=e6]
+    - textbox "Loading..." [ref=e9] [cursor=pointer]
+    - generic [ref=e10]:
+      - generic [ref=e11]: / or ⌘K
+      - img [ref=e12]
+  - main [ref=e16]:
+    - generic [ref=e17]:
+      - generic [ref=e18]:
+        - navigation "Page navigation" [ref=e19]
+        - link "GitHub" [ref=e62] [cursor=pointer]:
+          - /url: https://github.com/x402agent/solana-clawd
+      - generic [ref=e67]:
+        - generic [ref=e68]
+        - generic [ref=e81]
+      - generic [ref=e88]:
+        - generic [ref=e89]
+        - generic [ref=e113]
+    - generic [ref=e121]:
+      - generic [ref=e122]:
+        - generic [ref=e123]
+        - generic [ref=e127]: "1"
+      - generic [ref=e128]:
+        - generic [ref=e129]
+        - generic [ref=e133]: "1"
+      - generic [ref=e134]:
+        - generic [ref=e135]
+        - generic [ref=e140]: "1"
+      - generic [ref=e141]:
+        - generic [ref=e142]
+        - generic [ref=e146]: "9"
+    - generic [ref=e148]:
+      - generic [ref=e149]:
+        - generic [ref=e150]
+        - generic [ref=e156]: checking session
+      - generic [ref=e157]:
+        - generic [ref=e158]
+        - paragraph [ref=e162]: Gateway minting is free to users, so requests are tied to a platform login and recorded in Convex.
+        - link "Open Login" [ref=e163] [cursor=pointer]:
+          - /url: /
+        - button "Refresh session" [ref=e164] [cursor=pointer]
+    - generic [ref=e166]:
+      - generic [ref=e168]:
+        - generic [ref=e169]
+        - generic [ref=e178]
+      - table [ref=e185]:
+        - rowgroup [ref=e186]
+        - rowgroup [ref=e192]
+    - generic [ref=e341]:
+      - generic [ref=e342]:
+        - generic [ref=e343]
+        - generic [ref=e355]
+      - generic [ref=e374]:
+        - generic [ref=e375]
+        - generic [ref=e379]
+    - generic [ref=e399]:
+      - generic [ref=e400]:
+        - img [ref=e401]
+        - text: Synced Package Workspaces
+      - paragraph [ref=e403]: "These packages are discovered from the installed `solana-clawd/packages` workspace and kept in the same live source graph as the gateway, skills, agents, and library."
+      - generic [ref=e404]:
+        - generic [ref=e405]
+        - generic [ref=e413]
+        - generic [ref=e421]
+        - generic [ref=e429]
+        - generic [ref=e437]
+        - generic [ref=e445]
+        - generic [ref=e453]
+        - generic [ref=e461]
+        - generic [ref=e469]
+        - generic [ref=e477]
+        - generic [ref=e484]
+        - generic [ref=e492]
+        - generic [ref=e499]
+    - generic [ref=e506]:
+      - generic [ref=e507]:
+        - generic [ref=e508]
+        - generic [ref=e511]
+      - generic [ref=e533]:
+        - generic [ref=e534]
+        - generic [ref=e539]
+    - generic [ref=e567]:
+      - generic [ref=e568]:
+        - generic [ref=e569]
+        - table [ref=e573]
+      - generic [ref=e588]:
+        - generic [ref=e589]
+        - generic [ref=e601]
+  - button "Open Next.js Dev Tools" [ref=e617] [cursor=pointer]:
+    - img [ref=e618]
+  - alert [ref=e2]

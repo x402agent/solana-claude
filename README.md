@@ -256,7 +256,15 @@ OWNER_DID=did:key:z6Mkq5mY3JWtxoxUobWcfNHm7AkRubgSWEZTkBVqZXJviFZ5
 git clone "gitlawb://$OWNER_DID/my-project-public"
 ```
 
-The public mirror includes source for `sdk`, `tui`, `ooda`, `MemeBRain`, `gateway`, `automaton-main`, `agents`, and `leviathan`. It excludes `.local-secrets`, live `.env` files, key material, UCAN files, `node_modules`, and generated build output.
+The public mirror includes source for `sdk`, `tui`, `ooda`, `MemeBRain`, `gateway`, `automaton-main`, `agents`, `leviathan`, and `perps/clawd-agents-perps`. It can include package metadata, READMEs, `.env.example` templates, source trees, and small checked build artifacts where useful. It never includes `.local-secrets`, live `.env` files, key material, UCAN files, or any `node_modules` directory.
+
+Public mirror source groups:
+
+| Group | Included paths | Explicitly excluded |
+| --- | --- | --- |
+| Automaton runtime | `automaton-main/assets`, `automaton-main/automation`, `automaton-main/packages`, `automaton-main/scripts`, `automaton-main/src`, `automaton-main/dist`, `automaton-main/*.md`, package manifests, lockfiles, and shell entrypoints | `automaton-main/node_modules`, local `.automaton` wallets/state, live `.env` files |
+| Clawd Perps | `perps/clawd-agents-perps/src`, `perps/clawd-agents-perps/dist`, `.env.example`, `README.md`, `package.json`, `package-lock.json`, and `tsconfig.json` | `perps/clawd-agents-perps/node_modules`, live `.env` files, wallet/key material |
+| Gateway + ADK | `gateway`, `adk`, `agents`, `sdk`, `tui`, and registry docs/templates | live RPC URLs, API keys, bot tokens, UCAN credentials, generated dependency folders |
 
 ---
 
