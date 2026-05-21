@@ -3,6 +3,7 @@
  *
  * Routes mounted:
  *   /facilitator/*            — Solana x402 facilitator (verify/settle/supported)
+ *   /commerce/*               — x402 Google-agent shop + Merchant API sync plans
  *   /registry/:id             — read agent record + manifest
  *   /agents/:id/*             — payment-gated agent invocation (any protocol)
  *   /a2a/:id/.well-known/agent.json   — A2A agent card
@@ -14,6 +15,7 @@ import { Hono } from "hono";
 import { cors } from "hono/cors";
 
 import type { Env } from "./types";
+import { commerce } from "./commerce";
 import { facilitator } from "./solana/facilitator";
 import { clawdFacilitator } from "./solana/clawd-facilitator";
 import { getAgent, methodHash, priceFor } from "./solana/registry";
@@ -56,6 +58,7 @@ app.get("/health", (c) =>
 
 app.route("/facilitator", facilitator);
 app.route("/facilitator/clawd", clawdFacilitator);
+app.route("/commerce", commerce);
 
 /* ——— Registry read ——— */
 

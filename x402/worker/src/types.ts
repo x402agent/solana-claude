@@ -25,6 +25,14 @@ export interface Env {
   DISCOUNT_TIER_2_BPS: number;
   DISCOUNT_TIER_3_BALANCE: string;
   DISCOUNT_TIER_3_BPS: number;
+  /** Optional default Merchant Center account id for commerce sync plans. */
+  GOOGLE_MERCHANT_ACCOUNT_ID?: string;
+  /** Optional default Merchant API data source name: accounts/{id}/dataSources/{id}. */
+  GOOGLE_MERCHANT_DATASOURCE_NAME?: string;
+  /** Optional public product landing page used in Merchant productInputs. */
+  COMMERCE_PRODUCT_BASE_URL?: string;
+  /** Optional public base URL for product images, ending before /{productId}.png. */
+  COMMERCE_IMAGE_BASE_URL?: string;
 
   // secrets
   HELIUS_API_KEY: string;

@@ -37,6 +37,8 @@ import {
 } from "@solana/spl-token";
 import bs58 from "bs58";
 
+export * from "./commerce";
+
 export interface SolanaPaymentRequirement {
   scheme: "exact";
   network: "solana" | "solana-devnet";

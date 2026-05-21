@@ -33,6 +33,7 @@ The viral hook is simple: every useful API call becomes a collectible, auditable
 | Part | Path | What it does |
 | --- | --- | --- |
 | Gateway | `worker/src/index.ts` | Cloudflare Worker entrypoint. Routes health, registry reads, facilitator calls, A2A cards, and paid agent invocations. |
+| Commerce shop | `worker/src/commerce.ts` | Publishes the Google-agent catalog, issues x402 checkout challenges, settles Solana USDC orders, and returns Merchant API sync plans. |
 | Protocol negotiation | `worker/src/protocols/negotiate.ts` | Decides whether the caller wants x402, MPP, or AP2 based on HTTP headers. |
 | x402 adapter | `worker/src/protocols/x402.ts` | Builds `Payment-Required` challenges and emits `Payment-Response` receipts. |
 | Solana verifier | `worker/src/solana/x402.ts` | Verifies signed Solana transactions match the challenge: blockhash, mint, destination, amount, and p-token batch outputs. |
@@ -44,6 +45,7 @@ The viral hook is simple: every useful API call becomes a collectible, auditable
 | MPP bridge | `worker/src/protocols/mpp.ts` | Maps `WWW-Authenticate: Payment` flows onto Solana exact payments. |
 | AP2 bridge | `worker/src/protocols/ap2.ts` | Verifies AP2 intent mandates before accepting Solana settlement. |
 | SDK | `sdk/src/index.ts` | Drop-in `clawdFetch` client. Detects 402, validates challenge, signs the transfer, retries with payment. |
+| SDK commerce helpers | `sdk/src/commerce.ts` | Builds commerce quotes, Google Merchant `productInput` payloads, and credential-safe Merchant API request specs. |
 | Vault program | `programs/clawd-vault/src/lib.rs` | Anchor registry and revenue vault. Stores pricing, protocols, split config, and payout recipients. |
 | Metaplex agent token | `METAPLEX_AGENT_TOKEN.md` | Launches the canonical token for a registered agent through Metaplex Genesis and routes creator fees to the agent PDA. |
 
@@ -111,6 +113,47 @@ POST /a2a/:id
 ```
 
 The request body must be JSON-RPC 2.0. Pricing can be keyed by `params.metadata.skillId` or by the A2A method name.
+
+## Commerce Shop
+
+The gateway now exposes a first-pass x402 agent store for Google-agent access and operator packages.
+
+| Product | Price | Entitlement |
+| --- | ---: | --- |
+| `google-adk-gateway-seat` | `$4.02` | Google ADK gateway entrypoint and private destination registry |
+| `merchant-center-sync-agent` | `$14.02` | Merchant API datasource/productInput sync planning |
+| `clawd-perps-risk-agent` | `$9.42` | Clawd Perps and Phoenix risk planning |
+| `automaton-runtime-agent` | `$40.20` | Automaton runtime bootstrap package |
+| `x402-agent-store-bundle` | `$140.20` | Full Google-agent commerce bundle |
+
+Checkout is normal x402:
+
+```http
+POST /commerce/checkout
+402 Payment Required
+Payment-Required: <base64-json challenge>
+
+POST /commerce/checkout
+Payment-Signature: <base64 signed Solana transaction>
+201 Created
+Payment-Response: <base64-json receipt>
+```
+
+Merchant Center integration is generated as request specs, not live token-bearing calls. Use:
+
+```http
+POST /commerce/merchant/sync-plan
+```
+
+The plan uses current Merchant API stable `v1` endpoints:
+
+```text
+POST /datasources/v1/accounts/{ACCOUNT_ID}/dataSources
+POST /products/v1/accounts/{ACCOUNT_ID}/productInputs:insert?dataSource=accounts/{ACCOUNT_ID}/dataSources/{DATASOURCE_ID}
+GET  /products/v1/accounts/{ACCOUNT_ID}/products/{PRODUCT_ID}
+```
+
+See [ECOMMERCE.md](/Users/8bit/bots/Cladwbot-solana/solana-clawd/x402/ECOMMERCE.md) for the store routes, request bodies, and Merchant API notes.
 
 ## Revenue Loop
 
@@ -234,12 +277,19 @@ After `anchor build`, replace the placeholder `declare_id!("11111111111111111111
 | `SOLANATRACKER_API_KEY` | RPC fallback provider. |
 | `PINATA_JWT` | Used to pin settlement receipts. |
 | `AP2_VERIFIER_JWK` | Public JWK for AP2 mandate verification. |
+| `COMMERCE_PRODUCT_BASE_URL` | Public product landing page used in Merchant `productInput.link`. Defaults to `https://x402.wtf/gateway`. |
+| `COMMERCE_IMAGE_BASE_URL` | Optional public base URL for product images as `{base}/{productId}.png`. |
+| `GOOGLE_MERCHANT_ACCOUNT_ID` | Optional default Merchant Center account id for sync-plan generation. |
+| `GOOGLE_MERCHANT_DATASOURCE_NAME` | Optional default datasource resource name for sync-plan generation. |
 
 ## Endpoints
 
 | Route | What happens |
 | --- | --- |
 | `GET /health` | Liveness and network metadata. |
+| `GET /commerce/catalog` | Lists paid Google-agent store SKUs. |
+| `POST /commerce/checkout` | Returns an x402 challenge, then settles a paid commerce order on retry. |
+| `POST /commerce/merchant/sync-plan` | Builds Merchant API v1 datasource and product insertion request specs. |
 | `GET /registry/:id` | Reads the registered agent account. |
 | `POST /facilitator/verify` | Verifies a payment against a challenge. |
 | `POST /facilitator/settle` | Re-verifies and broadcasts the payment transaction. |

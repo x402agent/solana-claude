@@ -43,7 +43,13 @@
     "DISCOUNT_TIER_2_BALANCE": "1000000000000000",   // 1M
     "DISCOUNT_TIER_2_BPS": 2500,                     // 25%
     "DISCOUNT_TIER_3_BALANCE": "10000000000000000",  // 10M
-    "DISCOUNT_TIER_3_BPS": 5000                      // 50%
+    "DISCOUNT_TIER_3_BPS": 5000,                     // 50%
+
+    // Optional commerce defaults. OAuth tokens are never stored here.
+    "COMMERCE_PRODUCT_BASE_URL": "https://x402.wtf/gateway",
+    // "COMMERCE_IMAGE_BASE_URL": "https://x402.wtf/assets/agents",
+    // "GOOGLE_MERCHANT_ACCOUNT_ID": "123456789",
+    // "GOOGLE_MERCHANT_DATASOURCE_NAME": "accounts/123456789/dataSources/987654321"
   }
 
   // Secrets (set via `wrangler secret put`):

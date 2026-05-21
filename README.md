@@ -503,6 +503,8 @@ npm i @openclawdsolana/clawd-sdk         # On-chain SDK, curves, vaults
 
 HTTP `402 Payment Required` as agent-native settlement. Runtime loops that earn, pay, and keep operating. p-token micropayments cheap enough for per-action receipts.
 
+The x402 folder now includes the Solana Clawd x402 Agent Store: paid Google-agent SKUs, `/commerce/checkout` Solana USDC settlement, and Merchant API v1 sync-plan generation for Google Merchant Center product inputs. See [`x402/ECOMMERCE.md`](./x402/ECOMMERCE.md).
+
 ```bash
 curl https://x402.wtf/api/agents | jq .
 curl https://x402.wtf/registry | jq .

@@ -36,7 +36,7 @@ clawd-terminal
 .wrangler
 **/.wrangler/
 **/.wrangler
-
+nanohub
 # Python caches and local environments
 __pycache__/
 *.py[cod]
