@@ -12,10 +12,12 @@
 .clawd/
 .vulcan/
 .gitlawb/
+.playwright-mcp/
 .claude/settings.local.json
 **/.clawd/
 **/.vulcan/
 **/.gitlawb/
+**/.playwright-mcp/
 **/strategy-runs/
 ucan.json
 identity.pem

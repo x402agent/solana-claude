@@ -290,9 +290,16 @@ node amm/dist/cli.js route-split SOL-PERP long 4000
 
 ---
 
-## Public Gitlawb Mirror
+## Public Gitlawb Mirrors
 
-The sanitized public mirror is published as `my-project-public` on gitlawb. Force the public node before clone so `git-remote-gitlawb` does not fall back to a local node:
+The sanitized public mirrors are tracked from this GitHub repo as gitlinks/submodules, not as expanded private workspaces:
+
+| Mirror | Purpose | Public safety rule |
+| --- | --- | --- |
+| [`my-project-public`](./my-project-public) | Stable public mirror for judge/reviewer cloning | Sanitized source only; no local secrets, wallets, live env, UCAN material, or dependency folders |
+| [`my-project-public-fresh`](./my-project-public-fresh) | Fresh rebuild mirror used to verify the public export path | Same sanitizer rules as `my-project-public`; used as a second-pass safety check |
+
+Force the public node before clone so `git-remote-gitlawb` does not fall back to a local node:
 
 ```bash
 export GITLAWB_NODE=https://node.gitlawb.com
@@ -300,7 +307,7 @@ OWNER_DID=did:key:z6Mkq5mY3JWtxoxUobWcfNHm7AkRubgSWEZTkBVqZXJviFZ5
 git clone "gitlawb://$OWNER_DID/my-project-public"
 ```
 
-The public mirror includes source for `sdk`, `tui`, `ooda`, `MemeBRain`, `gateway`, `automaton-main`, `agents`, `leviathan`, and `perps/clawd-agents-perps`. It can include package metadata, READMEs, `.env.example` templates, source trees, and small checked build artifacts where useful. It never includes `.local-secrets`, live `.env` files, key material, UCAN files, or any `node_modules` directory.
+The public mirrors include source for `sdk`, `tui`, `ooda`, `MemeBRain`, `gateway`, `automaton-main`, `agents`, `leviathan`, and `perps/clawd-agents-perps`. They can include package metadata, READMEs, `.env.example` templates, source trees, and small checked build artifacts where useful. They never include `.local-secrets`, `.playwright-mcp`, live `.env` files, key material, UCAN files, browser snapshots, or any `node_modules` directory.
 
 Public mirror source groups:
 
