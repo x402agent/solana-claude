@@ -184,7 +184,7 @@ export function journalOoda(phase: string, content: string, opts: MemoryOptions 
   db.close();
 }
 
-function _enforceWorkingMemoryLimit(db: Database.Database, bank: string): void {
+function _enforceWorkingMemoryLimit(db: ReturnType<typeof openDb>, bank: string): void {
   const count = (db.prepare(`SELECT COUNT(*) as n FROM memories WHERE bank = ? AND tier = 'working'`).get(bank) as { n: number }).n;
   if (count > WORKING_MEMORY_LIMIT) {
     db.prepare(`
