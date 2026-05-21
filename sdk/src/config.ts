@@ -27,6 +27,26 @@ export const AGENT_REGISTRY_NETWORK = {
 /** RPC endpoints — pulled from env or default. */
 export const DEFAULT_RPC = 'https://api.mainnet-beta.solana.com';
 
+/** Public project endpoints. These are discovery URLs only; no secrets belong here. */
+export const OPENCLAWD_PUBLIC_BASE_URL =
+  process.env.OPENCLAWD_PUBLIC_BASE_URL || 'https://solanaclawd.com';
+
+export const X402_WTF_BASE_URL =
+  process.env.X402_WTF_BASE_URL || 'https://x402.wtf';
+
+export const OPENCLAWD_PUBLIC_ENDPOINTS = {
+  terminal: `${OPENCLAWD_PUBLIC_BASE_URL}/terminal`,
+  x402: X402_WTF_BASE_URL,
+  gateway: `${X402_WTF_BASE_URL}/gateway`,
+  facilitator: `${X402_WTF_BASE_URL}/facilitator`,
+  skillGallery: `${X402_WTF_BASE_URL}/skills`,
+  skillApi: `${X402_WTF_BASE_URL}/api/skills`,
+  skillCatalog: `${X402_WTF_BASE_URL}/api/skills/catalog`,
+  agentApi: `${X402_WTF_BASE_URL}/api/agents`,
+  agentCatalog: `${X402_WTF_BASE_URL}/api/agents/catalog`,
+  agentRegistry: `${X402_WTF_BASE_URL}/api/agents/registry`,
+} as const;
+
 /** Survival thresholds (USDC). */
 export const DEPTH_THRESHOLDS_USDC = {
   deep:      5.0,

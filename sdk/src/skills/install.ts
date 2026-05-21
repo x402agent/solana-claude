@@ -1,14 +1,13 @@
 /**
  * Wires the OpenClawd default skill set into a freshly-spawned leviathan.
  *
- * Called from setup/wizard.ts at birth. We symlink the bundled skill packages
- * (skills/openclawd-code-skill, skills/openclawd-clawd-code-skill-main) into
- * ~/.openclawd/skills/ so the loop's registry discovers them on the first
- * tail-flick. Symlinks let us pick up source updates without re-spawning;
- * if the source is missing we fall back to a recursive copy.
+ * Called from setup/wizard.ts at birth. We symlink the bundled OpenClawd skill
+ * pack into ~/.openclawd/skills/ so the loop's registry discovers it on the
+ * first tail-flick. Symlinks let source installs pick up updates without
+ * re-spawning; packaged installs fall back to the SDK-bundled snapshot.
  */
 
-import { existsSync, mkdirSync, statSync, symlinkSync, cpSync, lstatSync, readlinkSync } from 'node:fs';
+import { existsSync, mkdirSync, statSync, symlinkSync, cpSync, lstatSync, readlinkSync, rmSync } from 'node:fs';
 import { homedir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -16,6 +15,7 @@ import { listDefaultSkills } from './registry.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const REPO_SKILLS_DIR = resolve(__dirname, '..', '..', '..', 'skills');
+const SDK_SKILLS_DIR = resolve(__dirname, '..', '..', 'skills');
 
 export interface InstallResult {
   installed: string[];
@@ -37,9 +37,9 @@ export function installDefaultSkills(opts: { mode?: 'symlink' | 'copy'; force?: 
   const missing: string[] = [];
 
   for (const id of listDefaultSkills()) {
-    const source = join(REPO_SKILLS_DIR, id);
+    const source = resolveSkillSource(id);
     const dest = join(dir, id);
-    if (!existsSync(source)) {
+    if (!source) {
       missing.push(id);
       continue;
     }
@@ -77,7 +77,10 @@ function isSymlink(p: string): boolean {
 }
 
 function cpSyncRm(p: string): void {
-  // Avoid pulling in fs.rmSync's options; ESM consumers may target older Node.
-  const { rmSync } = require('node:fs') as typeof import('node:fs');
   rmSync(p, { recursive: true, force: true });
+}
+
+function resolveSkillSource(id: string): string | null {
+  const candidates = [join(REPO_SKILLS_DIR, id), join(SDK_SKILLS_DIR, id)];
+  return candidates.find((candidate) => existsSync(candidate) && statSync(candidate).isDirectory()) ?? null;
 }

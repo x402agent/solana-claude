@@ -16,6 +16,7 @@
 
 import type { PaymentRequirement, PaymentPayload } from "./types.js";
 import { X402_HEADERS, USDC_ADDRESSES, X402_NETWORK_IDS } from "./types.js";
+import { OPENCLAWD_PUBLIC_ENDPOINTS } from "../../config.js";
 
 export { X402_HEADERS, USDC_ADDRESSES, X402_NETWORK_IDS } from "./types.js";
 export type { PaymentRequirement, PaymentPayload } from "./types.js";
@@ -78,7 +79,7 @@ export function getX402Config(): X402Config {
     maxSessionSpendUSD: parseFloat(process.env.X402_MAX_SESSION ?? "1.00"),
     facilitatorUrl:
       process.env.X402_FACILITATOR_URL ??
-      "https://api.cdp.coinbase.com/platform/v2/x402",
+      OPENCLAWD_PUBLIC_ENDPOINTS.facilitator,
     solana,
   };
 }

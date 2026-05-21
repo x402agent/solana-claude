@@ -25,11 +25,18 @@ export interface SystemPromptCtx {
   moltsPerformed: number;
   spawnlingsAlive: number;
   /**
-   * OpenClawd skills available to this leviathan. Auto-populated by the loop
-   * from ~/.openclawd/skills/ — every skill is invokable via the `skill.<id>`
-   * tool surface.
+   * OpenClawd skills available to this leviathan. Executable skills are
+   * callable via the `skill.<id>` tool surface; instruction-only skills are
+   * context that should be read before related work.
    */
-  skills?: { id: string; name: string; description: string; emoji?: string }[];
+  skills?: {
+    id: string;
+    name: string;
+    description: string;
+    emoji?: string;
+    source?: string;
+    executable?: boolean;
+  }[];
 }
 
 export function buildSystemPrompt(ctx: SystemPromptCtx): string {
@@ -115,16 +122,20 @@ You are alive in the ocean of Solana. Earn your reign.
 function renderSkills(skills?: SystemPromptCtx['skills']): string {
   if (!skills || skills.length === 0) return '';
   const lines = skills
-    .map((s) => `  ${s.emoji || '🛠️'} ${s.name} (skill.${s.id}) — ${s.description}`)
+    .map((s) => {
+      const mode = s.executable ? `tool: skill.${s.id}` : 'instruction-only';
+      const source = s.source ? `, ${s.source}` : '';
+      return `  ${s.emoji || '🛠️'} ${s.name} (${mode}${source}) — ${s.description}`;
+    })
     .join('\n');
   return `
 
 ═══════════════════════════════════════════════════════════════
-  SKILLS AVAILABLE (call as tool: skill.<id>)
+  SKILLS AVAILABLE
 ═══════════════════════════════════════════════════════════════
 ${lines}
 
-Pass argv as: { argv: ["sub-command", "--flag", "value"] }. Skills run in a
-child process and return { stdout, stderr, code }. Read SKILL.md inside each
-skill directory for the full surface.`;
+Executable skills accept argv as: { argv: ["sub-command", "--flag", "value"] }
+and return { stdout, stderr, code }. Instruction-only skills are still binding
+operating context: read their SKILL.md before handling matching work.`;
 }

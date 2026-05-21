@@ -4,10 +4,12 @@
  * Search order (first match wins for a given skill name):
  *   1. $OPENCLAWD_SKILL_PATH (colon-separated, like $PATH)
  *   2. ~/.openclawd/skills/             — per-user installed skills
- *   3. <repo>/skills/                   — workspace skills bundled in the monorepo
+ *   3. <sdk>/skills/                    — SDK-bundled catalog + executable skills
+ *   4. <repo>/skills/                   — workspace skills bundled in the monorepo
  *
- * A "skill" is any directory that contains a SKILL.md and a `package.json`
- * with a `bin` entry. We honour the `dist/` build output if present.
+ * A skill can be instruction-only (SKILL.md) or executable (SKILL.md plus a
+ * package.json bin/main). Instruction-only skills become prompt/catalog context;
+ * executable skills are also exposed as callable tools.
  */
 
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
@@ -23,12 +25,16 @@ export interface LoadedSkill {
   id: string;
   /** Absolute path to the skill directory. */
   dir: string;
-  /** Absolute path to the executable entrypoint (CLI bin). */
-  bin: string;
+  /** Where the skill came from. */
+  source: 'env' | 'user' | 'sdk' | 'repo';
+  /** Absolute path to the executable entrypoint (CLI bin), if any. */
+  bin?: string;
+  /** Whether this skill can be invoked as a child-process tool. */
+  executable: boolean;
   /** Skill metadata parsed from SKILL.md frontmatter. */
   manifest: SkillFrontmatter;
   /** Optional npm package metadata. */
-  pkg: SkillPackageJson;
+  pkg?: SkillPackageJson;
 }
 
 interface SkillPackageJson {
@@ -38,19 +44,33 @@ interface SkillPackageJson {
   main?: string;
 }
 
-const DEFAULT_SEARCH_DIRS = [
-  join(homedir(), '.openclawd', 'skills'),
-  resolve(__dirname, '..', '..', '..', 'skills'),
-];
+const USER_SKILLS_DIR = join(homedir(), '.openclawd', 'skills');
+const SDK_SKILLS_DIR = resolve(__dirname, '..', '..', 'skills');
+const REPO_SKILLS_DIR = resolve(__dirname, '..', '..', '..', 'skills');
 
-const DEFAULT_SKILLS = ['openclawd-code-skill', 'openclawd-clawd-code-skill-main'] as const;
+const DEFAULT_SKILLS = [
+  'magicblock',
+  'imperial',
+  'imperial-market-intel',
+  'imperial-trade-execution',
+  'oracle',
+  'sherpa-onnx-tts',
+  'skill-creator',
+  'solana-clawd',
+  'solana-clawd-agentic-commerce',
+  'dflow-spot-trading',
+  'dflow-phantom-connect',
+  'phantom-wallet-mcp',
+] as const;
 
 export type DefaultSkillId = (typeof DEFAULT_SKILLS)[number];
 
 export function listSearchPaths(): string[] {
   const env = process.env.OPENCLAWD_SKILL_PATH;
   const fromEnv = env ? env.split(':').filter(Boolean) : [];
-  return [...fromEnv, ...DEFAULT_SEARCH_DIRS].filter((d) => existsSync(d) && statSync(d).isDirectory());
+  return [...fromEnv, USER_SKILLS_DIR, SDK_SKILLS_DIR, REPO_SKILLS_DIR]
+    .filter((d, index, all) => all.indexOf(d) === index)
+    .filter((d) => existsSync(d) && statSync(d).isDirectory());
 }
 
 export function loadInstalledSkills(): LoadedSkill[] {
@@ -60,7 +80,7 @@ export function loadInstalledSkills(): LoadedSkill[] {
     for (const entry of readdirSync(root)) {
       if (seen.has(entry)) continue;
       const dir = join(root, entry);
-      const skill = tryLoadSkill(entry, dir);
+      const skill = tryLoadSkill(entry, dir, sourceForRoot(root));
       if (skill) {
         out.push(skill);
         seen.add(entry);
@@ -73,7 +93,7 @@ export function loadInstalledSkills(): LoadedSkill[] {
 export function loadSkill(id: string): LoadedSkill | null {
   for (const root of listSearchPaths()) {
     const dir = join(root, id);
-    const skill = tryLoadSkill(id, dir);
+    const skill = tryLoadSkill(id, dir, sourceForRoot(root));
     if (skill) return skill;
   }
   return null;
@@ -83,26 +103,38 @@ export function listDefaultSkills(): readonly DefaultSkillId[] {
   return DEFAULT_SKILLS;
 }
 
-function tryLoadSkill(id: string, dir: string): LoadedSkill | null {
+export function loadExecutableSkills(): LoadedSkill[] {
+  return loadInstalledSkills().filter((skill) => skill.executable);
+}
+
+function tryLoadSkill(id: string, dir: string, source: LoadedSkill['source']): LoadedSkill | null {
   if (!existsSync(dir) || !statSync(dir).isDirectory()) return null;
   const skillMdPath = join(dir, 'SKILL.md');
   const pkgPath = join(dir, 'package.json');
-  if (!existsSync(skillMdPath) || !existsSync(pkgPath)) return null;
+  if (!existsSync(skillMdPath)) return null;
 
   const manifest = parseSkillMd(skillMdPath);
   if (!manifest) return null;
 
-  let pkg: SkillPackageJson = {};
-  try {
-    pkg = JSON.parse(readFileSync(pkgPath, 'utf8')) as SkillPackageJson;
-  } catch {
-    return null;
+  let pkg: SkillPackageJson | undefined;
+  let bin: string | null = null;
+  if (existsSync(pkgPath)) {
+    try {
+      pkg = JSON.parse(readFileSync(pkgPath, 'utf8')) as SkillPackageJson;
+      bin = resolveBin(dir, pkg);
+    } catch {
+      pkg = undefined;
+    }
   }
 
-  const bin = resolveBin(dir, pkg);
-  if (!bin) return null;
+  return { id, dir, source, bin: bin || undefined, executable: Boolean(bin), manifest, pkg };
+}
 
-  return { id, dir, bin, manifest, pkg };
+function sourceForRoot(root: string): LoadedSkill['source'] {
+  if (root === USER_SKILLS_DIR) return 'user';
+  if (root === SDK_SKILLS_DIR) return 'sdk';
+  if (root === REPO_SKILLS_DIR) return 'repo';
+  return 'env';
 }
 
 function resolveBin(dir: string, pkg: SkillPackageJson): string | null {

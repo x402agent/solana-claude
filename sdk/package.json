@@ -66,6 +66,14 @@
       "types": "./dist/services/x402/types.d.ts",
       "default": "./dist/services/x402/types.js"
     },
+    "./skills/index.js": {
+      "types": "./dist/skills/index.d.ts",
+      "default": "./dist/skills/index.js"
+    },
+    "./skills/catalog.js": {
+      "types": "./dist/skills/catalog.d.ts",
+      "default": "./dist/skills/catalog.js"
+    },
     "./buddy/index.js": {
       "types": "./dist/buddy/index.d.ts",
       "default": "./dist/buddy/index.js"
@@ -104,6 +112,7 @@
   "license": "MIT",
   "files": [
     "dist",
+    "skills",
     "scripts",
     "three-laws.md",
     "README.md"
@@ -118,6 +127,7 @@
     "check": "tsc --noEmit && npm run harness:packages",
     "harness:packages": "node scripts/verify-package-harness.mjs",
     "one-shot:install": "npm install --legacy-peer-deps && npm run harness:packages",
+    "skills:sync": "node scripts/sync-skills.mjs",
     "hermes": "echo '🦞 HERMES Terminal — launch via: clawd (TUI) or node dist/index.js --run' && node dist/index.js --run",
     "start": "node dist/index.js",
     "demo:ooda": "npx tsx examples/ooda-loop.ts",

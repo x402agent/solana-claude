@@ -10,7 +10,7 @@
 import { spawn } from 'node:child_process';
 import type { ClawTool } from '../agent/loop.js';
 import type { LoadedSkill } from './registry.js';
-import { loadInstalledSkills } from './registry.js';
+import { loadExecutableSkills } from './registry.js';
 
 export interface SkillCallArgs {
   /** Argv to pass after the skill bin (e.g. ["session-start", "myproj", "-d", "."]). */
@@ -32,6 +32,13 @@ export interface SkillCallResult {
 const DEFAULT_TIMEOUT_MS = 10 * 60 * 1000;
 
 export async function invokeSkill(skill: LoadedSkill, args: SkillCallArgs): Promise<SkillCallResult> {
+  if (!skill.bin) {
+    return {
+      stdout: '',
+      stderr: `Skill ${skill.id} is instruction-only and has no executable bin.`,
+      code: 64,
+    };
+  }
   return new Promise((resolveResult) => {
     const child = spawn('node', [skill.bin, ...args.argv], {
       cwd: args.cwd || process.cwd(),
@@ -65,7 +72,7 @@ export function skillToTool(skill: LoadedSkill): ClawTool {
 }
 
 export function loadInstalledSkillTools(): ClawTool[] {
-  return loadInstalledSkills().map(skillToTool);
+  return loadExecutableSkills().map(skillToTool);
 }
 
 function normaliseArgs(raw: unknown): SkillCallArgs {

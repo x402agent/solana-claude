@@ -1,0 +1,2461 @@
+{
+  "$schema": "https://solanaclawd.com/schemas/skill-hub.v1.json",
+  "apiVersion": "1.0",
+  "generatedAt": "2026-05-21T18:20:01.132Z",
+  "hub": {
+    "gallery": "https://x402.wtf/skills",
+    "api": "https://x402.wtf/api/skills",
+    "gateway": "https://x402.wtf/gateway",
+    "repo": "https://github.com/x402agent/solana-clawd",
+    "skillsRoot": "skills",
+    "attestation": "https://attest.solana.com",
+    "sasProgram": "22zoJMtdu4tQc2PzL74ZUT7FrwgB1Udec8DdW4yw4BdG",
+    "credentialAuthority": "8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump"
+  },
+  "formalVerification": {
+    "schema": "skill-schema.v1.json",
+    "sasSchema": "OpenClawdSkillAttestation",
+    "layoutBytes": [
+      12,
+      32,
+      12,
+      8,
+      1
+    ],
+    "fieldNames": [
+      "skill_id",
+      "verifier_pubkey",
+      "proof_hash",
+      "verification_timestamp",
+      "is_formally_verified"
+    ],
+    "verifierUI": "https://attest.solana.com",
+    "workflowDoc": "https://x402.wtf/skills/verify"
+  },
+  "stats": {
+    "totalSkills": 113,
+    "verifiedSkills": 0,
+    "pendingVerification": 113,
+    "byCategory": {
+      "AI / Agents": 11,
+      "Clawd Ecosystem": 3,
+      "Communication": 6,
+      "DevOps / Infrastructure": 6,
+      "DFlow / Trading": 10,
+      "Local / Web Services": 2,
+      "Media": 9,
+      "Other": 5,
+      "Productivity": 10,
+      "Pump.fun / Token Launch": 5,
+      "Solana / Blockchain": 38,
+      "Web / Research": 8
+    }
+  },
+  "skills": [
+    {
+      "skillId": "coding-agent",
+      "name": "coding-agent",
+      "description": "Run Codex CLI, Claude Code, OpenCode, or Pi Coding Agent via background process for programmatic control.",
+      "category": "AI / Agents",
+      "path": "coding-agent/SKILL.md",
+      "url": "https://x402.wtf/api/skills/coding-agent",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/coding-agent",
+      "tags": [
+        "ai-agents",
+        "coding",
+        "agent"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "gemini",
+      "name": "gemini",
+      "description": "Gemini CLI for one-shot Q&A, summaries, and generation.",
+      "category": "AI / Agents",
+      "path": "gemini/SKILL.md",
+      "url": "https://x402.wtf/api/skills/gemini",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/gemini",
+      "tags": [
+        "ai-agents",
+        "gemini"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "model-usage",
+      "name": "model-usage",
+      "description": "Use CodexBar CLI local cost usage to summarize per-model usage for Codex or Claude, including the current (most recent) model or a full model breakdown. Trigger when asked for model-level usage/cost data from codexbar, or when you need a scriptable per-model summary from codexbar cost JSON.",
+      "category": "AI / Agents",
+      "path": "model-usage/SKILL.md",
+      "url": "https://x402.wtf/api/skills/model-usage",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/model-usage",
+      "tags": [
+        "ai-agents",
+        "model",
+        "usage"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "openai-image-gen",
+      "name": "openai-image-gen",
+      "description": "Batch-generate images via OpenAI Images API. Random prompt sampler + `index.html` gallery.",
+      "category": "AI / Agents",
+      "path": "openai-image-gen/SKILL.md",
+      "url": "https://x402.wtf/api/skills/openai-image-gen",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/openai-image-gen",
+      "tags": [
+        "ai-agents",
+        "openai",
+        "image",
+        "gen"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "openai-whisper",
+      "name": "openai-whisper",
+      "description": "Local speech-to-text with the Whisper CLI (no API key).",
+      "category": "AI / Agents",
+      "path": "openai-whisper/SKILL.md",
+      "url": "https://x402.wtf/api/skills/openai-whisper",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/openai-whisper",
+      "tags": [
+        "ai-agents",
+        "openai",
+        "whisper"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "openai-whisper-api",
+      "name": "openai-whisper-api",
+      "description": "Transcribe audio via OpenAI Audio Transcriptions API (Whisper).",
+      "category": "AI / Agents",
+      "path": "openai-whisper-api/SKILL.md",
+      "url": "https://x402.wtf/api/skills/openai-whisper-api",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/openai-whisper-api",
+      "tags": [
+        "ai-agents",
+        "openai",
+        "whisper",
+        "api"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "oracle",
+      "name": "oracle",
+      "description": "Best practices for using the oracle CLI (prompt + file bundling, engines, sessions, and file attachment patterns).",
+      "category": "AI / Agents",
+      "path": "oracle/SKILL.md",
+      "url": "https://x402.wtf/api/skills/oracle",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/oracle",
+      "tags": [
+        "oracle"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "sag",
+      "name": "sag",
+      "description": "ElevenLabs text-to-speech with mac-style say UX.",
+      "category": "AI / Agents",
+      "path": "sag/SKILL.md",
+      "url": "https://x402.wtf/api/skills/sag",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/sag",
+      "tags": [
+        "ai-agents",
+        "sag"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "skill-creator",
+      "name": "skill-creator",
+      "description": "Create or update AgentSkills. Use when designing, structuring, or packaging skills with scripts, references, and assets.",
+      "category": "AI / Agents",
+      "path": "skill-creator/SKILL.md",
+      "url": "https://x402.wtf/api/skills/skill-creator",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/skill-creator",
+      "tags": [
+        "skill",
+        "creator"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "swarm-orchestrator",
+      "name": "Swarm Orchestrator",
+      "description": "Orchestrate multi-bot trading swarms on Pump.fun with persona-driven agents",
+      "category": "AI / Agents",
+      "path": "swarm-orchestrator/SKILL.md",
+      "url": "https://x402.wtf/api/skills/swarm-orchestrator",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/swarm-orchestrator",
+      "tags": [
+        "ai-agents",
+        "swarm",
+        "orchestrator"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "swarm-orchestrator copy",
+      "name": "Swarm Orchestrator",
+      "description": "Orchestrate multi-bot trading swarms on Pump.fun with persona-driven agents",
+      "category": "AI / Agents",
+      "path": "swarm-orchestrator copy/SKILL.md",
+      "url": "https://x402.wtf/api/skills/swarm-orchestrator%20copy",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/swarm-orchestrator%20copy",
+      "tags": [
+        "ai-agents",
+        "swarm",
+        "orchestrator"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "clawdhub",
+      "name": "clawdhub",
+      "description": "Use the ClawdHub CLI to search, install, update, and publish agent skills from clawdhub.com. Use when you need to fetch new skills on the fly, sync installed skills to latest or a specific version, or publish new/updated skill folders with the npm-installed clawdhub CLI.",
+      "category": "Clawd Ecosystem",
+      "path": "clawdhub/SKILL.md",
+      "url": "https://x402.wtf/api/skills/clawdhub",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/clawdhub",
+      "tags": [
+        "other",
+        "clawdhub"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "github",
+      "name": "github",
+      "description": "Interact with GitHub using the `gh` CLI. Use `gh issue`, `gh pr`, `gh run`, and `gh api` for issues, PRs, CI runs, and advanced queries.",
+      "category": "Clawd Ecosystem",
+      "path": "github/SKILL.md",
+      "url": "https://x402.wtf/api/skills/github",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/github",
+      "tags": [
+        "other",
+        "github"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "openclaw-claude-code-skill-main",
+      "name": "claude-code-skill",
+      "description": "Control Claude Code via MCP protocol. Trigger with \"plan\" to write a precise execution plan then feed it to Claude Code. Also supports direct commands, persistent sessions, agent teams, and advanced tool control.",
+      "category": "Clawd Ecosystem",
+      "path": "openclaw-claude-code-skill-main/SKILL.md",
+      "url": "https://x402.wtf/api/skills/openclaw-claude-code-skill-main",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/openclaw-claude-code-skill-main",
+      "tags": [
+        "clawd-ecosystem",
+        "claude",
+        "code",
+        "skill"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "bluebubbles",
+      "name": "bluebubbles",
+      "description": "Build or update the BlueBubbles external channel plugin for Clawdbot (extension package, REST send/probe, webhook inbound).",
+      "category": "Communication",
+      "path": "bluebubbles/SKILL.md",
+      "url": "https://x402.wtf/api/skills/bluebubbles",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/bluebubbles",
+      "tags": [
+        "communication",
+        "bluebubbles"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "discord",
+      "name": "discord",
+      "description": "Use when you need to control Discord from Clawdbot via the discord tool: send messages, react, post or upload stickers, upload emojis, run polls, manage threads/pins/search, create/edit/delete channels and categories, fetch permissions or member/role/channel info, or handle moderation actions in Discord DMs or channels.",
+      "category": "Communication",
+      "path": "discord/SKILL.md",
+      "url": "https://x402.wtf/api/skills/discord",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/discord",
+      "tags": [
+        "communication",
+        "discord"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "himalaya",
+      "name": "himalaya",
+      "description": "CLI to manage emails via IMAP/SMTP. Use `himalaya` to list, read, write, reply, forward, search, and organize emails from the terminal. Supports multiple accounts and message composition with MML (MIME Meta Language).",
+      "category": "Communication",
+      "path": "himalaya/SKILL.md",
+      "url": "https://x402.wtf/api/skills/himalaya",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/himalaya",
+      "tags": [
+        "communication",
+        "himalaya"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "imsg",
+      "name": "imsg",
+      "description": "iMessage/SMS CLI for listing chats, history, watch, and sending.",
+      "category": "Communication",
+      "path": "imsg/SKILL.md",
+      "url": "https://x402.wtf/api/skills/imsg",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/imsg",
+      "tags": [
+        "communication",
+        "imsg"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "slack",
+      "name": "slack",
+      "description": "Use when you need to control Slack from Clawdbot via the slack tool, including reacting to messages or pinning/unpinning items in Slack channels or DMs.",
+      "category": "Communication",
+      "path": "slack/SKILL.md",
+      "url": "https://x402.wtf/api/skills/slack",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/slack",
+      "tags": [
+        "communication",
+        "slack"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "voice-call",
+      "name": "voice-call",
+      "description": "Start voice calls via the Clawdbot voice-call plugin.",
+      "category": "Communication",
+      "path": "voice-call/SKILL.md",
+      "url": "https://x402.wtf/api/skills/voice-call",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/voice-call",
+      "tags": [
+        "communication",
+        "voice",
+        "call"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "blucli",
+      "name": "blucli",
+      "description": "BluOS CLI (blu) for discovery, playback, grouping, and volume.",
+      "category": "DevOps / Infrastructure",
+      "path": "blucli/SKILL.md",
+      "url": "https://x402.wtf/api/skills/blucli",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/blucli",
+      "tags": [
+        "devops-infrastructure",
+        "blucli"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "eightctl",
+      "name": "eightctl",
+      "description": "Control Eight Sleep pods (status, temperature, alarms, schedules).",
+      "category": "DevOps / Infrastructure",
+      "path": "eightctl/SKILL.md",
+      "url": "https://x402.wtf/api/skills/eightctl",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/eightctl",
+      "tags": [
+        "devops-infrastructure",
+        "eightctl"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "gateway-node-ops",
+      "name": "SolanaOS Gateway + Node Workflow",
+      "description": "How to spawn a SolanaOS Gateway and connect headless nodes",
+      "category": "DevOps / Infrastructure",
+      "path": "gateway-node-ops/SKILL.md",
+      "url": "https://x402.wtf/api/skills/gateway-node-ops",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/gateway-node-ops",
+      "tags": [
+        "devops-infrastructure",
+        "solanaos",
+        "gateway",
+        "node",
+        "workflow"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "nano-banana-pro",
+      "name": "nano-banana-pro",
+      "description": "Generate or edit images via Gemini 3 Pro Image (Nano Banana Pro).",
+      "category": "DevOps / Infrastructure",
+      "path": "nano-banana-pro/SKILL.md",
+      "url": "https://x402.wtf/api/skills/nano-banana-pro",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/nano-banana-pro",
+      "tags": [
+        "devops-infrastructure",
+        "nano",
+        "banana",
+        "pro"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "openhue",
+      "name": "openhue",
+      "description": "Control Philips Hue lights/scenes via the OpenHue CLI.",
+      "category": "DevOps / Infrastructure",
+      "path": "openhue/SKILL.md",
+      "url": "https://x402.wtf/api/skills/openhue",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/openhue",
+      "tags": [
+        "devops-infrastructure",
+        "openhue"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "tmux",
+      "name": "tmux",
+      "description": "Remote-control tmux sessions for interactive CLIs by sending keystrokes and scraping pane output.",
+      "category": "DevOps / Infrastructure",
+      "path": "tmux/SKILL.md",
+      "url": "https://x402.wtf/api/skills/tmux",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/tmux",
+      "tags": [
+        "devops-infrastructure",
+        "tmux"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "dflow-docs",
+      "name": "dflow-docs",
+      "description": "Discover and use DFlow documentation, Agent CLI, Trading API, Metadata API, Proof KYC, prediction markets, and the hosted DFlow docs MCP. Use before implementing DFlow features or when field-level endpoint details are needed.",
+      "category": "DFlow / Trading",
+      "path": "dflow-docs/SKILL.md",
+      "url": "https://x402.wtf/api/skills/dflow-docs",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/dflow-docs",
+      "tags": [
+        "dflow-trading",
+        "dflow",
+        "docs"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "dflow-kalshi-market-data",
+      "name": "dflow-kalshi-market-data",
+      "description": "Read market data for a known Kalshi prediction market on DFlow — orderbook, trades, top-of-book prices, candlesticks, forecast-percentile history, and Kalshi in-game live data — via one-shot REST snapshots, historical ranges, or live WebSocket streams. Use when the user asks \"show me the orderbook for X\", \"get last hour of trades\", \"build a live price ticker\", \"stream orderbook depth\", \"pull 1-minute candles for the last day\", \"watch in-game scores for this sports market\", or \"alert me when the orderbook moves\". Do NOT use to discover markets matching a criterion (use `dflow-kalshi-market-scanner`), to place orders (use `dflow-kalshi-trading`), or to read a user's own positions/P&L (use `dflow-kalshi-portfolio`).",
+      "category": "DFlow / Trading",
+      "path": "dflow-kalshi-market-data/SKILL.md",
+      "url": "https://x402.wtf/api/skills/dflow-kalshi-market-data",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/dflow-kalshi-market-data",
+      "tags": [
+        "dflow-trading",
+        "dflow",
+        "kalshi",
+        "market",
+        "data"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "dflow-kalshi-market-scanner",
+      "name": "dflow-kalshi-market-scanner",
+      "description": "Find Kalshi prediction markets on DFlow that match a criterion — arbitrage (YES+NO<$1), cheap long-shots, near-certain short-dated plays, biggest movers, widest spreads, highest volume, closing soonest, and series/event-level scans. Use when the user asks \"where's the free money?\", \"any mispriced markets?\", \"cheap YES with volume\", \"what moved today?\", \"markets closing soon\", \"cheapest YES in this event\", \"top markets by volume\", or \"alert me when X happens\" (streaming). Do NOT use to place orders (use `dflow-kalshi-trading`), to view a user's own positions (use `dflow-kalshi-portfolio`), or for general live-data plumbing unrelated to a scan (use `dflow-kalshi-market-data`).",
+      "category": "DFlow / Trading",
+      "path": "dflow-kalshi-market-scanner/SKILL.md",
+      "url": "https://x402.wtf/api/skills/dflow-kalshi-market-scanner",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/dflow-kalshi-market-scanner",
+      "tags": [
+        "dflow-trading",
+        "dflow",
+        "kalshi",
+        "market",
+        "scanner"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "dflow-kalshi-portfolio",
+      "name": "dflow-kalshi-portfolio",
+      "description": "View what a wallet holds on DFlow's Kalshi prediction markets — current positions, unrealized mark-to-market, realized P&L, activity history, and redeemable winners. Use when the user asks \"what are my positions?\", \"what do I own?\", \"am I up or down?\", \"what's my fill history?\", \"what can I redeem?\", \"mark my portfolio to market\", or \"show me this wallet's DFlow activity\". Read-only. Do NOT use to place sells or redemptions (use `dflow-kalshi-trading`), for market-wide data unrelated to a wallet (use `dflow-kalshi-market-data`), or to discover new markets (use `dflow-kalshi-market-scanner`).",
+      "category": "DFlow / Trading",
+      "path": "dflow-kalshi-portfolio/SKILL.md",
+      "url": "https://x402.wtf/api/skills/dflow-kalshi-portfolio",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/dflow-kalshi-portfolio",
+      "tags": [
+        "dflow-trading",
+        "dflow",
+        "kalshi",
+        "portfolio"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "dflow-kalshi-trading",
+      "name": "dflow-kalshi-trading",
+      "description": "Buy, sell, or redeem YES/NO outcome tokens on Kalshi prediction markets via DFlow. Use when the user wants to bet on an event, place a Kalshi order, take a YES or NO position, exit a Kalshi position, redeem winning outcome tokens after a market resolves, tune priority fees on a PM trade, or build a gasless / sponsored PM flow where the app pays tx / ATA / market-init costs. Covers both the `dflow` CLI and the DFlow Trading API. Do NOT use to discover markets, view positions, stream prices, complete Proof KYC, or for non-Kalshi spot swaps.",
+      "category": "DFlow / Trading",
+      "path": "dflow-kalshi-trading/SKILL.md",
+      "url": "https://x402.wtf/api/skills/dflow-kalshi-trading",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/dflow-kalshi-trading",
+      "tags": [
+        "dflow-trading",
+        "dflow",
+        "kalshi",
+        "trading"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "dflow-phantom-connect",
+      "name": "dflow-phantom-connect",
+      "description": "Build Solana wallet-connected apps with Phantom Connect SDKs and DFlow trading. Use when user asks to connect a Phantom wallet, integrate Phantom in React, React Native, or vanilla JS, sign messages or transactions, build token-gated pages, mint NFTs, accept crypto payments, swap tokens with DFlow, trade prediction markets, or integrate Proof KYC verification. Covers @phantom/react-sdk, @phantom/react-native-sdk, @phantom/browser-sdk, DFlow spot trading, DFlow prediction markets, and DFlow Proof identity verification. Do NOT use for Ethereum or EVM wallet integrations, or non-DFlow DEX routing.",
+      "category": "DFlow / Trading",
+      "path": "dflow-phantom-connect/SKILL.md",
+      "url": "https://x402.wtf/api/skills/dflow-phantom-connect",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/dflow-phantom-connect",
+      "tags": [
+        "dflow-trading",
+        "dflow",
+        "phantom",
+        "connect"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "dflow-platform-fees",
+      "name": "dflow-platform-fees",
+      "description": "Monetize a DFlow integration by collecting a builder-defined fee on trades your app routes through the Trade API — either a fixed percentage (spot + PM) via `platformFeeBps`, or a probability-weighted dynamic fee (PM outcome tokens only) via `platformFeeScale`. Use when the user asks \"how do I take a cut of trades?\", \"add a builder fee\", \"monetize my swap UI\", \"charge a platform fee\", \"how does platformFeeBps / platformFeeScale work?\", or \"where do my fees get paid?\". Do NOT use to run a trade itself (use `dflow-spot-trading` or `dflow-kalshi-trading` — both also cover priority fees and sponsored / gasless flows).",
+      "category": "DFlow / Trading",
+      "path": "dflow-platform-fees/SKILL.md",
+      "url": "https://x402.wtf/api/skills/dflow-platform-fees",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/dflow-platform-fees",
+      "tags": [
+        "dflow-trading",
+        "dflow",
+        "platform",
+        "fees"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "dflow-proof-kyc",
+      "name": "dflow-proof-kyc",
+      "description": "Integrate DFlow Proof — a Solana wallet identity-verification primitive (Stripe Identity under the hood) — for either (a) gating your own app's features behind KYC, or (b) completing the mandatory verification step for Kalshi prediction-market buys on DFlow. Use when the user asks \"how do I KYC a wallet?\", \"check if a wallet is verified\", \"add KYC to my DeFi app\", \"handle unverified_wallet_not_allowed / PROOF_NOT_VERIFIED\", \"redirect to dflow.net/proof\", or \"gate a feature by jurisdiction or identity\". Do NOT use to actually place trades (use `dflow-kalshi-trading`), for geoblocking (separate concern, handled inline in the trading skill), for age gating (Proof doesn't currently verify age), or for spot swaps (no KYC required).",
+      "category": "DFlow / Trading",
+      "path": "dflow-proof-kyc/SKILL.md",
+      "url": "https://x402.wtf/api/skills/dflow-proof-kyc",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/dflow-proof-kyc",
+      "tags": [
+        "dflow-trading",
+        "dflow",
+        "proof",
+        "kyc"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "dflow-spot-trading",
+      "name": "dflow-spot-trading",
+      "description": "Swap any pair of Solana tokens via DFlow. Use when the user wants to trade, swap, or convert tokens on Solana, get a price quote, build a swap UI, tune priority fees so a swap lands under congestion, or build a gasless / sponsored swap where the app pays fees. Covers both the `dflow` CLI and the DFlow Trading API. Do NOT use for Kalshi prediction-market YES/NO trades or builder-side platform fees.",
+      "category": "DFlow / Trading",
+      "path": "dflow-spot-trading/SKILL.md",
+      "url": "https://x402.wtf/api/skills/dflow-spot-trading",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/dflow-spot-trading",
+      "tags": [
+        "dflow-trading",
+        "dflow",
+        "spot",
+        "trading"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "phantom-wallet-mcp",
+      "name": "phantom-wallet-mcp",
+      "description": ">",
+      "category": "DFlow / Trading",
+      "path": "phantom-wallet-mcp/SKILL.md",
+      "url": "https://x402.wtf/api/skills/phantom-wallet-mcp",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/phantom-wallet-mcp",
+      "tags": [
+        "dflow-trading",
+        "phantom",
+        "wallet",
+        "mcp"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "food-order",
+      "name": "food-order",
+      "description": "Reorder Foodora orders + track ETA/status with ordercli. Never confirm without explicit user approval. Triggers: order food, reorder, track ETA.",
+      "category": "Local / Web Services",
+      "path": "food-order/SKILL.md",
+      "url": "https://x402.wtf/api/skills/food-order",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/food-order",
+      "tags": [
+        "other",
+        "food",
+        "order"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "local-places",
+      "name": "local-places",
+      "description": "Search for places (restaurants, cafes, etc.) via Google Places API proxy on localhost.",
+      "category": "Local / Web Services",
+      "path": "local-places/SKILL.md",
+      "url": "https://x402.wtf/api/skills/local-places",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/local-places",
+      "tags": [
+        "other",
+        "local",
+        "places"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "camsnap",
+      "name": "camsnap",
+      "description": "Capture frames or clips from RTSP/ONVIF cameras.",
+      "category": "Media",
+      "path": "camsnap/SKILL.md",
+      "url": "https://x402.wtf/api/skills/camsnap",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/camsnap",
+      "tags": [
+        "media",
+        "camsnap"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "canvas",
+      "name": "Canvas Skill",
+      "description": "Display HTML content on connected SolanaOS nodes (Mac app, iOS, Android).",
+      "category": "Media",
+      "path": "canvas/SKILL.md",
+      "url": "https://x402.wtf/api/skills/canvas",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/canvas",
+      "tags": [
+        "media",
+        "canvas",
+        "skill"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "gifgrep",
+      "name": "gifgrep",
+      "description": "Search GIF providers with CLI/TUI, download results, and extract stills/sheets.",
+      "category": "Media",
+      "path": "gifgrep/SKILL.md",
+      "url": "https://x402.wtf/api/skills/gifgrep",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/gifgrep",
+      "tags": [
+        "media",
+        "gifgrep"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "peekaboo",
+      "name": "peekaboo",
+      "description": "Capture and automate macOS UI with the Peekaboo CLI.",
+      "category": "Media",
+      "path": "peekaboo/SKILL.md",
+      "url": "https://x402.wtf/api/skills/peekaboo",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/peekaboo",
+      "tags": [
+        "media",
+        "peekaboo"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "sherpa-onnx-tts",
+      "name": "sherpa-onnx-tts",
+      "description": "Local text-to-speech via sherpa-onnx (offline, no cloud)",
+      "category": "Media",
+      "path": "sherpa-onnx-tts/SKILL.md",
+      "url": "https://x402.wtf/api/skills/sherpa-onnx-tts",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/sherpa-onnx-tts",
+      "tags": [
+        "tts",
+        "sherpa",
+        "onnx"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "songsee",
+      "name": "songsee",
+      "description": "Generate spectrograms and feature-panel visualizations from audio with the songsee CLI.",
+      "category": "Media",
+      "path": "songsee/SKILL.md",
+      "url": "https://x402.wtf/api/skills/songsee",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/songsee",
+      "tags": [
+        "media",
+        "songsee"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "sonoscli",
+      "name": "sonoscli",
+      "description": "Control Sonos speakers (discover/status/play/volume/group).",
+      "category": "Media",
+      "path": "sonoscli/SKILL.md",
+      "url": "https://x402.wtf/api/skills/sonoscli",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/sonoscli",
+      "tags": [
+        "media",
+        "sonoscli"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "spotify-player",
+      "name": "spotify-player",
+      "description": "Terminal Spotify playback/search via spogo (preferred) or spotify_player.",
+      "category": "Media",
+      "path": "spotify-player/SKILL.md",
+      "url": "https://x402.wtf/api/skills/spotify-player",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/spotify-player",
+      "tags": [
+        "media",
+        "spotify",
+        "player"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "video-frames",
+      "name": "video-frames",
+      "description": "Extract frames or short clips from videos using ffmpeg.",
+      "category": "Media",
+      "path": "video-frames/SKILL.md",
+      "url": "https://x402.wtf/api/skills/video-frames",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/video-frames",
+      "tags": [
+        "media",
+        "video",
+        "frames"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "bird",
+      "name": "bird",
+      "description": "X/Twitter CLI for reading, searching, posting, and engagement via cookies.",
+      "category": "Other",
+      "path": "bird/SKILL.md",
+      "url": "https://x402.wtf/api/skills/bird",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/bird",
+      "tags": [
+        "other",
+        "bird"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "bird copy",
+      "name": "bird",
+      "description": "X/Twitter CLI for reading, searching, posting, and engagement via cookies.",
+      "category": "Other",
+      "path": "bird copy/SKILL.md",
+      "url": "https://x402.wtf/api/skills/bird%20copy",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/bird%20copy",
+      "tags": [
+        "other",
+        "bird"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "README",
+      "name": "Skills",
+      "description": "This directory contains 109 active skills. Each listed entry has a top-level `SKILL.md` under `skills/<slug>/`.",
+      "category": "Other",
+      "path": "README.md",
+      "url": "https://x402.wtf/api/skills/README",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/README",
+      "tags": [
+        "other",
+        "skills"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "SKILL_HUB",
+      "name": "Clawd Skill Hub",
+      "description": "Every skill, plugin, MCP server, agent, or Solana program listed here has\npassed the three-layer formal verification gate before it was accepted.\nAdding anything to the hub without running the gate is",
+      "category": "Other",
+      "path": "SKILL_HUB.md",
+      "url": "https://x402.wtf/api/skills/SKILL_HUB",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/SKILL_HUB",
+      "tags": [
+        "other",
+        "clawd",
+        "skill",
+        "hub"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "SUBMIT",
+      "name": "Submitting a Skill to the Clawd Skill Hub",
+      "description": "Any Solana agent or human can submit a skill, plugin, MCP server, or agent.\nEvery submission passes a three-layer formal verification gate before it appears\nin the hub and receives a Solana Attestatio",
+      "category": "Other",
+      "path": "SUBMIT.md",
+      "url": "https://x402.wtf/api/skills/SUBMIT",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/SUBMIT",
+      "tags": [
+        "other",
+        "submitting",
+        "a",
+        "skill",
+        "to",
+        "the",
+        "clawd",
+        "hub"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "1password",
+      "name": "1password",
+      "description": "Set up and use 1Password CLI (op). Use when installing the CLI, enabling desktop app integration, signing in (single or multi-account), or reading/injecting/running secrets via op.",
+      "category": "Productivity",
+      "path": "1password/SKILL.md",
+      "url": "https://x402.wtf/api/skills/1password",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/1password",
+      "tags": [
+        "productivity",
+        "1password"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "apple-notes",
+      "name": "apple-notes",
+      "description": "Manage Apple Notes via the `memo` CLI on macOS (create, view, edit, delete, search, move, and export notes). Use when a user asks Clawdbot to add a note, list notes, search notes, or manage note folders.",
+      "category": "Productivity",
+      "path": "apple-notes/SKILL.md",
+      "url": "https://x402.wtf/api/skills/apple-notes",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/apple-notes",
+      "tags": [
+        "productivity",
+        "apple",
+        "notes"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "apple-reminders",
+      "name": "apple-reminders",
+      "description": "Manage Apple Reminders via the `remindctl` CLI on macOS (list, add, edit, complete, delete). Supports lists, date filters, and JSON/plain output.",
+      "category": "Productivity",
+      "path": "apple-reminders/SKILL.md",
+      "url": "https://x402.wtf/api/skills/apple-reminders",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/apple-reminders",
+      "tags": [
+        "productivity",
+        "apple",
+        "reminders"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "bear-notes",
+      "name": "bear-notes",
+      "description": "Create, search, and manage Bear notes via grizzly CLI.",
+      "category": "Productivity",
+      "path": "bear-notes/SKILL.md",
+      "url": "https://x402.wtf/api/skills/bear-notes",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/bear-notes",
+      "tags": [
+        "productivity",
+        "bear",
+        "notes"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "notion",
+      "name": "notion",
+      "description": "Notion API for creating and managing pages, databases, and blocks.",
+      "category": "Productivity",
+      "path": "notion/SKILL.md",
+      "url": "https://x402.wtf/api/skills/notion",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/notion",
+      "tags": [
+        "productivity",
+        "notion"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "obsidian",
+      "name": "obsidian",
+      "description": "Work with Obsidian vaults (plain Markdown notes) and automate via obsidian-cli.",
+      "category": "Productivity",
+      "path": "obsidian/SKILL.md",
+      "url": "https://x402.wtf/api/skills/obsidian",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/obsidian",
+      "tags": [
+        "productivity",
+        "obsidian"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "ordercli",
+      "name": "ordercli",
+      "description": "Foodora-only CLI for checking past orders and active order status (Deliveroo WIP).",
+      "category": "Productivity",
+      "path": "ordercli/SKILL.md",
+      "url": "https://x402.wtf/api/skills/ordercli",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/ordercli",
+      "tags": [
+        "productivity",
+        "ordercli"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "session-logs",
+      "name": "session-logs",
+      "description": "Search and analyze your own session logs (older/parent conversations) using jq.",
+      "category": "Productivity",
+      "path": "session-logs/SKILL.md",
+      "url": "https://x402.wtf/api/skills/session-logs",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/session-logs",
+      "tags": [
+        "productivity",
+        "session",
+        "logs"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "things-mac",
+      "name": "things-mac",
+      "description": "Manage Things 3 via the `things` CLI on macOS (add/update projects+todos via URL scheme; read/search/list from the local Things database). Use when a user asks Clawdbot to add a task to Things, list inbox/today/upcoming, search tasks, or inspect projects/areas/tags.",
+      "category": "Productivity",
+      "path": "things-mac/SKILL.md",
+      "url": "https://x402.wtf/api/skills/things-mac",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/things-mac",
+      "tags": [
+        "productivity",
+        "things",
+        "mac"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "trello",
+      "name": "trello",
+      "description": "Manage Trello boards, lists, and cards via the Trello REST API.",
+      "category": "Productivity",
+      "path": "trello/SKILL.md",
+      "url": "https://x402.wtf/api/skills/trello",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/trello",
+      "tags": [
+        "productivity",
+        "trello"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "pumpfun",
+      "name": "pumpfun",
+      "description": "Launch and trade tokens on Pump.fun bonding curves. Create memecoins, buy/sell tokens, check prices, and collect creator fees on Solana.",
+      "category": "Pump.fun / Token Launch",
+      "path": "pumpfun/SKILL.md",
+      "url": "https://x402.wtf/api/skills/pumpfun",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/pumpfun",
+      "tags": [
+        "pump-fun-token-launch",
+        "pumpfun"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "pumpfun-analytics",
+      "name": "PumpFun Analytics",
+      "description": "Monitor bonding curves, graduation progress, and trade analytics on Pump.fun",
+      "category": "Pump.fun / Token Launch",
+      "path": "pumpfun-analytics/SKILL.md",
+      "url": "https://x402.wtf/api/skills/pumpfun-analytics",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/pumpfun-analytics",
+      "tags": [
+        "pump-fun-token-launch",
+        "pumpfun",
+        "analytics"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "pumpfun-fees",
+      "name": "PumpFun Fee Sharing",
+      "description": "Configure and claim creator fee sharing on Pump.fun tokens",
+      "category": "Pump.fun / Token Launch",
+      "path": "pumpfun-fees/SKILL.md",
+      "url": "https://x402.wtf/api/skills/pumpfun-fees",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/pumpfun-fees",
+      "tags": [
+        "pump-fun-token-launch",
+        "pumpfun",
+        "fee",
+        "sharing"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "pumpfun-launcher",
+      "name": "PumpFun Token Launcher",
+      "description": "Launch new tokens on Pump.fun directly via the Pump SDK",
+      "category": "Pump.fun / Token Launch",
+      "path": "pumpfun-launcher/SKILL.md",
+      "url": "https://x402.wtf/api/skills/pumpfun-launcher",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/pumpfun-launcher",
+      "tags": [
+        "pump-fun-token-launch",
+        "pumpfun",
+        "token",
+        "launcher"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "pumpfun-trading",
+      "name": "PumpFun Trading",
+      "description": "Buy and sell tokens on Pump.fun bonding curves and AMM pools",
+      "category": "Pump.fun / Token Launch",
+      "path": "pumpfun-trading/SKILL.md",
+      "url": "https://x402.wtf/api/skills/pumpfun-trading",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/pumpfun-trading",
+      "tags": [
+        "pump-fun-token-launch",
+        "pumpfun",
+        "trading"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "clawdex",
+      "name": "clawdex",
+      "description": "Clawdex — dual-engine coding agent. Claude Code (reasoning + planning) + OpenAI Codex (fast execution) + Browser Use boxes (web research) + Upstash compute boxes (isolated sandboxes).",
+      "category": "Solana / Blockchain",
+      "path": "clawdex/SKILL.md",
+      "url": "https://x402.wtf/api/skills/clawdex",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/clawdex",
+      "tags": [
+        "other",
+        "clawdex"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "dex-screener-scanner",
+      "name": "dex-screener-scanner",
+      "description": "Automate DexScreener Solana token discovery and screening via browser automation. Navigate dexscreener.com/solana, scrape real-time token listings, filter by volume/liquidity/age/holders, and identify the best opportunities. Triggers: scan dexscreener, find new tokens, find trending tokens, screen Solana tokens, best tokens on Solana, dexscreener scanner.",
+      "category": "Solana / Blockchain",
+      "path": "dex-screener-scanner/SKILL.md",
+      "url": "https://x402.wtf/api/skills/dex-screener-scanner",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/dex-screener-scanner",
+      "tags": [
+        "other",
+        "dex",
+        "screener",
+        "scanner"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "imperial",
+      "name": "imperial",
+      "description": "Entry-point skill for Imperial perpetual routing on Solana. Use before answering or acting on Imperial router flows, Phoenix-routed perps, profile funding, market/portfolio intel, risk checks, TP/SL, TWAP, grid, or Telegram bot trading workflows.",
+      "category": "Solana / Blockchain",
+      "path": "imperial/SKILL.md",
+      "url": "https://x402.wtf/api/skills/imperial",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/imperial",
+      "tags": [
+        "perps",
+        "solana",
+        "imperial"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "imperial-execution-modes",
+      "name": "imperial-execution-modes",
+      "description": "Execution-mode taxonomy for Imperial router workflows in this repo: observe, route-check, paper/spec, live single-shot, and external durable runner.",
+      "category": "Solana / Blockchain",
+      "path": "imperial-execution-modes/SKILL.md",
+      "url": "https://x402.wtf/api/skills/imperial-execution-modes",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/imperial-execution-modes",
+      "tags": [
+        "perps",
+        "solana",
+        "imperial",
+        "execution",
+        "modes"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "imperial-grid-trading",
+      "name": "imperial-grid-trading",
+      "description": "Grid strategy design for Imperial/Phoenix perps: ladder layout, venue pinning, replacement logic, and durable-runner boundaries.",
+      "category": "Solana / Blockchain",
+      "path": "imperial-grid-trading/SKILL.md",
+      "url": "https://x402.wtf/api/skills/imperial-grid-trading",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/imperial-grid-trading",
+      "tags": [
+        "perps",
+        "solana",
+        "imperial",
+        "grid",
+        "trading"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "imperial-margin-operations",
+      "name": "imperial-margin-operations",
+      "description": "Imperial profile funding, deposit/withdraw transaction building, profile isolation, and margin-state reporting.",
+      "category": "Solana / Blockchain",
+      "path": "imperial-margin-operations/SKILL.md",
+      "url": "https://x402.wtf/api/skills/imperial-margin-operations",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/imperial-margin-operations",
+      "tags": [
+        "perps",
+        "solana",
+        "imperial",
+        "margin",
+        "operations"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "imperial-market-intel",
+      "name": "imperial-market-intel",
+      "description": "Imperial and Phoenix market data: funding, mark prices, route checks, Phoenix depth, and pre-trade venue context.",
+      "category": "Solana / Blockchain",
+      "path": "imperial-market-intel/SKILL.md",
+      "url": "https://x402.wtf/api/skills/imperial-market-intel",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/imperial-market-intel",
+      "tags": [
+        "perps",
+        "solana",
+        "imperial",
+        "market",
+        "intel"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "imperial-portfolio-intel",
+      "name": "imperial-portfolio-intel",
+      "description": "Imperial profile balances, open positions, open orders, exposure summary, and wallet-level Telegram/admin portfolio recaps.",
+      "category": "Solana / Blockchain",
+      "path": "imperial-portfolio-intel/SKILL.md",
+      "url": "https://x402.wtf/api/skills/imperial-portfolio-intel",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/imperial-portfolio-intel",
+      "tags": [
+        "perps",
+        "solana",
+        "imperial",
+        "portfolio",
+        "intel"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "imperial-position-management",
+      "name": "imperial-position-management",
+      "description": "Inspect, reduce, and close Imperial-routed positions across Phoenix, Flash, Jupiter, and GMTrade, with Phoenix preferred by default.",
+      "category": "Solana / Blockchain",
+      "path": "imperial-position-management/SKILL.md",
+      "url": "https://x402.wtf/api/skills/imperial-position-management",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/imperial-position-management",
+      "tags": [
+        "perps",
+        "solana",
+        "imperial",
+        "position",
+        "management"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "imperial-risk-management",
+      "name": "imperial-risk-management",
+      "description": "Risk checks for Imperial-routed perps: profile funding, existing exposure, venue choice, margin headroom, and Telegram pre-trade snapshots.",
+      "category": "Solana / Blockchain",
+      "path": "imperial-risk-management/SKILL.md",
+      "url": "https://x402.wtf/api/skills/imperial-risk-management",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/imperial-risk-management",
+      "tags": [
+        "perps",
+        "solana",
+        "imperial",
+        "risk",
+        "management"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "imperial-skills-index",
+      "name": "imperial-skills-index",
+      "description": "Index for the bundled Imperial skill pack exposed through solana-clawd. Use to discover the correct focused Imperial skill.",
+      "category": "Solana / Blockchain",
+      "path": "imperial-skills-index/SKILL.md",
+      "url": "https://x402.wtf/api/skills/imperial-skills-index",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/imperial-skills-index",
+      "tags": [
+        "perps",
+        "solana",
+        "imperial",
+        "skills",
+        "index"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "imperial-tpsl-management",
+      "name": "imperial-tpsl-management",
+      "description": "Take-profit and stop-loss management for Imperial-routed positions, including close-leg design, verification, and Telegram operator caveats.",
+      "category": "Solana / Blockchain",
+      "path": "imperial-tpsl-management/SKILL.md",
+      "url": "https://x402.wtf/api/skills/imperial-tpsl-management",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/imperial-tpsl-management",
+      "tags": [
+        "perps",
+        "solana",
+        "imperial",
+        "tpsl",
+        "management"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "imperial-trade-execution",
+      "name": "imperial-trade-execution",
+      "description": "Safe Imperial live execution: authenticated market orders, Phoenix-first venue preference, profile-aware routing, and post-trade verification.",
+      "category": "Solana / Blockchain",
+      "path": "imperial-trade-execution/SKILL.md",
+      "url": "https://x402.wtf/api/skills/imperial-trade-execution",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/imperial-trade-execution",
+      "tags": [
+        "perps",
+        "solana",
+        "imperial",
+        "trade",
+        "execution"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "imperial-twap-execution",
+      "name": "imperial-twap-execution",
+      "description": "TWAP execution guidance for Imperial: slice planning, venue pinning, profile budgeting, and durable-runner requirements.",
+      "category": "Solana / Blockchain",
+      "path": "imperial-twap-execution/SKILL.md",
+      "url": "https://x402.wtf/api/skills/imperial-twap-execution",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/imperial-twap-execution",
+      "tags": [
+        "perps",
+        "solana",
+        "imperial",
+        "twap",
+        "execution"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "magicblock",
+      "name": "magicblock",
+      "description": "MagicBlock Ephemeral Rollups development patterns for Solana. Covers delegation/undelegation flows, dual-connection architecture (base layer + ER), cranks for scheduled tasks, VRF for verifiable randomness, magic actions for atomic ER-commit + base-layer follow-ups, private payments API (deposits, transfers, withdrawals, swaps, and challenge/login auth flow), commit sponsorship and fee vault wiring, lamports top-up for delegated accounts, and TypeScript/Anchor integration. Use for high-performance gaming, real-time apps, private transfers and swaps, and fast transaction throughput on Solana.",
+      "category": "Solana / Blockchain",
+      "path": "magicblock/SKILL.md",
+      "url": "https://x402.wtf/api/skills/magicblock",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/magicblock",
+      "tags": [
+        "solana",
+        "magicblock",
+        "ephemeral-rollups",
+        "gaming",
+        "vrf"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "solana-clawd",
+      "name": "solana-clawd",
+      "description": "One-shot setup and operation guide for the solana-clawd agentic engine. Use when: cloning the repo, setting up MCP tools, starting the Telegram bot, deploying to Fly.io/Netlify, hatching blockchain buddies, running OODA loops, configuring voice mode (ElevenLabs + Grok), minting Metaplex agents, managing the vault, running the worker swarm, or contributing to the project. Covers all 31 MCP tools, 18 buddy species, 9 spinners, 60+ Telegram commands, 95 skills, and the full repo structure.",
+      "category": "Solana / Blockchain",
+      "path": "solana-clawd/SKILL.md",
+      "url": "https://x402.wtf/api/skills/solana-clawd",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/solana-clawd",
+      "tags": [
+        "solana-blockchain",
+        "solana",
+        "clawd"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "solana-clawd-agentic-commerce",
+      "name": "solana-clawd-agentic-commerce",
+      "description": "Build and operate Solana CLAWD agents that spend through Pay CLI, expose paid stores, mint Metaplex-readable identities, and launch Genesis agent tokens.",
+      "category": "Solana / Blockchain",
+      "path": "solana-clawd-agentic-commerce/SKILL.md",
+      "url": "https://x402.wtf/api/skills/solana-clawd-agentic-commerce",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/solana-clawd-agentic-commerce",
+      "tags": [
+        "solana-blockchain",
+        "solana",
+        "clawd",
+        "agentic",
+        "commerce"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "solana-formal-verification",
+      "name": "qedgen",
+      "description": "Formally verify programs by writing Lean 4 proofs. Trigger this skill whenever the user wants to formally verify code, generate Lean 4 proofs, prove properties about algorithms or smart contracts, verify invariants, convert program logic into formal specifications, or anything involving Lean 4 and formal verification. Also trigger when the user mentions \"qedgen\", \"lean proof\", \"formal proof\", \"verify my code\", \"prove correctness\", \"formal verification\", or wants mathematical guarantees about their implementation.",
+      "category": "Solana / Blockchain",
+      "path": "solana-formal-verification/SKILL.md",
+      "url": "https://x402.wtf/api/skills/solana-formal-verification",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/solana-formal-verification",
+      "tags": [
+        "solana-blockchain",
+        "qedgen"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "solanaos",
+      "name": "solanaos",
+      "description": ">",
+      "category": "Solana / Blockchain",
+      "path": "solanaos.md",
+      "url": "https://x402.wtf/api/skills/solanaos",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/solanaos",
+      "tags": [
+        "solana-blockchain",
+        "solanaos"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "ultrathink-blockchain",
+      "name": "ultrathink-blockchain",
+      "description": "Deep-reasoning Solana and blockchain engineering skill. Use for production blockchain development, on-chain programs, Solana transaction flows, DeFi integrations, token bots, swaps, Anchor/Rust programs, RPC handling, Helius/Jito execution, MEV analysis, PDA/account validation, retry logic, simulations, monitoring, or security hardening.",
+      "category": "Solana / Blockchain",
+      "path": "ultrathink-blockchain/SKILL.md",
+      "url": "https://x402.wtf/api/skills/ultrathink-blockchain",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/ultrathink-blockchain",
+      "tags": [
+        "other",
+        "ultrathink",
+        "blockchain"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "vulcan",
+      "name": "vulcan",
+      "description": "Entry-point skill for Phoenix perpetuals through Vulcan/Rise SDK inside solana-clawd. Use before answering or acting on Vulcan, Phoenix DEX, Solana perps, paper trading, live trading, margin, TP/SL, TWAP, grid, TA strategies, or perps agent setup.",
+      "category": "Solana / Blockchain",
+      "path": "vulcan/SKILL.md",
+      "url": "https://x402.wtf/api/skills/vulcan",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/vulcan",
+      "tags": [
+        "other",
+        "vulcan"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "vulcan-error-recovery",
+      "name": "vulcan-error-recovery",
+      "description": "Error category routing and recovery for Vulcan/Phoenix perps. Use on failed CLI/MCP calls, tx failures, auth/config/API/network/rate-limit errors, and strategy recovery.",
+      "category": "Solana / Blockchain",
+      "path": "vulcan-error-recovery/SKILL.md",
+      "url": "https://x402.wtf/api/skills/vulcan-error-recovery",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/vulcan-error-recovery",
+      "tags": [
+        "other",
+        "vulcan",
+        "error",
+        "recovery"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "vulcan-execution-modes",
+      "name": "vulcan-execution-modes",
+      "description": "Canonical Vulcan execution mode taxonomy: Observe, Paper, Dry-Run, Confirm-Each, Auto-Execute. Use before launching strategies or live-capable perps flows.",
+      "category": "Solana / Blockchain",
+      "path": "vulcan-execution-modes/SKILL.md",
+      "url": "https://x402.wtf/api/skills/vulcan-execution-modes",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/vulcan-execution-modes",
+      "tags": [
+        "other",
+        "vulcan",
+        "execution",
+        "modes"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "vulcan-grid-trading",
+      "name": "vulcan-grid-trading",
+      "description": "Grid trading with layered limit orders on Phoenix perpetuals. Use for grid setup, monitoring, pausing/stopping, and live/paper grid strategy safety.",
+      "category": "Solana / Blockchain",
+      "path": "vulcan-grid-trading/SKILL.md",
+      "url": "https://x402.wtf/api/skills/vulcan-grid-trading",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/vulcan-grid-trading",
+      "tags": [
+        "other",
+        "vulcan",
+        "grid",
+        "trading"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "vulcan-lot-size-calculator",
+      "name": "vulcan-lot-size-calculator",
+      "description": "Convert desired token/notional amounts to Phoenix base lots. Use whenever a Vulcan command requires size/base lots.",
+      "category": "Solana / Blockchain",
+      "path": "vulcan-lot-size-calculator/SKILL.md",
+      "url": "https://x402.wtf/api/skills/vulcan-lot-size-calculator",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/vulcan-lot-size-calculator",
+      "tags": [
+        "other",
+        "vulcan",
+        "lot",
+        "size",
+        "calculator"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "vulcan-margin-operations",
+      "name": "vulcan-margin-operations",
+      "description": "Vulcan/Phoenix collateral, deposits, withdrawals, transfers, isolated margin, leverage tiers, and margin health.",
+      "category": "Solana / Blockchain",
+      "path": "vulcan-margin-operations/SKILL.md",
+      "url": "https://x402.wtf/api/skills/vulcan-margin-operations",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/vulcan-margin-operations",
+      "tags": [
+        "other",
+        "vulcan",
+        "margin",
+        "operations"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "vulcan-market-intel",
+      "name": "vulcan-market-intel",
+      "description": "Phoenix market data, tickers, orderbooks, candles, funding, spreads, liquidity, and pre-trade market context.",
+      "category": "Solana / Blockchain",
+      "path": "vulcan-market-intel/SKILL.md",
+      "url": "https://x402.wtf/api/skills/vulcan-market-intel",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/vulcan-market-intel",
+      "tags": [
+        "other",
+        "vulcan",
+        "market",
+        "intel"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "vulcan-onboarding",
+      "name": "vulcan-onboarding",
+      "description": "First-run Vulcan setup for paper trading, wallet, registration, collateral, MCP skills, and live readiness.",
+      "category": "Solana / Blockchain",
+      "path": "vulcan-onboarding/SKILL.md",
+      "url": "https://x402.wtf/api/skills/vulcan-onboarding",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/vulcan-onboarding",
+      "tags": [
+        "other",
+        "vulcan",
+        "onboarding"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "vulcan-portfolio-intel",
+      "name": "vulcan-portfolio-intel",
+      "description": "Phoenix portfolio snapshots: margin, positions, resting orders, funding exposure, PnL, and account reporting.",
+      "category": "Solana / Blockchain",
+      "path": "vulcan-portfolio-intel/SKILL.md",
+      "url": "https://x402.wtf/api/skills/vulcan-portfolio-intel",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/vulcan-portfolio-intel",
+      "tags": [
+        "other",
+        "vulcan",
+        "portfolio",
+        "intel"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "vulcan-position-management",
+      "name": "vulcan-position-management",
+      "description": "List, show, close, reduce Phoenix positions and attach/cancel TP/SL.",
+      "category": "Solana / Blockchain",
+      "path": "vulcan-position-management/SKILL.md",
+      "url": "https://x402.wtf/api/skills/vulcan-position-management",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/vulcan-position-management",
+      "tags": [
+        "other",
+        "vulcan",
+        "position",
+        "management"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "vulcan-quickstart",
+      "name": "vulcan-quickstart",
+      "description": "Five-minute Vulcan quickstart for install, health check, first market read, and first paper trade.",
+      "category": "Solana / Blockchain",
+      "path": "vulcan-quickstart/SKILL.md",
+      "url": "https://x402.wtf/api/skills/vulcan-quickstart",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/vulcan-quickstart",
+      "tags": [
+        "other",
+        "vulcan",
+        "quickstart"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "vulcan-risk-management",
+      "name": "vulcan-risk-management",
+      "description": "Risk checks for Phoenix perps: margin health, leverage tiers, liquidation distance, notional caps, exposure, stops, and strategy guardrails.",
+      "category": "Solana / Blockchain",
+      "path": "vulcan-risk-management/SKILL.md",
+      "url": "https://x402.wtf/api/skills/vulcan-risk-management",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/vulcan-risk-management",
+      "tags": [
+        "other",
+        "vulcan",
+        "risk",
+        "management"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "vulcan-skills-index",
+      "name": "vulcan-skills-index",
+      "description": "Index for the bundled Vulcan skill pack exposed through solana-clawd. Use to discover the correct focused Vulcan skill.",
+      "category": "Solana / Blockchain",
+      "path": "vulcan-skills-index/SKILL.md",
+      "url": "https://x402.wtf/api/skills/vulcan-skills-index",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/vulcan-skills-index",
+      "tags": [
+        "other",
+        "vulcan",
+        "skills",
+        "index"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "vulcan-ta-strategy",
+      "name": "vulcan-ta-strategy",
+      "description": "Technical-analysis-driven Phoenix strategy runner using declarative rules and Vulcan strategy ledgers.",
+      "category": "Solana / Blockchain",
+      "path": "vulcan-ta-strategy/SKILL.md",
+      "url": "https://x402.wtf/api/skills/vulcan-ta-strategy",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/vulcan-ta-strategy",
+      "tags": [
+        "other",
+        "vulcan",
+        "ta",
+        "strategy"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "vulcan-technical-analysis",
+      "name": "vulcan-technical-analysis",
+      "description": "Technical indicators and trigger evaluation for Phoenix markets: RSI, MACD, BBands, ATR, ADX, VWAP, Stoch, SMA, EMA.",
+      "category": "Solana / Blockchain",
+      "path": "vulcan-technical-analysis/SKILL.md",
+      "url": "https://x402.wtf/api/skills/vulcan-technical-analysis",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/vulcan-technical-analysis",
+      "tags": [
+        "other",
+        "vulcan",
+        "technical",
+        "analysis"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "vulcan-tpsl-management",
+      "name": "vulcan-tpsl-management",
+      "description": "Take-profit and stop-loss setup, cancellation, laddered exits, position-side rules, and verification for Vulcan/Phoenix.",
+      "category": "Solana / Blockchain",
+      "path": "vulcan-tpsl-management/SKILL.md",
+      "url": "https://x402.wtf/api/skills/vulcan-tpsl-management",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/vulcan-tpsl-management",
+      "tags": [
+        "other",
+        "vulcan",
+        "tpsl",
+        "management"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "vulcan-trade-execution",
+      "name": "vulcan-trade-execution",
+      "description": "Safe Phoenix order execution via Vulcan: pre-trade checks, market/limit orders, paper/dry-run/live gates, and post-trade verification.",
+      "category": "Solana / Blockchain",
+      "path": "vulcan-trade-execution/SKILL.md",
+      "url": "https://x402.wtf/api/skills/vulcan-trade-execution",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/vulcan-trade-execution",
+      "tags": [
+        "other",
+        "vulcan",
+        "trade",
+        "execution"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "vulcan-twap-execution",
+      "name": "vulcan-twap-execution",
+      "description": "TWAP strategy execution on Phoenix perps using Vulcan's first-class runner, tick logs, ledgers, status/monitor/finalize controls.",
+      "category": "Solana / Blockchain",
+      "path": "vulcan-twap-execution/SKILL.md",
+      "url": "https://x402.wtf/api/skills/vulcan-twap-execution",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/vulcan-twap-execution",
+      "tags": [
+        "other",
+        "vulcan",
+        "twap",
+        "execution"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "blogwatcher",
+      "name": "blogwatcher",
+      "description": "Monitor blogs and RSS/Atom feeds for updates using the blogwatcher CLI.",
+      "category": "Web / Research",
+      "path": "blogwatcher/SKILL.md",
+      "url": "https://x402.wtf/api/skills/blogwatcher",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/blogwatcher",
+      "tags": [
+        "web-research",
+        "blogwatcher"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "gog",
+      "name": "gog",
+      "description": "Google Workspace CLI for Gmail, Calendar, Drive, Contacts, Sheets, and Docs.",
+      "category": "Web / Research",
+      "path": "gog/SKILL.md",
+      "url": "https://x402.wtf/api/skills/gog",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/gog",
+      "tags": [
+        "web-research",
+        "gog"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "goplaces",
+      "name": "goplaces",
+      "description": "Query Google Places API (New) via the goplaces CLI for text search, place details, resolve, and reviews. Use for human-friendly place lookup or JSON output for scripts.",
+      "category": "Web / Research",
+      "path": "goplaces/SKILL.md",
+      "url": "https://x402.wtf/api/skills/goplaces",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/goplaces",
+      "tags": [
+        "web-research",
+        "goplaces"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "mcporter",
+      "name": "mcporter",
+      "description": "Use the mcporter CLI to list, configure, auth, and call MCP servers/tools directly (HTTP or stdio), including ad-hoc servers, config edits, and CLI/type generation.",
+      "category": "Web / Research",
+      "path": "mcporter/SKILL.md",
+      "url": "https://x402.wtf/api/skills/mcporter",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/mcporter",
+      "tags": [
+        "web-research",
+        "mcporter"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "nano-pdf",
+      "name": "nano-pdf",
+      "description": "Edit PDFs with natural-language instructions using the nano-pdf CLI.",
+      "category": "Web / Research",
+      "path": "nano-pdf/SKILL.md",
+      "url": "https://x402.wtf/api/skills/nano-pdf",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/nano-pdf",
+      "tags": [
+        "web-research",
+        "nano",
+        "pdf"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "summarize",
+      "name": "summarize",
+      "description": "Summarize or extract text/transcripts from URLs, podcasts, and local files (great fallback for “transcribe this YouTube/video”).",
+      "category": "Web / Research",
+      "path": "summarize/SKILL.md",
+      "url": "https://x402.wtf/api/skills/summarize",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/summarize",
+      "tags": [
+        "web-research",
+        "summarize"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "wacli",
+      "name": "wacli",
+      "description": "Send WhatsApp messages to other people or search/sync WhatsApp history via the wacli CLI (not for normal user chats).",
+      "category": "Web / Research",
+      "path": "wacli/SKILL.md",
+      "url": "https://x402.wtf/api/skills/wacli",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/wacli",
+      "tags": [
+        "web-research",
+        "wacli"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "weather",
+      "name": "weather",
+      "description": "Get current weather and forecasts (no API key required).",
+      "category": "Web / Research",
+      "path": "weather/SKILL.md",
+      "url": "https://x402.wtf/api/skills/weather",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/weather",
+      "tags": [
+        "web-research",
+        "weather"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    }
+  ],
+  "verificationFlow": {
+    "submit": "https://x402.wtf/api/skills/submit",
+    "attest": "https://x402.wtf/api/skills/attest",
+    "detail": "https://x402.wtf/api/skills/{slug}"
+  }
+}

@@ -4,6 +4,7 @@ export {
   loadSkill,
   listSearchPaths,
   listDefaultSkills,
+  loadExecutableSkills,
   type LoadedSkill,
   type DefaultSkillId,
 } from './registry.js';
@@ -15,3 +16,14 @@ export {
   type SkillCallResult,
 } from './skill-tool.js';
 export { installDefaultSkills, ensureSkillsDir, type InstallResult } from './install.js';
+export {
+  findLocalSkill,
+  fetchPublicSkillCatalog,
+  getSkillHubEndpoints,
+  listLocalSkillsByCategory,
+  loadLocalSkillCatalog,
+  loadLocalSkillHubManifest,
+  type SkillCatalogEntry,
+  type SkillHubEntry,
+  type SkillHubManifest,
+} from './catalog.js';

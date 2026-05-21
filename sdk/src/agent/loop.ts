@@ -70,6 +70,8 @@ export async function tailFlick(input: LoopInput): Promise<void> {
         name: s.manifest.name,
         description: s.manifest.description,
         emoji: s.manifest.emoji,
+        source: s.source,
+        executable: s.executable,
       }));
   const allTools = [...input.tools, ...skillTools];
 
