@@ -696,6 +696,7 @@ SOLANA_TRACKER_API_KEY=   # SolanaTracker for trending tokens
 | --- | --- | --- |
 | `@openclawdsolana/leviathan` | ✅ published | `npm install && npm run build` |
 | `@openclawdsolana/clawd` | ✅ published | `npm install && npm run build` |
+| `@openclawdsolana/clawd-memory` | 🆕 new | `npm run build` · `cm init` |
 | `@openclawdsolana/clawd-standalone` | ✅ published | ships prebuilt |
 | `@openclawd/solana-sdk` | 🚧 dev | `npm run build` |
 | `@openclawd/wallet` | 🚧 dev | `npm run build` |
