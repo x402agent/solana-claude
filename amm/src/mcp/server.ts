@@ -60,6 +60,14 @@ export async function createAmmMcpServer(): Promise<Server> {
           side: side(args.side),
           notionalUsd: Number(args.notionalUsd),
         }));
+      case "amm_route_trade_split":
+        return text(await client.routeSplit({
+          symbol: String(args.symbol),
+          side: side(args.side),
+          notionalUsd: Number(args.notionalUsd),
+        }));
+      case "amm_get_pools":
+        return text(await client.pools(String(args.symbol)));
       case "amm_build_order_tx":
         return text(await client.buildOrder({
           wallet: String(args.wallet),

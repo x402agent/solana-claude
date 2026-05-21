@@ -10,6 +10,8 @@ Usage:
   clawd-amm markets
   clawd-amm quote <symbol> <long|short> <notionalUsd>
   clawd-amm route <symbol> <long|short> <notionalUsd>
+  clawd-amm route-split <symbol> <long|short> <notionalUsd>
+  clawd-amm pools <symbol>
   clawd-amm simulate <wallet> <symbol> <long|short> <notionalUsd> [leverage]
   clawd-amm positions <wallet>
   clawd-amm risks <wallet>
@@ -50,6 +52,13 @@ async function main(): Promise<void> {
       break;
     case "route":
       print(await client.route({ symbol: String(args[0]), side: side(args[1]), notionalUsd: Number(args[2]) }));
+      break;
+    case "route-split":
+    case "split":
+      print(await client.routeSplit({ symbol: String(args[0]), side: side(args[1]), notionalUsd: Number(args[2]) }));
+      break;
+    case "pools":
+      print(await client.pools(String(args[0])));
       break;
     case "simulate":
       print(await client.simulateOrder({

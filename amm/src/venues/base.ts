@@ -1,4 +1,5 @@
 import { estimateAmmSlippage, estimateBookSlippage, priceFromSlippage } from "../aggregator/slippage.js";
+import { poolHealthScore, poolImpact } from "../aggregator/ammMath.js";
 import type {
   BuiltOrderTx,
   FundingRate,
@@ -7,12 +8,14 @@ import type {
   OrderBook,
   OrderBuildRequest,
   Position,
+  PoolStateView,
   QuoteRequest,
   VenueName,
   VenueQuote,
 } from "../types.js";
 import { rawSideToSide, type ImperialTransport, type RawDepth } from "./transport.js";
 import type { VenueAdapter, VenueDefaults } from "./adapter.js";
+import { syntheticPoolState, type PoolStateProvider } from "./poolState.js";
 
 const UNDERWRITER: Record<VenueName, number> = {
   phoenix: 0,
@@ -45,6 +48,7 @@ export class BaseImperialVenueAdapter implements VenueAdapter {
   readonly name: VenueName;
   protected readonly defaults: VenueDefaults;
   protected readonly transport: ImperialTransport;
+  protected poolProvider: PoolStateProvider | null = null;
 
   constructor(defaults: VenueDefaults, transport: ImperialTransport) {
     this.name = defaults.venue;
@@ -128,11 +132,34 @@ export class BaseImperialVenueAdapter implements VenueAdapter {
     return null;
   }
 
+  setPoolStateProvider(provider: PoolStateProvider | null): void {
+    this.poolProvider = provider;
+  }
+
+  async getPoolState(symbol: string): Promise<PoolStateView | null> {
+    if (this.name === "phoenix") return null;
+    if (this.poolProvider) {
+      try {
+        const provided = await this.poolProvider(this.name, symbol.toUpperCase());
+        if (provided) return provided;
+      } catch {
+        // Fall back to synthetic state.
+      }
+    }
+
+    const funding = await this.getFundingRate(symbol).catch(() => null);
+    return syntheticPoolState({
+      aumUsd: this.defaults.defaultLiquidityUsd,
+      funding,
+    });
+  }
+
   async quote(request: QuoteRequest): Promise<VenueQuote> {
-    const [mark, funding, book] = await Promise.all([
+    const [mark, funding, book, pool] = await Promise.all([
       this.getMarkPrice(request.symbol),
       this.getFundingRate(request.symbol),
       this.getOrderBook(request.symbol),
+      this.getPoolState(request.symbol),
     ]);
 
     const warnings: string[] = [];
@@ -148,6 +175,22 @@ export class BaseImperialVenueAdapter implements VenueAdapter {
       if (estimate.unfilledUsd > 0) {
         warnings.push(`book lacks ${estimate.unfilledUsd.toFixed(2)} USD of requested notional`);
       }
+    } else if (pool) {
+      const impact = poolImpact({
+        pool,
+        markPrice: mark.price,
+        side: request.side,
+        sizeUsd: request.notionalUsd,
+      });
+      slippageBps = impact.slippageBps;
+      expectedPrice = impact.expectedPrice;
+      liquidityUsd = Math.max(
+        pool.maxLongOiUsd + pool.maxShortOiUsd - pool.longOiUsd - pool.shortOiUsd,
+        this.defaults.defaultLiquidityUsd,
+      );
+      if (!impact.fillable && impact.reason) warnings.push(impact.reason);
+      const health = poolHealthScore(pool);
+      if (health.score < 0.35) warnings.push(`pool health low (${health.score.toFixed(2)})`);
     } else {
       slippageBps = estimateAmmSlippage(
         request.notionalUsd,
@@ -173,9 +216,10 @@ export class BaseImperialVenueAdapter implements VenueAdapter {
       estimatedSlippageBps: slippageBps,
       fundingRateHourlyPct,
       liquidityUsd,
-      openInterestUsd: this.defaults.defaultOpenInterestUsd,
+      openInterestUsd: pool ? pool.longOiUsd + pool.shortOiUsd : this.defaults.defaultOpenInterestUsd,
       confidence,
       warnings,
+      pool,
     };
   }
 
@@ -260,6 +304,7 @@ export class BaseImperialVenueAdapter implements VenueAdapter {
       active: true,
       maxLeverage: this.defaults.maxLeverage,
       minNotionalUsd: 1,
+      pool: null,
     };
   }
 

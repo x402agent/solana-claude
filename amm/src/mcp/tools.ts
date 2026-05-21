@@ -68,6 +68,28 @@ export const AMM_TOOLS: Tool[] = [
     },
   },
   {
+    name: "amm_route_trade_split",
+    description: "Build a pool-aware split route across AMM/perps venues when marginal cost or capacity demands it.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        symbol: { type: "string" },
+        side: { type: "string", enum: ["long", "short"] },
+        notionalUsd: { type: "number" },
+      },
+      required: ["symbol", "side", "notionalUsd"],
+    },
+  },
+  {
+    name: "amm_get_pools",
+    description: "Get AMM pool state, per-side capacity, utilization, predicted funding, borrow rates, and health by venue.",
+    inputSchema: {
+      type: "object",
+      properties: { symbol: { type: "string" } },
+      required: ["symbol"],
+    },
+  },
+  {
     name: "amm_build_order_tx",
     description: "Build a paper-safe order transaction payload.",
     inputSchema: {

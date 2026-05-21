@@ -17,6 +17,8 @@ import type {
   VenueQuote,
 } from "../types.js";
 import type { VenueAdapter } from "../venues/adapter.js";
+import type { PoolStateProvider } from "../venues/poolState.js";
+import { summarisePool } from "../aggregator/ammMath.js";
 import { aggregatePositions } from "../realtime/positionAggregator.js";
 import { scoreMarketFromQuote } from "../realtime/marketScore.js";
 import { orderPayloadFromRoute, paperBuiltOrder, simulateBuiltOrder } from "./transactions.js";
@@ -55,6 +57,18 @@ export class PerpsAmmClient {
     return this.router.getAdapter(venue).getOrderBook(symbol);
   }
 
+  setPoolStateProvider(provider: PoolStateProvider | null): void {
+    for (const adapter of this.adapters) adapter.setPoolStateProvider(provider);
+  }
+
+  async pools(symbol: string) {
+    const states = await Promise.all(this.adapters.map(async (adapter) => {
+      const pool = await adapter.getPoolState(symbol).catch(() => null);
+      return pool ? summarisePool(adapter.name, symbol.toUpperCase(), pool) : null;
+    }));
+    return states.filter((state) => state !== null);
+  }
+
   health() {
     return {
       paper: this.config.safety.paper,
@@ -73,6 +87,10 @@ export class PerpsAmmClient {
 
   async route(request: QuoteRequest): Promise<RoutePlan> {
     return this.router.route(request);
+  }
+
+  async routeSplit(request: QuoteRequest): Promise<RoutePlan> {
+    return this.router.routeSplit(request);
   }
 
   async buildOrder(request: OrderBuildRequest): Promise<BuiltOrderTx> {

@@ -2,20 +2,24 @@ import { assertSafeNotional } from "../config.js";
 import type { VenueAdapter } from "../venues/adapter.js";
 import type { AggregatorConfig, QuoteRequest, RoutePlan, VenueName, VenueQuote } from "../types.js";
 import { rankQuotes } from "./scoring.js";
+import { SplitRouter, type SplitRouterOptions } from "./splitRouter.js";
 
 export interface RouterOptions {
   splitThresholdUsd?: number;
+  split?: SplitRouterOptions;
 }
 
 export class SmartRouter {
   private readonly adapters: Map<VenueName, VenueAdapter>;
   private readonly config: AggregatorConfig;
   private readonly splitThresholdUsd: number;
+  private readonly splitRouter: SplitRouter;
 
   constructor(config: AggregatorConfig, adapters: VenueAdapter[], options: RouterOptions = {}) {
     this.config = config;
     this.adapters = new Map(adapters.map((adapter) => [adapter.name, adapter]));
     this.splitThresholdUsd = options.splitThresholdUsd ?? 100_000;
+    this.splitRouter = new SplitRouter(adapters, options.split);
   }
 
   listVenues(): VenueName[] {
@@ -63,6 +67,11 @@ export class SmartRouter {
       warnings: best.quote.warnings,
       createdAt: new Date().toISOString(),
     };
+  }
+
+  async routeSplit(request: QuoteRequest): Promise<RoutePlan> {
+    const quotes = await this.quoteAll(request);
+    return this.splitRouter.route(request, quotes);
   }
 
   getAdapter(venue: VenueName): VenueAdapter {

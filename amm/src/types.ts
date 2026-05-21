@@ -12,6 +12,7 @@ export interface Market {
   minNotionalUsd?: number;
   tickSize?: number;
   lotSize?: number;
+  pool?: PoolStateView | null;
 }
 
 export interface FundingRate {
@@ -66,6 +67,7 @@ export interface VenueQuote {
   openInterestUsd: number;
   confidence: number;
   warnings: string[];
+  pool?: PoolStateView | null;
   raw?: unknown;
 }
 
@@ -180,4 +182,16 @@ export interface AggregatorConfig {
   imperialApiBase: string;
   imperialJwt?: string;
   safety: SafetyConfig;
+}
+
+export interface PoolStateView {
+  aumUsd: number;
+  longOiUsd: number;
+  shortOiUsd: number;
+  maxLongOiUsd: number;
+  maxShortOiUsd: number;
+  perSideLiquidityUsd?: { long: number; short: number };
+  targetUtilization?: number;
+  fundingPeakPerHourPct?: number;
+  borrowPeakPerHourPct?: number;
 }

@@ -1,7 +1,9 @@
 export * from "./types.js";
 export * from "./config.js";
 export * from "./aggregator/router.js";
+export * from "./aggregator/ammMath.js";
 export * from "./aggregator/scoring.js";
+export * from "./aggregator/splitRouter.js";
 export * from "./aggregator/slippage.js";
 export * from "./realtime/marketScore.js";
 export * from "./realtime/marketStream.js";
@@ -11,5 +13,6 @@ export * from "./sdk/signing.js";
 export * from "./sdk/transactions.js";
 export * from "./venues/adapter.js";
 export * from "./venues/base.js";
+export * from "./venues/poolState.js";
 export * from "./venues/registry.js";
 export * from "./venues/transport.js";
