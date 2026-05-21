@@ -1,0 +1,64 @@
+{
+  "name": "@openclawdsolana/clawd-memory",
+  "version": "0.1.0",
+  "description": "Clawd Memory — local-first persistent memory for Solana agents. SQLite + FTS5, zero cloud required.",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "bin": {
+    "clawd-memory": "bin/clawd-memory.js",
+    "cm": "bin/clawd-memory.js"
+  },
+  "files": [
+    "bin",
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "node --enable-source-maps dist/cli.js",
+    "prepublishOnly": "npm run build",
+    "clean": "rm -rf dist"
+  },
+  "keywords": [
+    "clawd",
+    "openclawd",
+    "solana",
+    "agent-memory",
+    "sqlite",
+    "fts5",
+    "mnemosyne",
+    "ooda",
+    "local-first"
+  ],
+  "author": "OpenClawd",
+  "license": "MIT",
+  "homepage": "https://solanaclawd.com",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.0.0",
+    "chalk": "^5.3.0",
+    "ulid": "^2.3.0"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.0",
+    "@types/node": "^20.10.0",
+    "typescript": "^5.4.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": ["better-sqlite3"]
+  }
+}
