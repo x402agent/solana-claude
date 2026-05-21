@@ -20,6 +20,8 @@ export interface SlippageResult {
   fillable: boolean;
   /** Filled USD notional (== requested if fillable, less otherwise). */
   filledUsd: number;
+  /** Human reason if not fillable. */
+  reason?: string;
 }
 
 /** Walk an orderbook to compute VWAP for a market order of `sizeUsd`. */

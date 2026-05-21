@@ -136,6 +136,25 @@ export interface MarketMeta {
   minOrderUsd: number;
   /** Mark price source — "oracle" | "book-mid" | "pool". */
   markSource: string;
+  /** Pool state for AMM-style venues. Null for pure CLOB venues. */
+  pool?: PoolStateView | null;
+}
+
+/**
+ * Pool state surfaced through MarketMeta. Mirrors `PoolState` in
+ * `aggregator/ammMath.ts` but lives in the public types so SDK consumers
+ * can read it without importing the math module.
+ */
+export interface PoolStateView {
+  aumUsd: number;
+  longOiUsd: number;
+  shortOiUsd: number;
+  maxLongOiUsd: number;
+  maxShortOiUsd: number;
+  perSideLiquidityUsd?: { long: number; short: number };
+  targetUtilization?: number;
+  fundingPeakPerHourPct?: number;
+  borrowPeakPerHourPct?: number;
 }
 
 export interface MarketSnapshot {

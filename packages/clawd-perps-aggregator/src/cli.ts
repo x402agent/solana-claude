@@ -76,6 +76,26 @@ async function main(): Promise<void> {
       );
       break;
     }
+    case "route-split":
+    case "split": {
+      const [, symbol, side, sizeStr] = args;
+      if (!symbol || !side || !sizeStr) throw new Error("usage: route-split SYMBOL long|short SIZE_USD");
+      logJson(
+        await agg.routeSplit({
+          symbol,
+          side: side as Side,
+          action: "open",
+          sizeUsd: Number(sizeStr),
+        }),
+      );
+      break;
+    }
+    case "pools": {
+      const sym = args[1];
+      if (!sym) throw new Error("usage: pools SYMBOL");
+      logJson(await agg.pools(sym));
+      break;
+    }
     case "positions": {
       const wallet = args[1];
       logJson(await agg.positions(wallet));
@@ -126,6 +146,8 @@ async function main(): Promise<void> {
           "  funding [SYMBOL]                funding rates",
           "  quote SYMBOL long|short SIZE    cross-venue quotes",
           "  route SYMBOL long|short SIZE    routed best venue + breakdown",
+          "  route-split SYM SIDE SIZE       split-execution route across AMM venues",
+          "  pools SYMBOL                    per-venue AMM pool state + summary",
           "  positions [WALLET]              aggregated positions",
           "  risk [WALLET]                   liquidation risk table",
           "  balances                        USDC subaccount balances (needs IMPERIAL_JWT)",

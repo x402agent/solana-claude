@@ -11,14 +11,31 @@
 export * from "./types.js";
 export * from "./config.js";
 
-export { PerpsAggregator, usdToFixed, fixedToUsd } from "./sdk/client.js";
-export type { PerpsAggregatorOpts } from "./sdk/client.js";
+export {
+  PerpsAggregator,
+  usdToFixed,
+  fixedToUsd,
+  summarisePool,
+} from "./sdk/client.js";
+export type { PerpsAggregatorOpts, PoolSummary } from "./sdk/client.js";
 
 export { SmartRouter } from "./aggregator/router.js";
+export { SplitRouter } from "./aggregator/splitRouter.js";
+export type { SplitRouterOpts } from "./aggregator/splitRouter.js";
 export { scoreQuotes, DEFAULT_WEIGHTS } from "./aggregator/scoring.js";
 export type { ScoredQuote, ScoringWeights } from "./aggregator/scoring.js";
 export { bookVwapSlippage, ammImpactSlippage } from "./aggregator/slippage.js";
 export type { SlippageResult } from "./aggregator/slippage.js";
+export {
+  poolImpact,
+  predictFundingPerHourPct,
+  borrowRatePerHourPct,
+  poolHealthScore,
+  utilizationFor,
+  capacityFor,
+  oiSkew,
+} from "./aggregator/ammMath.js";
+export type { PoolState, PoolImpactInputs, PoolImpactResult } from "./aggregator/ammMath.js";
 
 export { ImperialTransport } from "./venues/transport.js";
 export type {
@@ -39,6 +56,13 @@ export {
   GMTradeAdapter,
   buildVenueAdapters,
 } from "./venues/registry.js";
+export {
+  StaticPoolStateProvider,
+  chainPoolStateProviders,
+  syntheticPoolState,
+  remainingCapacityUsd,
+} from "./venues/poolState.js";
+export type { PoolStateProvider, SyntheticPoolOpts } from "./venues/poolState.js";
 
 export {
   MarketStream,

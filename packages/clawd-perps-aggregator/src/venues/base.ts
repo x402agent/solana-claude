@@ -26,6 +26,8 @@ import {
   VENUE_FROM_UNDERWRITER,
 } from "../types.js";
 import { ammImpactSlippage, bookVwapSlippage } from "../aggregator/slippage.js";
+import { poolImpact } from "../aggregator/ammMath.js";
+import { syntheticPoolState, type PoolStateProvider } from "./poolState.js";
 
 export interface VenueDefaults {
   makerFeeBps: number;
@@ -44,11 +46,18 @@ export abstract class BaseVenueAdapter implements VenueAdapter {
   abstract readonly label: string;
   abstract readonly defaults: VenueDefaults;
 
+  poolProvider: PoolStateProvider | null = null;
+
   constructor(protected readonly transport: ImperialTransport) {}
 
   /** Whether this venue has a CLOB (Phoenix) or is AMM-style (others). */
   hasBook(): boolean {
     return false;
+  }
+
+  /** Allow operators to inject real on-chain pool state per venue/symbol. */
+  setPoolProvider(provider: PoolStateProvider | null): void {
+    this.poolProvider = provider;
   }
 
   async fetchMarkPrices(symbols?: string[]): Promise<MarkPrice[]> {
@@ -86,8 +95,9 @@ export abstract class BaseVenueAdapter implements VenueAdapter {
   }
 
   async fetchMeta(symbol: string): Promise<MarketMeta | null> {
-    return {
-      symbol: symbol.toUpperCase(),
+    const sym = symbol.toUpperCase();
+    const meta: MarketMeta = {
+      symbol: sym,
       venue: this.id,
       makerFeeBps: this.defaults.makerFeeBps,
       takerFeeBps: this.defaults.takerFeeBps,
@@ -96,7 +106,41 @@ export abstract class BaseVenueAdapter implements VenueAdapter {
       liquidityUsd: this.defaults.fallbackLiquidityUsd,
       minOrderUsd: this.defaults.minOrderUsd,
       markSource: this.defaults.markSource,
+      pool: null,
     };
+    if (!this.hasBook()) {
+      meta.pool = await this.resolvePool(sym);
+      if (meta.pool) {
+        meta.openInterestUsd = meta.pool.longOiUsd + meta.pool.shortOiUsd;
+        meta.liquidityUsd = Math.max(
+          meta.pool.maxLongOiUsd + meta.pool.maxShortOiUsd - meta.openInterestUsd,
+          meta.liquidityUsd ?? 0,
+        );
+      }
+    }
+    return meta;
+  }
+
+  /** Resolve a pool state: provider first, then synthetic fallback. */
+  protected async resolvePool(symbol: string) {
+    if (this.poolProvider) {
+      try {
+        const fromProvider = await this.poolProvider(this.id, symbol);
+        if (fromProvider) return fromProvider;
+      } catch {
+        // fall through to synthetic
+      }
+    }
+    // Best-effort synthetic from current funding + venue AUM default.
+    try {
+      const funding = (await this.fetchFunding([symbol]))[0] ?? null;
+      return syntheticPoolState({
+        aumUsd: this.defaults.fallbackLiquidityUsd,
+        funding,
+      });
+    } catch {
+      return null;
+    }
   }
 
   async snapshot(symbol: string): Promise<MarketSnapshot> {
@@ -150,13 +194,30 @@ export abstract class BaseVenueAdapter implements VenueAdapter {
     const executionSide = executionSideFor(ctx.side, ctx.action);
     const slip = snap.book
       ? bookVwapSlippage(snap.book, executionSide, ctx.sizeUsd)
-      : ammImpactSlippage({
-          markPrice: snap.markPrice,
-          liquidityUsd,
-          sizeUsd: ctx.sizeUsd,
-          side: executionSide,
-          impactCoeff: this.defaults.impactCoeff,
-        });
+      : meta?.pool
+        ? (() => {
+            const r = poolImpact({
+              pool: meta.pool!,
+              markPrice: snap.markPrice!,
+              side: executionSide,
+              sizeUsd: ctx.sizeUsd,
+              impactCoeff: this.defaults.impactCoeff,
+            });
+            return {
+              expectedPrice: r.expectedPrice,
+              slippageBps: r.slippageBps,
+              fillable: r.fillable,
+              filledUsd: r.filledUsd,
+              reason: r.reason,
+            };
+          })()
+        : ammImpactSlippage({
+            markPrice: snap.markPrice,
+            liquidityUsd,
+            sizeUsd: ctx.sizeUsd,
+            side: executionSide,
+            impactCoeff: this.defaults.impactCoeff,
+          });
 
     const expectedPrice = slip.expectedPrice || snap.markPrice;
     const slippageUsd = (Math.abs(slip.slippageBps) / 10_000) * ctx.sizeUsd;
@@ -186,7 +247,9 @@ export abstract class BaseVenueAdapter implements VenueAdapter {
     // Allowed slippage check.
     const fillable = slip.fillable && Math.abs(slip.slippageBps) <= ctx.slippageBps;
     const reason = !slip.fillable
-      ? `insufficient depth for ${ctx.sizeUsd} USD on ${this.id}`
+      ? ("reason" in slip && slip.reason
+          ? `${slip.reason} (${this.id})`
+          : `insufficient depth for ${ctx.sizeUsd} USD on ${this.id}`)
       : Math.abs(slip.slippageBps) > ctx.slippageBps
         ? `slippage ${slip.slippageBps.toFixed(1)} bps exceeds tolerance ${ctx.slippageBps}`
         : undefined;
