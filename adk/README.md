@@ -67,3 +67,18 @@ The agent exports `rootAgent` from `agent.ts` and uses multiple ADK `FunctionToo
 Real secrets belong in `adk/.env` or the shell. Do not commit RPC URLs, API keys, wallet keys, or bot tokens.
 
 Use [`adk/.env.example`](./.env.example) as the non-secret template.
+
+## Gateway Contract
+
+The ADK agent is designed to sit behind the private gateway documented in [`../gateway/README.md`](../gateway/README.md).
+
+| ADK tool | Gateway policy intent |
+| --- | --- |
+| `get_agent_catalog_stats` | safe read-only registry coverage check |
+| `search_agent_catalog` | safe read-only discovery over installed agents |
+| `get_private_destinations` | controlled disclosure of governed destination labels and URLs |
+| `get_token_price` | public market metadata lookup |
+| `get_token_search` | public token metadata lookup |
+| `prepare_jupiter_swap` | unsigned transaction preparation only; wallet signing stays outside the model |
+
+Production deployments should restrict MCP `tools/call` to the exact tool names required for the workflow and should route sensitive traffic through IAP, Model Armor, or a custom authorization extension before it reaches private destinations.

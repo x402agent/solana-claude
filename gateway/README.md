@@ -46,6 +46,19 @@ The ADK manifest includes:
 - installed catalog coverage for all source-backed agents
 - links to `/api/agents`, `/api/agents/catalog`, and `/api/agents/registry`
 
+## Security Boundary
+
+The gateway README is intentionally safe to publish. It documents the control plane, required permissions, and deployment patterns, but it does not include live RPC URLs, API keys, wallet material, bot tokens, UCAN credentials, or local operator secrets.
+
+Public docs can describe:
+
+- endpoint paths and non-secret registry metadata
+- Google Cloud permission names and API names
+- placeholder YAML for Agent Gateway resources
+- policy examples that use `PROJECT_ID`, `LOCATION`, and `AGENT_GATEWAY_NAME`
+
+Private runtime values must stay in local `.env` files, secret managers, or shell-only exports.
+
 ## Required Google Cloud APIs
 
 Enable these APIs in the project used for an Agent Gateway deployment:
@@ -110,6 +123,15 @@ gcloud alpha network-services agent-gateways import AGENT_GATEWAY_NAME \
 
 For Agent Runtime agents, use a regional registry path. For Gemini Enterprise, use the project's global registry path.
 
+Registry paths:
+
+| Integration | Registry path |
+| --- | --- |
+| Agent Runtime | `//agentregistry.googleapis.com/projects/PROJECT_ID/locations/REGION` |
+| Gemini Enterprise | `//agentregistry.googleapis.com/projects/PROJECT_ID/locations/global` |
+
+A single Agent Gateway cannot serve both registry styles at the same time. Deploy a dedicated regional gateway for Agent Runtime and a dedicated global-registry gateway for Gemini Enterprise.
+
 ## Client-to-Agent Ingress
 
 Use ingress mode when client traffic should enter through the governed gateway before reaching an agent.
@@ -162,6 +184,87 @@ Common delegation targets:
 - Model Armor for AI safety checks
 - custom authorization extensions over gRPC
 
+### IAP Request Authorization
+
+Use IAP when access decisions should be made before the request reaches the destination.
+
+```yaml
+name: clawd-iap-request-authz-ext
+service: iap.googleapis.com
+failOpen: true
+timeout: 1s
+```
+
+```yaml
+name: clawd-iap-request-authz-policy
+target:
+  resources:
+    - "projects/PROJECT_ID/locations/LOCATION/agentGateways/AGENT_GATEWAY_NAME"
+policyProfile: REQUEST_AUTHZ
+action: CUSTOM
+customProvider:
+  authzExtension:
+    resources:
+      - "projects/PROJECT_ID/locations/LOCATION/authzExtensions/clawd-iap-request-authz-ext"
+```
+
+For audit-only rollout, add metadata such as `iamEnforcementMode: "DRY_RUN"` to the extension and remove it when enforcement is ready.
+
+### Model Armor Content Authorization
+
+Use Model Armor when prompts, tool payloads, or responses need content inspection.
+
+```yaml
+name: clawd-ma-content-authz-ext
+service: modelarmor.LOCATION.rep.googleapis.com
+metadata:
+  model_armor_settings: '[
+    {
+      "request_template_id": "projects/MODEL_ARMOR_PROJECT_ID/locations/LOCATION/templates/REQUEST_TEMPLATE_ID",
+      "response_template_id": "projects/MODEL_ARMOR_PROJECT_ID/locations/LOCATION/templates/RESPONSE_TEMPLATE_ID"
+    }
+  ]'
+failOpen: true
+timeout: 1s
+```
+
+```yaml
+name: clawd-ma-content-authz-policy
+target:
+  resources:
+    - "projects/PROJECT_ID/locations/LOCATION/agentGateways/AGENT_GATEWAY_NAME"
+policyProfile: CONTENT_AUTHZ
+action: CUSTOM
+customProvider:
+  authzExtension:
+    resources:
+      - "projects/PROJECT_ID/locations/LOCATION/authzExtensions/clawd-ma-content-authz-ext"
+httpRules:
+  - to:
+      operations:
+        - paths:
+            - prefix: "/"
+    when: >
+      request.headers['content-type'] == 'application/json' ||
+      request.headers['content-type'].startsWith('text/')
+```
+
+Grant the Agent Gateway service account the required Model Armor callout and template roles when the gateway and templates live in different projects.
+
+### Custom Authorization Extension
+
+Custom authorization extensions can point to internal FQDNs that implement the expected Service Extensions protocol. Keep those endpoints private through VPC connectivity and DNS peering.
+
+```yaml
+name: clawd-custom-authz-ext
+service: authz.internal.example
+failOpen: true
+timeout: 1s
+wireFormat: EXT_AUTHZ_GRPC
+```
+
+Use `REQUEST_AUTHZ` for header/protocol decisions. Use `CONTENT_AUTHZ` only when the service supports streamed request and response body inspection.
+
 ## MCP Tool Restrictions
 
 For MCP, allow base protocol methods and explicitly permit tool calls:
@@ -187,6 +290,62 @@ httpRules:
 action: ALLOW
 ```
 
+For deny policies, target a method family such as `prompts` or an unsafe tool name. For allow policies, always include `baseProtocolMethodsOption: MATCH_BASE_PROTOCOL_METHODS` so initialization, logging, completion, notifications, and ping can continue to work.
+
+## Agent Identity
+
+Agent Identity gives each deployed agent a strongly attested SPIFFE-style identity:
+
+```text
+spiffe://TRUST_DOMAIN/resources/SERVICE/RESOURCE_PATH
+principal://TRUST_DOMAIN/resources/SERVICE/RESOURCE_PATH
+```
+
+Use the principal form in IAM allow policies. Unlike shared service accounts, agent identities are per-agent, cannot be impersonated in the same way, and do not require long-lived service account keys in the repository.
+
+Agent Identity auth manager can hold API key, OAuth 2-legged, OAuth 3-legged, and delegated end-user credentials. When used with Agent Gateway and Gemini Enterprise, end-user credentials are decrypted at the gateway boundary instead of being exposed directly to the agent.
+
+## Agent Registry
+
+Agent Registry is the inventory layer for discoverable agents, MCP servers, tools, and governed endpoints. For Clawd, the registry contract is:
+
+| Registry task | Clawd mapping |
+| --- | --- |
+| Register agents | Source-backed agent records in `agents/src/*.json` |
+| Register MCP servers | Gateway destinations and MCP-capable tool surfaces |
+| Search agents and tools | `search_agent_catalog` in the ADK agent |
+| Resolve endpoints | `/adk/manifest.json` plus private destination metadata |
+| Register custom ADK agent | `adk/agent.ts` exported `rootAgent` |
+
+Only registered destinations should be reachable through a governed production gateway.
+
+## Safety Stack
+
+The recommended safety posture is layered:
+
+| Layer | Purpose |
+| --- | --- |
+| Gemini model defaults | baseline safety behavior |
+| Configurable filters | threshold-based harm filtering |
+| System instructions | brand, scope, and operating constraints |
+| DLP | sensitive data detection, masking, or blocking |
+| Gemini as a filter | custom policy evaluation for prompts, tool results, and responses |
+| Model Armor | centralized gateway-level content guardrails |
+
+Use gateway content authorization for traffic that crosses trust boundaries. Use local checks before a tool call when the risk is specific to Clawd execution, wallet operations, swaps, or deployment actions.
+
+## Memory Bank Pattern
+
+Agent Platform Sessions and Memory Bank can be used when a deployed agent needs durable user context:
+
+1. Create a session for an opaque user ID.
+2. Append ordered user, agent, and tool events.
+3. Generate memories from the session or upload pre-extracted facts.
+4. Retrieve scoped memories and inject them into system instructions.
+5. Delete by resource name, filter criteria, or explicit user instruction.
+
+For this repo, Memory Bank wiring must keep scopes opaque and must not store private keys, seed phrases, raw RPC credentials, bot tokens, or user secrets as memories.
+
 ## Monitoring
 
 Agent Gateway logs use the monitored resource:
@@ -204,6 +363,13 @@ resource.labels.gateway_name="AGENT_GATEWAY_NAME"
 ```
 
 The log payload can include gateway request info, MCP method info, and the matched Agent Registry resource.
+
+## Limits To Design Around
+
+- Maximum four custom authorization policies per Agent Gateway.
+- Multiple custom policies with the same profile do not have guaranteed order.
+- `CONTENT_AUTHZ` custom extensions must support streamed body processing.
+- Gemini Enterprise egress requires the region that maps to the Gemini Enterprise location, such as `global` or `us` to `us-central1`, and `eu` to `europe-west1`.
 
 ## Local Build
 

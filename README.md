@@ -246,6 +246,18 @@ Docs:
 
 Secrets stay out of git. Put real Gemini keys, RPC URLs, API keys, and wallet material in local `.env` files or the shell only.
 
+## Public Gitlawb Mirror
+
+The sanitized public mirror is published as `my-project-public` on gitlawb. Force the public node before clone so `git-remote-gitlawb` does not fall back to a local node:
+
+```bash
+export GITLAWB_NODE=https://node.gitlawb.com
+OWNER_DID=did:key:z6Mkq5mY3JWtxoxUobWcfNHm7AkRubgSWEZTkBVqZXJviFZ5
+git clone "gitlawb://$OWNER_DID/my-project-public"
+```
+
+The public mirror includes source for `sdk`, `tui`, `ooda`, `MemeBRain`, `gateway`, `automaton-main`, `agents`, and `leviathan`. It excludes `.local-secrets`, live `.env` files, key material, UCAN files, `node_modules`, and generated build output.
+
 ---
 
 ## Repository Galaxy
