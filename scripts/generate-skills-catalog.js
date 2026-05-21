@@ -53,7 +53,7 @@ function extractMeta(yamlBlock) {
 
 function categorize(slug) {
   if (/dflow|kalshi|phantom/.test(slug)) return 'DFlow / Trading';
-  if (/imperial/.test(slug)) return 'Solana / Blockchain';
+  if (/imperial|vulcan|clawdex|dex-screener|ultrathink-blockchain/.test(slug)) return 'Solana / Blockchain';
   if (/^pump-|^pumpfun/.test(slug)) return 'Pump.fun / Token Launch';
   if (/solana|seeker|qedgen|magicblock/.test(slug)) return 'Solana / Blockchain';
   if (/discord|slack|imsg|bluebubbles|himalaya|voice-call/.test(slug)) return 'Communication';
@@ -62,7 +62,8 @@ function categorize(slug) {
   if (/gif|video|camsnap|canvas|songsee|sonoscli|spotify|sherpa|tts|peekaboo/.test(slug)) return 'Media';
   if (/gateway|healthcheck|tmux|eightctl|blucli|nano-banana|openhue/.test(slug)) return 'DevOps / Infrastructure';
   if (/browse|blogwatcher|xurl|pdf|summarize|gog|goplaces|weather|wacli|nano-pdf|mcporter/.test(slug)) return 'Web / Research';
-  if (/openclaw|clawhub/.test(slug)) return 'Clawd Ecosystem';
+  if (/openclaw|clawdhub|clawhub|github/.test(slug)) return 'Clawd Ecosystem';
+  if (/food-order|local-places/.test(slug)) return 'Local / Web Services';
   return 'Other';
 }
 
