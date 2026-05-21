@@ -7,6 +7,8 @@
 set -euo pipefail
 
 CLAWD_TERMINAL_URL="${CLAWD_TERMINAL_URL:-https://solanaclawd.com/terminal}"
+CLAWD_SDK_GRAPH_URL="${CLAWD_SDK_GRAPH_URL:-https://x402.wtf/sdk}"
+CLAWD_SDK_MANIFEST_URL="${CLAWD_SDK_MANIFEST_URL:-https://x402.wtf/api/solana-clawd/sdk}"
 
 # ── Terminal colours ──────────────────────────────────────────────────────────
 RESET="\033[0m"
@@ -147,6 +149,8 @@ XAI_API_KEY=
 # ── Public discovery URLs (no secrets) ──────────────────────────
 # OPENCLAWD_PUBLIC_BASE_URL=https://solanaclawd.com
 # X402_WTF_BASE_URL=https://x402.wtf
+# CLAWD_SDK_GRAPH_URL=https://x402.wtf/sdk
+# CLAWD_SDK_MANIFEST_URL=https://x402.wtf/api/solana-clawd/sdk
 # OPENCLAWD_SKILL_PATH=      # optional colon-separated extra skill roots
 
 # ── Optional services ──────────────────────────────────────
@@ -158,6 +162,10 @@ XAI_API_KEY=
 
 # Web terminal
 CLAWD_TERMINAL_URL=${CLAWD_TERMINAL_URL}
+
+# Hosted SDK graph
+CLAWD_SDK_GRAPH_URL=${CLAWD_SDK_GRAPH_URL}
+CLAWD_SDK_MANIFEST_URL=${CLAWD_SDK_MANIFEST_URL}
 
 # SolanaTracker (OODA loop example)
 # SOLANA_TRACKER_API_KEY=
@@ -190,6 +198,11 @@ printf "  ${CYAN}clawd examples run buddies${RESET}         — Blockchain Buddi
 printf "  ${CYAN}clawd examples run x402sol${RESET}         — x402 USDC payments\n"
 printf "\n"
 
+printf "  ${BOLD}Hosted SDK graph:${RESET}\n"
+printf "  ${CYAN}${CLAWD_SDK_GRAPH_URL}${RESET}\n"
+printf "  ${CYAN}curl ${CLAWD_SDK_MANIFEST_URL} | jq '.data.stats'${RESET}\n"
+printf "\n"
+
 printf "  ${BOLD}Install leviathan (advanced, spawns on-chain agent):${RESET}\n"
 printf "  ${CYAN}npm install -g @openclawdsolana/leviathan${RESET}\n"
 printf "  ${CYAN}leviathan --spawn${RESET}\n"
@@ -197,6 +210,7 @@ printf "\n"
 
 printf "  ${BOLD}Links:${RESET}\n"
 printf "  Terminal: ${CYAN}${CLAWD_TERMINAL_URL}${RESET}\n"
+printf "  SDK:      ${CYAN}${CLAWD_SDK_GRAPH_URL}${RESET}\n"
 printf "  Website:  ${CYAN}https://solanaclawd.com${RESET}\n"
 printf "  X:        ${CYAN}https://x.com/clawddevs${RESET}\n"
 printf "  Telegram: ${CYAN}https://t.me/clawdbot_sol_bot${RESET}\n"

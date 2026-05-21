@@ -32,6 +32,7 @@
 
 [![CA](https://img.shields.io/badge/CA-8cHzQH...pump-C85C2B?style=for-the-badge&logo=solana&logoColor=white)](https://pump.fun/coin/8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump)
 [![x402](https://img.shields.io/badge/x402.wtf-payments-1E5AA8?style=for-the-badge)](https://x402.wtf)
+[![Hosted SDK Graph](https://img.shields.io/badge/Hosted%20SDK%20Graph-x402.wtf%2Fsdk-06B6D4?style=for-the-badge)](https://x402.wtf/sdk)
 [![Website](https://img.shields.io/badge/solanaclawd.com-website-147D64?style=for-the-badge)](https://solanaclawd.com)
 [![Telegram](https://img.shields.io/badge/t.me/clawdtoken-community-26A5E4?style=for-the-badge&logo=telegram&logoColor=white)](https://t.me/clawdtoken)
 [![Terminal](https://img.shields.io/badge/solanaclawd.com%2Fterminal-AI%20Terminal-9B59B6?style=for-the-badge)](https://solanaclawd.com/terminal)
@@ -78,6 +79,13 @@ Verify the SDK harness after a local install:
 
 ```bash
 npm run harness:packages
+```
+
+Inspect the hosted SDK graph that powers `x402.wtf/sdk`:
+
+```bash
+curl https://x402.wtf/api/solana-clawd/sdk | jq '.data.stats'
+curl https://x402.wtf/api/solana-clawd/packages | jq '.data.total, .data.packages[0].name'
 ```
 
 **Or install the sovereign runtime:**
@@ -454,6 +462,22 @@ Refresh the SDK snapshot from the root skill catalog:
 
 ```bash
 npm --prefix sdk run skills:sync
+```
+
+### Hosted Manifest Contract
+
+`x402.wtf` exposes this SDK as a public graph for installers, agents, docs, and the `/sdk` dashboard. Production uses bundled safe metadata when it cannot read a local checkout, while local ClawdBrowser development can resolve this repo directly with `SOLANA_CLAWD_HOME`, `SOLANA_CLAWD_SDK_HOME`, or `CLAWD_SDK_HOME`.
+
+| Endpoint | Purpose |
+| --- | --- |
+| `GET https://x402.wtf/api/solana-clawd/sdk` | Full SDK manifest: source, stats, commands, surfaces, packages, skills, examples, automation, characters, and integration lanes |
+| `GET https://x402.wtf/api/solana-clawd/packages` | Package/workspace index from `sdk/packages` with hosted fallback package metadata |
+| `GET https://x402.wtf/api/solana-clawd/source` | Sanitized source/activation status with public path labels |
+
+```bash
+curl https://x402.wtf/api/solana-clawd/sdk | jq '.data.source, .data.stats'
+curl https://x402.wtf/api/solana-clawd/packages | jq '.data.packages[] | {name, version, path}'
+curl https://x402.wtf/api/solana-clawd/source | jq '.data.mode, .data.packages'
 ```
 
 ---

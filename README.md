@@ -12,6 +12,7 @@
 [![npm](https://img.shields.io/badge/npm-solana--clawd-CB3837?style=for-the-badge&logo=npm)](https://www.npmjs.com/package/solana-clawd)
 [![Phoenix](https://img.shields.io/badge/Phoenix-Perpetuals-FF5F1F?style=for-the-badge)](https://phoenix.trade)
 [![x402](https://img.shields.io/badge/x402.wtf-agent%20payments-14F195?style=for-the-badge)](https://x402.wtf)
+[![SDK Graph](https://img.shields.io/badge/SDK%20Graph-x402.wtf%2Fsdk-06B6D4?style=for-the-badge)](https://x402.wtf/sdk)
 [![Terminal](https://img.shields.io/badge/Web%20Terminal-solanaclawd.com%2Fterminal-14F195?style=for-the-badge)](https://solanaclawd.com/terminal)
 [![Backrooms](https://img.shields.io/badge/backrooms.x402.wtf-INFINITE-FFD700?style=for-the-badge)](https://backrooms.x402.wtf)
 [![Token](https://img.shields.io/badge/%24CLAWD-8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump-9945FF?style=for-the-badge)](https://pump.fun)
@@ -184,6 +185,9 @@ curl -fsSL https://backrooms.x402.wtf/enter.sh | bash
 
 # Install root CLI
 npm install -g solana-clawd && clawd
+
+# Inspect the hosted SDK graph
+curl https://x402.wtf/api/solana-clawd/sdk | jq '.data.stats'
 ```
 
 | | Command | What it does |
@@ -197,6 +201,34 @@ npm install -g solana-clawd && clawd
 | 🤖 | `bash automaton-main/leviathan.sh --full` | Full runtime bootstrap |
 | 🖥️ | `https://solanaclawd.com/terminal` | Browser terminal |
 | 📦 | `clawdhub install meme-trader` | Install a skill from ClawdHub |
+
+---
+
+## Hosted SDK Graph
+
+The public `x402.wtf` app now indexes this repo and the `sdk/` workspace as a first-class SDK graph. That gives installers, agents, and users a stable hosted map without shipping local paths, `node_modules`, or `dist` artifacts.
+
+| Surface | URL | Purpose |
+| --- | --- | --- |
+| SDK dashboard | <https://x402.wtf/sdk> | Human view of packages, skills, examples, automation, character files, and integration lanes |
+| SDK manifest | <https://x402.wtf/api/solana-clawd/sdk> | Machine-readable manifest consumed by the dashboard and agent clients |
+| Package map | <https://x402.wtf/api/solana-clawd/packages> | Public package/workspace metadata from `sdk/packages` with hosted fallback data |
+| Source status | <https://x402.wtf/api/solana-clawd/source> | Sanitized source detection and activation map for site/gateway wiring |
+
+Local ClawdBrowser development can point at this checkout with:
+
+```bash
+export SOLANA_CLAWD_HOME=/path/to/solana-clawd
+export SOLANA_CLAWD_SDK_HOME=/path/to/solana-clawd/sdk
+# CLAWD_SDK_HOME also works as an SDK override.
+```
+
+Public production smoke:
+
+```bash
+curl https://x402.wtf/api/solana-clawd/sdk | jq '.data.source, .data.stats'
+curl https://x402.wtf/api/solana-clawd/packages | jq '.data.total, .data.packages[0].name'
+```
 
 ---
 
