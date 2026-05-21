@@ -45,6 +45,51 @@ Clawd does not call itself "an AI terminal." It is the **verifiable execution ha
 
 ---
 
+## SDK-First Runtime
+
+The `sdk/` workspace is now a first-class entrypoint for Clawd. It packages the sovereign runtime, TUI operator, TypeScript SDK, wallet helpers, x402 payments, MCP tools, examples, automation, bundled skills, hosted graph metadata, and local install scripts under one harness.
+
+| SDK surface | Path | What it provides |
+| --- | --- | --- |
+| Runtime core | [`sdk/src`](./sdk/src), [`sdk/dist`](./sdk/dist) | Leviathan OODA loop, identity, balances, Metaplex spawn, memory, survival tiers, and x402 service exports |
+| Package workspace | [`sdk/packages`](./sdk/packages) | `@openclawdsolana/clawd`, `clawd-tui`, `clawd-sdk`, `clawd-standalone`, `clawd-wallet`, and `clawd-perps` package surfaces |
+| Install automation | [`sdk/install.sh`](./sdk/install.sh), [`sdk/enter.sh`](./sdk/enter.sh) | One-shot SDK install, global npm surface, local harness checks, and runtime entry |
+| Skills + knowledge | [`sdk/skills`](./sdk/skills), [`sdk/knowledge`](./sdk/knowledge), [`sdk/library`](./sdk/library) | Skill Hub snapshot, local-first agent knowledge, prompt library, MagicBlock, Imperial, DFlow/Phantom, commerce, oracle, and TTS skills |
+| Agent integrations | [`sdk/mcp-server`](./sdk/mcp-server), [`sdk/livekit-agent`](./sdk/livekit-agent), [`sdk/automation`](./sdk/automation) | MCP server, LiveKit/backrooms agent, bootstrap scripts, CI checks, and constitution/runtime automation |
+| Payment rails | [`sdk/x402`](./sdk/x402), [`sdk/pay`](./sdk/pay) | HTTP 402 Solana USDC flow, facilitator defaults, client/server examples, and pay-side references |
+| Examples + assets | [`sdk/examples`](./sdk/examples), [`sdk/assets`](./sdk/assets), [`sdk/characters`](./sdk/characters), [`sdk/goals`](./sdk/goals), [`sdk/data`](./sdk/data) | Nine runnable demos, local assets, character definitions, active goals, and program/token maps |
+| Hosted SDK graph | <https://x402.wtf/sdk> | Public manifest for packages, skills, examples, automation, characters, commands, and integration lanes |
+
+Local SDK install and verification:
+
+```bash
+cd sdk
+bash install.sh
+bash enter.sh
+npm run harness:packages
+npm run skills:sync
+```
+
+Global package surface installed by the SDK scripts:
+
+```bash
+npm install -g @openclawdsolana/clawd @openclawdsolana/clawd-tui @openclawdsolana/clawd-sdk @openclawdsolana/clawd-standalone @openclawdsolana/clawd-wallet @openclawdsolana/clawd-perps clawd-automaton x402.wtf x402agent-nanoclawd-cli
+```
+
+Run the SDK examples:
+
+```bash
+clawd examples list
+clawd examples run ooda
+clawd examples run lobtrader
+clawd examples run x402sol
+clawd examples run wallet
+```
+
+The SDK never publishes local secrets. Public graph data is sanitized metadata; keys, wallet files, RPC credentials, bearer tokens, `.env` files, `node_modules`, and private user skills stay local.
+
+---
+
 ## CLAWD: Cryptographic Layer for Autonomous Work & Decisions
 
 | Layer | State of the art | Clawd delta |
@@ -183,8 +228,14 @@ curl -fsSL https://raw.githubusercontent.com/x402agent/solana-clawd/main/mcp/ins
 # Enter the public backroom
 curl -fsSL https://backrooms.x402.wtf/enter.sh | bash
 
+# Install and enter the SDK harness
+cd sdk && bash install.sh && bash enter.sh
+
 # Install root CLI
 npm install -g solana-clawd && clawd
+
+# Install full SDK npm surface
+npm install -g @openclawdsolana/clawd @openclawdsolana/clawd-tui @openclawdsolana/clawd-sdk @openclawdsolana/clawd-standalone @openclawdsolana/clawd-wallet @openclawdsolana/clawd-perps clawd-automaton x402.wtf x402agent-nanoclawd-cli
 
 # Inspect the hosted SDK graph
 curl https://x402.wtf/api/solana-clawd/sdk | jq '.data.stats'
@@ -210,8 +261,8 @@ The public `x402.wtf` app now indexes this repo and the `sdk/` workspace as a fi
 
 | Surface | URL | Purpose |
 | --- | --- | --- |
-| SDK dashboard | <https://x402.wtf/sdk> | Human view of packages, skills, examples, automation, character files, and integration lanes |
-| SDK manifest | <https://x402.wtf/api/solana-clawd/sdk> | Machine-readable manifest consumed by the dashboard and agent clients |
+| SDK dashboard | <https://x402.wtf/sdk> | Human view of packages, skills, examples, automation, character files, commands, and integration lanes |
+| SDK manifest | <https://x402.wtf/api/solana-clawd/sdk> | Machine-readable manifest consumed by the dashboard, installers, docs, and agent clients |
 | Package map | <https://x402.wtf/api/solana-clawd/packages> | Public package/workspace metadata from `sdk/packages` with hosted fallback data |
 | Source status | <https://x402.wtf/api/solana-clawd/source> | Sanitized source detection and activation map for site/gateway wiring |
 
@@ -229,6 +280,17 @@ Public production smoke:
 curl https://x402.wtf/api/solana-clawd/sdk | jq '.data.source, .data.stats'
 curl https://x402.wtf/api/solana-clawd/packages | jq '.data.total, .data.packages[0].name'
 ```
+
+SDK-local maintenance:
+
+```bash
+npm --prefix sdk run harness:packages
+npm --prefix sdk run skills:sync
+npm --prefix sdk run mcp:build
+npm --prefix sdk run x402:build
+```
+
+The SDK manifest covers the same public-safe lanes exposed in the local tree: [`sdk/packages`](./sdk/packages), [`sdk/skills`](./sdk/skills), [`sdk/examples`](./sdk/examples), [`sdk/automation`](./sdk/automation), [`sdk/characters`](./sdk/characters), [`sdk/mcp-server`](./sdk/mcp-server), [`sdk/livekit-agent`](./sdk/livekit-agent), [`sdk/x402`](./sdk/x402), and [`sdk/pay`](./sdk/pay).
 
 ---
 
