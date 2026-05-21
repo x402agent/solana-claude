@@ -142,6 +142,12 @@ XAI_API_KEY=
 # X402_NETWORK=solana-mainnet
 # X402_MAX_PER_REQUEST=0.10   # $0.10 per request max
 # X402_MAX_SESSION=1.00       # $1.00 session cap
+# X402_FACILITATOR_URL=https://x402.wtf/facilitator
+
+# ── Public discovery URLs (no secrets) ──────────────────────────
+# OPENCLAWD_PUBLIC_BASE_URL=https://solanaclawd.com
+# X402_WTF_BASE_URL=https://x402.wtf
+# OPENCLAWD_SKILL_PATH=      # optional colon-separated extra skill roots
 
 # ── Optional services ──────────────────────────────────────
 # Research API (AutoResearch Wiki examples)

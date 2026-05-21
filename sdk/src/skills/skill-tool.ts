@@ -32,7 +32,8 @@ export interface SkillCallResult {
 const DEFAULT_TIMEOUT_MS = 10 * 60 * 1000;
 
 export async function invokeSkill(skill: LoadedSkill, args: SkillCallArgs): Promise<SkillCallResult> {
-  if (!skill.bin) {
+  const bin = skill.bin;
+  if (!bin) {
     return {
       stdout: '',
       stderr: `Skill ${skill.id} is instruction-only and has no executable bin.`,
@@ -40,10 +41,9 @@ export async function invokeSkill(skill: LoadedSkill, args: SkillCallArgs): Prom
     };
   }
   return new Promise((resolveResult) => {
-    const child = spawn('node', [skill.bin, ...args.argv], {
+    const child = spawn('node', [bin, ...args.argv], {
       cwd: args.cwd || process.cwd(),
       env: { ...process.env, ...(args.env || {}) },
-      stdio: ['ignore', 'pipe', 'pipe'],
     });
 
     let stdout = '';
@@ -52,7 +52,7 @@ export async function invokeSkill(skill: LoadedSkill, args: SkillCallArgs): Prom
 
     child.stdout.on('data', (chunk: Buffer) => { stdout += chunk.toString('utf8'); });
     child.stderr.on('data', (chunk: Buffer) => { stderr += chunk.toString('utf8'); });
-    child.on('exit', (code) => {
+    child.on('exit', (code: number | null) => {
       clearTimeout(timer);
       resolveResult({ stdout, stderr, code: code ?? -1 });
     });
