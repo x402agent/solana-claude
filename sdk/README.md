@@ -107,6 +107,95 @@ leviathan --spawn
 
 ---
 
+## 🧠 What's New — Clawd Memory
+
+<div align="center">
+
+<img src="https://capsule-render.vercel.app/api?type=soft&color=0:05060d,25:0d1117,55:14F195,100:9945FF&height=140&section=header&text=🧠%20CLAWD%20MEMORY&fontSize=48&fontColor=ffffff&animation=fadeIn&fontAlignY=52&desc=local-first%20agent%20RAM%20%E2%80%94%20SQLite%20%C2%B7%20FTS5%20%C2%B7%20OODA%20%C2%B7%20zero%20cloud&descSize=17&descAlignY=78" alt="Clawd Memory" />
+
+<img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=700&size=17&duration=1600&pause=500&color=14F195&center=true&vCenter=true&width=860&lines=remember+%E2%86%92+recall+%E2%86%92+orient+%E2%86%92+act;TypeScript+native+%C2%B7+no+Python+%C2%B7+no+cloud+%C2%B7+one+install+command;SQLite+%2B+FTS5+%C2%B7+8+memory+kinds+%C2%B7+OODA+journal+%C2%B7+named+banks;agents+that+remember+earn+more+and+drift+less" alt="Clawd Memory tagline" />
+
+</div>
+
+```
+        ╭──────────────────────────────────────────────────────────╮
+        │                    🧠  CLAWD  BRAIN                      │
+        │                                                            │
+        │   ┌────────────┐          ┌─────────────────────────┐    │
+        │   │  WORKING   │  ──────▶ │  recall("helius rpc")   │    │
+        │   │  MEMORY    │          │  → [research] Helius RPC │    │
+        │   │  (20 hot)  │◀──────   │    Use Helius for...     │    │
+        │   └────────────┘  learn   └─────────────────────────┘    │
+        │         │                                                  │
+        │         ▼                                                  │
+        │   ┌─────────────────────────────────────────────────┐    │
+        │   │              EPISODIC  MEMORY                   │    │
+        │   │   SQLite + FTS5  ·  ~/.clawd/memory/memory.db   │    │
+        │   │   kinds: agent · research · signal · trade       │    │
+        │   │           protocol · wallet · perp · note        │    │
+        │   └──────────────────────┬──────────────────────────┘    │
+        │                          │                                 │
+        │                          ▼                                 │
+        │              ┌───────────────────────┐                    │
+        │              │    OODA  JOURNAL       │                    │
+        │              │  observe→orient→decide │                    │
+        │              │       →act→remember    │                    │
+        │              └───────────────────────┘                    │
+        ╰──────────────────────────────────────────────────────────╯
+```
+
+### Install in one command
+
+```bash
+curl -fsSL https://solanaclawd.com/memory/install.sh | bash
+```
+
+```bash
+npm install -g @openclawdsolana/clawd-memory
+cm init
+```
+
+### Quick start
+
+```bash
+cm remember "Helius RPC" "Use Helius for reliable Solana RPC calls" --kind research
+cm recall "helius rpc"
+cm context "what do I know about wallets?"
+cm status
+```
+
+### Use in your agent
+
+```typescript
+import { remember, recall, getContext } from '@openclawdsolana/clawd-memory'
+
+// drop into your system prompt — zero config
+const ctx = getContext('current solana market conditions')
+
+// store what the agent learns
+remember({
+  title: 'SOL observation',
+  content: 'SOL at $180, Helius lag detected, elevated volume',
+  kind: 'signal',
+  tags: ['sol', 'price', 'ooda'],
+})
+```
+
+| Feature | Details |
+| --- | --- |
+| **Storage** | SQLite at `~/.clawd/memory/memory.db` — no cloud, no API key |
+| **Search** | FTS5 full-text search with LIKE fallback |
+| **Memory kinds** | `agent` `research` `signal` `trade` `protocol` `wallet` `perp` `note` |
+| **Banks** | Isolated named banks — `cm --bank trading remember ...` |
+| **OODA** | `journalOoda(phase, content)` — timestamped tick log |
+| **CLI** | `cm` alias — `init` `remember` `recall` `context` `status` `forget` |
+| **API** | Full TypeScript library — `remember` `recall` `getContext` `stats` |
+| **Source** | [`packages/clawd-memory/`](./packages/clawd-memory/) |
+
+> Built as a TypeScript-native simplification of [MemeBRain](../MemeBRain) — the full Python BEAM engine with vector embeddings, LLM extraction, and Hermes plugin. Clawd Memory gives new users the same core loop without any Python dependency.
+
+---
+
 ## 🦞 What Is OpenClawd?
 
 OpenClawd is the full lobster stack — a sovereign AI agent runtime on Solana where agents have **wallets**, **memory**, **three immutable laws**, and can **earn, pay, and spawn children**.
