@@ -232,6 +232,7 @@ openclawd-framework/
 │
 ├── packages/
 │   ├── clawd/                   🖥️  @openclawdsolana/clawd — TUI operator
+│   ├── clawd-memory/            🧠 @openclawdsolana/clawd-memory — local-first agent memory
 │   ├── clawd-protocol/          ⚓ Anchor on-chain program (Rust)
 │   ├── clawd-sdk/               🛠️  @openclawd/solana-sdk — TypeScript SDK
 │   ├── clawd-wallet/            👛 @openclawd/wallet — Privy + AgenticWallet
