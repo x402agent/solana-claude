@@ -257,11 +257,15 @@ Secrets stay out of git. Put real Gemini keys, RPC URLs, API keys, and wallet ma
 
 ## Skills Catalog Update
 
-The project-local skills registry now bundles [`skills/magicblock`](./skills/magicblock/SKILL.md), the MagicBlock Ephemeral Rollups development skill. It is also listed in [`skills/README.md`](./skills/README.md), [`skills/catalog.json`](./skills/catalog.json), and [`skills/index.json`](./skills/index.json) for discovery by Codex, Claude-style skill loaders, and the Clawd skill hub.
+The project-local skills registry now bundles [`skills/magicblock`](./skills/magicblock/SKILL.md), the MagicBlock Ephemeral Rollups development skill, plus the ClawdBrowser skill import from `/Users/8bit/Downloads/ClawdBrowser/skills`. These skills are listed in [`skills/README.md`](./skills/README.md), [`skills/catalog.json`](./skills/catalog.json), and [`skills/index.json`](./skills/index.json) for discovery by Codex, Claude-style skill loaders, and the Clawd skill hub.
 
 | Skill | Coverage |
 | --- | --- |
 | `magicblock` | MagicBlock Ephemeral Rollups, delegation/undelegation, dual-connection flows, cranks, VRF, Magic Actions, lamports top-up, private payments, commit sponsorship, and TypeScript/Anchor integration |
+| `imperial*` | Imperial/Phoenix perps routing, execution modes, market/portfolio intel, margin, risk, position management, TP/SL, TWAP, and grid workflows |
+| `oracle`, `sherpa-onnx-tts`, `skill-creator` | One-shot model consultation, offline TTS, and AgentSkill authoring/packaging |
+
+The root one-shot installers now regenerate `skills/catalog.json`; `scripts/setup.sh` already performs this step, and `install.sh` now does the same after the Node workspace is ready.
 
 ---
 

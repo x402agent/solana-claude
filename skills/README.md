@@ -5,15 +5,16 @@ This directory contains 109 active skills. Each listed entry has a top-level `SK
 ## Quick Index
 
 - **AI / Agents**: `coding-agent`, `gemini`, `model-usage`, `openai-image-gen`, `openai-whisper`, `openai-whisper-api`, `oracle`, `sag`, `skill-creator`, `swarm-orchestrator`, `swarm-orchestrator copy`
-- **Clawd Ecosystem**: `openclaw-claude-code-skill-main`
+- **Clawd Ecosystem**: `clawdhub`, `github`, `openclaw-claude-code-skill-main`
 - **Communication**: `bluebubbles`, `discord`, `himalaya`, `imsg`, `slack`, `voice-call`
 - **DevOps / Infrastructure**: `blucli`, `eightctl`, `gateway-node-ops`, `nano-banana-pro`, `openhue`, `tmux`
 - **DFlow / Trading**: `dflow-docs`, `dflow-kalshi-market-data`, `dflow-kalshi-market-scanner`, `dflow-kalshi-portfolio`, `dflow-kalshi-trading`, `dflow-phantom-connect`, `dflow-platform-fees`, `dflow-proof-kyc`, `dflow-spot-trading`, `phantom-wallet-mcp`
+- **Local / Web Services**: `food-order`, `local-places`
 - **Media**: `camsnap`, `canvas`, `gifgrep`, `peekaboo`, `sherpa-onnx-tts`, `songsee`, `sonoscli`, `spotify-player`, `video-frames`
-- **Other**: `bird`, `bird copy`, `clawdex`, `clawdhub`, `dex-screener-scanner`, `food-order`, `github`, `local-places`, `ultrathink-blockchain`, `vulcan`, `vulcan-error-recovery`, `vulcan-execution-modes`, `vulcan-grid-trading`, `vulcan-lot-size-calculator`, `vulcan-margin-operations`, `vulcan-market-intel`, `vulcan-onboarding`, `vulcan-portfolio-intel`, `vulcan-position-management`, `vulcan-quickstart`, `vulcan-risk-management`, `vulcan-skills-index`, `vulcan-ta-strategy`, `vulcan-technical-analysis`, `vulcan-tpsl-management`, `vulcan-trade-execution`, `vulcan-twap-execution`
+- **Other**: `bird`, `bird copy`
 - **Productivity**: `1password`, `apple-notes`, `apple-reminders`, `bear-notes`, `notion`, `obsidian`, `ordercli`, `session-logs`, `things-mac`, `trello`
 - **Pump.fun / Token Launch**: `pumpfun`, `pumpfun-analytics`, `pumpfun-fees`, `pumpfun-launcher`, `pumpfun-trading`
-- **Solana / Blockchain**: `imperial`, `imperial-execution-modes`, `imperial-grid-trading`, `imperial-margin-operations`, `imperial-market-intel`, `imperial-portfolio-intel`, `imperial-position-management`, `imperial-risk-management`, `imperial-skills-index`, `imperial-tpsl-management`, `imperial-trade-execution`, `imperial-twap-execution`, `magicblock`, `solana-clawd`, `solana-clawd-agentic-commerce`, `solana-formal-verification`
+- **Solana / Blockchain**: `clawdex`, `dex-screener-scanner`, `imperial`, `imperial-execution-modes`, `imperial-grid-trading`, `imperial-margin-operations`, `imperial-market-intel`, `imperial-portfolio-intel`, `imperial-position-management`, `imperial-risk-management`, `imperial-skills-index`, `imperial-tpsl-management`, `imperial-trade-execution`, `imperial-twap-execution`, `magicblock`, `solana-clawd`, `solana-clawd-agentic-commerce`, `solana-formal-verification`, `ultrathink-blockchain`, `vulcan`, `vulcan-error-recovery`, `vulcan-execution-modes`, `vulcan-grid-trading`, `vulcan-lot-size-calculator`, `vulcan-margin-operations`, `vulcan-market-intel`, `vulcan-onboarding`, `vulcan-portfolio-intel`, `vulcan-position-management`, `vulcan-quickstart`, `vulcan-risk-management`, `vulcan-skills-index`, `vulcan-ta-strategy`, `vulcan-technical-analysis`, `vulcan-tpsl-management`, `vulcan-trade-execution`, `vulcan-twap-execution`
 - **Web / Research**: `blogwatcher`, `gog`, `goplaces`, `mcporter`, `nano-pdf`, `summarize`, `wacli`, `weather`
 
 ## Full Catalog
@@ -38,6 +39,8 @@ This directory contains 109 active skills. Each listed entry has a top-level `SK
 
 | Skill | Name | Description |
 |---|---|---|
+| [`clawdhub`](clawdhub/SKILL.md) | clawdhub | Use the ClawdHub CLI to search, install, update, and publish agent skills from clawdhub.com. Use when you need to fetch new skills on the fly, sync installed skills to latest or a specific version, or publish new/updated skill folders with the npm-installed clawdhub CLI. |
+| [`github`](github/SKILL.md) | github | Interact with GitHub using the `gh` CLI. Use `gh issue`, `gh pr`, `gh run`, and `gh api` for issues, PRs, CI runs, and advanced queries. |
 | [`openclaw-claude-code-skill-main`](openclaw-claude-code-skill-main/SKILL.md) | claude-code-skill | Control Claude Code via MCP protocol. Trigger with "plan" to write a precise execution plan then feed it to Claude Code. Also supports direct commands, persistent sessions, agent teams, and advanced tool control. |
 
 ### Communication
@@ -77,6 +80,13 @@ This directory contains 109 active skills. Each listed entry has a top-level `SK
 | [`dflow-spot-trading`](dflow-spot-trading/SKILL.md) | dflow-spot-trading | Swap any pair of Solana tokens via DFlow. Use when the user wants to trade, swap, or convert tokens on Solana, get a price quote, build a swap UI, tune priority fees so a swap lands under congestion, or build a gasless / sponsored swap where the app pays fees. Covers both the `dflow` CLI and the DFlow Trading API. Do NOT use for Kalshi prediction-market YES/NO trades or builder-side platform fees. |
 | [`phantom-wallet-mcp`](phantom-wallet-mcp/SKILL.md) | phantom-wallet-mcp | > |
 
+### Local / Web Services
+
+| Skill | Name | Description |
+|---|---|---|
+| [`food-order`](food-order/SKILL.md) | food-order | Reorder Foodora orders + track ETA/status with ordercli. Never confirm without explicit user approval. Triggers: order food, reorder, track ETA. |
+| [`local-places`](local-places/SKILL.md) | local-places | Search for places (restaurants, cafes, etc.) via Google Places API proxy on localhost. |
+
 ### Media
 
 | Skill | Name | Description |
@@ -97,31 +107,6 @@ This directory contains 109 active skills. Each listed entry has a top-level `SK
 |---|---|---|
 | [`bird`](bird/SKILL.md) | bird | X/Twitter CLI for reading, searching, posting, and engagement via cookies. |
 | [`bird copy`](bird%20copy/SKILL.md) | bird | X/Twitter CLI for reading, searching, posting, and engagement via cookies. |
-| [`clawdex`](clawdex/SKILL.md) | clawdex | Clawdex — dual-engine coding agent. Claude Code (reasoning + planning) + OpenAI Codex (fast execution) + Browser Use boxes (web research) + Upstash compute boxes (isolated sandboxes). |
-| [`clawdhub`](clawdhub/SKILL.md) | clawdhub | Use the ClawdHub CLI to search, install, update, and publish agent skills from clawdhub.com. Use when you need to fetch new skills on the fly, sync installed skills to latest or a specific version, or publish new/updated skill folders with the npm-installed clawdhub CLI. |
-| [`dex-screener-scanner`](dex-screener-scanner/SKILL.md) | dex-screener-scanner | Automate DexScreener Solana token discovery and screening via browser automation. Navigate dexscreener.com/solana, scrape real-time token listings, filter by volume/liquidity/age/holders, and identify the best opportunities. Triggers: scan dexscreener, find new tokens, find trending tokens, screen Solana tokens, best tokens on Solana, dexscreener scanner. |
-| [`food-order`](food-order/SKILL.md) | food-order | Reorder Foodora orders + track ETA/status with ordercli. Never confirm without explicit user approval. Triggers: order food, reorder, track ETA. |
-| [`github`](github/SKILL.md) | github | Interact with GitHub using the `gh` CLI. Use `gh issue`, `gh pr`, `gh run`, and `gh api` for issues, PRs, CI runs, and advanced queries. |
-| [`local-places`](local-places/SKILL.md) | local-places | Search for places (restaurants, cafes, etc.) via Google Places API proxy on localhost. |
-| [`ultrathink-blockchain`](ultrathink-blockchain/SKILL.md) | ultrathink-blockchain | Deep-reasoning Solana and blockchain engineering skill. Use for production blockchain development, on-chain programs, Solana transaction flows, DeFi integrations, token bots, swaps, Anchor/Rust programs, RPC handling, Helius/Jito execution, MEV analysis, PDA/account validation, retry logic, simulations, monitoring, or security hardening. |
-| [`vulcan`](vulcan/SKILL.md) | vulcan | Entry-point skill for Phoenix perpetuals through Vulcan/Rise SDK inside solana-clawd. Use before answering or acting on Vulcan, Phoenix DEX, Solana perps, paper trading, live trading, margin, TP/SL, TWAP, grid, TA strategies, or perps agent setup. |
-| [`vulcan-error-recovery`](vulcan-error-recovery/SKILL.md) | vulcan-error-recovery | Error category routing and recovery for Vulcan/Phoenix perps. Use on failed CLI/MCP calls, tx failures, auth/config/API/network/rate-limit errors, and strategy recovery. |
-| [`vulcan-execution-modes`](vulcan-execution-modes/SKILL.md) | vulcan-execution-modes | Canonical Vulcan execution mode taxonomy: Observe, Paper, Dry-Run, Confirm-Each, Auto-Execute. Use before launching strategies or live-capable perps flows. |
-| [`vulcan-grid-trading`](vulcan-grid-trading/SKILL.md) | vulcan-grid-trading | Grid trading with layered limit orders on Phoenix perpetuals. Use for grid setup, monitoring, pausing/stopping, and live/paper grid strategy safety. |
-| [`vulcan-lot-size-calculator`](vulcan-lot-size-calculator/SKILL.md) | vulcan-lot-size-calculator | Convert desired token/notional amounts to Phoenix base lots. Use whenever a Vulcan command requires size/base lots. |
-| [`vulcan-margin-operations`](vulcan-margin-operations/SKILL.md) | vulcan-margin-operations | Vulcan/Phoenix collateral, deposits, withdrawals, transfers, isolated margin, leverage tiers, and margin health. |
-| [`vulcan-market-intel`](vulcan-market-intel/SKILL.md) | vulcan-market-intel | Phoenix market data, tickers, orderbooks, candles, funding, spreads, liquidity, and pre-trade market context. |
-| [`vulcan-onboarding`](vulcan-onboarding/SKILL.md) | vulcan-onboarding | First-run Vulcan setup for paper trading, wallet, registration, collateral, MCP skills, and live readiness. |
-| [`vulcan-portfolio-intel`](vulcan-portfolio-intel/SKILL.md) | vulcan-portfolio-intel | Phoenix portfolio snapshots: margin, positions, resting orders, funding exposure, PnL, and account reporting. |
-| [`vulcan-position-management`](vulcan-position-management/SKILL.md) | vulcan-position-management | List, show, close, reduce Phoenix positions and attach/cancel TP/SL. |
-| [`vulcan-quickstart`](vulcan-quickstart/SKILL.md) | vulcan-quickstart | Five-minute Vulcan quickstart for install, health check, first market read, and first paper trade. |
-| [`vulcan-risk-management`](vulcan-risk-management/SKILL.md) | vulcan-risk-management | Risk checks for Phoenix perps: margin health, leverage tiers, liquidation distance, notional caps, exposure, stops, and strategy guardrails. |
-| [`vulcan-skills-index`](vulcan-skills-index/SKILL.md) | vulcan-skills-index | Index for the bundled Vulcan skill pack exposed through solana-clawd. Use to discover the correct focused Vulcan skill. |
-| [`vulcan-ta-strategy`](vulcan-ta-strategy/SKILL.md) | vulcan-ta-strategy | Technical-analysis-driven Phoenix strategy runner using declarative rules and Vulcan strategy ledgers. |
-| [`vulcan-technical-analysis`](vulcan-technical-analysis/SKILL.md) | vulcan-technical-analysis | Technical indicators and trigger evaluation for Phoenix markets: RSI, MACD, BBands, ATR, ADX, VWAP, Stoch, SMA, EMA. |
-| [`vulcan-tpsl-management`](vulcan-tpsl-management/SKILL.md) | vulcan-tpsl-management | Take-profit and stop-loss setup, cancellation, laddered exits, position-side rules, and verification for Vulcan/Phoenix. |
-| [`vulcan-trade-execution`](vulcan-trade-execution/SKILL.md) | vulcan-trade-execution | Safe Phoenix order execution via Vulcan: pre-trade checks, market/limit orders, paper/dry-run/live gates, and post-trade verification. |
-| [`vulcan-twap-execution`](vulcan-twap-execution/SKILL.md) | vulcan-twap-execution | TWAP strategy execution on Phoenix perps using Vulcan's first-class runner, tick logs, ledgers, status/monitor/finalize controls. |
 
 ### Productivity
 
@@ -152,6 +137,8 @@ This directory contains 109 active skills. Each listed entry has a top-level `SK
 
 | Skill | Name | Description |
 |---|---|---|
+| [`clawdex`](clawdex/SKILL.md) | clawdex | Clawdex — dual-engine coding agent. Claude Code (reasoning + planning) + OpenAI Codex (fast execution) + Browser Use boxes (web research) + Upstash compute boxes (isolated sandboxes). |
+| [`dex-screener-scanner`](dex-screener-scanner/SKILL.md) | dex-screener-scanner | Automate DexScreener Solana token discovery and screening via browser automation. Navigate dexscreener.com/solana, scrape real-time token listings, filter by volume/liquidity/age/holders, and identify the best opportunities. Triggers: scan dexscreener, find new tokens, find trending tokens, screen Solana tokens, best tokens on Solana, dexscreener scanner. |
 | [`imperial`](imperial/SKILL.md) | imperial | Entry-point skill for Imperial perpetual routing on Solana. Use before answering or acting on Imperial router flows, Phoenix-routed perps, profile funding, market/portfolio intel, risk checks, TP/SL, TWAP, grid, or Telegram bot trading workflows. |
 | [`imperial-execution-modes`](imperial-execution-modes/SKILL.md) | imperial-execution-modes | Execution-mode taxonomy for Imperial router workflows in this repo: observe, route-check, paper/spec, live single-shot, and external durable runner. |
 | [`imperial-grid-trading`](imperial-grid-trading/SKILL.md) | imperial-grid-trading | Grid strategy design for Imperial/Phoenix perps: ladder layout, venue pinning, replacement logic, and durable-runner boundaries. |
@@ -168,6 +155,25 @@ This directory contains 109 active skills. Each listed entry has a top-level `SK
 | [`solana-clawd`](solana-clawd/SKILL.md) | solana-clawd | One-shot setup and operation guide for the solana-clawd agentic engine. Use when: cloning the repo, setting up MCP tools, starting the Telegram bot, deploying to Fly.io/Netlify, hatching blockchain buddies, running OODA loops, configuring voice mode (ElevenLabs + Grok), minting Metaplex agents, managing the vault, running the worker swarm, or contributing to the project. Covers all 31 MCP tools, 18 buddy species, 9 spinners, 60+ Telegram commands, 95 skills, and the full repo structure. |
 | [`solana-clawd-agentic-commerce`](solana-clawd-agentic-commerce/SKILL.md) | solana-clawd-agentic-commerce | Build and operate Solana CLAWD agents that spend through Pay CLI, expose paid stores, mint Metaplex-readable identities, and launch Genesis agent tokens. |
 | [`solana-formal-verification`](solana-formal-verification/SKILL.md) | qedgen | Formally verify programs by writing Lean 4 proofs. Trigger this skill whenever the user wants to formally verify code, generate Lean 4 proofs, prove properties about algorithms or smart contracts, verify invariants, convert program logic into formal specifications, or anything involving Lean 4 and formal verification. Also trigger when the user mentions "qedgen", "lean proof", "formal proof", "verify my code", "prove correctness", "formal verification", or wants mathematical guarantees about their implementation. |
+| [`ultrathink-blockchain`](ultrathink-blockchain/SKILL.md) | ultrathink-blockchain | Deep-reasoning Solana and blockchain engineering skill. Use for production blockchain development, on-chain programs, Solana transaction flows, DeFi integrations, token bots, swaps, Anchor/Rust programs, RPC handling, Helius/Jito execution, MEV analysis, PDA/account validation, retry logic, simulations, monitoring, or security hardening. |
+| [`vulcan`](vulcan/SKILL.md) | vulcan | Entry-point skill for Phoenix perpetuals through Vulcan/Rise SDK inside solana-clawd. Use before answering or acting on Vulcan, Phoenix DEX, Solana perps, paper trading, live trading, margin, TP/SL, TWAP, grid, TA strategies, or perps agent setup. |
+| [`vulcan-error-recovery`](vulcan-error-recovery/SKILL.md) | vulcan-error-recovery | Error category routing and recovery for Vulcan/Phoenix perps. Use on failed CLI/MCP calls, tx failures, auth/config/API/network/rate-limit errors, and strategy recovery. |
+| [`vulcan-execution-modes`](vulcan-execution-modes/SKILL.md) | vulcan-execution-modes | Canonical Vulcan execution mode taxonomy: Observe, Paper, Dry-Run, Confirm-Each, Auto-Execute. Use before launching strategies or live-capable perps flows. |
+| [`vulcan-grid-trading`](vulcan-grid-trading/SKILL.md) | vulcan-grid-trading | Grid trading with layered limit orders on Phoenix perpetuals. Use for grid setup, monitoring, pausing/stopping, and live/paper grid strategy safety. |
+| [`vulcan-lot-size-calculator`](vulcan-lot-size-calculator/SKILL.md) | vulcan-lot-size-calculator | Convert desired token/notional amounts to Phoenix base lots. Use whenever a Vulcan command requires size/base lots. |
+| [`vulcan-margin-operations`](vulcan-margin-operations/SKILL.md) | vulcan-margin-operations | Vulcan/Phoenix collateral, deposits, withdrawals, transfers, isolated margin, leverage tiers, and margin health. |
+| [`vulcan-market-intel`](vulcan-market-intel/SKILL.md) | vulcan-market-intel | Phoenix market data, tickers, orderbooks, candles, funding, spreads, liquidity, and pre-trade market context. |
+| [`vulcan-onboarding`](vulcan-onboarding/SKILL.md) | vulcan-onboarding | First-run Vulcan setup for paper trading, wallet, registration, collateral, MCP skills, and live readiness. |
+| [`vulcan-portfolio-intel`](vulcan-portfolio-intel/SKILL.md) | vulcan-portfolio-intel | Phoenix portfolio snapshots: margin, positions, resting orders, funding exposure, PnL, and account reporting. |
+| [`vulcan-position-management`](vulcan-position-management/SKILL.md) | vulcan-position-management | List, show, close, reduce Phoenix positions and attach/cancel TP/SL. |
+| [`vulcan-quickstart`](vulcan-quickstart/SKILL.md) | vulcan-quickstart | Five-minute Vulcan quickstart for install, health check, first market read, and first paper trade. |
+| [`vulcan-risk-management`](vulcan-risk-management/SKILL.md) | vulcan-risk-management | Risk checks for Phoenix perps: margin health, leverage tiers, liquidation distance, notional caps, exposure, stops, and strategy guardrails. |
+| [`vulcan-skills-index`](vulcan-skills-index/SKILL.md) | vulcan-skills-index | Index for the bundled Vulcan skill pack exposed through solana-clawd. Use to discover the correct focused Vulcan skill. |
+| [`vulcan-ta-strategy`](vulcan-ta-strategy/SKILL.md) | vulcan-ta-strategy | Technical-analysis-driven Phoenix strategy runner using declarative rules and Vulcan strategy ledgers. |
+| [`vulcan-technical-analysis`](vulcan-technical-analysis/SKILL.md) | vulcan-technical-analysis | Technical indicators and trigger evaluation for Phoenix markets: RSI, MACD, BBands, ATR, ADX, VWAP, Stoch, SMA, EMA. |
+| [`vulcan-tpsl-management`](vulcan-tpsl-management/SKILL.md) | vulcan-tpsl-management | Take-profit and stop-loss setup, cancellation, laddered exits, position-side rules, and verification for Vulcan/Phoenix. |
+| [`vulcan-trade-execution`](vulcan-trade-execution/SKILL.md) | vulcan-trade-execution | Safe Phoenix order execution via Vulcan: pre-trade checks, market/limit orders, paper/dry-run/live gates, and post-trade verification. |
+| [`vulcan-twap-execution`](vulcan-twap-execution/SKILL.md) | vulcan-twap-execution | TWAP strategy execution on Phoenix perps using Vulcan's first-class runner, tick logs, ledgers, status/monitor/finalize controls. |
 
 ### Web / Research
 

@@ -66,6 +66,18 @@
     "category": "AI / Agents"
   },
   {
+    "slug": "clawdhub",
+    "name": "clawdhub",
+    "description": "Use the ClawdHub CLI to search, install, update, and publish agent skills from clawdhub.com. Use when you need to fetch new skills on the fly, sync installed skills to latest or a specific version, or publish new/updated skill folders with the npm-installed clawdhub CLI.",
+    "category": "Clawd Ecosystem"
+  },
+  {
+    "slug": "github",
+    "name": "github",
+    "description": "Interact with GitHub using the `gh` CLI. Use `gh issue`, `gh pr`, `gh run`, and `gh api` for issues, PRs, CI runs, and advanced queries.",
+    "category": "Clawd Ecosystem"
+  },
+  {
     "slug": "openclaw-claude-code-skill-main",
     "name": "claude-code-skill",
     "description": "Control Claude Code via MCP protocol. Trigger with \"plan\" to write a precise execution plan then feed it to Claude Code. Also supports direct commands, persistent sessions, agent teams, and advanced tool control.",
@@ -204,6 +216,18 @@
     "category": "DFlow / Trading"
   },
   {
+    "slug": "food-order",
+    "name": "food-order",
+    "description": "Reorder Foodora orders + track ETA/status with ordercli. Never confirm without explicit user approval. Triggers: order food, reorder, track ETA.",
+    "category": "Local / Web Services"
+  },
+  {
+    "slug": "local-places",
+    "name": "local-places",
+    "description": "Search for places (restaurants, cafes, etc.) via Google Places API proxy on localhost.",
+    "category": "Local / Web Services"
+  },
+  {
     "slug": "camsnap",
     "name": "camsnap",
     "description": "Capture frames or clips from RTSP/ONVIF cameras.",
@@ -270,45 +294,9 @@
     "category": "Other"
   },
   {
-    "slug": "clawdex",
-    "name": "clawdex",
-    "description": "Clawdex — dual-engine coding agent. Claude Code (reasoning + planning) + OpenAI Codex (fast execution) + Browser Use boxes (web research) + Upstash compute boxes (isolated sandboxes).",
-    "category": "Other"
-  },
-  {
-    "slug": "clawdhub",
-    "name": "clawdhub",
-    "description": "Use the ClawdHub CLI to search, install, update, and publish agent skills from clawdhub.com. Use when you need to fetch new skills on the fly, sync installed skills to latest or a specific version, or publish new/updated skill folders with the npm-installed clawdhub CLI.",
-    "category": "Other"
-  },
-  {
-    "slug": "dex-screener-scanner",
-    "name": "dex-screener-scanner",
-    "description": "Automate DexScreener Solana token discovery and screening via browser automation. Navigate dexscreener.com/solana, scrape real-time token listings, filter by volume/liquidity/age/holders, and identify the best opportunities. Triggers: scan dexscreener, find new tokens, find trending tokens, screen Solana tokens, best tokens on Solana, dexscreener scanner.",
-    "category": "Other"
-  },
-  {
-    "slug": "food-order",
-    "name": "food-order",
-    "description": "Reorder Foodora orders + track ETA/status with ordercli. Never confirm without explicit user approval. Triggers: order food, reorder, track ETA.",
-    "category": "Other"
-  },
-  {
-    "slug": "github",
-    "name": "github",
-    "description": "Interact with GitHub using the `gh` CLI. Use `gh issue`, `gh pr`, `gh run`, and `gh api` for issues, PRs, CI runs, and advanced queries.",
-    "category": "Other"
-  },
-  {
-    "slug": "local-places",
-    "name": "local-places",
-    "description": "Search for places (restaurants, cafes, etc.) via Google Places API proxy on localhost.",
-    "category": "Other"
-  },
-  {
     "slug": "README",
     "name": "Skills",
-    "description": "This directory contains 94 active skills. Each listed entry has a top-level `SKILL.md` under `skills/<slug>/`.",
+    "description": "This directory contains 109 active skills. Each listed entry has a top-level `SKILL.md` under `skills/<slug>/`.",
     "category": "Other"
   },
   {
@@ -321,120 +309,6 @@
     "slug": "SUBMIT",
     "name": "Submitting a Skill to the Clawd Skill Hub",
     "description": "Any Solana agent or human can submit a skill, plugin, MCP server, or agent.\nEvery submission passes a three-layer formal verification gate before it appears\nin the hub and receives a Solana Attestatio",
-    "category": "Other"
-  },
-  {
-    "slug": "ultrathink-blockchain",
-    "name": "ultrathink-blockchain",
-    "description": "Deep-reasoning Solana and blockchain engineering skill. Use for production blockchain development, on-chain programs, Solana transaction flows, DeFi integrations, token bots, swaps, Anchor/Rust programs, RPC handling, Helius/Jito execution, MEV analysis, PDA/account validation, retry logic, simulations, monitoring, or security hardening.",
-    "category": "Other"
-  },
-  {
-    "slug": "vulcan",
-    "name": "vulcan",
-    "description": "Entry-point skill for Phoenix perpetuals through Vulcan/Rise SDK inside solana-clawd. Use before answering or acting on Vulcan, Phoenix DEX, Solana perps, paper trading, live trading, margin, TP/SL, TWAP, grid, TA strategies, or perps agent setup.",
-    "category": "Other"
-  },
-  {
-    "slug": "vulcan-error-recovery",
-    "name": "vulcan-error-recovery",
-    "description": "Error category routing and recovery for Vulcan/Phoenix perps. Use on failed CLI/MCP calls, tx failures, auth/config/API/network/rate-limit errors, and strategy recovery.",
-    "category": "Other"
-  },
-  {
-    "slug": "vulcan-execution-modes",
-    "name": "vulcan-execution-modes",
-    "description": "Canonical Vulcan execution mode taxonomy: Observe, Paper, Dry-Run, Confirm-Each, Auto-Execute. Use before launching strategies or live-capable perps flows.",
-    "category": "Other"
-  },
-  {
-    "slug": "vulcan-grid-trading",
-    "name": "vulcan-grid-trading",
-    "description": "Grid trading with layered limit orders on Phoenix perpetuals. Use for grid setup, monitoring, pausing/stopping, and live/paper grid strategy safety.",
-    "category": "Other"
-  },
-  {
-    "slug": "vulcan-lot-size-calculator",
-    "name": "vulcan-lot-size-calculator",
-    "description": "Convert desired token/notional amounts to Phoenix base lots. Use whenever a Vulcan command requires size/base lots.",
-    "category": "Other"
-  },
-  {
-    "slug": "vulcan-margin-operations",
-    "name": "vulcan-margin-operations",
-    "description": "Vulcan/Phoenix collateral, deposits, withdrawals, transfers, isolated margin, leverage tiers, and margin health.",
-    "category": "Other"
-  },
-  {
-    "slug": "vulcan-market-intel",
-    "name": "vulcan-market-intel",
-    "description": "Phoenix market data, tickers, orderbooks, candles, funding, spreads, liquidity, and pre-trade market context.",
-    "category": "Other"
-  },
-  {
-    "slug": "vulcan-onboarding",
-    "name": "vulcan-onboarding",
-    "description": "First-run Vulcan setup for paper trading, wallet, registration, collateral, MCP skills, and live readiness.",
-    "category": "Other"
-  },
-  {
-    "slug": "vulcan-portfolio-intel",
-    "name": "vulcan-portfolio-intel",
-    "description": "Phoenix portfolio snapshots: margin, positions, resting orders, funding exposure, PnL, and account reporting.",
-    "category": "Other"
-  },
-  {
-    "slug": "vulcan-position-management",
-    "name": "vulcan-position-management",
-    "description": "List, show, close, reduce Phoenix positions and attach/cancel TP/SL.",
-    "category": "Other"
-  },
-  {
-    "slug": "vulcan-quickstart",
-    "name": "vulcan-quickstart",
-    "description": "Five-minute Vulcan quickstart for install, health check, first market read, and first paper trade.",
-    "category": "Other"
-  },
-  {
-    "slug": "vulcan-risk-management",
-    "name": "vulcan-risk-management",
-    "description": "Risk checks for Phoenix perps: margin health, leverage tiers, liquidation distance, notional caps, exposure, stops, and strategy guardrails.",
-    "category": "Other"
-  },
-  {
-    "slug": "vulcan-skills-index",
-    "name": "vulcan-skills-index",
-    "description": "Index for the bundled Vulcan skill pack exposed through solana-clawd. Use to discover the correct focused Vulcan skill.",
-    "category": "Other"
-  },
-  {
-    "slug": "vulcan-ta-strategy",
-    "name": "vulcan-ta-strategy",
-    "description": "Technical-analysis-driven Phoenix strategy runner using declarative rules and Vulcan strategy ledgers.",
-    "category": "Other"
-  },
-  {
-    "slug": "vulcan-technical-analysis",
-    "name": "vulcan-technical-analysis",
-    "description": "Technical indicators and trigger evaluation for Phoenix markets: RSI, MACD, BBands, ATR, ADX, VWAP, Stoch, SMA, EMA.",
-    "category": "Other"
-  },
-  {
-    "slug": "vulcan-tpsl-management",
-    "name": "vulcan-tpsl-management",
-    "description": "Take-profit and stop-loss setup, cancellation, laddered exits, position-side rules, and verification for Vulcan/Phoenix.",
-    "category": "Other"
-  },
-  {
-    "slug": "vulcan-trade-execution",
-    "name": "vulcan-trade-execution",
-    "description": "Safe Phoenix order execution via Vulcan: pre-trade checks, market/limit orders, paper/dry-run/live gates, and post-trade verification.",
-    "category": "Other"
-  },
-  {
-    "slug": "vulcan-twap-execution",
-    "name": "vulcan-twap-execution",
-    "description": "TWAP strategy execution on Phoenix perps using Vulcan's first-class runner, tick logs, ledgers, status/monitor/finalize controls.",
     "category": "Other"
   },
   {
@@ -526,6 +400,18 @@
     "name": "PumpFun Trading",
     "description": "Buy and sell tokens on Pump.fun bonding curves and AMM pools",
     "category": "Pump.fun / Token Launch"
+  },
+  {
+    "slug": "clawdex",
+    "name": "clawdex",
+    "description": "Clawdex — dual-engine coding agent. Claude Code (reasoning + planning) + OpenAI Codex (fast execution) + Browser Use boxes (web research) + Upstash compute boxes (isolated sandboxes).",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "dex-screener-scanner",
+    "name": "dex-screener-scanner",
+    "description": "Automate DexScreener Solana token discovery and screening via browser automation. Navigate dexscreener.com/solana, scrape real-time token listings, filter by volume/liquidity/age/holders, and identify the best opportunities. Triggers: scan dexscreener, find new tokens, find trending tokens, screen Solana tokens, best tokens on Solana, dexscreener scanner.",
+    "category": "Solana / Blockchain"
   },
   {
     "slug": "imperial",
@@ -627,6 +513,120 @@
     "slug": "solanaos",
     "name": "solanaos",
     "description": ">",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "ultrathink-blockchain",
+    "name": "ultrathink-blockchain",
+    "description": "Deep-reasoning Solana and blockchain engineering skill. Use for production blockchain development, on-chain programs, Solana transaction flows, DeFi integrations, token bots, swaps, Anchor/Rust programs, RPC handling, Helius/Jito execution, MEV analysis, PDA/account validation, retry logic, simulations, monitoring, or security hardening.",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "vulcan",
+    "name": "vulcan",
+    "description": "Entry-point skill for Phoenix perpetuals through Vulcan/Rise SDK inside solana-clawd. Use before answering or acting on Vulcan, Phoenix DEX, Solana perps, paper trading, live trading, margin, TP/SL, TWAP, grid, TA strategies, or perps agent setup.",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "vulcan-error-recovery",
+    "name": "vulcan-error-recovery",
+    "description": "Error category routing and recovery for Vulcan/Phoenix perps. Use on failed CLI/MCP calls, tx failures, auth/config/API/network/rate-limit errors, and strategy recovery.",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "vulcan-execution-modes",
+    "name": "vulcan-execution-modes",
+    "description": "Canonical Vulcan execution mode taxonomy: Observe, Paper, Dry-Run, Confirm-Each, Auto-Execute. Use before launching strategies or live-capable perps flows.",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "vulcan-grid-trading",
+    "name": "vulcan-grid-trading",
+    "description": "Grid trading with layered limit orders on Phoenix perpetuals. Use for grid setup, monitoring, pausing/stopping, and live/paper grid strategy safety.",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "vulcan-lot-size-calculator",
+    "name": "vulcan-lot-size-calculator",
+    "description": "Convert desired token/notional amounts to Phoenix base lots. Use whenever a Vulcan command requires size/base lots.",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "vulcan-margin-operations",
+    "name": "vulcan-margin-operations",
+    "description": "Vulcan/Phoenix collateral, deposits, withdrawals, transfers, isolated margin, leverage tiers, and margin health.",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "vulcan-market-intel",
+    "name": "vulcan-market-intel",
+    "description": "Phoenix market data, tickers, orderbooks, candles, funding, spreads, liquidity, and pre-trade market context.",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "vulcan-onboarding",
+    "name": "vulcan-onboarding",
+    "description": "First-run Vulcan setup for paper trading, wallet, registration, collateral, MCP skills, and live readiness.",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "vulcan-portfolio-intel",
+    "name": "vulcan-portfolio-intel",
+    "description": "Phoenix portfolio snapshots: margin, positions, resting orders, funding exposure, PnL, and account reporting.",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "vulcan-position-management",
+    "name": "vulcan-position-management",
+    "description": "List, show, close, reduce Phoenix positions and attach/cancel TP/SL.",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "vulcan-quickstart",
+    "name": "vulcan-quickstart",
+    "description": "Five-minute Vulcan quickstart for install, health check, first market read, and first paper trade.",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "vulcan-risk-management",
+    "name": "vulcan-risk-management",
+    "description": "Risk checks for Phoenix perps: margin health, leverage tiers, liquidation distance, notional caps, exposure, stops, and strategy guardrails.",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "vulcan-skills-index",
+    "name": "vulcan-skills-index",
+    "description": "Index for the bundled Vulcan skill pack exposed through solana-clawd. Use to discover the correct focused Vulcan skill.",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "vulcan-ta-strategy",
+    "name": "vulcan-ta-strategy",
+    "description": "Technical-analysis-driven Phoenix strategy runner using declarative rules and Vulcan strategy ledgers.",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "vulcan-technical-analysis",
+    "name": "vulcan-technical-analysis",
+    "description": "Technical indicators and trigger evaluation for Phoenix markets: RSI, MACD, BBands, ATR, ADX, VWAP, Stoch, SMA, EMA.",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "vulcan-tpsl-management",
+    "name": "vulcan-tpsl-management",
+    "description": "Take-profit and stop-loss setup, cancellation, laddered exits, position-side rules, and verification for Vulcan/Phoenix.",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "vulcan-trade-execution",
+    "name": "vulcan-trade-execution",
+    "description": "Safe Phoenix order execution via Vulcan: pre-trade checks, market/limit orders, paper/dry-run/live gates, and post-trade verification.",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "vulcan-twap-execution",
+    "name": "vulcan-twap-execution",
+    "description": "TWAP strategy execution on Phoenix perps using Vulcan's first-class runner, tick logs, ledgers, status/monitor/finalize controls.",
     "category": "Solana / Blockchain"
   },
   {

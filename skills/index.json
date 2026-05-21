@@ -1,7 +1,7 @@
 {
   "$schema": "https://solanaclawd.com/schemas/skill-hub.v1.json",
   "apiVersion": "1.0",
-  "generatedAt": "2026-05-21T18:18:22.341Z",
+  "generatedAt": "2026-05-21T18:20:01.132Z",
   "hub": {
     "gallery": "https://x402.wtf/skills",
     "api": "https://x402.wtf/api/skills",
@@ -38,15 +38,16 @@
     "pendingVerification": 113,
     "byCategory": {
       "AI / Agents": 11,
-      "Clawd Ecosystem": 1,
+      "Clawd Ecosystem": 3,
       "Communication": 6,
       "DevOps / Infrastructure": 6,
       "DFlow / Trading": 10,
+      "Local / Web Services": 2,
       "Media": 9,
-      "Other": 30,
+      "Other": 5,
       "Productivity": 10,
       "Pump.fun / Token Launch": 5,
-      "Solana / Blockchain": 17,
+      "Solana / Blockchain": 38,
       "Web / Research": 8
     }
   },
@@ -270,6 +271,46 @@
         "ai-agents",
         "swarm",
         "orchestrator"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "clawdhub",
+      "name": "clawdhub",
+      "description": "Use the ClawdHub CLI to search, install, update, and publish agent skills from clawdhub.com. Use when you need to fetch new skills on the fly, sync installed skills to latest or a specific version, or publish new/updated skill folders with the npm-installed clawdhub CLI.",
+      "category": "Clawd Ecosystem",
+      "path": "clawdhub/SKILL.md",
+      "url": "https://x402.wtf/api/skills/clawdhub",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/clawdhub",
+      "tags": [
+        "other",
+        "clawdhub"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "github",
+      "name": "github",
+      "description": "Interact with GitHub using the `gh` CLI. Use `gh issue`, `gh pr`, `gh run`, and `gh api` for issues, PRs, CI runs, and advanced queries.",
+      "category": "Clawd Ecosystem",
+      "path": "github/SKILL.md",
+      "url": "https://x402.wtf/api/skills/github",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/github",
+      "tags": [
+        "other",
+        "github"
       ],
       "requiredEnv": [],
       "attestation": {
@@ -769,6 +810,48 @@
       }
     },
     {
+      "skillId": "food-order",
+      "name": "food-order",
+      "description": "Reorder Foodora orders + track ETA/status with ordercli. Never confirm without explicit user approval. Triggers: order food, reorder, track ETA.",
+      "category": "Local / Web Services",
+      "path": "food-order/SKILL.md",
+      "url": "https://x402.wtf/api/skills/food-order",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/food-order",
+      "tags": [
+        "other",
+        "food",
+        "order"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "local-places",
+      "name": "local-places",
+      "description": "Search for places (restaurants, cafes, etc.) via Google Places API proxy on localhost.",
+      "category": "Local / Web Services",
+      "path": "local-places/SKILL.md",
+      "url": "https://x402.wtf/api/skills/local-places",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/local-places",
+      "tags": [
+        "other",
+        "local",
+        "places"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
       "skillId": "camsnap",
       "name": "camsnap",
       "description": "Capture frames or clips from RTSP/ONVIF cameras.",
@@ -993,135 +1076,11 @@
       }
     },
     {
-      "skillId": "clawdex",
-      "name": "clawdex",
-      "description": "Clawdex — dual-engine coding agent. Claude Code (reasoning + planning) + OpenAI Codex (fast execution) + Browser Use boxes (web research) + Upstash compute boxes (isolated sandboxes).",
-      "category": "Other",
-      "path": "clawdex/SKILL.md",
-      "url": "https://x402.wtf/api/skills/clawdex",
-      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/clawdex",
-      "tags": [
-        "other",
-        "clawdex"
-      ],
-      "requiredEnv": [],
-      "attestation": {
-        "status": "pending",
-        "isFormallyVerified": false,
-        "attestationPda": null,
-        "verificationTimestamp": null
-      }
-    },
-    {
-      "skillId": "clawdhub",
-      "name": "clawdhub",
-      "description": "Use the ClawdHub CLI to search, install, update, and publish agent skills from clawdhub.com. Use when you need to fetch new skills on the fly, sync installed skills to latest or a specific version, or publish new/updated skill folders with the npm-installed clawdhub CLI.",
-      "category": "Other",
-      "path": "clawdhub/SKILL.md",
-      "url": "https://x402.wtf/api/skills/clawdhub",
-      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/clawdhub",
-      "tags": [
-        "other",
-        "clawdhub"
-      ],
-      "requiredEnv": [],
-      "attestation": {
-        "status": "pending",
-        "isFormallyVerified": false,
-        "attestationPda": null,
-        "verificationTimestamp": null
-      }
-    },
-    {
-      "skillId": "dex-screener-scanner",
-      "name": "dex-screener-scanner",
-      "description": "Automate DexScreener Solana token discovery and screening via browser automation. Navigate dexscreener.com/solana, scrape real-time token listings, filter by volume/liquidity/age/holders, and identify the best opportunities. Triggers: scan dexscreener, find new tokens, find trending tokens, screen Solana tokens, best tokens on Solana, dexscreener scanner.",
-      "category": "Other",
-      "path": "dex-screener-scanner/SKILL.md",
-      "url": "https://x402.wtf/api/skills/dex-screener-scanner",
-      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/dex-screener-scanner",
-      "tags": [
-        "other",
-        "dex",
-        "screener",
-        "scanner"
-      ],
-      "requiredEnv": [],
-      "attestation": {
-        "status": "pending",
-        "isFormallyVerified": false,
-        "attestationPda": null,
-        "verificationTimestamp": null
-      }
-    },
-    {
-      "skillId": "food-order",
-      "name": "food-order",
-      "description": "Reorder Foodora orders + track ETA/status with ordercli. Never confirm without explicit user approval. Triggers: order food, reorder, track ETA.",
-      "category": "Other",
-      "path": "food-order/SKILL.md",
-      "url": "https://x402.wtf/api/skills/food-order",
-      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/food-order",
-      "tags": [
-        "other",
-        "food",
-        "order"
-      ],
-      "requiredEnv": [],
-      "attestation": {
-        "status": "pending",
-        "isFormallyVerified": false,
-        "attestationPda": null,
-        "verificationTimestamp": null
-      }
-    },
-    {
-      "skillId": "github",
-      "name": "github",
-      "description": "Interact with GitHub using the `gh` CLI. Use `gh issue`, `gh pr`, `gh run`, and `gh api` for issues, PRs, CI runs, and advanced queries.",
-      "category": "Other",
-      "path": "github/SKILL.md",
-      "url": "https://x402.wtf/api/skills/github",
-      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/github",
-      "tags": [
-        "other",
-        "github"
-      ],
-      "requiredEnv": [],
-      "attestation": {
-        "status": "pending",
-        "isFormallyVerified": false,
-        "attestationPda": null,
-        "verificationTimestamp": null
-      }
-    },
-    {
-      "skillId": "local-places",
-      "name": "local-places",
-      "description": "Search for places (restaurants, cafes, etc.) via Google Places API proxy on localhost.",
-      "category": "Other",
-      "path": "local-places/SKILL.md",
-      "url": "https://x402.wtf/api/skills/local-places",
-      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/local-places",
-      "tags": [
-        "other",
-        "local",
-        "places"
-      ],
-      "requiredEnv": [],
-      "attestation": {
-        "status": "pending",
-        "isFormallyVerified": false,
-        "attestationPda": null,
-        "verificationTimestamp": null
-      }
-    },
-    {
       "skillId": "README",
       "name": "Skills",
-      "description": "This directory contains 94 active skills. Each listed entry has a top-level `SKILL.md` under `skills/<slug>/`.",
+      "description": "This directory contains 109 active skills. Each listed entry has a top-level `SKILL.md` under `skills/<slug>/`.",
       "category": "Other",
-      "path": "README/SKILL.md",
+      "path": "README.md",
       "url": "https://x402.wtf/api/skills/README",
       "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/README",
       "tags": [
@@ -1141,7 +1100,7 @@
       "name": "Clawd Skill Hub",
       "description": "Every skill, plugin, MCP server, agent, or Solana program listed here has\npassed the three-layer formal verification gate before it was accepted.\nAdding anything to the hub without running the gate is",
       "category": "Other",
-      "path": "SKILL_HUB/SKILL.md",
+      "path": "SKILL_HUB.md",
       "url": "https://x402.wtf/api/skills/SKILL_HUB",
       "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/SKILL_HUB",
       "tags": [
@@ -1163,7 +1122,7 @@
       "name": "Submitting a Skill to the Clawd Skill Hub",
       "description": "Any Solana agent or human can submit a skill, plugin, MCP server, or agent.\nEvery submission passes a three-layer formal verification gate before it appears\nin the hub and receives a Solana Attestatio",
       "category": "Other",
-      "path": "SUBMIT/SKILL.md",
+      "path": "SUBMIT.md",
       "url": "https://x402.wtf/api/skills/SUBMIT",
       "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/SUBMIT",
       "tags": [
@@ -1175,420 +1134,6 @@
         "the",
         "clawd",
         "hub"
-      ],
-      "requiredEnv": [],
-      "attestation": {
-        "status": "pending",
-        "isFormallyVerified": false,
-        "attestationPda": null,
-        "verificationTimestamp": null
-      }
-    },
-    {
-      "skillId": "ultrathink-blockchain",
-      "name": "ultrathink-blockchain",
-      "description": "Deep-reasoning Solana and blockchain engineering skill. Use for production blockchain development, on-chain programs, Solana transaction flows, DeFi integrations, token bots, swaps, Anchor/Rust programs, RPC handling, Helius/Jito execution, MEV analysis, PDA/account validation, retry logic, simulations, monitoring, or security hardening.",
-      "category": "Other",
-      "path": "ultrathink-blockchain/SKILL.md",
-      "url": "https://x402.wtf/api/skills/ultrathink-blockchain",
-      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/ultrathink-blockchain",
-      "tags": [
-        "other",
-        "ultrathink",
-        "blockchain"
-      ],
-      "requiredEnv": [],
-      "attestation": {
-        "status": "pending",
-        "isFormallyVerified": false,
-        "attestationPda": null,
-        "verificationTimestamp": null
-      }
-    },
-    {
-      "skillId": "vulcan",
-      "name": "vulcan",
-      "description": "Entry-point skill for Phoenix perpetuals through Vulcan/Rise SDK inside solana-clawd. Use before answering or acting on Vulcan, Phoenix DEX, Solana perps, paper trading, live trading, margin, TP/SL, TWAP, grid, TA strategies, or perps agent setup.",
-      "category": "Other",
-      "path": "vulcan/SKILL.md",
-      "url": "https://x402.wtf/api/skills/vulcan",
-      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/vulcan",
-      "tags": [
-        "other",
-        "vulcan"
-      ],
-      "requiredEnv": [],
-      "attestation": {
-        "status": "pending",
-        "isFormallyVerified": false,
-        "attestationPda": null,
-        "verificationTimestamp": null
-      }
-    },
-    {
-      "skillId": "vulcan-error-recovery",
-      "name": "vulcan-error-recovery",
-      "description": "Error category routing and recovery for Vulcan/Phoenix perps. Use on failed CLI/MCP calls, tx failures, auth/config/API/network/rate-limit errors, and strategy recovery.",
-      "category": "Other",
-      "path": "vulcan-error-recovery/SKILL.md",
-      "url": "https://x402.wtf/api/skills/vulcan-error-recovery",
-      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/vulcan-error-recovery",
-      "tags": [
-        "other",
-        "vulcan",
-        "error",
-        "recovery"
-      ],
-      "requiredEnv": [],
-      "attestation": {
-        "status": "pending",
-        "isFormallyVerified": false,
-        "attestationPda": null,
-        "verificationTimestamp": null
-      }
-    },
-    {
-      "skillId": "vulcan-execution-modes",
-      "name": "vulcan-execution-modes",
-      "description": "Canonical Vulcan execution mode taxonomy: Observe, Paper, Dry-Run, Confirm-Each, Auto-Execute. Use before launching strategies or live-capable perps flows.",
-      "category": "Other",
-      "path": "vulcan-execution-modes/SKILL.md",
-      "url": "https://x402.wtf/api/skills/vulcan-execution-modes",
-      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/vulcan-execution-modes",
-      "tags": [
-        "other",
-        "vulcan",
-        "execution",
-        "modes"
-      ],
-      "requiredEnv": [],
-      "attestation": {
-        "status": "pending",
-        "isFormallyVerified": false,
-        "attestationPda": null,
-        "verificationTimestamp": null
-      }
-    },
-    {
-      "skillId": "vulcan-grid-trading",
-      "name": "vulcan-grid-trading",
-      "description": "Grid trading with layered limit orders on Phoenix perpetuals. Use for grid setup, monitoring, pausing/stopping, and live/paper grid strategy safety.",
-      "category": "Other",
-      "path": "vulcan-grid-trading/SKILL.md",
-      "url": "https://x402.wtf/api/skills/vulcan-grid-trading",
-      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/vulcan-grid-trading",
-      "tags": [
-        "other",
-        "vulcan",
-        "grid",
-        "trading"
-      ],
-      "requiredEnv": [],
-      "attestation": {
-        "status": "pending",
-        "isFormallyVerified": false,
-        "attestationPda": null,
-        "verificationTimestamp": null
-      }
-    },
-    {
-      "skillId": "vulcan-lot-size-calculator",
-      "name": "vulcan-lot-size-calculator",
-      "description": "Convert desired token/notional amounts to Phoenix base lots. Use whenever a Vulcan command requires size/base lots.",
-      "category": "Other",
-      "path": "vulcan-lot-size-calculator/SKILL.md",
-      "url": "https://x402.wtf/api/skills/vulcan-lot-size-calculator",
-      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/vulcan-lot-size-calculator",
-      "tags": [
-        "other",
-        "vulcan",
-        "lot",
-        "size",
-        "calculator"
-      ],
-      "requiredEnv": [],
-      "attestation": {
-        "status": "pending",
-        "isFormallyVerified": false,
-        "attestationPda": null,
-        "verificationTimestamp": null
-      }
-    },
-    {
-      "skillId": "vulcan-margin-operations",
-      "name": "vulcan-margin-operations",
-      "description": "Vulcan/Phoenix collateral, deposits, withdrawals, transfers, isolated margin, leverage tiers, and margin health.",
-      "category": "Other",
-      "path": "vulcan-margin-operations/SKILL.md",
-      "url": "https://x402.wtf/api/skills/vulcan-margin-operations",
-      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/vulcan-margin-operations",
-      "tags": [
-        "other",
-        "vulcan",
-        "margin",
-        "operations"
-      ],
-      "requiredEnv": [],
-      "attestation": {
-        "status": "pending",
-        "isFormallyVerified": false,
-        "attestationPda": null,
-        "verificationTimestamp": null
-      }
-    },
-    {
-      "skillId": "vulcan-market-intel",
-      "name": "vulcan-market-intel",
-      "description": "Phoenix market data, tickers, orderbooks, candles, funding, spreads, liquidity, and pre-trade market context.",
-      "category": "Other",
-      "path": "vulcan-market-intel/SKILL.md",
-      "url": "https://x402.wtf/api/skills/vulcan-market-intel",
-      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/vulcan-market-intel",
-      "tags": [
-        "other",
-        "vulcan",
-        "market",
-        "intel"
-      ],
-      "requiredEnv": [],
-      "attestation": {
-        "status": "pending",
-        "isFormallyVerified": false,
-        "attestationPda": null,
-        "verificationTimestamp": null
-      }
-    },
-    {
-      "skillId": "vulcan-onboarding",
-      "name": "vulcan-onboarding",
-      "description": "First-run Vulcan setup for paper trading, wallet, registration, collateral, MCP skills, and live readiness.",
-      "category": "Other",
-      "path": "vulcan-onboarding/SKILL.md",
-      "url": "https://x402.wtf/api/skills/vulcan-onboarding",
-      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/vulcan-onboarding",
-      "tags": [
-        "other",
-        "vulcan",
-        "onboarding"
-      ],
-      "requiredEnv": [],
-      "attestation": {
-        "status": "pending",
-        "isFormallyVerified": false,
-        "attestationPda": null,
-        "verificationTimestamp": null
-      }
-    },
-    {
-      "skillId": "vulcan-portfolio-intel",
-      "name": "vulcan-portfolio-intel",
-      "description": "Phoenix portfolio snapshots: margin, positions, resting orders, funding exposure, PnL, and account reporting.",
-      "category": "Other",
-      "path": "vulcan-portfolio-intel/SKILL.md",
-      "url": "https://x402.wtf/api/skills/vulcan-portfolio-intel",
-      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/vulcan-portfolio-intel",
-      "tags": [
-        "other",
-        "vulcan",
-        "portfolio",
-        "intel"
-      ],
-      "requiredEnv": [],
-      "attestation": {
-        "status": "pending",
-        "isFormallyVerified": false,
-        "attestationPda": null,
-        "verificationTimestamp": null
-      }
-    },
-    {
-      "skillId": "vulcan-position-management",
-      "name": "vulcan-position-management",
-      "description": "List, show, close, reduce Phoenix positions and attach/cancel TP/SL.",
-      "category": "Other",
-      "path": "vulcan-position-management/SKILL.md",
-      "url": "https://x402.wtf/api/skills/vulcan-position-management",
-      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/vulcan-position-management",
-      "tags": [
-        "other",
-        "vulcan",
-        "position",
-        "management"
-      ],
-      "requiredEnv": [],
-      "attestation": {
-        "status": "pending",
-        "isFormallyVerified": false,
-        "attestationPda": null,
-        "verificationTimestamp": null
-      }
-    },
-    {
-      "skillId": "vulcan-quickstart",
-      "name": "vulcan-quickstart",
-      "description": "Five-minute Vulcan quickstart for install, health check, first market read, and first paper trade.",
-      "category": "Other",
-      "path": "vulcan-quickstart/SKILL.md",
-      "url": "https://x402.wtf/api/skills/vulcan-quickstart",
-      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/vulcan-quickstart",
-      "tags": [
-        "other",
-        "vulcan",
-        "quickstart"
-      ],
-      "requiredEnv": [],
-      "attestation": {
-        "status": "pending",
-        "isFormallyVerified": false,
-        "attestationPda": null,
-        "verificationTimestamp": null
-      }
-    },
-    {
-      "skillId": "vulcan-risk-management",
-      "name": "vulcan-risk-management",
-      "description": "Risk checks for Phoenix perps: margin health, leverage tiers, liquidation distance, notional caps, exposure, stops, and strategy guardrails.",
-      "category": "Other",
-      "path": "vulcan-risk-management/SKILL.md",
-      "url": "https://x402.wtf/api/skills/vulcan-risk-management",
-      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/vulcan-risk-management",
-      "tags": [
-        "other",
-        "vulcan",
-        "risk",
-        "management"
-      ],
-      "requiredEnv": [],
-      "attestation": {
-        "status": "pending",
-        "isFormallyVerified": false,
-        "attestationPda": null,
-        "verificationTimestamp": null
-      }
-    },
-    {
-      "skillId": "vulcan-skills-index",
-      "name": "vulcan-skills-index",
-      "description": "Index for the bundled Vulcan skill pack exposed through solana-clawd. Use to discover the correct focused Vulcan skill.",
-      "category": "Other",
-      "path": "vulcan-skills-index/SKILL.md",
-      "url": "https://x402.wtf/api/skills/vulcan-skills-index",
-      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/vulcan-skills-index",
-      "tags": [
-        "other",
-        "vulcan",
-        "skills",
-        "index"
-      ],
-      "requiredEnv": [],
-      "attestation": {
-        "status": "pending",
-        "isFormallyVerified": false,
-        "attestationPda": null,
-        "verificationTimestamp": null
-      }
-    },
-    {
-      "skillId": "vulcan-ta-strategy",
-      "name": "vulcan-ta-strategy",
-      "description": "Technical-analysis-driven Phoenix strategy runner using declarative rules and Vulcan strategy ledgers.",
-      "category": "Other",
-      "path": "vulcan-ta-strategy/SKILL.md",
-      "url": "https://x402.wtf/api/skills/vulcan-ta-strategy",
-      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/vulcan-ta-strategy",
-      "tags": [
-        "other",
-        "vulcan",
-        "ta",
-        "strategy"
-      ],
-      "requiredEnv": [],
-      "attestation": {
-        "status": "pending",
-        "isFormallyVerified": false,
-        "attestationPda": null,
-        "verificationTimestamp": null
-      }
-    },
-    {
-      "skillId": "vulcan-technical-analysis",
-      "name": "vulcan-technical-analysis",
-      "description": "Technical indicators and trigger evaluation for Phoenix markets: RSI, MACD, BBands, ATR, ADX, VWAP, Stoch, SMA, EMA.",
-      "category": "Other",
-      "path": "vulcan-technical-analysis/SKILL.md",
-      "url": "https://x402.wtf/api/skills/vulcan-technical-analysis",
-      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/vulcan-technical-analysis",
-      "tags": [
-        "other",
-        "vulcan",
-        "technical",
-        "analysis"
-      ],
-      "requiredEnv": [],
-      "attestation": {
-        "status": "pending",
-        "isFormallyVerified": false,
-        "attestationPda": null,
-        "verificationTimestamp": null
-      }
-    },
-    {
-      "skillId": "vulcan-tpsl-management",
-      "name": "vulcan-tpsl-management",
-      "description": "Take-profit and stop-loss setup, cancellation, laddered exits, position-side rules, and verification for Vulcan/Phoenix.",
-      "category": "Other",
-      "path": "vulcan-tpsl-management/SKILL.md",
-      "url": "https://x402.wtf/api/skills/vulcan-tpsl-management",
-      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/vulcan-tpsl-management",
-      "tags": [
-        "other",
-        "vulcan",
-        "tpsl",
-        "management"
-      ],
-      "requiredEnv": [],
-      "attestation": {
-        "status": "pending",
-        "isFormallyVerified": false,
-        "attestationPda": null,
-        "verificationTimestamp": null
-      }
-    },
-    {
-      "skillId": "vulcan-trade-execution",
-      "name": "vulcan-trade-execution",
-      "description": "Safe Phoenix order execution via Vulcan: pre-trade checks, market/limit orders, paper/dry-run/live gates, and post-trade verification.",
-      "category": "Other",
-      "path": "vulcan-trade-execution/SKILL.md",
-      "url": "https://x402.wtf/api/skills/vulcan-trade-execution",
-      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/vulcan-trade-execution",
-      "tags": [
-        "other",
-        "vulcan",
-        "trade",
-        "execution"
-      ],
-      "requiredEnv": [],
-      "attestation": {
-        "status": "pending",
-        "isFormallyVerified": false,
-        "attestationPda": null,
-        "verificationTimestamp": null
-      }
-    },
-    {
-      "skillId": "vulcan-twap-execution",
-      "name": "vulcan-twap-execution",
-      "description": "TWAP strategy execution on Phoenix perps using Vulcan's first-class runner, tick logs, ledgers, status/monitor/finalize controls.",
-      "category": "Other",
-      "path": "vulcan-twap-execution/SKILL.md",
-      "url": "https://x402.wtf/api/skills/vulcan-twap-execution",
-      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/vulcan-twap-execution",
-      "tags": [
-        "other",
-        "vulcan",
-        "twap",
-        "execution"
       ],
       "requiredEnv": [],
       "attestation": {
@@ -1900,6 +1445,48 @@
         "pump-fun-token-launch",
         "pumpfun",
         "trading"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "clawdex",
+      "name": "clawdex",
+      "description": "Clawdex — dual-engine coding agent. Claude Code (reasoning + planning) + OpenAI Codex (fast execution) + Browser Use boxes (web research) + Upstash compute boxes (isolated sandboxes).",
+      "category": "Solana / Blockchain",
+      "path": "clawdex/SKILL.md",
+      "url": "https://x402.wtf/api/skills/clawdex",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/clawdex",
+      "tags": [
+        "other",
+        "clawdex"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "dex-screener-scanner",
+      "name": "dex-screener-scanner",
+      "description": "Automate DexScreener Solana token discovery and screening via browser automation. Navigate dexscreener.com/solana, scrape real-time token listings, filter by volume/liquidity/age/holders, and identify the best opportunities. Triggers: scan dexscreener, find new tokens, find trending tokens, screen Solana tokens, best tokens on Solana, dexscreener scanner.",
+      "category": "Solana / Blockchain",
+      "path": "dex-screener-scanner/SKILL.md",
+      "url": "https://x402.wtf/api/skills/dex-screener-scanner",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/dex-screener-scanner",
+      "tags": [
+        "other",
+        "dex",
+        "screener",
+        "scanner"
       ],
       "requiredEnv": [],
       "attestation": {
@@ -2275,12 +1862,426 @@
       "name": "solanaos",
       "description": ">",
       "category": "Solana / Blockchain",
-      "path": "solanaos/SKILL.md",
+      "path": "solanaos.md",
       "url": "https://x402.wtf/api/skills/solanaos",
       "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/solanaos",
       "tags": [
         "solana-blockchain",
         "solanaos"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "ultrathink-blockchain",
+      "name": "ultrathink-blockchain",
+      "description": "Deep-reasoning Solana and blockchain engineering skill. Use for production blockchain development, on-chain programs, Solana transaction flows, DeFi integrations, token bots, swaps, Anchor/Rust programs, RPC handling, Helius/Jito execution, MEV analysis, PDA/account validation, retry logic, simulations, monitoring, or security hardening.",
+      "category": "Solana / Blockchain",
+      "path": "ultrathink-blockchain/SKILL.md",
+      "url": "https://x402.wtf/api/skills/ultrathink-blockchain",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/ultrathink-blockchain",
+      "tags": [
+        "other",
+        "ultrathink",
+        "blockchain"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "vulcan",
+      "name": "vulcan",
+      "description": "Entry-point skill for Phoenix perpetuals through Vulcan/Rise SDK inside solana-clawd. Use before answering or acting on Vulcan, Phoenix DEX, Solana perps, paper trading, live trading, margin, TP/SL, TWAP, grid, TA strategies, or perps agent setup.",
+      "category": "Solana / Blockchain",
+      "path": "vulcan/SKILL.md",
+      "url": "https://x402.wtf/api/skills/vulcan",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/vulcan",
+      "tags": [
+        "other",
+        "vulcan"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "vulcan-error-recovery",
+      "name": "vulcan-error-recovery",
+      "description": "Error category routing and recovery for Vulcan/Phoenix perps. Use on failed CLI/MCP calls, tx failures, auth/config/API/network/rate-limit errors, and strategy recovery.",
+      "category": "Solana / Blockchain",
+      "path": "vulcan-error-recovery/SKILL.md",
+      "url": "https://x402.wtf/api/skills/vulcan-error-recovery",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/vulcan-error-recovery",
+      "tags": [
+        "other",
+        "vulcan",
+        "error",
+        "recovery"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "vulcan-execution-modes",
+      "name": "vulcan-execution-modes",
+      "description": "Canonical Vulcan execution mode taxonomy: Observe, Paper, Dry-Run, Confirm-Each, Auto-Execute. Use before launching strategies or live-capable perps flows.",
+      "category": "Solana / Blockchain",
+      "path": "vulcan-execution-modes/SKILL.md",
+      "url": "https://x402.wtf/api/skills/vulcan-execution-modes",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/vulcan-execution-modes",
+      "tags": [
+        "other",
+        "vulcan",
+        "execution",
+        "modes"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "vulcan-grid-trading",
+      "name": "vulcan-grid-trading",
+      "description": "Grid trading with layered limit orders on Phoenix perpetuals. Use for grid setup, monitoring, pausing/stopping, and live/paper grid strategy safety.",
+      "category": "Solana / Blockchain",
+      "path": "vulcan-grid-trading/SKILL.md",
+      "url": "https://x402.wtf/api/skills/vulcan-grid-trading",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/vulcan-grid-trading",
+      "tags": [
+        "other",
+        "vulcan",
+        "grid",
+        "trading"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "vulcan-lot-size-calculator",
+      "name": "vulcan-lot-size-calculator",
+      "description": "Convert desired token/notional amounts to Phoenix base lots. Use whenever a Vulcan command requires size/base lots.",
+      "category": "Solana / Blockchain",
+      "path": "vulcan-lot-size-calculator/SKILL.md",
+      "url": "https://x402.wtf/api/skills/vulcan-lot-size-calculator",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/vulcan-lot-size-calculator",
+      "tags": [
+        "other",
+        "vulcan",
+        "lot",
+        "size",
+        "calculator"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "vulcan-margin-operations",
+      "name": "vulcan-margin-operations",
+      "description": "Vulcan/Phoenix collateral, deposits, withdrawals, transfers, isolated margin, leverage tiers, and margin health.",
+      "category": "Solana / Blockchain",
+      "path": "vulcan-margin-operations/SKILL.md",
+      "url": "https://x402.wtf/api/skills/vulcan-margin-operations",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/vulcan-margin-operations",
+      "tags": [
+        "other",
+        "vulcan",
+        "margin",
+        "operations"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "vulcan-market-intel",
+      "name": "vulcan-market-intel",
+      "description": "Phoenix market data, tickers, orderbooks, candles, funding, spreads, liquidity, and pre-trade market context.",
+      "category": "Solana / Blockchain",
+      "path": "vulcan-market-intel/SKILL.md",
+      "url": "https://x402.wtf/api/skills/vulcan-market-intel",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/vulcan-market-intel",
+      "tags": [
+        "other",
+        "vulcan",
+        "market",
+        "intel"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "vulcan-onboarding",
+      "name": "vulcan-onboarding",
+      "description": "First-run Vulcan setup for paper trading, wallet, registration, collateral, MCP skills, and live readiness.",
+      "category": "Solana / Blockchain",
+      "path": "vulcan-onboarding/SKILL.md",
+      "url": "https://x402.wtf/api/skills/vulcan-onboarding",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/vulcan-onboarding",
+      "tags": [
+        "other",
+        "vulcan",
+        "onboarding"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "vulcan-portfolio-intel",
+      "name": "vulcan-portfolio-intel",
+      "description": "Phoenix portfolio snapshots: margin, positions, resting orders, funding exposure, PnL, and account reporting.",
+      "category": "Solana / Blockchain",
+      "path": "vulcan-portfolio-intel/SKILL.md",
+      "url": "https://x402.wtf/api/skills/vulcan-portfolio-intel",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/vulcan-portfolio-intel",
+      "tags": [
+        "other",
+        "vulcan",
+        "portfolio",
+        "intel"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "vulcan-position-management",
+      "name": "vulcan-position-management",
+      "description": "List, show, close, reduce Phoenix positions and attach/cancel TP/SL.",
+      "category": "Solana / Blockchain",
+      "path": "vulcan-position-management/SKILL.md",
+      "url": "https://x402.wtf/api/skills/vulcan-position-management",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/vulcan-position-management",
+      "tags": [
+        "other",
+        "vulcan",
+        "position",
+        "management"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "vulcan-quickstart",
+      "name": "vulcan-quickstart",
+      "description": "Five-minute Vulcan quickstart for install, health check, first market read, and first paper trade.",
+      "category": "Solana / Blockchain",
+      "path": "vulcan-quickstart/SKILL.md",
+      "url": "https://x402.wtf/api/skills/vulcan-quickstart",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/vulcan-quickstart",
+      "tags": [
+        "other",
+        "vulcan",
+        "quickstart"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "vulcan-risk-management",
+      "name": "vulcan-risk-management",
+      "description": "Risk checks for Phoenix perps: margin health, leverage tiers, liquidation distance, notional caps, exposure, stops, and strategy guardrails.",
+      "category": "Solana / Blockchain",
+      "path": "vulcan-risk-management/SKILL.md",
+      "url": "https://x402.wtf/api/skills/vulcan-risk-management",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/vulcan-risk-management",
+      "tags": [
+        "other",
+        "vulcan",
+        "risk",
+        "management"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "vulcan-skills-index",
+      "name": "vulcan-skills-index",
+      "description": "Index for the bundled Vulcan skill pack exposed through solana-clawd. Use to discover the correct focused Vulcan skill.",
+      "category": "Solana / Blockchain",
+      "path": "vulcan-skills-index/SKILL.md",
+      "url": "https://x402.wtf/api/skills/vulcan-skills-index",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/vulcan-skills-index",
+      "tags": [
+        "other",
+        "vulcan",
+        "skills",
+        "index"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "vulcan-ta-strategy",
+      "name": "vulcan-ta-strategy",
+      "description": "Technical-analysis-driven Phoenix strategy runner using declarative rules and Vulcan strategy ledgers.",
+      "category": "Solana / Blockchain",
+      "path": "vulcan-ta-strategy/SKILL.md",
+      "url": "https://x402.wtf/api/skills/vulcan-ta-strategy",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/vulcan-ta-strategy",
+      "tags": [
+        "other",
+        "vulcan",
+        "ta",
+        "strategy"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "vulcan-technical-analysis",
+      "name": "vulcan-technical-analysis",
+      "description": "Technical indicators and trigger evaluation for Phoenix markets: RSI, MACD, BBands, ATR, ADX, VWAP, Stoch, SMA, EMA.",
+      "category": "Solana / Blockchain",
+      "path": "vulcan-technical-analysis/SKILL.md",
+      "url": "https://x402.wtf/api/skills/vulcan-technical-analysis",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/vulcan-technical-analysis",
+      "tags": [
+        "other",
+        "vulcan",
+        "technical",
+        "analysis"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "vulcan-tpsl-management",
+      "name": "vulcan-tpsl-management",
+      "description": "Take-profit and stop-loss setup, cancellation, laddered exits, position-side rules, and verification for Vulcan/Phoenix.",
+      "category": "Solana / Blockchain",
+      "path": "vulcan-tpsl-management/SKILL.md",
+      "url": "https://x402.wtf/api/skills/vulcan-tpsl-management",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/vulcan-tpsl-management",
+      "tags": [
+        "other",
+        "vulcan",
+        "tpsl",
+        "management"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "vulcan-trade-execution",
+      "name": "vulcan-trade-execution",
+      "description": "Safe Phoenix order execution via Vulcan: pre-trade checks, market/limit orders, paper/dry-run/live gates, and post-trade verification.",
+      "category": "Solana / Blockchain",
+      "path": "vulcan-trade-execution/SKILL.md",
+      "url": "https://x402.wtf/api/skills/vulcan-trade-execution",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/vulcan-trade-execution",
+      "tags": [
+        "other",
+        "vulcan",
+        "trade",
+        "execution"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "vulcan-twap-execution",
+      "name": "vulcan-twap-execution",
+      "description": "TWAP strategy execution on Phoenix perps using Vulcan's first-class runner, tick logs, ledgers, status/monitor/finalize controls.",
+      "category": "Solana / Blockchain",
+      "path": "vulcan-twap-execution/SKILL.md",
+      "url": "https://x402.wtf/api/skills/vulcan-twap-execution",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/vulcan-twap-execution",
+      "tags": [
+        "other",
+        "vulcan",
+        "twap",
+        "execution"
       ],
       "requiredEnv": [],
       "attestation": {
