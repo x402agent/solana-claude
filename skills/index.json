@@ -1,7 +1,7 @@
 {
   "$schema": "https://solanaclawd.com/schemas/skill-hub.v1.json",
   "apiVersion": "1.0",
-  "generatedAt": "2026-05-21T17:14:08.664Z",
+  "generatedAt": "2026-05-21T18:15:10.200Z",
   "hub": {
     "gallery": "https://x402.wtf/skills",
     "api": "https://x402.wtf/api/skills",
@@ -33,9 +33,9 @@
     "workflowDoc": "https://x402.wtf/skills/verify"
   },
   "stats": {
-    "totalSkills": 97,
+    "totalSkills": 98,
     "verifiedSkills": 0,
-    "pendingVerification": 97,
+    "pendingVerification": 98,
     "byCategory": {
       "AI / Agents": 9,
       "Clawd Ecosystem": 1,
@@ -46,7 +46,7 @@
       "Other": 30,
       "Productivity": 10,
       "Pump.fun / Token Launch": 5,
-      "Solana / Blockchain": 4,
+      "Solana / Blockchain": 5,
       "Web / Research": 8
     }
   },
@@ -1840,6 +1840,29 @@
         "pump-fun-token-launch",
         "pumpfun",
         "trading"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "magicblock",
+      "name": "magicblock",
+      "description": "MagicBlock Ephemeral Rollups development patterns for Solana. Covers delegation/undelegation flows, dual-connection architecture (base layer + ER), cranks for scheduled tasks, VRF for verifiable randomness, magic actions for atomic ER-commit + base-layer follow-ups, private payments API (deposits, transfers, withdrawals, swaps, and challenge/login auth flow), commit sponsorship and fee vault wiring, lamports top-up for delegated accounts, and TypeScript/Anchor integration. Use for high-performance gaming, real-time apps, private transfers and swaps, and fast transaction throughput on Solana.",
+      "category": "Solana / Blockchain",
+      "path": "magicblock/SKILL.md",
+      "url": "https://x402.wtf/api/skills/magicblock",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/magicblock",
+      "tags": [
+        "solana",
+        "magicblock",
+        "ephemeral-rollups",
+        "gaming",
+        "vrf"
       ],
       "requiredEnv": [],
       "attestation": {

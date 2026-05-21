@@ -54,7 +54,7 @@ function extractMeta(yamlBlock) {
 function categorize(slug) {
   if (/dflow|kalshi|phantom/.test(slug)) return 'DFlow / Trading';
   if (/^pump-|^pumpfun/.test(slug)) return 'Pump.fun / Token Launch';
-  if (/solana|seeker|qedgen|oracle/.test(slug)) return 'Solana / Blockchain';
+  if (/solana|seeker|qedgen|oracle|magicblock/.test(slug)) return 'Solana / Blockchain';
   if (/discord|slack|imsg|bluebubbles|himalaya|voice-call/.test(slug)) return 'Communication';
   if (/apple|bear-notes|notion|obsidian|things|trello|ordercli|session-logs|1password/.test(slug)) return 'Productivity';
   if (/coding-agent|swarm|gemini|openai-image|openai-whisper|e2b|cua|skill-creator|sag|model-usage/.test(slug)) return 'AI / Agents';

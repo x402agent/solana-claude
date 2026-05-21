@@ -255,6 +255,16 @@ Secrets stay out of git. Put real Gemini keys, RPC URLs, API keys, and wallet ma
 
 ---
 
+## Skills Catalog Update
+
+The project-local skills registry now bundles [`skills/magicblock`](./skills/magicblock/SKILL.md), the MagicBlock Ephemeral Rollups development skill. It is also listed in [`skills/README.md`](./skills/README.md), [`skills/catalog.json`](./skills/catalog.json), and [`skills/index.json`](./skills/index.json) for discovery by Codex, Claude-style skill loaders, and the Clawd skill hub.
+
+| Skill | Coverage |
+| --- | --- |
+| `magicblock` | MagicBlock Ephemeral Rollups, delegation/undelegation, dual-connection flows, cranks, VRF, Magic Actions, lamports top-up, private payments, commit sponsorship, and TypeScript/Anchor integration |
+
+---
+
 ## Hackathon Submission
 
 Solana Clawd is submitted to Colosseum here: [arena.colosseum.org/projects/explore/solana-clawd](https://arena.colosseum.org/projects/explore/solana-clawd).
