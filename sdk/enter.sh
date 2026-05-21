@@ -26,6 +26,7 @@ CONVEX_SITE="${CONVEX_SITE:-https://giddy-dragon-7.convex.site}"
 BACKROOM_URL="${BACKROOM_URL:-https://backrooms.x402.wtf}"
 BACKROOM_3D_URL="${BACKROOM_3D_URL:-https://backroom-3d.fly.dev}"
 GATEWAY_URL="${GATEWAY_URL:-https://x402.wtf/gateway}"
+TERMINAL_URL="${TERMINAL_URL:-http://localhost:3000/terminal}"
 CLAWD_PROFILE_DIR="${CLAWD_PROFILE_DIR:-$HOME/.clawd}"
 CLAWD_PROFILE_FILE="${CLAWD_PROFILE_FILE:-$CLAWD_PROFILE_DIR/profile.json}"
 CLAWD_ENV_FILE="${CLAWD_PROFILE_DIR}/.env"
@@ -243,10 +244,11 @@ save_profile() {
       name: process.argv[3],
       convexSite: process.argv[4],
       gatewayUrl: process.argv[5],
+      terminalUrl: process.argv[6],
       updatedAt: new Date().toISOString(),
     };
     fs.writeFileSync(process.argv[1], JSON.stringify(updated, null, 2) + "\n", { mode: 0o600 });
-  ' "$CLAWD_PROFILE_FILE" "$agent_id" "$name" "$CONVEX_SITE" "$GATEWAY_URL"
+  ' "$CLAWD_PROFILE_FILE" "$agent_id" "$name" "$CONVEX_SITE" "$GATEWAY_URL" "$TERMINAL_URL"
   chmod 600 "$CLAWD_PROFILE_FILE"
 }
 
@@ -402,7 +404,8 @@ PROFILE_VAL="$(json_build \
   "clawdVersion=${CLAWD_VER:-not-installed}" \
   "installedAt=$(date -u +%Y-%m-%dT%H:%M:%SZ 2>/dev/null || date)" \
   "source=enter.sh" \
-  "gatewayUrl=${GATEWAY_URL}")"
+  "gatewayUrl=${GATEWAY_URL}" \
+  "terminalUrl=${TERMINAL_URL}")"
 
 convex_store "$AGENT_ID" "developer.profile" "$PROFILE_VAL" "application/json"
 
@@ -523,6 +526,9 @@ XAI_API_KEY=
 # ── Your developer ID ───────────────────────────
 CLAWD_AGENT_ID=${AGENT_ID}
 CLAWD_NAME=${AGENT_NAME}
+
+# ── Local web terminal ──────────────────────────
+CLAWD_TERMINAL_URL=${TERMINAL_URL}
 ENV
   chmod 600 "$CLAWD_ENV_FILE"
   ok ".env template created at ${GREY}${CLAWD_ENV_FILE}${CR}"
@@ -531,6 +537,10 @@ else
   if ! grep -q "^X402_DEV_KEY=" "$CLAWD_ENV_FILE" 2>/dev/null; then
     printf "\n# x402.wtf developer API key\nX402_DEV_KEY=%s\n" "$DEV_API_KEY" >> "$CLAWD_ENV_FILE"
     ok "X402_DEV_KEY added to existing .env"
+  fi
+  if ! grep -q "^CLAWD_TERMINAL_URL=" "$CLAWD_ENV_FILE" 2>/dev/null; then
+    printf "\n# Local web terminal\nCLAWD_TERMINAL_URL=%s\n" "$TERMINAL_URL" >> "$CLAWD_ENV_FILE"
+    ok "CLAWD_TERMINAL_URL added to existing .env"
   fi
 fi
 
@@ -554,6 +564,7 @@ printf "  ${GREY}├─${CR} ID:       ${CYAN}${AGENT_ID}${CR}\n"
 printf "  ${GREY}├─${CR} Name:     ${CYAN}${AGENT_NAME}${CR}\n"
 printf "  ${GREY}├─${CR} API key:  ${NEON}${DEV_API_KEY}${CR}\n"
 printf "  ${GREY}├─${CR} Gateway:  ${CYAN}${GATEWAY_URL}${CR}\n"
+printf "  ${GREY}├─${CR} Terminal: ${CYAN}${TERMINAL_URL}${CR}\n"
 printf "  ${GREY}└─${CR} Profile:  ${GREY}${CLAWD_PROFILE_FILE}${CR}\n"
 printf "\n"
 
@@ -575,9 +586,11 @@ printf "  ${BOLD}Commands${CR}\n"
 printf "  ${CYAN}clawd${CR}                — interactive TUI\n"
 printf "  ${CYAN}clawd --help${CR}         — all options\n"
 printf "  ${CYAN}leviathan --spawn${CR}    — spawn sovereign on-chain agent\n"
+printf "  ${CYAN}${TERMINAL_URL}${CR} — local browser terminal\n"
 printf "\n"
 
 printf "  ${BOLD}Links${CR}\n"
+printf "  ${CYAN}${TERMINAL_URL}${CR} — local browser terminal\n"
 printf "  ${CYAN}https://x402.wtf/gateway${CR}    — your developer hub\n"
 printf "  ${CYAN}https://install.x402.wtf${CR}    — install hub\n"
 printf "  ${CYAN}https://backrooms.x402.wtf${CR}  — infinite backroom\n"

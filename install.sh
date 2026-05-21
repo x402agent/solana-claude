@@ -47,6 +47,7 @@ OPENCLAWD_BASE_URL="${OPENCLAWD_BASE_URL:-https://x402.wtf}"
 OPENCLAWD_GATEWAY_URL="${OPENCLAWD_GATEWAY_URL:-https://x402.wtf/api}"
 OPENCLAWD_SITE_URL="${OPENCLAWD_SITE_URL:-https://x402.wtf/automation}"
 OPENCLAWD_AGENTS_URL="${OPENCLAWD_AGENTS_URL:-https://x402.wtf/api/agents}"
+OPENCLAWD_TERMINAL_URL="${OPENCLAWD_TERMINAL_URL:-http://localhost:3000/terminal}"
 BIN_DIR_DEFAULT="$WORKSPACE/bin"
 BIN_DIR=""
 BUILD_DIR_NAME="build"
@@ -813,6 +814,7 @@ write_config() {
   "openclawdBase":   "$OPENCLAWD_BASE_URL",
   "apiBase":         "$OPENCLAWD_BASE_URL",
   "gatewayBase":     "$OPENCLAWD_GATEWAY_URL",
+  "terminalUrl":     "$OPENCLAWD_TERMINAL_URL",
   "marketplaceBase": "$OPENCLAWD_SITE_URL/marketplace",
   "mcpBase":         "$OPENCLAWD_GATEWAY_URL/mcp",
   "registrarBase":   "$OPENCLAWD_BASE_URL/registrar",
@@ -890,6 +892,7 @@ OPENCLAWD_VOICE_EPHEMERAL_URL=https://api.x.ai/v1/realtime/client_secrets
 OPENCLAWD_VOICE_EPHEMERAL_TTL=300
 OPENCLAWD_API_BASE=$OPENCLAWD_BASE_URL
 OPENCLAWD_GATEWAY_BASE=$OPENCLAWD_GATEWAY_URL
+OPENCLAWD_TERMINAL_URL=$OPENCLAWD_TERMINAL_URL
 OPENCLAWD_MARKETPLACE=$OPENCLAWD_SITE_URL/marketplace
 OPENCLAWD_AGENTS_BASE=$OPENCLAWD_AGENTS_URL
 OPENCLAWD_AGENTS_CATALOG=$OPENCLAWD_AGENTS_URL/catalog
@@ -924,6 +927,10 @@ ENVEOF
   ok "wrote $ENV_PATH (chmod 0600)"
 else
   info "keeping existing $ENV_PATH"
+  if ! grep -q '^OPENCLAWD_TERMINAL_URL=' "$ENV_PATH" 2>/dev/null; then
+    printf "\n# Local web terminal\nOPENCLAWD_TERMINAL_URL=%s\n" "$OPENCLAWD_TERMINAL_URL" >> "$ENV_PATH"
+    ok "added OPENCLAWD_TERMINAL_URL to $ENV_PATH"
+  fi
 fi
 
 # Seed XAI_API_KEY from --xai-key flag or interactive prompt (TTY only).
@@ -1001,6 +1008,7 @@ printf "       ${GREEN}clawd-code${RESET}         ${DIM}# clawd-code-cli — Gro
 printf "       ${GREEN}clawd-backroom stream${RESET}  ${DIM}# follow the CLAWD Infinite Backroom (SSE)${RESET}\n"
 printf "       ${GREEN}clawd-backroom transform${RESET}  ${DIM}# relay claude → clawd into the room 🦞${RESET}\n"
 printf "       ${GREEN}clawd -p \"check my wallet\"${RESET}  ${DIM}# headless one-shot${RESET}\n"
+printf "       ${GREEN}$OPENCLAWD_TERMINAL_URL${RESET}  ${DIM}# local browser terminal${RESET}\n"
 printf "\n"
 printf "  ${PURPLE}4.${RESET}  Run the sovereign runtime:\n"
 printf "       ${GREEN}leviathan --spawn${RESET}   ${DIM}# first-time identity wizard${RESET}\n"
@@ -1021,6 +1029,7 @@ printf "       ${DIM}/search solana price  # live Grok web search${RESET}\n"
 printf "       ${DIM}/voice say hello      # xAI TTS${RESET}\n"
 printf "\n"
 printf "  ${DIM}Hub      : https://github.com/x402agent/solana-clawd${RESET}\n"
+printf "  ${DIM}Terminal : $OPENCLAWD_TERMINAL_URL${RESET}\n"
 printf "  ${DIM}Automation: https://x402.wtf/automation${RESET}\n"
 printf "  ${DIM}x402     : https://x402.wtf${RESET}\n"
 printf "  ${DIM}Agents   : https://x402.wtf/api/agents${RESET}\n"

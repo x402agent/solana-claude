@@ -6,6 +6,8 @@
 # ╚══════════════════════════════════════════════════════════════════════════╝
 set -euo pipefail
 
+CLAWD_TERMINAL_URL="${CLAWD_TERMINAL_URL:-http://localhost:3000/terminal}"
+
 # ── Terminal colours ──────────────────────────────────────────────────────────
 RESET="\033[0m"
 BOLD="\033[1m"
@@ -148,6 +150,9 @@ XAI_API_KEY=
 # Orchestrator (orchestrator-client example)
 # ORCHESTRATOR_URL=http://localhost:8787
 
+# Local web terminal
+CLAWD_TERMINAL_URL=${CLAWD_TERMINAL_URL}
+
 # SolanaTracker (OODA loop example)
 # SOLANA_TRACKER_API_KEY=
 ENV
@@ -155,6 +160,10 @@ ENV
   warn "Fill in your XAI_API_KEY (minimum) before starting clawd"
 else
   info "~/.clawd/.env already exists — skipping"
+  if ! grep -q "^CLAWD_TERMINAL_URL=" "$ENV_FILE" 2>/dev/null; then
+    printf "\n# Local web terminal\nCLAWD_TERMINAL_URL=%s\n" "$CLAWD_TERMINAL_URL" >> "$ENV_FILE"
+    ok "CLAWD_TERMINAL_URL added to existing .env"
+  fi
 fi
 
 # ── Done ──────────────────────────────────────────────────────────────────────
@@ -164,6 +173,7 @@ printf "  ${BOLD}Quick start:${RESET}\n"
 printf "  ${CYAN}1.${RESET} Edit ${BOLD}${ENV_FILE}${RESET} → add your ${BOLD}XAI_API_KEY${RESET}\n"
 printf "  ${CYAN}2.${RESET} Run   ${BOLD}clawd${RESET}            — interactive Grok/xAI TUI\n"
 printf "  ${CYAN}3.${RESET} Run   ${BOLD}clawd --help${RESET}     — all options\n"
+printf "  ${CYAN}4.${RESET} Open  ${BOLD}${CLAWD_TERMINAL_URL}${RESET} — local browser terminal\n"
 printf "\n"
 
 printf "  ${BOLD}Examples (no key needed for most):${RESET}\n"
@@ -180,6 +190,7 @@ printf "  ${CYAN}leviathan --spawn${RESET}\n"
 printf "\n"
 
 printf "  ${BOLD}Links:${RESET}\n"
+printf "  Terminal: ${CYAN}${CLAWD_TERMINAL_URL}${RESET}\n"
 printf "  Website:  ${CYAN}https://solanaclawd.com${RESET}\n"
 printf "  X:        ${CYAN}https://x.com/clawddevs${RESET}\n"
 printf "  Telegram: ${CYAN}https://t.me/clawdbot_sol_bot${RESET}\n"
