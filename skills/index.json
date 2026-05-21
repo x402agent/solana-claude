@@ -1,7 +1,7 @@
 {
   "$schema": "https://solanaclawd.com/schemas/skill-hub.v1.json",
   "apiVersion": "1.0",
-  "generatedAt": "2026-05-21T18:15:10.200Z",
+  "generatedAt": "2026-05-21T18:18:22.341Z",
   "hub": {
     "gallery": "https://x402.wtf/skills",
     "api": "https://x402.wtf/api/skills",
@@ -33,20 +33,20 @@
     "workflowDoc": "https://x402.wtf/skills/verify"
   },
   "stats": {
-    "totalSkills": 98,
+    "totalSkills": 113,
     "verifiedSkills": 0,
-    "pendingVerification": 98,
+    "pendingVerification": 113,
     "byCategory": {
-      "AI / Agents": 9,
+      "AI / Agents": 11,
       "Clawd Ecosystem": 1,
       "Communication": 6,
       "DevOps / Infrastructure": 6,
       "DFlow / Trading": 10,
-      "Media": 8,
+      "Media": 9,
       "Other": 30,
       "Productivity": 10,
       "Pump.fun / Token Launch": 5,
-      "Solana / Blockchain": 5,
+      "Solana / Blockchain": 17,
       "Web / Research": 8
     }
   },
@@ -179,6 +179,25 @@
       }
     },
     {
+      "skillId": "oracle",
+      "name": "oracle",
+      "description": "Best practices for using the oracle CLI (prompt + file bundling, engines, sessions, and file attachment patterns).",
+      "category": "AI / Agents",
+      "path": "oracle/SKILL.md",
+      "url": "https://x402.wtf/api/skills/oracle",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/oracle",
+      "tags": [
+        "oracle"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
       "skillId": "sag",
       "name": "sag",
       "description": "ElevenLabs text-to-speech with mac-style say UX.",
@@ -189,6 +208,26 @@
       "tags": [
         "ai-agents",
         "sag"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "skill-creator",
+      "name": "skill-creator",
+      "description": "Create or update AgentSkills. Use when designing, structuring, or packaging skills with scripts, references, and assets.",
+      "category": "AI / Agents",
+      "path": "skill-creator/SKILL.md",
+      "url": "https://x402.wtf/api/skills/skill-creator",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/skill-creator",
+      "tags": [
+        "skill",
+        "creator"
       ],
       "requiredEnv": [],
       "attestation": {
@@ -811,6 +850,27 @@
       }
     },
     {
+      "skillId": "sherpa-onnx-tts",
+      "name": "sherpa-onnx-tts",
+      "description": "Local text-to-speech via sherpa-onnx (offline, no cloud)",
+      "category": "Media",
+      "path": "sherpa-onnx-tts/SKILL.md",
+      "url": "https://x402.wtf/api/skills/sherpa-onnx-tts",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/sherpa-onnx-tts",
+      "tags": [
+        "tts",
+        "sherpa",
+        "onnx"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
       "skillId": "songsee",
       "name": "songsee",
       "description": "Generate spectrograms and feature-panel visualizations from audio with the songsee CLI.",
@@ -1061,7 +1121,7 @@
       "name": "Skills",
       "description": "This directory contains 94 active skills. Each listed entry has a top-level `SKILL.md` under `skills/<slug>/`.",
       "category": "Other",
-      "path": "README.md",
+      "path": "README/SKILL.md",
       "url": "https://x402.wtf/api/skills/README",
       "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/README",
       "tags": [
@@ -1081,7 +1141,7 @@
       "name": "Clawd Skill Hub",
       "description": "Every skill, plugin, MCP server, agent, or Solana program listed here has\npassed the three-layer formal verification gate before it was accepted.\nAdding anything to the hub without running the gate is",
       "category": "Other",
-      "path": "SKILL_HUB.md",
+      "path": "SKILL_HUB/SKILL.md",
       "url": "https://x402.wtf/api/skills/SKILL_HUB",
       "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/SKILL_HUB",
       "tags": [
@@ -1103,7 +1163,7 @@
       "name": "Submitting a Skill to the Clawd Skill Hub",
       "description": "Any Solana agent or human can submit a skill, plugin, MCP server, or agent.\nEvery submission passes a three-layer formal verification gate before it appears\nin the hub and receives a Solana Attestatio",
       "category": "Other",
-      "path": "SUBMIT.md",
+      "path": "SUBMIT/SKILL.md",
       "url": "https://x402.wtf/api/skills/SUBMIT",
       "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/SUBMIT",
       "tags": [
@@ -1850,6 +1910,280 @@
       }
     },
     {
+      "skillId": "imperial",
+      "name": "imperial",
+      "description": "Entry-point skill for Imperial perpetual routing on Solana. Use before answering or acting on Imperial router flows, Phoenix-routed perps, profile funding, market/portfolio intel, risk checks, TP/SL, TWAP, grid, or Telegram bot trading workflows.",
+      "category": "Solana / Blockchain",
+      "path": "imperial/SKILL.md",
+      "url": "https://x402.wtf/api/skills/imperial",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/imperial",
+      "tags": [
+        "perps",
+        "solana",
+        "imperial"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "imperial-execution-modes",
+      "name": "imperial-execution-modes",
+      "description": "Execution-mode taxonomy for Imperial router workflows in this repo: observe, route-check, paper/spec, live single-shot, and external durable runner.",
+      "category": "Solana / Blockchain",
+      "path": "imperial-execution-modes/SKILL.md",
+      "url": "https://x402.wtf/api/skills/imperial-execution-modes",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/imperial-execution-modes",
+      "tags": [
+        "perps",
+        "solana",
+        "imperial",
+        "execution",
+        "modes"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "imperial-grid-trading",
+      "name": "imperial-grid-trading",
+      "description": "Grid strategy design for Imperial/Phoenix perps: ladder layout, venue pinning, replacement logic, and durable-runner boundaries.",
+      "category": "Solana / Blockchain",
+      "path": "imperial-grid-trading/SKILL.md",
+      "url": "https://x402.wtf/api/skills/imperial-grid-trading",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/imperial-grid-trading",
+      "tags": [
+        "perps",
+        "solana",
+        "imperial",
+        "grid",
+        "trading"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "imperial-margin-operations",
+      "name": "imperial-margin-operations",
+      "description": "Imperial profile funding, deposit/withdraw transaction building, profile isolation, and margin-state reporting.",
+      "category": "Solana / Blockchain",
+      "path": "imperial-margin-operations/SKILL.md",
+      "url": "https://x402.wtf/api/skills/imperial-margin-operations",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/imperial-margin-operations",
+      "tags": [
+        "perps",
+        "solana",
+        "imperial",
+        "margin",
+        "operations"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "imperial-market-intel",
+      "name": "imperial-market-intel",
+      "description": "Imperial and Phoenix market data: funding, mark prices, route checks, Phoenix depth, and pre-trade venue context.",
+      "category": "Solana / Blockchain",
+      "path": "imperial-market-intel/SKILL.md",
+      "url": "https://x402.wtf/api/skills/imperial-market-intel",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/imperial-market-intel",
+      "tags": [
+        "perps",
+        "solana",
+        "imperial",
+        "market",
+        "intel"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "imperial-portfolio-intel",
+      "name": "imperial-portfolio-intel",
+      "description": "Imperial profile balances, open positions, open orders, exposure summary, and wallet-level Telegram/admin portfolio recaps.",
+      "category": "Solana / Blockchain",
+      "path": "imperial-portfolio-intel/SKILL.md",
+      "url": "https://x402.wtf/api/skills/imperial-portfolio-intel",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/imperial-portfolio-intel",
+      "tags": [
+        "perps",
+        "solana",
+        "imperial",
+        "portfolio",
+        "intel"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "imperial-position-management",
+      "name": "imperial-position-management",
+      "description": "Inspect, reduce, and close Imperial-routed positions across Phoenix, Flash, Jupiter, and GMTrade, with Phoenix preferred by default.",
+      "category": "Solana / Blockchain",
+      "path": "imperial-position-management/SKILL.md",
+      "url": "https://x402.wtf/api/skills/imperial-position-management",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/imperial-position-management",
+      "tags": [
+        "perps",
+        "solana",
+        "imperial",
+        "position",
+        "management"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "imperial-risk-management",
+      "name": "imperial-risk-management",
+      "description": "Risk checks for Imperial-routed perps: profile funding, existing exposure, venue choice, margin headroom, and Telegram pre-trade snapshots.",
+      "category": "Solana / Blockchain",
+      "path": "imperial-risk-management/SKILL.md",
+      "url": "https://x402.wtf/api/skills/imperial-risk-management",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/imperial-risk-management",
+      "tags": [
+        "perps",
+        "solana",
+        "imperial",
+        "risk",
+        "management"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "imperial-skills-index",
+      "name": "imperial-skills-index",
+      "description": "Index for the bundled Imperial skill pack exposed through solana-clawd. Use to discover the correct focused Imperial skill.",
+      "category": "Solana / Blockchain",
+      "path": "imperial-skills-index/SKILL.md",
+      "url": "https://x402.wtf/api/skills/imperial-skills-index",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/imperial-skills-index",
+      "tags": [
+        "perps",
+        "solana",
+        "imperial",
+        "skills",
+        "index"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "imperial-tpsl-management",
+      "name": "imperial-tpsl-management",
+      "description": "Take-profit and stop-loss management for Imperial-routed positions, including close-leg design, verification, and Telegram operator caveats.",
+      "category": "Solana / Blockchain",
+      "path": "imperial-tpsl-management/SKILL.md",
+      "url": "https://x402.wtf/api/skills/imperial-tpsl-management",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/imperial-tpsl-management",
+      "tags": [
+        "perps",
+        "solana",
+        "imperial",
+        "tpsl",
+        "management"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "imperial-trade-execution",
+      "name": "imperial-trade-execution",
+      "description": "Safe Imperial live execution: authenticated market orders, Phoenix-first venue preference, profile-aware routing, and post-trade verification.",
+      "category": "Solana / Blockchain",
+      "path": "imperial-trade-execution/SKILL.md",
+      "url": "https://x402.wtf/api/skills/imperial-trade-execution",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/imperial-trade-execution",
+      "tags": [
+        "perps",
+        "solana",
+        "imperial",
+        "trade",
+        "execution"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
+      "skillId": "imperial-twap-execution",
+      "name": "imperial-twap-execution",
+      "description": "TWAP execution guidance for Imperial: slice planning, venue pinning, profile budgeting, and durable-runner requirements.",
+      "category": "Solana / Blockchain",
+      "path": "imperial-twap-execution/SKILL.md",
+      "url": "https://x402.wtf/api/skills/imperial-twap-execution",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/imperial-twap-execution",
+      "tags": [
+        "perps",
+        "solana",
+        "imperial",
+        "twap",
+        "execution"
+      ],
+      "requiredEnv": [],
+      "attestation": {
+        "status": "pending",
+        "isFormallyVerified": false,
+        "attestationPda": null,
+        "verificationTimestamp": null
+      }
+    },
+    {
       "skillId": "magicblock",
       "name": "magicblock",
       "description": "MagicBlock Ephemeral Rollups development patterns for Solana. Covers delegation/undelegation flows, dual-connection architecture (base layer + ER), cranks for scheduled tasks, VRF for verifiable randomness, magic actions for atomic ER-commit + base-layer follow-ups, private payments API (deposits, transfers, withdrawals, swaps, and challenge/login auth flow), commit sponsorship and fee vault wiring, lamports top-up for delegated accounts, and TypeScript/Anchor integration. Use for high-performance gaming, real-time apps, private transfers and swaps, and fast transaction throughput on Solana.",
@@ -1941,7 +2275,7 @@
       "name": "solanaos",
       "description": ">",
       "category": "Solana / Blockchain",
-      "path": "solanaos.md",
+      "path": "solanaos/SKILL.md",
       "url": "https://x402.wtf/api/skills/solanaos",
       "homepage": "https://github.com/x402agent/solana-clawd/tree/main/skills/solanaos",
       "tags": [

@@ -36,9 +36,21 @@
     "category": "AI / Agents"
   },
   {
+    "slug": "oracle",
+    "name": "oracle",
+    "description": "Best practices for using the oracle CLI (prompt + file bundling, engines, sessions, and file attachment patterns).",
+    "category": "AI / Agents"
+  },
+  {
     "slug": "sag",
     "name": "sag",
     "description": "ElevenLabs text-to-speech with mac-style say UX.",
+    "category": "AI / Agents"
+  },
+  {
+    "slug": "skill-creator",
+    "name": "skill-creator",
+    "description": "Create or update AgentSkills. Use when designing, structuring, or packaging skills with scripts, references, and assets.",
     "category": "AI / Agents"
   },
   {
@@ -213,6 +225,12 @@
     "slug": "peekaboo",
     "name": "peekaboo",
     "description": "Capture and automate macOS UI with the Peekaboo CLI.",
+    "category": "Media"
+  },
+  {
+    "slug": "sherpa-onnx-tts",
+    "name": "sherpa-onnx-tts",
+    "description": "Local text-to-speech via sherpa-onnx (offline, no cloud)",
     "category": "Media"
   },
   {
@@ -508,6 +526,78 @@
     "name": "PumpFun Trading",
     "description": "Buy and sell tokens on Pump.fun bonding curves and AMM pools",
     "category": "Pump.fun / Token Launch"
+  },
+  {
+    "slug": "imperial",
+    "name": "imperial",
+    "description": "Entry-point skill for Imperial perpetual routing on Solana. Use before answering or acting on Imperial router flows, Phoenix-routed perps, profile funding, market/portfolio intel, risk checks, TP/SL, TWAP, grid, or Telegram bot trading workflows.",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "imperial-execution-modes",
+    "name": "imperial-execution-modes",
+    "description": "Execution-mode taxonomy for Imperial router workflows in this repo: observe, route-check, paper/spec, live single-shot, and external durable runner.",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "imperial-grid-trading",
+    "name": "imperial-grid-trading",
+    "description": "Grid strategy design for Imperial/Phoenix perps: ladder layout, venue pinning, replacement logic, and durable-runner boundaries.",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "imperial-margin-operations",
+    "name": "imperial-margin-operations",
+    "description": "Imperial profile funding, deposit/withdraw transaction building, profile isolation, and margin-state reporting.",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "imperial-market-intel",
+    "name": "imperial-market-intel",
+    "description": "Imperial and Phoenix market data: funding, mark prices, route checks, Phoenix depth, and pre-trade venue context.",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "imperial-portfolio-intel",
+    "name": "imperial-portfolio-intel",
+    "description": "Imperial profile balances, open positions, open orders, exposure summary, and wallet-level Telegram/admin portfolio recaps.",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "imperial-position-management",
+    "name": "imperial-position-management",
+    "description": "Inspect, reduce, and close Imperial-routed positions across Phoenix, Flash, Jupiter, and GMTrade, with Phoenix preferred by default.",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "imperial-risk-management",
+    "name": "imperial-risk-management",
+    "description": "Risk checks for Imperial-routed perps: profile funding, existing exposure, venue choice, margin headroom, and Telegram pre-trade snapshots.",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "imperial-skills-index",
+    "name": "imperial-skills-index",
+    "description": "Index for the bundled Imperial skill pack exposed through solana-clawd. Use to discover the correct focused Imperial skill.",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "imperial-tpsl-management",
+    "name": "imperial-tpsl-management",
+    "description": "Take-profit and stop-loss management for Imperial-routed positions, including close-leg design, verification, and Telegram operator caveats.",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "imperial-trade-execution",
+    "name": "imperial-trade-execution",
+    "description": "Safe Imperial live execution: authenticated market orders, Phoenix-first venue preference, profile-aware routing, and post-trade verification.",
+    "category": "Solana / Blockchain"
+  },
+  {
+    "slug": "imperial-twap-execution",
+    "name": "imperial-twap-execution",
+    "description": "TWAP execution guidance for Imperial: slice planning, venue pinning, profile budgeting, and durable-runner requirements.",
+    "category": "Solana / Blockchain"
   },
   {
     "slug": "magicblock",
