@@ -22,14 +22,6 @@
 
 ---
 
-## Hackathon Submission
-
-Solana Clawd is submitted to Colosseum here: [arena.colosseum.org/projects/explore/solana-clawd](https://arena.colosseum.org/projects/explore/solana-clawd).
-
-Judges should start with the dedicated [hackathon guide](./hackathon/README.md), then use the [demo script](./hackathon/DEMOS.md), [judge guide](./hackathon/JUDGES.md), and [repo map](./hackathon/REPO_MAP.md).
-
----
-
 ## The Thesis
 
 > **AI will not become truly useful at global scale until actions become verifiable. Clawd turns AI from probabilistic speech into attestable machine labor.**
@@ -260,6 +252,43 @@ Docs:
 | [`adk/.env.example`](./adk/.env.example) | Non-secret env template for ADK model auth and private routing overrides |
 
 Secrets stay out of git. Put real Gemini keys, RPC URLs, API keys, and wallet material in local `.env` files or the shell only.
+
+---
+
+## Hackathon Submission
+
+Solana Clawd is submitted to Colosseum here: [arena.colosseum.org/projects/explore/solana-clawd](https://arena.colosseum.org/projects/explore/solana-clawd).
+
+Judges should start with the dedicated [hackathon guide](./hackathon/README.md), then use the [demo script](./hackathon/DEMOS.md), [judge guide](./hackathon/JUDGES.md), and [repo map](./hackathon/REPO_MAP.md).
+
+| Path | What judges should use it for |
+| --- | --- |
+| [`hackathon/README.md`](./hackathon/README.md) | Main animated submission guide and product narrative |
+| [`hackathon/JUDGES.md`](./hackathon/JUDGES.md) | Fast evaluation path, architecture notes, and scoring hooks |
+| [`hackathon/DEMOS.md`](./hackathon/DEMOS.md) | Demo flows for research, market intelligence, wallet analysis, and onchain execution |
+| [`hackathon/REPO_MAP.md`](./hackathon/REPO_MAP.md) | Map of the submitted GitHub repo across MCP, agents, SDK, TUI, perps, AMM, gateway, verification, and skills |
+
+## AMM Pool Routing Upgrade
+
+The `/amm` package now carries the merged perps AMM work into the standalone AMM surface: pool state, pool impact math, split routing, CLI commands, SDK exports, and two new MCP tools.
+
+| Surface | Upgrade |
+| --- | --- |
+| [`amm/src/aggregator/ammMath.ts`](./amm/src/aggregator/ammMath.ts) | Per-side utilization, capacity checks, OI skew, predicted funding, borrow rates, and pool health |
+| [`amm/src/venues/poolState.ts`](./amm/src/venues/poolState.ts) | Operator-injected pool state with synthetic fallback from funding and liquidity defaults |
+| [`amm/src/aggregator/splitRouter.ts`](./amm/src/aggregator/splitRouter.ts) | Greedy marginal-cost split routing across venues when it beats single-venue execution |
+| [`amm/src/mcp/tools.ts`](./amm/src/mcp/tools.ts) | `amm_route_trade_split` and `amm_get_pools`, bringing the AMM MCP surface to 17 tools |
+| [`amm/README.md`](./amm/README.md) | AMM-specific animated guide, CLI examples, SDK usage, and MCP tool map |
+
+```bash
+npm --prefix amm run typecheck
+npm --prefix amm run test:math
+npm --prefix amm run build
+node amm/dist/cli.js pools SOL-PERP
+node amm/dist/cli.js route-split SOL-PERP long 4000
+```
+
+---
 
 ## Public Gitlawb Mirror
 
