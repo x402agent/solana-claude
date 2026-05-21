@@ -33,6 +33,8 @@ export interface Env {
   COMMERCE_PRODUCT_BASE_URL?: string;
   /** Optional public base URL for product images, ending before /{productId}.png. */
   COMMERCE_IMAGE_BASE_URL?: string;
+  /** Public 3D Backroom frontend machine. API paths are not proxied. */
+  BACKROOM_3D_PUBLIC_URL?: string;
 
   // secrets
   HELIUS_API_KEY: string;

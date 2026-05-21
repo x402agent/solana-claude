@@ -8,6 +8,7 @@
  *   /agents/:id/*             — payment-gated agent invocation (any protocol)
  *   /a2a/:id/.well-known/agent.json   — A2A agent card
  *   /a2a/:id                  — A2A JSON-RPC endpoint (payment-gated)
+ *   /3d                       — public 3D Backroom page redirect
  *   /health                   — liveness
  */
 
@@ -48,6 +49,7 @@ import {
 } from "./protocols/a2a";
 
 const app = new Hono<{ Bindings: Env }>();
+const DEFAULT_BACKROOM_3D_PUBLIC_URL = "https://backroom-3d.fly.dev";
 
 app.use("*", cors({ origin: "*", allowHeaders: ["*"], exposeHeaders: ["*"] }));
 app.use("*", securityHeaders);
@@ -59,6 +61,13 @@ app.get("/health", (c) =>
 app.route("/facilitator", facilitator);
 app.route("/facilitator/clawd", clawdFacilitator);
 app.route("/commerce", commerce);
+
+/* ——— Public 3D Backroom route, no API proxying ——— */
+
+app.all("/3d/api/*", (c) => hiddenBackroom3dApi(c));
+app.all("/api/backroom-3d/*", (c) => hiddenBackroom3dApi(c));
+app.all("/3d", (c) => redirectBackroom3d(c));
+app.all("/3d/*", (c) => redirectBackroom3d(c));
 
 /* ——— Registry read ——— */
 
@@ -314,6 +323,41 @@ function isValidA2ARequest(value: unknown): value is A2ARequest {
     !!rpc.params &&
     typeof rpc.params === "object"
   );
+}
+
+function redirectBackroom3d(c: import("hono").Context<{ Bindings: Env }>): Response {
+  if (c.req.method !== "GET" && c.req.method !== "HEAD") {
+    return c.json({ error: "method not allowed" }, 405, { allow: "GET, HEAD" });
+  }
+
+  const incoming = new URL(c.req.url);
+  const suffix = incoming.pathname === "/3d" ? "/" : incoming.pathname.slice("/3d".length) || "/";
+  if (suffix === "/api" || suffix.startsWith("/api/")) return hiddenBackroom3dApi(c);
+
+  const upstream = new URL(c.env.BACKROOM_3D_PUBLIC_URL || DEFAULT_BACKROOM_3D_PUBLIC_URL);
+  upstream.pathname = joinPublicPath(upstream.pathname, suffix);
+  upstream.search = incoming.search;
+
+  c.header("cache-control", "public, max-age=300");
+  c.header("x-backroom-3d-machine", upstream.hostname);
+  return c.redirect(upstream.toString(), 302);
+}
+
+function hiddenBackroom3dApi(c: import("hono").Context<{ Bindings: Env }>): Response {
+  return c.json(
+    {
+      error: "not found",
+      message: "The 3D Backroom page is public, but its internal API is not exposed here.",
+    },
+    404,
+    { "cache-control": "no-store" },
+  );
+}
+
+function joinPublicPath(basePath: string, suffix: string): string {
+  const base = basePath === "/" ? "" : basePath.replace(/\/+$/, "");
+  const tail = suffix.startsWith("/") ? suffix : `/${suffix}`;
+  return `${base}${tail}` || "/";
 }
 
 export default app;
