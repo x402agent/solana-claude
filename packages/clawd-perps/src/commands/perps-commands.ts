@@ -55,37 +55,28 @@ function handleTwammAction(action: string, opts: Record<string, unknown>): void 
     once: Boolean(opts.once),
     yes: Boolean(opts.yes),
   };
+  const skipAppInstall = Boolean(opts.skipAppInstall);
 
   if (action === "status") {
     const s = getTwammStatus();
     print({ success: true, data: s, output: JSON.stringify(s, null, 2) });
-    return;
-  }
-  if (action === "build" || action === "install") {
-    const r = buildTwamm({ skipAppInstall: Boolean(opts.skipAppInstall) });
+  } else if (["build", "install"].includes(action)) {
+    const r = buildTwamm({ skipAppInstall });
     print({ success: r.ok, data: r, output: JSON.stringify(r, null, 2), ...(r.ok ? {} : { error: r.error || "build failed" }) });
-    return;
-  }
-  if (action === "build-plan") {
-    const p = buildTwammBuildPlan({ skipAppInstall: Boolean(opts.skipAppInstall) });
+  } else if (action === "build-plan") {
+    const p = buildTwammBuildPlan({ skipAppInstall });
     print({ success: true, data: p, output: JSON.stringify(p, null, 2) });
-    return;
-  }
-  if (action === "test-plan") {
+  } else if (action === "test-plan") {
     const p = buildTwammTestPlan({ anchor: !opts.cargo, cargo: Boolean(opts.cargo) });
     print({ success: true, data: p, output: JSON.stringify(p, null, 2) });
-    return;
-  }
-  if (action === "plan" || action === "crank-plan") {
+  } else if (["plan", "crank-plan"].includes(action)) {
     const p = buildTwammCrankPlan(crankOptions);
     print({ success: true, data: p, output: JSON.stringify(p, null, 2) });
-    return;
-  }
-  if (action === "crank" || action === "run") {
+  } else if (["crank", "run"].includes(action)) {
     runTwammCrank(crankOptions);
-    return;
+  } else {
+    print({ success: false, error: `unknown twamm action: ${action}` });
   }
-  print({ success: false, error: `unknown twamm action: ${action}` });
 }
 
 export function buildPerpsCommand(): Command {
@@ -535,46 +526,7 @@ Environment:
   CLAWD_TWAMM_TOKEN_B_MINT   Token B mint (default: USDC)
   CLAWD_TWAMM_LIVE=true      Required for crank (with OPERATOR_CONFIRMED=true and --yes)
 `)
-    .action((action: string, opts: Record<string, unknown>) => {
-      const crankOptions = {
-        rpcUrl: typeof opts.rpcUrl === "string" ? opts.rpcUrl : undefined,
-        tokenAMint: typeof opts.tokenA === "string" ? opts.tokenA : undefined,
-        tokenBMint: typeof opts.tokenB === "string" ? opts.tokenB : undefined,
-        walletPath: typeof opts.wallet === "string" ? opts.wallet : undefined,
-        once: Boolean(opts.once),
-        yes: Boolean(opts.yes),
-      };
-      if (action === "status") {
-        const s = getTwammStatus();
-        print({ success: true, data: s, output: JSON.stringify(s, null, 2) });
-        return;
-      }
-      if (action === "build" || action === "install") {
-        const r = buildTwamm({ skipAppInstall: Boolean(opts.skipAppInstall) });
-        print({ success: r.ok, data: r, output: JSON.stringify(r, null, 2), ...(r.ok ? {} : { error: r.error || "build failed" }) });
-        return;
-      }
-      if (action === "build-plan") {
-        const p = buildTwammBuildPlan({ skipAppInstall: Boolean(opts.skipAppInstall) });
-        print({ success: true, data: p, output: JSON.stringify(p, null, 2) });
-        return;
-      }
-      if (action === "test-plan") {
-        const p = buildTwammTestPlan({ anchor: !opts.cargo, cargo: Boolean(opts.cargo) });
-        print({ success: true, data: p, output: JSON.stringify(p, null, 2) });
-        return;
-      }
-      if (action === "plan" || action === "crank-plan") {
-        const p = buildTwammCrankPlan(crankOptions);
-        print({ success: true, data: p, output: JSON.stringify(p, null, 2) });
-        return;
-      }
-      if (action === "crank" || action === "run") {
-        runTwammCrank(crankOptions);
-        return;
-      }
-      print({ success: false, error: `unknown twamm action: ${action}` });
-    });
+    .action((action: string, opts: Record<string, unknown>) => handleTwammAction(action, opts));
 
   cmd
     .command("python-agent")
