@@ -107,6 +107,81 @@ leviathan --spawn
 
 ---
 
+## ⚡ What's New — Perps Stack
+
+<div align="center">
+
+<img src="https://capsule-render.vercel.app/api?type=rect&color=0:05060d,30:1a0a2e,60:9945FF,100:FF5F1F&height=100&text=⚡%20PERPS%20STACK%20UPGRADE&fontSize=36&fontColor=ffffff&animation=fadeIn&fontAlignY=50&desc=clawd-perps%20v1.5.0%20%C2%B7%20clawd-perps-aggregator%20v0.2.0&descSize=15&descAlignY=72" alt="Perps Stack Upgrade" />
+
+<img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=700&size=16&duration=1400&pause=500&color=9945FF&center=true&vCenter=true&width=860&lines=%F0%9F%94%A5+TP%2FSL+orders+%C2%B7+risk+metrics+%C2%B7+Claude+Haiku+harness;%E2%9A%A1+spread+scoring+%C2%B7+venue+fallback+%C2%B7+portfolio+funding+exposure;%F0%9F%A6%9E%F0%9F%91%91+Phoenix+%2B+Flash+%2B+Jupiter+%2B+GMTrade+%C2%B7+MCP+server+%C2%B7+paper-first" alt="Perps update" />
+
+</div>
+
+```text
+  ┌─────────────────────────────────────────────────────────────────────┐
+  │  clawd-perps v1.5.0 · Phoenix CLI + AI Harness                     │
+  │  ✅  buildSetTpSl — TP (limit close) + SL (stop-loss) in one call  │
+  │  ✅  getRiskMetrics — margin ratio · liq distance · health band     │
+  │  ✅  Claude Haiku 4.5 default model in harness                     │
+  ├─────────────────────────────────────────────────────────────────────┤
+  │  clawd-perps-aggregator v0.2.0 · SOR + MCP across 4 venues         │
+  │  ✅  Spread scoring (5th dimension: cost·liq·OI·funding·spread)    │
+  │  ✅  Venue fallback — auto-skips unfillable, picks next-best        │
+  │  ✅  fundingAccruedUsd + marginRatio in AggregatedPositions.totals  │
+  └─────────────────────────────────────────────────────────────────────┘
+```
+
+**`clawd-perps` v1.5.0** — Phoenix CLI, TUI, agent harness, on-chain MM bridge.
+
+```bash
+npm install -g @openclawdsolana/clawd-perps
+
+# new in v1.5.0
+clawd-perps perps position tpsl SOL --tp 220 --sl 140 --side long
+clawd-perps perps account risk
+```
+
+```typescript
+import { ClaWDPerps } from '@openclawdsolana/clawd-perps'
+const perps = new ClaWDPerps()
+
+// Take-profit + stop-loss in one instruction set
+await perps.buildSetTpSl({ market: 'SOL', takeProfit: 220, stopLoss: 140, positionSide: 'long' })
+
+// Portfolio risk overview — margin ratio, liq distance per position
+await perps.getRiskMetrics()
+// → { marginRatioPct: 42.1, portfolioHealth: 'low', positions: [...] }
+```
+
+**`clawd-perps-aggregator` v0.2.0** — Smart order router, SDK, and MCP server across Phoenix · Flash · Jupiter · GMTrade.
+
+```bash
+npm install @openclawdsolana/clawd-perps-aggregator
+
+# best venue across all four with spread-aware scoring + fallback
+clawd-perps-aggregator route SOL long open --size 1000
+```
+
+```typescript
+import { PerpsAggregator } from '@openclawdsolana/clawd-perps-aggregator'
+const agg = new PerpsAggregator()
+
+// Smart route — spread + cost + liq + OI + funding scoring, auto-fallback
+const plan = await agg.route({ symbol: 'SOL', side: 'long', action: 'open', sizeUsd: 1000 })
+// plan.rationale → "Phoenix (phoenix) score 0.847 · slip 2.1bps · beats flash by $0.12"
+
+// Cross-venue positions with funding exposure + margin ratio
+const positions = await agg.positions('YOUR_WALLET')
+// positions.totals → { fundingAccruedUsd: -1.24, marginRatio: 0.08, ... }
+```
+
+| Package | Version | New |
+| --- | --- | --- |
+| [`@openclawdsolana/clawd-perps`](./packages/clawd-perps/) | `1.5.0` | TP orders · risk metrics · Claude Haiku |
+| [`@openclawdsolana/clawd-perps-aggregator`](./packages/clawd-perps-aggregator/) | `0.2.0` | Spread scoring · venue fallback · funding exposure |
+
+---
+
 ## 🧠 What's New — Clawd Memory
 
 <div align="center">
