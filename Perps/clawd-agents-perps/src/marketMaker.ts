@@ -112,6 +112,11 @@ export class ClawdPerpsRuntime {
     return summarizeVulcanCatalog(this.repoRoot);
   }
 
+  async listSkills(category?: "vulcan" | "clawd" | "other") {
+    const summary = await summarizeVulcanCatalog(this.repoRoot);
+    return category ? summary.skills.filter((s) => s.category === category) : summary.skills;
+  }
+
   previewObserve(symbol: string, expectedSpreadBps?: number): TraderActionPreview {
     const preflight = buildPreflightReport(this.config, {
       symbol,
