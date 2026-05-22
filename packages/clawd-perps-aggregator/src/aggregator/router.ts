@@ -78,12 +78,13 @@ export class SmartRouter {
   async route(req: QuoteRequest): Promise<RoutePlan> {
     const quotes = await this.quoteAll(req);
     const scored = scoreQuotes(quotes, this.weights);
-    const top = scored[0];
+
+    // Prefer the top fillable venue; fall back to runner-up if top is unfillable.
+    const top = scored.find((s) => s.quote.fillable) ?? scored[0];
     if (!top) {
       throw new Error("no venue quotes available");
     }
 
-    // If the top score is 0 (nothing fillable), still produce a plan but mark it.
     const chosen = top.quote;
     const rationale = buildRationale(top, scored);
 

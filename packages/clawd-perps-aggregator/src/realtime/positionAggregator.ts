@@ -69,6 +69,8 @@ export async function fetchAggregatedPositions(
     netNotionalUsd: 0,
     collateralUsd: 0,
     unrealizedPnlUsd: 0,
+    fundingAccruedUsd: 0,
+    marginRatio: 0,
     bySymbol: {} as Record<string, number>,
   };
   for (const p of positions) {
@@ -77,8 +79,13 @@ export async function fetchAggregatedPositions(
     totals.netNotionalUsd += signedUsd;
     totals.collateralUsd += p.collateralUsd;
     totals.unrealizedPnlUsd += p.unrealizedPnlUsd ?? 0;
+    totals.fundingAccruedUsd += p.fundingAccruedUsd ?? 0;
     totals.bySymbol[p.symbol] = (totals.bySymbol[p.symbol] ?? 0) + signedUsd;
   }
+  // margin ratio = gross notional / total collateral (leverage-based view)
+  totals.marginRatio = totals.collateralUsd > 0
+    ? Math.min(totals.grossNotionalUsd / totals.collateralUsd / 100, 1)
+    : 0;
 
   return { wallet, positions, totals };
 }

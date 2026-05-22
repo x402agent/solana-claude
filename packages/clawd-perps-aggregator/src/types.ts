@@ -192,6 +192,10 @@ export interface AggregatedPositions {
     netNotionalUsd: number;
     collateralUsd: number;
     unrealizedPnlUsd: number;
+    /** Sum of fundingAccruedUsd across all positions (negative = owed). */
+    fundingAccruedUsd: number;
+    /** usedMargin / totalCollateral — portfolio-level margin utilization [0,1]. */
+    marginRatio: number;
     /** Net exposure per symbol (longs - shorts, USD). */
     bySymbol: Record<string, number>;
   };

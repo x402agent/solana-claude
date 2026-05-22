@@ -119,7 +119,7 @@ export function scoreQuotes(
     .map<ScoredQuote>((q) => ({
       quote: q,
       score: 0,
-      components: { cost: 0, liquidity: 0, openInterest: 0, funding: 0 },
+      components: { cost: 0, liquidity: 0, openInterest: 0, funding: 0, spread: 0 },
     }));
 
   return [...scored, ...rest].sort((a, b) => b.score - a.score);
