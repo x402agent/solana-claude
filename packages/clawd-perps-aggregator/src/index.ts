@@ -54,8 +54,10 @@ export {
   FlashAdapter,
   JupiterAdapter,
   GMTradeAdapter,
+  TwammAdapter,
   buildVenueAdapters,
 } from "./venues/registry.js";
+export { TWAMM_DEFAULT_SUPPORTED_PAIRS } from "./venues/twamm.js";
 export {
   StaticPoolStateProvider,
   chainPoolStateProviders,
