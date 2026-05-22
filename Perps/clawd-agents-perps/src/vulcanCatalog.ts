@@ -1,5 +1,5 @@
-import { readFile } from "node:fs/promises";
-import { join } from "node:path";
+import { readFile, readdir } from "node:fs/promises";
+import { join, basename } from "node:path";
 
 export interface VulcanCatalogCommand {
   name: string;
@@ -24,6 +24,12 @@ export interface VulcanMcpConfig {
   mcpServers?: Record<string, { command: string; args?: string[] }>;
 }
 
+export interface VulcanSkillEntry {
+  name: string;
+  path: string;
+  category: "vulcan" | "clawd" | "other";
+}
+
 export interface VulcanCatalogSummary {
   cliVersion: string;
   groupCount: number;
@@ -31,6 +37,7 @@ export interface VulcanCatalogSummary {
   dangerousCommands: number;
   groups: Array<{ name: string; description: string; commandCount: number }>;
   mcpServer?: { command: string; args: string[] };
+  skills: VulcanSkillEntry[];
 }
 
 async function readJsonFile<T>(path: string): Promise<T> {
@@ -48,10 +55,31 @@ export async function loadVulcanMcpConfig(repoRoot: string): Promise<VulcanMcpCo
   return readJsonFile<VulcanMcpConfig>(join(repoRoot, "vulcan-cli-master", ".mcp.json"));
 }
 
+async function enumerateSkills(repoRoot: string): Promise<VulcanSkillEntry[]> {
+  const skillsRoot = join(repoRoot, "skills");
+  try {
+    const entries = await readdir(skillsRoot, { withFileTypes: true });
+    return entries
+      .filter((entry) => entry.isDirectory())
+      .map((entry) => {
+        const name = basename(entry.name);
+        const category: VulcanSkillEntry["category"] = name.startsWith("vulcan")
+          ? "vulcan"
+          : name.startsWith("clawd")
+            ? "clawd"
+            : "other";
+        return { name, path: join(skillsRoot, name, "SKILL.md"), category };
+      });
+  } catch {
+    return [];
+  }
+}
+
 export async function summarizeVulcanCatalog(repoRoot: string): Promise<VulcanCatalogSummary> {
-  const [catalog, mcp] = await Promise.all([
+  const [catalog, mcp, skills] = await Promise.all([
     loadVulcanToolCatalog(repoRoot),
     loadVulcanMcpConfig(repoRoot),
+    enumerateSkills(repoRoot),
   ]);
 
   const groups = Object.entries(catalog.groups).map(([name, description]) => ({
@@ -69,6 +97,7 @@ export async function summarizeVulcanCatalog(repoRoot: string): Promise<VulcanCa
     commandCount: catalog.commands.length,
     dangerousCommands,
     groups,
+    skills,
     ...(mcpServer
       ? { mcpServer: { command: mcpServer.command, args: mcpServer.args ?? [] } }
       : {}),
