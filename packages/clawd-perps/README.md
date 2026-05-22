@@ -13,7 +13,7 @@
 
 ---
 
-```
+```text
   ╔══════════════════════════════════════════════════════════════════╗
   ║   🦞  Phoenix Perpetuals DEX · CLI · TUI · Agent Harness        ║
   ║                                                                  ║
@@ -32,7 +32,7 @@ Part of the [OpenClawd](https://solanaclawd.com) framework.
 ### What's new in v1.5.0
 
 | Change | Details |
-|---|---|
+| --- | --- |
 | **Take-profit orders** | `buildSetTpSl` now wires both SL (Rise stop-loss) and TP (resting limit close) in one call |
 | **Risk metrics** | New `getRiskMetrics()` — margin ratio, liquidation distance bands, portfolio health score |
 | **Claude Haiku default** | Harness default model upgraded from `gpt-5-nano` → `claude-haiku-4-5` |

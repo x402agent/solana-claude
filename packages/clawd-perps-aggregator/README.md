@@ -1,10 +1,44 @@
-# @openclawdsolana/clawd-perps-aggregator
+<div align="center">
+
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:05060d,20:0d1117,50:9945FF,80:14F195,100:FF5F1F&height=220&section=header&text=⚡%20CLAWD%20PERPS%20AGGREGATOR&fontSize=44&fontColor=ffffff&animation=fadeIn&fontAlignY=42&desc=Phoenix%20%C2%B7%20Flash%20%C2%B7%20Jupiter%20%C2%B7%20GMTrade%20%C2%B7%20Smart%20Routing%20%C2%B7%20MCP&descAlignY=66&descSize=17" alt="Clawd Perps Aggregator" />
+
+<img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=700&size=19&duration=1600&pause=500&color=14F195&center=true&vCenter=true&width=900&lines=%E2%9A%A1+SMART+ORDER+ROUTING+ACROSS+4+VENUES;%F0%9F%93%8A+SPREAD+%2B+COST+%2B+LIQUIDITY+%2B+OI+%2B+FUNDING+SCORING;%F0%9F%A4%96+MCP+SERVER+FOR+AI+AGENTS+%2B+CLAUDE+DESKTOP;%F0%9F%94%81+VENUE+FALLBACK+%2B+SPLIT+EXECUTION+%2B+PORTFOLIO+RISK;%F0%9F%86%95+v0.2.0%3A+spread+scoring+%C2%B7+funding+exposure+%C2%B7+margin+ratio" alt="Clawd Perps Aggregator" />
+
+[![npm](https://img.shields.io/npm/v/@openclawdsolana/clawd-perps-aggregator?style=for-the-badge&color=9945FF&logo=npm)](https://www.npmjs.com/package/@openclawdsolana/clawd-perps-aggregator)
+[![License](https://img.shields.io/badge/license-MIT-14F195?style=for-the-badge)](LICENSE)
+[![MCP](https://img.shields.io/badge/MCP-17%20tools-FF5F1F?style=for-the-badge)](src/mcp)
+[![Venues](https://img.shields.io/badge/venues-Phoenix%20%2B%20Flash%20%2B%20Jupiter%20%2B%20GMTrade-9945FF?style=for-the-badge)](src/venues)
+
+</div>
+
+---
+
+```text
+       ┌──────────────────────────────────────────────────────┐
+       │           ⚡  CLAWD PERPS AGGREGATOR  v0.2.0          │
+       │                                                        │
+       │   quote all venues ──▶ score (cost·liq·OI·fund·spread)│
+       │   pick best fillable ──▶ fallback to runner-up        │
+       │   split execution for oversized AMM orders            │
+       │   funding exposure · margin ratio · liq risk          │
+       │   17 MCP tools · paper-first · size-capped safety     │
+       └──────────────────────────────────────────────────────┘
+```
 
 **Solana perps smart-order router, developer SDK, and MCP server.**
 Built on top of the Clawd `/Perps` stack and the Imperial multi-venue
 execution router. Aggregates Phoenix, Flash Trade, Jupiter Perps, and
 GMTrade behind a single execution surface for humans, dashboards, and
 AI agents.
+
+### What's new in v0.2.0
+
+| Change | Details |
+| --- | --- |
+| **Spread scoring** | 5th scoring dimension — tighter bid-ask spread scores higher; weights rebalanced to sum to 1.0 |
+| **Venue fallback** | Router now auto-selects next-best fillable venue if top choice is unfillable |
+| **Portfolio funding exposure** | `AggregatedPositions.totals.fundingAccruedUsd` — net funding owed/earned across all positions |
+| **Margin ratio** | `AggregatedPositions.totals.marginRatio` — gross notional / collateral leverage view |
 
 ```text
                        ┌────────────────────────────────────┐
