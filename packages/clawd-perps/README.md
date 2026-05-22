@@ -1,13 +1,42 @@
-# 🦞👑 Lobster King Phoenix Perps
+<div align="center">
 
-<p align="center">
-  <img alt="Lobster King Phoenix Perps" src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=800&size=28&pause=900&color=FF5F1F&center=true&vCenter=true&width=900&lines=%F0%9F%A6%9E%F0%9F%91%91+LOBSTER+KING+PERPS+ONLINE;%F0%9F%94%A5+PHOENIX+MARKETS+%2B+VULCAN+STRATEGIES;%E2%9A%A1+CLAWD+AGENTS+%2B+IMPERIAL+RELAY;%F0%9F%93%A1+REALTIME+BACKROOM+TUI" />
-</p>
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:05060d,20:1a0a2e,50:FF5F1F,80:FFD166,100:9945FF&height=220&section=header&text=🦞👑%20LOBSTER%20KING%20PERPS&fontSize=52&fontColor=ffffff&animation=twinkling&fontAlignY=42&desc=Phoenix%20%C2%B7%20Vulcan%20%C2%B7%20Imperial%20%C2%B7%20On-Chain%20MM%20%C2%B7%20AI%20Harness&descAlignY=66&descSize=18" alt="Lobster King Perps" />
+
+<img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=800&size=22&duration=1800&pause=600&color=FF5F1F&center=true&vCenter=true&width=900&lines=%F0%9F%A6%9E%F0%9F%91%91+LOBSTER+KING+PERPS+v1.5.0;%F0%9F%94%A5+PHOENIX+MARKETS+%2B+TP%2FSL+%2B+RISK+METRICS;%E2%9A%A1+CLAWD+AGENTS+%2B+IMPERIAL+RELAY+%2B+VULCAN;%F0%9F%93%A1+REALTIME+TUI+%2B+AI+HARNESS+%2B+ONCHAIN+MM;%F0%9F9E+NEW%3A+getRiskMetrics+%C2%B7+buildSetTpSl+%C2%B7+Claude+model" alt="Lobster King Perps" />
+
+[![npm](https://img.shields.io/npm/v/@openclawdsolana/clawd-perps?style=for-the-badge&color=FF5F1F&logo=npm)](https://www.npmjs.com/package/@openclawdsolana/clawd-perps)
+[![License](https://img.shields.io/badge/license-MIT-9945FF?style=for-the-badge)](LICENSE)
+[![Solana](https://img.shields.io/badge/Solana-Phoenix%20Perps-14F195?style=for-the-badge&logo=solana)](https://phoenix.trade)
+[![OpenClawd](https://img.shields.io/badge/OpenClawd-solanaclawd.com-FF5F1F?style=for-the-badge)](https://solanaclawd.com)
+
+</div>
+
+---
+
+```
+  ╔══════════════════════════════════════════════════════════════════╗
+  ║   🦞  Phoenix Perpetuals DEX · CLI · TUI · Agent Harness        ║
+  ║                                                                  ║
+  ║   market data  ─▶  positions  ─▶  orders  ─▶  TP/SL           ║
+  ║   risk metrics ─▶  margin ratio ─▶  liq distance bands         ║
+  ║   harness      ─▶  Claude Haiku ─▶  OODA ─▶  relay             ║
+  ║   on-chain MM  ─▶  Phoenix reference impl (gated)              ║
+  ╚══════════════════════════════════════════════════════════════════╝
+```
 
 **Phoenix Perpetuals DEX CLI, realtime TUI, agent harness, and gated on-chain market-maker bridge for the OpenClawd framework.**  
 Trade perps on Solana from TypeScript market tools, bring up the Clawd TypeScript agent, inspect the Phoenix on-chain MM reference implementation, or delegate strategies/lifecycle controls through the Python Phoenix agent and Vulcan CLI.
 
 Part of the [OpenClawd](https://solanaclawd.com) framework.
+
+### What's new in v1.5.0
+
+| Change | Details |
+|---|---|
+| **Take-profit orders** | `buildSetTpSl` now wires both SL (Rise stop-loss) and TP (resting limit close) in one call |
+| **Risk metrics** | New `getRiskMetrics()` — margin ratio, liquidation distance bands, portfolio health score |
+| **Claude Haiku default** | Harness default model upgraded from `gpt-5-nano` → `claude-haiku-4-5` |
+| **TP size control** | `TpSlParams.takeProfitSize` — partial TP at specified base units |
 
 ---
 
