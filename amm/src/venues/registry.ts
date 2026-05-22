@@ -1,9 +1,10 @@
 import { ImperialTransport } from "./transport.js";
 import { BaseImperialVenueAdapter, PhoenixVenueAdapter } from "./base.js";
+import { TwammVenueAdapter } from "./twamm.js";
 import type { VenueAdapter, VenueDefaults } from "./adapter.js";
 import type { AggregatorConfig, VenueName } from "../types.js";
 
-const DEFAULTS: Record<VenueName, VenueDefaults> = {
+const DEFAULTS: Record<Exclude<VenueName, "twamm">, VenueDefaults> = {
   phoenix: {
     venue: "phoenix",
     feeBps: 4,
@@ -49,8 +50,10 @@ export function createVenueAdapters(config: AggregatorConfig): VenueAdapter[] {
   });
 
   return config.safety.allowedVenues.map((venue) => {
-    const defaults = DEFAULTS[venue];
-    if (venue === "phoenix") return new PhoenixVenueAdapter(defaults, transport);
-    return new BaseImperialVenueAdapter(defaults, transport);
+    if (venue === "twamm") return new TwammVenueAdapter(transport);
+    if (venue === "phoenix") return new PhoenixVenueAdapter(DEFAULTS[venue], transport);
+    return new BaseImperialVenueAdapter(DEFAULTS[venue as Exclude<VenueName, "twamm">], transport);
   });
 }
+
+export { TwammVenueAdapter };

@@ -16,3 +16,4 @@ export * from "./venues/base.js";
 export * from "./venues/poolState.js";
 export * from "./venues/registry.js";
 export * from "./venues/transport.js";
+export { TwammVenueAdapter } from "./venues/twamm.js";

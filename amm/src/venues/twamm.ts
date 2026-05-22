@@ -9,7 +9,7 @@
  */
 
 import { BaseImperialVenueAdapter } from "./base.js";
-import { ImperialTransport } from "./transport.js";
+import type { ImperialTransport } from "./transport.js";
 import type { VenueDefaults } from "./adapter.js";
 import type { QuoteRequest, VenueQuote } from "../types.js";
 
