@@ -60,6 +60,17 @@ HERMES x402 is the first **fully Solana-native agentic harness** — an autonomo
 - Anti-sandwich slippage config  
 - Price impact minimization for whale-sized positions  
 
+### Perps Aggregator — Phoenix · Flash · Jupiter · GMTrade
+The **Solana perps routing layer** for traders, terminals, dashboards, and autonomous agents. One execution surface across four venues, exposed as an SDK, a smart-order router, and **17 MCP tools** wired straight into the Clawd MCP server.
+
+- **Smart order routing (SOR):** scores every venue on cost / liquidity / open-interest / funding and picks the best execution path, with a full per-venue breakdown and rationale.
+- **AMM pool intelligence:** for pool-backed venues (Flash, Jupiter, GMTrade) the router models real pool mechanics — per-side utilization, OI skew, predicted next-period funding, a convex borrow-rate ladder, and a composite pool-health score. Opening into the heavy side of a skewed pool correctly costs more; orders that would breach per-side OI caps are refused.
+- **Phoenix CLOB depth:** for the orderbook venue, slippage is computed by walking the book to a true VWAP.
+- **Split execution:** a greedy multi-leg allocator fans a large order across venues when no single pool can clear it cheaply.
+- **Paper-first safety:** live submission is gated behind `IMPERIAL_LIVE=true`, bounded by a hard per-order USD cap and a symbol allowlist. Private keys never enter the package — build tools return base64 transactions for the caller to sign.
+
+**Files:** `packages/clawd-perps-aggregator/` (SDK + router + MCP), `MCP/src/tools/perps-tools.ts` (bridge), `Perps/` (Imperial router + Phoenix MM + TWAMM).
+
 ---
 
 ## Architecture
@@ -67,7 +78,8 @@ HERMES x402 is the first **fully Solana-native agentic harness** — an autonomo
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │  LAYER 1: THE INTERFACE (TUI + CLI + MCP)                       │
-│   hermes-tui  •  clawd CLI  •  MCP server (31 Solana tools)    │
+│   hermes-tui • clawd CLI • MCP server (105 tools, 14 categories)│
+│   Perps Aggregator: 17 perps_* tools — SOR · AMM · split        │
 └──────────────────────────┬──────────────────────────────────────┘
                            │
 ┌──────────────────────────▼──────────────────────────────────────┐
@@ -84,9 +96,11 @@ HERMES x402 is the first **fully Solana-native agentic harness** — an autonomo
 └──────────────────────────┬──────────────────────────────────────┘
                            │
 ┌──────────────────────────▼──────────────────────────────────────┐
-│  LAYER 4: DARK DEFI INTELLIGENCE                                │
+│  LAYER 4: DARK DEFI INTELLIGENCE + PERPS EXECUTION              │
 │   Whale surveillance  •  MEV detection  •  Dark routing         │
 │   Helius DAS  •  On-chain context injection  •  Jupiter splits  │
+│   Perps SOR across Phoenix · Flash · Jupiter · GMTrade          │
+│   AMM pool intel: utilization · OI skew · funding · health      │
 └──────────────────────────┬──────────────────────────────────────┘
                            │
 ┌──────────────────────────▼──────────────────────────────────────┐
@@ -108,6 +122,8 @@ HERMES x402 is the first **fully Solana-native agentic harness** — an autonomo
 | Google A2A Client | `x402/a2a-agent.ts` | Full A2A spec + x402 payment gating |
 | Confidential Agent | `x402/confidential-agent.ts` | NaCl-encrypted inference + pay.sh |
 | Dark DeFi | `x402/dark-defi.ts` | Whale intel, MEV detection, dark routing |
+| Perps Aggregator | `packages/clawd-perps-aggregator/` | SOR + AMM pool intel + split routing + SDK + MCP across Phoenix/Flash/Jupiter/GMTrade |
+| Perps MCP Bridge | `MCP/src/tools/perps-tools.ts` | 17 `perps_*` tools wired into the Clawd MCP server |
 
 ---
 
@@ -134,11 +150,17 @@ npm run demo:dark-defi   # Dark DeFi intelligence demo
 # Start ClawdRouter (LLM router with x402)
 cd clawdrouter && npm start
 
-# Start MCP server (31 Solana tools for Claude Desktop / Cursor)
-npm run mcp:start
+# Build + start the MCP server (105 tools incl. 17 perps_* tools)
+npm run clawd-perps-aggregator:build   # provides the perps tools
+npm run mcp:build && npm run mcp:start
+
+# Perps Aggregator — smart-order routing across 4 Solana perps venues
+npm run clawd-perps-aggregator:cli -- route SOL long 250    # best venue + breakdown
+npm run clawd-perps-aggregator:cli -- pools SOL             # AMM pool intel
+npm run clawd-perps-aggregator:cli -- route-split SOL long 25000
 ```
 
-**No private key required for demo mode.** All market data uses public APIs.
+**No private key required for demo mode.** All market data uses public APIs; perps execution is paper-first and live submission is gated behind `IMPERIAL_LIVE=true`.
 
 ---
 
@@ -150,6 +172,7 @@ Agent earns USDC by:          Agent pays USDC for:
   • Running analysis tasks       • ClawdRouter model access (x402)
   • A2A task responses           • On-chain data (Helius)
   • Dark DeFi intelligence       • Other agent services (A2A)
+  • Perps routing / execution    • MCP tool calls (p-token metered)
 ```
 
 Revenue split on every x402 payment:
@@ -169,6 +192,7 @@ $CLAWD holder discounts: 10% (1K) → 25% (100K) → 50% (1M tokens)
 3. **Private**: pay.sh blind relay — the only confidential x402 facilitator  
 4. **Open**: No keys, no KYC, MIT licensed, one-shot install  
 5. **Beautiful**: Neon TUI that actually shows live Solana data  
+6. **Executes**: Perps aggregator routes real trades across Phoenix, Flash, Jupiter, and GMTrade — agents don't just signal, they route and execute (paper-first, live-gated)  
 
 ---
 

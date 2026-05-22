@@ -36,6 +36,7 @@ export type ToolCategory =
   | "agents"
   | "chess"
   | "market"
+  | "perps"
   | "federation"
   | "docs"
   | "orchestrator"

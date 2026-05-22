@@ -38,6 +38,8 @@
  *   memory      (4)  — Persistent agent memory + autoDream
  *   agents      (6)  — Agent fleet + skill management
  *   chess       (7)  — Chess.com (autonomous agent chess)
+ *   perps       (17) — Solana perps aggregator: SOR, AMM pool intel,
+ *                      split routing, positions, risk, realtime
  *   federation  (N)  — Federated MCP tools from external servers
  *   docs        (3)  — Documentation system (list/get/search)
  *   orchestrator (4) — Orchestrator management tools
@@ -75,6 +77,7 @@ import { X402_TOOLS, withMeter, enhanceX402WithFacilitator } from "./tools/x402-
 import { LEVIATHAN_TOOLS } from "./tools/leviathan-tools.js";
 import { MARKET_TOOLS } from "./tools/market-tools.js";
 import { DEEP_CLAWD_TOOLS } from "./tools/deep-clawd-tools.js";
+import { createPerpsTools } from "./tools/perps-tools.js";
 import { createIntegrationTools } from "./tools/integration-tools.js";
 import { getPluginRegistry, type PluginRegistry } from "./plugins/plugin-registry.js";
 import { getFederationBridge, type FederationBridge } from "./federation/federation-bridge.js";
@@ -215,6 +218,15 @@ async function buildOrchestrator(
 
   // ── Deep Clawd (DeepSeek trading agent) ──────────────────────────────────
   orch.registerAll(DEEP_CLAWD_TOOLS);
+
+  // ── Perps Aggregator (Solana SOR + AMM pool intel + MCP) ─────────────────
+  // Bridges @openclawdsolana/clawd-perps-aggregator. Paper-first; live gated
+  // by IMPERIAL_LIVE. Loaded lazily so the server boots even if the package
+  // hasn't been built yet.
+  const perpsTools = await createPerpsTools();
+  if (perpsTools.length > 0) {
+    orch.registerAll(perpsTools);
+  }
 
   // ── Local package and service integrations ───────────────────────────────
   orch.registerAll(createIntegrationTools(REPO_ROOT));

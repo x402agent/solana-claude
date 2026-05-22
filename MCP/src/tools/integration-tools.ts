@@ -31,6 +31,7 @@ const PACKAGE_PATHS = [
   "packages/agentwallet",
   "packages/clawd",
   "packages/clawd-perps",
+  "packages/clawd-perps-aggregator",
   "packages/clawd-protocol",
   "packages/clawd-sdk",
   "packages/clawd-wallet",
