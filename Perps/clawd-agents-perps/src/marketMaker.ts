@@ -12,6 +12,18 @@ import {
   type VulcanExecutionPlan,
 } from "./adapters/vulcan.js";
 import { summarizeVulcanCatalog } from "./vulcanCatalog.js";
+import {
+  getTwammAutomationStatus,
+  buildTwammCrankPlan,
+  type TwammAutomationStatus,
+  type TwammAutomationPlan,
+} from "./twammAutomation.js";
+import {
+  getOnchainMarketMakerStatus,
+  buildOnchainMarketMakerPlan,
+  type OnchainMarketMakerStatus,
+  type OnchainMarketMakerPlan,
+} from "./onchainMarketMaker.js";
 
 export interface MarketMakerIntent {
   symbol: string;
@@ -203,6 +215,147 @@ export class ClawdPerpsRuntime {
       execution: intent.action.startsWith("live") ? "vulcan-live" : "paper",
     });
     return buildVulcanExecutionPlan(this.repoRoot, intent, preflight);
+  }
+
+  // ── TWAMM execution strategy ──────────────────────────────────────────────
+
+  getTwammStatus(): TwammAutomationStatus {
+    return getTwammAutomationStatus();
+  }
+
+  buildTwammCrankPlan(opts: {
+    rpcUrl?: string;
+    tokenAMint?: string;
+    tokenBMint?: string;
+    walletPath?: string;
+    once?: boolean;
+    yes?: boolean;
+  } = {}): TwammAutomationPlan {
+    return buildTwammCrankPlan(opts);
+  }
+
+  /**
+   * Preview a TWAMM-scheduled execution for large orders.
+   * TWAMM fills at the time-weighted oracle price over a configurable window,
+   * eliminating market-impact slippage at the cost of deferred fills.
+   * Use when notionalUsd exceeds ~$50k or when low-impact execution is required.
+   */
+  previewTwammExecution(
+    symbol: string,
+    side: "buy" | "sell",
+    notionalUsd: number,
+    tokenAMint?: string,
+    tokenBMint?: string,
+  ): TraderActionPreview & { twamm: TwammAutomationPlan } {
+    const preflight = buildPreflightReport(this.config, {
+      symbol,
+      notionalUsd,
+      execution: "observe",
+    });
+    const twammStatus = getTwammAutomationStatus();
+    const twammPlan = buildTwammCrankPlan({ tokenAMint, tokenBMint });
+    return {
+      symbol: symbol.toUpperCase(),
+      side,
+      notionalUsd,
+      execution: "observe",
+      preflight,
+      route: {
+        adapter: "rise",
+        action: "twamm.schedule",
+        payload: {
+          symbol: symbol.toUpperCase(),
+          side,
+          notionalUsd,
+          strategy: "twamm",
+          tokenAMint: tokenAMint ?? twammStatus.tokenAMint,
+          tokenBMint: tokenBMint ?? twammStatus.tokenBMint,
+          note: "TWAMM executes as time-weighted on-chain slices. Arm with CLAWD_TWAMM_LIVE=true.",
+          blocked: !preflight.ok || !twammStatus.exists,
+        },
+      },
+      twamm: twammPlan,
+    };
+  }
+
+  // ── Phoenix on-chain market-maker strategy ────────────────────────────────
+
+  getOnchainMmStatus(): OnchainMarketMakerStatus {
+    return getOnchainMarketMakerStatus();
+  }
+
+  buildOnchainMmPlan(opts: {
+    market?: string;
+    ticker?: string;
+    rpcUrl?: string;
+    keypairPath?: string;
+    quoteEdgeBps?: number;
+    quoteSize?: number;
+    refreshMs?: number;
+    priceImprovement?: string;
+    postOnly?: boolean;
+    release?: boolean;
+    yes?: boolean;
+  } = {}): OnchainMarketMakerPlan {
+    return buildOnchainMarketMakerPlan(opts);
+  }
+
+  /**
+   * Preview a Phoenix on-chain market-maker run plan.
+   * The mm binary places resting limit orders on the Phoenix CLOB, earning
+   * maker rebates while tightening the book spread.
+   */
+  previewOnchainMm(
+    market?: string,
+    ticker = "SOL-USD",
+    quoteEdgeBps = 3,
+  ): { status: OnchainMarketMakerStatus; plan: OnchainMarketMakerPlan } {
+    const status = getOnchainMarketMakerStatus();
+    const plan = buildOnchainMarketMakerPlan({
+      market: market ?? status.defaultMarket,
+      ticker,
+      quoteEdgeBps,
+    });
+    return { status, plan };
+  }
+
+  // ── Vulcan TWAP strategy ──────────────────────────────────────────────────
+
+  /**
+   * Build a Vulcan TWAP execution plan for large perps orders.
+   * Uses `vulcan strategy twap start` — the runner owns the loop, tick display,
+   * ledger, and report. Prefer this over manual slice execution.
+   */
+  buildVulcanTwapPlan(opts: {
+    symbol: string;
+    side: "buy" | "sell";
+    notionalUsd: number;
+    slices?: number;
+    intervalSeconds?: number;
+    mode?: "paper" | "dry_run" | "confirm_each" | "auto_execute";
+    maxPriceDriftBps?: number;
+  }): { command: string; args: string[]; note: string } {
+    const mode = opts.mode ?? "paper";
+    const slices = opts.slices ?? 5;
+    const intervalSeconds = opts.intervalSeconds ?? 60;
+    const args = [
+      "strategy", "twap", "start",
+      "--symbol", opts.symbol.toUpperCase(),
+      "--side", opts.side,
+      "--notional-usdc", String(opts.notionalUsd),
+      "--slices", String(slices),
+      "--interval-seconds", String(intervalSeconds),
+      "--mode", mode,
+      "-o", "json",
+    ];
+    if (opts.maxPriceDriftBps != null) {
+      args.push("--max-price-drift-bps", String(opts.maxPriceDriftBps));
+    }
+    return {
+      command: "vulcan",
+      args,
+      note: `Vulcan TWAP: ${opts.symbol} ${opts.side} $${opts.notionalUsd} over ${slices} slices × ${intervalSeconds}s in ${mode} mode.`,
+    };
   }
 }
 
