@@ -76,7 +76,7 @@
     "dotenv": "^16.4.0",
     "enquirer": "^2.4.1",
     "fs-extra": "^11.2.0",
-    "ink": "^4.4.1",
+    "ink": "^5.0.0",
     "marked": "^15.0.12",
     "marked-terminal": "^7.3.0",
     "openai": "^5.10.1",

@@ -606,58 +606,13 @@ export class ClaWDPerps {
         (subaccount.positions ?? []).map((position: any) => ({ subaccountIndex: subaccount.subaccountIndex, ...position })),
       ) ?? [];
 
-      const ms = (snapshot.snapshot.marginStatus ?? snapshot.snapshot) as any;
+      const ms = ((snapshot.snapshot as any).marginStatus ?? snapshot.snapshot) as any;
       const totalCollateral: number = ms.totalCollateral ?? ms.totalMargin ?? 0;
       const usedMargin: number = ms.usedMargin ?? 0;
       const availableMargin: number = ms.availableMargin ?? (totalCollateral - usedMargin);
       const marginRatio = totalCollateral > 0 ? usedMargin / totalCollateral : 0;
 
       const positionRisks = positions.map((pos: any) => this.computePositionRisk(pos, markBySymbol));
-      const criticalCount = positionRisks.filter((p) => p.riskBand === "critical").length;
-      const highCount = positionRisks.filter((p) => p.riskBand === "high").length;
-
-      return ok({
-        wallet: authority,
-        totalCollateralUsd: totalCollateral,
-        usedMarginUsd: usedMargin,
-        availableMarginUsd: availableMargin,
-        marginRatio: +marginRatio.toFixed(4),
-        marginRatioPct: +(marginRatio * 100).toFixed(2),
-        portfolioHealth: criticalCount > 0 ? "critical" : highCount > 0 ? "high" : marginRatio > 0.8 ? "medium" : "low",
-        positions: positionRisks,
-        summary: `${positions.length} position(s) · margin ratio ${(marginRatio * 100).toFixed(1)}% · ${criticalCount} critical`,
-      });
-    } catch (error) {
-      return wrapError("getRiskMetrics", error);
-    }
-  }
-
-  // kept for backward compat — removed duplicate block below
-  private _unused_positionRisk(pos: any, markBySymbol: Map<string, number>) {
-        const mark = markBySymbol.get(pos.symbol) ?? pos.markPrice ?? 0;
-        const liqPrice: number = pos.liquidationPrice ?? 0;
-        let distancePct = null;
-        let riskBand: "low" | "medium" | "high" | "critical" | "unknown" = "unknown";
-        if (mark > 0 && liqPrice > 0) {
-          const dist = pos.side === "long"
-            ? (mark - liqPrice) / mark
-            : (liqPrice - mark) / mark;
-          distancePct = +(dist * 100).toFixed(2);
-          const distBps = dist * 10_000;
-          riskBand = distBps > 2_000 ? "low" : distBps > 800 ? "medium" : distBps > 200 ? "high" : "critical";
-        }
-        return {
-          symbol: pos.symbol,
-          side: pos.side,
-          markPrice: mark,
-          liquidationPrice: liqPrice,
-          liquidationDistancePct: distancePct,
-          riskBand,
-          unrealizedPnl: pos.unrealizedPnl ?? 0,
-          leverage: pos.leverage ?? 0,
-        };
-      });
-
       const criticalCount = positionRisks.filter((p) => p.riskBand === "critical").length;
       const highCount = positionRisks.filter((p) => p.riskBand === "high").length;
 

@@ -81,6 +81,8 @@ export interface OrderParams {
 export interface TpSlParams {
   market: string;
   takeProfit?: number;
+  /** Size to close at TP (base units). Defaults to full position when 0 or omitted. */
+  takeProfitSize?: number;
   stopLoss?: number;
   positionSide: "long" | "short";
 }

@@ -1,6 +1,6 @@
 {
   "name": "@openclawdsolana/clawd-perps",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "ClaWD Perps — Phoenix, Vulcan, Imperial, on-chain MM, and Backroom realtime perps CLI/TUI/agent harness for OpenClawd.",
   "type": "module",
   "main": "dist/index.js",

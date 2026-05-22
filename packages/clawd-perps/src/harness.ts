@@ -79,7 +79,7 @@ async function callOpenRouter(prompt: string, snapshot: unknown, model?: string)
       "X-Title": "clawd-perps harness",
     },
     body: JSON.stringify({
-      model: model || process.env.CLAWD_PERPS_MODEL || "openai/gpt-5-nano",
+      model: model || process.env.CLAWD_PERPS_MODEL || "anthropic/claude-haiku-4-5",
       messages: [
         {
           role: "system",
