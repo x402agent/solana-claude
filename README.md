@@ -466,7 +466,7 @@ const preview = runtime.previewTwammExecution("SOL", "buy", 50_000);
 When to use TWAMM vs immediate execution:
 
 | Scenario | Route |
-|---|---|
+| --- | --- |
 | Order > $50k notional | ✅ TWAMM |
 | Thin book / high slippage | ✅ TWAMM |
 | Needs immediate fill | ❌ Phoenix CLOB |
