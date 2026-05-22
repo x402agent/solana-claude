@@ -16,17 +16,21 @@
 
 // ─── Venue identity ───────────────────────────────────────────────────────────
 
-export type VenueId = "phoenix" | "flash" | "jupiter" | "gmtrade";
+export type VenueId = "phoenix" | "flash" | "jupiter" | "gmtrade" | "twamm";
 
-export const VENUE_IDS: readonly VenueId[] = ["phoenix", "flash", "jupiter", "gmtrade"] as const;
+export const VENUE_IDS: readonly VenueId[] = ["phoenix", "flash", "jupiter", "gmtrade", "twamm"] as const;
 
 /** Imperial underwriter codes — kept stable so on-wire payloads match. */
-export const UNDERWRITER_CODE: Record<VenueId, 0 | 1 | 2 | 3> = {
+export const UNDERWRITER_CODE: Record<Exclude<VenueId, "twamm">, 0 | 1 | 2 | 3> = {
   jupiter: 0,
   flash: 1,
   phoenix: 2,
   gmtrade: 3,
 };
+
+/** TWAMM routes via an on-chain crank program, not Imperial — no underwriter code. */
+export const TWAMM_EXECUTION_NOTE =
+  "TWAMM executes as time-weighted on-chain slices via permissionless crank. Orders are not immediate fills.";
 
 export const VENUE_FROM_UNDERWRITER: Record<number, VenueId> = {
   0: "jupiter",
@@ -40,6 +44,7 @@ export const VENUE_LABELS: Record<VenueId, string> = {
   flash: "Flash Trade",
   jupiter: "Jupiter",
   gmtrade: "GMTrade",
+  twamm: "TWAMM",
 };
 
 // ─── Side / action ────────────────────────────────────────────────────────────
