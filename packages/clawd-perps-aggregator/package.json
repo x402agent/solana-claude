@@ -1,6 +1,6 @@
 {
   "name": "@openclawdsolana/clawd-perps-aggregator",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Smart order routing, SDK, and MCP server for Solana perps. Aggregates Phoenix, Flash Trade, Jupiter, and GMTrade behind a single execution surface for humans, dashboards, and AI agents.",
   "type": "module",
   "main": "dist/index.js",
