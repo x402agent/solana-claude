@@ -398,6 +398,214 @@ node amm/dist/cli.js route-split SOL-PERP long 4000
 
 ---
 
+<div align="center">
+
+<img src="https://capsule-render.vercel.app/api?type=venom&color=0:05060d,15:0d1f3c,35:FF5F1F,60:9945FF,80:14F195,100:FFD166&height=260&section=header&text=PERPS%20OVERHAUL&fontSize=72&fontColor=ffffff&animation=blinking&fontAlignY=50&desc=TWAMM%20%C2%B7%20Phoenix%20On-Chain%20MM%20%C2%B7%20Vulcan%20TWAP%20%C2%B7%20Aggregator%20Venues%20%C2%B7%20Skills&descSize=18&descAlignY=70" alt="Perps Overhaul" />
+
+<img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=900&size=19&duration=1400&pause=280&color=FF5F1F&center=true&vCenter=true&width=1000&lines=TWAMM+crank+now+running+inside+the+agent;Phoenix+on-chain+MM+binary+wired+to+ClawdPerpsRuntime;time-weighted+execution+%C2%B7+maker+rebates+%C2%B7+zero-slippage+large+orders;vulcan+strategy+twap+start+is+now+a+first-class+plan;clawd-twamm+%C2%B7+clawd-phoenix-mm+skills+deployed;all+four+packages+compile+clean+%E2%80%94+zero+type+errors" alt="Perps overhaul typing" />
+
+</div>
+
+## 🌊 Perps Overhaul — TWAMM · Phoenix MM · Aggregator Venues · Skills
+
+> **The execution stack just got three new time-aware strategies, two new venue adapters, two new agent skills, and a fully enumerable skill registry wired into `ClawdPerpsRuntime`.**
+
+### What changed
+
+<div align="center">
+
+| Layer | Before | After |
+| --- | --- | --- |
+| **TWAMM** | Anchor program sitting in `perps/twamm-master`, unused | Full `clawd-perps twamm` CLI, `TwammAutomationStatus`, gated crank plan, `previewTwammExecution()` in runtime |
+| **Phoenix MM** | Rust binary in `perps/phoenix-onchain-market-maker-master`, unreachable | `getOnchainMmStatus()`, `buildOnchainMmPlan()`, `previewOnchainMm()` wired to `ClawdPerpsRuntime` |
+| **Vulcan TWAP** | Manual `vulcan strategy twap` CLI | `buildVulcanTwapPlan()` — first-class runtime method, typed args, JSON output mode |
+| **Aggregator venues** | `phoenix \| flash \| jupiter \| gmtrade` | + **`twamm`** — `TwammAdapter` in perps-aggregator, `TwammVenueAdapter` in amm, caps `slippageBps` ≤ 2 |
+| **Skills** | No TWAMM or Phoenix MM skills | `skills/clawd-twamm/SKILL.md` · `skills/clawd-phoenix-mm/SKILL.md` |
+| **Skill registry** | `VulcanCatalogSummary` had no skill inventory | `enumerateSkills()` scans `skills/` by category; `listSkills(category?)` on runtime |
+
+</div>
+
+---
+
+### ⏱ TWAMM — Time-Weighted On-Chain Execution
+
+TWAMM splits your order into infinitely many infinitesimal swaps over a time window. The result: **average fill = time-weighted oracle price. Zero market impact. Deferred settlement.**
+
+```bash
+# Check workspace (finds perps/twamm-master automatically)
+clawd perps twamm status
+
+# Build the Anchor program
+clawd perps twamm build
+
+# Preview the crank command (dry-run, no tx)
+clawd perps twamm plan \
+  --token-a So11111111111111111111111111111111111111112 \
+  --token-b EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v
+
+# Live gated run — all three env vars required
+CLAWD_TWAMM_LIVE=true OPERATOR_CONFIRMED=true \
+  clawd perps twamm crank \
+  --token-a <MINT_A> --token-b <MINT_B> --yes
+```
+
+```typescript
+const runtime = new ClawdPerpsRuntime();
+
+// Workspace status
+const status = runtime.getTwammStatus();
+// status.exists  — true when perps/twamm-master is present
+// status.liveEnabled  — true when CLAWD_TWAMM_LIVE=true
+
+// Preview a $50k SOL buy routed through TWAMM
+const preview = runtime.previewTwammExecution("SOL", "buy", 50_000);
+// preview.route.payload.blocked → false only after CLAWD_TWAMM_LIVE=true
+// preview.twamm.command → exact crank invocation
+```
+
+When to use TWAMM vs immediate execution:
+
+| Scenario | Route |
+|---|---|
+| Order > $50k notional | ✅ TWAMM |
+| Thin book / high slippage | ✅ TWAMM |
+| Needs immediate fill | ❌ Phoenix CLOB |
+| Levered perps position | ❌ Vulcan TWAP |
+
+---
+
+### 🦅 Phoenix On-Chain Market Maker
+
+The `mm` Rust binary places **resting two-sided limit orders** on the Phoenix CLOB around the Coinbase mid price. Every refresh earns maker rebates and tightens the book spread.
+
+```bash
+# Build the mm binary
+clawd perps onchain-mm build
+
+# Preview the run command (no tx)
+clawd perps onchain-mm plan \
+  --market HhHRvLFvZid6FD7C96H93F2MkASjYfYAx8Y2P8KMAr6b \
+  --ticker SOL-USD \
+  --quote-edge-bps 3
+
+# Arm and run
+CLAWD_ONCHAIN_MM_LIVE=true OPERATOR_CONFIRMED=true \
+  clawd perps onchain-mm run \
+  --market <PUBKEY> --ticker SOL-USD \
+  --quote-edge-bps 3 --quote-size 100000000 --yes
+```
+
+| Flag | Default | Description |
+|---|---|---|
+| `--quote-edge-bps` | 3 | Half-spread in bps around mid |
+| `--quote-size` | 100,000,000 | Quote size in quote atoms |
+| `--refresh-ms` | 2000 | Quote refresh interval |
+| `--price-improvement` | `ignore` | `join` / `dime` / `ignore` |
+| `--post-only` | `true` | Reject if would cross book |
+
+```typescript
+// Runtime API
+const { status, plan } = runtime.previewOnchainMm("SOL-USD", 3);
+// status.binaryBuilt — true if cargo build has run
+// plan.command + plan.args → exact invocation, copy-paste ready
+```
+
+---
+
+### 🔀 Vulcan TWAP Strategy
+
+For **large perps orders** on levered venues, Vulcan's `strategy twap start` owns the loop, tick display, ledger, and report. One call, zero manual slicing.
+
+```typescript
+const plan = runtime.buildVulcanTwapPlan({
+  symbol: "SOL",
+  side: "buy",
+  notionalUsd: 100_000,
+  slices: 10,
+  intervalSeconds: 30,
+  mode: "paper",               // paper | dry_run | confirm_each | auto_execute
+  maxPriceDriftBps: 50,
+});
+// plan.command → "vulcan"
+// plan.args → ["strategy", "twap", "start", "--symbol", "SOL", ...]
+// plan.note → human-readable summary
+```
+
+---
+
+### 🏛 Venue Registry — `twamm` Now First-Class
+
+Both `packages/clawd-perps-aggregator` and `amm` now include TWAMM as a registered venue:
+
+<div align="center">
+
+```
+VenueId:   "phoenix" | "flash" | "jupiter" | "gmtrade" | "twamm"
+VenueName: "phoenix" | "flash" | "jupiter" | "gmtrade" | "twamm"
+```
+
+</div>
+
+```typescript
+import { buildVenueAdapters } from "@openclawdsolana/clawd-perps-aggregator";
+import { TwammVenueAdapter } from "@openclawdsolana/clawd-perps-aggregator";
+
+// Enable all venues including TWAMM
+const adapters = buildVenueAdapters(transport, ["phoenix", "flash", "jupiter", "gmtrade", "twamm"]);
+
+// TWAMM adapter caps slippageBps ≤ 2 for any notional
+const quote = await adapters.twamm.quote({ symbol: "SOL-PERP", side: "long", notionalUsd: 200_000 });
+// quote.estimatedSlippageBps → ≤ 2
+// quote.warnings → ["TWAMM: fills at time-weighted oracle price. Not immediate."]
+```
+
+TWAMM has no on-chain underwriter code (it is not routed through the Imperial CPI path). The `UNDERWRITER` map uses sentinel `-1` for TWAMM to keep the type system clean.
+
+---
+
+### 🧠 Skills — TWAMM + Phoenix MM
+
+Two new agent skills are now live in `skills/` and indexed by `VulcanCatalogSummary`:
+
+<div align="center">
+
+| Skill | Path | Agent trigger |
+|---|---|---|
+| `clawd-twamm` | [`skills/clawd-twamm/SKILL.md`](./skills/clawd-twamm/SKILL.md) | scheduling large spot orders, running the TWAMM crank, near-zero slippage execution |
+| `clawd-phoenix-mm` | [`skills/clawd-phoenix-mm/SKILL.md`](./skills/clawd-phoenix-mm/SKILL.md) | running the Phoenix MM Rust binary, quoting two-sided, earning maker rebates |
+
+</div>
+
+The skill catalog is now **enumerable at runtime**:
+
+```typescript
+// All skills indexed from skills/ directory
+const runtime = new ClawdPerpsRuntime();
+
+const all = await runtime.listSkills();
+// [{ name: "clawd-twamm", path: "skills/clawd-twamm/SKILL.md", category: "clawd" }, ...]
+
+const vulcanOnly = await runtime.listSkills("vulcan");
+const clawdOnly  = await runtime.listSkills("clawd");
+
+// Also surfaced in health check
+const health = await runtime.getRuntimeHealth();
+// health.vulcan.skills → VulcanSkillEntry[] (all skills by category)
+// health.vulcan.commandCount, groupCount, dangerousCommands
+```
+
+`getRuntimeHealth()` now returns the full `VulcanCatalogSummary` including skills — no extra call needed.
+
+---
+
+<div align="center">
+
+<img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=900&size=16&duration=1600&pause=320&color=14F195&center=true&vCenter=true&width=1000&lines=TWAMM+%E2%80%94+time-weighted+oracle+fills%2C+near-zero+slippage;Phoenix+MM+%E2%80%94+resting+two-sided+quotes%2C+maker+rebates;Vulcan+TWAP+%E2%80%94+strategy+runner+owns+the+loop+and+ledger;all+four+packages%3A+zero+TypeScript+errors;clawd-twamm+%C2%B7+clawd-phoenix-mm+%E2%80%94+skills+deployed" alt="perps overhaul summary" />
+
+</div>
+
+---
+
 ## Public Gitlawb Mirrors
 
 The sanitized public mirrors are tracked from this GitHub repo as gitlinks/submodules, not as expanded private workspaces:
