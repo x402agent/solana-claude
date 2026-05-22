@@ -46,6 +46,48 @@ function readOnchainMmOptions(opts: Record<string, unknown>) {
   };
 }
 
+function handleTwammAction(action: string, opts: Record<string, unknown>): void {
+  const crankOptions = {
+    rpcUrl: typeof opts.rpcUrl === "string" ? opts.rpcUrl : undefined,
+    tokenAMint: typeof opts.tokenA === "string" ? opts.tokenA : undefined,
+    tokenBMint: typeof opts.tokenB === "string" ? opts.tokenB : undefined,
+    walletPath: typeof opts.wallet === "string" ? opts.wallet : undefined,
+    once: Boolean(opts.once),
+    yes: Boolean(opts.yes),
+  };
+
+  if (action === "status") {
+    const s = getTwammStatus();
+    print({ success: true, data: s, output: JSON.stringify(s, null, 2) });
+    return;
+  }
+  if (action === "build" || action === "install") {
+    const r = buildTwamm({ skipAppInstall: Boolean(opts.skipAppInstall) });
+    print({ success: r.ok, data: r, output: JSON.stringify(r, null, 2), ...(r.ok ? {} : { error: r.error || "build failed" }) });
+    return;
+  }
+  if (action === "build-plan") {
+    const p = buildTwammBuildPlan({ skipAppInstall: Boolean(opts.skipAppInstall) });
+    print({ success: true, data: p, output: JSON.stringify(p, null, 2) });
+    return;
+  }
+  if (action === "test-plan") {
+    const p = buildTwammTestPlan({ anchor: !opts.cargo, cargo: Boolean(opts.cargo) });
+    print({ success: true, data: p, output: JSON.stringify(p, null, 2) });
+    return;
+  }
+  if (action === "plan" || action === "crank-plan") {
+    const p = buildTwammCrankPlan(crankOptions);
+    print({ success: true, data: p, output: JSON.stringify(p, null, 2) });
+    return;
+  }
+  if (action === "crank" || action === "run") {
+    runTwammCrank(crankOptions);
+    return;
+  }
+  print({ success: false, error: `unknown twamm action: ${action}` });
+}
+
 export function buildPerpsCommand(): Command {
   const perps = new ClaWDPerps();
 
@@ -471,6 +513,67 @@ Environment variables:
         return;
       }
       print({ success: false, error: `unknown onchain-mm action: ${action}` });
+    });
+
+  cmd
+    .command("twamm")
+    .description("TWAMM crank automation — status/build/plan/crank")
+    .argument("[action]", "status | build | build-plan | test-plan | plan | crank", "status")
+    .option("--rpc-url <url>", "RPC URL or alias: local, dev, main")
+    .option("--token-a <mint>", "Token A mint pubkey (default: SOL)")
+    .option("--token-b <mint>", "Token B mint pubkey (default: USDC)")
+    .option("--wallet <path>", "Solana keypair path for crank signer")
+    .option("--once", "Run the crank a single time then exit")
+    .option("--skip-app-install", "Skip npm install before anchor build")
+    .option("--cargo", "Use cargo test instead of anchor test")
+    .option("--yes", "Required gate for live crank execution")
+    .addHelpText("after", `
+Environment:
+  CLAWD_TWAMM_ROOT           Path to perps/twamm-master workspace
+  CLAWD_TWAMM_RPC_URL        RPC alias/url (default: SOLANA_RPC_URL or local)
+  CLAWD_TWAMM_TOKEN_A_MINT   Token A mint (default: SOL)
+  CLAWD_TWAMM_TOKEN_B_MINT   Token B mint (default: USDC)
+  CLAWD_TWAMM_LIVE=true      Required for crank (with OPERATOR_CONFIRMED=true and --yes)
+`)
+    .action((action: string, opts: Record<string, unknown>) => {
+      const crankOptions = {
+        rpcUrl: typeof opts.rpcUrl === "string" ? opts.rpcUrl : undefined,
+        tokenAMint: typeof opts.tokenA === "string" ? opts.tokenA : undefined,
+        tokenBMint: typeof opts.tokenB === "string" ? opts.tokenB : undefined,
+        walletPath: typeof opts.wallet === "string" ? opts.wallet : undefined,
+        once: Boolean(opts.once),
+        yes: Boolean(opts.yes),
+      };
+      if (action === "status") {
+        const s = getTwammStatus();
+        print({ success: true, data: s, output: JSON.stringify(s, null, 2) });
+        return;
+      }
+      if (action === "build" || action === "install") {
+        const r = buildTwamm({ skipAppInstall: Boolean(opts.skipAppInstall) });
+        print({ success: r.ok, data: r, output: JSON.stringify(r, null, 2), ...(r.ok ? {} : { error: r.error || "build failed" }) });
+        return;
+      }
+      if (action === "build-plan") {
+        const p = buildTwammBuildPlan({ skipAppInstall: Boolean(opts.skipAppInstall) });
+        print({ success: true, data: p, output: JSON.stringify(p, null, 2) });
+        return;
+      }
+      if (action === "test-plan") {
+        const p = buildTwammTestPlan({ anchor: !opts.cargo, cargo: Boolean(opts.cargo) });
+        print({ success: true, data: p, output: JSON.stringify(p, null, 2) });
+        return;
+      }
+      if (action === "plan" || action === "crank-plan") {
+        const p = buildTwammCrankPlan(crankOptions);
+        print({ success: true, data: p, output: JSON.stringify(p, null, 2) });
+        return;
+      }
+      if (action === "crank" || action === "run") {
+        runTwammCrank(crankOptions);
+        return;
+      }
+      print({ success: false, error: `unknown twamm action: ${action}` });
     });
 
   cmd
