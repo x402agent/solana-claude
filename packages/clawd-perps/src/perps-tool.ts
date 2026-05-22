@@ -488,44 +488,192 @@ export class ClaWDPerps {
     return this.buildClosePosition(market, size);
   }
 
+  private async buildSlInstruction(
+    params: TpSlParams,
+    authority: string,
+    symbol: string,
+    marketMeta: any,
+    indexes: ReturnType<ClaWDPerps["traderIndexes"]>,
+  ): Promise<{ instruction: unknown; price: number } | { error: string }> {
+    const slSide = params.positionSide === "long" ? Side.Ask : Side.Bid;
+    const slDirection = params.positionSide === "long" ? Direction.LessThan : Direction.GreaterThan;
+    const triggerPrice = priceUsdToTicksWithMarketParams(String(params.stopLoss!), {
+      tickSize: marketMeta.tickSize,
+      baseLotsDecimals: marketMeta.baseLotsDecimals,
+    });
+    try {
+      const ix = await this.client.ixs.buildPlaceStopLoss({
+        authority: asAuthority(authority),
+        symbol: asSymbol(symbol),
+        tradeSide: slSide,
+        executionDirection: slDirection,
+        orderKind: StopLossOrderKind.IOC,
+        triggerPrice,
+        ...indexes,
+      });
+      return { instruction: ix, price: params.stopLoss! };
+    } catch (err) {
+      return { error: err instanceof Error ? err.message : String(err) };
+    }
+  }
+
+  private async buildTpInstruction(
+    params: TpSlParams,
+    authority: string,
+    symbol: string,
+    indexes: ReturnType<ClaWDPerps["traderIndexes"]>,
+  ): Promise<{ instruction: unknown; price: number } | { error: string }> {
+    // TP = resting limit close at the target price.
+    // Long TP: limit sell (Ask) at TP price; short TP: limit buy (Bid) at TP price.
+    const tpSide = params.positionSide === "long" ? Side.Ask : Side.Bid;
+    try {
+      const tpOrderPacket = await this.client.orderPackets.buildLimitOrderPacket({
+        symbol: asSymbol(symbol),
+        side: tpSide,
+        priceUsd: String(params.takeProfit!),
+        baseUnits: params.takeProfitSize ? String(params.takeProfitSize) : "0",
+      });
+      const ix = await this.client.ixs.placeLimitOrder({
+        authority: asAuthority(authority),
+        symbol: asSymbol(symbol),
+        orderPacket: tpOrderPacket as any,
+        ...indexes,
+      });
+      return { instruction: ix, price: params.takeProfit! };
+    } catch (err) {
+      return { error: err instanceof Error ? err.message : String(err) };
+    }
+  }
+
   async buildSetTpSl(params: TpSlParams): Promise<ToolResult> {
     try {
       const authority = this.requireWallet();
       const symbol = normalizeSymbol(params.market);
       const marketMeta = await this.client.exchange.market(asSymbol(symbol));
       const indexes = this.traderIndexes();
-      const side = params.positionSide === "long" ? Side.Ask : Side.Bid;
-      const direction = params.positionSide === "long" ? Direction.LessThan : Direction.GreaterThan;
+      const meta: Record<string, unknown> = { authority, symbol, positionSide: params.positionSide };
+      const instructions: unknown[] = [];
 
       if (params.stopLoss !== undefined) {
-        const triggerPrice = priceUsdToTicksWithMarketParams(
-          String(params.stopLoss),
-          {
-            tickSize: (marketMeta as any).tickSize,
-            baseLotsDecimals: (marketMeta as any).baseLotsDecimals,
-          },
-        );
-        return this.formatInstructionResult(
-          "buildSetTpSl",
-          this.client.ixs.buildPlaceStopLoss({
-            authority: asAuthority(authority),
-            symbol: asSymbol(symbol),
-            tradeSide: side,
-            executionDirection: direction,
-            orderKind: StopLossOrderKind.IOC,
-            triggerPrice,
-            ...indexes,
-          }),
-          { authority, symbol, stopLoss: params.stopLoss, positionSide: params.positionSide },
-        );
+        const r = await this.buildSlInstruction(params, authority, symbol, marketMeta, indexes);
+        if ("error" in r) { meta.stopLossError = r.error; }
+        else { instructions.push({ kind: "stop_loss", triggerPrice: r.price, instruction: r.instruction }); meta.stopLoss = r.price; }
       }
 
-      return {
-        success: false,
-        error: "buildSetTpSl: Rise stop-loss instruction is supported here; take-profit needs conditional-order wiring not yet implemented in this adapter",
-      };
+      if (params.takeProfit !== undefined) {
+        const r = await this.buildTpInstruction(params, authority, symbol, indexes);
+        if ("error" in r) { meta.takeProfitError = r.error; }
+        else { instructions.push({ kind: "take_profit", limitPrice: r.price, instruction: r.instruction }); meta.takeProfit = r.price; }
+      }
+
+      if (instructions.length === 0) {
+        return { success: false, error: "buildSetTpSl: no valid takeProfit or stopLoss price provided" };
+      }
+
+      return ok({ kind: "buildSetTpSl", signingRequired: true, submitVia: "solana wallet or RPC", meta, instructions, count: instructions.length });
     } catch (error) {
       return wrapError("buildSetTpSl", error);
+    }
+  }
+
+  private computePositionRisk(pos: any, markBySymbol: Map<string, number>) {
+    const mark = markBySymbol.get(pos.symbol) ?? pos.markPrice ?? 0;
+    const liqPrice: number = pos.liquidationPrice ?? 0;
+    let liquidationDistancePct: number | null = null;
+    let riskBand: "low" | "medium" | "high" | "critical" | "unknown" = "unknown";
+    if (mark > 0 && liqPrice > 0) {
+      const dist = pos.side === "long" ? (mark - liqPrice) / mark : (liqPrice - mark) / mark;
+      liquidationDistancePct = +(dist * 100).toFixed(2);
+      const bps = dist * 10_000;
+      riskBand = bps > 2_000 ? "low" : bps > 800 ? "medium" : bps > 200 ? "high" : "critical";
+    }
+    return { symbol: pos.symbol, side: pos.side, markPrice: mark, liquidationPrice: liqPrice, liquidationDistancePct, riskBand, unrealizedPnl: pos.unrealizedPnl ?? 0, leverage: pos.leverage ?? 0 };
+  }
+
+  async getRiskMetrics(wallet?: string): Promise<ToolResult> {
+    try {
+      const authority = this.requireWallet(wallet);
+      const [snapshot, exchangeSnapshot] = await Promise.all([
+        this.api.traders().getTraderStateSnapshot(authority, { traderPdaIndex: this.traderIndexes().traderPdaIndex }),
+        this.api.exchange().getSnapshot(),
+      ]);
+
+      const markBySymbol = new Map<string, number>(
+        (exchangeSnapshot.markets ?? []).map((m: any) => [m.symbol, m.markPriceParameters?.markPrice ?? 0]),
+      );
+
+      const positions = snapshot.snapshot.subaccounts?.flatMap((subaccount) =>
+        (subaccount.positions ?? []).map((position: any) => ({ subaccountIndex: subaccount.subaccountIndex, ...position })),
+      ) ?? [];
+
+      const ms = (snapshot.snapshot.marginStatus ?? snapshot.snapshot) as any;
+      const totalCollateral: number = ms.totalCollateral ?? ms.totalMargin ?? 0;
+      const usedMargin: number = ms.usedMargin ?? 0;
+      const availableMargin: number = ms.availableMargin ?? (totalCollateral - usedMargin);
+      const marginRatio = totalCollateral > 0 ? usedMargin / totalCollateral : 0;
+
+      const positionRisks = positions.map((pos: any) => this.computePositionRisk(pos, markBySymbol));
+      const criticalCount = positionRisks.filter((p) => p.riskBand === "critical").length;
+      const highCount = positionRisks.filter((p) => p.riskBand === "high").length;
+
+      return ok({
+        wallet: authority,
+        totalCollateralUsd: totalCollateral,
+        usedMarginUsd: usedMargin,
+        availableMarginUsd: availableMargin,
+        marginRatio: +marginRatio.toFixed(4),
+        marginRatioPct: +(marginRatio * 100).toFixed(2),
+        portfolioHealth: criticalCount > 0 ? "critical" : highCount > 0 ? "high" : marginRatio > 0.8 ? "medium" : "low",
+        positions: positionRisks,
+        summary: `${positions.length} position(s) · margin ratio ${(marginRatio * 100).toFixed(1)}% · ${criticalCount} critical`,
+      });
+    } catch (error) {
+      return wrapError("getRiskMetrics", error);
+    }
+  }
+
+  // kept for backward compat — removed duplicate block below
+  private _unused_positionRisk(pos: any, markBySymbol: Map<string, number>) {
+        const mark = markBySymbol.get(pos.symbol) ?? pos.markPrice ?? 0;
+        const liqPrice: number = pos.liquidationPrice ?? 0;
+        let distancePct = null;
+        let riskBand: "low" | "medium" | "high" | "critical" | "unknown" = "unknown";
+        if (mark > 0 && liqPrice > 0) {
+          const dist = pos.side === "long"
+            ? (mark - liqPrice) / mark
+            : (liqPrice - mark) / mark;
+          distancePct = +(dist * 100).toFixed(2);
+          const distBps = dist * 10_000;
+          riskBand = distBps > 2_000 ? "low" : distBps > 800 ? "medium" : distBps > 200 ? "high" : "critical";
+        }
+        return {
+          symbol: pos.symbol,
+          side: pos.side,
+          markPrice: mark,
+          liquidationPrice: liqPrice,
+          liquidationDistancePct: distancePct,
+          riskBand,
+          unrealizedPnl: pos.unrealizedPnl ?? 0,
+          leverage: pos.leverage ?? 0,
+        };
+      });
+
+      const criticalCount = positionRisks.filter((p) => p.riskBand === "critical").length;
+      const highCount = positionRisks.filter((p) => p.riskBand === "high").length;
+
+      return ok({
+        wallet: authority,
+        totalCollateralUsd: totalCollateral,
+        usedMarginUsd: usedMargin,
+        availableMarginUsd: availableMargin,
+        marginRatio: +marginRatio.toFixed(4),
+        marginRatioPct: +(marginRatio * 100).toFixed(2),
+        portfolioHealth: criticalCount > 0 ? "critical" : highCount > 0 ? "high" : marginRatio > 0.8 ? "medium" : "low",
+        positions: positionRisks,
+        summary: `${positions.length} position(s) · margin ratio ${(marginRatio * 100).toFixed(1)}% · ${criticalCount} critical`,
+      });
+    } catch (error) {
+      return wrapError("getRiskMetrics", error);
     }
   }
 
