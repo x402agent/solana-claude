@@ -22,6 +22,7 @@ const UNDERWRITER: Record<VenueName, number> = {
   flash: 1,
   jupiter: 2,
   gmtrade: 3,
+  twamm: -1,
 };
 
 function assetFromSymbol(symbol: string): string {
