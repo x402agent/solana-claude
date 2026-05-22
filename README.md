@@ -496,7 +496,7 @@ CLAWD_ONCHAIN_MM_LIVE=true OPERATOR_CONFIRMED=true \
 ```
 
 | Flag | Default | Description |
-|---|---|---|
+| --- | --- | --- |
 | `--quote-edge-bps` | 3 | Half-spread in bps around mid |
 | `--quote-size` | 100,000,000 | Quote size in quote atoms |
 | `--refresh-ms` | 2000 | Quote refresh interval |
@@ -539,7 +539,7 @@ Both `packages/clawd-perps-aggregator` and `amm` now include TWAMM as a register
 
 <div align="center">
 
-```
+```text
 VenueId:   "phoenix" | "flash" | "jupiter" | "gmtrade" | "twamm"
 VenueName: "phoenix" | "flash" | "jupiter" | "gmtrade" | "twamm"
 ```
@@ -570,7 +570,7 @@ Two new agent skills are now live in `skills/` and indexed by `VulcanCatalogSumm
 <div align="center">
 
 | Skill | Path | Agent trigger |
-|---|---|---|
+| --- | --- | --- |
 | `clawd-twamm` | [`skills/clawd-twamm/SKILL.md`](./skills/clawd-twamm/SKILL.md) | scheduling large spot orders, running the TWAMM crank, near-zero slippage execution |
 | `clawd-phoenix-mm` | [`skills/clawd-phoenix-mm/SKILL.md`](./skills/clawd-phoenix-mm/SKILL.md) | running the Phoenix MM Rust binary, quoting two-sided, earning maker rebates |
 
