@@ -5,6 +5,7 @@ import { buildImperialRelay, sendRelayFanout } from "../relay-client.js";
 import { runPerpsTui } from "../tui.js";
 import { runPerpsHarness } from "../harness.js";
 import { buildOnchainMm, buildOnchainMmPlan, getOnchainMmStatus, runOnchainMm } from "../onchain-market-maker.js";
+import { buildTwamm, buildTwammBuildPlan, buildTwammCrankPlan, buildTwammTestPlan, getTwammStatus, runTwammCrank } from "../twamm.js";
 import type { ToolResult, CandleParams, OrderParams, TpSlParams } from "../types.js";
 
 function print(r: ToolResult) {

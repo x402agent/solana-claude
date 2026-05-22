@@ -13,6 +13,22 @@ export {
 export { runPerpsTui } from "./tui.js";
 export { runPerpsHarness } from "./harness.js";
 export { getOnchainMmStatus, buildOnchainMmPlan, buildOnchainMm, runOnchainMm } from "./onchain-market-maker.js";
+export {
+  getTwammStatus,
+  resolveTwammRoot,
+  buildTwammBuildPlan,
+  buildTwammTestPlan,
+  buildTwammCrankPlan,
+  buildTwamm,
+  runTwammCrank,
+} from "./twamm.js";
+export type {
+  TwammStatus,
+  TwammPlan,
+  TwammBuildOptions,
+  TwammTestOptions,
+  TwammCrankOptions,
+} from "./twamm.js";
 export type {
   ToolResult,
   PerpsConfig,
