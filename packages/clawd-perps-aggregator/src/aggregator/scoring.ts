@@ -21,13 +21,16 @@ export interface ScoringWeights {
   liquidity: number;
   openInterest: number;
   funding: number;
+  /** Bid-ask spread tightness — tighter spread scores higher. */
+  spread?: number;
 }
 
 export const DEFAULT_WEIGHTS: ScoringWeights = {
-  cost: 0.55,
-  liquidity: 0.20,
+  cost: 0.50,
+  liquidity: 0.18,
   openInterest: 0.10,
-  funding: 0.15,
+  funding: 0.14,
+  spread: 0.08,
 };
 
 export interface ScoredQuote {
@@ -38,6 +41,7 @@ export interface ScoredQuote {
     liquidity: number;
     openInterest: number;
     funding: number;
+    spread: number;
   };
 }
 
@@ -74,20 +78,22 @@ export function scoreQuotes(
   if (quotes.length === 0) return [];
 
   const fillable = quotes.filter((q) => q.fillable);
-  // If nothing is fillable, score over the whole set so the operator still
-  // sees ranking, but every score will be 0 for cost.
   const pool = fillable.length > 0 ? fillable : quotes;
 
   const costs = pool.map((q) => q.totalCostUsd);
   const liq = pool.map((q) => q.liquidityUsd);
   const oi = pool.map((q) => q.openInterestUsd);
-  // Funding cost is bidirectional: rebates (negative) are best. Lower=better.
   const funding = pool.map((q) => q.fundingCostUsd);
+  // Spread in bps: tighter = better (lower = better).
+  const spreads = pool.map((q) => q.slippageBps);
 
   const nCost = normaliseAscending(costs);
   const nLiq = normaliseDescending(liq);
   const nOi = normaliseDescending(oi);
   const nFunding = normaliseAscending(funding);
+  const nSpread = normaliseAscending(spreads);
+
+  const spreadW = weights.spread ?? 0;
 
   const scored = pool.map<ScoredQuote>((q, i) => {
     const comp = {
@@ -95,12 +101,14 @@ export function scoreQuotes(
       liquidity: nLiq[i] ?? 0,
       openInterest: nOi[i] ?? 0,
       funding: nFunding[i] ?? 0,
+      spread: nSpread[i] ?? 0,
     };
     const score =
       comp.cost * weights.cost +
       comp.liquidity * weights.liquidity +
       comp.openInterest * weights.openInterest +
-      comp.funding * weights.funding;
+      comp.funding * weights.funding +
+      comp.spread * spreadW;
     return { quote: q, score, components: comp };
   });
 
