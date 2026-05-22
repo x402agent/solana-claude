@@ -101,7 +101,12 @@ The project is not just a token dashboard, a chatbot, or a wallet script. Solana
 | [DEMOS.md](./DEMOS.md) | Demo script, safe commands, expected outcomes, and judging flow. |
 | [REPO_MAP.md](./REPO_MAP.md) | Complete map of the submitted repository modules. |
 | [SUBMISSION.md](./SUBMISSION.md) | Submission summary, checklist, and links. |
-| [PERPS_AGGREGATOR.md](./PERPS_AGGREGATOR.md) | Deep-dive: smart-order router, AMM pool intel, split execution, 17 MCP tools. |
+| [PERPS_AGGREGATOR.md](./PERPS_AGGREGATOR.md) | Deep-dive: SOR, AMM pool intel, split execution, 17 MCP tools. |
+| [PACKAGES.md](./PACKAGES.md) | Deep-dive: all 8 npm packages in the workspace. |
+| [PROGRAMS.md](./PROGRAMS.md) | Deep-dive: 10 Anchor/Rust programs (inference market, staking, oracle, launchpad). |
+| [SDK.md](./SDK.md) | Deep-dive: Leviathan sovereign runtime + clawd-sdk, Three Laws, proof receipts. |
+| [TUI.md](./TUI.md) | Deep-dive: Bloomberg-style terminal, screens, agent mint, keyboard nav. |
+| [MY_PROJECT_PUBLIC.md](./MY_PROJECT_PUBLIC.md) | Deep-dive: public submission surface — leviathan, ooda, gateway, agents, MemeBRain. |
 
 ## One-Command Verification
 
