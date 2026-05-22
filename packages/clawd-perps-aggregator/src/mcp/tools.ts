@@ -57,7 +57,7 @@ function asVenue(input: Record<string, unknown>, key = "venue"): VenueId | undef
   if (v == null) return undefined;
   if (typeof v !== "string") return undefined;
   const lc = v.toLowerCase() as VenueId;
-  if (!["phoenix", "flash", "jupiter", "gmtrade"].includes(lc)) {
+  if (!["phoenix", "flash", "jupiter", "gmtrade", "twamm"].includes(lc)) {
     throw new Error(`unknown venue ${v}`);
   }
   return lc;
@@ -216,7 +216,7 @@ export function buildTools(agg: PerpsAggregator): McpTool[] {
           side: { type: "string", enum: ["long", "short"] },
           action: { type: "string", enum: ["open", "close"], default: "open" },
           sizeUsd: { type: "number" },
-          venue: { type: "string", enum: ["phoenix", "flash", "jupiter", "gmtrade"] },
+          venue: { type: "string", enum: ["phoenix", "flash", "jupiter", "gmtrade", "twamm"] },
           orderType: { type: "string", default: "market" },
           slippageBps: { type: "number", default: 50 },
           triggerPrice: { type: "number" },
@@ -257,7 +257,7 @@ export function buildTools(agg: PerpsAggregator): McpTool[] {
           side: { type: "string", enum: ["long", "short"] },
           action: { type: "string", enum: ["open", "close"], default: "open" },
           sizeUsd: { type: "number" },
-          venue: { type: "string", enum: ["phoenix", "flash", "jupiter", "gmtrade"] },
+          venue: { type: "string", enum: ["phoenix", "flash", "jupiter", "gmtrade", "twamm"] },
           slippageBps: { type: "number", default: 50 },
           holdSeconds: { type: "number", default: 3600 },
         },
@@ -291,7 +291,7 @@ export function buildTools(agg: PerpsAggregator): McpTool[] {
           side: { type: "string", enum: ["long", "short"] },
           action: { type: "string", enum: ["open", "close"], default: "open" },
           sizeUsd: { type: "number" },
-          venue: { type: "string", enum: ["phoenix", "flash", "jupiter", "gmtrade"] },
+          venue: { type: "string", enum: ["phoenix", "flash", "jupiter", "gmtrade", "twamm"] },
           orderType: { type: "string", default: "market" },
           slippageBps: { type: "number", default: 50 },
           triggerPrice: { type: "number" },
@@ -384,7 +384,7 @@ export function buildTools(agg: PerpsAggregator): McpTool[] {
         required: ["symbol"],
         properties: {
           symbol: { type: "string" },
-          venue: { type: "string", enum: ["phoenix", "flash", "jupiter", "gmtrade"] },
+          venue: { type: "string", enum: ["phoenix", "flash", "jupiter", "gmtrade", "twamm"] },
         },
       },
       handler: async (input) => {

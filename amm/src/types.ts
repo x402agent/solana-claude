@@ -1,4 +1,4 @@
-export type VenueName = "phoenix" | "flash" | "jupiter" | "gmtrade";
+export type VenueName = "phoenix" | "flash" | "jupiter" | "gmtrade" | "twamm";
 export type OrderSide = "long" | "short";
 export type OrderKind = "market" | "limit";
 
