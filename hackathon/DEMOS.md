@@ -78,31 +78,56 @@ What to inspect:
 
 Expected value: Agent Kit loads local agent templates, catalogs, and runtime profiles instead of treating agents as one-off prompts.
 
-## Demo 5: Perps And Market Intelligence
+## Demo 5: Perps Aggregator — Smart-Order Routing
 
-Purpose: show execution and signal intent with safe defaults.
+Purpose: show that the agent routes real trades, not just signals.
 
 ```bash
+# Build the aggregator first (required once)
+npm run clawd-perps-aggregator:build
+
+# Best venue + full breakdown for a 250 SOL long
+npm run clawd-perps-aggregator:cli -- route SOL long 250
+
+# AMM pool intelligence: utilization, OI skew, funding, health score
+npm run clawd-perps-aggregator:cli -- pools SOL
+
+# Capacity-aware split execution across all venues
+npm run clawd-perps-aggregator:cli -- route-split SOL long 25000
+
+# Typecheck + workspace build (CI-safe)
 npm run clawd-perps-aggregator:typecheck
 npm run perps:workspace:build
 ```
 
-Optional safe/paper commands if installed:
+What the route command shows:
+
+| Output field | What it means |
+| --- | --- |
+| Best venue | The SOR winner: Phoenix CLOB, Flash, Jupiter, or GMTrade |
+| Score breakdown | Cost weight + liquidity weight + OI weight + funding weight |
+| Slippage estimate | VWAP walk for CLOB; convex pool model for AMMs |
+| Rationale | One-sentence human-readable explanation of the routing decision |
+
+The same 17 tools are wired into the MCP server as `perps_*` — see [PERPS_AGGREGATOR.md](./PERPS_AGGREGATOR.md) for the full tool list.
+
+Optional paper-mode commands (if `clawd-agents-perps` is installed):
 
 ```bash
-clawd-perps signal oi SOL-PERP --mode paper
-clawd-perps signal watch SOL-PERP --interval 5s
 clawd-agents-perps status
 clawd-agents-perps paper-long SOL --notional 100
+clawd-perps signal oi SOL-PERP --mode paper
+clawd-perps signal watch SOL-PERP --interval 5s
 ```
 
 Inspect:
 
+- [../packages/clawd-perps-aggregator](../packages/clawd-perps-aggregator)
+- [../MCP/src/tools/perps-tools.ts](../MCP/src/tools/perps-tools.ts)
 - [../perps](../perps)
 - [../packages/clawd-perps](../packages/clawd-perps)
-- [../packages/clawd-perps-aggregator](../packages/clawd-perps-aggregator)
 
-Live trading requires explicit environment configuration and should not be treated as a default judging command.
+Live trading requires `IMPERIAL_LIVE=true` and should not be run in a judge environment.
 
 ## Demo 6: Autonomous Runtime
 

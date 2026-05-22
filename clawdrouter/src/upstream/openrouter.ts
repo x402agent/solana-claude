@@ -115,7 +115,7 @@ export function clearModelCache(): void {
  * Attribution headers for OpenRouter App Rankings & Analytics:
  * - HTTP-Referer: Primary identifier (URL of your app)
  * - X-OpenRouter-Title: Display name in rankings (X-Title also supported)
- * - X-OpenRouter-Categories: Comma-separated marketplace categories (max 2 per request)
+ * - X-OpenRouter-Categories: Comma-separated marketplace categories
  *
  * See: https://openrouter.ai/docs/features/app-attribution
  */
@@ -129,15 +129,15 @@ export async function proxyToOpenRouter(
     'Authorization': `Bearer ${apiKey}`,
     'Content-Type': 'application/json',
     // OpenRouter attribution headers for app rankings & analytics
-    'HTTP-Referer': siteUrl ?? 'https://github.com/x402agent/solana-clawd',
-    'X-OpenRouter-Title': siteTitle ?? 'ClawdRouter — Solana Agent LLM Router',
+    'HTTP-Referer': siteUrl ?? 'https://solanaclawd.com',
+    'X-OpenRouter-Title': siteTitle ?? 'Solana Clawd',
     // X-Title is also supported for backwards compatibility
-    'X-Title': siteTitle ?? 'ClawdRouter — Solana Agent LLM Router',
+    'X-Title': siteTitle ?? 'Solana Clawd',
   };
 
-  // Add categories header if provided (max 2 categories per request, merged up to 10 total)
+  // Add recognized OpenRouter marketplace categories for app attribution.
   if (categories && categories.length > 0) {
-    headers['X-OpenRouter-Categories'] = categories.slice(0, 2).join(',');
+    headers['X-OpenRouter-Categories'] = categories.slice(0, 3).join(',');
   }
 
   const response = await fetch(OPENROUTER_API_URL, {

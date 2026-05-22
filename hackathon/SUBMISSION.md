@@ -73,8 +73,11 @@ Default judge demos should be read-only, local, or paper-mode. Live trading, mai
 | Judge guide added | Done |
 | Demo guide added | Done |
 | Full repo map added | Done |
+| Perps aggregator deep-dive added | Done |
 | TUI, SDK, skills, Agent Kit included | Done |
 | Perps agents and packages included | Done |
+| Perps aggregator (SOR + AMM + split + 17 MCP tools) wired | Done |
+| ClawdRouter branding updated (solanaclawd.com) | Done |
 | Formal verification and Python/operator surfaces included | Done |
-| MCP, gateway, x402, oracle, attestation included | Done |
+| MCP (105 tools, 14 categories), gateway, x402, oracle, attestation | Done |
 

@@ -4,7 +4,7 @@
 
 <br/>
 
-<img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=900&size=18&duration=1800&pause=450&color=14F195&center=true&vCenter=true&width=980&lines=Discover+tokens+%E2%86%92+analyze+wallets+%E2%86%92+monitor+signals+%E2%86%92+execute+faster;Research%2C+market+intelligence%2C+MCP%2C+agents%2C+perps%2C+SDK%2C+TUI%2C+and+verification+in+one+interface;Built+for+Colosseum+judges+who+want+the+fastest+route+from+demo+to+technical+depth" alt="Animated Solana Clawd pitch" />
+<img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=900&size=18&duration=1800&pause=450&color=14F195&center=true&vCenter=true&width=980&lines=Discover+tokens+%E2%86%92+analyze+wallets+%E2%86%92+monitor+signals+%E2%86%92+execute+faster;105+MCP+tools+%E2%80%A2+17+perps+tools+%E2%80%A2+SOR+across+Phoenix+%C2%B7+Flash+%C2%B7+Jupiter+%C2%B7+GMTrade;Research%2C+market+intelligence%2C+MCP%2C+agents%2C+perps%2C+SDK%2C+TUI%2C+and+verification+in+one+interface;Built+for+Colosseum+judges+who+want+the+fastest+route+from+demo+to+technical+depth" alt="Animated Solana Clawd pitch" />
 
 <br/>
 
@@ -53,12 +53,13 @@ This `hackathon/` folder is the judge path. It maps the repository, gives demo f
 | SDK | TypeScript integration layer for wallet, commerce, packages, and app developers. |
 | Skills | Installable agent capability files for repeatable Solana workflows. |
 | Agent Kit | Local catalog and runtime profile builder for Solana Clawd agents. |
-| MCP | Orchestration plane that exposes Solana, market, x402, agent, docs, gateway, and federation tools. |
-| Perps | Paper-first and live-gated perpetuals tooling, with Phoenix/Vulcan-oriented agent workflows. |
+| MCP (105 tools) | Orchestration plane across 14 categories: Solana, market, x402, agents, docs, gateway, federation, and perps. |
+| Perps Aggregator | Smart-order router across Phoenix · Flash · Jupiter · GMTrade. 17 MCP tools. AMM pool intel, split execution, paper-first live gating. |
 | Formal verification | Risk and registry gates that make execution policy auditable. |
 | LLM Oracle | Solana oracle adapter for model-driven callbacks and Percolator-related operational references. |
 | Gateway | Agent registry, ADK metadata, governed destinations, and API surface for public/private routing. |
 | Leviathan + OODA | Local-first autonomous runtime with identity, memory, market observation, and constrained action loop. |
+| ClawdRouter | LLM routing service with x402 payment gating and OpenRouter attribution (solanaclawd.com). |
 
 ## Architecture At A Glance
 
@@ -66,13 +67,14 @@ This `hackathon/` folder is the judge path. It maps the repository, gives demo f
 User / Judge
     |
     v
-TUI + CLI + SDK
+TUI + CLI + SDK + ClawdRouter (OpenRouter / x402)
     |
     v
-MCP Orchestrator ---- Agent Kit / Skills / Agents Catalog
-    |                         |
-    v                         v
-Market Data + Wallets + OODA + Deep Clawd + Perps
+MCP Orchestrator (105 tools, 14 categories)
+    |---- Agent Kit / Skills / Agents Catalog
+    |---- Perps Aggregator (17 tools: SOR · AMM · split · positions)
+    v
+Market Data + Wallets + OODA + Deep Clawd
     |
     v
 Gateway + x402 + Attestation + Formal Verification
@@ -99,6 +101,7 @@ The project is not just a token dashboard, a chatbot, or a wallet script. Solana
 | [DEMOS.md](./DEMOS.md) | Demo script, safe commands, expected outcomes, and judging flow. |
 | [REPO_MAP.md](./REPO_MAP.md) | Complete map of the submitted repository modules. |
 | [SUBMISSION.md](./SUBMISSION.md) | Submission summary, checklist, and links. |
+| [PERPS_AGGREGATOR.md](./PERPS_AGGREGATOR.md) | Deep-dive: smart-order router, AMM pool intel, split execution, 17 MCP tools. |
 
 ## One-Command Verification
 

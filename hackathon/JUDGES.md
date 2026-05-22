@@ -21,6 +21,7 @@ Submission links:
 | Solana-native design | [programs](../programs), [attestation](../attestation), [llm_oracle](../llm_oracle), [packages](../packages), [pay](../pay), [x402](../x402) |
 | Agentic intelligence | [agents](../agents), [agent-kit](../agent-kit), [skills](../skills), [ooda](../ooda), [deep-clawd](../deep-clawd), [leviathan](../leviathan) |
 | Market execution | [perps](../perps), [packages/clawd-perps](../packages/clawd-perps), [packages/clawd-perps-aggregator](../packages/clawd-perps-aggregator), [x402/sdk](../x402/sdk) |
+| Perps routing depth | [packages/clawd-perps-aggregator](../packages/clawd-perps-aggregator) — SOR, AMM pool intel (utilization, OI skew, funding, borrow ladder), split execution, 17 MCP tools |
 | Safety and proof | [formal_verification](../formal_verification), [attestation](../attestation), [gateway](../gateway), [mcp](../mcp) |
 | Developer usability | [sdk](../sdk), [packages](../packages), [agent-kit](../agent-kit), [mcp/README.md](../mcp/README.md), [examples](../examples) |
 

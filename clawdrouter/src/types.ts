@@ -216,7 +216,7 @@ export interface ClawdRouterConfig {
   openRouterApiKey: string;         // OpenRouter API key
   openRouterSiteTitle: string;      // X-OpenRouter-Title / X-Title header
   openRouterSiteUrl: string;       // HTTP-Referer header (your app's URL)
-  openRouterCategories: string[];   // X-OpenRouter-Categories header (max 2)
+  openRouterCategories: string[];   // X-OpenRouter-Categories header
   openRouterEnabled: boolean;      // Route through OpenRouter
 
   // ── x402 Payment Config ───────────────────────────────────────
