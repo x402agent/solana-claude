@@ -7,7 +7,17 @@
       "Bash(git -C /Users/8bit/bots/Cladwbot-solana/solana-clawd log --oneline --all -- perps/clawd-agents-perps/src/marketMaker.ts)",
       "Bash(git -C /Users/8bit/bots/Cladwbot-solana/solana-clawd log --oneline --all -- perps/clawd-agents-perps/src/vulcanCatalog.ts)",
       "Bash(git -C /Users/8bit/bots/Cladwbot-solana/solana-clawd log --oneline --all -- packages/clawd-perps/src/twamm.ts)",
-      "Bash(git -C /Users/8bit/bots/Cladwbot-solana/solana-clawd log --oneline --all -- skills/clawd-twamm/SKILL.md)"
+      "Bash(git -C /Users/8bit/bots/Cladwbot-solana/solana-clawd log --oneline --all -- skills/clawd-twamm/SKILL.md)",
+      "Bash(git -C /Users/8bit/bots/Cladwbot-solana/solana-clawd log --oneline -- skills/clawd-twamm/SKILL.md)",
+      "Bash(git -C /Users/8bit/bots/Cladwbot-solana/solana-clawd log --oneline -- packages/clawd-perps/src/twamm.ts)",
+      "Bash(git -C /Users/8bit/bots/Cladwbot-solana/solana-clawd log --oneline -- amm/src/venues/twamm.ts)",
+      "Bash(git -C /Users/8bit/bots/Cladwbot-solana/solana-clawd log --oneline -- packages/clawd-perps-aggregator/src/venues/twamm.ts)",
+      "Bash(git -C /Users/8bit/bots/Cladwbot-solana/solana-clawd log --oneline origin/newnew..HEAD)",
+      "Bash(git -C /Users/8bit/bots/Cladwbot-solana/solana-clawd show --stat 41083a292)",
+      "Bash(git -C /Users/8bit/bots/Cladwbot-solana/solana-clawd diff HEAD -- perps/clawd-agents-perps/src/vulcanCatalog.ts)",
+      "Bash(git -C /Users/8bit/bots/Cladwbot-solana/solana-clawd/my-project-public status --short)",
+      "Bash(git -C /Users/8bit/bots/Cladwbot-solana/solana-clawd/my-project-public-fresh status --short)",
+      "Bash(git -C /Users/8bit/bots/Cladwbot-solana/solana-clawd/my-project-public diff -- index.html)"
     ]
   }
 }
