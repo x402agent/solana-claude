@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git -C /Users/8bit/bots/Cladwbot-solana/solana-clawd show --stat 2c8334ef2)",
+      "Bash(git -C /Users/8bit/bots/Cladwbot-solana/solana-clawd show --stat 432ce9fe6)",
+      "Bash(git -C /Users/8bit/bots/Cladwbot-solana/solana-clawd status -u)",
+      "Bash(git -C /Users/8bit/bots/Cladwbot-solana/solana-clawd log --oneline --all -- perps/clawd-agents-perps/src/marketMaker.ts)",
+      "Bash(git -C /Users/8bit/bots/Cladwbot-solana/solana-clawd log --oneline --all -- perps/clawd-agents-perps/src/vulcanCatalog.ts)",
+      "Bash(git -C /Users/8bit/bots/Cladwbot-solana/solana-clawd log --oneline --all -- packages/clawd-perps/src/twamm.ts)",
+      "Bash(git -C /Users/8bit/bots/Cladwbot-solana/solana-clawd log --oneline --all -- skills/clawd-twamm/SKILL.md)"
+    ]
+  }
+}
