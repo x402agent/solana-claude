@@ -23,6 +23,58 @@
 
 ---
 
+<div align="center">
+
+<img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=900&size=20&duration=1200&pause=200&color=14F195&center=true&vCenter=true&width=900&lines=%E2%96%BC+ONE+COMMAND+TO+RULE+THEM+ALL+%E2%96%BC;pick+your+path+below+and+run+it" alt="One command" />
+
+</div>
+
+## ⚡ One-Shot Install — Pick Your Path
+
+```bash
+# ── PATH 1 — Full TUI + Agent Kit (recommended) ─────────────────────────────
+curl -fsSL https://solanaclawd.com/leviathan.sh | sh && clawd-tui
+
+# ── PATH 2 — MCP server only (Claude Desktop / Cursor / VS Code) ────────────
+curl -fsSL https://raw.githubusercontent.com/x402agent/solana-clawd/main/mcp/install.sh | bash
+
+# ── PATH 3 — npm global surface ─────────────────────────────────────────────
+npm install -g solana-clawd && clawd
+
+# ── PATH 4 — full SDK workspace (perps + automaton + backrooms) ─────────────
+git clone https://github.com/x402agent/solana-clawd.git
+cd solana-clawd && bash sdk/install.sh && bash sdk/enter.sh
+
+# ── PATH 5 — browser terminal (zero install) ────────────────────────────────
+open https://solanaclawd.com/terminal
+```
+
+> **Bitwarden Secrets Manager**: export `BWS_ACCESS_TOKEN=<token>` before running any path above and all API keys hydrate automatically — no `.env` editing required. [See setup →](#-bitwarden-secrets-manager--installation-integration)
+
+<div align="center">
+
+| Path | Time | Best for |
+| --- | --- | --- |
+| `leviathan.sh` | ~2 min | Full Bloomberg TUI + perps + OODA loop |
+| `mcp install.sh` | ~1 min | Claude Desktop / Cursor / VS Code agent tools |
+| `npm -g solana-clawd` | ~30 sec | CLI-only quick test |
+| `git clone` + SDK | ~5 min | Full dev environment with perps, AMM, Bitwarden |
+| Browser terminal | instant | Zero-install demo |
+
+</div>
+
+After install, verify everything is wired:
+
+```bash
+clawd --version                                  # root CLI
+clawd-tui                                        # Bloomberg-style operator terminal
+clawd-perps signal oi SOL-PERP --mock            # perps OI signal (no RPC needed)
+clawd balance                                    # wallet status
+curl https://x402.wtf/api/solana-clawd/sdk | jq '.data.stats'  # hosted SDK graph
+```
+
+---
+
 ## The Thesis
 
 > **AI will not become truly useful at global scale until actions become verifiable. Clawd turns AI from probabilistic speech into attestable machine labor.**
