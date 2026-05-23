@@ -24,7 +24,9 @@
       "Bash(git -C /Users/8bit/bots/Cladwbot-solana/solana-clawd diff --cached --stat)",
       "Bash(git -C /Users/8bit/bots/Cladwbot-solana/solana-clawd commit -m ' *)",
       "Bash(git -C /Users/8bit/bots/Cladwbot-solana/solana-clawd log --oneline -5)",
-      "Bash(git -C /Users/8bit/bots/Cladwbot-solana/solana-clawd add .claude/settings.json)"
+      "Bash(git -C /Users/8bit/bots/Cladwbot-solana/solana-clawd add .claude/settings.json)",
+      "Bash(git -C /Users/8bit/bots/Cladwbot-solana/solana-clawd log --oneline -6)",
+      "Bash(git -C /Users/8bit/bots/Cladwbot-solana/solana-clawd add README.md)"
     ]
   }
 }
