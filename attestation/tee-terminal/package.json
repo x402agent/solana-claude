@@ -1,0 +1,30 @@
+{
+  "name": "@openclawdsolana/tee-terminal",
+  "version": "0.1.0",
+  "description": "TEE-style encrypted terminal with Solana attestation and private AI routing",
+  "main": "dist/server.js",
+  "bin": {
+    "clawd-tee": "dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev:server": "ts-node src/server.ts",
+    "dev:cli": "ts-node src/cli.ts",
+    "start": "node dist/server.js",
+    "cli": "ts-node src/cli.ts"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.36.3",
+    "@solana/kit": "^2.1.1",
+    "dotenv": "^16.4.7",
+    "uuid": "^11.1.0",
+    "ws": "^8.18.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/uuid": "^10.0.0",
+    "@types/ws": "^8.5.13",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  }
+}

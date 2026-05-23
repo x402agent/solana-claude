@@ -10,7 +10,26 @@
     "generate-idl": "shank idl -r program -o idl",
     "qedgen:spec": "printf '%s\n' 'QEDGen entrypoint: use attestation/idl/solana_attestation_service.json and attestation/formal_verification/SPEC.md as the canonical SAS proof target.'",
     "qedgen:build": "cd formal_verification && lake build",
-    "verify:agent-template": "npx tsx ../formal_verification/gate.ts verify --path ../agents/agent-template-attested.json"
+    "verify:agent-template": "npx tsx ../formal_verification/gate.ts verify --path ../agents/agent-template-attested.json",
+
+    "tee:install":    "cd tee-terminal && npm install",
+    "tee:build":      "cd tee-terminal && npm run build",
+    "tee:server":     "cd tee-terminal && npm run dev:server",
+    "tee:cli":        "cd tee-terminal && npm run dev:cli",
+
+    "inference:install": "cd inference && npm install",
+    "inference:build":   "cd inference && npm run build",
+    "inference:demo":    "cd inference && ts-node src/index.ts",
+
+    "agents:install":    "cd agent-router && npm install",
+    "agents:build":      "cd agent-router && npm run build",
+    "agents:list":       "cd agent-router && ts-node src/index.ts list",
+    "agents:register":   "cd agent-router && ts-node src/index.ts register",
+    "agents:route":      "cd agent-router && ts-node src/index.ts route",
+
+    "private-ai:install-all": "npm run tee:install && npm run inference:install && npm run agents:install",
+    "private-ai:build-all":   "npm run tee:build && npm run inference:build && npm run agents:build",
+    "private-ai:demo":        "concurrently \"npm run tee:server\" \"sleep 3 && npm run tee:cli\""
   },
   "dependencies": {
     "@codama/nodes-from-anchor": "^1.3.0",
@@ -23,6 +42,7 @@
     "@types/chai": "^5.2.2",
     "@types/mocha": "^10.0.10",
     "chai": "^5.2.0",
+    "concurrently": "^9.1.2",
     "mocha": "^10.8.2",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3"

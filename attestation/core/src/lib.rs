@@ -71,6 +71,69 @@ pub mod plugin_attestation_fields {
     pub const IS_AUDITED: &str = "is_audited";
 }
 
+// ─── Private AI & TEE Extensions ───────────────────────────────────────────
+
+/// Schema types for private AI, TEE sessions, and agent routing
+pub mod private_ai_schema_types {
+    /// TEE session: [String, Pubkey, U64, ProofHash, Bool]
+    /// Fields: session_id, session_pubkey, start_time, params_hash, is_active
+    pub const TEE_SESSION_SCHEMA: &[u8] = &[12, 32, 3, 34, 10];
+
+    /// Private inference attestation: [String, Pubkey, ProofHash, ProofHash, U64, Bool]
+    /// Fields: inference_id, model_pubkey, prompt_hash, response_hash, timestamp, is_verified
+    pub const INFERENCE_ATTESTATION_SCHEMA: &[u8] = &[12, 32, 34, 34, 3, 10];
+
+    /// Model registry entry: [String, Pubkey, String, U64, Bool]
+    /// Fields: model_id, provider_pubkey, endpoint, registered_at, is_active
+    pub const MODEL_REGISTRY_SCHEMA: &[u8] = &[12, 32, 12, 3, 10];
+
+    /// Agent router registration: [String, Pubkey, String, String, U64, Bool]
+    /// Fields: agent_id, wallet_pubkey, capabilities, endpoint, registered_at, is_active
+    pub const AGENT_ROUTER_SCHEMA: &[u8] = &[12, 32, 12, 12, 3, 10];
+
+    /// Encryption key attestation: [String, Pubkey, ProofHash, U64, Bool]
+    /// Fields: key_id, owner_pubkey, key_commitment_hash, created_at, is_active
+    pub const ENCRYPTION_KEY_SCHEMA: &[u8] = &[12, 32, 34, 3, 10];
+}
+
+/// Field names for TEE session attestation
+pub mod tee_session_fields {
+    pub const SESSION_ID: &str = "session_id";
+    pub const SESSION_PUBKEY: &str = "session_pubkey";
+    pub const START_TIME: &str = "start_time";
+    pub const PARAMS_HASH: &str = "params_hash";
+    pub const IS_ACTIVE: &str = "is_active";
+}
+
+/// Field names for private inference attestation
+pub mod inference_attestation_fields {
+    pub const INFERENCE_ID: &str = "inference_id";
+    pub const MODEL_PUBKEY: &str = "model_pubkey";
+    pub const PROMPT_HASH: &str = "prompt_hash";
+    pub const RESPONSE_HASH: &str = "response_hash";
+    pub const TIMESTAMP: &str = "timestamp";
+    pub const IS_VERIFIED: &str = "is_verified";
+}
+
+/// Field names for model registry attestation
+pub mod model_registry_fields {
+    pub const MODEL_ID: &str = "model_id";
+    pub const PROVIDER_PUBKEY: &str = "provider_pubkey";
+    pub const ENDPOINT: &str = "endpoint";
+    pub const REGISTERED_AT: &str = "registered_at";
+    pub const IS_ACTIVE: &str = "is_active";
+}
+
+/// Field names for agent router attestation
+pub mod agent_router_fields {
+    pub const AGENT_ID: &str = "agent_id";
+    pub const WALLET_PUBKEY: &str = "wallet_pubkey";
+    pub const CAPABILITIES: &str = "capabilities";
+    pub const ENDPOINT: &str = "endpoint";
+    pub const REGISTERED_AT: &str = "registered_at";
+    pub const IS_ACTIVE: &str = "is_active";
+}
+
 #[cfg(test)]
 mod test {
     use crate::schema_types::{AGENT_IDENTITY_SCHEMA, SKILL_ATTESTATION_SCHEMA};

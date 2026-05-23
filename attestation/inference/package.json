@@ -1,0 +1,23 @@
+{
+  "name": "@openclawdsolana/private-inference",
+  "version": "0.1.0",
+  "description": "Private AI inference with Solana attestation — encrypt prompts, record hashes on-chain",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "dev": "ts-node src/index.ts",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.36.3",
+    "@solana/kit": "^2.1.1",
+    "dotenv": "^16.4.7",
+    "uuid": "^11.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/uuid": "^10.0.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  }
+}
