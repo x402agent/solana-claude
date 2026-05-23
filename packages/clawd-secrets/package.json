@@ -1,0 +1,45 @@
+{
+  "name": "@openclawdsolana/clawd-secrets",
+  "version": "0.1.0",
+  "description": "Zero-dependency secret manager hydrator for the Clawd runtime. Pulls secrets from Bitwarden Secrets Manager (bws) into process.env at startup.",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "bitwarden",
+    "secrets-manager",
+    "bws",
+    "secrets",
+    "env",
+    "clawd",
+    "solana"
+  ],
+  "author": "Clawd",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/x402agent/solana-clawd",
+    "directory": "packages/clawd-secrets"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "@types/node": "^20.19.41",
+    "typescript": "^5.9.3"
+  }
+}

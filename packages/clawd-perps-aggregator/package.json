@@ -68,7 +68,8 @@
   },
   "homepage": "https://solanaclawd.com",
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.0.0"
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "@openclawdsolana/clawd-secrets": "file:../clawd-secrets"
   },
   "optionalDependencies": {
     "ws": "^8.18.0"

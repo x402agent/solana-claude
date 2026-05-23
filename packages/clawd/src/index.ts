@@ -9,10 +9,14 @@ import { getSettingsManager } from "./utils/settings-manager.js";
 import { ConfirmationService } from "./utils/confirmation-service.js";
 import { createMCPCommand } from "./commands/mcp.js";
 import { createExamplesCommand } from "./commands/examples.js";
+import { hydrateSecretsFromBitwarden } from "@openclawdsolana/clawd-secrets";
 import type { ChatCompletionMessageParam } from "openai/resources/chat";
 
 // Load environment variables
 dotenv.config();
+// Pull secrets from Bitwarden when configured (no-op otherwise). Existing env
+// and .env always win; this only fills blanks.
+hydrateSecretsFromBitwarden();
 
 // Disable default SIGINT handling to let Ink handle Ctrl+C
 // We'll handle exit through the input system instead

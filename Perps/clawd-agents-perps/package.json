@@ -13,7 +13,8 @@
     "typecheck": "tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {
-    "@openclawdsolana/clawd-perps": "file:../../packages/clawd-perps"
+    "@openclawdsolana/clawd-perps": "file:../../packages/clawd-perps",
+    "@openclawdsolana/clawd-secrets": "file:../../packages/clawd-secrets"
   },
   "devDependencies": {
     "@types/node": "^24.9.1",

@@ -116,11 +116,18 @@ Entrypoints that self-hydrate today:
 | MCP server (stdio + HTTP) | `MCP/src/index.ts`, `MCP/src/http.ts` |
 | Perps aggregator CLI | `packages/clawd-perps-aggregator/src/cli.ts` |
 | Perps aggregator MCP bin | `packages/clawd-perps-aggregator/src/mcp/bin.ts` |
+| `clawd-perps` CLI | `packages/clawd-perps/src/cli.ts` |
+| `clawd-agents-perps` CLI | `Perps/clawd-agents-perps/src/cli.ts` |
+| `clawd` TUI | `packages/clawd/src/index.ts` |
+| `clawd-standalone` CLI | `packages/cli-standalone/index.js` |
+| `leviathan` / `openclawd` CLI | `sdk/src/index.ts` |
+| Gateway (Telegram + HTTP API) | `gateway/src/index.ts` |
 
-The canonical implementation lives once in
-`packages/clawd-perps-aggregator/src/secrets/bitwarden.ts` and is exported as
-`hydrateSecretsFromBitwarden()`. The MCP server re-exports it (it already
-depends on the aggregator), so there is a single hydrator to maintain.
+The canonical implementation lives once in the zero-dependency package
+**`@openclawdsolana/clawd-secrets`** (`packages/clawd-secrets`), exported as
+`hydrateSecretsFromBitwarden()`. The perps aggregator re-exports it, and the
+MCP server re-exports it via the aggregator — so there is exactly one hydrator
+to maintain and every runtime above shares it.
 
 Rules for all hydration paths:
 
@@ -132,17 +139,20 @@ Rules for all hydration paths:
 
 ### Adding self-hydration to another runtime
 
-Any Node entrypoint can opt in:
+Any Node entrypoint can opt in with the zero-dependency package:
 
 ```ts
-import { hydrateSecretsFromBitwarden } from "@openclawdsolana/clawd-perps-aggregator";
+import { hydrateSecretsFromBitwarden } from "@openclawdsolana/clawd-secrets";
 hydrateSecretsFromBitwarden(); // call once, before reading process.env
 ```
 
-Components that don't import this (the `clawd`/SDK packages, gateway, Perps
-agents) still receive Bitwarden secrets when launched through the installed
-`bws run` launchers / `clawd-secure` wrapper, which populate the environment
-before the process starts.
+Add `"@openclawdsolana/clawd-secrets": "file:…/packages/clawd-secrets"` to the
+package's dependencies. It pulls in no third-party packages (only Node's
+built-in `child_process`), so even the lightest CLI can use it.
+
+Anything that hasn't opted in still receives Bitwarden secrets when launched
+through the installed `bws run` launchers / `clawd-secure` wrapper, which
+populate the environment before the process starts.
 
 ---
 
@@ -154,9 +164,11 @@ before the process starts.
   SDK installer fetches it from the repo when run via `curl | bash`.
 - `scripts/test-bitwarden-secrets.sh` — a 25-assertion test suite that runs
   against a mock `bws` (no account/network needed): `bash scripts/test-bitwarden-secrets.sh`.
-- `packages/clawd-perps-aggregator/src/secrets/bitwarden.ts` — the canonical
-  Node runtime hydrator (exported as `hydrateSecretsFromBitwarden`).
-- `MCP/src/secrets/bitwarden.ts` — thin re-export of the canonical hydrator.
+- `packages/clawd-secrets/` — the canonical, zero-dependency Node runtime
+  hydrator (`@openclawdsolana/clawd-secrets`, exports
+  `hydrateSecretsFromBitwarden`). Every runtime entrypoint imports this.
+- `packages/clawd-perps-aggregator/src/secrets/bitwarden.ts` and
+  `MCP/src/secrets/bitwarden.ts` — thin re-exports of the canonical hydrator.
 
 ## Security notes
 

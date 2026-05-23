@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import "dotenv/config";
+import { hydrateSecretsFromBitwarden } from "@openclawdsolana/clawd-secrets";
 import { buildPerpsFrontendStatus } from "./frontend.js";
 import { ClawdPerpsRuntime } from "./marketMaker.js";
 import { handleTelegramPerpsCommand } from "./telegram.js";
@@ -189,6 +190,8 @@ Environment:
 }
 
 async function main() {
+  // Pull secrets from Bitwarden when configured (no-op otherwise).
+  hydrateSecretsFromBitwarden();
   const parsed = parseArgs(process.argv.slice(2));
   const createRuntime = () => new ClawdPerpsRuntime(undefined, repoRoot());
 

@@ -6,8 +6,13 @@
  * Env:    See ../.env for configuration
  */
 import 'dotenv/config';
+import { hydrateSecretsFromBitwarden } from '@openclawdsolana/clawd-secrets';
 import express from 'express';
 import { TelegramBot, sendMessage } from './telegram.js';
+
+// Pull secrets from Bitwarden when configured (no-op otherwise). Existing env
+// and .env always win; this only fills blanks.
+hydrateSecretsFromBitwarden();
 import {
   getBalance,
   getTokenAccounts,

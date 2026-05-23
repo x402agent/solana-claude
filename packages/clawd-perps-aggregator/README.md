@@ -298,10 +298,12 @@ The aggregator inherits the existing Imperial safety contract verbatim:
 The CLI (`clawd-perps-aggregator`) and standalone MCP bin (`clawd-perps-mcp`)
 self-hydrate from **Bitwarden Secrets Manager** at startup when
 `BWS_ACCESS_TOKEN` is set and the `bws` CLI is present — existing env always
-wins, and it is a no-op otherwise. Reuse it anywhere:
+wins, and it is a no-op otherwise. The hydrator is the zero-dependency
+[`@openclawdsolana/clawd-secrets`](../clawd-secrets) package (re-exported here
+for convenience):
 
 ```ts
-import { hydrateSecretsFromBitwarden } from "@openclawdsolana/clawd-perps-aggregator";
+import { hydrateSecretsFromBitwarden } from "@openclawdsolana/clawd-secrets";
 hydrateSecretsFromBitwarden(); // before reading process.env
 ```
 

@@ -46,6 +46,7 @@
     "mcp:http": "cd MCP && npm run start:http",
     "secrets:test": "bash scripts/test-bitwarden-secrets.sh",
     "secrets:install-cli": "bash -c '. scripts/bitwarden-secrets.sh && bws_ensure_cli'",
+    "clawd-secrets:build": "npm --prefix packages/clawd-secrets install --no-audit --no-fund && npm --prefix packages/clawd-secrets run build",
     "amm:install": "npm --prefix amm install",
     "amm:typecheck": "npm --prefix amm run typecheck",
     "amm:build": "npm --prefix amm run build",
@@ -298,6 +299,8 @@
     "packages/agentwallet",
     "packages/clawd",
     "packages/clawd-perps",
+    "packages/clawd-perps-aggregator",
+    "packages/clawd-secrets",
     "packages/clawd-sdk",
     "packages/clawd-wallet",
     "packages/cli-standalone"

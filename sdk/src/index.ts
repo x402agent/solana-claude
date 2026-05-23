@@ -14,7 +14,12 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { hydrateSecretsFromBitwarden } from '@openclawdsolana/clawd-secrets';
 import { hasKeystore, readKeystoreMetadata, requireKeypair } from './identity/wallet.js';
+
+// Pull secrets from Bitwarden when configured (no-op otherwise). Existing env
+// always wins; this only fills blanks. Runs before any process.env reads below.
+hydrateSecretsFromBitwarden();
 import { runSpawnWizard } from './setup/wizard.js';
 import { spawnSpawnling } from './molting/spawn.js';
 import { startPulse } from './pulse/daemon.js';

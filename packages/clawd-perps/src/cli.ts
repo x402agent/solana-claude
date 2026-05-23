@@ -1,7 +1,12 @@
 #!/usr/bin/env node
 import "dotenv/config";
+import { hydrateSecretsFromBitwarden } from "@openclawdsolana/clawd-secrets";
 import { Command } from "commander";
 import { buildPerpsCommand } from "./commands/perps-commands.js";
+
+// Pull secrets from Bitwarden when configured (no-op otherwise). Existing env
+// and .env always win; this only fills blanks.
+hydrateSecretsFromBitwarden();
 
 const program = new Command()
   .name("clawd-perps")
