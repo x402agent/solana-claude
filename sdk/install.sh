@@ -21,6 +21,57 @@ warn() { printf "${YELLOW}⚠️   %s${RESET}\n" "$*"; }
 die()  { printf "${RED}❌  %s${RESET}\n" "$*" >&2; exit 1; }
 step() { printf "\n${BOLD}${MAGENTA}▶  %s${RESET}\n" "$*"; }
 
+# ── Bitwarden Secrets Manager (bws) config + flags ────────────────────────────
+CLAWD_DIR="${HOME}/.clawd"
+BWS_TOKEN_FILE="${BWS_TOKEN_FILE:-$CLAWD_DIR/bws-access-token}"
+BWS_PROJECT_ID="${BWS_PROJECT_ID:-}"
+BWS_BRANCH="${SOLANA_CLAWD_BWS_BRANCH:-main}"
+BWS_DO_INSTALL=0
+BWS_DO_SEED=0
+BWS_DO_SAVE_TOKEN=0
+BWS_OVERWRITE=0
+BWS_DISABLED="${SOLANA_CLAWD_BWS:-1}"; [ "$BWS_DISABLED" = "0" ] && BWS_DISABLED=1 || BWS_DISABLED=0
+
+for arg in "$@"; do
+  case "$arg" in
+    --bws-install) BWS_DO_INSTALL=1 ;;
+    --bws-token=*) export BWS_ACCESS_TOKEN="${arg#--bws-token=}" ;;
+    --bws-project=*) BWS_PROJECT_ID="${arg#--bws-project=}" ;;
+    --bws-save-token) BWS_DO_SAVE_TOKEN=1 ;;
+    --bws-seed) BWS_DO_SEED=1 ;;
+    --bws-overwrite) BWS_OVERWRITE=1 ;;
+    --no-bws) BWS_DISABLED=1 ;;
+    *) : ;;  # ignore unknown flags (installer is permissive)
+  esac
+done
+[ -n "$BWS_PROJECT_ID" ] && export BWS_PROJECT_ID
+export BWS_TOKEN_FILE
+
+# Source the shared Bitwarden helper library. Prefer a local checkout; when
+# running via `curl | bash`, fetch it from the repo (single source of truth).
+load_bitwarden_lib() {
+  [ "$BWS_DISABLED" = "1" ] && return 1
+  local local_lib raw tmp
+  for local_lib in \
+    "$(dirname "$0" 2>/dev/null)/../scripts/bitwarden-secrets.sh" \
+    "./scripts/bitwarden-secrets.sh"; do
+    if [ -f "$local_lib" ]; then
+      # shellcheck source=/dev/null
+      . "$local_lib" && return 0
+    fi
+  done
+  command -v curl >/dev/null 2>&1 || { warn "curl needed to fetch Bitwarden helper; skipping"; return 1; }
+  raw="https://raw.githubusercontent.com/x402agent/solana-clawd/${BWS_BRANCH}/scripts/bitwarden-secrets.sh"
+  tmp="$(mktemp "${TMPDIR:-/tmp}/bwslib.XXXXXX")" || return 1
+  if curl -fsSL "$raw" -o "$tmp" 2>/dev/null && [ -s "$tmp" ]; then
+    # shellcheck source=/dev/null
+    . "$tmp" && { rm -f "$tmp"; return 0; }
+  fi
+  rm -f "$tmp"
+  warn "could not load Bitwarden helper from $raw"
+  return 1
+}
+
 # ── Banner ────────────────────────────────────────────────────────────────────
 printf "${CYAN}${BOLD}"
 cat << 'BANNER'
@@ -156,6 +207,49 @@ ENV
 else
   info "~/.clawd/.env already exists — skipping"
 fi
+chmod 0600 "${ENV_FILE}" 2>/dev/null || true
+
+# ── Bitwarden Secrets Manager (optional secret manager) ───────────────────────
+step "Secret manager (Bitwarden Secrets Manager)"
+if [ "$BWS_DISABLED" = "1" ]; then
+  info "Bitwarden integration disabled (--no-bws / SOLANA_CLAWD_BWS=0)"
+elif load_bitwarden_lib; then
+  if [ "$BWS_DO_INSTALL" = "1" ]; then
+    bws_ensure_cli || warn "bws CLI not available; continuing"
+  fi
+  if [ "$BWS_DO_SAVE_TOKEN" = "1" ] && [ -n "${BWS_ACCESS_TOKEN:-}" ]; then
+    bws_save_token "$BWS_TOKEN_FILE" "$BWS_ACCESS_TOKEN" || warn "could not save token"
+  fi
+  if [ "$BWS_DO_SEED" = "1" ]; then
+    bws_have_cli || bws_ensure_cli || warn "bws CLI required to seed; skipping"
+    bws_seed_env_file "$ENV_FILE" "$BWS_OVERWRITE" || warn "secret seed failed"
+  fi
+
+  # Write a runtime-injecting wrapper: `clawd-secure` runs clawd under `bws run`
+  # so secrets are pulled fresh from Bitwarden and never persisted.
+  if bws_token_present || [ "$BWS_DO_SAVE_TOKEN" = "1" ]; then
+    mkdir -p "$CLAWD_DIR/bin"
+    {
+      printf '#!/usr/bin/env bash\nset -euo pipefail\n'
+      printf '# clawd-secure — run any clawd CLI with Bitwarden secret injection.\n'
+      printf '# Usage: clawd-secure [clawd|clawd-perps|clawd-tui|...] [args]\n'
+      bws_launcher_prelude "$ENV_FILE" "$BWS_TOKEN_FILE" "$BWS_PROJECT_ID"
+      printf 'CMD="${1:-clawd}"; shift 2>/dev/null || true\n'
+      printf 'set -- "$CMD" "$@"\n'
+      bws_launcher_exec
+    } > "$CLAWD_DIR/bin/clawd-secure"
+    chmod +x "$CLAWD_DIR/bin/clawd-secure"
+    ok "Wrote runtime-injection wrapper: $CLAWD_DIR/bin/clawd-secure"
+  fi
+
+  if bws_token_present; then
+    ok "Bitwarden token configured — use 'clawd-secure clawd' for runtime injection"
+  else
+    info "No token yet. Set BWS_ACCESS_TOKEN (or --bws-token=...) then re-run with --bws-seed/--bws-save-token"
+  fi
+else
+  info "Bitwarden helper not loaded; enable with: BWS_ACCESS_TOKEN=... bash install.sh --bws-install --bws-save-token"
+fi
 
 # ── Done ──────────────────────────────────────────────────────────────────────
 printf "\n${BOLD}${GREEN}🦞  OpenClawd installed!${RESET}\n\n"
@@ -177,6 +271,14 @@ printf "\n"
 printf "  ${BOLD}Install leviathan (advanced, spawns on-chain agent):${RESET}\n"
 printf "  ${CYAN}npm install -g @openclawdsolana/leviathan${RESET}\n"
 printf "  ${CYAN}leviathan --spawn${RESET}\n"
+printf "\n"
+
+printf "  ${BOLD}Secret manager (Bitwarden Secrets Manager):${RESET}\n"
+printf "  ${CYAN}export BWS_ACCESS_TOKEN=...${RESET}   # machine-account token\n"
+printf "  ${CYAN}bash install.sh --bws-install --bws-save-token --bws-seed${RESET}\n"
+printf "  Then run with runtime secret injection (no plaintext on disk):\n"
+printf "  ${CYAN}~/.clawd/bin/clawd-secure clawd${RESET}     # = bws run -- clawd\n"
+printf "  Disable anytime with ${BOLD}--no-bws${RESET} or ${BOLD}SOLANA_CLAWD_BWS=0${RESET}.\n"
 printf "\n"
 
 printf "  ${BOLD}Links:${RESET}\n"

@@ -13,6 +13,10 @@ import { randomUUID } from "node:crypto";
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
 import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js";
 import { createServer } from "./server.js";
+import { hydrateSecretsFromBitwarden } from "./secrets/bitwarden.js";
+
+// Hydrate secrets from Bitwarden Secrets Manager when configured (no-op otherwise).
+hydrateSecretsFromBitwarden();
 
 const PORT = parseInt(process.env.PORT ?? "3000", 10);
 const API_KEY = process.env.MCP_API_KEY;

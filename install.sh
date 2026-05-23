@@ -33,6 +33,13 @@
 #   --reset-config       Overwrite an existing config.json.
 #   --quiet              Suppress informational chatter; keep ✓/! lines only.
 #   --no-banner          Skip the ASCII banner (CI-friendly).
+#   --bws-install        Install the Bitwarden Secrets Manager CLI (bws).
+#   --bws-token=TOKEN    Machine-account access token (or set BWS_ACCESS_TOKEN).
+#   --bws-project=ID     Restrict to one Secrets Manager project (BWS_PROJECT_ID).
+#   --bws-save-token     Persist the token to a 0600 file for runtime injection.
+#   --bws-seed           Seed the workspace .env from Bitwarden (fills blanks).
+#   --bws-overwrite      With --bws-seed, overwrite existing values too.
+#   --no-bws             Disable Bitwarden integration (or SOLANA_CLAWD_BWS=0).
 #   -h | --help          Show usage and exit.
 
 set -euo pipefail
@@ -60,6 +67,11 @@ RESET_CONFIG=0
 QUIET=0
 NO_BANNER=0
 XAI_KEY_FLAG=""
+BWS_DO_INSTALL=0
+BWS_DO_SEED=0
+BWS_DO_SAVE_TOKEN=0
+BWS_OVERWRITE=0
+BWS_DISABLED="${SOLANA_CLAWD_BWS:-1}"; [ "$BWS_DISABLED" = "0" ] && BWS_DISABLED=1 || BWS_DISABLED=0
 GO_MIN_MAJOR=1
 GO_MIN_MINOR=21
 NODE_MIN_MAJOR=20
@@ -86,7 +98,7 @@ warn()  { printf "${PURPLE}  ! %s${RESET}\n" "$*"; }
 fail()  { printf "${RED}  ✖ %s${RESET}\n" "$*" >&2; exit 1; }
 
 usage() {
-  sed -n '2,29p' "$0" | sed 's/^# \{0,1\}//'
+  sed -n '2,43p' "$0" | sed 's/^# \{0,1\}//'
   exit 0
 }
 
@@ -239,12 +251,25 @@ for arg in "$@"; do
     --branch=*)        BRANCH="${arg#--branch=}" ;;
     --bin-dir=*)       BIN_DIR="${arg#--bin-dir=}" ;;
     --xai-key=*)       XAI_KEY_FLAG="${arg#--xai-key=}" ;;
+    --bws-install)     BWS_DO_INSTALL=1 ;;
+    --bws-token=*)     export BWS_ACCESS_TOKEN="${arg#--bws-token=}" ;;
+    --bws-project=*)   BWS_PROJECT_ID="${arg#--bws-project=}" ;;
+    --bws-save-token)  BWS_DO_SAVE_TOKEN=1 ;;
+    --bws-seed)        BWS_DO_SEED=1 ;;
+    --bws-overwrite)   BWS_OVERWRITE=1 ;;
+    --no-bws)          BWS_DISABLED=1 ;;
     -h|--help)         usage ;;
     *) warn "Ignoring unknown flag: $arg" ;;
   esac
 done
 
 BIN_DIR="${BIN_DIR:-$BIN_DIR_DEFAULT}"
+
+# Bitwarden Secrets Manager defaults.
+BWS_TOKEN_FILE="${BWS_TOKEN_FILE:-$WORKSPACE/bws-access-token}"
+BWS_PROJECT_ID="${BWS_PROJECT_ID:-}"
+[ -n "$BWS_PROJECT_ID" ] && export BWS_PROJECT_ID
+export BWS_TOKEN_FILE
 
 banner
 
@@ -949,6 +974,57 @@ elif [ -t 0 ] && [ -t 1 ] && [ "$QUIET" = "0" ] && grep -q '^XAI_API_KEY=$' "$EN
   printf "${CYAN}  ? Paste your XAI_API_KEY for Grok voice (Enter to skip): ${RESET}"
   IFS= read -r XAI_INPUT || XAI_INPUT=""
   [ -n "${XAI_INPUT:-}" ] && seed_xai_key "$XAI_INPUT"
+fi
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Bitwarden Secrets Manager — secret manager at install.
+# Sources the shared helper from the checkout; installs the bws CLI, saves a
+# machine-account token (0600), seeds the workspace .env, and writes a
+# clawd-secure wrapper that injects secrets at runtime via `bws run`.
+# ──────────────────────────────────────────────────────────────────────────────
+if [ "$BWS_DISABLED" = "1" ]; then
+  info "Bitwarden integration disabled (--no-bws / SOLANA_CLAWD_BWS=0)"
+else
+  BWS_LIB="$SRC_DIR/scripts/bitwarden-secrets.sh"
+  if [ -f "$BWS_LIB" ]; then
+    step "Secret manager (Bitwarden Secrets Manager)"
+    # shellcheck source=/dev/null
+    . "$BWS_LIB"
+
+    [ "$BWS_DO_INSTALL" = "1" ] && { bws_ensure_cli || warn "bws CLI not available; continuing"; }
+
+    if [ "$BWS_DO_SAVE_TOKEN" = "1" ] && [ -n "${BWS_ACCESS_TOKEN:-}" ]; then
+      bws_save_token "$BWS_TOKEN_FILE" "$BWS_ACCESS_TOKEN" || warn "could not save token"
+    fi
+
+    if [ "$BWS_DO_SEED" = "1" ]; then
+      bws_have_cli || bws_ensure_cli || warn "bws CLI required to seed; skipping"
+      bws_seed_env_file "$ENV_PATH" "$BWS_OVERWRITE" || warn "secret seed failed"
+    fi
+
+    if bws_token_present || [ "$BWS_DO_SAVE_TOKEN" = "1" ]; then
+      mkdir -p "$BIN_DIR"
+      {
+        printf '#!/usr/bin/env bash\nset -euo pipefail\n'
+        printf '# clawd-secure — run any clawd command with Bitwarden secret injection.\n'
+        # Reuse the MCP launcher var name so SOLANA_CLAWD_MCP_ENV overrides work too.
+        SOLANA_CLAWD_MCP_ENV="" bws_launcher_prelude "$ENV_PATH" "$BWS_TOKEN_FILE" "$BWS_PROJECT_ID"
+        printf 'CMD="${1:-clawd}"; shift 2>/dev/null || true\n'
+        printf 'set -- "$CMD" "$@"\n'
+        bws_launcher_exec
+      } > "$BIN_DIR/clawd-secure"
+      chmod +x "$BIN_DIR/clawd-secure"
+      ok "wrote runtime-injection wrapper: $BIN_DIR/clawd-secure"
+    fi
+
+    if bws_token_present; then
+      ok "Bitwarden token configured — run 'clawd-secure <cmd>' for runtime secret injection"
+    else
+      info "No Bitwarden token configured. Set BWS_ACCESS_TOKEN or use --bws-token=..."
+    fi
+  else
+    warn "Bitwarden helper not found at $BWS_LIB; skipping secret manager setup"
+  fi
 fi
 
 # ──────────────────────────────────────────────────────────────────────────────

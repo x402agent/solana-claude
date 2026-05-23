@@ -8,6 +8,11 @@
 !**/.env.template
 *.local
 *.secret
+
+# Bitwarden Secrets Manager access tokens (never commit)
+bws-access-token
+*.bws-token
+**/bws-access-token
 *.secrets
 .clawd/
 .vulcan/

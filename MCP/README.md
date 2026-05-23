@@ -259,6 +259,24 @@ The perps tools honour the same Imperial env contract as the `clawd-perps` CLI:
 | `PERPS_AGG_VENUES` | all | Enabled venues subset |
 | `PERPS_AGG_PAPER` | auto | Force paper mode regardless of `IMPERIAL_LIVE` |
 
+## Secret manager — Bitwarden Secrets Manager
+
+Rather than keeping API keys and JWTs in the env file, the installer can wire
+in **Bitwarden Secrets Manager** (`bws`). With a machine-account access token,
+the generated launchers wrap the server in `bws run`, injecting secrets fresh
+at runtime so they never touch disk:
+
+```bash
+export BWS_ACCESS_TOKEN="0.xxxx…"          # machine-account token
+curl -fsSL https://raw.githubusercontent.com/x402agent/solana-clawd/main/MCP/install.sh \
+  | bash -s -- --bws-install --bws-save-token
+```
+
+The MCP server also hydrates from Bitwarden at startup (`src/secrets/bitwarden.ts`)
+when launched directly — existing env vars always win, and it is a no-op without
+a token. Disable everything with `--no-bws` or `SOLANA_CLAWD_BWS=0`. Full
+details and flags: [`docs/SECRETS.md`](../docs/SECRETS.md).
+
 ## Running
 
 ### One-shot curl install

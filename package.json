@@ -44,6 +44,8 @@
     "mcp:build": "cd MCP && npm ci && npm run build",
     "mcp:start": "cd MCP && npm start",
     "mcp:http": "cd MCP && npm run start:http",
+    "secrets:test": "bash scripts/test-bitwarden-secrets.sh",
+    "secrets:install-cli": "bash -c '. scripts/bitwarden-secrets.sh && bws_ensure_cli'",
     "amm:install": "npm --prefix amm install",
     "amm:typecheck": "npm --prefix amm run typecheck",
     "amm:build": "npm --prefix amm run build",

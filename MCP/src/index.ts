@@ -15,6 +15,12 @@
  */
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { createServer } from "./server.js";
+import { hydrateSecretsFromBitwarden } from "./secrets/bitwarden.js";
+
+// Pull secrets from Bitwarden Secrets Manager when configured (no-op otherwise).
+// Existing env vars always win, so `bws run` injection and explicit env take
+// precedence over this fallback path.
+hydrateSecretsFromBitwarden();
 
 const server = await createServer();
 const transport = new StdioServerTransport();
