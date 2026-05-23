@@ -1,3 +1,33 @@
+<!-- ═══════════════════════════════════════════════════════════════════ -->
+<!--   CLAWD PRIVATE AI — blockchain-confirmed inference layer          -->
+<!-- ═══════════════════════════════════════════════════════════════════ -->
+<div align="center">
+
+<img width="100%" src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=6,11,20&height=270&section=header&text=CLAWD%20PRIVATE%20AI&fontSize=54&fontColor=14F195&animation=fadeIn&desc=Blockchain-Confirmed%20Inference%20%C2%B7%20TEE%20Terminal%20%C2%B7%20Solana%20Agent%20Router&descSize=20&descAlignY=65&fontAlign=50" />
+
+<img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=700&size=18&duration=1900&pause=750&color=14F195&center=true&vCenter=true&width=980&lines=%F0%9F%94%90+TEE+TERMINAL+%E2%80%94+X25519+ECDH+%2B+AES-256-GCM+encrypted+sessions;%F0%9F%A7%A0+PRIVATE+INFERENCE+%E2%80%94+SHA-256+commitment+on+Solana%2C+prompt+stays+yours;%F0%9F%94%97+AGENT+ROUTER+%E2%80%94+route+by+on-chain+capability+attestation;%F0%9F%A6%9E+CLAWD+%E2%80%94+prove+your+AI+ran+without+revealing+what+you+asked" alt="CLAWD Private AI" />
+
+<br/>
+
+[![Private AI](https://img.shields.io/badge/Private_AI-Blockchain_Confirmed-14F195?style=for-the-badge&logo=solana&logoColor=black)](.)
+[![Encryption](https://img.shields.io/badge/AES--256--GCM-E2E_Encrypted-9945FF?style=for-the-badge&logoColor=white)](.)
+[![Key Exchange](https://img.shields.io/badge/X25519-ECDH_Session_Keys-03E1FF?style=for-the-badge&logoColor=white)](.)
+[![Privacy](https://img.shields.io/badge/SHA--256-Prompt_Commitment-F9CF4D?style=for-the-badge&logoColor=black)](.)
+
+</div>
+
+> **🚀 NEW — Private AI Attestation Layer:**  
+> TEE terminal (X25519 ECDH → AES-256-GCM encrypted), private AI inference (SHA-256 prompt hash on Solana — plaintext never stored), and Solana agent router (capability-based attestation discovery).
+>
+> ```bash
+> cp attestation/.env.example attestation/.env  # add ANTHROPIC_API_KEY
+> npm run tee:server     # encrypted TEE terminal server  →  ws://localhost:8443
+> npm run tee:cli        # connect — session attested on Solana on handshake
+> npm run inference:demo "your prompt"  # private inference, hash on-chain
+> ```
+
+---
+
 <div align="center">
 
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/solana-foundation/solana-attestation-service)
