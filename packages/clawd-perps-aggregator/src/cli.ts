@@ -18,6 +18,7 @@
  */
 
 import { PerpsAggregator } from "./sdk/client.js";
+import { hydrateSecretsFromBitwarden } from "./secrets/bitwarden.js";
 import type { Side } from "./types.js";
 
 const args = process.argv.slice(2);
@@ -28,6 +29,9 @@ function logJson(obj: unknown): void {
 }
 
 async function main(): Promise<void> {
+  // Pull secrets from Bitwarden when configured (no-op otherwise). Existing
+  // env wins, so `bws run` injection and explicit env take precedence.
+  hydrateSecretsFromBitwarden();
   const agg = new PerpsAggregator();
 
   switch (cmd) {

@@ -92,3 +92,5 @@ export type { Base64Tx, SignerLike } from "./sdk/signing.js";
 export { startMcpServer } from "./mcp/server.js";
 export { buildTools } from "./mcp/tools.js";
 export type { McpTool } from "./mcp/tools.js";
+
+export { hydrateSecretsFromBitwarden } from "./secrets/bitwarden.js";

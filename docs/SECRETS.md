@@ -103,17 +103,46 @@ exec "$@"
 So a launcher degrades gracefully: no token or no CLI → it just runs the
 program with whatever the env file provides.
 
-## Node-side hydration (MCP server)
+## Node-side hydration (runtime, no launcher needed)
 
-When the MCP server is launched directly (e.g. a Claude Desktop config that
-points at `node dist/index.js` without the launcher), it still hydrates from
-Bitwarden at startup via `MCP/src/secrets/bitwarden.ts`:
+Even when a process is launched directly (e.g. a Claude Desktop config that
+points at `node dist/index.js`, or `npx`/`tsx`/`npm run` without the `bws run`
+launcher), the runtime self-hydrates from Bitwarden at startup.
+
+Entrypoints that self-hydrate today:
+
+| Entrypoint | Source |
+|------------|--------|
+| MCP server (stdio + HTTP) | `MCP/src/index.ts`, `MCP/src/http.ts` |
+| Perps aggregator CLI | `packages/clawd-perps-aggregator/src/cli.ts` |
+| Perps aggregator MCP bin | `packages/clawd-perps-aggregator/src/mcp/bin.ts` |
+
+The canonical implementation lives once in
+`packages/clawd-perps-aggregator/src/secrets/bitwarden.ts` and is exported as
+`hydrateSecretsFromBitwarden()`. The MCP server re-exports it (it already
+depends on the aggregator), so there is a single hydrator to maintain.
+
+Rules for all hydration paths:
 
 - No-op unless `BWS_ACCESS_TOKEN` is set and the `bws` CLI is available.
 - **Existing env vars always win** — `bws run` injection and explicit env take
   precedence; this is only a fallback.
 - Fully guarded: any failure logs to stderr and continues. A bad token can
-  never take the server down.
+  never take a process down.
+
+### Adding self-hydration to another runtime
+
+Any Node entrypoint can opt in:
+
+```ts
+import { hydrateSecretsFromBitwarden } from "@openclawdsolana/clawd-perps-aggregator";
+hydrateSecretsFromBitwarden(); // call once, before reading process.env
+```
+
+Components that don't import this (the `clawd`/SDK packages, gateway, Perps
+agents) still receive Bitwarden secrets when launched through the installed
+`bws run` launchers / `clawd-secure` wrapper, which populate the environment
+before the process starts.
 
 ---
 
@@ -125,7 +154,9 @@ Bitwarden at startup via `MCP/src/secrets/bitwarden.ts`:
   SDK installer fetches it from the repo when run via `curl | bash`.
 - `scripts/test-bitwarden-secrets.sh` — a 25-assertion test suite that runs
   against a mock `bws` (no account/network needed): `bash scripts/test-bitwarden-secrets.sh`.
-- `MCP/src/secrets/bitwarden.ts` — the Node runtime hydrator.
+- `packages/clawd-perps-aggregator/src/secrets/bitwarden.ts` — the canonical
+  Node runtime hydrator (exported as `hydrateSecretsFromBitwarden`).
+- `MCP/src/secrets/bitwarden.ts` — thin re-export of the canonical hydrator.
 
 ## Security notes
 

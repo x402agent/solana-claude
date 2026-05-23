@@ -290,6 +290,22 @@ The aggregator inherits the existing Imperial safety contract verbatim:
 | `PERPS_AGG_VENUES` | all | Enabled venues, comma-separated subset of `phoenix,flash,jupiter,gmtrade`. |
 | `PERPS_AGG_HOLD_SECONDS` | `3600` | Default hold horizon for funding-aware quoting. |
 | `PERPS_AGG_PAPER` | auto | Force paper mode regardless of `IMPERIAL_LIVE`. |
+| `BWS_ACCESS_TOKEN` | — | Bitwarden Secrets Manager token. When set, the CLI/MCP bin hydrate the above vars from Bitwarden at startup. |
+| `SOLANA_CLAWD_BWS` | `1` | Set `0` to disable Bitwarden hydration. |
+
+### Secret manager (Bitwarden)
+
+The CLI (`clawd-perps-aggregator`) and standalone MCP bin (`clawd-perps-mcp`)
+self-hydrate from **Bitwarden Secrets Manager** at startup when
+`BWS_ACCESS_TOKEN` is set and the `bws` CLI is present — existing env always
+wins, and it is a no-op otherwise. Reuse it anywhere:
+
+```ts
+import { hydrateSecretsFromBitwarden } from "@openclawdsolana/clawd-perps-aggregator";
+hydrateSecretsFromBitwarden(); // before reading process.env
+```
+
+See [`docs/SECRETS.md`](../../docs/SECRETS.md) for the full install + runtime model.
 
 ---
 
