@@ -17,7 +17,10 @@
       "Bash(git -C /Users/8bit/bots/Cladwbot-solana/solana-clawd diff HEAD -- perps/clawd-agents-perps/src/vulcanCatalog.ts)",
       "Bash(git -C /Users/8bit/bots/Cladwbot-solana/solana-clawd/my-project-public status --short)",
       "Bash(git -C /Users/8bit/bots/Cladwbot-solana/solana-clawd/my-project-public-fresh status --short)",
-      "Bash(git -C /Users/8bit/bots/Cladwbot-solana/solana-clawd/my-project-public diff -- index.html)"
+      "Bash(git -C /Users/8bit/bots/Cladwbot-solana/solana-clawd/my-project-public diff -- index.html)",
+      "Bash(git -C /Users/8bit/bots/Cladwbot-solana/solana-clawd ls-files .claude/settings.json)",
+      "Bash(git -C /Users/8bit/bots/Cladwbot-solana/solana-clawd/my-project-public add index.html)",
+      "Bash(git -C /Users/8bit/bots/Cladwbot-solana/solana-clawd/my-project-public commit -m ' *)"
     ]
   }
 }
