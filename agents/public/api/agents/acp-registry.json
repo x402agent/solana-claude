@@ -1,7 +1,7 @@
 {
   "schemaVersion": "openclawd.acp.registry.v1",
   "protocol": "Agent Commerce Protocol",
-  "generatedAt": "2026-05-24T13:31:17.724Z",
+  "generatedAt": "2026-05-24T13:39:56.737Z",
   "host": "https://x402.wtf",
   "discover": {
     "catalog": "https://x402.wtf/api/agents/catalog",
@@ -67,7 +67,7 @@
       }
     ],
     "coverage": {
-      "agent-registry": 51,
+      "agent-registry": 50,
       "genesis": 1,
       "core": 3,
       "token-metadata": 4,
@@ -113,7 +113,7 @@
   },
   "stats": {
     "totalAgents": 135,
-    "totalOneShots": 43,
+    "totalOneShots": 42,
     "totalFeatured": 24,
     "totalTemplates": 5,
     "byCategory": {
@@ -124,12 +124,13 @@
       "research": 1,
       "governance": 2,
       "analytics": 11,
+      "programming": 1,
       "infrastructure": 1,
-      "dev-tools": 4,
+      "dev-tools": 3,
       "nft": 2,
       "payments": 25
     },
-    "metaplexEnabledAgents": 51,
+    "metaplexEnabledAgents": 50,
     "tradingCapableAgents": 12,
     "launchCapableAgents": 1,
     "mintCapableAgents": 2
@@ -460,6 +461,34 @@
           "agentRegistry": "solana:mainnet:metaplex-agent-registry",
           "status": "pending-onchain-registration",
           "registrationUri": "https://x402.wtf/api/agents/registry/clawd-portfolio-tracker.json"
+        }
+      ]
+    },
+    {
+      "id": "clawd-pump-sdk-expert",
+      "title": "Clawd Pump SDK Expert",
+      "category": "programming",
+      "capabilities": [
+        "pump-token-create",
+        "pump-bonding-curve-math",
+        "pump-fee-sharing",
+        "instruction-building"
+      ],
+      "metaplexSkills": [],
+      "oneShot": false,
+      "featured": true,
+      "endpoints": {
+        "catalog": "https://x402.wtf/api/agents/catalog/clawd-pump-sdk-expert.json",
+        "registration": "https://x402.wtf/api/agents/registry/clawd-pump-sdk-expert.json",
+        "a2a": "https://x402.wtf/api/agents/a2a",
+        "mint": "https://x402.wtf/agents/mint?template=clawd-pump-sdk-expert"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:clawd-pump-sdk-expert",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://x402.wtf/api/agents/registry/clawd-pump-sdk-expert.json"
         }
       ]
     },
@@ -1263,36 +1292,6 @@
           "agentRegistry": "solana:mainnet:metaplex-agent-registry",
           "status": "pending-onchain-registration",
           "registrationUri": "https://x402.wtf/api/agents/registry/protocol-treasury-analyst.json"
-        }
-      ]
-    },
-    {
-      "id": "pump-fun-sdk-expert",
-      "title": "Pump Fun SDK Expert",
-      "category": "dev-tools",
-      "capabilities": [
-        "payment-gated",
-        "x402",
-        "read-only",
-        "a2a-message"
-      ],
-      "metaplexSkills": [
-        "agent-registry"
-      ],
-      "oneShot": true,
-      "featured": true,
-      "endpoints": {
-        "catalog": "https://x402.wtf/api/agents/catalog/pump-fun-sdk-expert.json",
-        "registration": "https://x402.wtf/api/agents/registry/pump-fun-sdk-expert.json",
-        "a2a": "https://x402.wtf/api/agents/a2a",
-        "mint": "https://x402.wtf/agents/mint?template=pump-fun-sdk-expert"
-      },
-      "registrations": [
-        {
-          "agentId": "openclawd:pump-fun-sdk-expert",
-          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
-          "status": "pending-onchain-registration",
-          "registrationUri": "https://x402.wtf/api/agents/registry/pump-fun-sdk-expert.json"
         }
       ]
     },

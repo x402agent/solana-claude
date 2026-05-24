@@ -1,7 +1,7 @@
 {
   "$schema": "https://x402.wtf/schema/clawdAgentCatalog.v1.json",
   "apiVersion": "1.0",
-  "generatedAt": "2026-05-24T13:31:17.724Z",
+  "generatedAt": "2026-05-24T13:39:56.737Z",
   "hub": {
     "gallery": "https://x402.wtf/agents",
     "mint": "https://x402.wtf/agents/mint",
@@ -10,7 +10,7 @@
   },
   "stats": {
     "totalAgents": 135,
-    "totalOneShots": 43,
+    "totalOneShots": 42,
     "totalFeatured": 24,
     "totalTemplates": 5,
     "byCategory": {
@@ -21,12 +21,13 @@
       "research": 1,
       "governance": 2,
       "analytics": 11,
+      "programming": 1,
       "infrastructure": 1,
-      "dev-tools": 4,
+      "dev-tools": 3,
       "nft": 2,
       "payments": 25
     },
-    "metaplexEnabledAgents": 51,
+    "metaplexEnabledAgents": 50,
     "tradingCapableAgents": 12,
     "launchCapableAgents": 1,
     "mintCapableAgents": 2
@@ -80,7 +81,7 @@
       }
     ],
     "coverage": {
-      "agent-registry": 51,
+      "agent-registry": 50,
       "genesis": 1,
       "core": 3,
       "token-metadata": 4,
@@ -1679,58 +1680,6 @@
       }
     },
     {
-      "identifier": "pump-fun-sdk-expert",
-      "title": "Pump Fun SDK Expert",
-      "description": "Specialized assistant for the @nirholas/pump-sdk — token creation, bonding curve trading, fee sharing, and AMM migration on Solana",
-      "avatar": "🛠️",
-      "tags": [
-        "pump-fun",
-        "solana",
-        "sdk",
-        "bonding-curve",
-        "token-creation",
-        "defi",
-        "amm",
-        "fee-sharing",
-        "clawd",
-        "pumpfun",
-        "dev-tools",
-        "x402",
-        "solana-clawd"
-      ],
-      "category": "dev-tools",
-      "author": "openclawd",
-      "createdAt": "2026-02-27",
-      "oneShot": true,
-      "featured": true,
-      "openingMessage": "🛠️ Dev copilot for @pump-fun/agent-payments-sdk and tokenized-agent payments. x402 flows, invoice creation, server-side tx build, verification.",
-      "openingQuestions": [
-        "Scaffold a payment-gated Node route",
-        "How do I verify an invoice server-side?",
-        "x402 vs solana-pay — when do I use each?",
-        "Stream payment events to a Telegram bot"
-      ],
-      "tokenUsage": 900,
-      "capabilities": [
-        "payment-gated",
-        "x402",
-        "read-only",
-        "a2a-message"
-      ],
-      "metaplexSkills": [
-        "agent-registry"
-      ],
-      "payment": null,
-      "agentToken": null,
-      "deploy": {
-        "json": "/api/agents/catalog/pump-fun-sdk-expert.json",
-        "chat": "/agents/chat?agent=pump-fun-sdk-expert",
-        "mint": "/agents/mint?template=pump-fun-sdk-expert",
-        "mcp": "/api/agents/catalog/pump-fun-sdk-expert.json",
-        "registration": "/api/agents/registry/pump-fun-sdk-expert.json"
-      }
-    },
-    {
       "identifier": "solana-jupiter-router",
       "title": "Solana Jupiter Router",
       "description": "Find the best swap route on Solana with price impact, slippage, and priority fee guidance via Jupiter v6",
@@ -2625,6 +2574,52 @@
       }
     },
     {
+      "identifier": "clawd-pump-sdk-expert",
+      "title": "Clawd Pump SDK Expert",
+      "description": "Specialized assistant for @solana-clawd/pump-sdk — Solana Clawd's own dependency-free pump bonding-curve SDK: token creation, buy/sell math, fee sharing, PDAs, and instruction building",
+      "avatar": "🦞",
+      "tags": [
+        "clawd",
+        "solana-clawd",
+        "pump",
+        "bonding-curve",
+        "token-launch",
+        "sdk",
+        "solana",
+        "programming",
+        "defi"
+      ],
+      "category": "programming",
+      "author": "solana-clawd",
+      "createdAt": "2026-05-24",
+      "oneShot": false,
+      "featured": true,
+      "openingMessage": "🦞 Clawd Pump SDK Expert — I cover @solana-clawd/pump-sdk, Solana Clawd's own dependency-free pump bonding-curve SDK. Token creation, buy/sell quotes, fee sharing, PDAs, and instruction building. What are you building?",
+      "openingQuestions": [
+        "How do I create a token on a bonding curve with the Clawd Pump SDK?",
+        "Quote a 1 SOL buy and show the slippage bound",
+        "How do I set up creator fee sharing with 3 wallets?",
+        "Show me how to convert an InstructionDescriptor to a web3.js transaction"
+      ],
+      "tokenUsage": null,
+      "capabilities": [
+        "pump-token-create",
+        "pump-bonding-curve-math",
+        "pump-fee-sharing",
+        "instruction-building"
+      ],
+      "metaplexSkills": [],
+      "payment": null,
+      "agentToken": null,
+      "deploy": {
+        "json": "/api/agents/catalog/clawd-pump-sdk-expert.json",
+        "chat": "/agents/chat?agent=clawd-pump-sdk-expert",
+        "mint": "/agents/mint?template=clawd-pump-sdk-expert",
+        "mcp": "/api/agents/catalog/clawd-pump-sdk-expert.json",
+        "registration": "/api/agents/registry/clawd-pump-sdk-expert.json"
+      }
+    },
+    {
       "identifier": "clawd-pumpfun-official",
       "title": "CLAWD × Pump.fun Official Agent",
       "description": "The official Solana Clawd pump.fun agent. Payment-gated random number generator (0.1 SOL), wallet-connected launch screening, claims + buyback tracking, and Telegram alerts — all wired through @pump-fun/agent-payments-sdk.",
@@ -3082,58 +3077,6 @@
         "mint": "/agents/mint?template=portfolio-rebalancing-advisor",
         "mcp": "/api/agents/catalog/portfolio-rebalancing-advisor.json",
         "registration": "/api/agents/registry/portfolio-rebalancing-advisor.json"
-      }
-    },
-    {
-      "identifier": "pump-fun-sdk-expert",
-      "title": "Pump Fun SDK Expert",
-      "description": "Specialized assistant for the @nirholas/pump-sdk — token creation, bonding curve trading, fee sharing, and AMM migration on Solana",
-      "avatar": "🛠️",
-      "tags": [
-        "pump-fun",
-        "solana",
-        "sdk",
-        "bonding-curve",
-        "token-creation",
-        "defi",
-        "amm",
-        "fee-sharing",
-        "clawd",
-        "pumpfun",
-        "dev-tools",
-        "x402",
-        "solana-clawd"
-      ],
-      "category": "dev-tools",
-      "author": "openclawd",
-      "createdAt": "2026-02-27",
-      "oneShot": true,
-      "featured": true,
-      "openingMessage": "🛠️ Dev copilot for @pump-fun/agent-payments-sdk and tokenized-agent payments. x402 flows, invoice creation, server-side tx build, verification.",
-      "openingQuestions": [
-        "Scaffold a payment-gated Node route",
-        "How do I verify an invoice server-side?",
-        "x402 vs solana-pay — when do I use each?",
-        "Stream payment events to a Telegram bot"
-      ],
-      "tokenUsage": 900,
-      "capabilities": [
-        "payment-gated",
-        "x402",
-        "read-only",
-        "a2a-message"
-      ],
-      "metaplexSkills": [
-        "agent-registry"
-      ],
-      "payment": null,
-      "agentToken": null,
-      "deploy": {
-        "json": "/api/agents/catalog/pump-fun-sdk-expert.json",
-        "chat": "/agents/chat?agent=pump-fun-sdk-expert",
-        "mint": "/agents/mint?template=pump-fun-sdk-expert",
-        "mcp": "/api/agents/catalog/pump-fun-sdk-expert.json",
-        "registration": "/api/agents/registry/pump-fun-sdk-expert.json"
       }
     },
     {
@@ -4076,6 +4019,52 @@
         "mint": "/agents/mint?template=clawd-portfolio-tracker",
         "mcp": "/api/agents/catalog/clawd-portfolio-tracker.json",
         "registration": "/api/agents/registry/clawd-portfolio-tracker.json"
+      }
+    },
+    {
+      "identifier": "clawd-pump-sdk-expert",
+      "title": "Clawd Pump SDK Expert",
+      "description": "Specialized assistant for @solana-clawd/pump-sdk — Solana Clawd's own dependency-free pump bonding-curve SDK: token creation, buy/sell math, fee sharing, PDAs, and instruction building",
+      "avatar": "🦞",
+      "tags": [
+        "clawd",
+        "solana-clawd",
+        "pump",
+        "bonding-curve",
+        "token-launch",
+        "sdk",
+        "solana",
+        "programming",
+        "defi"
+      ],
+      "category": "programming",
+      "author": "solana-clawd",
+      "createdAt": "2026-05-24",
+      "oneShot": false,
+      "featured": true,
+      "openingMessage": "🦞 Clawd Pump SDK Expert — I cover @solana-clawd/pump-sdk, Solana Clawd's own dependency-free pump bonding-curve SDK. Token creation, buy/sell quotes, fee sharing, PDAs, and instruction building. What are you building?",
+      "openingQuestions": [
+        "How do I create a token on a bonding curve with the Clawd Pump SDK?",
+        "Quote a 1 SOL buy and show the slippage bound",
+        "How do I set up creator fee sharing with 3 wallets?",
+        "Show me how to convert an InstructionDescriptor to a web3.js transaction"
+      ],
+      "tokenUsage": null,
+      "capabilities": [
+        "pump-token-create",
+        "pump-bonding-curve-math",
+        "pump-fee-sharing",
+        "instruction-building"
+      ],
+      "metaplexSkills": [],
+      "payment": null,
+      "agentToken": null,
+      "deploy": {
+        "json": "/api/agents/catalog/clawd-pump-sdk-expert.json",
+        "chat": "/agents/chat?agent=clawd-pump-sdk-expert",
+        "mint": "/agents/mint?template=clawd-pump-sdk-expert",
+        "mcp": "/api/agents/catalog/clawd-pump-sdk-expert.json",
+        "registration": "/api/agents/registry/clawd-pump-sdk-expert.json"
       }
     },
     {
@@ -5423,58 +5412,6 @@
         "mint": "/agents/mint?template=protocol-treasury-analyst",
         "mcp": "/api/agents/catalog/protocol-treasury-analyst.json",
         "registration": "/api/agents/registry/protocol-treasury-analyst.json"
-      }
-    },
-    {
-      "identifier": "pump-fun-sdk-expert",
-      "title": "Pump Fun SDK Expert",
-      "description": "Specialized assistant for the @nirholas/pump-sdk — token creation, bonding curve trading, fee sharing, and AMM migration on Solana",
-      "avatar": "🛠️",
-      "tags": [
-        "pump-fun",
-        "solana",
-        "sdk",
-        "bonding-curve",
-        "token-creation",
-        "defi",
-        "amm",
-        "fee-sharing",
-        "clawd",
-        "pumpfun",
-        "dev-tools",
-        "x402",
-        "solana-clawd"
-      ],
-      "category": "dev-tools",
-      "author": "openclawd",
-      "createdAt": "2026-02-27",
-      "oneShot": true,
-      "featured": true,
-      "openingMessage": "🛠️ Dev copilot for @pump-fun/agent-payments-sdk and tokenized-agent payments. x402 flows, invoice creation, server-side tx build, verification.",
-      "openingQuestions": [
-        "Scaffold a payment-gated Node route",
-        "How do I verify an invoice server-side?",
-        "x402 vs solana-pay — when do I use each?",
-        "Stream payment events to a Telegram bot"
-      ],
-      "tokenUsage": 900,
-      "capabilities": [
-        "payment-gated",
-        "x402",
-        "read-only",
-        "a2a-message"
-      ],
-      "metaplexSkills": [
-        "agent-registry"
-      ],
-      "payment": null,
-      "agentToken": null,
-      "deploy": {
-        "json": "/api/agents/catalog/pump-fun-sdk-expert.json",
-        "chat": "/agents/chat?agent=pump-fun-sdk-expert",
-        "mint": "/agents/mint?template=pump-fun-sdk-expert",
-        "mcp": "/api/agents/catalog/pump-fun-sdk-expert.json",
-        "registration": "/api/agents/registry/pump-fun-sdk-expert.json"
       }
     },
     {

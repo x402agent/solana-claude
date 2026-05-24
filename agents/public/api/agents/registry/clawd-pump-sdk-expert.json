@@ -1,30 +1,26 @@
 {
   "schemaVersion": "erc-8004-agent-registration-v1",
   "protocol": "metaplex-agent-registry",
-  "name": "Pump Fun SDK Expert",
-  "description": "Specialized assistant for the @nirholas/pump-sdk — token creation, bonding curve trading, fee sharing, and AMM migration on Solana",
+  "name": "Clawd Pump SDK Expert",
+  "description": "Specialized assistant for @solana-clawd/pump-sdk — Solana Clawd's own dependency-free pump bonding-curve SDK: token creation, buy/sell math, fee sharing, PDAs, and instruction building",
   "image": "https://x402.wtf/nich.jpg",
-  "external_url": "https://x402.wtf/agents/pump-fun-sdk-expert",
+  "external_url": "https://x402.wtf/agents/clawd-pump-sdk-expert",
   "active": true,
-  "createdAt": "2026-02-27",
-  "updatedAt": "2026-05-24T13:31:17.724Z",
+  "createdAt": "2026-05-24",
+  "updatedAt": "2026-05-24T13:39:56.737Z",
   "tags": [
-    "pump-fun",
-    "solana",
-    "sdk",
-    "bonding-curve",
-    "token-creation",
-    "defi",
-    "amm",
-    "fee-sharing",
     "clawd",
-    "pumpfun",
-    "dev-tools",
-    "x402",
-    "solana-clawd"
+    "solana-clawd",
+    "pump",
+    "bonding-curve",
+    "token-launch",
+    "sdk",
+    "solana",
+    "programming",
+    "defi"
   ],
   "categories": [
-    "dev-tools"
+    "programming"
   ],
   "owner": {
     "organization": "OpenClawd",
@@ -38,7 +34,7 @@
   "services": [
     {
       "name": "web",
-      "endpoint": "https://x402.wtf/agents/pump-fun-sdk-expert"
+      "endpoint": "https://x402.wtf/agents/clawd-pump-sdk-expert"
     },
     {
       "name": "A2A",
@@ -47,19 +43,19 @@
     },
     {
       "name": "catalog",
-      "endpoint": "https://x402.wtf/api/agents/catalog/pump-fun-sdk-expert.json"
+      "endpoint": "https://x402.wtf/api/agents/catalog/clawd-pump-sdk-expert.json"
     },
     {
       "name": "registration",
-      "endpoint": "https://x402.wtf/api/agents/registry/pump-fun-sdk-expert.json"
+      "endpoint": "https://x402.wtf/api/agents/registry/clawd-pump-sdk-expert.json"
     }
   ],
   "registrations": [
     {
-      "agentId": "openclawd:pump-fun-sdk-expert",
+      "agentId": "openclawd:clawd-pump-sdk-expert",
       "agentRegistry": "solana:mainnet:metaplex-agent-registry",
       "status": "pending-onchain-registration",
-      "registrationUri": "https://x402.wtf/api/agents/registry/pump-fun-sdk-expert.json"
+      "registrationUri": "https://x402.wtf/api/agents/registry/clawd-pump-sdk-expert.json"
     }
   ],
   "supportedTrust": [
@@ -68,9 +64,7 @@
     "token-gated"
   ],
   "metaplex": {
-    "programs": [
-      "agent-registry"
-    ],
+    "programs": [],
     "sdk": "@metaplex-foundation/mpl-agent-registry",
     "expectedIdentity": {
       "asset": null,
@@ -86,12 +80,12 @@
     ]
   },
   "openclawd": {
-    "identifier": "pump-fun-sdk-expert",
+    "identifier": "clawd-pump-sdk-expert",
     "capabilities": [
-      "payment-gated",
-      "x402",
-      "read-only",
-      "a2a-message"
+      "pump-token-create",
+      "pump-bonding-curve-math",
+      "pump-fee-sharing",
+      "instruction-building"
     ],
     "payment": null,
     "agentToken": null

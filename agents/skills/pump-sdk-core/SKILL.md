@@ -15,7 +15,7 @@ Build, extend, and maintain the core Pump SDK — an offline-first TypeScript SD
 
 ## Context
 
-The SDK is published as `@x402agent/pump-sdk` (npm) and powers the Pump protocol — a Solana-based token launchpad with bonding curve pricing, automatic AMM migration after graduation, tiered fees, and creator fee sharing. The codebase uses Anchor for IDL-based instruction building and supports both Token (SPL) and Token-2022 token programs.
+The SDK is published as `@solana-clawd/pump-sdk` (npm) and powers the Pump protocol — a Solana-based token launchpad with bonding curve pricing, automatic AMM migration after graduation, tiered fees, and creator fee sharing. The codebase uses Anchor for IDL-based instruction building and supports both Token (SPL) and Token-2022 token programs.
 
 ## Key Files
 

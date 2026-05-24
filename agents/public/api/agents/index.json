@@ -1,7 +1,7 @@
 {
   "name": "OpenClawd Agents API",
   "version": "1.0",
-  "generatedAt": "2026-05-24T13:31:17.724Z",
+  "generatedAt": "2026-05-24T13:39:56.737Z",
   "endpoints": {
     "catalog": "/api/agents/catalog",
     "registry": "/api/agents/registry",

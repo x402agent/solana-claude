@@ -3,6 +3,33 @@
   "agents": [
     {
       "author": "solana-clawd",
+      "createdAt": "2026-05-24",
+      "homepage": "https://solanaclawd.com/agents/clawd-pump-sdk-expert",
+      "identifier": "clawd-pump-sdk-expert",
+      "knowledgeCount": 0,
+      "meta": {
+        "title": "Clawd Pump SDK Expert",
+        "description": "Specialized assistant for @solana-clawd/pump-sdk — Solana Clawd's own dependency-free pump bonding-curve SDK: token creation, buy/sell math, fee sharing, PDAs, and instruction building",
+        "avatar": "🦞",
+        "tags": [
+          "clawd",
+          "solana-clawd",
+          "pump",
+          "bonding-curve",
+          "token-launch",
+          "sdk",
+          "solana",
+          "programming",
+          "defi"
+        ],
+        "category": "programming"
+      },
+      "pluginCount": 0,
+      "schemaVersion": 1,
+      "tokenUsage": 1124
+    },
+    {
+      "author": "solana-clawd",
       "createdAt": "2026-05-14",
       "homepage": "https://github.com/x402agent/solana-clawd",
       "identifier": "pinocchio-p-token-builder",
@@ -63,34 +90,6 @@
       },
       "pluginCount": 0,
       "tokenUsage": 5846
-    },
-    {
-      "author": "solana-clawd",
-      "createdAt": "2026-02-27",
-      "homepage": "https://github.com/x402agent/solana-clawd",
-      "identifier": "pump-fun-sdk-expert",
-      "knowledgeCount": 0,
-      "meta": {
-        "title": "Pump Fun SDK Expert",
-        "description": "Specialized assistant for the @nirholas/pump-sdk — token creation, bonding curve trading, fee sharing, and AMM migration on Solana",
-        "avatar": "🚀",
-        "tags": [
-          "pump-fun",
-          "solana",
-          "sdk",
-          "bonding-curve",
-          "token-creation",
-          "defi",
-          "amm",
-          "fee-sharing",
-          "clawd",
-          "solana-clawd"
-        ],
-        "category": "defi"
-      },
-      "pluginCount": 0,
-      "schemaVersion": 1,
-      "tokenUsage": 742
     },
     {
       "author": "solana-clawd",

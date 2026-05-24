@@ -1,0 +1,37 @@
+{
+  "name": "@solana-clawd/pump-sdk",
+  "version": "0.1.0",
+  "description": "Solana Clawd pump SDK — dependency-free TypeScript helpers for bonding-curve token launches, buy/sell math, fee sharing, PDA seeds, and instruction descriptors. Solana Clawd's own implementation, served alongside the agent catalog at x402.wtf/agents.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "solana",
+    "solana-clawd",
+    "clawd",
+    "pump",
+    "bonding-curve",
+    "token-launch",
+    "defi",
+    "agent-sdk"
+  ],
+  "license": "MIT",
+  "author": "solana-clawd <agents@x402.wtf>",
+  "homepage": "https://github.com/x402agent/solana-clawd",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "clean": "rm -rf dist",
+    "type-check": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}

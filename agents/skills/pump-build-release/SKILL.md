@@ -63,7 +63,7 @@ Commit format: `type(scope): description`
 
 ```bash
 npm publish --access public
-# Package: @x402agent/pump-sdk
+# Package: @solana-clawd/pump-sdk
 ```
 
 ## Vercel Website Deployment

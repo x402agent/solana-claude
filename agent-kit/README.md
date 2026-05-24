@@ -21,6 +21,7 @@ This is not the upstream Solana Agent Kit plugin bundle. The imported plugin pac
 
 - `@solana-clawd/agent-kit`: agent/template/catalog loader and runtime profile helpers
 - `@solana-clawd/agent-registry`: registry document helpers for publishable Solana Clawd agent metadata
+- `@solana-clawd/pump-sdk`: Solana Clawd's own dependency-free pump bonding-curve SDK (token creation, buy/sell math, fee sharing, PDAs, instruction descriptors)
 
 ## Install
 
