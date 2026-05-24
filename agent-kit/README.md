@@ -19,9 +19,30 @@ This is not the upstream Solana Agent Kit plugin bundle. The imported plugin pac
 
 ## Packages
 
-- `@solana-clawd/agent-kit`: agent/template/catalog loader and runtime profile helpers
-- `@solana-clawd/agent-registry`: registry document helpers for publishable Solana Clawd agent metadata
+- `@solana-clawd/agent-kit`: agent/template/catalog loader, runtime profile helpers, and the `clawd-agent` CLI
+- `@solana-clawd/agent-registry`: registry document helpers — Metaplex (ERC-8004 `metaplex-agent-registry`) **and** Google A2A agent cards
 - `@solana-clawd/pump-sdk`: Solana Clawd's own dependency-free pump bonding-curve SDK (token creation, buy/sell math, fee sharing, PDAs, instruction descriptors)
+- `@solana-clawd/x402-agent-kit`: build/consume x402 (HTTP 402) payment challenges to gate agent endpoints with USDC/CLAWD on Solana
+
+## Design, validate, and mint your own agent
+
+The `clawd-agent` CLI ships with `@solana-clawd/agent-kit`:
+
+```bash
+npm i -g @solana-clawd/agent-kit      # provides the `clawd-agent` binary
+
+clawd-agent list                       # every agent in the catalog (or --remote from x402.wtf)
+clawd-agent show clawd-pump-sdk-expert # details + deploy/chat/mint/mcp endpoints
+clawd-agent new my-agent               # scaffold src/my-agent.json (Solana Clawd owned)
+clawd-agent validate my-agent          # ownership + schema check
+
+# Register / mint the agent identity
+clawd-agent register my-agent --target metaplex   # ERC-8004 metaplex-agent-registry doc
+clawd-agent register my-agent --target google     # Google A2A agent card
+```
+
+Point the CLI at a checkout with `--agents-dir DIR` or `SOLANA_CLAWD_AGENTS_DIR`.
+The hosted, gasless mint flow lives at `https://x402.wtf/agents/mint`.
 
 ## Install
 

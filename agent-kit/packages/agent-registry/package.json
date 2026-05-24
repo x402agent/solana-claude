@@ -19,8 +19,6 @@
     "clean": "rm -rf dist",
     "type-check": "tsc -p tsconfig.json --noEmit"
   },
-  "dependencies": {
-    "@solana-clawd/agent-kit": "workspace:*"
-  },
+  "dependencies": {},
   "devDependencies": {}
 }

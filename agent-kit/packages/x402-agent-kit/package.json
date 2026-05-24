@@ -1,0 +1,39 @@
+{
+  "name": "@solana-clawd/x402-agent-kit",
+  "version": "0.1.0",
+  "description": "x402 payment-gated agent kit for Solana Clawd — build and consume HTTP 402 payment challenges for agent endpoints on Solana (USDC / CLAWD).",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "x402",
+    "solana",
+    "solana-clawd",
+    "clawd",
+    "payments",
+    "agents",
+    "usdc",
+    "402"
+  ],
+  "license": "MIT",
+  "author": "solana-clawd <agents@x402.wtf>",
+  "homepage": "https://github.com/x402agent/solana-clawd",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "clean": "rm -rf dist",
+    "type-check": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@types/node": "^20.17.16"
+  }
+}
