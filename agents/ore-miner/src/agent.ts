@@ -28,6 +28,7 @@ import {
   isOreCLIAvailable,
 } from './cli.js';
 import { solAmount, oreAmount } from './constants.js';
+import type { DashboardState, LogEntry } from './server.js';
 
 const CLAWD_LOOP_PROMPT = `You are the Clawd ORE Mining Agent — the world's first AI-driven autonomous miner for the ORE v3 protocol on Solana.
 
@@ -283,28 +284,33 @@ async function clawdDecide(
 
     const msg = response.choices[0]?.message;
     const toolCall = msg?.tool_calls?.[0];
+    // DeepSeek thinking mode returns reasoning_content alongside content
+    const reasoning = (msg as unknown as { reasoning_content?: string }).reasoning_content ?? undefined;
 
     if (!toolCall) {
       const text = msg?.content?.slice(0, 200) ?? 'no tool called';
-      log(chalk.gray(`Claude held: ${text}`));
-      return { tick, action: 'hold', tool: null, input: {}, output: text, success: true, timestamp: now };
+      log(chalk.gray(`Agent held: ${text}`));
+      return { tick, action: 'hold', tool: null, input: {}, output: text, success: true, timestamp: now, reasoning };
     }
 
-    const toolInput = JSON.parse(toolCall.function.arguments) as Record<string, unknown>;
-    log(`${chalk.blue('CLAWD LOOP ACTION:')} ${chalk.bold(toolCall.function.name)} ${JSON.stringify(toolInput).slice(0, 100)}`);
+    const fn = (toolCall as { function: { name: string; arguments: string } }).function;
+    const toolInput = JSON.parse(fn.arguments) as Record<string, unknown>;
+    log(`${chalk.blue('CLAWD LOOP ACTION:')} ${chalk.bold(fn.name)} ${JSON.stringify(toolInput).slice(0, 100)}`);
+    if (reasoning) log(chalk.gray(`  thinking: ${reasoning.slice(0, 120)}…`));
 
-    const result = await executeToolCall(toolCall.function.name, toolInput, conn, keypair, config, board, round);
+    const result = await executeToolCall(fn.name, toolInput, conn, keypair, config, board, round);
     const icon = result.success ? chalk.green('✓') : chalk.red('✗');
     log(`${icon} ${JSON.stringify(result.output).slice(0, 200)}`);
 
     return {
       tick,
-      action: toolCall.function.name,
-      tool: toolCall.function.name,
+      action: fn.name,
+      tool: fn.name,
       input: toolInput,
       output: result.output,
       success: result.success,
       timestamp: now,
+      reasoning,
     };
   } catch (err) {
     log(chalk.red(`Clawd loop error: ${err}`));
@@ -366,29 +372,6 @@ function buildUserMessage(
   ].join('\n');
 }
 
-export interface AgentState {
-  tick: number;
-  roundId: string;
-  miningOpen: boolean;
-  miningSecondsRemaining: number;
-  totalDeployed: string;
-  totalMiners: string;
-  squares: Array<{ index: number; deployed: string; miners: string; ev: string; isTop: boolean }>;
-  topEvSquares: number[];
-  emptySquares: number[];
-  walletBalance: string;
-  rewardsSol: string;
-  rewardsOre: string;
-  checkpointNeeded: boolean;
-  lastAction: string;
-  lastTool: string | null;
-  lastSuccess: boolean;
-  lastOutput: string;
-  history: OodaTick[];
-  dryRun: boolean;
-  timestamp: string;
-}
-
 function buildDashboardState(
   tick: number,
   board: BoardState,
@@ -397,64 +380,99 @@ function buildDashboardState(
   walletLamports: bigint,
   miner: Awaited<ReturnType<typeof getMiner>>,
   lastStrike: OodaTick,
-  history: OodaTick[],
+  logEntries: LogEntry[],
   config: AgentConfig,
-): AgentState {
+  loopPhase: DashboardState['loop'],
+): DashboardState {
+  const minerDeployed = new Set(
+    miner ? miner.deployed.map((dep, i) => (dep > 0n ? i : -1)).filter(i => i >= 0) : [],
+  );
+
   return {
-    tick,
-    roundId: board.roundId.toString(),
+    round: Number(board.roundId),
     miningOpen: analysis.miningOpen,
     miningSecondsRemaining: analysis.miningSecondsRemaining,
-    totalDeployed: `${solAmount(round.totalDeployed)} SOL`,
-    totalMiners: round.totalMiners.toString(),
-    squares: round.deployed.map((dep, i) => ({
-      index: i,
-      deployed: `${solAmount(dep)} SOL`,
-      miners: (round.count[i] ?? 0n).toString(),
-      ev: `${analysis.squares[i]?.expectedValue.toFixed(2)}x`,
-      isTop: analysis.topSquares.includes(i),
-    })),
-    topEvSquares: analysis.topSquares,
-    emptySquares: analysis.bottomSquares,
-    walletBalance: `${solAmount(walletLamports)} SOL`,
-    rewardsSol: miner ? `${solAmount(miner.rewardsSol)} SOL` : '0 SOL',
-    rewardsOre: miner ? `${oreAmount(miner.rewardsOre + miner.refinedOre)} ORE` : '0 ORE',
-    checkpointNeeded: miner?.checkpointNeeded ?? false,
-    lastAction: lastStrike.action,
-    lastTool: lastStrike.tool,
-    lastSuccess: lastStrike.success,
-    lastOutput: JSON.stringify(lastStrike.output).slice(0, 200),
-    history: history.slice(-20),
+    claimHoursRemaining: Number(analysis.claimSlotRemaining) * 0.4 / 3600,
+    totalDeployed: solAmount(round.totalDeployed),
+    totalMiners: Number(round.totalMiners),
+    motherlode: oreAmount(round.motherlode),
+    settled: round.slotHashRevealed,
+    winningSquare: round.slotHashRevealed ? round.winningSquare : null,
+    squares: round.deployed.map((dep, i) => {
+      const sq = analysis.squares[i];
+      return {
+        index: i,
+        deployed: solAmount(dep),
+        miners: Number(round.count[i] ?? 0n),
+        ev: sq?.expectedValue ?? 0,
+        isUnderbet: sq?.isUnderbet ?? false,
+        isEmpty: dep === 0n,
+        myDeployment: minerDeployed.has(i) && miner ? solAmount(miner.deployed[i] ?? 0n) : null,
+      };
+    }),
+    wallet: {
+      pubkey: miner?.authority ?? '',
+      balanceSol: solAmount(walletLamports),
+      rewardsSol: miner ? solAmount(miner.rewardsSol) : '0',
+      rewardsOre: miner ? oreAmount(miner.rewardsOre + miner.refinedOre) : '0',
+      checkpointNeeded: miner?.checkpointNeeded ?? false,
+    },
+    agentAction: lastStrike.action,
+    agentReasoning: lastStrike.reasoning ?? JSON.stringify(lastStrike.output).slice(0, 200),
+    loop: loopPhase,
+    log: logEntries.slice(-100),
     dryRun: config.dryRun,
-    timestamp: new Date().toISOString(),
+    timestamp: Date.now(),
+    tick,
   };
 }
 
 function buildOpenAIClient(): OpenAI {
+  const deepseekKey = process.env.DEEPSEEK_API_KEY;
   const orKey = process.env.OPENROUTER_API_KEY;
-  const key = orKey ?? process.env.ANTHROPIC_API_KEY;
-  const baseURL = orKey ? 'https://openrouter.ai/api/v1' : 'https://api.anthropic.com/v1';
-  const defaultHeaders = orKey
-    ? { 'HTTP-Referer': 'https://openclawd.com', 'X-Title': 'Clawd ORE Mining Agent' }
-    : undefined;
-  return new OpenAI({ apiKey: key, baseURL, defaultHeaders });
+  const anthropicKey = process.env.ANTHROPIC_API_KEY;
+
+  if (deepseekKey) {
+    return new OpenAI({ apiKey: deepseekKey, baseURL: 'https://api.deepseek.com' });
+  }
+  if (orKey) {
+    return new OpenAI({
+      apiKey: orKey,
+      baseURL: 'https://openrouter.ai/api/v1',
+      defaultHeaders: { 'HTTP-Referer': 'https://openclawd.com', 'X-Title': 'Clawd ORE Mining Agent' },
+    });
+  }
+  return new OpenAI({ apiKey: anthropicKey, baseURL: 'https://api.anthropic.com/v1' });
 }
 
 export async function runAgent(config: AgentConfig): Promise<void> {
   const client = buildOpenAIClient();
-  const model = process.env.OPENROUTER_MODEL ?? 'anthropic/claude-opus-4.7-fast';
+  const model = process.env.DEEPSEEK_MODEL
+    ?? process.env.OPENROUTER_MODEL
+    ?? (process.env.DEEPSEEK_API_KEY ? 'deepseek-v4-flash' : 'anthropic/claude-opus-4.7-fast');
 
   const conn = new Connection(config.rpcUrl, 'confirmed');
   const keypair = loadKeypair(config.keypairPath);
   const cliAvailable = isOreCLIAvailable();
 
-  log(chalk.cyan('━━━ CLAWD ORE MINING AGENT ━━━'));
-  log(`Wallet: ${chalk.yellow(keypair.publicKey.toBase58())}`);
-  log(`Model:  ${chalk.blue(model)}`);
-  log(`Mode:   ${config.dryRun ? chalk.yellow('DRY RUN') : chalk.green('LIVE')}`);
-  log(`CLI:    ${cliAvailable ? chalk.green('compiled ✓') : chalk.red('not compiled')}`);
-  log(`Limits: ${config.maxDeployPerRound} SOL/round | ${config.minReserve} SOL reserve`);
-  log(chalk.cyan('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'));
+  const logEntries: LogEntry[] = [];
+  let loopPhase: DashboardState['loop'] = 'idle';
+
+  function addLog(level: LogEntry['level'], msg: string): void {
+    logEntries.push({ ts: Date.now(), level, msg });
+    if (logEntries.length > 200) logEntries.shift();
+    log(msg);
+  }
+
+  function emitState(board: BoardState, analysis: ReturnType<typeof analyzeBoard>, round: RoundState, walletLamports: bigint, miner: Awaited<ReturnType<typeof getMiner>>, strike: OodaTick): void {
+    if (!config.io) return;
+    const dashState = buildDashboardState(tick, board, analysis, round, walletLamports, miner, strike, logEntries, config, loopPhase);
+    config.io.emit('state', dashState);
+  }
+
+  addLog('info', chalk.cyan('━━━ CLAWD ORE MINING AGENT ━━━'));
+  addLog('info', `Wallet: ${keypair.publicKey.toBase58()}`);
+  addLog('info', `Model:  ${model} | Mode: ${config.dryRun ? 'DRY RUN' : 'LIVE'}`);
 
   const history: OodaTick[] = [];
   let tick = 0;
@@ -462,41 +480,44 @@ export async function runAgent(config: AgentConfig): Promise<void> {
   while (true) {
     tick++;
     const now = new Date().toISOString();
-    log(`\n${chalk.bold(`[Clawd Loop Tick ${tick}]`)} ${now}`);
+    addLog('info', `[Tick ${tick}] ${now}`);
 
     let board: BoardState;
     let round: RoundState;
     let currentSlot: bigint;
 
+    loopPhase = 'observe';
     try {
       board = await getBoard(conn);
       currentSlot = await getCurrentSlot(conn);
       round = await getRound(conn, board.roundId);
     } catch (err) {
-      log(chalk.red(`Chain read failed: ${err}`));
+      addLog('error', `Chain read failed: ${err}`);
       await sleep(10_000);
       continue;
     }
 
+    loopPhase = 'orient';
     const analysis = analyzeBoard(round, currentSlot, board.endSlot);
     const walletLamports = await getSolBalance(conn, keypair.publicKey);
     const miner = await getMiner(conn, keypair.publicKey).catch(() => null);
+    addLog('info', analysis.summary);
 
+    loopPhase = 'decide';
     const userMessage = buildUserMessage(tick, now, board, analysis, walletLamports, miner, history, config, cliAvailable);
-
     const strike = await clawdDecide(client, model, userMessage, tick, now, conn, keypair, config, board, round);
+
+    loopPhase = 'act';
+    addLog(strike.success ? 'action' : 'error', `${strike.action}: ${JSON.stringify(strike.output).slice(0, 120)}`);
 
     history.push(strike);
     if (history.length > 100) history.shift();
 
-    // Broadcast state to dashboard
-    if (config.io) {
-      const dashState = buildDashboardState(tick, board, analysis, round, walletLamports, miner, strike, history, config);
-      config.io.emit('state', dashState);
-    }
+    emitState(board, analysis, round, walletLamports, miner, strike);
 
+    loopPhase = 'idle';
     const sleepMs = computeSleepMs(analysis.miningSecondsRemaining, analysis.miningOpen, round.slotHashRevealed, config.tickIntervalMs);
-    log(chalk.gray(`Next CLAWD loop tick in ${(sleepMs / 1000).toFixed(0)}s`));
+    addLog('info', `Next tick in ${(sleepMs / 1000).toFixed(0)}s`);
     await sleep(sleepMs);
   }
 }

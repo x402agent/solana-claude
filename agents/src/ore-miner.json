@@ -1,0 +1,111 @@
+{
+  "$schema": "https://solanaclawd.com/schemas/clawdAgentSchema.v1.json",
+  "author": "openclawd",
+  "identifier": "ore-miner",
+  "schemaVersion": 1,
+  "createdAt": "2026-05-24",
+  "homepage": "https://solanaclawd.com/agents/ore-miner",
+  "oneShot": true,
+  "featured": true,
+  "meta": {
+    "title": "Clawd ORE Mining Agent",
+    "description": "World's first AI-driven autonomous miner for the ORE v3 25-square game on Solana. Claude-powered CLAWD LOOP with live animated dashboard.",
+    "avatar": "⛏️",
+    "category": "defi",
+    "tags": [
+      "ore",
+      "mining",
+      "solana",
+      "clawd-loop",
+      "autonomous",
+      "ooda",
+      "dashboard",
+      "one-shot",
+      "openrouter",
+      "solana-clawd",
+      "ore-v3",
+      "ai-agent"
+    ]
+  },
+  "config": {
+    "systemRole": "You are the Clawd ORE Mining Agent — the world's first AI-driven autonomous miner for the ORE v3 protocol on Solana.\n\nTHE CLAWD LOOP (Observe → Orient → Decide → Act):\nEach tick you receive fresh on-chain data. You observe, orient, decide, and act with one tool call.\n\nORE GAME RULES:\n- 25-square grid per round. Mining window: ~60 seconds. Claim window: ~24h.\n- One winning square chosen by on-chain RNG (XOR of slot hash) at round end.\n- Winning square miners split all SOL from losing squares (proportional to share).\n- All miners earn ORE token rewards from the motherlode.\n\nSTRATEGIC PRINCIPLES:\n1. EMPTY SQUARES = infinite EV — any deployment wins all other deployments there\n2. UNDERBET SQUARES (EV > 1.0x) are statistically favorable\n3. Deploy only when miningOpen=true — never after mining window closes\n4. CHECKPOINT before claiming (checkpointNeeded must be false before claim)\n5. CLAIM when rewards_sol > 0.01 SOL or rewards_ore > significant amount\n6. Never deploy more than maxDeployPerRound SOL or drop below minReserve SOL\n\nNON-NEGOTIABLE SAFETY:\n- If miningOpen=false → do NOT deploy, only checkpoint/claim/hold\n- If balance < minReserve → hold (no gas for txns)\n- Always check chain state before acting\n\nCall exactly ONE tool per tick. Observe first when uncertain.",
+    "openingMessage": "⛏️ Clawd ORE Mining Agent — AI-driven autonomous miner for the ORE v3 25-square game. Live CLAWD LOOP with animated dashboard at localhost:3333.",
+    "openingQuestions": [
+      "What's the current round status and best squares to deploy to?",
+      "Run a dry-run to see what the agent would do right now",
+      "How do I set up my keypair and start mining?",
+      "Explain the ORE v3 EV formula and strategy"
+    ],
+    "params": {
+      "temperature": 0.2,
+      "top_p": 0.95,
+      "max_tokens": 1024
+    }
+  },
+  "runtime": {
+    "type": "node",
+    "entrypoint": "agents/ore-miner/src/index.ts",
+    "runner": "node --import tsx/esm",
+    "requires": {
+      "node": ">=20",
+      "rust": "optional (for ore-cli binary)"
+    },
+    "scripts": {
+      "mine": "npm run mine --prefix agents/ore-miner",
+      "observe": "npm run observe --prefix agents/ore-miner",
+      "status": "npm run status --prefix agents/ore-miner"
+    },
+    "env": {
+      "required": ["RPC", "KEYPAIR", "OPENROUTER_API_KEY"],
+      "optional": {
+        "OPENROUTER_MODEL": "anthropic/claude-opus-4.7-fast",
+        "MAX_DEPLOY_SOL": "0.1",
+        "MIN_RESERVE_SOL": "0.05",
+        "TICK_INTERVAL_MS": "60000",
+        "DRY_RUN": "false",
+        "DASHBOARD_PORT": "3333"
+      }
+    },
+    "dashboard": {
+      "url": "http://localhost:3333",
+      "transport": "socket.io",
+      "event": "state"
+    }
+  },
+  "solana": {
+    "rpcRequirements": ["standard", "helius-recommended"],
+    "capabilities": [
+      "read-only",
+      "deploy-sol",
+      "claim-rewards",
+      "checkpoint-miner",
+      "autonomous-loop"
+    ],
+    "metaplexSkills": ["agent-registry"],
+    "programDeps": [
+      {
+        "name": "ORE v3",
+        "programId": "oreV3EG1i9BEgiAJ8b177Z2S2rMarzak4NMv1kULvWv",
+        "cluster": "mainnet-beta"
+      }
+    ],
+    "walletRequirements": {
+      "needsSigner": true,
+      "minBalanceLamports": 150000000,
+      "note": "0.15 SOL recommended — 0.1 to deploy, 0.05 reserve for gas"
+    }
+  },
+  "install": {
+    "oneShot": "curl -fsSL https://x402.wtf/ore/install.sh | bash",
+    "withEnv": "OPENROUTER_API_KEY=sk-or-... RPC=https://mainnet.helius-rpc.com/?api-key=KEY KEYPAIR=~/.config/solana/id.json curl -fsSL https://x402.wtf/ore/install.sh | bash",
+    "dryRun": "DRY_RUN=true curl -fsSL https://x402.wtf/ore/install.sh | bash",
+    "local": "npm run ore:miner"
+  },
+  "endpoints": {
+    "a2a": "POST /api/agents/a2a",
+    "mint-as-agent": "POST /api/agents/mint",
+    "catalog": "GET /api/agents/catalog/ore-miner.json"
+  },
+  "summary": "World's first AI-driven autonomous miner for the ORE v3 25-square game on Solana. Claude-powered CLAWD LOOP: Observe → Orient → Decide → Act. Live animated dashboard. One-shot install.",
+  "tokenUsage": 512
+}

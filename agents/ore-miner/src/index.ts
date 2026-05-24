@@ -3,29 +3,32 @@
  * Clawd ORE Mining Agent — Entry Point
  *
  * The world's first AI-driven autonomous miner for the ORE v3 protocol.
- * Claude-powered OODA loop: Observe → Orient → Decide → Act.
+ * Claude-powered CLAWD LOOP: Observe → Orient → Decide → Act.
  *
  * Usage:
  *   ANTHROPIC_API_KEY=... RPC=... KEYPAIR=~/.config/solana/id.json \
  *     node --import tsx/esm src/index.ts [--mine] [--dry-run] [--observe]
  *
  * Environment:
- *   ANTHROPIC_API_KEY   Claude API key (required)
+ *   ANTHROPIC_API_KEY   Claude API key (or use OPENROUTER_API_KEY)
+ *   OPENROUTER_API_KEY  OpenRouter API key
+ *   OPENROUTER_MODEL    Model to use via OpenRouter (default: anthropic/claude-opus-4.7-fast)
  *   RPC                 Solana RPC URL (or HELIUS_RPC_URL)
  *   KEYPAIR             Path to Solana keypair JSON file (required for mining)
  *   MAX_DEPLOY_SOL      Max SOL to deploy per round (default: 0.1)
  *   MIN_RESERVE_SOL     Min SOL to keep in wallet (default: 0.05)
- *   TICK_INTERVAL_MS    OODA loop interval in ms (default: 60000)
+ *   TICK_INTERVAL_MS    CLAWD loop interval in ms (default: 60000)
  *   DRY_RUN             Set to "true" to observe without executing (default: false)
  */
 
 import chalk from 'chalk';
-import { Connection, PublicKey } from '@solana/web3.js';
+import { Connection } from '@solana/web3.js';
 
 import { getBoard, getRound, getMiner, getCurrentSlot, getSolBalance } from './rpc.js';
 import { analyzeBoard, formatBoardForClaude } from './strategy.js';
 import { isOreCLIAvailable } from './cli.js';
 import { runAgent } from './agent.js';
+import { createDashboardServer } from './server.js';
 import { solAmount, oreAmount } from './constants.js';
 
 const args = process.argv.slice(2);
@@ -35,14 +38,16 @@ const mode = args.includes('--mine')
   ? 'observe'
   : args.includes('--status')
   ? 'status'
-  : 'mine'; // default to mine
+  : 'mine';
 
-const dryRun = args.includes('--dry-run') || process.env['DRY_RUN'] === 'true';
+const dryRun = args.includes('--dry-run') || process.env.DRY_RUN === 'true';
 
 async function main(): Promise<void> {
-  const rpcUrl = process.env['RPC'] ?? process.env['HELIUS_RPC_URL'];
-  const keypairPath = process.env['KEYPAIR'];
-  const apiKey = process.env['ANTHROPIC_API_KEY'];
+  const rpcUrl = process.env.RPC ?? process.env.HELIUS_RPC_URL;
+  const keypairPath = process.env.KEYPAIR;
+  const apiKey = process.env.ANTHROPIC_API_KEY;
+  const openrouterKey = process.env.OPENROUTER_API_KEY;
+  const deepseekKey = process.env.DEEPSEEK_API_KEY;
 
   if (!rpcUrl) {
     console.error(chalk.red('Error: RPC env var required (set RPC or HELIUS_RPC_URL)'));
@@ -64,14 +69,17 @@ async function main(): Promise<void> {
     console.error(chalk.red('Error: KEYPAIR env var required for mining'));
     process.exit(1);
   }
-  if (!apiKey && !process.env['OPENROUTER_API_KEY']) {
-    console.error(chalk.red('Error: ANTHROPIC_API_KEY or OPENROUTER_API_KEY env var required'));
+  if (!deepseekKey && !openrouterKey && !apiKey) {
+    console.error(chalk.red('Error: DEEPSEEK_API_KEY, OPENROUTER_API_KEY, or ANTHROPIC_API_KEY required'));
     process.exit(1);
   }
 
-  const maxDeploySol = parseFloat(process.env['MAX_DEPLOY_SOL'] ?? '0.1');
-  const minReserveSol = parseFloat(process.env['MIN_RESERVE_SOL'] ?? '0.05');
-  const tickIntervalMs = parseInt(process.env['TICK_INTERVAL_MS'] ?? '60000', 10);
+  const maxDeploySol = Number.parseFloat(process.env.MAX_DEPLOY_SOL ?? '0.1');
+  const minReserveSol = Number.parseFloat(process.env.MIN_RESERVE_SOL ?? '0.05');
+  const tickIntervalMs = Number.parseInt(process.env.TICK_INTERVAL_MS ?? '60000', 10);
+  const dashPort = Number.parseInt(process.env.DASHBOARD_PORT ?? '3333', 10);
+
+  const { io } = createDashboardServer(dashPort);
 
   await runAgent({
     rpcUrl,
@@ -80,6 +88,7 @@ async function main(): Promise<void> {
     minReserve: minReserveSol,
     tickIntervalMs,
     dryRun,
+    io,
   });
 }
 
@@ -146,7 +155,7 @@ async function statusMode(rpcUrl: string, keypairPath?: string): Promise<void> {
     const miningSlotsLeft = miningOpen ? board.endSlot - currentSlot : 0n;
     const claimSlotsLeft = round.expiresAt > currentSlot ? round.expiresAt - currentSlot : 0n;
 
-    console.log(`ORE Program: oreV3EG1i9BEgiAJ8b177Z2S2rMarzak4NMv1kULvWv`);
+    console.log('ORE Program: oreV3EG1i9BEgiAJ8b177Z2S2rMarzak4NMv1kULvWv');
     console.log(`Board:       ${board.address}`);
     console.log(`Round:       ${board.roundId}`);
     console.log(`Mining:      ${miningOpen ? chalk.green(`OPEN — ${(Number(miningSlotsLeft) * 0.4).toFixed(0)}s left`) : chalk.yellow('CLOSED')}`);

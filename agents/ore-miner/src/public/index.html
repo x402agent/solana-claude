@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CLAWD ORE MINER — Live Dashboard</title>
+  <script src="/socket.io/socket.io.js"></script>
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --panel: #111118;
+      --border: #1e1e2e;
+      --accent: #7c3aed;
+      --accent2: #06b6d4;
+      --green: #22c55e;
+      --yellow: #eab308;
+      --red: #ef4444;
+      --text: #e2e8f0;
+      --muted: #64748b;
+      --ore: #f59e0b;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+      font-size: 13px;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Scanline overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0,0,0,0.03) 2px,
+        rgba(0,0,0,0.03) 4px
+      );
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 20px;
+      border-bottom: 1px solid var(--border);
+      background: var(--panel);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 18px;
+      font-weight: bold;
+      letter-spacing: 2px;
+      color: var(--accent);
+      text-transform: uppercase;
+    }
+
+    .logo .claw { font-size: 22px; animation: pulse 2s ease-in-out infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
+
+    .loop-badge {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .loop-step {
+      padding: 3px 10px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      font-size: 11px;
+      letter-spacing: 1px;
+      color: var(--muted);
+      transition: all 0.3s ease;
+    }
+
+    .loop-step.active {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: rgba(124,58,237,0.15);
+      box-shadow: 0 0 12px rgba(124,58,237,0.4);
+    }
+
+    .status-bar {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .status-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--muted);
+    }
+    .status-dot.live { background: var(--green); animation: blink 1s step-start infinite; }
+    .status-dot.dry { background: var(--yellow); }
+    @keyframes blink { 50% { opacity: 0; } }
+
+    main {
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      grid-template-rows: auto 1fr;
+      gap: 12px;
+      padding: 12px;
+      height: calc(100vh - 57px);
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px;
+      overflow: hidden;
+    }
+
+    .panel-title {
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .panel-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* Stats row */
+    .stats-row {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 10px;
+    }
+
+    .stat {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .stat-label {
+      font-size: 10px;
+      letter-spacing: 1px;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    .stat-value {
+      font-size: 20px;
+      font-weight: bold;
+      color: var(--text);
+    }
+
+    .stat-value.green { color: var(--green); }
+    .stat-value.yellow { color: var(--yellow); }
+    .stat-value.red { color: var(--red); }
+    .stat-value.ore { color: var(--ore); }
+    .stat-value.accent { color: var(--accent); }
+
+    .stat-sub {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    /* Board grid */
+    .board-area { display: flex; flex-direction: column; gap: 12px; }
+
+    .grid-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .square-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 6px;
+      flex: 1;
+    }
+
+    .square {
+      aspect-ratio: 1;
+      border-radius: 8px;
+      border: 2px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      padding: 4px;
+    }
+
+    .square::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--sq-color, transparent);
+      opacity: 0.15;
+    }
+
+    .square:hover { transform: scale(1.04); }
+
+    .square.empty {
+      border-color: rgba(124,58,237,0.4);
+      --sq-color: var(--accent);
+    }
+    .square.empty::before { opacity: 0.08; animation: glow 2s ease-in-out infinite; }
+    @keyframes glow { 0%,100%{opacity:0.08} 50%{opacity:0.2} }
+
+    .square.underbet { border-color: rgba(34,197,94,0.5); --sq-color: var(--green); }
+    .square.overbet  { border-color: rgba(100,116,139,0.3); }
+    .square.winning  { border-color: var(--ore); --sq-color: var(--ore);
+                       animation: winpulse 0.8s ease-in-out infinite; }
+    @keyframes winpulse { 0%,100%{box-shadow:0 0 0 0 rgba(245,158,11,0.4)} 50%{box-shadow:0 0 0 8px rgba(245,158,11,0)} }
+
+    .square.mine { border-color: var(--accent2); --sq-color: var(--accent2); }
+
+    .sq-num {
+      font-size: 10px;
+      color: var(--muted);
+      font-weight: bold;
+    }
+
+    .sq-ev {
+      font-size: 13px;
+      font-weight: bold;
+      color: var(--text);
+    }
+
+    .sq-sol {
+      font-size: 9px;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    /* EV bar */
+    .ev-bar {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--ev-color, var(--muted));
+      opacity: 0.7;
+      transform-origin: left;
+      transition: transform 0.5s ease;
+    }
+
+    /* Agent panel */
+    .agent-panel { display: flex; flex-direction: column; gap: 12px; }
+
+    .agent-action {
+      background: rgba(124,58,237,0.1);
+      border: 1px solid rgba(124,58,237,0.3);
+      border-radius: 6px;
+      padding: 10px 12px;
+      font-size: 12px;
+      color: var(--accent);
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .agent-action .action-icon { font-size: 16px; }
+
+    .reasoning {
+      font-size: 11px;
+      color: var(--muted);
+      line-height: 1.6;
+      max-height: 120px;
+      overflow-y: auto;
+    }
+
+    /* Wallet */
+    .wallet-info { display: flex; flex-direction: column; gap: 6px; }
+    .wallet-row { display: flex; justify-content: space-between; align-items: center; }
+    .wallet-label { color: var(--muted); font-size: 11px; }
+    .wallet-value { font-size: 12px; }
+    .wallet-pubkey {
+      font-size: 10px;
+      color: var(--muted);
+      word-break: break-all;
+      padding: 4px 0;
+    }
+
+    /* Log ticker */
+    .log-panel {
+      grid-column: 1 / -1;
+      max-height: 140px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .log-entry {
+      display: flex;
+      gap: 10px;
+      font-size: 11px;
+      padding: 3px 6px;
+      border-radius: 4px;
+      animation: fadeIn 0.3s ease;
+    }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+
+    .log-entry.info  { color: var(--text); }
+    .log-entry.action { color: var(--accent2); background: rgba(6,182,212,0.05); }
+    .log-entry.warn  { color: var(--yellow); }
+    .log-entry.error { color: var(--red); }
+
+    .log-ts { color: var(--muted); flex-shrink: 0; }
+
+    /* Countdown ring */
+    .countdown-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 0;
+    }
+
+    .ring {
+      position: relative;
+      width: 80px;
+      height: 80px;
+    }
+
+    .ring svg { transform: rotate(-90deg); }
+    .ring-bg { fill: none; stroke: var(--border); stroke-width: 6; }
+    .ring-fg { fill: none; stroke: var(--accent); stroke-width: 6;
+               stroke-linecap: round; stroke-dasharray: 220; stroke-dashoffset: 220;
+               transition: stroke-dashoffset 1s linear; }
+    .ring-fg.open { stroke: var(--green); }
+    .ring-fg.closed { stroke: var(--red); }
+
+    .ring-text {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: bold;
+    }
+    .ring-sub { font-size: 9px; color: var(--muted); }
+
+    .connecting {
+      position: fixed;
+      inset: 0;
+      background: rgba(10,10,15,0.9);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      z-index: 100;
+      font-size: 18px;
+      letter-spacing: 3px;
+      color: var(--accent);
+    }
+
+    .spinner {
+      width: 40px; height: 40px;
+      border: 3px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+
+<div class="connecting" id="connecting">
+  <div class="spinner"></div>
+  <div>CONNECTING TO CLAWD LOOP</div>
+  <div style="font-size:12px;color:var(--muted)">waiting for agent…</div>
+</div>
+
+<header>
+  <div class="logo">
+    <span class="claw">🦀</span>
+    CLAWD ORE MINER
+  </div>
+  <div class="loop-badge">
+    <div class="loop-step" id="step-observe">OBSERVE</div>
+    <div class="loop-step" id="step-orient">ORIENT</div>
+    <div class="loop-step" id="step-decide">DECIDE</div>
+    <div class="loop-step" id="step-act">ACT</div>
+  </div>
+  <div class="status-bar">
+    <div class="status-dot" id="live-dot"></div>
+    <span id="mode-label">—</span>
+    <span style="color:var(--muted)">|</span>
+    <span id="round-label" style="color:var(--accent)">Round —</span>
+  </div>
+</header>
+
+<main>
+  <!-- Stats row -->
+  <div class="stats-row">
+    <div class="stat">
+      <div class="stat-label">Mining Window</div>
+      <div class="stat-value" id="mining-status">—</div>
+      <div class="stat-sub" id="mining-time">—</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Total Deployed</div>
+      <div class="stat-value ore" id="total-deployed">—</div>
+      <div class="stat-sub" id="total-miners">— miners</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">ORE Motherlode</div>
+      <div class="stat-value ore" id="motherlode">—</div>
+      <div class="stat-sub">this round</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">My SOL Rewards</div>
+      <div class="stat-value green" id="my-sol">—</div>
+      <div class="stat-sub">pending</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">My ORE Rewards</div>
+      <div class="stat-value ore" id="my-ore">—</div>
+      <div class="stat-sub">claimable</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Claim Window</div>
+      <div class="stat-value accent" id="claim-time">—</div>
+      <div class="stat-sub">remaining</div>
+    </div>
+  </div>
+
+  <!-- Board + grid -->
+  <div class="board-area panel">
+    <div class="panel-title">25-SQUARE MINING BOARD</div>
+    <div class="square-grid" id="square-grid">
+      <!-- squares injected by JS -->
+    </div>
+    <div style="display:flex;gap:16px;font-size:10px;color:var(--muted);padding-top:8px;flex-wrap:wrap;">
+      <span style="color:var(--accent)">■ EMPTY (EV=∞)</span>
+      <span style="color:var(--green)">■ UNDERBET (EV&gt;1)</span>
+      <span style="color:var(--muted)">■ BALANCED</span>
+      <span style="color:var(--ore)">■ WINNING SQ</span>
+      <span style="color:var(--accent2)">■ MY DEPLOYMENT</span>
+    </div>
+  </div>
+
+  <!-- Right panel -->
+  <div class="agent-panel panel">
+    <div class="panel-title">AGENT BRAIN</div>
+
+    <div class="countdown-wrap">
+      <div class="ring">
+        <svg viewBox="0 0 80 80" width="80" height="80">
+          <circle class="ring-bg" cx="40" cy="40" r="35" />
+          <circle class="ring-fg" id="ring-fg" cx="40" cy="40" r="35" />
+        </svg>
+        <div class="ring-text">
+          <div id="ring-val">—</div>
+          <div class="ring-sub" id="ring-label">SLOTS</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel-title">CURRENT ACTION</div>
+    <div class="agent-action">
+      <span class="action-icon" id="action-icon">⏳</span>
+      <span id="action-text">Waiting for agent…</span>
+    </div>
+
+    <div class="panel-title">REASONING</div>
+    <div class="reasoning" id="reasoning-text">—</div>
+
+    <div class="panel-title">WALLET</div>
+    <div class="wallet-info" id="wallet-info">
+      <div class="wallet-pubkey" id="wallet-pubkey">—</div>
+      <div class="wallet-row">
+        <span class="wallet-label">Balance</span>
+        <span class="wallet-value" id="wallet-bal">—</span>
+      </div>
+      <div class="wallet-row">
+        <span class="wallet-label">Checkpoint</span>
+        <span class="wallet-value" id="wallet-ckpt">—</span>
+      </div>
+    </div>
+
+    <div class="panel-title">ACTIVITY LOG</div>
+    <div class="log-panel" id="log-panel"></div>
+  </div>
+</main>
+
+<script>
+  const socket = io();
+  let roundDuration = 150; // estimated slots
+
+  const $ = id => document.getElementById(id);
+
+  // Build 25 squares
+  const grid = $('square-grid');
+  for (let i = 0; i < 25; i++) {
+    const sq = document.createElement('div');
+    sq.className = 'square';
+    sq.id = `sq-${i}`;
+    sq.innerHTML = `
+      <div class="sq-num">${i}</div>
+      <div class="sq-ev" id="sq-ev-${i}">—</div>
+      <div class="sq-sol" id="sq-sol-${i}">—</div>
+      <div class="ev-bar" id="sq-bar-${i}"></div>
+    `;
+    grid.appendChild(sq);
+  }
+
+  function formatSecs(s) {
+    if (s < 0) return '0s';
+    if (s < 60) return `${s.toFixed(0)}s`;
+    return `${(s / 60).toFixed(1)}m`;
+  }
+
+  function evColor(ev, isEmpty) {
+    if (isEmpty) return 'var(--accent)';
+    if (ev >= 10) return 'var(--accent)';
+    if (ev >= 2) return 'var(--green)';
+    if (ev >= 1) return 'rgba(34,197,94,0.5)';
+    return 'var(--muted)';
+  }
+
+  function actionIcon(action) {
+    if (!action) return '⏳';
+    if (action.includes('deploy')) return '💰';
+    if (action.includes('claim')) return '🏆';
+    if (action.includes('checkpoint')) return '📌';
+    if (action.includes('observe')) return '👁️';
+    if (action.includes('hold')) return '⏸️';
+    if (action.includes('analyze')) return '🧠';
+    return '⚡';
+  }
+
+  socket.on('connect', () => {
+    $('live-dot').className = 'status-dot live';
+    $('connecting').style.display = 'none';
+  });
+
+  socket.on('disconnect', () => {
+    $('live-dot').className = 'status-dot';
+    $('connecting').style.display = 'flex';
+  });
+
+  socket.on('state', (state) => {
+    // Header
+    $('round-label').textContent = `Round ${state.round}`;
+    $('mode-label').textContent = state.dryRun ? 'DRY RUN' : 'LIVE';
+    $('live-dot').className = state.dryRun ? 'status-dot dry' : 'status-dot live';
+
+    // CLAWD loop steps
+    ['observe','orient','decide','act'].forEach(step => {
+      const el = $(`step-${step}`);
+      el.className = 'loop-step' + (state.loop === step ? ' active' : '');
+    });
+
+    // Stats
+    const miningEl = $('mining-status');
+    if (state.miningOpen) {
+      miningEl.textContent = 'OPEN';
+      miningEl.className = 'stat-value green';
+      $('mining-time').textContent = `${formatSecs(state.miningSecondsRemaining)} left`;
+    } else {
+      miningEl.textContent = 'CLOSED';
+      miningEl.className = 'stat-value red';
+      $('mining-time').textContent = 'claim window';
+    }
+
+    $('total-deployed').textContent = state.totalDeployed + ' SOL';
+    $('total-miners').textContent = `${state.totalMiners} miners`;
+    $('motherlode').textContent = state.motherlode + ' ORE';
+    $('claim-time').textContent = state.claimHoursRemaining.toFixed(1) + 'h';
+
+    if (state.wallet) {
+      $('my-sol').textContent = state.wallet.rewardsSol + ' SOL';
+      $('my-ore').textContent = state.wallet.rewardsOre + ' ORE';
+      $('wallet-pubkey').textContent = state.wallet.pubkey;
+      $('wallet-bal').textContent = state.wallet.balanceSol + ' SOL';
+      $('wallet-ckpt').innerHTML = state.wallet.checkpointNeeded
+        ? '<span style="color:var(--yellow)">NEEDED</span>'
+        : '<span style="color:var(--green)">OK</span>';
+    } else {
+      $('my-sol').textContent = '—';
+      $('my-ore').textContent = '—';
+    }
+
+    // Countdown ring
+    const ringFg = $('ring-fg');
+    if (state.miningOpen) {
+      const maxSecs = roundDuration * 0.4;
+      const pct = Math.max(0, Math.min(1, state.miningSecondsRemaining / maxSecs));
+      ringFg.style.strokeDashoffset = 220 * (1 - pct);
+      ringFg.className = 'ring-fg open';
+      $('ring-val').textContent = formatSecs(state.miningSecondsRemaining);
+      $('ring-label').textContent = 'MINING';
+    } else {
+      ringFg.style.strokeDashoffset = 220;
+      ringFg.className = 'ring-fg closed';
+      $('ring-val').textContent = state.claimHoursRemaining.toFixed(1)+'h';
+      $('ring-label').textContent = 'CLAIM';
+    }
+
+    // Agent action
+    $('action-icon').textContent = actionIcon(state.agentAction);
+    $('action-text').textContent = state.agentAction || 'Idle';
+    $('reasoning-text').textContent = state.agentReasoning || '—';
+
+    // Squares
+    if (state.squares && state.squares.length === 25) {
+      state.squares.forEach(sq => {
+        const el = $(`sq-${sq.index}`);
+        const evEl = $(`sq-ev-${sq.index}`);
+        const solEl = $(`sq-sol-${sq.index}`);
+        const barEl = $(`sq-bar-${sq.index}`);
+
+        // Classes
+        let cls = 'square';
+        if (state.settled && state.winningSquare === sq.index) cls += ' winning';
+        else if (sq.myDeployment) cls += ' mine';
+        else if (sq.isEmpty) cls += ' empty';
+        else if (sq.isUnderbet) cls += ' underbet';
+        else cls += ' overbet';
+        el.className = cls;
+
+        // EV display
+        evEl.textContent = sq.isEmpty ? '∞' : sq.ev.toFixed(2) + 'x';
+        evEl.style.color = evColor(sq.ev, sq.isEmpty);
+        solEl.textContent = sq.isEmpty ? 'empty' : sq.deployed;
+
+        // EV bar (cap at 10x = full width)
+        const barPct = sq.isEmpty ? 1 : Math.min(1, sq.ev / 10);
+        barEl.style.transform = `scaleX(${barPct})`;
+        barEl.style.background = evColor(sq.ev, sq.isEmpty);
+      });
+    }
+
+    // Log
+    if (state.log && state.log.length > 0) {
+      const logPanel = $('log-panel');
+      // Only add new entries
+      const existing = logPanel.querySelectorAll('.log-entry').length;
+      const newEntries = state.log.slice(existing);
+      newEntries.forEach(entry => {
+        const div = document.createElement('div');
+        div.className = `log-entry ${entry.level}`;
+        const t = new Date(entry.ts);
+        const ts = `${t.getHours().toString().padStart(2,'0')}:${t.getMinutes().toString().padStart(2,'0')}:${t.getSeconds().toString().padStart(2,'0')}`;
+        div.innerHTML = `<span class="log-ts">${ts}</span><span>${entry.msg}</span>`;
+        logPanel.appendChild(div);
+        logPanel.scrollTop = logPanel.scrollHeight;
+      });
+    }
+  });
+</script>
+</body>
+</html>
