@@ -154,16 +154,17 @@ ORE_RPC_URL=https://your-rpc.example \
 npm run ore:status
 
 # Configure ORE automation and run one miner tick
+cd automaton-main
 ORE_KEYPAIR=~/.config/solana/id.json \
 ORE_RPC_URL=https://your-rpc.example \
-npm run ore:miner -- --ore-setup --ore-once \
+pnpm ore:miner -- --ore-setup --ore-once \
   --ore-amount-sol 0.001 \
   --ore-deposit-sol 0.05 \
   --ore-strategy random \
   --ore-num-squares 1
 ```
 
-Use `npm run ore:miner -- --help` through the automaton CLI help for the full option list. Direct deployments require an explicit square selection or `--ore-deploy-all`; automation setup requires both amount and deposit inputs.
+Use `cd automaton-main && pnpm ore:miner -- --help` for the automaton CLI help. Direct deployments require an explicit square selection or `--ore-deploy-all`; automation setup requires both amount and deposit inputs.
 
 ---
 

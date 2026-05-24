@@ -51,3 +51,30 @@ For line coverage, use llvm-cov:
 ```
 cargo llvm-cov
 ```
+
+## Solana Clawd Integration
+
+This workspace is vendored by the sibling [`../automaton-main`](../automaton-main) runtime. Solana Clawd uses `ore-cli` as the local protocol bridge for ORE board/miner status, automation setup, executor deploys, checkpointing, and reward claims.
+
+```bash
+# From repo root
+npm run ore:build
+
+# Raw ORE CLI bridge
+KEYPAIR=~/.config/solana/id.json \
+RPC=https://your-rpc.example \
+COMMAND=board \
+npm run ore:cli
+
+# Automaton-managed miner loop
+cd automaton-main
+ORE_KEYPAIR=~/.config/solana/id.json \
+ORE_RPC_URL=https://your-rpc.example \
+pnpm ore:miner -- --ore-setup --ore-once \
+  --ore-amount-sol 0.001 \
+  --ore-deposit-sol 0.05 \
+  --ore-strategy random \
+  --ore-num-squares 1
+```
+
+The Solana Clawd wrapper requires explicit keypair/RPC inputs and explicit amount/deposit inputs before it sends spending transactions.

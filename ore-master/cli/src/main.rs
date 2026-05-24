@@ -574,7 +574,6 @@ async fn reset(
         .await?;
     println!("Entropy seed: {:?}", response);
 
-    let config = get_config(rpc).await?;
     let sample_ix = entropy_api::sdk::sample(payer.pubkey(), ORE_VAR_ADDRESS);
     let reveal_ix = entropy_api::sdk::reveal(payer.pubkey(), ORE_VAR_ADDRESS, response.seed);
     let reset_ix = ore_api::sdk::reset(
