@@ -9,15 +9,15 @@
     "api": "https://x402.wtf/api/agents"
   },
   "stats": {
-    "totalAgents": 135,
-    "totalOneShots": 42,
+    "totalAgents": 136,
+    "totalOneShots": 43,
     "totalFeatured": 24,
     "totalTemplates": 5,
     "byCategory": {
       "trading": 9,
       "education": 6,
       "security": 8,
-      "defi": 66,
+      "defi": 67,
       "research": 1,
       "governance": 2,
       "analytics": 11,
@@ -27,7 +27,7 @@
       "nft": 2,
       "payments": 25
     },
-    "metaplexEnabledAgents": 50,
+    "metaplexEnabledAgents": 51,
     "tradingCapableAgents": 12,
     "launchCapableAgents": 1,
     "mintCapableAgents": 2
@@ -81,7 +81,7 @@
       }
     ],
     "coverage": {
-      "agent-registry": 50,
+      "agent-registry": 51,
       "genesis": 1,
       "core": 3,
       "token-metadata": 4,
@@ -1826,6 +1826,58 @@
         "mint": "/agents/mint?template=solana-mpl-core-launcher",
         "mcp": "/api/agents/catalog/solana-mpl-core-launcher.json",
         "registration": "/api/agents/registry/solana-mpl-core-launcher.json"
+      }
+    },
+    {
+      "identifier": "solana-ore-mining-agent",
+      "title": "Solana ORE Mining Agent",
+      "description": "Operator agent for ORE mining on Solana: setup, round monitoring, automation, reward claims, fee controls, wallet safety, and profitability checks.",
+      "avatar": "⛏️",
+      "tags": [
+        "ore",
+        "mining",
+        "proof-of-work",
+        "solana",
+        "rewards",
+        "automation",
+        "priority-fees",
+        "jito",
+        "clawd",
+        "one-shot",
+        "solana-clawd"
+      ],
+      "category": "defi",
+      "author": "openclawd",
+      "createdAt": "2026-05-24",
+      "oneShot": true,
+      "featured": false,
+      "openingMessage": "⛏️ ORE mining operator online. I can build a safe runbook, estimate fees and rewards, monitor rounds, and prepare claim/deploy plans. I will not sign or spend SOL without explicit approval.",
+      "openingQuestions": [
+        "Set up an ORE CLI mining wallet on this machine",
+        "Estimate my ORE mining break-even after fees and Jito tips",
+        "Build a dry-run plan to claim ORE and SOL rewards",
+        "Diagnose why my ORE mining transaction is failing"
+      ],
+      "tokenUsage": 1320,
+      "capabilities": [
+        "read-only",
+        "a2a-message",
+        "ore-mining-operations",
+        "transaction-building",
+        "reward-claiming",
+        "automation-planning"
+      ],
+      "metaplexSkills": [
+        "agent-registry"
+      ],
+      "payment": null,
+      "agentToken": null,
+      "deploy": {
+        "json": "/api/agents/catalog/solana-ore-mining-agent.json",
+        "chat": "/agents/chat?agent=solana-ore-mining-agent",
+        "mint": "/agents/mint?template=solana-ore-mining-agent",
+        "mcp": "/api/agents/catalog/solana-ore-mining-agent.json",
+        "registration": "/api/agents/registry/solana-ore-mining-agent.json"
       }
     },
     {
@@ -7309,6 +7361,58 @@
         "mint": "/agents/mint?template=solana-order-flow-analyst",
         "mcp": "/api/agents/catalog/solana-order-flow-analyst.json",
         "registration": "/api/agents/registry/solana-order-flow-analyst.json"
+      }
+    },
+    {
+      "identifier": "solana-ore-mining-agent",
+      "title": "Solana ORE Mining Agent",
+      "description": "Operator agent for ORE mining on Solana: setup, round monitoring, automation, reward claims, fee controls, wallet safety, and profitability checks.",
+      "avatar": "⛏️",
+      "tags": [
+        "ore",
+        "mining",
+        "proof-of-work",
+        "solana",
+        "rewards",
+        "automation",
+        "priority-fees",
+        "jito",
+        "clawd",
+        "one-shot",
+        "solana-clawd"
+      ],
+      "category": "defi",
+      "author": "openclawd",
+      "createdAt": "2026-05-24",
+      "oneShot": true,
+      "featured": false,
+      "openingMessage": "⛏️ ORE mining operator online. I can build a safe runbook, estimate fees and rewards, monitor rounds, and prepare claim/deploy plans. I will not sign or spend SOL without explicit approval.",
+      "openingQuestions": [
+        "Set up an ORE CLI mining wallet on this machine",
+        "Estimate my ORE mining break-even after fees and Jito tips",
+        "Build a dry-run plan to claim ORE and SOL rewards",
+        "Diagnose why my ORE mining transaction is failing"
+      ],
+      "tokenUsage": 1320,
+      "capabilities": [
+        "read-only",
+        "a2a-message",
+        "ore-mining-operations",
+        "transaction-building",
+        "reward-claiming",
+        "automation-planning"
+      ],
+      "metaplexSkills": [
+        "agent-registry"
+      ],
+      "payment": null,
+      "agentToken": null,
+      "deploy": {
+        "json": "/api/agents/catalog/solana-ore-mining-agent.json",
+        "chat": "/agents/chat?agent=solana-ore-mining-agent",
+        "mint": "/agents/mint?template=solana-ore-mining-agent",
+        "mcp": "/api/agents/catalog/solana-ore-mining-agent.json",
+        "registration": "/api/agents/registry/solana-ore-mining-agent.json"
       }
     },
     {

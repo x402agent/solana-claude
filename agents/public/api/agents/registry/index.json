@@ -3,7 +3,7 @@
   "generatedAt": "2026-05-24T13:47:44.426Z",
   "registry": "metaplex-agent-registry",
   "host": "https://x402.wtf",
-  "count": 135,
+  "count": 136,
   "agents": [
     {
       "id": "airdrop-hunter",
@@ -653,6 +653,13 @@
       "id": "solana-order-flow-analyst",
       "name": "Order Flow Analyst",
       "registrationUri": "https://x402.wtf/api/agents/registry/solana-order-flow-analyst.json",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration"
+    },
+    {
+      "id": "solana-ore-mining-agent",
+      "name": "Solana ORE Mining Agent",
+      "registrationUri": "https://x402.wtf/api/agents/registry/solana-ore-mining-agent.json",
       "agentRegistry": "solana:mainnet:metaplex-agent-registry",
       "status": "pending-onchain-registration"
     },

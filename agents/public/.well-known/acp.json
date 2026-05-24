@@ -67,7 +67,7 @@
       }
     ],
     "coverage": {
-      "agent-registry": 50,
+      "agent-registry": 51,
       "genesis": 1,
       "core": 3,
       "token-metadata": 4,
@@ -112,15 +112,15 @@
     ]
   },
   "stats": {
-    "totalAgents": 135,
-    "totalOneShots": 42,
+    "totalAgents": 136,
+    "totalOneShots": 43,
     "totalFeatured": 24,
     "totalTemplates": 5,
     "byCategory": {
       "trading": 9,
       "education": 6,
       "security": 8,
-      "defi": 66,
+      "defi": 67,
       "research": 1,
       "governance": 2,
       "analytics": 11,
@@ -130,7 +130,7 @@
       "nft": 2,
       "payments": 25
     },
-    "metaplexEnabledAgents": 50,
+    "metaplexEnabledAgents": 51,
     "tradingCapableAgents": 12,
     "launchCapableAgents": 1,
     "mintCapableAgents": 2
@@ -2545,6 +2545,38 @@
           "agentRegistry": "solana:mainnet:metaplex-agent-registry",
           "status": "pending-onchain-registration",
           "registrationUri": "https://x402.wtf/api/agents/registry/solana-order-flow-analyst.json"
+        }
+      ]
+    },
+    {
+      "id": "solana-ore-mining-agent",
+      "title": "Solana ORE Mining Agent",
+      "category": "defi",
+      "capabilities": [
+        "read-only",
+        "a2a-message",
+        "ore-mining-operations",
+        "transaction-building",
+        "reward-claiming",
+        "automation-planning"
+      ],
+      "metaplexSkills": [
+        "agent-registry"
+      ],
+      "oneShot": true,
+      "featured": false,
+      "endpoints": {
+        "catalog": "https://x402.wtf/api/agents/catalog/solana-ore-mining-agent.json",
+        "registration": "https://x402.wtf/api/agents/registry/solana-ore-mining-agent.json",
+        "a2a": "https://x402.wtf/api/agents/a2a",
+        "mint": "https://x402.wtf/agents/mint?template=solana-ore-mining-agent"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:solana-ore-mining-agent",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://x402.wtf/api/agents/registry/solana-ore-mining-agent.json"
         }
       ]
     },
