@@ -116,7 +116,7 @@ async function executeToolCall(
         const roundId = roundIdStr ? BigInt(roundIdStr) : board.roundId;
         const currentSlot = await getCurrentSlot(conn);
         const round = await getRound(conn, roundId);
-        const analysis = analyzeBoard(round, currentSlot);
+        const analysis = analyzeBoard(round, currentSlot, (cachedBoard ?? board).endSlot);
 
         return {
           output: {
