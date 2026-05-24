@@ -64,8 +64,8 @@ async function main(): Promise<void> {
     console.error(chalk.red('Error: KEYPAIR env var required for mining'));
     process.exit(1);
   }
-  if (!apiKey) {
-    console.error(chalk.red('Error: ANTHROPIC_API_KEY env var required'));
+  if (!apiKey && !process.env['OPENROUTER_API_KEY']) {
+    console.error(chalk.red('Error: ANTHROPIC_API_KEY or OPENROUTER_API_KEY env var required'));
     process.exit(1);
   }
 
