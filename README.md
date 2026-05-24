@@ -29,6 +29,88 @@
 
 </div>
 
+## ⛏️ Clawd ORE Mining Agent — NEW
+
+<div align="center">
+
+```
+╔══════════════════════════════════════════════════════════════╗
+║          C L A W D   O R E   M I N I N G   A G E N T        ║
+║    World's First AI-Driven Autonomous Miner · ORE v3         ║
+╠══════════════════════════════════════════════════════════════╣
+║                                                              ║
+║   🦀  CLAWD LOOP  ·  Observe → Orient → Decide → Act        ║
+║                                                              ║
+║   ┌──────────────────── 25-SQUARE BOARD ──────────────────┐  ║
+║   │  sq0   sq1   sq2   sq3   sq4  │  EV   Deploy  Miners  │  ║
+║   │  ████  ░░░░  ████  ░░░░  ████ │  ∞     EMPTY    0     │  ║
+║   │  sq5   sq6   sq7   sq8   sq9  │  3.2x  0.04    12     │  ║
+║   │  ░░░░  ████  ░░░░  ░░░░  ████ │  1.8x  0.08     7     │  ║
+║   │  sq10  sq11  sq12  sq13  sq14 │  0.9x  0.22    34     │  ║
+║   │  ████  ░░░░  ████  ░░░░  ████ │  ∞     EMPTY    0     │  ║
+║   │  sq15  sq16  sq17  sq18  sq19 │  2.1x  0.06     9     │  ║
+║   │  ░░░░  ████  ░░░░  ████  ░░░░ │  ∞     EMPTY    0     │  ║
+║   │  sq20  sq21  sq22  sq23  sq24 │  4.7x  0.02     3     │  ║
+║   │  ████  ░░░░  ████  ░░░░  ████ │  1.1x  0.18    21     │  ║
+║   └──────────────────────────────────────────────────────┘  ║
+║                                                              ║
+║   ● MINING OPEN   ████████████████░░░░░░   42s remaining    ║
+║   ◎ Round 273924  286 miners  7.08 SOL deployed             ║
+║   ⚡ DeepSeek thinking: "sq0 is empty — infinite EV.        ║
+║      Deploying 0.05 SOL now while window is open..."        ║
+║                                                              ║
+║   🌐 Live dashboard  →  http://localhost:3333               ║
+╚══════════════════════════════════════════════════════════════╝
+```
+
+<img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=700&size=16&duration=1800&pause=400&color=F59E0B&center=true&vCenter=true&width=900&lines=⛏️+AI+mines+ORE+v3+on+Solana+autonomously;CLAWD+LOOP%3A+Observe+→+Orient+→+Decide+→+Act;DeepSeek+thinking+mode+%2B+live+dashboard;25-square+game+%7C+~60s+mining+window+%7C+infinite+EV+squares;One-shot+install+%7C+your+keys%2C+your+RPC%2C+your+frontend" alt="ORE Mining Agent" />
+
+</div>
+
+### One-shot install
+
+```bash
+# Interactive — prompts for your DeepSeek key, RPC, and keypair:
+curl -fsSL https://x402.wtf/ore/install.sh | bash
+
+# One-liner — all inline, no prompts:
+DEEPSEEK_API_KEY=sk-... \
+RPC=https://mainnet.helius-rpc.com/?api-key=YOUR_KEY \
+KEYPAIR=~/.config/solana/id.json \
+curl -fsSL https://x402.wtf/ore/install.sh | bash
+
+# Dry run — watch the AI reason with zero real transactions:
+DRY_RUN=true DEEPSEEK_API_KEY=sk-... RPC=... KEYPAIR=... \
+curl -fsSL https://x402.wtf/ore/install.sh | bash
+```
+
+Or from the repo:
+
+```bash
+# Status (no keys needed)
+RPC=https://mainnet.helius-rpc.com/?api-key=KEY npm run ore:status
+
+# Start the agent + live dashboard at http://localhost:3333
+DEEPSEEK_API_KEY=sk-... RPC=... KEYPAIR=... npm run ore:miner
+```
+
+<div align="center">
+
+| What | Detail |
+|------|--------|
+| **AI brain** | DeepSeek v4-flash (default) · v4-pro for full chain-of-thought |
+| **Fallbacks** | OpenRouter · Anthropic direct |
+| **Game** | ORE v3 · 25 squares · ~60s mining window · ~24h claim |
+| **Strategy** | EV per square · empty = ∞ · checkpoint → claim |
+| **Dashboard** | Socket.io · animated 5×5 grid · CLAWD LOOP phase badges |
+| **Frontend** | Replace `src/public/index.html` with your own UI |
+| **Source** | [`agents/ore-miner/`](./agents/ore-miner/) |
+| **Briefing** | [`agents/ore-miner/ore.txt`](./agents/ore-miner/ore.txt) |
+
+</div>
+
+---
+
 ## ⚡ One-Shot Install — Pick Your Path
 
 ```bash

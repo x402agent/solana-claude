@@ -1,9 +1,9 @@
 {
   "schemaVersion": "openclawd.metaplex.registry.index.v1",
-  "generatedAt": "2026-05-24T15:22:03.246Z",
+  "generatedAt": "2026-05-24T20:34:54.440Z",
   "registry": "metaplex-agent-registry",
   "host": "https://x402.wtf",
-  "count": 136,
+  "count": 137,
   "agents": [
     {
       "id": "airdrop-hunter",
@@ -247,6 +247,13 @@
       "id": "nft-liquidity-advisor",
       "name": "NFT Liquidity & Lending Advisor",
       "registrationUri": "https://x402.wtf/api/agents/registry/nft-liquidity-advisor.json",
+      "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+      "status": "pending-onchain-registration"
+    },
+    {
+      "id": "ore-miner",
+      "name": "Clawd ORE Mining Agent",
+      "registrationUri": "https://x402.wtf/api/agents/registry/ore-miner.json",
       "agentRegistry": "solana:mainnet:metaplex-agent-registry",
       "status": "pending-onchain-registration"
     },

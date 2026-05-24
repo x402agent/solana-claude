@@ -1,7 +1,7 @@
 {
   "schemaVersion": "openclawd.acp.registry.v1",
   "protocol": "Agent Commerce Protocol",
-  "generatedAt": "2026-05-24T15:22:03.246Z",
+  "generatedAt": "2026-05-24T20:34:54.440Z",
   "host": "https://x402.wtf",
   "discover": {
     "catalog": "https://x402.wtf/api/agents/catalog",
@@ -67,7 +67,7 @@
       }
     ],
     "coverage": {
-      "agent-registry": 51,
+      "agent-registry": 52,
       "genesis": 1,
       "core": 3,
       "token-metadata": 4,
@@ -112,15 +112,15 @@
     ]
   },
   "stats": {
-    "totalAgents": 136,
-    "totalOneShots": 43,
-    "totalFeatured": 24,
+    "totalAgents": 137,
+    "totalOneShots": 44,
+    "totalFeatured": 25,
     "totalTemplates": 5,
     "byCategory": {
       "trading": 9,
       "education": 6,
       "security": 8,
-      "defi": 67,
+      "defi": 68,
       "research": 1,
       "governance": 2,
       "analytics": 11,
@@ -130,7 +130,7 @@
       "nft": 2,
       "payments": 25
     },
-    "metaplexEnabledAgents": 51,
+    "metaplexEnabledAgents": 52,
     "tradingCapableAgents": 12,
     "launchCapableAgents": 1,
     "mintCapableAgents": 2
@@ -1154,6 +1154,37 @@
           "agentRegistry": "solana:mainnet:metaplex-agent-registry",
           "status": "pending-onchain-registration",
           "registrationUri": "https://x402.wtf/api/agents/registry/nft-liquidity-advisor.json"
+        }
+      ]
+    },
+    {
+      "id": "ore-miner",
+      "title": "Clawd ORE Mining Agent",
+      "category": "defi",
+      "capabilities": [
+        "read-only",
+        "deploy-sol",
+        "claim-rewards",
+        "checkpoint-miner",
+        "autonomous-loop"
+      ],
+      "metaplexSkills": [
+        "agent-registry"
+      ],
+      "oneShot": true,
+      "featured": true,
+      "endpoints": {
+        "catalog": "https://x402.wtf/api/agents/catalog/ore-miner.json",
+        "registration": "https://x402.wtf/api/agents/registry/ore-miner.json",
+        "a2a": "https://x402.wtf/api/agents/a2a",
+        "mint": "https://x402.wtf/agents/mint?template=ore-miner"
+      },
+      "registrations": [
+        {
+          "agentId": "openclawd:ore-miner",
+          "agentRegistry": "solana:mainnet:metaplex-agent-registry",
+          "status": "pending-onchain-registration",
+          "registrationUri": "https://x402.wtf/api/agents/registry/ore-miner.json"
         }
       ]
     },

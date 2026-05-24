@@ -48,7 +48,7 @@ __pycache__/
 .ruff_cache/
 .venv/
 venv/
-
+ore.txt
 # Lean/Lake generated state
 .lake/
 **/.lake/

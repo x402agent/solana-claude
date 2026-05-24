@@ -1,25 +1,29 @@
 {
   "schemaVersion": "erc-8004-agent-registration-v1",
   "protocol": "metaplex-agent-registry",
-  "name": "Clawd Quote Relay",
-  "description": "Normalizes quotes, prices, and spend estimates for downstream Solana agents.",
+  "name": "Clawd ORE Mining Agent",
+  "description": "World's first AI-driven autonomous miner for the ORE v3 25-square game on Solana. Claude-powered CLAWD LOOP with live animated dashboard.",
   "image": "https://x402.wtf/nich.jpg",
-  "external_url": "https://x402.wtf/agents/solana-clawd-quote-relay",
+  "external_url": "https://x402.wtf/agents/ore-miner",
   "active": true,
-  "createdAt": "2026-05-12",
+  "createdAt": "2026-05-24",
   "updatedAt": "2026-05-24T20:34:54.440Z",
   "tags": [
+    "ore",
+    "mining",
     "solana",
-    "clawd",
-    "quotes",
-    "relay",
-    "pricing",
-    "x402",
-    "market-data",
-    "solana-clawd"
+    "clawd-loop",
+    "autonomous",
+    "ooda",
+    "dashboard",
+    "one-shot",
+    "openrouter",
+    "solana-clawd",
+    "ore-v3",
+    "ai-agent"
   ],
   "categories": [
-    "payments"
+    "defi"
   ],
   "owner": {
     "organization": "OpenClawd",
@@ -33,7 +37,7 @@
   "services": [
     {
       "name": "web",
-      "endpoint": "https://x402.wtf/agents/solana-clawd-quote-relay"
+      "endpoint": "https://x402.wtf/agents/ore-miner"
     },
     {
       "name": "A2A",
@@ -42,19 +46,19 @@
     },
     {
       "name": "catalog",
-      "endpoint": "https://x402.wtf/api/agents/catalog/solana-clawd-quote-relay.json"
+      "endpoint": "https://x402.wtf/api/agents/catalog/ore-miner.json"
     },
     {
       "name": "registration",
-      "endpoint": "https://x402.wtf/api/agents/registry/solana-clawd-quote-relay.json"
+      "endpoint": "https://x402.wtf/api/agents/registry/ore-miner.json"
     }
   ],
   "registrations": [
     {
-      "agentId": "openclawd:solana-clawd-quote-relay",
+      "agentId": "openclawd:ore-miner",
       "agentRegistry": "solana:mainnet:metaplex-agent-registry",
       "status": "pending-onchain-registration",
-      "registrationUri": "https://x402.wtf/api/agents/registry/solana-clawd-quote-relay.json"
+      "registrationUri": "https://x402.wtf/api/agents/registry/ore-miner.json"
     }
   ],
   "supportedTrust": [
@@ -63,7 +67,9 @@
     "token-gated"
   ],
   "metaplex": {
-    "programs": [],
+    "programs": [
+      "agent-registry"
+    ],
     "sdk": "@metaplex-foundation/mpl-agent-registry",
     "expectedIdentity": {
       "asset": null,
@@ -79,8 +85,14 @@
     ]
   },
   "openclawd": {
-    "identifier": "solana-clawd-quote-relay",
-    "capabilities": [],
+    "identifier": "ore-miner",
+    "capabilities": [
+      "read-only",
+      "deploy-sol",
+      "claim-rewards",
+      "checkpoint-miner",
+      "autonomous-loop"
+    ],
     "payment": null,
     "agentToken": null
   }

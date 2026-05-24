@@ -2,129 +2,188 @@
 CLAWD ORE MINING AGENT — ONE-SHOT INTEGRATION BRIEFING
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-This document gives you everything you need to embed the Clawd ORE
-Mining Agent into your own site in a single pass. Read it once, then act.
+Drop this file to any agent that needs to embed or adapt the Clawd
+ORE Mining Agent. Read once, act immediately.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-WHAT IS IT?
+THE ONE-SHOT CURL COMMAND
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-The world's first AI-driven autonomous miner for the ORE v3 protocol on
-Solana. Claude (via OpenRouter or Anthropic direct) runs a continuous
-CLAWD LOOP — Observe → Orient → Decide → Act — reading on-chain state
-and choosing whether to deploy SOL, claim rewards, checkpoint, or hold,
-every tick.
+Interactive (prompts for your keys):
+  curl -fsSL https://x402.wtf/ore/install.sh | bash
 
-A live Socket.io dashboard broadcasts agent state in real time to a
-browser frontend: 5×5 square grid colored by EV, countdown ring, agent
-action feed, activity log.
+One-liner — all keys inline (no prompts):
+  DEEPSEEK_API_KEY=sk-... \
+  RPC=https://mainnet.helius-rpc.com/?api-key=KEY \
+  KEYPAIR=~/.config/solana/id.json \
+  curl -fsSL https://x402.wtf/ore/install.sh | bash
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-THE ORE v3 GAME (what Claude reasons about)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Dry run (no transactions — just watch the AI think live):
+  DRY_RUN=true \
+  DEEPSEEK_API_KEY=sk-... \
+  RPC=https://mainnet.helius-rpc.com/?api-key=KEY \
+  KEYPAIR=~/.config/solana/id.json \
+  curl -fsSL https://x402.wtf/ore/install.sh | bash
 
-• 25-square grid per round.
-• Mining window: ~60 seconds (controlled by board.endSlot).
-• Claim window: ~24 hours after mining closes (round.expiresAt).
-• Winning square chosen by on-chain RNG: XOR of four 8-byte chunks of
-  the slot hash → rng % 25.
-• Winning-square miners split all losing-square deployments proportionally.
-• All miners earn ORE token from the motherlode.
+Auto-start without the Y/N prompt:
+  AUTO_START=true DEEPSEEK_API_KEY=... RPC=... KEYPAIR=... \
+  curl -fsSL https://x402.wtf/ore/install.sh | bash
 
-Key on-chain accounts (all derived from oreV3EG1i9BEgiAJ8b177Z2S2rMarzak4NMv1kULvWv):
-  Board  PDA seeds: ["board"]          discriminator: 105
-  Round  PDA seeds: ["round", u64 LE]  discriminator: 109
-  Miner  PDA seeds: ["miner", pubkey]  discriminator: 103
-
-Key Board fields (byte offsets):
-  roundId   [8..16]   u64 LE
-  startSlot [16..24]  u64 LE
-  endSlot   [24..32]  u64 LE   ← use this for mining window timing
-
-Key Round fields (byte offsets):
-  deployed[0..24] [16..216]   25 × u64 LE (SOL lamports per square)
-  count[0..24]    [248..448]  25 × u64 LE (miners per square)
-  expiresAt       [448..456]  u64 LE     ← claim window deadline
-  motherlode      [456..464]  u64 LE
-  totalDeployed   [536..544]  u64 LE
-  totalMiners     [544..552]  u64 LE
-  slotHash        [216..248]  32 bytes   ← non-zero = settled
-  winningSquare   rng % 25 derived from slotHash chunks
+What the installer does:
+  1. Clones the repo to ~/.clawd/ore-miner (or detects local copy)
+  2. Checks Node >= 20, Cargo (optional)
+  3. Prompts for API key, RPC, keypair path
+  4. Writes .env
+  5. npm install
+  6. Optionally builds the ore-cli Rust binary
+  7. Runs --status to verify chain connectivity
+  8. Asks to start the agent (or auto-starts with AUTO_START=true)
+  9. Dashboard goes live at http://localhost:3333
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-FILE STRUCTURE
+AI BRAIN — DEEPSEEK (DEFAULT)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-agents/ore-miner/
-├── src/
-│   ├── index.ts       Entry point — CLI flags, dashboard server startup
-│   ├── agent.ts       CLAWD LOOP engine — OpenRouter/Claude, tool dispatch
-│   ├── server.ts      Express + Socket.io dashboard server
-│   ├── rpc.ts         On-chain state reader (binary deserialization)
-│   ├── strategy.ts    Board analysis — EV per square, timing, summary
-│   ├── tools.ts       Claude tool definitions (JSON schema)
-│   ├── cli.ts         Wraps ore-master/target/release/ore-cli binary
-│   ├── constants.ts   PDA seeds, program IDs, formatting helpers
-│   └── public/
-│       └── index.html Animated 5×5 dashboard (Socket.io client)
-├── package.json
-├── tsconfig.json
-└── .env.example
+The agent uses DeepSeek by default — cheapest frontier model with
+built-in thinking mode. The OpenAI SDK talks to api.deepseek.com.
 
-ore-master/           Rust workspace with the ore-cli binary
-  → cargo build --release  (produces ore-master/target/release/ore-cli)
+Provider priority (first key found wins):
+  1. DEEPSEEK_API_KEY   → https://api.deepseek.com
+  2. OPENROUTER_API_KEY → https://openrouter.ai/api/v1
+  3. ANTHROPIC_API_KEY  → https://api.anthropic.com/v1
+
+DeepSeek models:
+  deepseek-v4-flash   fast + cheap (default)
+  deepseek-v4-pro     max reasoning (thinking mode)
+
+Set DEEPSEEK_MODEL=deepseek-v4-pro to enable full chain-of-thought.
+The agent captures reasoning_content and surfaces it in the dashboard.
+
+Get a DeepSeek key: https://platform.deepseek.com
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ENVIRONMENT VARIABLES
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Required:
-  OPENROUTER_API_KEY   OpenRouter key (preferred)
-  — OR —
-  ANTHROPIC_API_KEY    Direct Anthropic key
-
-  RPC                  Solana RPC URL (Helius recommended)
+  DEEPSEEK_API_KEY     DeepSeek key (preferred)
+  — or OPENROUTER_API_KEY / ANTHROPIC_API_KEY
+  RPC                  Solana RPC URL
   KEYPAIR              Absolute path to Solana keypair JSON
 
 Optional:
-  OPENROUTER_MODEL     Model string (default: anthropic/claude-opus-4.7-fast)
+  DEEPSEEK_MODEL       deepseek-v4-flash (default) or deepseek-v4-pro
+  OPENROUTER_MODEL     When using OpenRouter
   MAX_DEPLOY_SOL       Max SOL per round (default: 0.1)
-  MIN_RESERVE_SOL      Min SOL to keep for gas (default: 0.05)
+  MIN_RESERVE_SOL      Min SOL kept for gas (default: 0.05)
   TICK_INTERVAL_MS     CLAWD loop interval ms (default: 60000)
-  DRY_RUN              true = observe + plan, no txns (default: false)
-  DASHBOARD_PORT       Port for live dashboard (default: 3333)
+  DRY_RUN              true = think+plan, no txns (default: false)
+  DASHBOARD_PORT       Live dashboard port (default: 3333)
+  AUTO_START           true = skip Y/N prompt in installer
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-HOW TO RUN
+WHAT IS IT?
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-1. Install dependencies:
-   cd agents/ore-miner && npm install
+The world's first AI-driven autonomous miner for the ORE v3 protocol on
+Solana. DeepSeek (or Claude) runs a continuous CLAWD LOOP —
+Observe → Orient → Decide → Act — reading on-chain state and choosing
+whether to deploy SOL, claim rewards, checkpoint, or hold, every tick.
 
-2. Build the Rust CLI (one-time):
-   cd ../../ore-master && cargo build --release
-
-3. Run status check (no keys needed):
-   RPC=https://mainnet.helius-rpc.com/?api-key=KEY \
-     node --import tsx/esm src/index.ts --status
-
-4. Observe mode (read-only, shows your wallet if KEYPAIR set):
-   RPC=... KEYPAIR=~/.config/solana/id.json \
-     node --import tsx/esm src/index.ts --observe
-
-5. Mine with dashboard (live agent + http://localhost:3333):
-   OPENROUTER_API_KEY=sk-or-... RPC=... KEYPAIR=... \
-     node --import tsx/esm src/index.ts --mine
-
-6. Dry run (agent reasons but sends no transactions):
-   DRY_RUN=true OPENROUTER_API_KEY=... RPC=... KEYPAIR=... \
-     node --import tsx/esm src/index.ts --mine
+A live Socket.io dashboard broadcasts agent state in real time to a
+browser: 5×5 square grid colored by EV, countdown ring, CLAWD LOOP
+phase badges, agent reasoning pane, scrolling activity log.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-SOCKET.IO DASHBOARD INTEGRATION
+THE ORE v3 GAME
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-The agent emits a single 'state' event every tick. Shape:
+• 25-square grid per round.
+• Mining window: ~60 seconds (controlled by board.endSlot).
+• Claim window: ~24 hours (round.expiresAt).
+• Winning square chosen by on-chain RNG: XOR of 4 chunks of slot hash → % 25.
+• Winning-square miners split all losing-square deployments proportionally.
+• All miners earn ORE token from the motherlode.
+
+Program ID: oreV3EG1i9BEgiAJ8b177Z2S2rMarzak4NMv1kULvWv
+
+Key accounts (all PDAs):
+  Board  seeds: ["board"]          disc: 105
+  Round  seeds: ["round", u64 LE]  disc: 109
+  Miner  seeds: ["miner", pubkey]  disc: 103
+
+Key offsets — Board:
+  roundId   [8..16]   u64 LE
+  startSlot [16..24]  u64 LE
+  endSlot   [24..32]  u64 LE   ← mining window deadline
+
+Key offsets — Round:
+  deployed[25] [16..216]   25 × u64 LE  (lamports per square)
+  count[25]    [248..448]  25 × u64 LE  (miners per square)
+  expiresAt    [448..456]  u64 LE        ← claim window deadline
+  motherlode   [456..464]  u64 LE
+  totalDeployed [536..544] u64 LE
+  totalMiners   [544..552] u64 LE
+  slotHash      [216..248] 32 bytes      ← non-zero = settled
+  winningSquare = Number((r1^r2^r3^r4) % 25n) where rx = BigUint64 at offsets 0,8,16,24
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FILE STRUCTURE (in solana-clawd repo)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+agents/ore-miner/
+├── install.sh             ← ONE-SHOT INSTALLER (this is what curl executes)
+├── .env.example
+├── package.json
+├── tsconfig.json
+└── src/
+    ├── index.ts           entry point — CLI flags, dashboard startup
+    ├── agent.ts           CLAWD LOOP — DeepSeek/Claude, tool dispatch
+    ├── server.ts          Express + Socket.io dashboard server
+    ├── rpc.ts             on-chain binary deserialization
+    ├── strategy.ts        EV per square, timing, board analysis
+    ├── tools.ts           AI tool definitions (JSON schema)
+    ├── cli.ts             wraps ore-master/target/release/ore-cli
+    ├── constants.ts       PDA seeds, program IDs, formatters
+    └── public/
+        └── index.html     animated 5×5 live dashboard
+
+ore-master/                Rust workspace (ore-cli binary)
+  cargo build --release    → ore-master/target/release/ore-cli
+
+Root npm scripts (solana-clawd):
+  npm run ore:status       check chain status
+  npm run ore:observe      read-only observe mode (+ wallet if KEYPAIR set)
+  npm run ore:miner        start the CLAWD LOOP agent
+  npm run ore:install      npm install the ore-miner package
+  npm run ore:build        build the ore-cli Rust binary
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+MANUAL COMMANDS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# Status (no keys needed)
+RPC=... npm run ore:status
+
+# Observe (wallet optional)
+RPC=... KEYPAIR=... npm run ore:observe
+
+# Dry run (agent reasons, no txns, dashboard at :3333)
+DRY_RUN=true DEEPSEEK_API_KEY=... RPC=... KEYPAIR=... npm run ore:miner
+
+# Live mining
+DEEPSEEK_API_KEY=... RPC=... KEYPAIR=... npm run ore:miner
+
+# Or from inside agents/ore-miner/:
+npm run mine       # full agent
+npm run observe    # read-only
+npm run status     # chain status
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SOCKET.IO STATE SHAPE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Agent emits 'state' event each tick:
 
 {
   tick: number,
@@ -132,19 +191,19 @@ The agent emits a single 'state' event every tick. Shape:
   miningOpen: boolean,
   miningSecondsRemaining: number,
   claimHoursRemaining: number,
-  totalDeployed: string,         // "10.5 SOL"
+  totalDeployed: string,         // "10.5"
   totalMiners: number,
-  motherlode: string,            // "0.0 ORE"
+  motherlode: string,            // "0.0"
   settled: boolean,
   winningSquare: number | null,
   squares: [{
     index: number,               // 0–24
-    deployed: string,            // "0.04 SOL"
+    deployed: string,            // "0.04"
     miners: number,
     ev: number,                  // expected value multiplier
     isUnderbet: boolean,
     isEmpty: boolean,
-    myDeployment: string | null, // null if no deployment on this square
+    myDeployment: string | null,
   }],
   wallet: {
     pubkey: string,
@@ -153,128 +212,72 @@ The agent emits a single 'state' event every tick. Shape:
     rewardsOre: string,
     checkpointNeeded: boolean,
   } | null,
-  agentAction: string,           // e.g. "ore_deploy"
-  agentReasoning: string,        // Claude's output summary
+  agentAction: string,           // "ore_deploy" / "hold" / etc.
+  agentReasoning: string,        // DeepSeek thinking_content or output summary
   loop: "observe"|"orient"|"decide"|"act"|"idle",
   log: [{ ts: number, level: "info"|"action"|"warn"|"error", msg: string }],
   dryRun: boolean,
-  timestamp: number,             // Date.now()
+  timestamp: number,
 }
 
-To embed in your site:
-  1. Add socket.io client script tag (served at /socket.io/socket.io.js by the agent server)
-  2. Connect: const socket = io('http://localhost:3333')  (or your proxied URL)
-  3. Listen: socket.on('state', (state) => { /* update your UI */ })
-
-The standalone dashboard is served at http://localhost:3333 (DASHBOARD_PORT).
-The public/ folder is served as static files — replace index.html with your own UI.
+Connect from your site:
+  import { io } from 'socket.io-client'
+  const socket = io('http://localhost:3333')
+  socket.on('state', updateYourUI)
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-EMBEDDING IN AN EXISTING NEXT.JS / REACT SITE
+EMBEDDING IN YOUR EXISTING SITE
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Option A — Sidecar process (simplest):
-  Run the agent as a separate process. In your Next.js app:
+Option A — Sidecar (simplest):
+  Run the agent as a separate process. Connect via socket.io-client.
   npm install socket.io-client
-  In a client component:
-    import { io } from 'socket.io-client'
-    const socket = io('http://localhost:3333')
-    socket.on('state', setState)
+  const socket = io('http://localhost:3333')
+  socket.on('state', setState)
 
-Option B — Embed the agent server inside Next.js:
-  In your custom server.ts (Next.js custom server):
-    import { createDashboardServer } from '../ore-miner/src/server.js'
-    import { runAgent } from '../ore-miner/src/agent.js'
-    const { io } = createDashboardServer(3333)
-    runAgent({ ..., io })  // runs in background
-  Then connect from the browser as in Option A.
+Option B — Embedded in Next.js custom server:
+  import { createDashboardServer } from './agents/ore-miner/src/server.js'
+  import { runAgent } from './agents/ore-miner/src/agent.js'
+  const { io } = createDashboardServer(3333)
+  runAgent({ rpcUrl, keypairPath, ..., io })   // runs in background
 
-Option C — API route + Server-Sent Events:
-  Skip Socket.io entirely. Poll the agent state via an API route that
-  reads from a shared in-memory store updated by runAgent callbacks.
-  Simpler but less real-time.
+Option C — Replace public/index.html:
+  Drop your own HTML into agents/ore-miner/src/public/
+  The Express server serves it as static files.
+  Connect to the same socket.io event — 'state'.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-CLAUDE TOOL INTERFACE
+STRATEGY LOGIC (what the AI decides)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Claude chooses one tool per tick:
+EV = (totalDeployed - squareDeployed) / squareDeployed
+Empty squares → EV = ∞ (deploy here first)
+Underbet (EV > 1.0) → statistically favorable
+Never deploy when miningOpen = false
+Never drop below minReserve SOL
+Checkpoint before claiming (checkpointNeeded must be false)
+Hold when < 15s remain in mining window
 
-  ore_observe_board      → reads Board PDA, returns roundId/startSlot/endSlot
-  ore_observe_round      → reads Round PDA, returns deployed/miners/EV per square
-  ore_observe_miner      → reads Miner PDA for wallet, returns rewards/checkpoint
-  ore_wallet_balance     → returns SOL balance
-  ore_analyze_strategy   → full board analysis + recommendation string
-  ore_deploy             → deploys amountSol (float) to squares[] (int array 0–24)
-  ore_claim              → claims pending SOL + ORE rewards
-  ore_checkpoint         → checkpoints miner (required before claiming)
-  hold                   → no-op, logs reason, waits next tick
-
-Tools call the ore-master CLI binary via subprocess (env vars: COMMAND,
-RPC, KEYPAIR, AMOUNT, SQUARES). DRY_RUN=true skips the subprocess.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-STRATEGIC LOGIC (what Claude is told)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-1. Empty squares have EV = ∞ — any deployment wins all others there.
-2. Underbet squares (EV > 1.0) are statistically favorable.
-3. Never deploy when miningOpen = false.
-4. Never drop below minReserve SOL.
-5. Checkpoint before claiming (checkpointNeeded must be false).
-6. Claim when rewardsSol > 0.01 SOL or significant ORE accrued.
-7. Hold when < 15 seconds remain in the mining window.
-
-The agent sees the full square grid, EV per square, round timing, miner
-state, wallet balance, and last 5 ticks of history in its context each tick.
+Tools available each tick (one per tick):
+  ore_observe_board      reads Board PDA
+  ore_observe_round      reads Round PDA + EV analysis
+  ore_observe_miner      reads Miner PDA for your wallet
+  ore_wallet_balance     SOL balance
+  ore_analyze_strategy   full board analysis + recommendation
+  ore_deploy             deploys amountSol to squares[] (array of 0–24)
+  ore_claim              claims pending SOL + ORE rewards
+  ore_checkpoint         checkpoints miner (required before claiming)
+  hold                   no-op, logs reason
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-KEY IMPLEMENTATION NOTES
+INTEGRATION CHECKLIST FOR YOUR AGENT
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-• TIMING: board.endSlot controls the ~60s mining window.
-  round.expiresAt controls the ~24h claim window. Never confuse them.
-  miningSecondsRemaining = (board.endSlot - currentSlot) * 0.4
-
-• BINARY DESERIALIZATION: All Solana account data is read as raw bytes.
-  Use BigInt for all u64 fields (JavaScript loses precision with Number).
-  Each field is little-endian. The discriminator is the first 8 bytes (u64 LE).
-
-• WINNING SQUARE: Computed from slotHash (32 bytes at offset 216 in Round):
-  const r1 = view.getBigUint64(0, true)
-  const r2 = view.getBigUint64(8, true)
-  const r3 = view.getBigUint64(16, true)
-  const r4 = view.getBigUint64(24, true)
-  const rng = r1 ^ r2 ^ r3 ^ r4
-  const winningSquare = Number(rng % 25n)
-  A non-zero slotHash means the round is settled.
-
-• OPENROUTER: Uses the OpenAI-compatible API at https://openrouter.ai/api/v1
-  with the openai npm package. Pass HTTP-Referer and X-Title headers.
-  Model: anthropic/claude-opus-4.7-fast (or override with OPENROUTER_MODEL).
-
-• TICK TIMING: Agent adapts loop speed to game state:
-  - < 30s mining window left → 10s ticks
-  - Round settled or mining closed → 15s ticks
-  - Normal → TICK_INTERVAL_MS (default 60s)
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-QUICK START COMMANDS CHEATSHEET
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-# Status check (no wallet required)
-RPC=https://mainnet.helius-rpc.com/?api-key=KEY npm run status
-
-# Observer (wallet optional)
-RPC=... KEYPAIR=... npm run observe
-
-# Dry run (agent thinks, no txns, dashboard at :3333)
-DRY_RUN=true OPENROUTER_API_KEY=... RPC=... KEYPAIR=... npm run mine
-
-# Live mining (dashboard at :3333)
-OPENROUTER_API_KEY=... RPC=... KEYPAIR=... npm run mine
-
-# Custom port dashboard
-DASHBOARD_PORT=8080 ... npm run mine
-
+□ Get a DeepSeek key → https://platform.deepseek.com
+□ Get a Helius RPC key → https://helius.dev (free tier fine)
+□ Have a Solana keypair with >= 0.15 SOL (0.1 deploy + 0.05 gas)
+□ curl -fsSL https://x402.wtf/ore/install.sh | bash
+□ Open http://localhost:3333
+□ Copy agents/ore-miner/src/public/index.html to your site and connect socket
+□ Set DEEPSEEK_MODEL=deepseek-v4-pro for full chain-of-thought reasoning
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

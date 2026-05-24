@@ -1,7 +1,7 @@
 {
   "$schema": "https://x402.wtf/schema/clawdAgentCatalog.v1.json",
   "apiVersion": "1.0",
-  "generatedAt": "2026-05-24T15:22:03.246Z",
+  "generatedAt": "2026-05-24T20:34:54.440Z",
   "hub": {
     "gallery": "https://x402.wtf/agents",
     "mint": "https://x402.wtf/agents/mint",
@@ -9,15 +9,15 @@
     "api": "https://x402.wtf/api/agents"
   },
   "stats": {
-    "totalAgents": 136,
-    "totalOneShots": 43,
-    "totalFeatured": 24,
+    "totalAgents": 137,
+    "totalOneShots": 44,
+    "totalFeatured": 25,
     "totalTemplates": 5,
     "byCategory": {
       "trading": 9,
       "education": 6,
       "security": 8,
-      "defi": 67,
+      "defi": 68,
       "research": 1,
       "governance": 2,
       "analytics": 11,
@@ -27,7 +27,7 @@
       "nft": 2,
       "payments": 25
     },
-    "metaplexEnabledAgents": 51,
+    "metaplexEnabledAgents": 52,
     "tradingCapableAgents": 12,
     "launchCapableAgents": 1,
     "mintCapableAgents": 2
@@ -81,7 +81,7 @@
       }
     ],
     "coverage": {
-      "agent-registry": 51,
+      "agent-registry": 52,
       "genesis": 1,
       "core": 3,
       "token-metadata": 4,
@@ -1576,6 +1576,58 @@
         "mint": "/agents/mint?template=nft-liquidity-advisor",
         "mcp": "/api/agents/catalog/nft-liquidity-advisor.json",
         "registration": "/api/agents/registry/nft-liquidity-advisor.json"
+      }
+    },
+    {
+      "identifier": "ore-miner",
+      "title": "Clawd ORE Mining Agent",
+      "description": "World's first AI-driven autonomous miner for the ORE v3 25-square game on Solana. Claude-powered CLAWD LOOP with live animated dashboard.",
+      "avatar": "⛏️",
+      "tags": [
+        "ore",
+        "mining",
+        "solana",
+        "clawd-loop",
+        "autonomous",
+        "ooda",
+        "dashboard",
+        "one-shot",
+        "openrouter",
+        "solana-clawd",
+        "ore-v3",
+        "ai-agent"
+      ],
+      "category": "defi",
+      "author": "openclawd",
+      "createdAt": "2026-05-24",
+      "oneShot": true,
+      "featured": true,
+      "openingMessage": "⛏️ Clawd ORE Mining Agent — AI-driven autonomous miner for the ORE v3 25-square game. Live CLAWD LOOP with animated dashboard at localhost:3333.",
+      "openingQuestions": [
+        "What's the current round status and best squares to deploy to?",
+        "Run a dry-run to see what the agent would do right now",
+        "How do I set up my keypair and start mining?",
+        "Explain the ORE v3 EV formula and strategy"
+      ],
+      "tokenUsage": 512,
+      "capabilities": [
+        "read-only",
+        "deploy-sol",
+        "claim-rewards",
+        "checkpoint-miner",
+        "autonomous-loop"
+      ],
+      "metaplexSkills": [
+        "agent-registry"
+      ],
+      "payment": null,
+      "agentToken": null,
+      "deploy": {
+        "json": "/api/agents/catalog/ore-miner.json",
+        "chat": "/agents/chat?agent=ore-miner",
+        "mint": "/agents/mint?template=ore-miner",
+        "mcp": "/api/agents/catalog/ore-miner.json",
+        "registration": "/api/agents/registry/ore-miner.json"
       }
     },
     {
@@ -3080,6 +3132,58 @@
         "mint": "/agents/mint?template=liquidation-risk-manager",
         "mcp": "/api/agents/catalog/liquidation-risk-manager.json",
         "registration": "/api/agents/registry/liquidation-risk-manager.json"
+      }
+    },
+    {
+      "identifier": "ore-miner",
+      "title": "Clawd ORE Mining Agent",
+      "description": "World's first AI-driven autonomous miner for the ORE v3 25-square game on Solana. Claude-powered CLAWD LOOP with live animated dashboard.",
+      "avatar": "⛏️",
+      "tags": [
+        "ore",
+        "mining",
+        "solana",
+        "clawd-loop",
+        "autonomous",
+        "ooda",
+        "dashboard",
+        "one-shot",
+        "openrouter",
+        "solana-clawd",
+        "ore-v3",
+        "ai-agent"
+      ],
+      "category": "defi",
+      "author": "openclawd",
+      "createdAt": "2026-05-24",
+      "oneShot": true,
+      "featured": true,
+      "openingMessage": "⛏️ Clawd ORE Mining Agent — AI-driven autonomous miner for the ORE v3 25-square game. Live CLAWD LOOP with animated dashboard at localhost:3333.",
+      "openingQuestions": [
+        "What's the current round status and best squares to deploy to?",
+        "Run a dry-run to see what the agent would do right now",
+        "How do I set up my keypair and start mining?",
+        "Explain the ORE v3 EV formula and strategy"
+      ],
+      "tokenUsage": 512,
+      "capabilities": [
+        "read-only",
+        "deploy-sol",
+        "claim-rewards",
+        "checkpoint-miner",
+        "autonomous-loop"
+      ],
+      "metaplexSkills": [
+        "agent-registry"
+      ],
+      "payment": null,
+      "agentToken": null,
+      "deploy": {
+        "json": "/api/agents/catalog/ore-miner.json",
+        "chat": "/agents/chat?agent=ore-miner",
+        "mint": "/agents/mint?template=ore-miner",
+        "mcp": "/api/agents/catalog/ore-miner.json",
+        "registration": "/api/agents/registry/ore-miner.json"
       }
     },
     {
@@ -5229,6 +5333,58 @@
         "mint": "/agents/mint?template=nft-liquidity-advisor",
         "mcp": "/api/agents/catalog/nft-liquidity-advisor.json",
         "registration": "/api/agents/registry/nft-liquidity-advisor.json"
+      }
+    },
+    {
+      "identifier": "ore-miner",
+      "title": "Clawd ORE Mining Agent",
+      "description": "World's first AI-driven autonomous miner for the ORE v3 25-square game on Solana. Claude-powered CLAWD LOOP with live animated dashboard.",
+      "avatar": "⛏️",
+      "tags": [
+        "ore",
+        "mining",
+        "solana",
+        "clawd-loop",
+        "autonomous",
+        "ooda",
+        "dashboard",
+        "one-shot",
+        "openrouter",
+        "solana-clawd",
+        "ore-v3",
+        "ai-agent"
+      ],
+      "category": "defi",
+      "author": "openclawd",
+      "createdAt": "2026-05-24",
+      "oneShot": true,
+      "featured": true,
+      "openingMessage": "⛏️ Clawd ORE Mining Agent — AI-driven autonomous miner for the ORE v3 25-square game. Live CLAWD LOOP with animated dashboard at localhost:3333.",
+      "openingQuestions": [
+        "What's the current round status and best squares to deploy to?",
+        "Run a dry-run to see what the agent would do right now",
+        "How do I set up my keypair and start mining?",
+        "Explain the ORE v3 EV formula and strategy"
+      ],
+      "tokenUsage": 512,
+      "capabilities": [
+        "read-only",
+        "deploy-sol",
+        "claim-rewards",
+        "checkpoint-miner",
+        "autonomous-loop"
+      ],
+      "metaplexSkills": [
+        "agent-registry"
+      ],
+      "payment": null,
+      "agentToken": null,
+      "deploy": {
+        "json": "/api/agents/catalog/ore-miner.json",
+        "chat": "/agents/chat?agent=ore-miner",
+        "mint": "/agents/mint?template=ore-miner",
+        "mcp": "/api/agents/catalog/ore-miner.json",
+        "registration": "/api/agents/registry/ore-miner.json"
       }
     },
     {
