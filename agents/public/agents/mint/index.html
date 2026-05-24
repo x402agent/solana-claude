@@ -59,14 +59,17 @@
 
   <h3>1 · Scaffold with the Agent Kit</h3>
   <pre><code>npm i -g @solana-clawd/agent-kit
-clawd-agent new my-agent          # writes src/my-agent.json from the template
-clawd-agent validate my-agent     # checks Solana Clawd ownership + schema</code></pre>
+clawd-kit new my-agent          # writes src/my-agent.json from the template
+clawd-kit validate my-agent     # checks Solana Clawd ownership + schema</code></pre>
 
   <h3>2 · Build registration documents</h3>
-  <pre><code>clawd-agent register my-agent --target metaplex   # ERC-8004 metaplex-agent-registry doc
-clawd-agent register my-agent --target google     # Google A2A agent card</code></pre>
+  <pre><code>clawd-kit register my-agent --target metaplex   # ERC-8004 metaplex-agent-registry doc
+clawd-kit register my-agent --target google     # Google A2A agent card</code></pre>
 
   <h3>3 · Mint on-chain (Metaplex)</h3>
+  <pre><code>clawd-agent mint-free --network devnet --owner &lt;YOUR_SOLANA_PUBKEY&gt; \
+  --name "My Agent" --uri https://example.com/agent.json --service MCP=https://...</code></pre>
+  <p class="lede">Or POST to the hosted gasless gateway:</p>
   <pre><code id="mintcurl">curl -X POST https://x402.wtf/api/mint/agent \
   -H 'Content-Type: application/json' \
   -d '{"templateId":"TEMPLATE_ID","ownerPubkey":"&lt;YOUR_SOLANA_PUBKEY&gt;"}'</code></pre>

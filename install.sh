@@ -791,6 +791,25 @@ elif command -v npm >/dev/null 2>&1; then
   else
     warn "clawd-agent not on PATH — fallback: npx -p @openclawdsolana/clawd-tui clawd-agent"
   fi
+
+  # Solana Clawd Agent Kit CLI (design/validate/register your own agents).
+  CLAWD_KIT_BIN="$(command -v clawd-kit 2>/dev/null || echo '')"
+  if [ -n "$CLAWD_KIT_BIN" ]; then
+    ok "Agent Kit CLI ready at $CLAWD_KIT_BIN"
+    ln -sf "$CLAWD_KIT_BIN" "$BIN_DIR/clawd-kit" 2>/dev/null || true
+  elif [ -f "$SRC_DIR/agent-kit/packages/agent-kit/dist/cli.js" ]; then
+    ln -sf "$SRC_DIR/agent-kit/packages/agent-kit/dist/cli.js" "$BIN_DIR/clawd-kit" 2>/dev/null \
+      && chmod +x "$SRC_DIR/agent-kit/packages/agent-kit/dist/cli.js" 2>/dev/null \
+      && ok "linked clawd-kit (agent kit CLI) → $BIN_DIR/clawd-kit"
+  elif [ -d "$SRC_DIR/agent-kit" ] && command -v pnpm >/dev/null 2>&1; then
+    ( cd "$SRC_DIR/agent-kit" && pnpm install --silent && pnpm -r build ) >/dev/null 2>&1 \
+      && ln -sf "$SRC_DIR/agent-kit/packages/agent-kit/dist/cli.js" "$BIN_DIR/clawd-kit" 2>/dev/null \
+      && chmod +x "$SRC_DIR/agent-kit/packages/agent-kit/dist/cli.js" 2>/dev/null \
+      && ok "built clawd-kit (agent kit CLI) → $BIN_DIR/clawd-kit" \
+      || warn "clawd-kit build skipped — run: (cd agent-kit && pnpm install && pnpm -r build)"
+  else
+    warn "clawd-kit not available — install @solana-clawd/agent-kit or build agent-kit/ locally"
+  fi
 else
   warn "clawd npm CLIs skipped — npm not found"
 fi
@@ -1048,8 +1067,10 @@ printf "  ${DIM}SDK Graph : $OPENCLAWD_SDK_GRAPH_URL${RESET}\n"
 printf "  ${DIM}SDK API   : $OPENCLAWD_SDK_MANIFEST_URL${RESET}\n"
 printf "  ${DIM}x402     : https://x402.wtf${RESET}\n"
 printf "  ${DIM}Agents   : https://x402.wtf/api/agents${RESET}\n"
-printf "  ${DIM}Catalog  : https://x402.wtf/api/agents/catalog${RESET}\n"
+printf "  ${DIM}Catalog  : https://x402.wtf/agents  (browse all agents)${RESET}\n"
 printf "  ${DIM}Registry : https://x402.wtf/api/agents/registry${RESET}\n"
+printf "  ${DIM}Build    : clawd-kit new my-agent   # design your own (agent kit)${RESET}\n"
+printf "  ${DIM}Mint     : clawd-agent mint-free    # register on Metaplex${RESET}\n"
 printf "  ${DIM}Templates: $SRC_DIR/agents/templates/index.json${RESET}\n"
 printf "  ${DIM}Skill Hub: $SRC_DIR/skills/index.json${RESET}\n"
 printf "  ${DIM}Attest   : $SRC_DIR/attestation/README.md${RESET}\n"

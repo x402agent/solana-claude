@@ -26,22 +26,32 @@ This is not the upstream Solana Agent Kit plugin bundle. The imported plugin pac
 
 ## Design, validate, and mint your own agent
 
-The `clawd-agent` CLI ships with `@solana-clawd/agent-kit`:
+The `clawd-kit` CLI ships with `@solana-clawd/agent-kit`:
 
 ```bash
-npm i -g @solana-clawd/agent-kit      # provides the `clawd-agent` binary
+npm i -g @solana-clawd/agent-kit      # provides the `clawd-kit` binary
 
-clawd-agent list                       # every agent in the catalog (or --remote from x402.wtf)
-clawd-agent show clawd-pump-sdk-expert # details + deploy/chat/mint/mcp endpoints
-clawd-agent new my-agent               # scaffold src/my-agent.json (Solana Clawd owned)
-clawd-agent validate my-agent          # ownership + schema check
+clawd-kit list                       # every agent in the catalog (or --remote from x402.wtf)
+clawd-kit show clawd-pump-sdk-expert # details + deploy/chat/mint/mcp endpoints
+clawd-kit new my-agent               # scaffold src/my-agent.json (Solana Clawd owned)
+clawd-kit validate my-agent          # ownership + schema check
 
-# Register / mint the agent identity
-clawd-agent register my-agent --target metaplex   # ERC-8004 metaplex-agent-registry doc
-clawd-agent register my-agent --target google     # Google A2A agent card
+# Build registration documents
+clawd-kit register my-agent --target metaplex   # ERC-8004 metaplex-agent-registry doc
+clawd-kit register my-agent --target google     # Google A2A agent card
 ```
 
 Point the CLI at a checkout with `--agents-dir DIR` or `SOLANA_CLAWD_AGENTS_DIR`.
+
+To actually **mint** the agent identity on-chain, use the `clawd-agent` CLI from
+`@openclawdsolana/clawd-tui` (installed by `install.sh`):
+
+```bash
+clawd-agent mint --network devnet --keypair ~/.config/solana/id.json \
+  --name "My Agent" --uri https://example.com/agent.json --service MCP=https://... --yes
+clawd-agent mint-free --network devnet --owner <YOUR_SOLANA_PUBKEY> --name "My Agent" ...
+```
+
 The hosted, gasless mint flow lives at `https://x402.wtf/agents/mint`.
 
 ## Install

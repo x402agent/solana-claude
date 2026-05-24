@@ -1,11 +1,13 @@
 #!/usr/bin/env node
-// clawd-agent — design, validate, and register Solana Clawd agents.
+// clawd-kit — design, validate, and register Solana Clawd agents.
+// (Complements `clawd-agent` from @openclawdsolana/clawd-tui, which does the
+//  on-chain Metaplex mint via `clawd-agent mint` / `mint-free`.)
 //
-//   clawd-agent list [--category X] [--json] [--remote]
-//   clawd-agent show <id>
-//   clawd-agent new <id> [--title T] [--description D] [--category C] [--avatar A]
-//   clawd-agent validate <id|--all>
-//   clawd-agent register <id> --target metaplex|google [--out FILE] [--host URL]
+//   clawd-kit list [--category X] [--json] [--remote]
+//   clawd-kit show <id>
+//   clawd-kit new <id> [--title T] [--description D] [--category C] [--avatar A]
+//   clawd-kit validate <id|--all>
+//   clawd-kit register <id> --target metaplex|google [--out FILE] [--host URL]
 
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
@@ -66,7 +68,7 @@ function log(line = ""): void {
 }
 
 function fail(message: string): never {
-  stderr.write(`clawd-agent: ${message}\n`);
+  stderr.write(`clawd-kit: ${message}\n`);
   exit(1);
 }
 
@@ -136,7 +138,7 @@ async function cmdList(flags: Flags): Promise<void> {
 
 function cmdShow(flags: Flags): void {
   const id = (flags._ as string[])[1];
-  if (!id) fail("usage: clawd-agent show <id>");
+  if (!id) fail("usage: clawd-kit show <id>");
   const kit = kitFor(flags);
   const agent = kit.loadAgent(id);
   const entry = kit.toCatalogEntry(agent);
@@ -152,7 +154,7 @@ function cmdShow(flags: Flags): void {
 function cmdNew(flags: Flags): void {
   const id = (flags._ as string[])[1];
   if (!id || !/^[a-z0-9-]+$/.test(id)) {
-    fail("usage: clawd-agent new <kebab-id>  (lowercase letters, digits, dashes)");
+    fail("usage: clawd-kit new <kebab-id>  (lowercase letters, digits, dashes)");
   }
   const kit = kitFor(flags);
   const target = join(kit.srcDir, `${id}.json`);
@@ -189,7 +191,7 @@ function cmdNew(flags: Flags): void {
   writeFileSync(target, `${JSON.stringify(agent, null, 2)}\n`, "utf8");
   kit.assertSolanaClawdAgent(agent);
   log(`Created ${target}`);
-  log("Next: edit config.systemRole, then `clawd-agent validate " + id + "`");
+  log("Next: edit config.systemRole, then `clawd-kit validate " + id + "`");
 }
 
 function cmdValidate(flags: Flags): void {
@@ -197,7 +199,7 @@ function cmdValidate(flags: Flags): void {
   const ids = flags.all
     ? kit.listAgents().map((a) => a.identifier)
     : [(flags._ as string[])[1]].filter(Boolean) as string[];
-  if (ids.length === 0) fail("usage: clawd-agent validate <id> | --all");
+  if (ids.length === 0) fail("usage: clawd-kit validate <id> | --all");
 
   let ok = 0;
   for (const id of ids) {
@@ -217,7 +219,7 @@ function cmdRegister(flags: Flags): void {
   const id = (flags._ as string[])[1];
   const target = flags.target as string | undefined;
   if (!id || (target !== "metaplex" && target !== "google")) {
-    fail("usage: clawd-agent register <id> --target metaplex|google [--out FILE] [--host URL]");
+    fail("usage: clawd-kit register <id> --target metaplex|google [--out FILE] [--host URL]");
   }
   const kit = kitFor(flags);
   const agent = kit.loadAgent(id);
@@ -239,7 +241,7 @@ function cmdRegister(flags: Flags): void {
 }
 
 function usage(): void {
-  log("clawd-agent — design, validate, and register Solana Clawd agents\n");
+  log("clawd-kit — design, validate, and register Solana Clawd agents\n");
   log("Commands:");
   log("  list [--category X] [--json] [--remote] [--host URL]");
   log("  show <id>");
@@ -247,6 +249,7 @@ function usage(): void {
   log("  validate <id> | --all");
   log("  register <id> --target metaplex|google [--out FILE] [--host URL]");
   log("\nGlobal: --agents-dir DIR  (or SOLANA_CLAWD_AGENTS_DIR)");
+  log("On-chain mint: `clawd-agent mint` / `clawd-agent mint-free` (clawd-tui)");
   log("Docs: https://x402.wtf/agents/mint");
 }
 
@@ -275,7 +278,7 @@ async function main(): Promise<void> {
       usage();
       break;
     default:
-      fail(`unknown command: ${command} (try \`clawd-agent help\`)`);
+      fail(`unknown command: ${command} (try \`clawd-kit help\`)`);
   }
 }
 
