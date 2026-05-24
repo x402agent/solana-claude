@@ -71,7 +71,7 @@ function OreBoardGrid({ squares }: { squares: OreSquare[] }) {
 
 function OreBoardScene({ squares }: { squares: OreSquare[] }) {
   return (
-    <Canvas camera={{ position: [3.9, 4.2, 5.6], fov: 42 }}>
+    <Canvas camera={{ position: [3.9, 4.2, 5.6], fov: 42 }} gl={{ preserveDrawingBuffer: true }}>
       <color attach="background" args={["#020405"]} />
       <fog attach="fog" args={["#020405", 7, 14]} />
       <ambientLight intensity={0.55} />
