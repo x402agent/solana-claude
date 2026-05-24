@@ -17,7 +17,7 @@ interface OreMiningPageProps {
   state: DashboardState;
 }
 
-function OreBoardScene({ squares }: { squares: OreSquare[] }) {
+function OreBoardGrid({ squares }: { squares: OreSquare[] }) {
   const group = useRef<Group>(null);
   const maxLamports = useMemo(
     () => Math.max(1, ...squares.map((square) => square.lamports)),
@@ -30,48 +30,54 @@ function OreBoardScene({ squares }: { squares: OreSquare[] }) {
   });
 
   return (
+    <group ref={group} rotation={[-0.55, 0, 0.68]}>
+      {squares.map((square) => {
+        const x = (square.id % 5 - 2) * 0.72;
+        const z = (Math.floor(square.id / 5) - 2) * 0.72;
+        const weight = square.lamports / maxLamports;
+        const height = 0.08 + weight * 0.72;
+        const color = square.selected ? "#ffd166" : square.lamports > 0 ? "#14f195" : "#20323a";
+        return (
+          <group key={square.id} position={[x, 0, z]}>
+            <mesh position={[0, height / 2, 0]}>
+              <boxGeometry args={[0.56, height, 0.56]} />
+              <meshStandardMaterial
+                color={color}
+                emissive={square.selected ? "#6a4300" : square.lamports > 0 ? "#063d27" : "#071014"}
+                metalness={0.42}
+                roughness={0.34}
+              />
+            </mesh>
+            <mesh position={[0, -0.035, 0]}>
+              <boxGeometry args={[0.62, 0.035, 0.62]} />
+              <meshStandardMaterial color="#071015" roughness={0.78} />
+            </mesh>
+            <Text
+              position={[0, height + 0.08, 0]}
+              rotation={[-Math.PI / 2, 0, 0]}
+              fontSize={0.12}
+              color="#d9fff0"
+              anchorX="center"
+              anchorY="middle"
+            >
+              {square.id}
+            </Text>
+          </group>
+        );
+      })}
+    </group>
+  );
+}
+
+function OreBoardScene({ squares }: { squares: OreSquare[] }) {
+  return (
     <Canvas camera={{ position: [3.9, 4.2, 5.6], fov: 42 }}>
       <color attach="background" args={["#020405"]} />
       <fog attach="fog" args={["#020405", 7, 14]} />
       <ambientLight intensity={0.55} />
       <directionalLight position={[3, 6, 4]} intensity={2.5} color="#f7d774" />
       <pointLight position={[-4, 3, -2]} intensity={10} color="#14f195" />
-      <group ref={group} rotation={[-0.55, 0, 0.68]}>
-        {squares.map((square) => {
-          const x = (square.id % 5 - 2) * 0.72;
-          const z = (Math.floor(square.id / 5) - 2) * 0.72;
-          const weight = square.lamports / maxLamports;
-          const height = 0.08 + weight * 0.72;
-          const color = square.selected ? "#ffd166" : square.lamports > 0 ? "#14f195" : "#20323a";
-          return (
-            <group key={square.id} position={[x, 0, z]}>
-              <mesh position={[0, height / 2, 0]}>
-                <boxGeometry args={[0.56, height, 0.56]} />
-                <meshStandardMaterial
-                  color={color}
-                  emissive={square.selected ? "#6a4300" : square.lamports > 0 ? "#063d27" : "#071014"}
-                  metalness={0.42}
-                  roughness={0.34}
-                />
-              </mesh>
-              <mesh position={[0, -0.035, 0]}>
-                <boxGeometry args={[0.62, 0.035, 0.62]} />
-                <meshStandardMaterial color="#071015" roughness={0.78} />
-              </mesh>
-              <Text
-                position={[0, height + 0.08, 0]}
-                rotation={[-Math.PI / 2, 0, 0]}
-                fontSize={0.12}
-                color="#d9fff0"
-                anchorX="center"
-                anchorY="middle"
-              >
-                {square.id}
-              </Text>
-            </group>
-          );
-        })}
-      </group>
+      <OreBoardGrid squares={squares} />
       <OrbitControls enablePan={false} minDistance={4.5} maxDistance={8} />
     </Canvas>
   );
