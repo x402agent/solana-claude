@@ -82,25 +82,31 @@ export function analyzeBoard(round: RoundState, currentSlot: bigint, boardEndSlo
 
   const avgDeployedPerSquare = total > 0n ? total / 25n : 0n;
 
-  // Slot timing (~400ms per slot on Solana)
-  const slotsRemaining = round.expiresAt > currentSlot
+  // Mining window uses board.endSlot; claim window uses round.expiresAt.
+  // Each ORE round has a ~60s mining window followed by a ~24h claim window.
+  const endSlot = boardEndSlot ?? 0n;
+  const miningOpen = endSlot > 0n && currentSlot < endSlot;
+  const miningSlotRemaining = miningOpen ? endSlot - currentSlot : 0n;
+  const miningSecondsRemaining = Number(miningSlotRemaining) * 0.4;
+
+  const claimSlotRemaining = round.expiresAt > currentSlot
     ? round.expiresAt - currentSlot
     : 0n;
-  const secondsRemaining = Number(slotsRemaining) * 0.4;
-  const roundDuration = round.expiresAt - (round.expiresAt - slotsRemaining > 0n ? 0n : round.expiresAt);
-  const roundProgress = roundDuration > 0n
-    ? 1 - Number(slotsRemaining) / Number(round.expiresAt)
+
+  const roundDuration = endSlot > 0n ? endSlot - (endSlot - miningSlotRemaining) : 150n;
+  const roundProgress = miningOpen && roundDuration > 0n
+    ? 1 - Number(miningSlotRemaining) / Number(roundDuration)
     : 1.0;
 
   const emptyCount = bottomSquares.length;
   const summary = [
-    `Round ${round.id}: ${secondsRemaining.toFixed(0)}s remaining (${slotsRemaining} slots)`,
+    `Round ${round.id}: mining ${miningOpen ? `OPEN — ${miningSecondsRemaining.toFixed(0)}s left` : 'CLOSED'} | claim window ${(Number(claimSlotRemaining) * 0.4 / 3600).toFixed(1)}h left`,
     `Total deployed: ${solAmount(total)} SOL across ${round.totalMiners} miners`,
     `Empty squares: ${emptyCount}/25 | Top 5 EV squares: [${topSquares.join(', ')}]`,
     `ORE motherlode: ${round.motherlode} grams`,
     round.slotHashRevealed
       ? `ROUND SETTLED — winning square: ${round.winningSquare}`
-      : 'Round still open',
+      : 'Slot hash not yet revealed',
   ].join('\n');
 
   return {
@@ -111,8 +117,10 @@ export function analyzeBoard(round: RoundState, currentSlot: bigint, boardEndSlo
     bottomSquares,
     avgDeployedPerSquare,
     roundProgress,
-    slotsRemaining,
-    secondsRemaining,
+    miningOpen,
+    miningSlotRemaining,
+    miningSecondsRemaining,
+    claimSlotRemaining,
     summary,
   };
 }
