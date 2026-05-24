@@ -24,6 +24,7 @@ import { loadSkills } from "./skills/loader.js";
 import { initStateRepo } from "./git/state-versioning.js";
 import { createSocialClient } from "./social/client.js";
 import { createConvexClient } from "./clawd/convex-client.js";
+import { parseOreMinerArgs, runOreMiner, showOreStatus } from "./ore/miner.js";
 import type { AutomatonIdentity, AgentState, Skill, SocialClientInterface, ConvexAgentClient } from "./types.js";
 
 const VERSION = "0.2.0";
@@ -50,12 +51,32 @@ Usage:
   clawd-automaton --provision    Provision API key via SIWE
   clawd-automaton --status       Show current automaton status
   clawd-automaton --goblin       Run devnet-only paper Goblin OODA trading mode
+  clawd-automaton --ore-miner    Run the ORE automation miner loop
+  clawd-automaton --ore-status   Show ORE board/miner status through ore-master
   clawd-automaton --version      Show version
   clawd-automaton --help         Show this help
 
 Environment:
   CLAWD_API_URL       CLAWD Runtime API URL (default: https://api.x402.wtf)
   CLAWD_API_KEY       CLAWD Runtime API key (overrides config)
+  ORE_KEYPAIR         Solana keypair JSON for ORE mining
+  ORE_RPC_URL         Solana RPC URL for ORE mining
+
+ORE Miner Options:
+  --ore-setup                         Configure on-chain ORE automation before running
+  --ore-once                          Run one miner tick and exit
+  --ore-keypair <path>                Solana keypair JSON
+  --ore-rpc <url>                     Solana RPC URL
+  --ore-amount-sol <sol>              Per-square deploy amount
+  --ore-deposit-sol <sol>             Automation deposit amount
+  --ore-strategy <random|preferred|discretionary>
+  --ore-square <0-24>                 Single square selection
+  --ore-squares <csv>                 Comma-separated square selection
+  --ore-mask <u64>                    Raw square bitmask
+  --ore-num-squares <n>               Random strategy square count
+  --ore-authority <pubkey>            Miner authority for executor mode
+  --ore-claim-every <ticks>           Claim rewards every N ticks in authority mode
+  --ore-deploy-all                    Allow direct all-square deployment
 `);
     process.exit(0);
   }
@@ -86,6 +107,16 @@ Environment:
   if (args.includes("--status")) {
     await showStatus();
     process.exit(0);
+  }
+
+  if (args.includes("--ore-status")) {
+    await showOreStatus(parseOreMinerArgs(args));
+    process.exit(0);
+  }
+
+  if (args.includes("--ore-miner")) {
+    await runOreMiner(parseOreMinerArgs(args));
+    return;
   }
 
   if (args.includes("--goblin")) {

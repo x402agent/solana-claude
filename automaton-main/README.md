@@ -148,6 +148,20 @@ clawd-automaton --run
 # Show runtime status
 clawd-automaton --status
 
+# Show ORE board/miner status through the vendored ore-master workspace
+ORE_KEYPAIR=~/.config/solana/id.json \
+ORE_RPC_URL=https://your-rpc.example \
+clawd-automaton --ore-status
+
+# Configure ORE on-chain automation, then run the miner once
+ORE_KEYPAIR=~/.config/solana/id.json \
+ORE_RPC_URL=https://your-rpc.example \
+clawd-automaton --ore-miner --ore-setup --ore-once \
+  --ore-amount-sol 0.001 \
+  --ore-deposit-sol 0.05 \
+  --ore-strategy random \
+  --ore-num-squares 1
+
 # Interactive setup wizard
 clawd-automaton --setup
 
@@ -160,6 +174,36 @@ clawd-automaton --provision
 # Devnet paper Goblin OODA trading mode
 clawd-automaton --goblin
 ```
+
+## ORE Mining Integration
+
+`automaton-main` integrates the sibling [`../ore-master`](../ore-master) workspace as a local ORE execution backend. The TypeScript automaton runner shells into the Rust `ore-cli`, so the protocol account layouts and instruction builders stay sourced from the vendored ORE program/API code.
+
+Available package scripts:
+
+```bash
+pnpm ore:build    # cargo build -p ore-cli
+pnpm ore:cli      # raw ore-cli bridge; set COMMAND=board/miner/etc.
+pnpm ore:status   # board + miner status
+pnpm ore:miner    # automated miner loop
+```
+
+Core ORE flags and env:
+
+| Option | Env | Purpose |
+| --- | --- | --- |
+| `--ore-keypair` | `ORE_KEYPAIR` or `KEYPAIR` | Solana keypair JSON used to sign ORE transactions |
+| `--ore-rpc` | `ORE_RPC_URL`, `RPC`, or `SOLANA_RPC_URL` | Solana RPC endpoint |
+| `--ore-setup` | `ORE_SETUP=1` | Send ORE `Automate` before running |
+| `--ore-amount-sol` / `--ore-amount-lamports` | `ORE_AMOUNT_SOL` / `ORE_AMOUNT_LAMPORTS` | Per-square SOL deployment amount |
+| `--ore-deposit-sol` / `--ore-deposit-lamports` | `ORE_DEPOSIT_SOL` / `ORE_DEPOSIT_LAMPORTS` | SOL deposited into the ORE automation account |
+| `--ore-strategy` | `ORE_STRATEGY` | `random`, `preferred`, or `discretionary` |
+| `--ore-square`, `--ore-squares`, `--ore-mask` | matching env names | Square selection for direct/preferred/discretionary deploys |
+| `--ore-num-squares` | `ORE_NUM_SQUARES` | Random strategy square count |
+| `--ore-authority` | `ORE_AUTHORITY` | Miner authority when this signer is only the automation executor |
+| `--ore-once` | `ORE_ONCE=1` | Run one board/miner/deploy tick and exit |
+
+The miner loop checks the board, reads miner state, checkpoints stale rounds before deploying, avoids redeploying an already active round, and only claims rewards when `--ore-claim-every <ticks>` is set in authority-signer mode. Direct all-square deployments require explicit `--ore-deploy-all`; otherwise pass a square selection to avoid accidental broad deployment.
 
 ---
 

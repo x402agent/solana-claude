@@ -60,6 +60,9 @@ async fn main() {
         "buyback" => {
             buyback(&rpc, &payer).await.unwrap();
         }
+        "automate" => {
+            automate(&rpc, &payer).await.unwrap();
+        }
         "reset" => {
             reset(&rpc, &payer).await.unwrap();
         }
@@ -75,6 +78,9 @@ async fn main() {
         "deploy_all" => {
             deploy_all(&rpc, &payer).await.unwrap();
         }
+        "deploy_mask" => {
+            deploy_mask(&rpc, &payer).await.unwrap();
+        }
         "round" => {
             log_round(&rpc).await.unwrap();
         }
@@ -86,6 +92,9 @@ async fn main() {
         }
         "checkpoint" => {
             checkpoint(&rpc, &payer).await.unwrap();
+        }
+        "reload_sol" => {
+            reload_sol(&rpc, &payer).await.unwrap();
         }
         "checkpoint_all" => {
             checkpoint_all(&rpc, &payer).await.unwrap();
@@ -113,6 +122,162 @@ async fn main() {
         }
         _ => panic!("Invalid command"),
     };
+}
+
+fn parse_u64_value(name: &str, value: &str) -> Result<u64, anyhow::Error> {
+    if let Some(hex) = value.strip_prefix("0x") {
+        u64::from_str_radix(hex, 16)
+            .map_err(|e| anyhow::anyhow!("Invalid {name} hex value {value}: {e}"))
+    } else {
+        u64::from_str(value).map_err(|e| anyhow::anyhow!("Invalid {name} value {value}: {e}"))
+    }
+}
+
+fn parse_sol_to_lamports(value: &str) -> Result<u64, anyhow::Error> {
+    let value = value.trim();
+    let (whole, fractional) = value.split_once('.').unwrap_or((value, ""));
+    if fractional.len() > 9 {
+        return Err(anyhow::anyhow!(
+            "SOL values support at most 9 decimal places: {value}"
+        ));
+    }
+    let whole_lamports = u64::from_str(whole)
+        .map_err(|e| anyhow::anyhow!("Invalid SOL whole amount {value}: {e}"))?
+        .checked_mul(LAMPORTS_PER_SOL)
+        .ok_or_else(|| anyhow::anyhow!("SOL amount overflow: {value}"))?;
+    let mut frac = fractional.to_string();
+    while frac.len() < 9 {
+        frac.push('0');
+    }
+    let fractional_lamports = if frac.is_empty() {
+        0
+    } else {
+        u64::from_str(&frac)
+            .map_err(|e| anyhow::anyhow!("Invalid SOL fractional amount {value}: {e}"))?
+    };
+    whole_lamports
+        .checked_add(fractional_lamports)
+        .ok_or_else(|| anyhow::anyhow!("SOL amount overflow: {value}"))
+}
+
+fn lamports_env(lamports_name: &str, sol_name: &str) -> Result<u64, anyhow::Error> {
+    if let Ok(value) = std::env::var(lamports_name) {
+        return parse_u64_value(lamports_name, &value);
+    }
+    if let Ok(value) = std::env::var(sol_name) {
+        return parse_sol_to_lamports(&value);
+    }
+    Err(anyhow::anyhow!(
+        "Missing {lamports_name} env var or {sol_name} env var"
+    ))
+}
+
+fn lamports_env_or(
+    lamports_name: &str,
+    sol_name: &str,
+    default: u64,
+) -> Result<u64, anyhow::Error> {
+    if std::env::var(lamports_name).is_ok() || std::env::var(sol_name).is_ok() {
+        lamports_env(lamports_name, sol_name)
+    } else {
+        Ok(default)
+    }
+}
+
+fn bool_env_or(name: &str, default: bool) -> Result<bool, anyhow::Error> {
+    let Ok(value) = std::env::var(name) else {
+        return Ok(default);
+    };
+    match value.to_ascii_lowercase().as_str() {
+        "1" | "true" | "yes" | "y" | "on" => Ok(true),
+        "0" | "false" | "no" | "n" | "off" => Ok(false),
+        _ => Err(anyhow::anyhow!("Invalid boolean env var {name}={value}")),
+    }
+}
+
+fn pubkey_env_or(name: &str, default: Pubkey) -> Result<Pubkey, anyhow::Error> {
+    match std::env::var(name) {
+        Ok(value) => Pubkey::from_str(&value)
+            .map_err(|e| anyhow::anyhow!("Invalid {name} pubkey {value}: {e}")),
+        Err(_) => Ok(default),
+    }
+}
+
+fn strategy_env_or(default: AutomationStrategy) -> Result<AutomationStrategy, anyhow::Error> {
+    let Ok(value) = std::env::var("STRATEGY") else {
+        return Ok(default);
+    };
+    match value.to_ascii_lowercase().as_str() {
+        "0" | "random" => Ok(AutomationStrategy::Random),
+        "1" | "preferred" => Ok(AutomationStrategy::Preferred),
+        "2" | "discretionary" => Ok(AutomationStrategy::Discretionary),
+        _ => Err(anyhow::anyhow!(
+            "Invalid STRATEGY={value}; expected random, preferred, or discretionary"
+        )),
+    }
+}
+
+fn square_mask_from_env() -> Result<Option<u64>, anyhow::Error> {
+    if let Ok(value) = std::env::var("MASK") {
+        return Ok(Some(parse_u64_value("MASK", &value)?));
+    }
+
+    if let Ok(value) = std::env::var("SQUARE") {
+        let square = parse_u64_value("SQUARE", &value)?;
+        if square > 24 {
+            return Err(anyhow::anyhow!("SQUARE must be between 0 and 24"));
+        }
+        return Ok(Some(1u64 << square));
+    }
+
+    if let Ok(value) = std::env::var("SQUARES") {
+        let mut mask = 0u64;
+        for item in value.split(',') {
+            let item = item.trim();
+            if item.is_empty() {
+                continue;
+            }
+            let square = parse_u64_value("SQUARES", item)?;
+            if square > 24 {
+                return Err(anyhow::anyhow!("SQUARES entries must be between 0 and 24"));
+            }
+            mask |= 1u64 << square;
+        }
+        return Ok(Some(mask));
+    }
+
+    Ok(None)
+}
+
+fn squares_from_mask(mask: u64) -> [bool; 25] {
+    let mut squares = [false; 25];
+    for i in 0..25 {
+        squares[i] = (mask & (1u64 << i)) != 0;
+    }
+    squares
+}
+
+fn automation_mask_env(strategy: AutomationStrategy) -> Result<u64, anyhow::Error> {
+    if let Some(mask) = square_mask_from_env()? {
+        return Ok(mask);
+    }
+
+    match strategy {
+        AutomationStrategy::Random => {
+            let count = match std::env::var("NUM_SQUARES") {
+                Ok(value) => parse_u64_value("NUM_SQUARES", &value)?,
+                Err(_) => 1,
+            };
+            if count == 0 || count > 25 {
+                return Err(anyhow::anyhow!("NUM_SQUARES must be between 1 and 25"));
+            }
+            Ok(count)
+        }
+        AutomationStrategy::Preferred => Err(anyhow::anyhow!(
+            "Preferred automation requires MASK, SQUARE, or SQUARES"
+        )),
+        AutomationStrategy::Discretionary => Ok(0),
+    }
 }
 
 async fn liq(
@@ -330,6 +495,44 @@ async fn buyback(
     Ok(())
 }
 
+async fn automate(
+    rpc: &RpcClient,
+    payer: &solana_sdk::signer::keypair::Keypair,
+) -> Result<(), anyhow::Error> {
+    let amount = lamports_env("AMOUNT", "AMOUNT_SOL")?;
+    let deposit = lamports_env("DEPOSIT", "DEPOSIT_SOL")?;
+    let executor = pubkey_env_or("EXECUTOR", EXECUTOR_ADDRESS)?;
+    let fee = lamports_env_or("FEE", "FEE_SOL", CHECKPOINT_FEE)?;
+    let strategy = strategy_env_or(AutomationStrategy::Random)?;
+    let mask = automation_mask_env(strategy)?;
+    let reload = bool_env_or("RELOAD", true)?;
+
+    let ix = ore_api::sdk::automate(
+        payer.pubkey(),
+        amount,
+        deposit,
+        executor,
+        fee,
+        mask,
+        strategy as u8,
+        reload,
+    );
+    let sig = submit_transaction(rpc, payer, &[ix]).await?;
+
+    println!("Automation configured");
+    println!("  authority: {}", payer.pubkey());
+    println!("  amount: {} lamports", amount);
+    println!("  deposit: {} lamports", deposit);
+    println!("  executor: {}", executor);
+    println!("  fee: {} lamports", fee);
+    println!("  strategy: {:?}", strategy);
+    println!("  mask: {}", mask);
+    println!("  reload: {}", reload);
+    println!("  signature: {}", sig);
+
+    Ok(())
+}
+
 #[allow(dead_code)]
 pub async fn get_address_lookup_table_accounts(
     rpc_client: &RpcClient,
@@ -390,20 +593,17 @@ async fn deploy(
     rpc: &RpcClient,
     payer: &solana_sdk::signer::keypair::Keypair,
 ) -> Result<(), anyhow::Error> {
-    let amount = std::env::var("AMOUNT").expect("Missing AMOUNT env var");
-    let amount = u64::from_str(&amount).expect("Invalid AMOUNT");
+    let amount = lamports_env("AMOUNT", "AMOUNT_SOL")?;
     let square_id = std::env::var("SQUARE").expect("Missing SQUARE env var");
     let square_id = u64::from_str(&square_id).expect("Invalid SQUARE");
+    if square_id > 24 {
+        return Err(anyhow::anyhow!("SQUARE must be between 0 and 24"));
+    }
+    let authority = pubkey_env_or("AUTHORITY", payer.pubkey())?;
     let board = get_board(rpc).await?;
     let mut squares = [false; 25];
     squares[square_id as usize] = true;
-    let ix = ore_api::sdk::deploy(
-        payer.pubkey(),
-        payer.pubkey(),
-        amount,
-        board.round_id,
-        squares,
-    );
+    let ix = ore_api::sdk::deploy(payer.pubkey(), authority, amount, board.round_id, squares);
     submit_transaction(rpc, payer, &[ix]).await?;
     Ok(())
 }
@@ -412,16 +612,31 @@ async fn deploy_all(
     rpc: &RpcClient,
     payer: &solana_sdk::signer::keypair::Keypair,
 ) -> Result<(), anyhow::Error> {
-    let amount = std::env::var("AMOUNT").expect("Missing AMOUNT env var");
-    let amount = u64::from_str(&amount).expect("Invalid AMOUNT");
+    let amount = lamports_env("AMOUNT", "AMOUNT_SOL")?;
+    let authority = pubkey_env_or("AUTHORITY", payer.pubkey())?;
     let board = get_board(rpc).await?;
     let squares = [true; 25];
+    let ix = ore_api::sdk::deploy(payer.pubkey(), authority, amount, board.round_id, squares);
+    submit_transaction(rpc, payer, &[ix]).await?;
+    Ok(())
+}
+
+async fn deploy_mask(
+    rpc: &RpcClient,
+    payer: &solana_sdk::signer::keypair::Keypair,
+) -> Result<(), anyhow::Error> {
+    let amount = lamports_env("AMOUNT", "AMOUNT_SOL")?;
+    let authority = pubkey_env_or("AUTHORITY", payer.pubkey())?;
+    let mask = square_mask_from_env()?.ok_or_else(|| {
+        anyhow::anyhow!("Missing MASK, SQUARE, or SQUARES env var for deploy_mask")
+    })?;
+    let board = get_board(rpc).await?;
     let ix = ore_api::sdk::deploy(
         payer.pubkey(),
-        payer.pubkey(),
-        board.round_id,
+        authority,
         amount,
-        squares,
+        board.round_id,
+        squares_from_mask(mask),
     );
     submit_transaction(rpc, payer, &[ix]).await?;
     Ok(())
@@ -444,6 +659,16 @@ async fn checkpoint(
     let authority = Pubkey::from_str(&authority).expect("Invalid AUTHORITY");
     let miner = get_miner(rpc, authority).await?;
     let ix = ore_api::sdk::checkpoint(payer.pubkey(), authority, miner.round_id);
+    submit_transaction(rpc, payer, &[ix]).await?;
+    Ok(())
+}
+
+async fn reload_sol(
+    rpc: &RpcClient,
+    payer: &solana_sdk::signer::keypair::Keypair,
+) -> Result<(), anyhow::Error> {
+    let authority = pubkey_env_or("AUTHORITY", payer.pubkey())?;
+    let ix = ore_api::sdk::reload_sol(payer.pubkey(), authority);
     submit_transaction(rpc, payer, &[ix]).await?;
     Ok(())
 }
