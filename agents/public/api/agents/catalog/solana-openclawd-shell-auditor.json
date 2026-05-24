@@ -79,7 +79,9 @@
       "shell",
       "payments",
       "security",
-      "logs"
+      "logs",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "OpenClawd SHELL Auditor"
   },

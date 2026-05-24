@@ -24,7 +24,8 @@
       "gateway",
       "codex",
       "claude",
-      "clawd"
+      "clawd",
+      "solana-clawd"
     ]
   },
   "config": {

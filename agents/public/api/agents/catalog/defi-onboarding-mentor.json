@@ -20,7 +20,8 @@
       "defi-basics",
       "clawd",
       "solana",
-      "defi"
+      "defi",
+      "solana-clawd"
     ]
   },
   "config": {

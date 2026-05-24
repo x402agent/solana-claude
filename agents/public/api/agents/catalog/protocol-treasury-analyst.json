@@ -21,7 +21,8 @@
       "clawd",
       "solana",
       "governance",
-      "analytics"
+      "analytics",
+      "solana-clawd"
     ]
   },
   "config": {

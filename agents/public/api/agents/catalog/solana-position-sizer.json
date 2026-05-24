@@ -14,7 +14,9 @@
       "position-sizing",
       "kelly",
       "risk-management",
-      "money-management"
+      "money-management",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "Position Sizing Engine"
   },

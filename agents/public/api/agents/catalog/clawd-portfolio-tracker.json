@@ -21,7 +21,8 @@
       "solana",
       "helius",
       "das",
-      "one-shot"
+      "one-shot",
+      "solana-clawd"
     ]
   },
   "config": {

@@ -15,7 +15,9 @@
       "cross-chain",
       "wormhole",
       "debridge",
-      "security"
+      "security",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "Cross-Chain Bridge Analyst"
   },

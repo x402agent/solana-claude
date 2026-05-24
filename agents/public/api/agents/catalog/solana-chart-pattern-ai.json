@@ -14,7 +14,9 @@
       "chart-patterns",
       "computer-vision",
       "ai",
-      "pattern-recognition"
+      "pattern-recognition",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "AI Chart Pattern Recognition"
   },

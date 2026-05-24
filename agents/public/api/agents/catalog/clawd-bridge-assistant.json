@@ -19,7 +19,8 @@
       "arbitrum",
       "layer-2",
       "solana",
-      "one-shot"
+      "one-shot",
+      "solana-clawd"
     ]
   },
   "config": {

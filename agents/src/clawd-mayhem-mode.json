@@ -24,7 +24,8 @@
       "candy-machine",
       "trading",
       "launch",
-      "one-shot"
+      "one-shot",
+      "solana-clawd"
     ]
   },
   "config": {

@@ -19,7 +19,8 @@
       "security",
       "screening",
       "one-shot",
-      "clawd"
+      "clawd",
+      "solana-clawd"
     ]
   },
   "config": {

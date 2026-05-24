@@ -21,7 +21,8 @@
       "clawd",
       "solana",
       "tensor",
-      "magic-eden"
+      "magic-eden",
+      "solana-clawd"
     ]
   },
   "config": {

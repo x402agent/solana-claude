@@ -19,7 +19,8 @@
       "staking",
       "governance",
       "solana",
-      "analytics"
+      "analytics",
+      "solana-clawd"
     ]
   },
   "config": {

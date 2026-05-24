@@ -1,7 +1,7 @@
 {
   "$schema": "https://solanaclawd.com/schemas/skill-hub.v1.json",
   "apiVersion": "1.0",
-  "generatedAt": "2026-05-20T17:15:22.480Z",
+  "generatedAt": "2026-05-24T13:31:17.724Z",
   "hub": {
     "gallery": "https://x402.wtf/skills",
     "api": "https://x402.wtf/api/skills",
@@ -1102,7 +1102,7 @@
       "requiredEnv": [
         "SOLANA_RPC_URL"
       ],
-      "homepage": "https://github.com/nirholas/pump-fun-sdk",
+      "homepage": "https://github.com/x402agent/pump-fun-sdk",
       "attestation": {
         "status": "pending",
         "isFormallyVerified": false,
@@ -1124,7 +1124,7 @@
         "agents"
       ],
       "requiredEnv": [],
-      "homepage": "https://github.com/nirholas/pump-fun-sdk",
+      "homepage": "https://github.com/x402agent/pump-fun-sdk",
       "attestation": {
         "status": "pending",
         "isFormallyVerified": false,
@@ -1146,7 +1146,7 @@
         "curve"
       ],
       "requiredEnv": [],
-      "homepage": "https://github.com/nirholas/pump-fun-sdk",
+      "homepage": "https://github.com/x402agent/pump-fun-sdk",
       "attestation": {
         "status": "pending",
         "isFormallyVerified": false,
@@ -1168,7 +1168,7 @@
         "release"
       ],
       "requiredEnv": [],
-      "homepage": "https://github.com/nirholas/pump-fun-sdk",
+      "homepage": "https://github.com/x402agent/pump-fun-sdk",
       "attestation": {
         "status": "pending",
         "isFormallyVerified": false,
@@ -1192,7 +1192,7 @@
       "requiredEnv": [
         "SOLANA_RPC_URL"
       ],
-      "homepage": "https://github.com/nirholas/pump-fun-sdk",
+      "homepage": "https://github.com/x402agent/pump-fun-sdk",
       "attestation": {
         "status": "pending",
         "isFormallyVerified": false,
@@ -1216,7 +1216,7 @@
       "requiredEnv": [
         "SOLANA_RPC_URL"
       ],
-      "homepage": "https://github.com/nirholas/pump-fun-sdk",
+      "homepage": "https://github.com/x402agent/pump-fun-sdk",
       "attestation": {
         "status": "pending",
         "isFormallyVerified": false,
@@ -1238,7 +1238,7 @@
         "system"
       ],
       "requiredEnv": [],
-      "homepage": "https://github.com/nirholas/pump-fun-sdk",
+      "homepage": "https://github.com/x402agent/pump-fun-sdk",
       "attestation": {
         "status": "pending",
         "isFormallyVerified": false,
@@ -1260,7 +1260,7 @@
         "server"
       ],
       "requiredEnv": [],
-      "homepage": "https://github.com/nirholas/pump-fun-sdk",
+      "homepage": "https://github.com/x402agent/pump-fun-sdk",
       "attestation": {
         "status": "pending",
         "isFormallyVerified": false,
@@ -1282,7 +1282,7 @@
         "vanity"
       ],
       "requiredEnv": [],
-      "homepage": "https://github.com/nirholas/pump-fun-sdk",
+      "homepage": "https://github.com/x402agent/pump-fun-sdk",
       "attestation": {
         "status": "pending",
         "isFormallyVerified": false,
@@ -1306,7 +1306,7 @@
       "requiredEnv": [
         "SOLANA_RPC_URL"
       ],
-      "homepage": "https://github.com/nirholas/pump-fun-sdk",
+      "homepage": "https://github.com/x402agent/pump-fun-sdk",
       "attestation": {
         "status": "pending",
         "isFormallyVerified": false,
@@ -1327,7 +1327,7 @@
         "security"
       ],
       "requiredEnv": [],
-      "homepage": "https://github.com/nirholas/pump-fun-sdk",
+      "homepage": "https://github.com/x402agent/pump-fun-sdk",
       "attestation": {
         "status": "pending",
         "isFormallyVerified": false,
@@ -1349,7 +1349,7 @@
         "scripts"
       ],
       "requiredEnv": [],
-      "homepage": "https://github.com/nirholas/pump-fun-sdk",
+      "homepage": "https://github.com/x402agent/pump-fun-sdk",
       "attestation": {
         "status": "pending",
         "isFormallyVerified": false,
@@ -1370,7 +1370,7 @@
         "architecture"
       ],
       "requiredEnv": [],
-      "homepage": "https://github.com/nirholas/pump-fun-sdk",
+      "homepage": "https://github.com/x402agent/pump-fun-sdk",
       "attestation": {
         "status": "pending",
         "isFormallyVerified": false,
@@ -1393,7 +1393,7 @@
       "requiredEnv": [
         "SOLANA_RPC_URL"
       ],
-      "homepage": "https://github.com/nirholas/pump-fun-sdk",
+      "homepage": "https://github.com/x402agent/pump-fun-sdk",
       "attestation": {
         "status": "pending",
         "isFormallyVerified": false,
@@ -1414,7 +1414,7 @@
         "wallet"
       ],
       "requiredEnv": [],
-      "homepage": "https://github.com/nirholas/pump-fun-sdk",
+      "homepage": "https://github.com/x402agent/pump-fun-sdk",
       "attestation": {
         "status": "pending",
         "isFormallyVerified": false,
@@ -1435,7 +1435,7 @@
         "testing"
       ],
       "requiredEnv": [],
-      "homepage": "https://github.com/nirholas/pump-fun-sdk",
+      "homepage": "https://github.com/x402agent/pump-fun-sdk",
       "attestation": {
         "status": "pending",
         "isFormallyVerified": false,
@@ -1459,7 +1459,7 @@
       "requiredEnv": [
         "SOLANA_RPC_URL"
       ],
-      "homepage": "https://github.com/nirholas/pump-fun-sdk",
+      "homepage": "https://github.com/x402agent/pump-fun-sdk",
       "attestation": {
         "status": "pending",
         "isFormallyVerified": false,
@@ -1483,7 +1483,7 @@
       "requiredEnv": [
         "SOLANA_RPC_URL"
       ],
-      "homepage": "https://github.com/nirholas/pump-fun-sdk",
+      "homepage": "https://github.com/x402agent/pump-fun-sdk",
       "attestation": {
         "status": "pending",
         "isFormallyVerified": false,
@@ -1505,7 +1505,7 @@
         "vanity"
       ],
       "requiredEnv": [],
-      "homepage": "https://github.com/nirholas/pump-fun-sdk",
+      "homepage": "https://github.com/x402agent/pump-fun-sdk",
       "attestation": {
         "status": "pending",
         "isFormallyVerified": false,
@@ -1695,7 +1695,7 @@
         "SAS_PROGRAM_ID",
         "SAS_AUTHORITY_KEY"
       ],
-      "homepage": "https://github.com/clawdsolana/OpenClawd/tree/main/attestation",
+      "homepage": "https://github.com/x402agent/solana-clawd/tree/main/attestation",
       "attestation": {
         "status": "pending",
         "isFormallyVerified": false,

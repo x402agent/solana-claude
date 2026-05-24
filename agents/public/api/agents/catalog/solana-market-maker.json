@@ -15,7 +15,9 @@
       "clob",
       "spread",
       "inventory",
-      "phoenix"
+      "phoenix",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "Market Making Strategist"
   },

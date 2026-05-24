@@ -15,7 +15,9 @@
       "yield",
       "usdc",
       "usdt",
-      "lending"
+      "lending",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "Stablecoin Yield Strategist"
   },

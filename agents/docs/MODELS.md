@@ -268,7 +268,7 @@ For Anchor audits or long on-chain transcripts, prefer Opus. For quick swap quot
 5. **Compare vs baseline**
 6. **Iterate** — change one parameter, repeat
 
-Keep a lightweight eval suite in `defi-agents/tests/` with real Solana prompts so regressions are visible.
+Keep a lightweight eval suite in `solana-clawd-agents/tests/` with real Solana prompts so regressions are visible.
 
 ---
 

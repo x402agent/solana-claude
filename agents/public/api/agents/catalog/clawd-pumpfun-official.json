@@ -21,7 +21,8 @@
       "x402",
       "telegram",
       "one-shot",
-      "clawd"
+      "clawd",
+      "solana-clawd"
     ]
   },
   "config": {

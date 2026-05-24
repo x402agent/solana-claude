@@ -78,7 +78,8 @@
       "planning",
       "budget",
       "x402",
-      "payments"
+      "payments",
+      "solana-clawd"
     ],
     "title": "Clawd Cost Planner"
   },

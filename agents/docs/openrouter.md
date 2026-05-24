@@ -16,7 +16,7 @@ DeFi Agents is a framework for building AI-powered DeFi agents. Use it with Open
 ### 2. Configure Your Agent
 
 ```typescript
-import { DeFiAgent } from '@nirholas/defi-agents';
+import { DeFiAgent } from '@x402agent/solana-clawd-agents';
 import OpenAI from 'openai';
 
 const openrouter = new OpenAI({
@@ -63,7 +63,7 @@ await agent.analyze('Should I provide liquidity to ETH/USDC on Uniswap?');
 
 ## Resources
 
-- [GitHub](https://github.com/nirholas/defi-agents)
+- [GitHub](https://github.com/x402agent/solana-clawd)
 - [OpenRouter Docs](https://openrouter.ai/docs)
 
 

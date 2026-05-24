@@ -79,7 +79,9 @@
       "monitoring",
       "health",
       "x402",
-      "treasury"
+      "treasury",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "OpenClawd Pulse Monitor"
   },

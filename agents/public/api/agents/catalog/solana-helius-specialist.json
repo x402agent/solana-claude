@@ -15,7 +15,9 @@
       "das",
       "webhooks",
       "enhanced-api",
-      "rpc"
+      "rpc",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "Helius API Specialist"
   },

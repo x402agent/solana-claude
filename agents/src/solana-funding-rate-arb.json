@@ -14,7 +14,9 @@
       "funding-rate",
       "arbitrage",
       "delta-neutral",
-      "carry-trade"
+      "carry-trade",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "Funding Rate Arbitrage Bot"
   },

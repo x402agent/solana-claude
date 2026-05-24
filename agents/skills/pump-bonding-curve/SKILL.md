@@ -3,7 +3,7 @@ name: pump-bonding-curve
 description: "Constant-product AMM bonding curve math for Pump token pricing — buy/sell quoting, fee-aware calculations, market cap computation, tiered fees, ceiling division, virtual vs real reserves, and edge-case handling."
 metadata:
   openclaw:
-    homepage: https://github.com/nirholas/pump-fun-sdk
+    homepage: https://github.com/x402agent/pump-fun-sdk
 ---
 
 # Bonding Curve — Pricing, Quoting & AMM Mathematics

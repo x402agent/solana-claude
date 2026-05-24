@@ -84,7 +84,9 @@
       "catalog",
       "authoring",
       "pay",
-      "gateway"
+      "gateway",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "x402 Provider Author"
   },

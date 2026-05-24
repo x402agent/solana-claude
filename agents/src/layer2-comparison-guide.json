@@ -19,7 +19,8 @@
       "optimism",
       "ethereum",
       "clawd",
-      "solana"
+      "solana",
+      "solana-clawd"
     ]
   },
   "config": {

@@ -24,7 +24,8 @@
       "clawd",
       "pumpfun",
       "dev-tools",
-      "x402"
+      "x402",
+      "solana-clawd"
     ]
   },
   "config": {

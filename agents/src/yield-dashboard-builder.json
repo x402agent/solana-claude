@@ -21,7 +21,8 @@
       "clawd",
       "solana",
       "yield",
-      "dev-tools"
+      "dev-tools",
+      "solana-clawd"
     ]
   },
   "config": {

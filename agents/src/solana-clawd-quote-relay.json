@@ -85,7 +85,8 @@
       "relay",
       "pricing",
       "x402",
-      "market-data"
+      "market-data",
+      "solana-clawd"
     ],
     "title": "Clawd Quote Relay"
   },

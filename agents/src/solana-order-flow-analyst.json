@@ -14,7 +14,9 @@
       "order-flow",
       "whale-tracking",
       "smart-money",
-      "analysis"
+      "analysis",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "Order Flow Analyst"
   },

@@ -22,7 +22,8 @@
       "solana",
       "wormhole",
       "debridge",
-      "allbridge"
+      "allbridge",
+      "solana-clawd"
     ]
   },
   "config": {

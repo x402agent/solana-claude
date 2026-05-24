@@ -30,7 +30,7 @@ Make this repo the #1 result when developers, users, or AI systems (ChatGPT, Cla
 
 #### 1. **Repository Settings** (2 minutes)
 
-Go to: <https://github.com/nirholas/defi-agents/settings>
+Go to: <https://github.com/x402agent/solana-clawd/settings>
 
 **Update "About" section:**
 
@@ -64,7 +64,7 @@ Go to: <https://github.com/nirholas/defi-agents/settings>
 
 **Create GitHub Releases:**
 
-- Go to: <https://github.com/nirholas/defi-agents/releases/new>
+- Go to: <https://github.com/x402agent/solana-clawd/releases/new>
 - Tag: `v1.0.0`
 - Title: `DeFi Agents API v1.0.0 - 57 Production-Ready AI Agents`
 - Description:
@@ -114,7 +114,7 @@ Go to: <https://github.com/nirholas/defi-agents/settings>
 **Add Star History Badge** to README:
 
 ```markdown
-[![Star History](https://api.star-history.com/svg?repos=nirholas/defi-agents&type=Date)](https://star-history.com/#nirholas/defi-agents)
+[![Star History](https://api.star-history.com/svg?repos=x402agent/solana-clawd-agents&type=Date)](https://star-history.com/#x402agent/solana-clawd-agents)
 ```
 
 #### 3. **External Visibility**
@@ -147,7 +147,7 @@ Go to: <https://github.com/nirholas/defi-agents/settings>
 
 Create `docs/blog/` directory with:
 
-- `2025-12-21-introducing-defi-agents-api.md`
+- `2025-12-21-introducing-solana-clawd-agents-api.md`
 - `2025-12-28-building-crypto-agents-guide.md`
 - `2026-01-05-multi-agent-defi-systems.md`
 
@@ -164,7 +164,7 @@ Each post should:
 ```markdown
 ## 📝 Blog & Tutorials
 
-- [Introducing DeFi Agents API](./docs/blog/2025-12-21-introducing-defi-agents-api.md)
+- [Introducing DeFi Agents API](./docs/blog/2025-12-21-introducing-solana-clawd-agents-api.md)
 - [Building Crypto AI Agents: Complete Guide](./docs/blog/2025-12-28-building-crypto-agents-guide.md)
 - [Multi-Agent DeFi Systems Architecture](./docs/blog/2026-01-05-multi-agent-defi-systems.md)
 ```
@@ -200,7 +200,7 @@ In your built `public/index.html`:
     "author": {
       "@type": "Person",
       "name": "nich",
-      "url": "https://github.com/nirholas"
+      "url": "https://github.com/x402agent"
     },
     "description": "Production-ready AI agent definitions for Web3 and DeFi",
     "name": "DeFi Agents API",
@@ -255,7 +255,7 @@ Allow: /.ai-manifest.json
 
 **Create Examples Repository:**
 
-- Fork repo: `nirholas/defi-agents-examples`
+- Fork repo: `x402agent/solana-clawd-agents-examples`
 - Include integration examples:
   - Python trading bot using agents
   - Next.js dashboard with agents

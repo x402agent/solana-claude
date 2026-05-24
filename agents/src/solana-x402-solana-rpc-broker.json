@@ -86,7 +86,9 @@
       "helius",
       "analytics",
       "broker",
-      "payments"
+      "payments",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "x402 Solana RPC Broker"
   },

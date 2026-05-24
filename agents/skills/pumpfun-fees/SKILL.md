@@ -17,7 +17,7 @@ Set up, manage, and claim creator fee sharing on Pump.fun tokens. Supports up to
 ### 1. Create Fee Sharing Config
 
 ```typescript
-import { PUMP_SDK } from "@nirholas/pump-sdk";
+import { PUMP_SDK } from "@x402agent/pump-sdk";
 
 const createConfigIx = await PUMP_SDK.createFeeSharingConfig({
   creator: wallet.publicKey,
@@ -78,7 +78,7 @@ Fees are tiered by market cap:
 Track unclaimed $PUMP reward tokens:
 
 ```typescript
-import { totalUnclaimedTokens, currentDayTokens } from "@nirholas/pump-sdk";
+import { totalUnclaimedTokens, currentDayTokens } from "@x402agent/pump-sdk";
 
 const unclaimed = totalUnclaimedTokens(userVolumeAccumulator, globalVolumeAccumulator);
 const todayTokens = currentDayTokens(globalVolumeAccumulator);

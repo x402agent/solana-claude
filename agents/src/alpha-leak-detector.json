@@ -22,7 +22,8 @@
       "solana",
       "helius",
       "birdeye",
-      "one-shot"
+      "one-shot",
+      "solana-clawd"
     ]
   },
   "config": {

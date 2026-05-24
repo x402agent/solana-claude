@@ -15,7 +15,9 @@
       "defi",
       "farming",
       "staking",
-      "optimization"
+      "optimization",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "DeFi Yield Optimizer"
   },

@@ -20,7 +20,8 @@
       "market-cycles",
       "clawd",
       "solana",
-      "analytics"
+      "analytics",
+      "solana-clawd"
     ]
   },
   "config": {

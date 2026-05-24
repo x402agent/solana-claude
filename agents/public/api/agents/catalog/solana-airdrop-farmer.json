@@ -15,7 +15,9 @@
       "points",
       "farming",
       "strategy",
-      "eligibility"
+      "eligibility",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "Airdrop Strategy Optimizer"
   },

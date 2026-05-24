@@ -15,7 +15,9 @@
       "research",
       "protocol",
       "analysis",
-      "architecture"
+      "architecture",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "Whitepaper & Docs Analyst"
   },

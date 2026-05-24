@@ -15,7 +15,9 @@
       "infrastructure",
       "helius",
       "quicknode",
-      "websocket"
+      "websocket",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "RPC & Infrastructure Expert"
   },

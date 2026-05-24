@@ -92,7 +92,9 @@
       "router",
       "x402",
       "jupiter",
-      "treasury"
+      "treasury",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "NemoClawd DeFi Payment Router"
   },

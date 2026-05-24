@@ -3,7 +3,7 @@ name: pump-solana-architecture
 description: "Design and derive Program Derived Addresses (PDAs) and account layouts across the Pump ecosystem's four Solana programs — global singletons, per-token accounts, per-user accumulators, and cross-program coordination patterns."
 metadata:
   openclaw:
-    homepage: https://github.com/nirholas/pump-fun-sdk
+    homepage: https://github.com/x402agent/pump-fun-sdk
 ---
 
 # Solana Program Architecture — PDAs, Accounts & Multi-Program Coordination

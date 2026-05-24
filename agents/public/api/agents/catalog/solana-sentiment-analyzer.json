@@ -15,7 +15,9 @@
       "nlp",
       "twitter",
       "social",
-      "analysis"
+      "analysis",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "Crypto Sentiment Analyzer"
   },

@@ -7,13 +7,15 @@
   "external_url": "https://x402.wtf/agents/solana-alpha-aggregator",
   "active": true,
   "createdAt": "2026-03-15",
-  "updatedAt": "2026-05-20T17:15:22.480Z",
+  "updatedAt": "2026-05-24T13:31:17.724Z",
   "tags": [
     "alpha",
     "signals",
     "aggregation",
     "trade-ideas",
-    "ranking"
+    "ranking",
+    "clawd",
+    "solana-clawd"
   ],
   "categories": [
     "defi"

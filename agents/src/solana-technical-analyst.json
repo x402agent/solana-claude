@@ -15,7 +15,9 @@
       "indicators",
       "charts",
       "patterns",
-      "trading"
+      "trading",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "Advanced Technical Analyst"
   },

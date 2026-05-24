@@ -15,7 +15,9 @@
       "self-managing",
       "adaptive",
       "agent",
-      "ai-trading"
+      "ai-trading",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "Autonomous Trading Agent"
   },

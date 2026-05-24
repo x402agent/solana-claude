@@ -7,13 +7,15 @@
   "external_url": "https://x402.wtf/agents/solana-onchain-sleuth",
   "active": true,
   "createdAt": "2026-03-15",
-  "updatedAt": "2026-05-20T17:15:22.480Z",
+  "updatedAt": "2026-05-24T13:31:17.724Z",
   "tags": [
     "forensics",
     "investigation",
     "tracing",
     "compliance",
-    "aml"
+    "aml",
+    "clawd",
+    "solana-clawd"
   ],
   "categories": [
     "defi"

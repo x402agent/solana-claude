@@ -15,7 +15,9 @@
       "lending",
       "marginfi",
       "solend",
-      "kamino"
+      "kamino",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "Liquidation Monitor"
   },

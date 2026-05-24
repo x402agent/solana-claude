@@ -21,7 +21,8 @@
       "solana",
       "defi",
       "ve-model",
-      "governance"
+      "governance",
+      "solana-clawd"
     ]
   },
   "config": {

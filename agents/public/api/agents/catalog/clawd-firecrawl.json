@@ -22,7 +22,8 @@
       "browser",
       "web",
       "openclawd",
-      "one-shot"
+      "one-shot",
+      "solana-clawd"
     ]
   },
   "config": {

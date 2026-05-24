@@ -23,7 +23,8 @@
       "kamino",
       "drift",
       "marginfi",
-      "one-shot"
+      "one-shot",
+      "solana-clawd"
     ]
   },
   "config": {

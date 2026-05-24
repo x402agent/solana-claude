@@ -86,7 +86,9 @@
       "live-data",
       "narratives",
       "payments",
-      "openclawd"
+      "openclawd",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "x402 Research Broker"
   },

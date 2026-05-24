@@ -1,7 +1,7 @@
 {
   "$schema": "https://x402.wtf/schema/clawdAgentCatalog.v1.json",
   "apiVersion": "1.0",
-  "generatedAt": "2026-05-20T17:15:22.480Z",
+  "generatedAt": "2026-05-24T13:31:17.724Z",
   "hub": {
     "gallery": "https://x402.wtf/agents",
     "mint": "https://x402.wtf/agents/mint",
@@ -214,7 +214,8 @@
         "solana",
         "jupiter",
         "lfg",
-        "one-shot"
+        "one-shot",
+        "solana-clawd"
       ],
       "category": "trading",
       "author": "openclawd",
@@ -262,7 +263,8 @@
         "solana",
         "helius",
         "birdeye",
-        "one-shot"
+        "one-shot",
+        "solana-clawd"
       ],
       "category": "trading",
       "author": "openclawd",
@@ -308,7 +310,8 @@
         "clawd",
         "solana",
         "kamino",
-        "marginfi"
+        "marginfi",
+        "solana-clawd"
       ],
       "category": "education",
       "author": "openclawd",
@@ -355,7 +358,8 @@
         "solana",
         "wormhole",
         "debridge",
-        "allbridge"
+        "allbridge",
+        "solana-clawd"
       ],
       "category": "security",
       "author": "openclawd",
@@ -399,7 +403,8 @@
         "arbitrum",
         "layer-2",
         "solana",
-        "one-shot"
+        "one-shot",
+        "solana-clawd"
       ],
       "category": "defi",
       "author": "openclawd",
@@ -446,7 +451,8 @@
         "browser",
         "web",
         "openclawd",
-        "one-shot"
+        "one-shot",
+        "solana-clawd"
       ],
       "category": "research",
       "author": "openclawd",
@@ -486,7 +492,8 @@
         "proposals",
         "solana",
         "realms",
-        "one-shot"
+        "one-shot",
+        "solana-clawd"
       ],
       "category": "governance",
       "author": "openclawd",
@@ -535,7 +542,8 @@
         "orca",
         "raydium",
         "dlmm",
-        "one-shot"
+        "one-shot",
+        "solana-clawd"
       ],
       "category": "defi",
       "author": "openclawd",
@@ -586,7 +594,8 @@
         "candy-machine",
         "trading",
         "launch",
-        "one-shot"
+        "one-shot",
+        "solana-clawd"
       ],
       "category": "trading",
       "author": "openclawd",
@@ -653,7 +662,8 @@
         "beginner",
         "tutorial",
         "solana",
-        "one-shot"
+        "one-shot",
+        "solana-clawd"
       ],
       "category": "education",
       "author": "openclawd",
@@ -699,7 +709,8 @@
         "solana",
         "helius",
         "das",
-        "one-shot"
+        "one-shot",
+        "solana-clawd"
       ],
       "category": "analytics",
       "author": "openclawd",
@@ -744,7 +755,8 @@
         "x402",
         "telegram",
         "one-shot",
-        "clawd"
+        "clawd",
+        "solana-clawd"
       ],
       "category": "trading",
       "author": "openclawd",
@@ -798,7 +810,8 @@
         "alerts",
         "kamino",
         "drift",
-        "one-shot"
+        "one-shot",
+        "solana-clawd"
       ],
       "category": "security",
       "author": "openclawd",
@@ -843,7 +856,8 @@
         "cloudflare",
         "x402",
         "agent-registry",
-        "one-shot"
+        "one-shot",
+        "solana-clawd"
       ],
       "category": "infrastructure",
       "author": "openclawd",
@@ -894,7 +908,8 @@
         "marginfi",
         "drift",
         "meteora",
-        "one-shot"
+        "one-shot",
+        "solana-clawd"
       ],
       "category": "defi",
       "author": "openclawd",
@@ -942,7 +957,8 @@
         "defi-basics",
         "clawd",
         "solana",
-        "defi"
+        "defi",
+        "solana-clawd"
       ],
       "category": "education",
       "author": "openclawd",
@@ -987,7 +1003,8 @@
         "research",
         "clawd",
         "solana",
-        "analytics"
+        "analytics",
+        "solana-clawd"
       ],
       "category": "analytics",
       "author": "openclawd",
@@ -1035,7 +1052,8 @@
         "defi",
         "risk-scoring",
         "security",
-        "one-shot"
+        "one-shot",
+        "solana-clawd"
       ],
       "category": "security",
       "author": "openclawd",
@@ -1083,7 +1101,8 @@
         "kamino",
         "meteora",
         "drift",
-        "one-shot"
+        "one-shot",
+        "solana-clawd"
       ],
       "category": "defi",
       "author": "openclawd",
@@ -1134,7 +1153,8 @@
         "jupiter",
         "router",
         "trading",
-        "one-shot"
+        "one-shot",
+        "solana-clawd"
       ],
       "category": "trading",
       "author": "openclawd",
@@ -1183,7 +1203,8 @@
         "priority-fees",
         "compute-units",
         "jito",
-        "dev-tools"
+        "dev-tools",
+        "solana-clawd"
       ],
       "category": "dev-tools",
       "author": "openclawd",
@@ -1229,7 +1250,8 @@
         "clawd",
         "solana",
         "realms",
-        "spl-governance"
+        "spl-governance",
+        "solana-clawd"
       ],
       "category": "governance",
       "author": "openclawd",
@@ -1277,7 +1299,8 @@
         "solana",
         "il",
         "meteora",
-        "orca"
+        "orca",
+        "solana-clawd"
       ],
       "category": "defi",
       "author": "openclawd",
@@ -1321,7 +1344,8 @@
         "optimism",
         "ethereum",
         "clawd",
-        "solana"
+        "solana",
+        "solana-clawd"
       ],
       "category": "defi",
       "author": "openclawd",
@@ -1369,7 +1393,8 @@
         "kamino",
         "drift",
         "marginfi",
-        "one-shot"
+        "one-shot",
+        "solana-clawd"
       ],
       "category": "security",
       "author": "openclawd",
@@ -1420,7 +1445,8 @@
         "meteora",
         "orca",
         "raydium",
-        "analytics"
+        "analytics",
+        "solana-clawd"
       ],
       "category": "analytics",
       "author": "openclawd",
@@ -1466,7 +1492,8 @@
         "clawd",
         "solana",
         "jito",
-        "bundles"
+        "bundles",
+        "solana-clawd"
       ],
       "category": "security",
       "author": "openclawd",
@@ -1513,7 +1540,8 @@
         "clawd",
         "solana",
         "tensor",
-        "magic-eden"
+        "magic-eden",
+        "solana-clawd"
       ],
       "category": "nft",
       "author": "openclawd",
@@ -1566,7 +1594,8 @@
         "gateway",
         "codex",
         "claude",
-        "clawd"
+        "clawd",
+        "solana-clawd"
       ],
       "category": "dev-tools",
       "author": "openclawd",
@@ -1615,7 +1644,8 @@
         "solana",
         "rebalance",
         "analytics",
-        "one-shot"
+        "one-shot",
+        "solana-clawd"
       ],
       "category": "analytics",
       "author": "openclawd",
@@ -1665,7 +1695,8 @@
         "clawd",
         "pumpfun",
         "dev-tools",
-        "x402"
+        "x402",
+        "solana-clawd"
       ],
       "category": "dev-tools",
       "author": "openclawd",
@@ -1711,7 +1742,8 @@
         "trading",
         "routing",
         "one-shot",
-        "clawd"
+        "clawd",
+        "solana-clawd"
       ],
       "category": "trading",
       "author": "openclawd",
@@ -1756,7 +1788,8 @@
         "yield",
         "defi",
         "one-shot",
-        "clawd"
+        "clawd",
+        "solana-clawd"
       ],
       "category": "defi",
       "author": "openclawd",
@@ -1803,7 +1836,8 @@
         "metaplex",
         "launch",
         "one-shot",
-        "clawd"
+        "clawd",
+        "solana-clawd"
       ],
       "category": "nft",
       "author": "openclawd",
@@ -1869,7 +1903,9 @@
         "cashback",
         "token-2022",
         "mayhem-mode",
-        "fee-tiers"
+        "fee-tiers",
+        "clawd",
+        "solana-clawd"
       ],
       "category": "trading",
       "author": "openclawd",
@@ -1909,7 +1945,8 @@
         "security",
         "screening",
         "one-shot",
-        "clawd"
+        "clawd",
+        "solana-clawd"
       ],
       "category": "security",
       "author": "openclawd",
@@ -1954,7 +1991,8 @@
         "lst",
         "governance",
         "one-shot",
-        "clawd"
+        "clawd",
+        "solana-clawd"
       ],
       "category": "education",
       "author": "openclawd",
@@ -2003,7 +2041,8 @@
         "solana",
         "stablecoins",
         "pyusd",
-        "susd"
+        "susd",
+        "solana-clawd"
       ],
       "category": "defi",
       "author": "openclawd",
@@ -2051,7 +2090,8 @@
         "solana",
         "validator",
         "lst",
-        "education"
+        "education",
+        "solana-clawd"
       ],
       "category": "education",
       "author": "openclawd",
@@ -2100,7 +2140,8 @@
         "solana",
         "phantom",
         "solflare",
-        "ledger"
+        "ledger",
+        "solana-clawd"
       ],
       "category": "security",
       "author": "openclawd",
@@ -2147,7 +2188,8 @@
         "solana",
         "whales",
         "helius",
-        "das"
+        "das",
+        "solana-clawd"
       ],
       "category": "analytics",
       "author": "openclawd",
@@ -2193,7 +2235,8 @@
         "clawd",
         "solana",
         "yield",
-        "dev-tools"
+        "dev-tools",
+        "solana-clawd"
       ],
       "category": "dev-tools",
       "author": "openclawd",
@@ -2239,7 +2282,8 @@
         "clawd",
         "solana",
         "emission-decay",
-        "analytics"
+        "analytics",
+        "solana-clawd"
       ],
       "category": "defi",
       "author": "openclawd",
@@ -2288,7 +2332,8 @@
         "solana",
         "helius",
         "birdeye",
-        "one-shot"
+        "one-shot",
+        "solana-clawd"
       ],
       "category": "trading",
       "author": "openclawd",
@@ -2335,7 +2380,8 @@
         "browser",
         "web",
         "openclawd",
-        "one-shot"
+        "one-shot",
+        "solana-clawd"
       ],
       "category": "research",
       "author": "openclawd",
@@ -2378,7 +2424,8 @@
         "orca",
         "raydium",
         "dlmm",
-        "one-shot"
+        "one-shot",
+        "solana-clawd"
       ],
       "category": "defi",
       "author": "openclawd",
@@ -2429,7 +2476,8 @@
         "candy-machine",
         "trading",
         "launch",
-        "one-shot"
+        "one-shot",
+        "solana-clawd"
       ],
       "category": "trading",
       "author": "openclawd",
@@ -2496,7 +2544,8 @@
         "beginner",
         "tutorial",
         "solana",
-        "one-shot"
+        "one-shot",
+        "solana-clawd"
       ],
       "category": "education",
       "author": "openclawd",
@@ -2542,7 +2591,8 @@
         "solana",
         "helius",
         "das",
-        "one-shot"
+        "one-shot",
+        "solana-clawd"
       ],
       "category": "analytics",
       "author": "openclawd",
@@ -2587,7 +2637,8 @@
         "x402",
         "telegram",
         "one-shot",
-        "clawd"
+        "clawd",
+        "solana-clawd"
       ],
       "category": "trading",
       "author": "openclawd",
@@ -2641,7 +2692,8 @@
         "alerts",
         "kamino",
         "drift",
-        "one-shot"
+        "one-shot",
+        "solana-clawd"
       ],
       "category": "security",
       "author": "openclawd",
@@ -2686,7 +2738,8 @@
         "cloudflare",
         "x402",
         "agent-registry",
-        "one-shot"
+        "one-shot",
+        "solana-clawd"
       ],
       "category": "infrastructure",
       "author": "openclawd",
@@ -2737,7 +2790,8 @@
         "marginfi",
         "drift",
         "meteora",
-        "one-shot"
+        "one-shot",
+        "solana-clawd"
       ],
       "category": "defi",
       "author": "openclawd",
@@ -2788,7 +2842,8 @@
         "kamino",
         "meteora",
         "drift",
-        "one-shot"
+        "one-shot",
+        "solana-clawd"
       ],
       "category": "defi",
       "author": "openclawd",
@@ -2839,7 +2894,8 @@
         "jupiter",
         "router",
         "trading",
-        "one-shot"
+        "one-shot",
+        "solana-clawd"
       ],
       "category": "trading",
       "author": "openclawd",
@@ -2887,10 +2943,11 @@
         "trading",
         "execution",
         "dry-run",
-        "audit"
+        "audit",
+        "solana-clawd"
       ],
       "category": "trading",
-      "author": "8bitsats",
+      "author": "solana-clawd",
       "createdAt": "2026-05-19",
       "oneShot": false,
       "featured": true,
@@ -2943,7 +3000,8 @@
         "kamino",
         "drift",
         "marginfi",
-        "one-shot"
+        "one-shot",
+        "solana-clawd"
       ],
       "category": "security",
       "author": "openclawd",
@@ -2992,7 +3050,8 @@
         "solana",
         "rebalance",
         "analytics",
-        "one-shot"
+        "one-shot",
+        "solana-clawd"
       ],
       "category": "analytics",
       "author": "openclawd",
@@ -3042,7 +3101,8 @@
         "clawd",
         "pumpfun",
         "dev-tools",
-        "x402"
+        "x402",
+        "solana-clawd"
       ],
       "category": "dev-tools",
       "author": "openclawd",
@@ -3088,7 +3148,8 @@
         "trading",
         "routing",
         "one-shot",
-        "clawd"
+        "clawd",
+        "solana-clawd"
       ],
       "category": "trading",
       "author": "openclawd",
@@ -3133,7 +3194,8 @@
         "yield",
         "defi",
         "one-shot",
-        "clawd"
+        "clawd",
+        "solana-clawd"
       ],
       "category": "defi",
       "author": "openclawd",
@@ -3180,7 +3242,8 @@
         "metaplex",
         "launch",
         "one-shot",
-        "clawd"
+        "clawd",
+        "solana-clawd"
       ],
       "category": "nft",
       "author": "openclawd",
@@ -3246,7 +3309,9 @@
         "cashback",
         "token-2022",
         "mayhem-mode",
-        "fee-tiers"
+        "fee-tiers",
+        "clawd",
+        "solana-clawd"
       ],
       "category": "trading",
       "author": "openclawd",
@@ -3286,7 +3351,8 @@
         "security",
         "screening",
         "one-shot",
-        "clawd"
+        "clawd",
+        "solana-clawd"
       ],
       "category": "security",
       "author": "openclawd",
@@ -3331,7 +3397,8 @@
         "lst",
         "governance",
         "one-shot",
-        "clawd"
+        "clawd",
+        "solana-clawd"
       ],
       "category": "education",
       "author": "openclawd",
@@ -3380,7 +3447,8 @@
         "autonomous",
         "strategy",
         "risk",
-        "trading"
+        "trading",
+        "solana-clawd"
       ],
       "category": "trading",
       "author": "x402agent",
@@ -3432,7 +3500,8 @@
         "solana",
         "phantom",
         "solflare",
-        "ledger"
+        "ledger",
+        "solana-clawd"
       ],
       "category": "security",
       "author": "openclawd",
@@ -3481,7 +3550,8 @@
         "solana",
         "jupiter",
         "lfg",
-        "one-shot"
+        "one-shot",
+        "solana-clawd"
       ],
       "category": "trading",
       "author": "openclawd",
@@ -3529,7 +3599,8 @@
         "solana",
         "helius",
         "birdeye",
-        "one-shot"
+        "one-shot",
+        "solana-clawd"
       ],
       "category": "trading",
       "author": "openclawd",
@@ -3575,7 +3646,8 @@
         "clawd",
         "solana",
         "kamino",
-        "marginfi"
+        "marginfi",
+        "solana-clawd"
       ],
       "category": "education",
       "author": "openclawd",
@@ -3622,7 +3694,8 @@
         "solana",
         "wormhole",
         "debridge",
-        "allbridge"
+        "allbridge",
+        "solana-clawd"
       ],
       "category": "security",
       "author": "openclawd",
@@ -3666,7 +3739,8 @@
         "arbitrum",
         "layer-2",
         "solana",
-        "one-shot"
+        "one-shot",
+        "solana-clawd"
       ],
       "category": "defi",
       "author": "openclawd",
@@ -3713,7 +3787,8 @@
         "browser",
         "web",
         "openclawd",
-        "one-shot"
+        "one-shot",
+        "solana-clawd"
       ],
       "category": "research",
       "author": "openclawd",
@@ -3753,7 +3828,8 @@
         "proposals",
         "solana",
         "realms",
-        "one-shot"
+        "one-shot",
+        "solana-clawd"
       ],
       "category": "governance",
       "author": "openclawd",
@@ -3802,7 +3878,8 @@
         "orca",
         "raydium",
         "dlmm",
-        "one-shot"
+        "one-shot",
+        "solana-clawd"
       ],
       "category": "defi",
       "author": "openclawd",
@@ -3853,7 +3930,8 @@
         "candy-machine",
         "trading",
         "launch",
-        "one-shot"
+        "one-shot",
+        "solana-clawd"
       ],
       "category": "trading",
       "author": "openclawd",
@@ -3920,7 +3998,8 @@
         "beginner",
         "tutorial",
         "solana",
-        "one-shot"
+        "one-shot",
+        "solana-clawd"
       ],
       "category": "education",
       "author": "openclawd",
@@ -3966,7 +4045,8 @@
         "solana",
         "helius",
         "das",
-        "one-shot"
+        "one-shot",
+        "solana-clawd"
       ],
       "category": "analytics",
       "author": "openclawd",
@@ -4011,7 +4091,8 @@
         "x402",
         "telegram",
         "one-shot",
-        "clawd"
+        "clawd",
+        "solana-clawd"
       ],
       "category": "trading",
       "author": "openclawd",
@@ -4065,7 +4146,8 @@
         "alerts",
         "kamino",
         "drift",
-        "one-shot"
+        "one-shot",
+        "solana-clawd"
       ],
       "category": "security",
       "author": "openclawd",
@@ -4110,7 +4192,8 @@
         "cloudflare",
         "x402",
         "agent-registry",
-        "one-shot"
+        "one-shot",
+        "solana-clawd"
       ],
       "category": "infrastructure",
       "author": "openclawd",
@@ -4161,7 +4244,8 @@
         "marginfi",
         "drift",
         "meteora",
-        "one-shot"
+        "one-shot",
+        "solana-clawd"
       ],
       "category": "defi",
       "author": "openclawd",
@@ -4209,7 +4293,9 @@
         "orchestrator",
         "dual-engine",
         "boxes",
-        "solana"
+        "solana",
+        "clawd",
+        "solana-clawd"
       ],
       "category": "defi",
       "author": "x402agent",
@@ -4245,7 +4331,8 @@
         "clawd",
         "solana",
         "narrative",
-        "analytics"
+        "analytics",
+        "solana-clawd"
       ],
       "category": "analytics",
       "author": "openclawd",
@@ -4289,7 +4376,8 @@
         "optimization",
         "compliance",
         "clawd",
-        "solana"
+        "solana",
+        "solana-clawd"
       ],
       "category": "education",
       "author": "openclawd",
@@ -4334,7 +4422,8 @@
         "safety",
         "clawd",
         "solana",
-        "defi"
+        "defi",
+        "solana-clawd"
       ],
       "category": "defi",
       "author": "openclawd",
@@ -4379,7 +4468,8 @@
         "defi-basics",
         "clawd",
         "solana",
-        "defi"
+        "defi",
+        "solana-clawd"
       ],
       "category": "education",
       "author": "openclawd",
@@ -4424,7 +4514,8 @@
         "research",
         "clawd",
         "solana",
-        "analytics"
+        "analytics",
+        "solana-clawd"
       ],
       "category": "analytics",
       "author": "openclawd",
@@ -4472,7 +4563,8 @@
         "defi",
         "risk-scoring",
         "security",
-        "one-shot"
+        "one-shot",
+        "solana-clawd"
       ],
       "category": "security",
       "author": "openclawd",
@@ -4520,7 +4612,8 @@
         "kamino",
         "meteora",
         "drift",
-        "one-shot"
+        "one-shot",
+        "solana-clawd"
       ],
       "category": "defi",
       "author": "openclawd",
@@ -4571,7 +4664,8 @@
         "jupiter",
         "router",
         "trading",
-        "one-shot"
+        "one-shot",
+        "solana-clawd"
       ],
       "category": "trading",
       "author": "openclawd",
@@ -4620,7 +4714,8 @@
         "priority-fees",
         "compute-units",
         "jito",
-        "dev-tools"
+        "dev-tools",
+        "solana-clawd"
       ],
       "category": "dev-tools",
       "author": "openclawd",
@@ -4666,7 +4761,8 @@
         "clawd",
         "solana",
         "realms",
-        "spl-governance"
+        "spl-governance",
+        "solana-clawd"
       ],
       "category": "governance",
       "author": "openclawd",
@@ -4714,10 +4810,11 @@
         "trading",
         "execution",
         "dry-run",
-        "audit"
+        "audit",
+        "solana-clawd"
       ],
       "category": "trading",
-      "author": "8bitsats",
+      "author": "solana-clawd",
       "createdAt": "2026-05-19",
       "oneShot": false,
       "featured": true,
@@ -4769,7 +4866,8 @@
         "solana",
         "il",
         "meteora",
-        "orca"
+        "orca",
+        "solana-clawd"
       ],
       "category": "defi",
       "author": "openclawd",
@@ -4813,7 +4911,8 @@
         "optimism",
         "ethereum",
         "clawd",
-        "solana"
+        "solana",
+        "solana-clawd"
       ],
       "category": "defi",
       "author": "openclawd",
@@ -4861,7 +4960,8 @@
         "kamino",
         "drift",
         "marginfi",
-        "one-shot"
+        "one-shot",
+        "solana-clawd"
       ],
       "category": "security",
       "author": "openclawd",
@@ -4912,7 +5012,8 @@
         "meteora",
         "orca",
         "raydium",
-        "analytics"
+        "analytics",
+        "solana-clawd"
       ],
       "category": "analytics",
       "author": "openclawd",
@@ -4958,7 +5059,8 @@
         "clawd",
         "solana",
         "jito",
-        "bundles"
+        "bundles",
+        "solana-clawd"
       ],
       "category": "security",
       "author": "openclawd",
@@ -5004,7 +5106,8 @@
         "market-cycles",
         "clawd",
         "solana",
-        "analytics"
+        "analytics",
+        "solana-clawd"
       ],
       "category": "analytics",
       "author": "openclawd",
@@ -5050,7 +5153,8 @@
         "clawd",
         "solana",
         "tensor",
-        "magic-eden"
+        "magic-eden",
+        "solana-clawd"
       ],
       "category": "nft",
       "author": "openclawd",
@@ -5103,7 +5207,8 @@
         "gateway",
         "codex",
         "claude",
-        "clawd"
+        "clawd",
+        "solana-clawd"
       ],
       "category": "dev-tools",
       "author": "openclawd",
@@ -5192,7 +5297,8 @@
         "solana",
         "rebalance",
         "analytics",
-        "one-shot"
+        "one-shot",
+        "solana-clawd"
       ],
       "category": "analytics",
       "author": "openclawd",
@@ -5239,7 +5345,8 @@
         "clawd",
         "solana",
         "analytics",
-        "defillama"
+        "defillama",
+        "solana-clawd"
       ],
       "category": "analytics",
       "author": "openclawd",
@@ -5285,7 +5392,8 @@
         "clawd",
         "solana",
         "governance",
-        "analytics"
+        "analytics",
+        "solana-clawd"
       ],
       "category": "analytics",
       "author": "openclawd",
@@ -5334,7 +5442,8 @@
         "clawd",
         "pumpfun",
         "dev-tools",
-        "x402"
+        "x402",
+        "solana-clawd"
       ],
       "category": "dev-tools",
       "author": "openclawd",
@@ -5382,7 +5491,8 @@
         "clawd",
         "solana",
         "anchor",
-        "dev-tools"
+        "dev-tools",
+        "solana-clawd"
       ],
       "category": "security",
       "author": "openclawd",
@@ -5424,7 +5534,9 @@
         "multi-agent",
         "coordination",
         "agentic",
-        "workflow"
+        "workflow",
+        "clawd",
+        "solana-clawd"
       ],
       "category": "defi",
       "author": "x402agent",
@@ -5456,7 +5568,9 @@
         "points",
         "farming",
         "strategy",
-        "eligibility"
+        "eligibility",
+        "clawd",
+        "solana-clawd"
       ],
       "category": "defi",
       "author": "x402agent",
@@ -5488,7 +5602,9 @@
         "signals",
         "aggregation",
         "trade-ideas",
-        "ranking"
+        "ranking",
+        "clawd",
+        "solana-clawd"
       ],
       "category": "defi",
       "author": "x402agent",
@@ -5520,7 +5636,9 @@
         "solana",
         "rust",
         "smart-contract",
-        "development"
+        "development",
+        "clawd",
+        "solana-clawd"
       ],
       "category": "defi",
       "author": "x402agent",
@@ -5551,7 +5669,9 @@
         "anomaly-detection",
         "fraud",
         "rug-pull",
-        "manipulation"
+        "manipulation",
+        "clawd",
+        "solana-clawd"
       ],
       "category": "defi",
       "author": "x402agent",
@@ -5582,7 +5702,9 @@
         "arbitrage",
         "cross-dex",
         "profit",
-        "scanner"
+        "scanner",
+        "clawd",
+        "solana-clawd"
       ],
       "category": "defi",
       "author": "x402agent",
@@ -5614,7 +5736,9 @@
         "self-managing",
         "adaptive",
         "agent",
-        "ai-trading"
+        "ai-trading",
+        "clawd",
+        "solana-clawd"
       ],
       "category": "defi",
       "author": "x402agent",
@@ -5645,7 +5769,9 @@
         "bot",
         "architecture",
         "automation",
-        "trading-system"
+        "trading-system",
+        "clawd",
+        "solana-clawd"
       ],
       "category": "defi",
       "author": "x402agent",
@@ -5676,7 +5802,9 @@
         "chart-patterns",
         "computer-vision",
         "ai",
-        "pattern-recognition"
+        "pattern-recognition",
+        "clawd",
+        "solana-clawd"
       ],
       "category": "defi",
       "author": "x402agent",
@@ -5710,7 +5838,8 @@
         "planning",
         "budget",
         "x402",
-        "payments"
+        "payments",
+        "solana-clawd"
       ],
       "category": "payments",
       "author": "x402agent",
@@ -5745,7 +5874,8 @@
         "support",
         "routing",
         "commerce",
-        "solana"
+        "solana",
+        "solana-clawd"
       ],
       "category": "defi",
       "author": "openclawd",
@@ -5779,7 +5909,8 @@
         "x402",
         "mpp",
         "payments",
-        "gateway"
+        "gateway",
+        "solana-clawd"
       ],
       "category": "payments",
       "author": "x402agent",
@@ -5813,7 +5944,8 @@
         "mpp",
         "payment",
         "gateway",
-        "openclawd"
+        "openclawd",
+        "solana-clawd"
       ],
       "category": "payments",
       "author": "x402agent",
@@ -5847,7 +5979,8 @@
         "scoring",
         "routing",
         "x402",
-        "pay"
+        "pay",
+        "solana-clawd"
       ],
       "category": "payments",
       "author": "x402agent",
@@ -5881,7 +6014,8 @@
         "relay",
         "pricing",
         "x402",
-        "market-data"
+        "market-data",
+        "solana-clawd"
       ],
       "category": "payments",
       "author": "x402agent",
@@ -5915,7 +6049,8 @@
         "allocator",
         "treasury",
         "payments",
-        "openclawd"
+        "openclawd",
+        "solana-clawd"
       ],
       "category": "payments",
       "author": "x402agent",
@@ -5949,7 +6084,8 @@
         "security",
         "biometric",
         "x402",
-        "pay"
+        "pay",
+        "solana-clawd"
       ],
       "category": "payments",
       "author": "x402agent",
@@ -5981,7 +6117,9 @@
         "cross-chain",
         "wormhole",
         "debridge",
-        "security"
+        "security",
+        "clawd",
+        "solana-clawd"
       ],
       "category": "defi",
       "author": "x402agent",
@@ -6016,7 +6154,9 @@
         "briefing",
         "research",
         "premium",
-        "solana"
+        "solana",
+        "clawd",
+        "solana-clawd"
       ],
       "category": "defi",
       "author": "openclawd",
@@ -6048,7 +6188,9 @@
         "indexing",
         "analytics",
         "geyser",
-        "helius"
+        "helius",
+        "clawd",
+        "solana-clawd"
       ],
       "category": "defi",
       "author": "x402agent",
@@ -6080,7 +6222,9 @@
         "dex",
         "jupiter",
         "trading",
-        "swap"
+        "swap",
+        "clawd",
+        "solana-clawd"
       ],
       "category": "defi",
       "author": "x402agent",
@@ -6115,7 +6259,9 @@
         "quotes",
         "storefront",
         "payments",
-        "solana"
+        "solana",
+        "clawd",
+        "solana-clawd"
       ],
       "category": "defi",
       "author": "openclawd",
@@ -6146,7 +6292,9 @@
         "funding-rate",
         "arbitrage",
         "delta-neutral",
-        "carry-trade"
+        "carry-trade",
+        "clawd",
+        "solana-clawd"
       ],
       "category": "defi",
       "author": "x402agent",
@@ -6178,7 +6326,9 @@
         "das",
         "webhooks",
         "enhanced-api",
-        "rpc"
+        "rpc",
+        "clawd",
+        "solana-clawd"
       ],
       "category": "defi",
       "author": "x402agent",
@@ -6214,7 +6364,9 @@
         "mpp",
         "payments",
         "moonpay",
-        "solana"
+        "solana",
+        "clawd",
+        "solana-clawd"
       ],
       "category": "defi",
       "author": "openclawd",
@@ -6245,7 +6397,9 @@
         "impermanent-loss",
         "liquidity",
         "amm",
-        "concentrated"
+        "concentrated",
+        "clawd",
+        "solana-clawd"
       ],
       "category": "defi",
       "author": "x402agent",
@@ -6279,7 +6433,8 @@
         "trading",
         "routing",
         "one-shot",
-        "clawd"
+        "clawd",
+        "solana-clawd"
       ],
       "category": "trading",
       "author": "openclawd",
@@ -6324,7 +6479,8 @@
         "yield",
         "defi",
         "one-shot",
-        "clawd"
+        "clawd",
+        "solana-clawd"
       ],
       "category": "defi",
       "author": "openclawd",
@@ -6370,7 +6526,9 @@
         "marginfi",
         "solend",
         "kamino",
-        "leverage"
+        "leverage",
+        "clawd",
+        "solana-clawd"
       ],
       "category": "defi",
       "author": "x402agent",
@@ -6402,7 +6560,9 @@
         "lending",
         "marginfi",
         "solend",
-        "kamino"
+        "kamino",
+        "clawd",
+        "solana-clawd"
       ],
       "category": "defi",
       "author": "x402agent",
@@ -6434,7 +6594,9 @@
         "msol",
         "jitosol",
         "bsol",
-        "sanctum"
+        "sanctum",
+        "clawd",
+        "solana-clawd"
       ],
       "category": "defi",
       "author": "x402agent",
@@ -6466,7 +6628,9 @@
         "economics",
         "fed",
         "liquidity",
-        "cycles"
+        "cycles",
+        "clawd",
+        "solana-clawd"
       ],
       "category": "defi",
       "author": "x402agent",
@@ -6498,7 +6662,9 @@
         "clob",
         "spread",
         "inventory",
-        "phoenix"
+        "phoenix",
+        "clawd",
+        "solana-clawd"
       ],
       "category": "defi",
       "author": "x402agent",
@@ -6530,7 +6696,9 @@
         "pump-fun",
         "degen",
         "alpha",
-        "bonding-curve"
+        "bonding-curve",
+        "clawd",
+        "solana-clawd"
       ],
       "category": "defi",
       "author": "x402agent",
@@ -6562,7 +6730,9 @@
         "jito",
         "security",
         "sandwich",
-        "front-running"
+        "front-running",
+        "clawd",
+        "solana-clawd"
       ],
       "category": "defi",
       "author": "x402agent",
@@ -6596,7 +6766,8 @@
         "metaplex",
         "launch",
         "one-shot",
-        "clawd"
+        "clawd",
+        "solana-clawd"
       ],
       "category": "nft",
       "author": "openclawd",
@@ -6650,7 +6821,9 @@
         "ttl",
         "x402",
         "optimization",
-        "payments"
+        "payments",
+        "clawd",
+        "solana-clawd"
       ],
       "category": "payments",
       "author": "x402agent",
@@ -6684,7 +6857,9 @@
         "budget",
         "x402",
         "payments",
-        "pay"
+        "pay",
+        "clawd",
+        "solana-clawd"
       ],
       "category": "payments",
       "author": "x402agent",
@@ -6718,7 +6893,9 @@
         "testing",
         "x402",
         "mpp",
-        "payments"
+        "payments",
+        "clawd",
+        "solana-clawd"
       ],
       "category": "payments",
       "author": "x402agent",
@@ -6750,7 +6927,9 @@
         "trends",
         "sector-rotation",
         "meta",
-        "alpha"
+        "alpha",
+        "clawd",
+        "solana-clawd"
       ],
       "category": "defi",
       "author": "x402agent",
@@ -6784,7 +6963,9 @@
         "router",
         "x402",
         "jupiter",
-        "treasury"
+        "treasury",
+        "clawd",
+        "solana-clawd"
       ],
       "category": "payments",
       "author": "x402agent",
@@ -6818,7 +6999,9 @@
         "ops",
         "treasury",
         "reconciliation",
-        "payments"
+        "payments",
+        "clawd",
+        "solana-clawd"
       ],
       "category": "payments",
       "author": "x402agent",
@@ -6852,7 +7035,9 @@
         "treasury",
         "usdc",
         "defi",
-        "payments"
+        "payments",
+        "clawd",
+        "solana-clawd"
       ],
       "category": "payments",
       "author": "x402agent",
@@ -6884,7 +7069,9 @@
         "floor-price",
         "magic-eden",
         "tensor",
-        "trading"
+        "trading",
+        "clawd",
+        "solana-clawd"
       ],
       "category": "defi",
       "author": "x402agent",
@@ -6916,7 +7103,9 @@
         "metrics",
         "tvl",
         "analytics",
-        "dashboard"
+        "dashboard",
+        "clawd",
+        "solana-clawd"
       ],
       "category": "defi",
       "author": "x402agent",
@@ -6948,7 +7137,9 @@
         "investigation",
         "tracing",
         "compliance",
-        "aml"
+        "aml",
+        "clawd",
+        "solana-clawd"
       ],
       "category": "defi",
       "author": "x402agent",
@@ -6982,7 +7173,9 @@
         "orchestration",
         "multi-agent",
         "x402",
-        "payments"
+        "payments",
+        "clawd",
+        "solana-clawd"
       ],
       "category": "payments",
       "author": "x402agent",
@@ -7016,7 +7209,9 @@
         "monitoring",
         "health",
         "x402",
-        "treasury"
+        "treasury",
+        "clawd",
+        "solana-clawd"
       ],
       "category": "payments",
       "author": "x402agent",
@@ -7050,7 +7245,9 @@
         "shell",
         "payments",
         "security",
-        "logs"
+        "logs",
+        "clawd",
+        "solana-clawd"
       ],
       "category": "payments",
       "author": "x402agent",
@@ -7084,7 +7281,9 @@
         "routing",
         "catalog",
         "payments",
-        "agents"
+        "agents",
+        "clawd",
+        "solana-clawd"
       ],
       "category": "payments",
       "author": "x402agent",
@@ -7118,7 +7317,9 @@
         "fleet",
         "delegation",
         "payments",
-        "orchestration"
+        "orchestration",
+        "clawd",
+        "solana-clawd"
       ],
       "category": "payments",
       "author": "x402agent",
@@ -7149,7 +7350,9 @@
         "order-flow",
         "whale-tracking",
         "smart-money",
-        "analysis"
+        "analysis",
+        "clawd",
+        "solana-clawd"
       ],
       "category": "defi",
       "author": "x402agent",
@@ -7181,7 +7384,9 @@
         "drift",
         "zeta",
         "leverage",
-        "futures"
+        "futures",
+        "clawd",
+        "solana-clawd"
       ],
       "category": "defi",
       "author": "x402agent",
@@ -7213,7 +7418,9 @@
         "risk",
         "var",
         "correlation",
-        "drawdown"
+        "drawdown",
+        "clawd",
+        "solana-clawd"
       ],
       "category": "defi",
       "author": "x402agent",
@@ -7244,7 +7451,9 @@
         "position-sizing",
         "kelly",
         "risk-management",
-        "money-management"
+        "money-management",
+        "clawd",
+        "solana-clawd"
       ],
       "category": "defi",
       "author": "x402agent",
@@ -7276,7 +7485,9 @@
         "probability",
         "dflow",
         "kalshi",
-        "forecasting"
+        "forecasting",
+        "clawd",
+        "solana-clawd"
       ],
       "category": "defi",
       "author": "x402agent",
@@ -7308,7 +7519,9 @@
         "prediction",
         "lstm",
         "transformer",
-        "price"
+        "price",
+        "clawd",
+        "solana-clawd"
       ],
       "category": "defi",
       "author": "x402agent",
@@ -7340,7 +7553,9 @@
         "security",
         "anchor",
         "rust",
-        "vulnerabilities"
+        "vulnerabilities",
+        "clawd",
+        "solana-clawd"
       ],
       "category": "defi",
       "author": "x402agent",
@@ -7386,7 +7601,9 @@
         "cashback",
         "token-2022",
         "mayhem-mode",
-        "fee-tiers"
+        "fee-tiers",
+        "clawd",
+        "solana-clawd"
       ],
       "category": "trading",
       "author": "openclawd",
@@ -7426,7 +7643,8 @@
         "security",
         "screening",
         "one-shot",
-        "clawd"
+        "clawd",
+        "solana-clawd"
       ],
       "category": "security",
       "author": "openclawd",
@@ -7469,7 +7687,9 @@
         "backtesting",
         "alpha",
         "research",
-        "strategy"
+        "strategy",
+        "clawd",
+        "solana-clawd"
       ],
       "category": "defi",
       "author": "x402agent",
@@ -7501,7 +7721,9 @@
         "sec",
         "compliance",
         "legal",
-        "policy"
+        "policy",
+        "clawd",
+        "solana-clawd"
       ],
       "category": "defi",
       "author": "x402agent",
@@ -7533,7 +7755,9 @@
         "monitoring",
         "smart-contract",
         "oracle",
-        "systemic"
+        "systemic",
+        "clawd",
+        "solana-clawd"
       ],
       "category": "defi",
       "author": "x402agent",
@@ -7565,7 +7789,9 @@
         "infrastructure",
         "helius",
         "quicknode",
-        "websocket"
+        "websocket",
+        "clawd",
+        "solana-clawd"
       ],
       "category": "defi",
       "author": "x402agent",
@@ -7597,7 +7823,9 @@
         "nlp",
         "twitter",
         "social",
-        "analysis"
+        "analysis",
+        "clawd",
+        "solana-clawd"
       ],
       "category": "defi",
       "author": "x402agent",
@@ -7628,7 +7856,9 @@
         "spot-trading",
         "execution",
         "slippage",
-        "optimization"
+        "optimization",
+        "clawd",
+        "solana-clawd"
       ],
       "category": "defi",
       "author": "x402agent",
@@ -7660,7 +7890,9 @@
         "yield",
         "usdc",
         "usdt",
-        "lending"
+        "lending",
+        "clawd",
+        "solana-clawd"
       ],
       "category": "defi",
       "author": "x402agent",
@@ -7692,7 +7924,9 @@
         "indicators",
         "charts",
         "patterns",
-        "trading"
+        "trading",
+        "clawd",
+        "solana-clawd"
       ],
       "category": "defi",
       "author": "x402agent",
@@ -7723,7 +7957,9 @@
         "pump-fun",
         "token-launch",
         "bonding-curve",
-        "raydium"
+        "raydium",
+        "clawd",
+        "solana-clawd"
       ],
       "category": "defi",
       "author": "x402agent",
@@ -7755,7 +7991,9 @@
         "supply",
         "vesting",
         "inflation",
-        "valuation"
+        "valuation",
+        "clawd",
+        "solana-clawd"
       ],
       "category": "defi",
       "author": "x402agent",
@@ -7789,7 +8027,8 @@
         "lst",
         "governance",
         "one-shot",
-        "clawd"
+        "clawd",
+        "solana-clawd"
       ],
       "category": "education",
       "author": "openclawd",
@@ -7833,7 +8072,9 @@
         "fundraising",
         "unlocks",
         "investors",
-        "deal-analysis"
+        "deal-analysis",
+        "clawd",
+        "solana-clawd"
       ],
       "category": "defi",
       "author": "x402agent",
@@ -7865,7 +8106,9 @@
         "options",
         "greeks",
         "risk",
-        "modeling"
+        "modeling",
+        "clawd",
+        "solana-clawd"
       ],
       "category": "defi",
       "author": "x402agent",
@@ -7902,7 +8145,8 @@
         "autonomous",
         "strategy",
         "risk",
-        "trading"
+        "trading",
+        "solana-clawd"
       ],
       "category": "trading",
       "author": "x402agent",
@@ -7948,7 +8192,9 @@
         "whale",
         "wallet-tracking",
         "accumulation",
-        "distribution"
+        "distribution",
+        "clawd",
+        "solana-clawd"
       ],
       "category": "defi",
       "author": "x402agent",
@@ -7980,7 +8226,9 @@
         "research",
         "protocol",
         "analysis",
-        "architecture"
+        "architecture",
+        "clawd",
+        "solana-clawd"
       ],
       "category": "defi",
       "author": "x402agent",
@@ -8014,7 +8262,9 @@
         "birdeye",
         "quotes",
         "payments",
-        "trading"
+        "trading",
+        "clawd",
+        "solana-clawd"
       ],
       "category": "payments",
       "author": "x402agent",
@@ -8048,7 +8298,9 @@
         "catalog",
         "authoring",
         "pay",
-        "gateway"
+        "gateway",
+        "clawd",
+        "solana-clawd"
       ],
       "category": "payments",
       "author": "x402agent",
@@ -8082,7 +8334,9 @@
         "routing",
         "providers",
         "pay",
-        "openclawd"
+        "openclawd",
+        "clawd",
+        "solana-clawd"
       ],
       "category": "payments",
       "author": "x402agent",
@@ -8116,7 +8370,9 @@
         "live-data",
         "narratives",
         "payments",
-        "openclawd"
+        "openclawd",
+        "clawd",
+        "solana-clawd"
       ],
       "category": "payments",
       "author": "x402agent",
@@ -8150,7 +8406,9 @@
         "monetization",
         "providers",
         "payments",
-        "research"
+        "research",
+        "clawd",
+        "solana-clawd"
       ],
       "category": "payments",
       "author": "x402agent",
@@ -8184,7 +8442,9 @@
         "helius",
         "analytics",
         "broker",
-        "payments"
+        "payments",
+        "clawd",
+        "solana-clawd"
       ],
       "category": "payments",
       "author": "x402agent",
@@ -8218,7 +8478,9 @@
         "settlement",
         "callbacks",
         "payments",
-        "accounting"
+        "accounting",
+        "clawd",
+        "solana-clawd"
       ],
       "category": "payments",
       "author": "x402agent",
@@ -8250,7 +8512,9 @@
         "defi",
         "farming",
         "staking",
-        "optimization"
+        "optimization",
+        "clawd",
+        "solana-clawd"
       ],
       "category": "defi",
       "author": "x402agent",
@@ -8284,7 +8548,8 @@
         "staking",
         "governance",
         "solana",
-        "analytics"
+        "analytics",
+        "solana-clawd"
       ],
       "category": "analytics",
       "author": "openclawd",
@@ -8331,7 +8596,8 @@
         "solana",
         "stablecoins",
         "pyusd",
-        "susd"
+        "susd",
+        "solana-clawd"
       ],
       "category": "defi",
       "author": "openclawd",
@@ -8379,7 +8645,8 @@
         "solana",
         "validator",
         "lst",
-        "education"
+        "education",
+        "solana-clawd"
       ],
       "category": "education",
       "author": "openclawd",
@@ -8426,7 +8693,8 @@
         "analysis",
         "clawd",
         "solana",
-        "analytics"
+        "analytics",
+        "solana-clawd"
       ],
       "category": "analytics",
       "author": "openclawd",
@@ -8471,7 +8739,8 @@
         "yield",
         "solana",
         "stablecoins",
-        "sky"
+        "sky",
+        "solana-clawd"
       ],
       "category": "defi",
       "author": "openclawd",
@@ -8518,7 +8787,8 @@
         "solana",
         "defi",
         "ve-model",
-        "governance"
+        "governance",
+        "solana-clawd"
       ],
       "category": "defi",
       "author": "openclawd",
@@ -8567,7 +8837,8 @@
         "solana",
         "phantom",
         "solflare",
-        "ledger"
+        "ledger",
+        "solana-clawd"
       ],
       "category": "security",
       "author": "openclawd",
@@ -8614,7 +8885,8 @@
         "solana",
         "whales",
         "helius",
-        "das"
+        "das",
+        "solana-clawd"
       ],
       "category": "analytics",
       "author": "openclawd",
@@ -8660,7 +8932,8 @@
         "clawd",
         "solana",
         "yield",
-        "dev-tools"
+        "dev-tools",
+        "solana-clawd"
       ],
       "category": "dev-tools",
       "author": "openclawd",
@@ -8706,7 +8979,8 @@
         "clawd",
         "solana",
         "emission-decay",
-        "analytics"
+        "analytics",
+        "solana-clawd"
       ],
       "category": "defi",
       "author": "openclawd",

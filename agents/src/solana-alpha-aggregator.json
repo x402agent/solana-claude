@@ -15,7 +15,9 @@
       "signals",
       "aggregation",
       "trade-ideas",
-      "ranking"
+      "ranking",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "Alpha Signal Aggregator"
   },

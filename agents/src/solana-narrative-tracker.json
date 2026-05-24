@@ -15,7 +15,9 @@
       "trends",
       "sector-rotation",
       "meta",
-      "alpha"
+      "alpha",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "Crypto Narrative Tracker"
   },

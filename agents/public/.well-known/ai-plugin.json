@@ -9,9 +9,9 @@
     },
     "api": {
         "type": "none",
-        "url": "https://agents.openclawd.biz/api/agents"
+        "url": "https://x402.wtf/api/agents"
     },
-    "logo_url": "https://agents.openclawd.biz/nich.jpg",
+    "logo_url": "https://x402.wtf/nich.jpg",
     "contact_email": "security@openclawd.biz",
-    "legal_info_url": "https://github.com/clawdsolana/OpenClawd/blob/main/agents/LICENSE"
+    "legal_info_url": "https://github.com/x402agent/solana-clawd/blob/main/agents/LICENSE"
 }

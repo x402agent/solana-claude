@@ -1,4 +1,4 @@
-# Contributing to defi-agents
+# Contributing to solana-clawd-agents
 
 Thanks for your interest in contributing! Every contribution helps make this project better.
 

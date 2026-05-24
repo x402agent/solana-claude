@@ -21,7 +21,8 @@
       "clawd",
       "solana",
       "emission-decay",
-      "analytics"
+      "analytics",
+      "solana-clawd"
     ]
   },
   "config": {

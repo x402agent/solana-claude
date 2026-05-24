@@ -78,7 +78,9 @@
       "routing",
       "catalog",
       "payments",
-      "agents"
+      "agents",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "OpenClawd Skill Router"
   },

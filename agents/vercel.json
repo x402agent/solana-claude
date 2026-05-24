@@ -7,7 +7,7 @@
     {
       "source": "/(.*).json",
       "headers": [
-        { "key": "Access-Control-Allow-Origin", "value": "https://clawd.io" },
+        { "key": "Access-Control-Allow-Origin", "value": "https://x402.wtf" },
         { "key": "Access-Control-Allow-Methods", "value": "GET, OPTIONS" },
         { "key": "Cache-Control", "value": "public, max-age=3600, s-maxage=86400, stale-while-revalidate=604800" },
         { "key": "Vary", "value": "Origin" }

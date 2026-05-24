@@ -3,7 +3,7 @@ name: pump-build-release
 description: "Build and release pipeline for the Pump SDK — tsup TypeScript builds, Cargo release profiles, semantic release with commitizen, npm publishing, linting, Makefile targets, Vercel deployment, and MCP server distribution."
 metadata:
   openclaw:
-    homepage: https://github.com/nirholas/pump-fun-sdk
+    homepage: https://github.com/x402agent/pump-fun-sdk
 ---
 
 # Build & Release — SDK Build Pipeline & Publishing
@@ -63,7 +63,7 @@ Commit format: `type(scope): description`
 
 ```bash
 npm publish --access public
-# Package: @nirholas/pump-sdk
+# Package: @x402agent/pump-sdk
 ```
 
 ## Vercel Website Deployment

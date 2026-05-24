@@ -20,7 +20,8 @@
       "yield",
       "solana",
       "stablecoins",
-      "sky"
+      "sky",
+      "solana-clawd"
     ]
   },
   "config": {

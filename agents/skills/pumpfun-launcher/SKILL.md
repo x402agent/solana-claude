@@ -28,7 +28,7 @@ The Pump SDK provides offline instruction builders for token creation. This skil
 
 ```typescript
 import { Keypair, Connection } from "@solana/web3.js";
-import { PUMP_SDK, OnlinePumpSdk, getBuyTokenAmountFromSolAmount } from "@nirholas/pump-sdk";
+import { PUMP_SDK, OnlinePumpSdk, getBuyTokenAmountFromSolAmount } from "@x402agent/pump-sdk";
 
 const connection = new Connection(process.env.HELIUS_RPC_URL!);
 const mintKeypair = Keypair.generate();

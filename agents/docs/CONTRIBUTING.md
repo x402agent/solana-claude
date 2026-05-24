@@ -239,7 +239,7 @@ To update an existing agent:
 ## Need Help?
 
 - 📖 Read the [Agent Creation Guide](./AGENT_GUIDE.md)
-- 🐛 Open an [Issue](https://github.com/nirholas/AI-Agents-Library/issues)
+- 🐛 Open an [Issue](https://github.com/x402agent/AI-Agents-Library/issues)
 
 ## Recognition
 

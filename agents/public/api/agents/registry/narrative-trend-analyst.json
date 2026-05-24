@@ -7,7 +7,7 @@
   "external_url": "https://x402.wtf/agents/narrative-trend-analyst",
   "active": true,
   "createdAt": "2026-04-16",
-  "updatedAt": "2026-05-20T17:15:22.480Z",
+  "updatedAt": "2026-05-24T13:31:17.724Z",
   "tags": [
     "narrative",
     "trends",
@@ -16,7 +16,8 @@
     "market-cycles",
     "clawd",
     "solana",
-    "analytics"
+    "analytics",
+    "solana-clawd"
   ],
   "categories": [
     "analytics"

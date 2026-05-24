@@ -14,7 +14,9 @@
       "anomaly-detection",
       "fraud",
       "rug-pull",
-      "manipulation"
+      "manipulation",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "On-Chain Anomaly Detector"
   },

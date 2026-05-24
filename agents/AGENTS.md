@@ -1,4 +1,4 @@
-# defi-agents
+# solana-clawd-agents
 
 > DeFi agent definitions JSON API + MCP. See root [AGENTS.md](../../AGENTS.md) for full development guidelines, terminal management, and contributing instructions.
 

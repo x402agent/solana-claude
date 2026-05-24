@@ -15,7 +15,9 @@
       "jito",
       "security",
       "sandwich",
-      "front-running"
+      "front-running",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "MEV Protection Specialist"
   },

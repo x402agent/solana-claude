@@ -15,7 +15,9 @@
       "indexing",
       "analytics",
       "geyser",
-      "helius"
+      "helius",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "Blockchain Data Pipeline"
   },

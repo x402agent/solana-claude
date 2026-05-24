@@ -15,7 +15,9 @@
       "investigation",
       "tracing",
       "compliance",
-      "aml"
+      "aml",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "On-Chain Investigation Specialist"
   },

@@ -14,7 +14,9 @@
       "impermanent-loss",
       "liquidity",
       "amm",
-      "concentrated"
+      "concentrated",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "Impermanent Loss Calculator"
   },

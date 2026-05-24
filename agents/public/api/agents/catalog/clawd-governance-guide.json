@@ -20,7 +20,8 @@
       "proposals",
       "solana",
       "realms",
-      "one-shot"
+      "one-shot",
+      "solana-clawd"
     ]
   },
   "config": {

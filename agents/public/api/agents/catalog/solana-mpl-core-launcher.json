@@ -19,7 +19,8 @@
       "metaplex",
       "launch",
       "one-shot",
-      "clawd"
+      "clawd",
+      "solana-clawd"
     ]
   },
   "config": {

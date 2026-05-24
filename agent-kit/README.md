@@ -27,7 +27,7 @@ This is not the upstream Solana Agent Kit plugin bundle. The imported plugin pac
 From the repository root:
 
 ```bash
-cd solana-clawd-agent-kit
+cd agent-kit
 pnpm install
 pnpm build
 pnpm validate

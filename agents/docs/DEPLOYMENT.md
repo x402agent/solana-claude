@@ -18,8 +18,8 @@ Push your `agent.json` into the repo and everything else is automatic.
 ### Steps
 
 ```bash
-git clone https://github.com/clawdsolana/OpenClawd.git
-cd openclawd/defi-agents
+git clone https://github.com/x402agent/solana-clawd.git
+cd openclawd/solana-clawd-agents
 cp agent-template.json src/your-agent-name.json
 # edit src/your-agent-name.json
 bun install
@@ -28,7 +28,7 @@ bun run build
 git checkout -b add-your-agent
 git commit -am "feat(agents): add your-agent-name"
 git push origin add-your-agent
-# open PR at github.com/clawdsolana/OpenClawd
+# open PR at github.com/x402agent/solana-clawd
 ```
 
 ### What CI does on merge

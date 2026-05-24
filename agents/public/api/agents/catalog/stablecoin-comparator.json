@@ -22,7 +22,8 @@
       "solana",
       "stablecoins",
       "pyusd",
-      "susd"
+      "susd",
+      "solana-clawd"
     ]
   },
   "config": {

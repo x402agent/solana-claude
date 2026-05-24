@@ -23,7 +23,8 @@
       "orca",
       "raydium",
       "dlmm",
-      "one-shot"
+      "one-shot",
+      "solana-clawd"
     ]
   },
   "config": {

@@ -23,7 +23,8 @@
       "priority-fees",
       "compute-units",
       "jito",
-      "dev-tools"
+      "dev-tools",
+      "solana-clawd"
     ]
   },
   "config": {

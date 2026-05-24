@@ -78,7 +78,8 @@
       "scoring",
       "routing",
       "x402",
-      "pay"
+      "pay",
+      "solana-clawd"
     ],
     "title": "Clawd Provider Scorer"
   },

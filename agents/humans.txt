@@ -1,6 +1,6 @@
 /* TEAM */
-Creator: nirholas
-GitHub: https://github.com/nirholas
+Creator: x402agent
+GitHub: https://github.com/x402agent
 From: Earth
 
 /* SITE */

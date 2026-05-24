@@ -15,7 +15,9 @@
       "floor-price",
       "magic-eden",
       "tensor",
-      "trading"
+      "trading",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "NFT Floor Price Trader"
   },

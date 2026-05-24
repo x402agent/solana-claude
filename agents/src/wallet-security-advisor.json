@@ -22,7 +22,8 @@
       "solana",
       "phantom",
       "solflare",
-      "ledger"
+      "ledger",
+      "solana-clawd"
     ]
   },
   "config": {

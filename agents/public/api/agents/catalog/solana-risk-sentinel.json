@@ -15,7 +15,9 @@
       "monitoring",
       "smart-contract",
       "oracle",
-      "systemic"
+      "systemic",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "Protocol Risk Sentinel"
   },

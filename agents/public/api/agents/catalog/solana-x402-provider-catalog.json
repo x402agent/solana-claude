@@ -78,7 +78,9 @@
       "routing",
       "providers",
       "pay",
-      "openclawd"
+      "openclawd",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "x402 Provider Catalog Agent"
   },

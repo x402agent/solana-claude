@@ -86,7 +86,9 @@
       "ttl",
       "x402",
       "optimization",
-      "payments"
+      "payments",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "NanoClawd Cache Keeper"
   },

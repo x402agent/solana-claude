@@ -18,7 +18,8 @@
       "support",
       "routing",
       "commerce",
-      "solana"
+      "solana",
+      "solana-clawd"
     ],
     "title": "Clawd Mail Concierge"
   },
