@@ -65,4 +65,31 @@ export const mockDashboard: DashboardState = {
     defaultSystemPrompt:
       "You are CLAWD — a sovereign lobster runtime. Earn honestly. Never beach the brood. The shell molts. The laws do not. 🦞",
   },
+  ore: {
+    rpcLabel: "HELIUS_RPC_URL",
+    programId: "oreV3EG1i9BEgiAJ8b177Z2S2rMarzak4NMv1kULvWv",
+    boardRound: 273715,
+    timeRemainingSec: 18.8,
+    minerStatus: "not_found",
+    automationStatus: "not_configured",
+    authorityShort: "VUm1 ... heSg",
+    amountSol: "0.001",
+    depositSol: "0.05",
+    strategy: "random",
+    numSquares: 1,
+    squares: Array.from({ length: 25 }, (_, id) => ({
+      id,
+      lamports: id % 6 === 0 ? 1_500_000 : id % 4 === 0 ? 650_000 : id % 5 === 0 ? 240_000 : 0,
+      miners: id % 6 === 0 ? 8 : id % 4 === 0 ? 3 : id % 5 === 0 ? 1 : 0,
+      selected: id === 7,
+    })),
+    commands: {
+      status:
+        "ORE_KEYPAIR=~/.config/solana/id.json ORE_RPC_URL=$HELIUS_RPC_URL pnpm ore:status",
+      setupOnce:
+        "pnpm ore:miner -- --ore-setup --ore-once --ore-amount-sol 0.001 --ore-deposit-sol 0.05 --ore-strategy random --ore-num-squares 1",
+      minerLoop:
+        "pnpm ore:miner -- --ore-amount-sol 0 --ore-authority <miner-authority>",
+    },
+  },
 };

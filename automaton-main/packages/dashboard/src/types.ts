@@ -1,4 +1,4 @@
-export type NavKey = "sandboxes" | "inference" | "billing" | "spawn" | "keys";
+export type NavKey = "sandboxes" | "ore" | "inference" | "billing" | "spawn" | "keys";
 
 export interface SidebarItem {
   key: NavKey;
@@ -45,6 +45,33 @@ export interface InferenceModel {
   outputPrice: string;
 }
 
+export interface OreSquare {
+  id: number;
+  lamports: number;
+  miners: number;
+  selected: boolean;
+}
+
+export interface OreStatus {
+  rpcLabel: string;
+  programId: string;
+  boardRound: number;
+  timeRemainingSec: number;
+  minerStatus: "not_found" | "ready" | "deployed";
+  automationStatus: "not_configured" | "configured";
+  authorityShort: string;
+  amountSol: string;
+  depositSol: string;
+  strategy: "random" | "preferred" | "discretionary";
+  numSquares: number;
+  squares: OreSquare[];
+  commands: {
+    status: string;
+    setupOnce: string;
+    minerLoop: string;
+  };
+}
+
 export interface DashboardState {
   identity: {
     walletShort: string;
@@ -67,4 +94,5 @@ export interface DashboardState {
     models: InferenceModel[];
     defaultSystemPrompt: string;
   };
+  ore: OreStatus;
 }

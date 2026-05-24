@@ -5,6 +5,7 @@ import { SceneBackdrop } from "./components/SceneBackdrop";
 import { SandboxPage } from "./components/SandboxPage";
 import { InferencePage } from "./components/InferencePage";
 import { BillingPage } from "./components/BillingPage";
+import { OreMiningPage } from "./components/OreMiningPage";
 import { PlaceholderPage } from "./components/PlaceholderPage";
 import { mockDashboard } from "./data/mockDashboard";
 import type { NavKey } from "./types";
@@ -17,6 +18,10 @@ const headerByView: Record<NavKey, { title: string; subtitle: string }> = {
   inference: {
     title: "Inference",
     subtitle: "AI inference routed through the CLAWD runtime. Trench-safe model controls.",
+  },
+  ore: {
+    title: "ORE Miner",
+    subtitle: "Mainnet ORE board state, automation setup, and miner execution controls.",
   },
   billing: {
     title: "Billing",
@@ -48,6 +53,7 @@ export function App() {
       <main className="main-shell">
         <Header {...headerByView[active]} />
         {active === "sandboxes" ? <SandboxPage state={state} /> : null}
+        {active === "ore" ? <OreMiningPage state={state} /> : null}
         {active === "inference" ? <InferencePage state={state} /> : null}
         {active === "billing" ? <BillingPage state={state} /> : null}
         {active === "spawn" ? (

@@ -3,12 +3,14 @@ import {
   Bot,
   CreditCard,
   KeyRound,
+  Pickaxe,
   Rocket,
 } from "lucide-react";
 import type { NavKey } from "../types";
 
 const items: Array<{ key: NavKey; label: string; icon: typeof Box }> = [
   { key: "sandboxes", label: "Sandboxes", icon: Box },
+  { key: "ore", label: "ORE Miner", icon: Pickaxe },
   { key: "inference", label: "Inference", icon: Bot },
   { key: "billing", label: "Billing", icon: CreditCard },
   { key: "spawn", label: "Spawn Automations", icon: Rocket },
