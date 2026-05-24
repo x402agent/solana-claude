@@ -14,7 +14,9 @@
       "spot-trading",
       "execution",
       "slippage",
-      "optimization"
+      "optimization",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "Spot Trading Optimizer"
   },

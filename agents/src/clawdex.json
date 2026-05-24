@@ -23,7 +23,9 @@
       "orchestrator",
       "dual-engine",
       "boxes",
-      "solana"
+      "solana",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "Clawdex",
     "description": "Dual-engine coding agent: Claude Code for reasoning + OpenAI Codex for execution + Browser Use for web research — all running in isolated Upstash boxes"

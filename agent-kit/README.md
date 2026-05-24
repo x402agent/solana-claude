@@ -19,15 +19,47 @@ This is not the upstream Solana Agent Kit plugin bundle. The imported plugin pac
 
 ## Packages
 
-- `@solana-clawd/agent-kit`: agent/template/catalog loader and runtime profile helpers
-- `@solana-clawd/agent-registry`: registry document helpers for publishable Solana Clawd agent metadata
+- `@solana-clawd/agent-kit`: agent/template/catalog loader, runtime profile helpers, and the `clawd-agent` CLI
+- `@solana-clawd/agent-registry`: registry document helpers — Metaplex (ERC-8004 `metaplex-agent-registry`) **and** Google A2A agent cards
+- `@solana-clawd/pump-sdk`: Solana Clawd's own dependency-free pump bonding-curve SDK (token creation, buy/sell math, fee sharing, PDAs, instruction descriptors)
+- `@solana-clawd/x402-agent-kit`: build/consume x402 (HTTP 402) payment challenges to gate agent endpoints with USDC/CLAWD on Solana
+
+## Design, validate, and mint your own agent
+
+The `clawd-kit` CLI ships with `@solana-clawd/agent-kit`:
+
+```bash
+npm i -g @solana-clawd/agent-kit      # provides the `clawd-kit` binary
+
+clawd-kit list                       # every agent in the catalog (or --remote from x402.wtf)
+clawd-kit show clawd-pump-sdk-expert # details + deploy/chat/mint/mcp endpoints
+clawd-kit new my-agent               # scaffold src/my-agent.json (Solana Clawd owned)
+clawd-kit validate my-agent          # ownership + schema check
+
+# Build registration documents
+clawd-kit register my-agent --target metaplex   # ERC-8004 metaplex-agent-registry doc
+clawd-kit register my-agent --target google     # Google A2A agent card
+```
+
+Point the CLI at a checkout with `--agents-dir DIR` or `SOLANA_CLAWD_AGENTS_DIR`.
+
+To actually **mint** the agent identity on-chain, use the `clawd-agent` CLI from
+`@openclawdsolana/clawd-tui` (installed by `install.sh`):
+
+```bash
+clawd-agent mint --network devnet --keypair ~/.config/solana/id.json \
+  --name "My Agent" --uri https://example.com/agent.json --service MCP=https://... --yes
+clawd-agent mint-free --network devnet --owner <YOUR_SOLANA_PUBKEY> --name "My Agent" ...
+```
+
+The hosted, gasless mint flow lives at `https://x402.wtf/agents/mint`.
 
 ## Install
 
 From the repository root:
 
 ```bash
-cd solana-clawd-agent-kit
+cd agent-kit
 pnpm install
 pnpm build
 pnpm validate

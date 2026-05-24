@@ -35,8 +35,8 @@ export const metaPath = resolve(root, 'meta.json');
 export const meta = readJSONSync(metaPath); // 项目元数据
 
 // 外部链接配置
-export const host = 'https://chat-agents.clawdos.com'; // 项目主站地址
-export const githubHomepage = 'https://github.com/clawdos/clawd-ai-agents'; // GitHub 仓库地址
+export const host = 'https://x402.wtf'; // 项目主站地址
+export const githubHomepage = 'https://github.com/x402agent/solana-clawd'; // GitHub 仓库地址
 
 // README 分割标识符
 export const readmeSplit = '<!-- AWESOME PROMPTS -->';

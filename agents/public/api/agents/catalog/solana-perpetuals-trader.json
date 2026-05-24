@@ -15,7 +15,9 @@
       "drift",
       "zeta",
       "leverage",
-      "futures"
+      "futures",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "Perpetuals Trading Strategist"
   },

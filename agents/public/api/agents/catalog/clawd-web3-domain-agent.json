@@ -20,7 +20,8 @@
       "cloudflare",
       "x402",
       "agent-registry",
-      "one-shot"
+      "one-shot",
+      "solana-clawd"
     ]
   },
   "config": {

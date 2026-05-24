@@ -7,7 +7,7 @@
   "external_url": "https://x402.wtf/agents/clawd-firecrawl",
   "active": true,
   "createdAt": "2026-04-19",
-  "updatedAt": "2026-05-20T17:15:22.480Z",
+  "updatedAt": "2026-05-24T13:47:44.426Z",
   "tags": [
     "clawd",
     "firecrawl",
@@ -18,7 +18,8 @@
     "browser",
     "web",
     "openclawd",
-    "one-shot"
+    "one-shot",
+    "solana-clawd"
   ],
   "categories": [
     "research"

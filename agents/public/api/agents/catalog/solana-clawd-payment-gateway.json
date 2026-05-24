@@ -86,7 +86,8 @@
       "mpp",
       "payment",
       "gateway",
-      "openclawd"
+      "openclawd",
+      "solana-clawd"
     ],
     "title": "Solana Clawd Payment Gateway"
   },

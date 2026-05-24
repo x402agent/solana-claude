@@ -79,7 +79,9 @@
       "settlement",
       "callbacks",
       "payments",
-      "accounting"
+      "accounting",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "x402 Webhook Settlement Agent"
   },

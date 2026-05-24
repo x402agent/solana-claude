@@ -78,7 +78,8 @@
       "x402",
       "mpp",
       "payments",
-      "gateway"
+      "gateway",
+      "solana-clawd"
     ],
     "title": "Clawd Payment Debugger"
   },

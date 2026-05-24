@@ -91,7 +91,8 @@
       "autonomous",
       "strategy",
       "risk",
-      "trading"
+      "trading",
+      "solana-clawd"
     ],
     "title": "Vulcan CLAWD Autonomous Perps",
     "category": "trading",

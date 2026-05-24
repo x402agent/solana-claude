@@ -22,7 +22,8 @@
       "solana",
       "il",
       "meteora",
-      "orca"
+      "orca",
+      "solana-clawd"
     ]
   },
   "config": {

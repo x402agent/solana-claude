@@ -15,7 +15,9 @@
       "prediction",
       "lstm",
       "transformer",
-      "price"
+      "price",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "ML Price Prediction Engine"
   },

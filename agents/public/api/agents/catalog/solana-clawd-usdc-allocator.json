@@ -79,7 +79,8 @@
       "allocator",
       "treasury",
       "payments",
-      "openclawd"
+      "openclawd",
+      "solana-clawd"
     ],
     "title": "Clawd USDC Allocator"
   },

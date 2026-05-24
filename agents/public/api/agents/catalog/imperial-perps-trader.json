@@ -1,5 +1,5 @@
 {
-  "author": "8bitsats",
+  "author": "solana-clawd",
   "config": {
     "openingMessage": "Imperial Perps Agent online. I observe Phoenix/Imperial market tape, score signals across momentum, funding, basis, and liquidity, then route dry-run previews through Imperial by default. Live submission requires IMPERIAL_LIVE=true and explicit operator confirmation.",
     "openingQuestions": [
@@ -105,7 +105,8 @@
       "trading",
       "execution",
       "dry-run",
-      "audit"
+      "audit",
+      "solana-clawd"
     ],
     "title": "Imperial Perps Trader",
     "category": "trading",

@@ -3,7 +3,7 @@ name: solana-attestation-skill
 description: "Operate the Solana Attestation Service verification layer vendored under /attestation — create credentials, generate schemas, issue attestations for skills/agents/plugins, verify proof hashes, and bridge OpenClawd formal-verification outputs into on-chain attestations."
 metadata:
   openclaw:
-    homepage: https://github.com/clawdsolana/OpenClawd/tree/main/attestation
+    homepage: https://github.com/x402agent/solana-clawd/tree/main/attestation
     requires:
       env:
         - SOLANA_RPC_URL

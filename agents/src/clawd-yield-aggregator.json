@@ -23,7 +23,8 @@
       "marginfi",
       "drift",
       "meteora",
-      "one-shot"
+      "one-shot",
+      "solana-clawd"
     ]
   },
   "config": {

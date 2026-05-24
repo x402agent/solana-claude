@@ -7,7 +7,7 @@
   "external_url": "https://x402.wtf/agents/solana-nemoclawd-defi-router",
   "active": true,
   "createdAt": "2026-05-12",
-  "updatedAt": "2026-05-20T17:15:22.480Z",
+  "updatedAt": "2026-05-24T13:47:44.426Z",
   "tags": [
     "solana",
     "nemoclawd",
@@ -15,7 +15,9 @@
     "router",
     "x402",
     "jupiter",
-    "treasury"
+    "treasury",
+    "clawd",
+    "solana-clawd"
   ],
   "categories": [
     "payments"

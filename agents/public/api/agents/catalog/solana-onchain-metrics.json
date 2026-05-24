@@ -15,7 +15,9 @@
       "metrics",
       "tvl",
       "analytics",
-      "dashboard"
+      "dashboard",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "On-Chain Metrics Dashboard"
   },

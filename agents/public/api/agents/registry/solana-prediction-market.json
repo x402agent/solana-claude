@@ -7,13 +7,15 @@
   "external_url": "https://x402.wtf/agents/solana-prediction-market",
   "active": true,
   "createdAt": "2026-03-15",
-  "updatedAt": "2026-05-20T17:15:22.480Z",
+  "updatedAt": "2026-05-24T13:47:44.426Z",
   "tags": [
     "prediction-market",
     "probability",
     "dflow",
     "kalshi",
-    "forecasting"
+    "forecasting",
+    "clawd",
+    "solana-clawd"
   ],
   "categories": [
     "defi"

@@ -79,7 +79,9 @@
       "fleet",
       "delegation",
       "payments",
-      "orchestration"
+      "orchestration",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "OpenClawd Spawn Manager"
   },

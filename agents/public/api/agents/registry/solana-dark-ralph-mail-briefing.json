@@ -7,7 +7,7 @@
   "external_url": "https://x402.wtf/agents/solana-dark-ralph-mail-briefing",
   "active": true,
   "createdAt": "2026-05-12",
-  "updatedAt": "2026-05-20T17:15:22.480Z",
+  "updatedAt": "2026-05-24T13:47:44.426Z",
   "tags": [
     "agentmail",
     "email",
@@ -16,7 +16,9 @@
     "briefing",
     "research",
     "premium",
-    "solana"
+    "solana",
+    "clawd",
+    "solana-clawd"
   ],
   "categories": [
     "defi"

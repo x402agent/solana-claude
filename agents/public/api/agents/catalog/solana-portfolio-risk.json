@@ -15,7 +15,9 @@
       "risk",
       "var",
       "correlation",
-      "drawdown"
+      "drawdown",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "Portfolio Risk Manager"
   },

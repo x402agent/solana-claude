@@ -85,7 +85,9 @@
       "birdeye",
       "quotes",
       "payments",
-      "trading"
+      "trading",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "x402 Market Data Buyer"
   },

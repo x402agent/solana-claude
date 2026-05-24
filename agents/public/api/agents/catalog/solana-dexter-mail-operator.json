@@ -18,7 +18,9 @@
       "quotes",
       "storefront",
       "payments",
-      "solana"
+      "solana",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "Dexter Mail Operator"
   },

@@ -22,7 +22,8 @@
       "solana",
       "rebalance",
       "analytics",
-      "one-shot"
+      "one-shot",
+      "solana-clawd"
     ]
   },
   "config": {

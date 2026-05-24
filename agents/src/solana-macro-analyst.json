@@ -15,7 +15,9 @@
       "economics",
       "fed",
       "liquidity",
-      "cycles"
+      "cycles",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "Crypto Macro Analyst"
   },

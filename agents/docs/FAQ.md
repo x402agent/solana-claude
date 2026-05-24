@@ -66,7 +66,7 @@ Test it 5-10 times with real scenarios. If you consistently get quality results 
 
 ### How do I submit an agent to AI Agents Library?
 
-1. Fork the repository: github.com/nirholas/AI-Agents-Library
+1. Fork the repository: github.com/x402agent/AI-Agents-Library
 2. Create your agent in `/src/your-agent-name.json`
 3. Test thoroughly
 4. Submit a Pull Request
@@ -124,7 +124,7 @@ However, **everything is still in flux** and subject to change as the platform e
 If you're building integrations or creating custom agents, be aware that:
 
 - Current URL: `https://clawd.fun/artifacts/portfolio/embed/*`
-- Future URL (tentative): `https://clawd.io/*` or similar
+- Future URL (tentative): `https://x402.wtf/*` or similar
 - Timeline: TBD based on ClawdOS production launch
 
 Monitor the repository for updates when the domain migration occurs.

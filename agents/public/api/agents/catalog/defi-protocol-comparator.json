@@ -20,7 +20,8 @@
       "research",
       "clawd",
       "solana",
-      "analytics"
+      "analytics",
+      "solana-clawd"
     ]
   },
   "config": {

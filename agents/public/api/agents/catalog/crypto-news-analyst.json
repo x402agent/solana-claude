@@ -21,7 +21,8 @@
       "clawd",
       "solana",
       "narrative",
-      "analytics"
+      "analytics",
+      "solana-clawd"
     ]
   },
   "config": {

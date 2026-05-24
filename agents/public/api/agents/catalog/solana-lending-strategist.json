@@ -16,7 +16,9 @@
       "marginfi",
       "solend",
       "kamino",
-      "leverage"
+      "leverage",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "Lending Protocol Strategist"
   },

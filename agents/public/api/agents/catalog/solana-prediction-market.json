@@ -15,7 +15,9 @@
       "probability",
       "dflow",
       "kalshi",
-      "forecasting"
+      "forecasting",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "Prediction Market Analyst"
   },

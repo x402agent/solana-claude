@@ -20,7 +20,8 @@
       "safety",
       "clawd",
       "solana",
-      "defi"
+      "defi",
+      "solana-clawd"
     ]
   },
   "config": {

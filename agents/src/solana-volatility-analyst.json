@@ -15,7 +15,9 @@
       "options",
       "greeks",
       "risk",
-      "modeling"
+      "modeling",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "Volatility Surface Modeler"
   },

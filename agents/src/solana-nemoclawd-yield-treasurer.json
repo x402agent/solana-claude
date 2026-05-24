@@ -84,7 +84,9 @@
       "treasury",
       "usdc",
       "defi",
-      "payments"
+      "payments",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "NemoClawd Yield Treasurer"
   },

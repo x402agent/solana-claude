@@ -84,7 +84,9 @@
       "monetization",
       "providers",
       "payments",
-      "research"
+      "research",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "x402 Signal Monetizer"
   },

@@ -24,7 +24,8 @@
       "meteora",
       "orca",
       "raydium",
-      "analytics"
+      "analytics",
+      "solana-clawd"
     ]
   },
   "config": {

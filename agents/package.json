@@ -1,21 +1,21 @@
 {
-  "name": "@nirholas/ai-agents-library",
+  "name": "@solana-clawd/agents",
   "version": "1.42.0",
   "description": "General Agent Index and library of specialized AI agents for general use, DeFi, portfolio management, yield optimization, trading, and blockchain automation. Supports linting, automated translation, and CI auto-build for seamless plugin discovery via index.json. Github Pages compatible.",
-  "homepage": "https://github.com/nirholas/ai-agents-library",
+  "homepage": "https://github.com/x402agent/solana-clawd",
   "repository": {
     "type": "git",
-    "url": "https://github.com/nirholas/ai-agents-library.git"
+    "url": "https://github.com/x402agent/solana-clawd.git"
   },
   "license": "MIT",
-  "author": "nich <nirholasi@github.io>",
+  "author": "solana-clawd <agents@x402.wtf>",
   "type": "module",
   "main": "public/index.json",
   "files": [
     "public"
   ],
   "scripts": {
-    "agent-kit:validate": "node ../solana-clawd-agent-kit/scripts/validate-agent-kit.mjs",
+    "agent-kit:validate": "node ../agent-kit/scripts/validate-agent-kit.mjs",
     "awesome": "bun scripts/commands/build.ts && bun scripts/commands/update-awesome.ts",
     "build": "bun scripts/commands/build.ts",
     "format": "bun scripts/commands/format.ts",
@@ -33,8 +33,8 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@solana-clawd/agent-kit": "file:../solana-clawd-agent-kit/packages/agent-kit",
-    "@solana-clawd/agent-registry": "file:../solana-clawd-agent-kit/packages/agent-registry"
+    "@solana-clawd/agent-kit": "file:../agent-kit/packages/agent-kit",
+    "@solana-clawd/agent-registry": "file:../agent-kit/packages/agent-registry"
   },
   "devDependencies": {
     "@lobehub/lint": "^1.25.5",

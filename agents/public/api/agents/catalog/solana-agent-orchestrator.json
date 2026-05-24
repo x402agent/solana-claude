@@ -15,7 +15,9 @@
       "multi-agent",
       "coordination",
       "agentic",
-      "workflow"
+      "workflow",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "Multi-Agent Trading Orchestrator"
   },

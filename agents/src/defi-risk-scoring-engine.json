@@ -23,7 +23,8 @@
       "defi",
       "risk-scoring",
       "security",
-      "one-shot"
+      "one-shot",
+      "solana-clawd"
     ]
   },
   "config": {

@@ -14,7 +14,9 @@
       "arbitrage",
       "cross-dex",
       "profit",
-      "scanner"
+      "scanner",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "Cross-DEX Arbitrage Scanner"
   },

@@ -21,7 +21,8 @@
       "clawd",
       "solana",
       "jito",
-      "bundles"
+      "bundles",
+      "solana-clawd"
     ]
   },
   "config": {

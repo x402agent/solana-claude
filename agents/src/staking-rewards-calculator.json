@@ -22,7 +22,8 @@
       "solana",
       "validator",
       "lst",
-      "education"
+      "education",
+      "solana-clawd"
     ]
   },
   "config": {

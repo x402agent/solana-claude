@@ -18,7 +18,9 @@
       "briefing",
       "research",
       "premium",
-      "solana"
+      "solana",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "Dark Ralph Mail Briefing Desk"
   },

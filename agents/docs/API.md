@@ -10,7 +10,7 @@ This is the data layer behind the [/agents](https://www.x402.wtf/agents) hub —
 
 - Static JSON API (CDN): `https://clawd.click`
 - Hub + dynamic endpoints: `https://www.x402.wtf`
-- MCP Streamable HTTP: `https://modelcontextprotocol.name/mcp/defi-agents`
+- MCP Streamable HTTP: `https://modelcontextprotocol.name/mcp/solana-clawd-agents`
 
 ---
 
@@ -300,7 +300,7 @@ Plug the hub into Clawd Desktop, Cursor, or ClawdOS via Streamable HTTP:
   "mcpServers": {
     "openclawd-agents": {
       "type": "http",
-      "url": "https://modelcontextprotocol.name/mcp/defi-agents"
+      "url": "https://modelcontextprotocol.name/mcp/solana-clawd-agents"
     }
   }
 }
@@ -385,8 +385,8 @@ See [CHANGELOG.md](../CHANGELOG.md) for version history, new agents, and schema 
 
 ## Support
 
-- **Repo**: <https://github.com/clawdsolana/OpenClawd>
-- **Issues**: <https://github.com/clawdsolana/OpenClawd/issues>
+- **Repo**: <https://github.com/x402agent/solana-clawd>
+- **Issues**: <https://github.com/x402agent/solana-clawd/issues>
 - **Hub**: <https://www.x402.wtf/agents>
 - **Registry**: <https://www.x402.wtf/agents-registry>
 - **Mint**: <https://www.x402.wtf/agents-mint>

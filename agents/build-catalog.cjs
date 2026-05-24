@@ -21,6 +21,7 @@ const PUBLIC_TEMPLATES_DIR = path.join(PUBLIC_API_DIR, "templates");
 const PUBLIC_REGISTRY_DIR = path.join(PUBLIC_API_DIR, "registry");
 const PUBLIC_SKILLS_DIR = path.join(PUBLIC_DIR, "api", "skills");
 const WELL_KNOWN_DIR = path.join(PUBLIC_DIR, ".well-known");
+const GALLERY_DIR = path.join(PUBLIC_DIR, "agents");
 const HOST = "https://x402.wtf";
 const CLAWD_MINT = "8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump";
 
@@ -640,6 +641,215 @@ function writeStaticApi(catalog, agents, templates, skills, templateIndex, skill
       markdown: fs.readFileSync(sourcePath, "utf8"),
     });
   }
+
+  writeGallery(catalog);
+}
+
+// ---------- Static gallery pages served at x402.wtf/agents ----------
+
+function htmlPage(title, bodyClass, inner) {
+  return `<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>${title}</title>
+<meta name="description" content="Solana Clawd agent catalog — discover, chat with, and mint Solana-native AI agents at x402.wtf/agents." />
+<link rel="icon" href="/nich.jpg" />
+<style>
+  :root { --bg:#0a0b0f; --panel:#13151c; --line:#232633; --fg:#e7e9ee; --muted:#8b90a0; --accent:#ff5c00; --accent2:#14f195; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--fg); font:15px/1.5 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,sans-serif; }
+  a { color:var(--accent2); text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  header.site { display:flex; align-items:center; gap:14px; padding:18px 24px; border-bottom:1px solid var(--line); position:sticky; top:0; background:rgba(10,11,15,.92); backdrop-filter:blur(8px); z-index:10; flex-wrap:wrap; }
+  .brand { font-weight:800; letter-spacing:.3px; font-size:18px; }
+  .brand span { color:var(--accent); }
+  .nav { margin-left:auto; display:flex; gap:18px; font-size:14px; }
+  .wrap { max-width:1100px; margin:0 auto; padding:28px 24px 80px; }
+  h1 { font-size:28px; margin:.2em 0; }
+  .lede { color:var(--muted); max-width:720px; }
+  .controls { display:flex; gap:10px; margin:22px 0; flex-wrap:wrap; }
+  input,select { background:var(--panel); border:1px solid var(--line); color:var(--fg); padding:10px 12px; border-radius:10px; font-size:14px; }
+  input { flex:1; min-width:220px; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:16px; margin-top:8px; }
+  .card { background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:16px; display:flex; flex-direction:column; gap:10px; }
+  .card .top { display:flex; gap:10px; align-items:center; }
+  .avatar { width:38px; height:38px; border-radius:10px; background:#000; display:grid; place-items:center; font-size:20px; border:1px solid var(--line); }
+  .title { font-weight:700; }
+  .cat { color:var(--muted); font-size:12px; text-transform:uppercase; letter-spacing:.5px; }
+  .desc { color:#c4c8d4; font-size:13.5px; flex:1; }
+  .tags { display:flex; gap:6px; flex-wrap:wrap; }
+  .tag { font-size:11px; color:var(--muted); border:1px solid var(--line); border-radius:999px; padding:2px 8px; }
+  .actions { display:flex; gap:8px; flex-wrap:wrap; margin-top:4px; }
+  .btn { font-size:12.5px; padding:7px 11px; border-radius:9px; border:1px solid var(--line); background:#0e0f15; color:var(--fg); cursor:pointer; }
+  .btn.primary { background:var(--accent); border-color:var(--accent); color:#000; font-weight:700; }
+  .btn.mint { background:var(--accent2); border-color:var(--accent2); color:#04140d; font-weight:700; }
+  .count { color:var(--muted); font-size:13px; margin:6px 0 0; }
+  code,pre { font-family:ui-monospace,SFMono-Regular,Menlo,monospace; }
+  pre { background:#06070a; border:1px solid var(--line); border-radius:10px; padding:14px; overflow:auto; font-size:13px; }
+  .pill { display:inline-block; background:#0e0f15; border:1px solid var(--line); border-radius:999px; padding:3px 10px; font-size:12px; color:var(--muted); }
+  footer { border-top:1px solid var(--line); color:var(--muted); padding:24px; text-align:center; font-size:13px; }
+</style>
+</head>
+<body class="${bodyClass}">
+<header class="site">
+  <div class="brand">Solana <span>Clawd</span> · Agents</div>
+  <nav class="nav">
+    <a href="/agents">Catalog</a>
+    <a href="/agents/mint">Design &amp; Mint</a>
+    <a href="/api/agents">API</a>
+    <a href="https://github.com/x402agent/solana-clawd">GitHub</a>
+  </nav>
+</header>
+${inner}
+<footer>Solana Clawd · served at <strong>x402.wtf/agents</strong> · CLAWD <code>${CLAWD_MINT}</code></footer>
+</body>
+</html>
+`;
+}
+
+function writeGallery(catalog) {
+  fs.mkdirSync(GALLERY_DIR, { recursive: true });
+  const stats = catalog.stats || {};
+
+  // --- Catalog gallery (/agents) ---
+  const galleryInner = `
+<div class="wrap">
+  <h1>Solana Clawd Agent Catalog</h1>
+  <p class="lede">Every agent below is Solana-native, ships with the Solana Clawd shell + runtime, and exposes JSON, MCP, chat, and Metaplex/Google registration endpoints. Install the runtime and they are available immediately — or design and mint your own with the Solana Clawd Agent Kit.</p>
+  <p><span class="pill">${stats.total || (catalog.agents || []).length} agents</span> <span class="pill">${stats.featured || 0} featured</span> <span class="pill">${stats.oneShots || 0} one-shot</span></p>
+  <div class="controls">
+    <input id="q" placeholder="Search agents (name, tag, capability)…" />
+    <select id="cat"><option value="">All categories</option></select>
+    <select id="sort"><option value="featured">Featured first</option><option value="az">A–Z</option></select>
+  </div>
+  <p class="count" id="count"></p>
+  <div class="grid" id="grid"></div>
+</div>
+<script>
+const CATALOG_URL = "/api/agents/agents-catalog.json";
+let AGENTS = [];
+const esc = (s) => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function card(a) {
+  const tags = (a.tags || []).slice(0, 5).map(t => '<span class="tag">' + esc(t) + '</span>').join("");
+  return '<div class="card">'
+    + '<div class="top"><div class="avatar">' + esc((a.avatar||"🤖").slice(0,2)) + '</div>'
+    + '<div><div class="title">' + esc(a.title) + '</div><div class="cat">' + esc(a.category) + (a.featured?' · ★ featured':'') + '</div></div></div>'
+    + '<div class="desc">' + esc(a.description) + '</div>'
+    + '<div class="tags">' + tags + '</div>'
+    + '<div class="actions">'
+    + '<a class="btn primary" href="/agents/chat?agent=' + encodeURIComponent(a.identifier) + '">Chat</a>'
+    + '<a class="btn mint" href="/agents/mint?template=' + encodeURIComponent(a.identifier) + '">Mint</a>'
+    + '<a class="btn" href="' + esc(a.deploy.json) + '">JSON</a>'
+    + '<a class="btn" href="' + esc(a.deploy.registration) + '">Registry</a>'
+    + '</div></div>';
+}
+function render() {
+  const q = document.getElementById("q").value.toLowerCase().trim();
+  const cat = document.getElementById("cat").value;
+  const sort = document.getElementById("sort").value;
+  let list = AGENTS.filter(a => {
+    if (cat && a.category !== cat) return false;
+    if (!q) return true;
+    const hay = (a.title + " " + a.description + " " + (a.tags||[]).join(" ") + " " + (a.capabilities||[]).join(" ")).toLowerCase();
+    return hay.includes(q);
+  });
+  list.sort(sort === "az"
+    ? (x,y) => x.title.localeCompare(y.title)
+    : (x,y) => (y.featured?1:0)-(x.featured?1:0) || x.title.localeCompare(y.title));
+  document.getElementById("grid").innerHTML = list.map(card).join("");
+  document.getElementById("count").textContent = list.length + " agent" + (list.length===1?"":"s");
+}
+async function boot() {
+  try {
+    const res = await fetch(CATALOG_URL, { headers: { accept: "application/json" } });
+    const data = await res.json();
+    AGENTS = data.agents || [];
+    const cats = [...new Set(AGENTS.map(a => a.category))].sort();
+    const sel = document.getElementById("cat");
+    for (const c of cats) { const o = document.createElement("option"); o.value = c; o.textContent = c; sel.appendChild(o); }
+    ["q","cat","sort"].forEach(id => document.getElementById(id).addEventListener("input", render));
+    render();
+  } catch (e) {
+    document.getElementById("grid").innerHTML = '<p class="lede">Could not load the catalog. Fetch <a href="/api/agents/agents-catalog.json">/api/agents/agents-catalog.json</a> directly.</p>';
+  }
+}
+boot();
+</script>`;
+  fs.writeFileSync(path.join(GALLERY_DIR, "index.html"), htmlPage("Solana Clawd · Agent Catalog", "gallery", galleryInner));
+
+  // --- Chat launcher (/agents/chat) ---
+  const chatInner = `
+<div class="wrap">
+  <h1 id="t">Chat with a Solana Clawd Agent</h1>
+  <p class="lede" id="lede">Loading agent…</p>
+  <div id="meta"></div>
+  <h3>Run it in your shell + runtime</h3>
+  <pre><code>curl -fsSL https://x402.wtf/install.sh | bash
+clawd-tui                       # interactive shell — all agents available immediately
+clawd-kit show <span id="idspan">AGENT_ID</span></code></pre>
+  <h3>Or connect over MCP</h3>
+  <pre><code id="mcp">GET /api/agents/catalog/AGENT_ID.json</code></pre>
+  <p><a class="btn mint" id="mintlink" href="/agents/mint">Design &amp; mint your own →</a> <a class="btn" href="/agents">← Back to catalog</a></p>
+</div>
+<script>
+const esc = (s) => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const id = new URLSearchParams(location.search).get("agent") || "";
+async function boot() {
+  if (!id) { document.getElementById("lede").textContent = "No agent specified."; return; }
+  document.getElementById("idspan").textContent = id;
+  document.getElementById("mcp").textContent = "GET /api/agents/catalog/" + id + ".json";
+  document.getElementById("mintlink").href = "/agents/mint?template=" + encodeURIComponent(id);
+  try {
+    const a = await (await fetch("/api/agents/catalog/" + encodeURIComponent(id) + ".json")).json();
+    document.getElementById("t").textContent = (a.meta?.avatar || "🤖") + "  " + (a.meta?.title || id);
+    document.getElementById("lede").textContent = a.meta?.description || "";
+    const opening = a.config?.openingMessage ? '<h3>Opening message</h3><pre>' + esc(a.config.openingMessage) + '</pre>' : "";
+    const qs = (a.config?.openingQuestions || []).map(q => '<span class="tag">' + esc(q) + '</span>').join(" ");
+    document.getElementById("meta").innerHTML = opening + (qs ? '<div class="tags">' + qs + '</div>' : "");
+  } catch (e) { document.getElementById("lede").textContent = "Agent not found: " + id; }
+}
+boot();
+</script>`;
+  fs.mkdirSync(path.join(GALLERY_DIR, "chat"), { recursive: true });
+  fs.writeFileSync(path.join(GALLERY_DIR, "chat", "index.html"), htmlPage("Solana Clawd · Chat", "chat", chatInner));
+
+  // --- Design & mint (/agents/mint) ---
+  const mintInner = `
+<div class="wrap">
+  <h1>Design &amp; Mint a Solana Clawd Agent</h1>
+  <p class="lede">Use the <strong>Solana Clawd Agent Kit</strong> to scaffold an agent, then register and mint it on <strong>Metaplex</strong> (on-chain identity) or <strong>Google A2A</strong> (agent-to-agent discovery). No SOL gas required for the hosted path.</p>
+
+  <h3>1 · Scaffold with the Agent Kit</h3>
+  <pre><code>npm i -g @solana-clawd/agent-kit
+clawd-kit new my-agent          # writes src/my-agent.json from the template
+clawd-kit validate my-agent     # checks Solana Clawd ownership + schema</code></pre>
+
+  <h3>2 · Build registration documents</h3>
+  <pre><code>clawd-kit register my-agent --target metaplex   # ERC-8004 metaplex-agent-registry doc
+clawd-kit register my-agent --target google     # Google A2A agent card</code></pre>
+
+  <h3>3 · Mint on-chain (Metaplex)</h3>
+  <pre><code>clawd-agent mint-free --network devnet --owner &lt;YOUR_SOLANA_PUBKEY&gt; \\
+  --name "My Agent" --uri https://example.com/agent.json --service MCP=https://...</code></pre>
+  <p class="lede">Or POST to the hosted gasless gateway:</p>
+  <pre><code id="mintcurl">curl -X POST https://x402.wtf/api/mint/agent \\
+  -H 'Content-Type: application/json' \\
+  -d '{"templateId":"TEMPLATE_ID","ownerPubkey":"&lt;YOUR_SOLANA_PUBKEY&gt;"}'</code></pre>
+
+  <p id="tpl"></p>
+  <p><a class="btn" href="/agents">← Back to catalog</a> <a class="btn primary" href="https://github.com/x402agent/solana-clawd/tree/main/agent-kit">Agent Kit docs</a></p>
+</div>
+<script>
+const tpl = new URLSearchParams(location.search).get("template");
+if (tpl) {
+  document.getElementById("mintcurl").textContent = document.getElementById("mintcurl").textContent.replace("TEMPLATE_ID", tpl);
+  document.getElementById("tpl").innerHTML = 'Starting from template <span class="pill">' + tpl + '</span> — view its <a href="/api/agents/registry/' + encodeURIComponent(tpl) + '.json">registration document</a>.';
+}
+</script>`;
+  fs.mkdirSync(path.join(GALLERY_DIR, "mint"), { recursive: true });
+  fs.writeFileSync(path.join(GALLERY_DIR, "mint", "index.html"), htmlPage("Solana Clawd · Design & Mint", "mint", mintInner));
 }
 
 function copyStaticMetadata() {

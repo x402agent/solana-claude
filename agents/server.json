@@ -1,35 +1,35 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
-  "name": "io.github.nirholas/defi-agents",
-  "title": "DeFi Agents Library",
-  "description": "AI Agents library for DeFi, trading, portfolio management, yield optimization, and blockchain automation. Index of specialized agents.",
+  "name": "io.github.x402agent/solana-clawd-agents",
+  "title": "Solana Clawd Agents",
+  "description": "Solana Clawd AI agent registry for DeFi, trading, portfolio management, yield optimization, and blockchain automation. Index of specialized agents served at x402.wtf/agents.",
   "license": "MIT",
   "authors": [
     {
-      "name": "nich",
-      "url": "https://github.com/nirholas"
+      "name": "solana-clawd",
+      "url": "https://github.com/x402agent"
     }
   ],
   "repository": {
-    "url": "https://github.com/nirholas/defi-agents",
+    "url": "https://github.com/x402agent/solana-clawd",
     "source": "github"
   },
   "version": "1.42.0",
   "links": {
-    "homepage": "https://github.com/nirholas/defi-agents",
-    "bugs": "https://github.com/nirholas/defi-agents/issues",
-    "npm": "https://www.npmjs.com/package/@nirholas/ai-agents-library"
+    "homepage": "https://github.com/x402agent/solana-clawd",
+    "bugs": "https://github.com/x402agent/solana-clawd/issues",
+    "npm": "https://www.npmjs.com/package/@solana-clawd/agents"
   },
   "icons": [
     {
-      "url": "https://raw.githubusercontent.com/nirholas/g1t/d9a0ee206b8136472c04384905999369f198b3c9/milady.svg",
+      "url": "https://raw.githubusercontent.com/x402agent/g1t/d9a0ee206b8136472c04384905999369f198b3c9/milady.svg",
       "type": "svg"
     }
   ],
   "packages": [
     {
       "registryType": "npm",
-      "identifier": "@nirholas/ai-agents-library",
+      "identifier": "@solana-clawd/agents",
       "version": "1.42.0",
       "runtimeHint": "npx",
       "transport": {

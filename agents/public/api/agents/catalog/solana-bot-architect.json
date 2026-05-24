@@ -14,7 +14,9 @@
       "bot",
       "architecture",
       "automation",
-      "trading-system"
+      "trading-system",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "Trading Bot Architect"
   },

@@ -86,7 +86,9 @@
       "orchestration",
       "multi-agent",
       "x402",
-      "payments"
+      "payments",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "OpenClawd Fleet Orchestrator"
   },

@@ -19,7 +19,8 @@
       "optimization",
       "compliance",
       "clawd",
-      "solana"
+      "solana",
+      "solana-clawd"
     ]
   },
   "config": {

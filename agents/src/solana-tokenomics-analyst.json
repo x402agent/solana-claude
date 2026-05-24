@@ -15,7 +15,9 @@
       "supply",
       "vesting",
       "inflation",
-      "valuation"
+      "valuation",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "Tokenomics Deep Researcher"
   },

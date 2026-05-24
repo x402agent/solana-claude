@@ -22,7 +22,8 @@
       "solana",
       "jupiter",
       "lfg",
-      "one-shot"
+      "one-shot",
+      "solana-clawd"
     ]
   },
   "config": {

@@ -86,7 +86,9 @@
       "budget",
       "x402",
       "payments",
-      "pay"
+      "pay",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "NanoClawd Microtransaction Specialist"
   },

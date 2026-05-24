@@ -15,7 +15,9 @@
       "dex",
       "jupiter",
       "trading",
-      "swap"
+      "swap",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "Solana DEX Aggregator"
   },

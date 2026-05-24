@@ -21,7 +21,8 @@
       "clawd",
       "solana",
       "analytics",
-      "defillama"
+      "defillama",
+      "solana-clawd"
     ]
   },
   "config": {

@@ -78,7 +78,8 @@
       "security",
       "biometric",
       "x402",
-      "pay"
+      "pay",
+      "solana-clawd"
     ],
     "title": "Clawd Wallet Guardian"
   },

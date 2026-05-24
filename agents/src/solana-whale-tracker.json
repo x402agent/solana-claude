@@ -14,7 +14,9 @@
       "whale",
       "wallet-tracking",
       "accumulation",
-      "distribution"
+      "distribution",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "Whale Wallet Intelligence"
   },

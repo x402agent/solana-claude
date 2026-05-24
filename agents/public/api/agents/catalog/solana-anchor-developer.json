@@ -15,7 +15,9 @@
       "solana",
       "rust",
       "smart-contract",
-      "development"
+      "development",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "Anchor Program Developer"
   },

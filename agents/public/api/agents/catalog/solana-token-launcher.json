@@ -14,7 +14,9 @@
       "pump-fun",
       "token-launch",
       "bonding-curve",
-      "raydium"
+      "raydium",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "Token Launch Specialist"
   },

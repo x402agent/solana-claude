@@ -78,7 +78,9 @@
       "testing",
       "x402",
       "mpp",
-      "payments"
+      "payments",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "NanoClawd Sandbox Runner"
   },

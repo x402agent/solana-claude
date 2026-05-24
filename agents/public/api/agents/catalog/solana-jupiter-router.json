@@ -19,7 +19,8 @@
       "trading",
       "routing",
       "one-shot",
-      "clawd"
+      "clawd",
+      "solana-clawd"
     ]
   },
   "config": {

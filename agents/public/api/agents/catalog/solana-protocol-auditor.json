@@ -15,7 +15,9 @@
       "security",
       "anchor",
       "rust",
-      "vulnerabilities"
+      "vulnerabilities",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "Smart Contract Auditor"
   },

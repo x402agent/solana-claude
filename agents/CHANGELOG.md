@@ -228,7 +228,7 @@ No vulnerabilities have been reported in the JSON API format. All agent definiti
 
 For questions, issues, or feedback:
 
-- **GitHub Issues**: <https://github.com/nirholas/defi-agents/issues>
+- **GitHub Issues**: <https://github.com/x402agent/solana-clawd/issues>
 - **Documentation**: [docs/API.md](docs/API.md)
 - **Contributing**: [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md)
 

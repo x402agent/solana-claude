@@ -79,7 +79,9 @@
       "ops",
       "treasury",
       "reconciliation",
-      "payments"
+      "payments",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "NemoClawd Settlement Ops"
   },

@@ -15,7 +15,9 @@
       "msol",
       "jitosol",
       "bsol",
-      "sanctum"
+      "sanctum",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "Liquid Staking Analyst"
   },

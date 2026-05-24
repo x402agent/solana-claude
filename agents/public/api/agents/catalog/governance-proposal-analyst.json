@@ -21,7 +21,8 @@
       "clawd",
       "solana",
       "realms",
-      "spl-governance"
+      "spl-governance",
+      "solana-clawd"
     ]
   },
   "config": {

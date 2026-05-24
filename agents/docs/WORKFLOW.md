@@ -51,8 +51,8 @@ git push
 
 ```bash
 # Setup
-git clone https://github.com/yourusername/defi-agents
-cd defi-agents
+git clone https://github.com/yourusername/solana-clawd-agents
+cd solana-clawd-agents
 bun install
 echo "OPENAI_API_KEY=sk-xxx" > .env
 
@@ -72,7 +72,7 @@ git push origin main
 ### Directory Structure
 
 ```
-defi-agents/
+solana-clawd-agents/
 ├── CNAME                          # Your custom domain (optional)
 ├── .env                           # Local environment variables (gitignored)
 │   └── OPENAI_API_KEY=sk-xxx
@@ -179,7 +179,7 @@ touch src/my-defi-agent.json
       "content": "Yield farming is..."
     }
   ],
-  "homepage": "https://github.com/nirholas/AI-Agents-Library",
+  "homepage": "https://github.com/x402agent/AI-Agents-Library",
   "identifier": "my-defi-agent",
   "meta": {
     "title": "My DeFi Agent",
@@ -279,7 +279,7 @@ GitHub Actions automatically:
 
 **Live in \~5 minutes at:**
 
-- Default: `https://yourusername.github.io/defi-agents/index.json`
+- Default: `https://yourusername.github.io/solana-clawd-agents/index.json`
 - Custom: `https://yourdomain.com/index.json`
 
 ---
@@ -290,8 +290,8 @@ GitHub Actions automatically:
 
 ```bash
 # 1. Clone repository
-git clone https://github.com/yourusername/defi-agents
-cd defi-agents
+git clone https://github.com/yourusername/solana-clawd-agents
+cd solana-clawd-agents
 
 # 2. Install dependencies
 bun install
@@ -432,7 +432,7 @@ git commit -m "Use default GitHub Pages domain"
 git push
 ```
 
-**Your site:** `https://username.github.io/defi-agents/`
+**Your site:** `https://username.github.io/solana-clawd-agents/`
 
 ### Option 2: Use Custom Domain
 
@@ -525,8 +525,8 @@ copyCNAME = () => {
 # Click "Fork" button
 
 # 2. Clone your fork
-git clone https://github.com/yourusername/defi-agents
-cd defi-agents
+git clone https://github.com/yourusername/solana-clawd-agents
+cd solana-clawd-agents
 
 # 3. Set up custom domain (optional)
 echo "yourdomain.com" > CNAME
@@ -551,7 +551,7 @@ git push origin main
 
 ```bash
 # Add upstream remote
-git remote add upstream https://github.com/nirholas/defi-agents
+git remote add upstream https://github.com/x402agent/solana-clawd
 
 # Sync with upstream
 git fetch upstream

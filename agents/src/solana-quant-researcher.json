@@ -15,7 +15,9 @@
       "backtesting",
       "alpha",
       "research",
-      "strategy"
+      "strategy",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "Quantitative Research Analyst"
   },

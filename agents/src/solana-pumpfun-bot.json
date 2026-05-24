@@ -35,7 +35,9 @@
       "cashback",
       "token-2022",
       "mayhem-mode",
-      "fee-tiers"
+      "fee-tiers",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "Solana PumpFun/PumpSwap Copy Trading Bot",
     "description": "High-performance Rust-based copy trading bot that monitors and replicates trading activity on Solana DEXs (PumpFun, PumpSwap, Raydium) using Yellowstone gRPC for real-time transaction monitoring with parallel processing, risk management, and Telegram notifications. Updated for v2 instructions, creator fees, cashback, Token-2022, and USDC-paired coins.",

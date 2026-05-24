@@ -146,7 +146,7 @@ Result (May 2026 generated snapshot — regenerate any time with `node build-cat
   "mcpServers": {
     "openclawd-agents": {
       "type": "http",
-      "url": "https://modelcontextprotocol.name/mcp/defi-agents"
+      "url": "https://modelcontextprotocol.name/mcp/solana-clawd-agents"
     }
   }
 }
@@ -177,7 +177,7 @@ curl https://x402.wtf/api/agents/registry | jq .
 ### For developers
 
 ```bash
-git clone https://github.com/clawdsolana/OpenClawd.git
+git clone https://github.com/x402agent/solana-clawd.git
 cd openclawd/agents
 bun install
 bun run format
@@ -582,7 +582,7 @@ Regenerate any time with `node build-catalog.cjs`. Current snapshot (May 2026):
 
 ## 🔗 Projects Building with Solana Clawd Agents
 
-- **ClawdOS** — [Application Branch](https://github.com/clawdsolana/OpenClawd/tree/clawdos)
+- **ClawdOS** — [Application Branch](https://github.com/x402agent/solana-clawd/tree/clawdos)
 - **CLAWD Terminal** — the parent repo hosting this hub + server + client
 - **CLAWD Router** — [ClawdRouter-main/](../ClawdRouter-main/) powers agent dispatch with tier/holder-aware routing
 - **CLAWD × Pump.fun** — payment-gated agent rails via `@pump-fun/agent-payments-sdk`
@@ -604,7 +604,7 @@ The Solana Clawd Agents hub is also published over MCP [Streamable HTTP](https:/
 **Endpoint:**
 
 ```text
-https://modelcontextprotocol.name/mcp/defi-agents
+https://modelcontextprotocol.name/mcp/solana-clawd-agents
 ```
 
 ### Available MCP Tools (10)
@@ -627,7 +627,7 @@ https://modelcontextprotocol.name/mcp/defi-agents
 **Get crypto prices:**
 
 ```bash
-curl -X POST https://modelcontextprotocol.name/mcp/defi-agents \
+curl -X POST https://modelcontextprotocol.name/mcp/solana-clawd-agents \
   -H "Content-Type: application/json" \
   -d '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"get_price","arguments":{"ids":"solana,jupiter-exchange-solana","vs_currencies":"usd"}}}'
 ```
@@ -635,7 +635,7 @@ curl -X POST https://modelcontextprotocol.name/mcp/defi-agents \
 **List all tools:**
 
 ```bash
-curl -X POST https://modelcontextprotocol.name/mcp/defi-agents \
+curl -X POST https://modelcontextprotocol.name/mcp/solana-clawd-agents \
   -H "Content-Type: application/json" \
   -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
 ```

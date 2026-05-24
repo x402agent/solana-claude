@@ -23,7 +23,8 @@
       "jupiter",
       "router",
       "trading",
-      "one-shot"
+      "one-shot",
+      "solana-clawd"
     ]
   },
   "config": {

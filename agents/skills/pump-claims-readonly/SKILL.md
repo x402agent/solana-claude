@@ -3,7 +3,7 @@ name: pump-claims-readonly
 description: "Read-only query methods for PumpFun claims — unclaimed token rewards, creator vault balances, volume accumulators, distributable fees, and current-day token previews across Pump and PumpAMM programs."
 metadata:
   openclaw:
-    homepage: https://github.com/nirholas/pump-fun-sdk
+    homepage: https://github.com/x402agent/pump-fun-sdk
     requires:
       env:
         - SOLANA_RPC_URL
@@ -28,7 +28,7 @@ Both domains span **two on-chain programs** — Pump (bonding curve) and PumpAMM
 
 ```typescript
 import { Connection, PublicKey } from "@solana/web3.js";
-import { OnlinePumpSdk } from "@nirholas/pump-sdk";
+import { OnlinePumpSdk } from "@solana-clawd/pump-sdk";
 
 const connection = new Connection(process.env.SOLANA_RPC_URL!);
 const sdk = new OnlinePumpSdk(connection);
@@ -129,7 +129,7 @@ interface UserVolumeAccumulator {
 If you already hold the account data, compute rewards offline without RPC:
 
 ```typescript
-import { totalUnclaimedTokens, currentDayTokens } from "@nirholas/pump-sdk";
+import { totalUnclaimedTokens, currentDayTokens } from "@solana-clawd/pump-sdk";
 
 const unclaimed: BN = totalUnclaimedTokens(globalAcc, userAcc);
 const today: BN = currentDayTokens(globalAcc, userAcc);
@@ -191,7 +191,7 @@ import {
   creatorVaultPda,
   feeSharingConfigPda,
   GLOBAL_VOLUME_ACCUMULATOR_PDA,
-} from "@nirholas/pump-sdk";
+} from "@solana-clawd/pump-sdk";
 
 const userVolumePda = userVolumeAccumulatorPda(user);
 const vaultPda = creatorVaultPda(creator);

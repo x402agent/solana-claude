@@ -15,7 +15,9 @@
       "pump-fun",
       "degen",
       "alpha",
-      "bonding-curve"
+      "bonding-curve",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "Memecoin Alpha Analyst"
   },

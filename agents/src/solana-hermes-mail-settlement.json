@@ -19,7 +19,9 @@
       "mpp",
       "payments",
       "moonpay",
-      "solana"
+      "solana",
+      "clawd",
+      "solana-clawd"
     ],
     "title": "HERMES Mail Settlement Controller"
   },
