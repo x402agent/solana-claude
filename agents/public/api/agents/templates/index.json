@@ -1,7 +1,7 @@
 {
   "$schema": "https://solanaclawd.com/schemas/agent-template-index.v1.json",
   "apiVersion": "1.0",
-  "generatedAt": "2026-05-24T13:47:44.426Z",
+  "generatedAt": "2026-05-24T15:22:03.246Z",
   "hub": {
     "gallery": "https://x402.wtf/agents/templates",
     "api": "https://x402.wtf/api/agents/templates",

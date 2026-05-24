@@ -7,6 +7,8 @@
   "homepage": "https://solanaclawd.com/agents/solana-ore-mining-agent",
   "oneShot": true,
   "featured": false,
+  "knowledgeCount": 0,
+  "pluginCount": 0,
   "meta": {
     "title": "Solana ORE Mining Agent",
     "description": "Operator agent for ORE mining on Solana: setup, round monitoring, automation, reward claims, fee controls, wallet safety, and profitability checks.",
