@@ -91,12 +91,13 @@ async function observeMode(rpcUrl: string, keypairPath?: string): Promise<void> 
     const board = await getBoard(conn);
     const currentSlot = await getCurrentSlot(conn);
     const round = await getRound(conn, board.roundId);
-    const analysis = analyzeBoard(round, currentSlot);
+    const analysis = analyzeBoard(round, currentSlot, board.endSlot);
 
     console.log(chalk.bold(`\nBoard: Round ${board.roundId}`));
     console.log(`  Start slot: ${board.startSlot}`);
     console.log(`  End slot:   ${board.endSlot}`);
     console.log(`  Current:    ${currentSlot}`);
+    console.log(`  Mining:     ${analysis.miningOpen ? chalk.green(`OPEN — ${analysis.miningSecondsRemaining.toFixed(0)}s left`) : chalk.yellow('CLOSED — claim window open')}`);
     console.log('');
     console.log(formatBoardForClaude(analysis));
 
@@ -141,13 +142,15 @@ async function statusMode(rpcUrl: string, keypairPath?: string): Promise<void> {
     const board = await getBoard(conn);
     const currentSlot = await getCurrentSlot(conn);
     const round = await getRound(conn, board.roundId);
-    const slotsRemaining = round.expiresAt > currentSlot ? round.expiresAt - currentSlot : 0n;
-    const secondsRemaining = Number(slotsRemaining) * 0.4;
+    const miningOpen = currentSlot < board.endSlot;
+    const miningSlotsLeft = miningOpen ? board.endSlot - currentSlot : 0n;
+    const claimSlotsLeft = round.expiresAt > currentSlot ? round.expiresAt - currentSlot : 0n;
 
     console.log(`ORE Program: oreV3EG1i9BEgiAJ8b177Z2S2rMarzak4NMv1kULvWv`);
     console.log(`Board:       ${board.address}`);
     console.log(`Round:       ${board.roundId}`);
-    console.log(`Time left:   ${secondsRemaining.toFixed(0)}s (${slotsRemaining} slots)`);
+    console.log(`Mining:      ${miningOpen ? chalk.green(`OPEN — ${(Number(miningSlotsLeft) * 0.4).toFixed(0)}s left`) : chalk.yellow('CLOSED')}`);
+    console.log(`Claim:       ${(Number(claimSlotsLeft) * 0.4 / 3600).toFixed(1)}h left`);
     console.log(`Miners:      ${round.totalMiners}`);
     console.log(`Deployed:    ${solAmount(round.totalDeployed)} SOL`);
     console.log(`Motherlode:  ${oreAmount(round.motherlode)} ORE`);
