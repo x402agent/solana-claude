@@ -28,16 +28,18 @@ export interface BoardAnalysis {
   totalDeployed: bigint;
   totalMiners: bigint;
   squares: SquareAnalysis[];
-  topSquares: number[];     // indices sorted by EV descending
-  bottomSquares: number[];  // indices with zero deployment
+  topSquares: number[];       // indices sorted by EV descending
+  bottomSquares: number[];    // indices with zero deployment
   avgDeployedPerSquare: bigint;
-  roundProgress: number;    // 0..1 fraction of round elapsed
-  slotsRemaining: bigint;
-  secondsRemaining: number;
+  roundProgress: number;      // 0..1 fraction of mining window elapsed
+  miningOpen: boolean;        // true if currentSlot < boardEndSlot
+  miningSlotRemaining: bigint;  // slots until mining window closes
+  miningSecondsRemaining: number;
+  claimSlotRemaining: bigint;  // slots until round expires (claim deadline)
   summary: string;
 }
 
-export function analyzeBoard(round: RoundState, currentSlot: bigint): BoardAnalysis {
+export function analyzeBoard(round: RoundState, currentSlot: bigint, boardEndSlot?: bigint): BoardAnalysis {
   const total = round.totalDeployed;
 
   const squares: SquareAnalysis[] = round.deployed.map((dep, i) => {
