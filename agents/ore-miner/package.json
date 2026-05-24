@@ -10,14 +10,26 @@
     "observe": "node --import tsx/esm src/index.ts --observe",
     "status": "node --import tsx/esm src/index.ts --status"
   },
-  "keywords": ["solana", "ore", "mining", "clawd", "openclawd", "claude", "ooda"],
+  "keywords": [
+    "solana",
+    "ore",
+    "mining",
+    "clawd",
+    "openclawd",
+    "claude",
+    "ooda"
+  ],
   "author": "OpenClawd / 8bit",
   "license": "MIT",
   "dependencies": {
     "@anthropic-ai/sdk": "^0.39.0",
     "@solana/web3.js": "^1.95.0",
     "bs58": "^6.0.0",
-    "chalk": "^5.4.0"
+    "chalk": "^5.4.0",
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "openai": "^6.39.0",
+    "socket.io": "^4.8.3"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
