@@ -756,7 +756,15 @@ async fn log_automation(rpc: &RpcClient) -> Result<(), anyhow::Error> {
     let authority = std::env::var("AUTHORITY").expect("Missing AUTHORITY env var");
     let authority = Pubkey::from_str(&authority).expect("Invalid AUTHORITY");
     let address = automation_pda(authority).0;
-    let automation = get_automation(rpc, address).await?;
+    let automation = match get_automation(rpc, address).await {
+        Ok(automation) => automation,
+        Err(_) => {
+            println!("Automation");
+            println!("  address: {}", address);
+            println!("  status: not found");
+            return Ok(());
+        }
+    };
     let account_balance = rpc.get_balance(&address).await?;
     let size = 8 + std::mem::size_of::<Automation>();
     let required_rent = Rent::default().minimum_balance(size);
@@ -868,9 +876,18 @@ async fn log_miner(
 ) -> Result<(), anyhow::Error> {
     let authority = std::env::var("AUTHORITY").unwrap_or(payer.pubkey().to_string());
     let authority = Pubkey::from_str(&authority).expect("Invalid AUTHORITY");
-    let treasury = get_treasury(&rpc).await?;
     let miner_address = ore_api::state::miner_pda(authority).0;
-    let mut miner = get_miner(&rpc, authority).await?;
+    let mut miner = match get_miner(&rpc, authority).await {
+        Ok(miner) => miner,
+        Err(_) => {
+            println!("Miner");
+            println!("  address: {}", miner_address);
+            println!("  authority: {}", authority);
+            println!("  status: not found");
+            return Ok(());
+        }
+    };
+    let treasury = get_treasury(&rpc).await?;
     miner.update_rewards(&treasury);
     println!("Miner");
     println!("  address: {}", miner_address);
