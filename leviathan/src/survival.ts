@@ -23,9 +23,22 @@ export function getTier(depth: Depth): DepthTier {
   return DEPTH_TIERS.find(t => t.name === depth) ?? DEPTH_TIERS[DEPTH_TIERS.length - 1]!;
 }
 
-/** Pick inference model from Anthropic ACP / OpenRouter based on depth */
+/**
+ * Pick inference model based on depth and active provider.
+ * When DEEPSEEK_API_KEY is set, routes through DeepSeek's Anthropic-compatible
+ * endpoint — deepseek-v4-pro at depth=deep (full thinking), flash everywhere else.
+ */
 export function selectModel(depth: Depth): string {
-  return getTier(depth).model;
+  const tier = getTier(depth);
+  if (!tier.model) return '';
+
+  // DeepSeek provider: thinking mode at deep, flash elsewhere
+  if (process.env.DEEPSEEK_API_KEY) {
+    if (depth === 'deep') return process.env.DEEPSEEK_MODEL ?? 'deepseek-v4-pro';
+    if (depth === 'shallow' || depth === 'shoreline') return 'deepseek-v4-flash';
+  }
+
+  return tier.model;
 }
 
 /** Map a tool name to its action category for depth filtering */

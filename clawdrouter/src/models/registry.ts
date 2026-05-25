@@ -166,16 +166,32 @@ const BUDGET_MODELS: ModelEntry[] = [
     contextWindow: 200_000, features: ['tools'], tier: 'budget',
     qualityScore: 72, speedMs: 400, enabled: true, free: false,
   },
+  // DeepSeek — cheapest frontier, Anthropic-compatible endpoint
+  {
+    id: 'deepseek/deepseek-v4-flash',
+    provider: 'deepseek', name: 'DeepSeek V4 Flash',
+    inputPricePerM: 0.27, outputPricePerM: 1.10,
+    contextWindow: 128_000, features: ['tools', 'agentic'], tier: 'budget',
+    qualityScore: 78, speedMs: 350, enabled: true, free: false,
+  },
+  {
+    id: 'deepseek/deepseek-v4-pro',
+    provider: 'deepseek', name: 'DeepSeek V4 Pro',
+    inputPricePerM: 0.55, outputPricePerM: 2.19,
+    contextWindow: 128_000, features: ['reasoning', 'tools', 'agentic'], tier: 'budget',
+    qualityScore: 88, speedMs: 900, enabled: true, free: false,
+  },
+  // Legacy DeepSeek aliases (kept for compatibility)
   {
     id: 'deepseek/deepseek-chat',
-    provider: 'deepseek', name: 'DeepSeek Chat',
+    provider: 'deepseek', name: 'DeepSeek Chat (legacy)',
     inputPricePerM: 0.28, outputPricePerM: 0.42,
     contextWindow: 128_000, features: ['tools'], tier: 'budget',
     qualityScore: 68, speedMs: 450, enabled: true, free: false,
   },
   {
     id: 'deepseek/deepseek-reasoner',
-    provider: 'deepseek', name: 'DeepSeek Reasoner',
+    provider: 'deepseek', name: 'DeepSeek Reasoner (legacy)',
     inputPricePerM: 0.28, outputPricePerM: 0.42,
     contextWindow: 128_000, features: ['reasoning', 'tools'], tier: 'budget',
     qualityScore: 74, speedMs: 700, enabled: true, free: false,
@@ -421,12 +437,12 @@ export const MODEL_REGISTRY: ModelEntry[] = [
 
 export const TIER_MAPPING: Record<RequestTier, TierMapping> = {
   SIMPLE: {
-    eco: 'nvidia/gpt-oss-120b',
+    eco: 'deepseek/deepseek-v4-flash',   // cheapest paid frontier with tool use
     auto: 'google/gemini-2.5-flash',
     premium: 'nvidia/kimi-k2.5',
   },
   MEDIUM: {
-    eco: 'google/gemini-2.5-flash-lite',
+    eco: 'deepseek/deepseek-v4-flash',   // fast + cheap for agentic tasks
     auto: 'nvidia/kimi-k2.5',
     premium: 'openai/gpt-5.3-codex',
   },
@@ -436,7 +452,7 @@ export const TIER_MAPPING: Record<RequestTier, TierMapping> = {
     premium: 'anthropic/claude-opus-4.6',
   },
   REASONING: {
-    eco: 'xai/grok-4-1-fast',
+    eco: 'deepseek/deepseek-v4-pro',     // thinking mode at eco price
     auto: 'xai/grok-4-1-fast-reasoning',
     premium: 'anthropic/claude-sonnet-4.6',
   },
@@ -477,6 +493,11 @@ export function resolveModelAlias(alias: string): string | null {
     'auto': 'clawdrouter/auto',
     'free': 'nvidia/nemotron-ultra-253b',
     'nemotron': 'nvidia/nemotron-ultra-253b',
+    // DeepSeek — primary provider
+    'deepseek': 'deepseek/deepseek-v4-flash',
+    'deepseek-flash': 'deepseek/deepseek-v4-flash',
+    'deepseek-pro': 'deepseek/deepseek-v4-pro',
+    'deepseek-think': 'deepseek/deepseek-v4-pro',
     'deepseek-free': 'nvidia/deepseek-v3.2',
     'devstral': 'nvidia/devstral-2-123b',
     'grok-4': 'xai/grok-4-1-fast',

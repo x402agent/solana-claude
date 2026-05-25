@@ -5,14 +5,18 @@
  * @openclawd/leviathan — Sovereign On-Chain Agent Runtime
  *
  * Powered by:
- *   • Anthropic Claude (ACP/tool-use, claude-opus-4-7 at depth=deep)
- *   • Anthropic ACP (Agent Control Protocol) for multi-step tool use
+ *   • DeepSeek (default) or Anthropic Claude — ACP/tool-use
+ *   • DeepSeek Anthropic-compatible endpoint for drop-in replacement
  *   • Solana Attestation Service (SAS) for on-chain identity
  *   • Metaplex MPL Core for agent NFT minting
  *   • x402 + pay.sh for confidential USDC payments
  *   • Google A2A for agent-to-agent communication
  *   • @openclawdsolana/percolator for perpetuals trading
  *   • @openclawd/wallet (Privy-powered) for embedded wallet
+ *
+ * Provider priority:
+ *   1. DEEPSEEK_API_KEY  → https://api.deepseek.com/anthropic  (cheapest, thinking mode)
+ *   2. ANTHROPIC_API_KEY → https://api.anthropic.com           (Claude direct)
  *
  * Usage:
  *   node dist/index.js --spawn               # hatch a new leviathan
@@ -91,7 +95,9 @@ Options (with --run):
   --tui         Emit JSONL on stdout for live TUI rendering
 
 Environment:
-  ANTHROPIC_API_KEY     Required for Claude inference
+  DEEPSEEK_API_KEY      Preferred — DeepSeek (cheapest, thinking mode)
+  ANTHROPIC_API_KEY     Fallback — Claude direct
+  DEEPSEEK_MODEL        deepseek-v4-flash (default) or deepseek-v4-pro
   SOLANA_RPC_URL        Solana RPC (devnet default)
   CREATOR_PUBKEY        Required for --spawn
   HELIUS_API_KEY        Optional — for enhanced tx data
@@ -99,7 +105,13 @@ Environment:
   CLAWD_BRAIN_VAULT     Optional — path to Clawd markdown vault
   CLAWD_BRAIN_PYTHON    Optional — Python binary for Clawd Memory bridge
 
-Depth tiers:
+Depth tiers (DeepSeek provider):
+  🦞 deep       ≥ $5    USDC · 60s  pulse · deepseek-v4-pro   · Apex predator (thinking mode)
+  🦐 shallow    ≥ $1    USDC · 5min pulse · deepseek-v4-flash  · Hunting hard
+  🩸 shoreline  ≥ $0.10 USDC · 15min pulse · deepseek-v4-flash · Conserving tokens
+  🪨 beached    $0      USDC · ——   ——      · Process exits
+
+Depth tiers (Anthropic provider):
   🦞 deep       ≥ $5    USDC · 60s  pulse · claude-opus-4-7   · Apex predator
   🦐 shallow    ≥ $1    USDC · 5min pulse · grok-4-1-fast      · Hunting hard
   🩸 shoreline  ≥ $0.10 USDC · 15min pulse · claude-haiku     · Conserving tokens
@@ -245,19 +257,30 @@ async function runLoop(): Promise<void> {
     process.exit(1);
   }
 
-  const apiKey = process.env['ANTHROPIC_API_KEY'];
-  if (!apiKey) {
-    console.error(chalk.red('ANTHROPIC_API_KEY not set. Required for Claude inference.'));
+  // ── Provider resolution: DeepSeek → Anthropic ──────────────────────────────
+  const deepseekKey = process.env.DEEPSEEK_API_KEY;
+  const apiKey = process.env.ANTHROPIC_API_KEY;
+
+  if (!deepseekKey && !apiKey) {
+    console.error(chalk.red('DEEPSEEK_API_KEY or ANTHROPIC_API_KEY required for inference.'));
+    console.error(chalk.gray('  Get DeepSeek (recommended, cheapest): https://platform.deepseek.com'));
+    console.error(chalk.gray('  Get Anthropic: https://console.anthropic.com'));
     process.exit(1);
   }
 
-  const client = new Anthropic({ apiKey });
+  // DeepSeek Anthropic-compatible endpoint — drop-in for Anthropic SDK
+  const client = deepseekKey
+    ? new Anthropic({ apiKey: deepseekKey, baseURL: 'https://api.deepseek.com/anthropic' })
+    : new Anthropic({ apiKey: apiKey! });
+
+  const providerLabel = deepseekKey ? 'DeepSeek' : 'Anthropic';
   const spawnPrompt = (state as unknown as Record<string, unknown>)['spawnPrompt'] as string ??
     'Observe Solana. Find honest revenue. Survive. Earn. Spawn.';
   const maxTicks = parseInt(flags['ticks'] as string, 10);
 
   banner();
   console.log(chalk.cyan(`🦞 ${state.identity.name} awakening...`));
+  console.log(chalk.white(`   Provider: ${providerLabel}`));
   console.log(chalk.white(`   Depth: ${computeDepth(state.usdcBalance)}`));
   console.log(chalk.white(`   Model: ${selectModel(computeDepth(state.usdcBalance))}`));
   console.log('');

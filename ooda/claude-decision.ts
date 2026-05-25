@@ -1,35 +1,74 @@
 /**
- * ooda/claude-decision.ts — Claude as the OODA decision function
+ * ooda/claude-decision.ts — AI-powered OODA decision function
  *
- * This is the LLM-in-the-loop adapter described in the Ralph README:
- *   "You can pass any Callable[[State, dict], dict] to run_loop to swap in
- *    a model call. Whatever you pass must still produce a decision that
- *    passes validate_decision."
+ * Provider priority:
+ *   1. DEEPSEEK_API_KEY  → deepseek-v4-flash (fast, cheap, thinking mode)
+ *   2. OPENROUTER_API_KEY → configurable model
+ *   3. ANTHROPIC_API_KEY  → Claude direct
  *
- * Design: Fresh context per tick. No conversation history. No memory.
+ * Design: Fresh context per tick. No conversation history.
  * The per-tick prompt (RALPH.md) + observations → one JSON decision.
- *
- * Sponsor: Anthropic / Claude API
  */
 
 import { readFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import OpenAI from 'openai';
 import type { State, Candle } from './state.js';
 import type { TickEntry } from './journal.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const RALPH_PATH = join(__dirname, 'RALPH.md');
 
-let _client: unknown | null = null;
+// ── Provider resolution (lazy singleton) ─────────────────────────────────────
 
-async function getClient(): Promise<any> {
-  if (!_client) {
-    const { default: Anthropic } = await import('@anthropic-ai/sdk');
-    _client = new Anthropic({ apiKey: process.env['ANTHROPIC_API_KEY'] });
-  }
-  return _client;
+interface OodaClient {
+  client: OpenAI;
+  model: string;
+  provider: string;
 }
+
+let _oodaClient: OodaClient | null = null;
+
+function getOodaClient(): OodaClient {
+  if (_oodaClient) return _oodaClient;
+
+  const deepseekKey = process.env.DEEPSEEK_API_KEY;
+  const openrouterKey = process.env.OPENROUTER_API_KEY;
+  const anthropicKey = process.env.ANTHROPIC_API_KEY;
+  const modelOverride = process.env.OODA_MODEL;
+
+  if (deepseekKey) {
+    _oodaClient = {
+      client: new OpenAI({ apiKey: deepseekKey, baseURL: 'https://api.deepseek.com' }),
+      model: modelOverride ?? 'deepseek-v4-flash',
+      provider: 'deepseek',
+    };
+  } else if (openrouterKey) {
+    _oodaClient = {
+      client: new OpenAI({
+        apiKey: openrouterKey,
+        baseURL: 'https://openrouter.ai/api/v1',
+        defaultHeaders: { 'HTTP-Referer': 'https://openclawd.com', 'X-Title': 'Solana Clawd OODA' },
+      }),
+      model: modelOverride ?? 'anthropic/claude-haiku-4-5',
+      provider: 'openrouter',
+    };
+  } else if (anthropicKey) {
+    // Anthropic via DeepSeek-compatible endpoint doesn't apply here — use OpenAI compat shim
+    _oodaClient = {
+      client: new OpenAI({ apiKey: anthropicKey, baseURL: 'https://api.anthropic.com/v1' }),
+      model: modelOverride ?? 'claude-haiku-4-5-20251001',
+      provider: 'anthropic',
+    };
+  } else {
+    throw new Error('OODA loop requires DEEPSEEK_API_KEY, OPENROUTER_API_KEY, or ANTHROPIC_API_KEY');
+  }
+
+  return _oodaClient;
+}
+
+// ── Public interfaces ─────────────────────────────────────────────────────────
 
 export interface Observations {
   tick: number;
@@ -44,8 +83,7 @@ export interface Observations {
 
 /**
  * Build the per-tick prompt by injecting observations into RALPH.md.
- * This mirrors the Python harness: read the file fresh each tick so
- * any in-flight edits to RALPH.md take effect immediately.
+ * Read fresh each tick so in-flight edits to RALPH.md take effect immediately.
  */
 export function buildPrompt(obs: Observations): string {
   const ralph = readFileSync(RALPH_PATH, 'utf8');
@@ -57,40 +95,45 @@ export function buildPrompt(obs: Observations): string {
 }
 
 /**
- * Call Claude once with the fresh per-tick prompt.
- * Returns the raw parsed JSON (validation happens in validate.ts).
+ * AI decision call — one tick of the OODA loop.
+ * Returns raw parsed JSON (validation in validate.ts).
  *
- * Model choice: claude-haiku-4-5 — fast, cheap, sufficient for a
- * one-JSON-object decision. Override with OODA_MODEL env var.
+ * DeepSeek thinking mode is enabled when using deepseek-v4-pro.
+ * Default deepseek-v4-flash is non-thinking for speed.
  */
 export async function claudeDecision(obs: Observations): Promise<unknown> {
-  const client = await getClient();
-  const model = process.env['OODA_MODEL'] ?? 'claude-haiku-4-5-20251001';
+  const { client, model, provider } = getOodaClient();
   const prompt = buildPrompt(obs);
 
-  const msg = await client.messages.create({
+  const isThinkingModel = model.includes('pro') || model.includes('opus') || model.includes('reasoner');
+  const extraBody = provider === 'deepseek' && isThinkingModel
+    ? { thinking: { type: 'enabled' }, reasoning_effort: 'high' }
+    : {};
+
+  const response = await client.chat.completions.create({
     model,
-    max_tokens: 256,
-    system: [
-      'You are a single tick of an OODA trading loop.',
-      'You MUST respond with ONLY a single JSON object matching one of the three shapes.',
-      'No markdown. No explanation. No preamble. Just the JSON object.',
-      'If uncertain, return {"action":"hold","reason":"<one sentence>"}.',
-    ].join(' '),
-    messages: [{ role: 'user', content: prompt }],
-  });
+    max_tokens: 512,
+    messages: [
+      {
+        role: 'system',
+        content: [
+          'You are a single tick of an OODA trading loop on Solana.',
+          'You MUST respond with ONLY a single JSON object matching one of the three shapes.',
+          'No markdown. No explanation. No preamble. Just the JSON object.',
+          'If uncertain, return {"action":"hold","reason":"<one sentence>"}.',
+        ].join(' '),
+      },
+      { role: 'user', content: prompt },
+    ],
+    ...extraBody,
+  } as Parameters<typeof client.chat.completions.create>[0]);
 
-  const text = msg.content
-    .filter(b => b.type === 'text')
-    .map(b => (b as { type: 'text'; text: string }).text)
-    .join('');
+  const msg = response.choices[0]?.message;
+  const text = msg?.content ?? '';
 
-  // Strip any accidental markdown fences
   const cleaned = text.replace(/```(?:json)?\s*/g, '').replace(/```/g, '').trim();
-
-  // Extract the first JSON object in the response
   const match = cleaned.match(/\{[\s\S]*\}/);
-  if (!match) throw new Error(`Claude returned no JSON object: ${text.slice(0, 200)}`);
+  if (!match) throw new Error(`AI returned no JSON object (${provider}/${model}): ${text.slice(0, 200)}`);
 
   return JSON.parse(match[0]);
 }

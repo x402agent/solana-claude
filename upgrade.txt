@@ -1,0 +1,99 @@
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  🦀  CLAWD UPGRADE LOG  —  2026-05-24
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PRODUCTION: https://x402.wtf  ✅  LIVE
+
+── /ore/install.sh — SHIPPED ────────────────────────
+
+  curl -fsSL https://x402.wtf/ore/install.sh | bash
+
+  HTTP 200 · Content-Type: text/x-shellscript
+  Source: github (newnew branch → real install.sh)
+
+  Install flow:
+    1. Prompts for DeepSeek/OpenRouter/Anthropic key
+    2. Prompts for Solana RPC + WebSocket URL
+    3. Prompts for keypair path (~/.config/solana/id.json)
+    4. npm install → deps in agents/ore-miner/
+    5. Optional: cargo build ore-cli binary
+    6. Status check (ORE v3 chain state)
+    7. Launches CLAWD LOOP + dashboard at http://localhost:3333
+
+  One-liner (no prompts):
+    DEEPSEEK_API_KEY=sk-... \
+    RPC=https://rpc-mainnet.solanatracker.io/?api_key=KEY \
+    RPC_WS=wss://rpc-mainnet.solanatracker.io/?api_key=KEY \
+    KEYPAIR=~/.config/solana/id.json \
+    curl -fsSL https://x402.wtf/ore/install.sh | bash
+
+  Dry run (zero transactions):
+    DRY_RUN=true DEEPSEEK_API_KEY=sk-... RPC=... KEYPAIR=... \
+    curl -fsSL https://x402.wtf/ore/install.sh | bash
+
+── WHAT CHANGED ─────────────────────────────────────
+
+  ClawdBrowser (x402.wtf) — commit b586e18d9
+  ├── NEW  src/app/ore/install.sh/route.ts       (pretty URL)
+  ├── NEW  src/app/api/ore/install/route.ts      (script server)
+  │         priority: local → github(newnew) → inline-fallback
+  ├── FIX  src/components/darkswap/swap-history-panel.tsx
+  │         explicit SwapEntry[] type — unblocked TS build
+  └── FIX  GitHub raw URL set to newnew branch (main 404'd)
+
+  solana-clawd (repo) — commit 69aea634c
+  ├── NEW  agents/ore-miner/src/connection.ts
+  │         resolveSolanaConnectionEnv + createSolanaConnection
+  │         supports RPC / SOLANA_TRACKER_RPC / HELIUS_RPC_URL
+  │         supports RPC_WS / WSS_RPC / SOLANA_TRACKER_WSS
+  ├── NEW  agents/ore-miner/src/persistence.ts
+  │         ConvexOreRecorder — persists run start/ticks/finish
+  │         mutations: upsertAutomationConfig, startRun, recordTick, finishRun
+  ├── NEW  agents/ore-miner/convex/schema.ts       (Convex schema)
+  ├── NEW  agents/ore-miner/convex/oreMining.ts    (Convex mutations)
+  ├── NEW  agents/ore-miner/convex/http.ts         (Convex HTTP actions)
+  ├── NEW  agents/ore-miner/convex/_generated/     (codegen output)
+  ├── MOD  agents/ore-miner/install.sh
+  │         + RPC_WS prompt
+  │         + SOLANA_TRACKER_* env aliases
+  │         + updated default RPC to SolanaTracker
+  ├── MOD  agents/ore-miner/src/agent.ts           (Convex recorder wired in)
+  ├── MOD  agents/ore-miner/src/index.ts           (connection helper)
+  ├── MOD  agents/ore-miner/src/server.ts          (extended dashboard state)
+  ├── MOD  agents/ore-miner/package.json           (+ convex dep)
+  └── MOD  agents/ore-miner/.env.example           (CONVEX_URL, RPC_WS docs)
+
+── VERCEL DEPLOY HISTORY (this session) ─────────────
+
+  Attempt 1: FAILED  — TS error (implicit any) in swap-history-panel.tsx
+  Attempt 2: FAILED  — second implicit any on .map() callback
+  Attempt 3: SUCCESS — aliased to https://x402.wtf
+  Attempt 4: SUCCESS — github raw URL fixed (newnew branch)
+              Final URL: clawd-browser-dwzwv8juw-mawdborts-projects.vercel.app
+              Aliased:   https://x402.wtf  ✅
+
+── ROUTE PRIORITY (how /ore/install.sh is served) ───
+
+  1. SOLANA_CLAWD_HOME env → reads install.sh from local checkout
+     (works during local dev, not on Vercel)
+  2. GitHub raw — newnew branch (then main as fallback)
+     ✅ ACTIVE in production (x-install-source: github)
+  3. Inline bootstrap — clones repo then hands off to full install.sh
+     (last resort, always works even if GitHub is down)
+
+── NEXT STEPS ───────────────────────────────────────
+
+  □  Set SOLANA_CLAWD_HOME in Vercel env vars to point at
+     a deployed copy of the repo for instant local-source serving
+     (optional — github fallback already works fine)
+
+  □  Merge newnew → main when ready so github raw works on main branch
+     git checkout main && git merge newnew && git push
+
+  □  Add CONVEX_URL to agents/ore-miner/.env for run persistence
+     (optional — agent works without it, just no cloud history)
+
+  □  Push agents/ore-miner to npm if standalone install desired:
+     cd agents/ore-miner && npm publish --access public
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

@@ -71,6 +71,7 @@ export function createDashboardServer(port = 3333): DashboardServer {
     cors: { origin: '*' },
   });
   let lastState: DashboardState | null = null;
+  let boundPort = port;
 
   app.use(express.static(join(__dirname, 'public')));
 
@@ -88,13 +89,29 @@ export function createDashboardServer(port = 3333): DashboardServer {
     });
   });
 
-  httpServer.listen(port, () => {
-    console.log(`[dashboard] live at http://localhost:${port}`);
-  });
+  // Try the requested port; if busy, try the next 4 ports before giving up.
+  const tryListen = (p: number, attemptsLeft: number): void => {
+    httpServer.once('error', (err: NodeJS.ErrnoException) => {
+      if (err.code === 'EADDRINUSE' && attemptsLeft > 0) {
+        console.warn(`[dashboard] port ${p} in use, trying ${p + 1}…`);
+        boundPort = p + 1;
+        setTimeout(() => tryListen(p + 1, attemptsLeft - 1), 500);
+      } else {
+        console.error(`[dashboard] failed to bind: ${err.message}`);
+        // Don't crash the process — agent works fine without the dashboard.
+      }
+    });
+    httpServer.listen(p, () => {
+      boundPort = p;
+      console.log(`[dashboard] live at http://localhost:${p}`);
+    });
+  };
+
+  tryListen(port, 4);
 
   return {
     io,
-    url: `http://localhost:${port}`,
+    get url() { return `http://localhost:${boundPort}`; },
     publishState: (state: DashboardState) => {
       lastState = state;
       io.emit('state', state);
