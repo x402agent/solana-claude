@@ -29,6 +29,8 @@ import {
 } from './cli.js';
 import { solAmount, oreAmount } from './constants.js';
 import type { DashboardState, LogEntry } from './server.js';
+import { createSolanaConnection } from './connection.js';
+import { createConvexOreRecorder } from './persistence.js';
 
 const CLAWD_LOOP_PROMPT = `You are the Clawd ORE Mining Agent — the world's first AI-driven autonomous miner for the ORE v3 protocol on Solana.
 
@@ -69,12 +71,14 @@ export interface OodaTick {
 
 export interface AgentConfig {
   rpcUrl: string;
+  wsEndpoint?: string;
   keypairPath: string;
   maxDeployPerRound: number;
   minReserve: number;
   tickIntervalMs: number;
   dryRun: boolean;
   io?: IOServer;
+  publishDashboardState?: (state: DashboardState) => void;
 }
 
 interface ToolResult {
@@ -427,15 +431,30 @@ function buildDashboardState(
   };
 }
 
-function buildOpenAIClient(): OpenAI {
+type LlmProvider = 'deepseek' | 'openrouter' | 'anthropic';
+
+function resolveLlmProvider(): LlmProvider {
+  const deepseekKey = process.env.DEEPSEEK_API_KEY;
+  const orKey = process.env.OPENROUTER_API_KEY;
+
+  if (deepseekKey) {
+    return 'deepseek';
+  }
+  if (orKey) {
+    return 'openrouter';
+  }
+  return 'anthropic';
+}
+
+function buildOpenAIClient(provider: LlmProvider): OpenAI {
   const deepseekKey = process.env.DEEPSEEK_API_KEY;
   const orKey = process.env.OPENROUTER_API_KEY;
   const anthropicKey = process.env.ANTHROPIC_API_KEY;
 
-  if (deepseekKey) {
+  if (provider === 'deepseek') {
     return new OpenAI({ apiKey: deepseekKey, baseURL: 'https://api.deepseek.com' });
   }
-  if (orKey) {
+  if (provider === 'openrouter') {
     return new OpenAI({
       apiKey: orKey,
       baseURL: 'https://openrouter.ai/api/v1',
@@ -446,12 +465,15 @@ function buildOpenAIClient(): OpenAI {
 }
 
 export async function runAgent(config: AgentConfig): Promise<void> {
-  const client = buildOpenAIClient();
-  const model = process.env.DEEPSEEK_MODEL
-    ?? process.env.OPENROUTER_MODEL
-    ?? (process.env.DEEPSEEK_API_KEY ? 'deepseek-v4-flash' : 'anthropic/claude-opus-4.7-fast');
+  const provider = resolveLlmProvider();
+  const client = buildOpenAIClient(provider);
+  const model = provider === 'deepseek'
+    ? (process.env.DEEPSEEK_MODEL ?? 'deepseek-v4-flash')
+    : provider === 'openrouter'
+    ? (process.env.OPENROUTER_MODEL ?? 'anthropic/claude-opus-4.7-fast')
+    : 'claude-sonnet-4-5';
 
-  const conn = new Connection(config.rpcUrl, 'confirmed');
+  const conn = createSolanaConnection({ rpcUrl: config.rpcUrl, wsEndpoint: config.wsEndpoint });
   const keypair = loadKeypair(config.keypairPath);
   const cliAvailable = isOreCLIAvailable();
 
@@ -464,15 +486,47 @@ export async function runAgent(config: AgentConfig): Promise<void> {
     log(msg);
   }
 
-  function emitState(board: BoardState, analysis: ReturnType<typeof analyzeBoard>, round: RoundState, walletLamports: bigint, miner: Awaited<ReturnType<typeof getMiner>>, strike: OodaTick): void {
-    if (!config.io) return;
-    const dashState = buildDashboardState(tick, board, analysis, round, walletLamports, miner, strike, logEntries, config, loopPhase);
-    config.io.emit('state', dashState);
+  function emitState(dashState: DashboardState): void {
+    if (config.publishDashboardState) {
+      config.publishDashboardState(dashState);
+      return;
+    }
+    config.io?.emit('state', dashState);
   }
 
   addLog('info', chalk.cyan('━━━ CLAWD ORE MINING AGENT ━━━'));
   addLog('info', `Wallet: ${keypair.publicKey.toBase58()}`);
   addLog('info', `Model:  ${model} | Mode: ${config.dryRun ? 'DRY RUN' : 'LIVE'}`);
+
+  const recorder = createConvexOreRecorder();
+  const dashboardUrl = `http://localhost:${process.env.DASHBOARD_PORT ?? '3333'}`;
+  await recorder.start({
+    agentSlug: 'ore-miner',
+    walletPubkey: keypair.publicKey.toBase58(),
+    rpcUrl: config.rpcUrl,
+    wsEndpoint: config.wsEndpoint,
+    dashboardUrl,
+    model,
+    provider,
+    dryRun: config.dryRun,
+    maxDeployPerRound: config.maxDeployPerRound,
+    minReserve: config.minReserve,
+    tickIntervalMs: config.tickIntervalMs,
+    systemPrompt: CLAWD_LOOP_PROMPT,
+  });
+
+  let shuttingDown = false;
+  const shutdown = async (status: 'stopped' | 'error', reason: string): Promise<void> => {
+    if (shuttingDown) return;
+    shuttingDown = true;
+    await recorder.finish(status, reason);
+  };
+  process.once('SIGINT', () => {
+    void shutdown('stopped', 'received SIGINT').finally(() => process.exit(0));
+  });
+  process.once('SIGTERM', () => {
+    void shutdown('stopped', 'received SIGTERM').finally(() => process.exit(0));
+  });
 
   const history: OodaTick[] = [];
   let tick = 0;
@@ -513,7 +567,15 @@ export async function runAgent(config: AgentConfig): Promise<void> {
     history.push(strike);
     if (history.length > 100) history.shift();
 
-    emitState(board, analysis, round, walletLamports, miner, strike);
+    const dashboardState = buildDashboardState(tick, board, analysis, round, walletLamports, miner, strike, logEntries, config, loopPhase);
+    emitState(dashboardState);
+    await recorder.recordTick({
+      tick: strike,
+      loopPhase,
+      userMessage,
+      dashboardState,
+      summary: analysis.summary,
+    });
 
     loopPhase = 'idle';
     const sleepMs = computeSleepMs(analysis.miningSecondsRemaining, analysis.miningOpen, round.slotHashRevealed, config.tickIntervalMs);

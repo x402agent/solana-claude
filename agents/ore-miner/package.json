@@ -8,7 +8,10 @@
     "start": "node --import tsx/esm src/index.ts",
     "mine": "node --import tsx/esm src/index.ts --mine",
     "observe": "node --import tsx/esm src/index.ts --observe",
-    "status": "node --import tsx/esm src/index.ts --status"
+    "status": "node --import tsx/esm src/index.ts --status",
+    "convex:dev": "npx convex dev",
+    "convex:codegen": "npx convex codegen",
+    "convex:deploy": "npx convex deploy"
   },
   "keywords": [
     "solana",
@@ -26,6 +29,7 @@
     "@solana/web3.js": "^1.95.0",
     "bs58": "^6.0.0",
     "chalk": "^5.4.0",
+    "convex": "^1.28.3",
     "cors": "^2.8.6",
     "express": "^5.2.1",
     "openai": "^6.39.0",

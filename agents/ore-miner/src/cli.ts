@@ -20,7 +20,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 // Resolve ore-master CLI binary relative to this file
 const ORE_CLI_PATH = path.resolve(
   __dirname,
-  '../../../../ore-master/target/release/ore-cli',
+  '../../../ore-master/target/release/ore-cli',
 );
 
 export interface CliResult {
@@ -48,12 +48,12 @@ export async function runOreCLI(
     };
   }
 
-  const rpc = process.env['RPC'] ?? process.env['HELIUS_RPC_URL'];
+  const rpc = process.env['RPC'] ?? process.env['SOLANA_TRACKER_RPC'] ?? process.env['HELIUS_RPC_URL'];
   if (!rpc) {
     return {
       success: false,
       stdout: '',
-      stderr: 'RPC env var required (set RPC or HELIUS_RPC_URL)',
+      stderr: 'RPC env var required (set RPC, SOLANA_TRACKER_RPC, or HELIUS_RPC_URL)',
     };
   }
 

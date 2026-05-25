@@ -8,7 +8,8 @@
 # │                                                                             │
 # │  One-liner with your own keys:                                              │
 # │    DEEPSEEK_API_KEY=sk-... \                                                │
-# │    RPC=https://mainnet.helius-rpc.com/?api-key=KEY \                        │
+# │    RPC=https://rpc-mainnet.solanatracker.io/?api_key=KEY \                  │
+# │    RPC_WS=wss://rpc-mainnet.solanatracker.io/?api_key=KEY \                 │
 # │    KEYPAIR=~/.config/solana/id.json \                                       │
 # │    curl -fsSL https://x402.wtf/ore/install.sh | bash                       │
 # │                                                                             │
@@ -152,10 +153,15 @@ fi
 [[ -n "${ANTHROPIC_API_KEY:-}" ]]  && success "Anthropic key set"
 
 # RPC
-if [[ -z "${RPC:-}" && -z "${HELIUS_RPC_URL:-}" ]]; then
-  ask RPC "Solana RPC URL" "https://api.mainnet-beta.solana.com"
+if [[ -z "${RPC:-}" && -z "${SOLANA_TRACKER_RPC:-}" && -z "${HELIUS_RPC_URL:-}" ]]; then
+  ask RPC "Solana RPC URL" "https://rpc-mainnet.solanatracker.io/?api_key=YOUR_API_KEY"
 fi
 [[ -n "${RPC:-}" ]] && success "RPC: ${RPC:0:40}…"
+
+if [[ -z "${RPC_WS:-}" && -z "${WSS_RPC:-}" && -z "${SOLANA_TRACKER_WSS:-}" ]]; then
+  ask RPC_WS "Solana websocket URL" "wss://rpc-mainnet.solanatracker.io/?api_key=YOUR_API_KEY"
+fi
+[[ -n "${RPC_WS:-}" ]] && success "RPC websocket: ${RPC_WS:0:40}…"
 
 # Keypair
 DEFAULT_KEYPAIR="$HOME/.config/solana/id.json"
@@ -198,6 +204,9 @@ ENV_FILE="$AGENT_DIR/.env"
   [[ -n "${OPENROUTER_MODEL:-}" ]]   && echo "OPENROUTER_MODEL=$OPENROUTER_MODEL"
   [[ -n "${ANTHROPIC_API_KEY:-}" ]]  && echo "ANTHROPIC_API_KEY=$ANTHROPIC_API_KEY"
   [[ -n "${RPC:-}" ]]                && echo "RPC=$RPC"
+  [[ -n "${RPC_WS:-}" ]]             && echo "RPC_WS=$RPC_WS"
+  [[ -n "${SOLANA_TRACKER_RPC:-}" ]] && echo "SOLANA_TRACKER_RPC=$SOLANA_TRACKER_RPC"
+  [[ -n "${SOLANA_TRACKER_WSS:-}" ]] && echo "SOLANA_TRACKER_WSS=$SOLANA_TRACKER_WSS"
   [[ -n "${HELIUS_RPC_URL:-}" ]]     && echo "HELIUS_RPC_URL=$HELIUS_RPC_URL"
   echo "KEYPAIR=$KEYPAIR"
   echo "MAX_DEPLOY_SOL=$MAX_DEPLOY_SOL"

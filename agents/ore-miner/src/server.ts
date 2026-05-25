@@ -58,12 +58,19 @@ export interface LogEntry {
   msg: string;
 }
 
-export function createDashboardServer(port = 3333): { io: SocketIOServer; url: string } {
+export interface DashboardServer {
+  io: SocketIOServer;
+  url: string;
+  publishState: (state: DashboardState) => void;
+}
+
+export function createDashboardServer(port = 3333): DashboardServer {
   const app = express();
   const httpServer = createServer(app);
   const io = new SocketIOServer(httpServer, {
     cors: { origin: '*' },
   });
+  let lastState: DashboardState | null = null;
 
   app.use(express.static(join(__dirname, 'public')));
 
@@ -73,6 +80,9 @@ export function createDashboardServer(port = 3333): { io: SocketIOServer; url: s
 
   io.on('connection', (socket) => {
     console.log(`[dashboard] client connected: ${socket.id}`);
+    if (lastState) {
+      socket.emit('state', lastState);
+    }
     socket.on('disconnect', () => {
       console.log(`[dashboard] client disconnected: ${socket.id}`);
     });
@@ -82,5 +92,12 @@ export function createDashboardServer(port = 3333): { io: SocketIOServer; url: s
     console.log(`[dashboard] live at http://localhost:${port}`);
   });
 
-  return { io, url: `http://localhost:${port}` };
+  return {
+    io,
+    url: `http://localhost:${port}`,
+    publishState: (state: DashboardState) => {
+      lastState = state;
+      io.emit('state', state);
+    },
+  };
 }

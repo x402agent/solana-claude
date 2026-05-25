@@ -3,14 +3,16 @@
  * Clawd ORE Mining Agent — Entry Point
  *
  * The world's first AI-driven autonomous miner for the ORE v3 protocol.
- * Claude-powered CLAWD LOOP: Observe → Orient → Decide → Act.
+ * DeepSeek-powered CLAWD LOOP by default: Observe → Orient → Decide → Act.
  *
  * Usage:
- *   ANTHROPIC_API_KEY=... RPC=... KEYPAIR=~/.config/solana/id.json \
+ *   DEEPSEEK_API_KEY=... RPC=... KEYPAIR=~/.config/solana/id.json \
  *     node --import tsx/esm src/index.ts [--mine] [--dry-run] [--observe]
  *
  * Environment:
- *   ANTHROPIC_API_KEY   Claude API key (or use OPENROUTER_API_KEY)
+ *   DEEPSEEK_API_KEY    DeepSeek API key (default provider)
+ *   DEEPSEEK_MODEL      DeepSeek model (default: deepseek-v4-flash)
+ *   ANTHROPIC_API_KEY   Claude API key (fallback provider)
  *   OPENROUTER_API_KEY  OpenRouter API key
  *   OPENROUTER_MODEL    Model to use via OpenRouter (default: anthropic/claude-opus-4.7-fast)
  *   RPC                 Solana RPC URL (or HELIUS_RPC_URL)
@@ -22,14 +24,17 @@
  */
 
 import chalk from 'chalk';
-import { Connection } from '@solana/web3.js';
-
 import { getBoard, getRound, getMiner, getCurrentSlot, getSolBalance } from './rpc.js';
 import { analyzeBoard, formatBoardForClaude } from './strategy.js';
 import { isOreCLIAvailable } from './cli.js';
 import { runAgent } from './agent.js';
 import { createDashboardServer } from './server.js';
 import { solAmount, oreAmount } from './constants.js';
+import { createSolanaConnection, resolveSolanaConnectionEnv } from './connection.js';
+
+// Load local .env automatically when present so the agent can run from repo defaults.
+const loadEnvFile = (process as NodeJS.Process & { loadEnvFile?: (path?: string) => void }).loadEnvFile;
+loadEnvFile?.();
 
 const args = process.argv.slice(2);
 const mode = args.includes('--mine')
@@ -43,24 +48,24 @@ const mode = args.includes('--mine')
 const dryRun = args.includes('--dry-run') || process.env.DRY_RUN === 'true';
 
 async function main(): Promise<void> {
-  const rpcUrl = process.env.RPC ?? process.env.HELIUS_RPC_URL;
+  const solanaConnection = resolveSolanaConnectionEnv();
   const keypairPath = process.env.KEYPAIR;
   const apiKey = process.env.ANTHROPIC_API_KEY;
   const openrouterKey = process.env.OPENROUTER_API_KEY;
   const deepseekKey = process.env.DEEPSEEK_API_KEY;
 
-  if (!rpcUrl) {
-    console.error(chalk.red('Error: RPC env var required (set RPC or HELIUS_RPC_URL)'));
+  if (!solanaConnection) {
+    console.error(chalk.red('Error: RPC env var required (set RPC, SOLANA_TRACKER_RPC, or HELIUS_RPC_URL)'));
     process.exit(1);
   }
 
   if (mode === 'observe') {
-    await observeMode(rpcUrl, keypairPath);
+    await observeMode(solanaConnection, keypairPath);
     return;
   }
 
   if (mode === 'status') {
-    await statusMode(rpcUrl, keypairPath);
+    await statusMode(solanaConnection, keypairPath);
     return;
   }
 
@@ -79,22 +84,26 @@ async function main(): Promise<void> {
   const tickIntervalMs = Number.parseInt(process.env.TICK_INTERVAL_MS ?? '60000', 10);
   const dashPort = Number.parseInt(process.env.DASHBOARD_PORT ?? '3333', 10);
 
-  const { io } = createDashboardServer(dashPort);
+  const { io, publishState } = createDashboardServer(dashPort);
 
   await runAgent({
-    rpcUrl,
+    ...solanaConnection,
     keypairPath,
     maxDeployPerRound: maxDeploySol,
     minReserve: minReserveSol,
     tickIntervalMs,
     dryRun,
     io,
+    publishDashboardState: publishState,
   });
 }
 
-async function observeMode(rpcUrl: string, keypairPath?: string): Promise<void> {
+async function observeMode(
+  solanaConnection: NonNullable<ReturnType<typeof resolveSolanaConnectionEnv>>,
+  keypairPath?: string,
+): Promise<void> {
   console.log(chalk.cyan('━━━ CLAWD ORE OBSERVER ━━━'));
-  const conn = new Connection(rpcUrl, 'confirmed');
+  const conn = createSolanaConnection(solanaConnection);
 
   try {
     const board = await getBoard(conn);
@@ -142,9 +151,12 @@ async function observeMode(rpcUrl: string, keypairPath?: string): Promise<void> 
   }
 }
 
-async function statusMode(rpcUrl: string, keypairPath?: string): Promise<void> {
+async function statusMode(
+  solanaConnection: NonNullable<ReturnType<typeof resolveSolanaConnectionEnv>>,
+  keypairPath?: string,
+): Promise<void> {
   console.log(chalk.cyan('━━━ CLAWD ORE STATUS ━━━'));
-  const conn = new Connection(rpcUrl, 'confirmed');
+  const conn = createSolanaConnection(solanaConnection);
   const cliAvailable = isOreCLIAvailable();
 
   try {
