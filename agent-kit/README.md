@@ -41,6 +41,29 @@ clawd-kit register my-agent --target metaplex   # ERC-8004 metaplex-agent-regist
 clawd-kit register my-agent --target google     # Google A2A agent card
 ```
 
+## Birth, install, mine — the animated lifecycle
+
+`install.sh` calls these for you, but you can run them by hand too:
+
+```bash
+clawd-kit birth                      # name your Clawd at birth (interactive)
+clawd-kit birth --auto --name "Onyx Pincer" --auto-mine --with-perps
+
+clawd-kit agents                     # animated /agents catalog browser
+clawd-kit install ore-miner          # install ORE miner from /agents catalog
+clawd-kit install solana-perpetuals-trader
+
+clawd-kit mine                       # install + animate + write launch script
+CLAWD_AUTO_MINE=true clawd-kit mine  # install + actually spawn the OODA loop
+clawd-kit perps                      # install + run Phoenix perps agent
+
+clawd-kit home                       # birth certificate + installed agents
+```
+
+Identity is stored at `$OPENCLAWD_HOME/.clawd/identity.json` and installs land
+in `$OPENCLAWD_HOME/.clawd/installed/` so every Clawd surface sees the same
+name, avatar, and runtime profiles.
+
 Point the CLI at a checkout with `--agents-dir DIR` or `SOLANA_CLAWD_AGENTS_DIR`.
 
 To actually **mint** the agent identity on-chain, use the `clawd-agent` CLI from
