@@ -1,0 +1,806 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>p-token Launch Lab | Solana Clawd</title>
+  <meta name="description" content="Interactive p-token, Pinocchio, agent-token, Dark DeFi, and confidential-agent experience for Solana Clawd.">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #07090d;
+      --bg-2: #0e1117;
+      --panel: #121720;
+      --panel-2: #171e27;
+      --ink: #f5f7fb;
+      --muted: #9eaabc;
+      --line: rgba(255, 255, 255, 0.12);
+      --green: #14f195;
+      --cyan: #54d6ff;
+      --violet: #9945ff;
+      --rose: #ff4d8d;
+      --amber: #ffd166;
+      --button-text: #06100b;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        linear-gradient(90deg, rgba(20, 241, 149, 0.06) 1px, transparent 1px) 0 0 / 42px 42px,
+        linear-gradient(0deg, rgba(84, 214, 255, 0.05) 1px, transparent 1px) 0 0 / 42px 42px,
+        linear-gradient(135deg, #07090d 0%, #10131b 48%, #090b10 100%);
+      min-height: 100vh;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    button, input, select { font: inherit; }
+    button { cursor: pointer; }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      border-bottom: 1px solid var(--line);
+      background: rgba(7, 9, 13, 0.84);
+      backdrop-filter: blur(18px);
+    }
+
+    .topbar-inner {
+      width: min(1220px, calc(100% - 32px));
+      min-height: 66px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 900;
+      letter-spacing: 0;
+      white-space: nowrap;
+    }
+
+    .brand img {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      box-shadow: 0 0 0 1px rgba(20, 241, 149, 0.28);
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    nav a {
+      padding: 9px 10px;
+      border-radius: 7px;
+    }
+
+    nav a:hover { color: var(--ink); background: rgba(255, 255, 255, 0.06); }
+
+    main {
+      width: min(1220px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .hero {
+      min-height: calc(100vh - 66px);
+      display: grid;
+      grid-template-columns: minmax(0, 0.92fr) minmax(380px, 1.08fr);
+      gap: 30px;
+      align-items: center;
+      padding: 42px 0;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--green);
+      font-size: 13px;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .status-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 99px;
+      background: var(--green);
+      box-shadow: 0 0 22px rgba(20, 241, 149, 0.7);
+    }
+
+    h1 {
+      max-width: 760px;
+      margin: 18px 0;
+      font-size: clamp(46px, 8vw, 92px);
+      line-height: 0.94;
+      letter-spacing: 0;
+    }
+
+    .hero-copy {
+      max-width: 680px;
+      color: var(--muted);
+      font-size: clamp(17px, 2vw, 21px);
+      line-height: 1.55;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 28px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 0 16px;
+      border: 1px solid transparent;
+      border-radius: 8px;
+      background: linear-gradient(135deg, var(--green), var(--cyan));
+      color: var(--button-text);
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .button.secondary {
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--ink);
+      border-color: var(--line);
+    }
+
+    .lab {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(18, 23, 32, 0.9);
+      box-shadow: 0 24px 100px rgba(0, 0, 0, 0.34);
+      overflow: hidden;
+    }
+
+    .lab-head,
+    .terminal-head {
+      min-height: 40px;
+      padding: 0 14px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: var(--muted);
+      font: 12px/1 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+
+    .dots { display: flex; gap: 6px; }
+    .dots i {
+      width: 9px;
+      height: 9px;
+      border-radius: 99px;
+      background: var(--rose);
+    }
+    .dots i:nth-child(2) { background: var(--amber); }
+    .dots i:nth-child(3) { background: var(--green); }
+
+    .lab-body { padding: 18px; }
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .metric {
+      min-height: 92px;
+      padding: 13px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--bg-2);
+    }
+
+    .metric span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .metric strong {
+      display: block;
+      margin-top: 9px;
+      font-size: clamp(24px, 4vw, 38px);
+      line-height: 1;
+    }
+
+    .metric small {
+      display: block;
+      margin-top: 7px;
+      color: var(--green);
+      font-size: 12px;
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    label {
+      display: grid;
+      gap: 7px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    input,
+    select {
+      width: 100%;
+      min-height: 42px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #080b10;
+      color: var(--ink);
+      padding: 0 12px;
+    }
+
+    input[type="range"] {
+      padding: 0;
+      accent-color: var(--green);
+    }
+
+    .speed-bars {
+      display: grid;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .bar-row {
+      display: grid;
+      grid-template-columns: 86px 1fr 86px;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .bar-track {
+      height: 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      overflow: hidden;
+      background: #080b10;
+    }
+
+    .bar-fill {
+      height: 100%;
+      width: 50%;
+      background: linear-gradient(90deg, var(--violet), var(--green));
+      transform-origin: left center;
+      animation: breathe 2.2s ease-in-out infinite;
+    }
+
+    .bar-fill.spl { background: linear-gradient(90deg, #343b48, var(--rose)); }
+
+    @keyframes breathe {
+      0%, 100% { filter: brightness(0.9); }
+      50% { filter: brightness(1.25); }
+    }
+
+    section {
+      padding: 68px 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .section-head {
+      display: grid;
+      grid-template-columns: minmax(0, 0.86fr) minmax(280px, 0.64fr);
+      gap: 28px;
+      align-items: end;
+      margin-bottom: 24px;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: clamp(32px, 5vw, 58px);
+      line-height: 1.02;
+      letter-spacing: 0;
+    }
+
+    h3 {
+      margin: 0 0 8px;
+      font-size: 19px;
+      letter-spacing: 0;
+    }
+
+    p { color: var(--muted); }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .card {
+      min-height: 176px;
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+    }
+
+    .card b {
+      display: inline-flex;
+      margin-bottom: 14px;
+      color: var(--cyan);
+      font-size: 12px;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .split {
+      display: grid;
+      grid-template-columns: minmax(0, 0.96fr) minmax(0, 1.04fr);
+      gap: 16px;
+      align-items: start;
+    }
+
+    .timeline {
+      display: grid;
+      gap: 10px;
+    }
+
+    .step {
+      display: grid;
+      grid-template-columns: 58px 1fr;
+      gap: 14px;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+    }
+
+    .step span {
+      display: grid;
+      place-items: center;
+      height: 38px;
+      border-radius: 8px;
+      background: rgba(20, 241, 149, 0.1);
+      color: var(--green);
+      font-weight: 900;
+    }
+
+    .terminal {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #070a0f;
+      overflow: hidden;
+    }
+
+    pre {
+      margin: 0;
+      padding: 18px;
+      overflow-x: auto;
+      color: #d8fbe9;
+      font: 13px/1.65 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+
+    .mode-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .mode-button {
+      min-height: 38px;
+      padding: 0 13px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--ink);
+      font-weight: 800;
+    }
+
+    .mode-button.active {
+      background: var(--green);
+      color: var(--button-text);
+      border-color: transparent;
+    }
+
+    .signal-board {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .signal {
+      min-height: 120px;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+    }
+
+    .signal meter {
+      width: 100%;
+      height: 12px;
+      margin-top: 10px;
+      accent-color: var(--green);
+    }
+
+    .notice {
+      margin-top: 14px;
+      padding: 15px;
+      border: 1px solid rgba(255, 209, 102, 0.32);
+      border-radius: 8px;
+      background: rgba(255, 209, 102, 0.08);
+      color: #f8df9f;
+    }
+
+    .footer {
+      padding: 34px 0 46px;
+      color: var(--muted);
+      border-top: 1px solid var(--line);
+    }
+
+    @media (max-width: 940px) {
+      nav { display: none; }
+      .hero,
+      .section-head,
+      .split {
+        grid-template-columns: 1fr;
+      }
+      .hero { min-height: auto; padding-top: 34px; }
+      .grid,
+      .metric-grid,
+      .signal-board {
+        grid-template-columns: 1fr;
+      }
+      .controls { grid-template-columns: 1fr; }
+      .bar-row { grid-template-columns: 72px 1fr 72px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="/" aria-label="Solana Clawd home">
+        <img src="../assets/app-icon.png" alt="">
+        <span>Solana Clawd</span>
+      </a>
+      <nav aria-label="Primary navigation">
+        <a href="#speed">Speed</a>
+        <a href="#agents">Agents</a>
+        <a href="#dark-defi">Dark DeFi</a>
+        <a href="#confidential">Confidential</a>
+        <a href="#explorer">Explorer</a>
+      </nav>
+      <a class="button secondary" href="/wallet.html">Wallet</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="speed">
+      <div>
+        <span class="eyebrow"><i class="status-dot"></i> Pinocchio p-token launch lab</span>
+        <h1>See how fast agent tokens can move.</h1>
+        <p class="hero-copy">
+          A public frontend for the p-token launchpad story: faster token operations,
+          agent-token bonding curves, Dark DeFi signal routing, and confidential paid
+          agent execution. It demonstrates the flow without publishing private x402 source.
+        </p>
+        <div class="hero-actions">
+          <a class="button" href="#agents">Launch an agent path</a>
+          <a class="button secondary" href="#dark-defi">Open signal board</a>
+        </div>
+      </div>
+
+      <div class="lab" aria-label="p-token compute speed simulator">
+        <div class="lab-head">
+          <div class="dots"><i></i><i></i><i></i></div>
+          <span>cu-speed-simulator</span>
+        </div>
+        <div class="lab-body">
+          <div class="metric-grid">
+            <div class="metric"><span>Total saved</span><strong id="saved-cu">0</strong><small>compute units</small></div>
+            <div class="metric"><span>Cheaper by</span><strong id="savings-pct">0%</strong><small>vs SPL Token</small></div>
+            <div class="metric"><span>Batch edge</span><strong id="batch-edge">0x</strong><small>fee distribution</small></div>
+          </div>
+
+          <div class="controls">
+            <label>
+              Launch buys
+              <input id="buy-count" type="range" min="1" max="500" value="120">
+            </label>
+            <label>
+              Launch sells
+              <input id="sell-count" type="range" min="0" max="300" value="42">
+            </label>
+            <label>
+              Fee recipients
+              <input id="recipient-count" type="range" min="1" max="20" value="8">
+            </label>
+            <label>
+              Agent launches
+              <input id="agent-count" type="range" min="1" max="50" value="12">
+            </label>
+          </div>
+
+          <div class="speed-bars" aria-label="SPL and p-token compute comparison">
+            <div class="bar-row"><span>SPL</span><div class="bar-track"><div class="bar-fill spl" id="spl-bar"></div></div><span id="spl-total">0 CU</span></div>
+            <div class="bar-row"><span>p-token</span><div class="bar-track"><div class="bar-fill" id="ptoken-bar"></div></div><span id="ptoken-total">0 CU</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="grid">
+        <article class="card"><b>p-token</b><h3>Lower CU token rails</h3><p>Transfer, mint, burn, close, and fee distribution paths are modeled against p-token benchmark deltas.</p></article>
+        <article class="card"><b>Pinocchio</b><h3>Native agent programs</h3><p>Fork launchpad, vault, escrow, and p-agent-token templates when Anchor overhead is not the target.</p></article>
+        <article class="card"><b>x402 surface</b><h3>Paid execution without source leaks</h3><p>The UI shows confidential-agent and Dark DeFi flows while private gateway files stay out of public GitHub.</p></article>
+      </div>
+    </section>
+
+    <section id="agents">
+      <div class="section-head">
+        <h2>Agent token launch path.</h2>
+        <p>Select a mode and the frontend shows what a user or agent would see: the on-chain intent, private payment step, and public command surface.</p>
+      </div>
+      <div class="split">
+        <div>
+          <div class="mode-row" role="tablist" aria-label="Agent flow modes">
+            <button class="mode-button active" data-mode="launch">Launch</button>
+            <button class="mode-button" data-mode="trade">Trade</button>
+            <button class="mode-button" data-mode="fees">Fees</button>
+            <button class="mode-button" data-mode="graduate">Graduate</button>
+          </div>
+          <div class="timeline" id="mode-steps"></div>
+        </div>
+        <div class="terminal">
+          <div class="terminal-head"><div class="dots"><i></i><i></i><i></i></div><span id="mode-title">agent-launch</span></div>
+          <pre id="mode-terminal"></pre>
+        </div>
+      </div>
+    </section>
+
+    <section id="dark-defi">
+      <div class="section-head">
+        <h2>Dark DeFi signal board.</h2>
+        <p>Private route analysis, wallet pressure, MEV risk, and liquidity migration are presented as visible user signals without exposing scanner internals.</p>
+      </div>
+      <div class="signal-board">
+        <article class="signal">
+          <h3>Whale pressure</h3>
+          <p id="whale-label">Accumulation bias detected</p>
+          <meter id="whale-meter" min="0" max="100" value="72"></meter>
+        </article>
+        <article class="signal">
+          <h3>MEV exposure</h3>
+          <p id="mev-label">Route privacy recommended</p>
+          <meter id="mev-meter" min="0" max="100" value="61"></meter>
+        </article>
+        <article class="signal">
+          <h3>Liquidity depth</h3>
+          <p id="depth-label">Curve can absorb test size</p>
+          <meter id="depth-meter" min="0" max="100" value="84"></meter>
+        </article>
+        <article class="signal">
+          <h3>Agent confidence</h3>
+          <p id="agent-label">Execution allowed after payment receipt</p>
+          <meter id="agent-meter" min="0" max="100" value="77"></meter>
+        </article>
+      </div>
+      <div class="notice">Dark DeFi here means a user-facing decision layer: route risk, wallet behavior, liquidity pressure, and execution privacy. It is not publishing private scanner code.</div>
+    </section>
+
+    <section id="confidential">
+      <div class="section-head">
+        <h2>Confidential agents.</h2>
+        <p>A paid agent can reveal work only after settlement while keeping prompts, receipts, and execution state separated from the public docs.</p>
+      </div>
+      <div class="grid">
+        <article class="card"><b>01</b><h3>Challenge</h3><p>The user requests research, trade planning, launch prep, or fee distribution and receives an HTTP 402 payment challenge.</p></article>
+        <article class="card"><b>02</b><h3>Seal</h3><p>The agent packages the task context for private execution and keeps sensitive strategy material off the static page.</p></article>
+        <article class="card"><b>03</b><h3>Settle</h3><p>After Solana USDC or p-token-compatible receipt validation, the agent releases the paid result and audit metadata.</p></article>
+      </div>
+    </section>
+
+    <section id="explorer">
+      <div class="section-head">
+        <h2>Explorer and command builder.</h2>
+        <p>Generate the public commands for mint inspection, p-token registration, launch planning, and agent-token planning.</p>
+      </div>
+      <div class="split">
+        <div class="lab">
+          <div class="lab-head"><div class="dots"><i></i><i></i><i></i></div><span>command-builder</span></div>
+          <div class="lab-body">
+            <label>Mint or symbol<input id="mint-input" value="PCLAWD"></label>
+            <label>Token name<input id="name-input" value="Clawd Agent Token"></label>
+            <label>Agent name<input id="agent-input" value="Clawd"></label>
+          </div>
+        </div>
+        <div class="terminal">
+          <div class="terminal-head"><div class="dots"><i></i><i></i><i></i></div><span>public-cli</span></div>
+          <pre id="command-output"></pre>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <main>
+      <p>Public frontend for p-token launchpad, explorer, agents, Dark DeFi, and confidential-agent flows. Private x402 source remains excluded from public exports.</p>
+    </main>
+  </footer>
+
+  <script>
+    const benchmarks = {
+      mint: { spl: 4128, ptoken: 2012 },
+      burn: { spl: 4753, ptoken: 1884 },
+      transfer: { spl: 4645, ptoken: 76 },
+      batchBase: 1000,
+      batchEach: 25
+    };
+
+    const buyCount = document.getElementById("buy-count");
+    const sellCount = document.getElementById("sell-count");
+    const recipientCount = document.getElementById("recipient-count");
+    const agentCount = document.getElementById("agent-count");
+    const savedCu = document.getElementById("saved-cu");
+    const savingsPct = document.getElementById("savings-pct");
+    const batchEdge = document.getElementById("batch-edge");
+    const splTotal = document.getElementById("spl-total");
+    const ptokenTotal = document.getElementById("ptoken-total");
+    const splBar = document.getElementById("spl-bar");
+    const ptokenBar = document.getElementById("ptoken-bar");
+
+    function compact(value) {
+      return Math.round(value).toLocaleString();
+    }
+
+    function renderSpeed() {
+      const buys = Number(buyCount.value);
+      const sells = Number(sellCount.value);
+      const recipients = Number(recipientCount.value);
+      const agents = Number(agentCount.value);
+      const splFees = agents * recipients * benchmarks.transfer.spl;
+      const ptokenFees = agents * (benchmarks.batchBase + recipients * benchmarks.batchEach);
+      const spl = buys * benchmarks.mint.spl + sells * benchmarks.burn.spl + splFees;
+      const ptoken = buys * benchmarks.mint.ptoken + sells * benchmarks.burn.ptoken + ptokenFees;
+      const saved = Math.max(0, spl - ptoken);
+      const pct = spl > 0 ? saved / spl * 100 : 0;
+      const edge = ptokenFees > 0 ? splFees / ptokenFees : 0;
+      savedCu.textContent = compact(saved);
+      savingsPct.textContent = `${pct.toFixed(1)}%`;
+      batchEdge.textContent = `${edge.toFixed(1)}x`;
+      splTotal.textContent = `${compact(spl)} CU`;
+      ptokenTotal.textContent = `${compact(ptoken)} CU`;
+      splBar.style.width = "100%";
+      ptokenBar.style.width = `${Math.max(3, Math.min(100, ptoken / spl * 100))}%`;
+    }
+
+    [buyCount, sellCount, recipientCount, agentCount].forEach((input) => {
+      input.addEventListener("input", renderSpeed);
+    });
+    renderSpeed();
+
+    const flows = {
+      launch: {
+        title: "agent-launch",
+        steps: [
+          ["01", "Create p-token mint", "Set supply, decimals, mint authority, and metadata URI."],
+          ["02", "Open bonding curve", "Initialize virtual SOL/token reserves and creator fee basis points."],
+          ["03", "Register agent identity", "Write PDA identity state with URI, owner, and executive delegate."],
+          ["04", "Bind token", "One-way token-to-agent binding makes the launch discoverable."]
+        ],
+        terminal: `npm run pagent:plan -- --symbol PCLAWD --name "Clawd Agent Token" --agent-name "Clawd"\nnpm run ptoken:launch-plan -- --symbol PCLAWD --name "Clawd Agent Token"`
+      },
+      trade: {
+        title: "curve-trade",
+        steps: [
+          ["01", "Quote curve", "Calculate output from virtual reserves before signing."],
+          ["02", "Buy or sell", "Mint or burn through the low-CU token path."],
+          ["03", "Update reserves", "Track tokens sold, SOL raised, and graduation progress."],
+          ["04", "Inspect mint", "Verify owner program, supply, and authorities through RPC."]
+        ],
+        terminal: `npm run ptoken:curve-quote -- --virtual-sol 30 --virtual-token 1073000000 --sol 1\nnpm run ptoken:inspect -- --mint <mint>`
+      },
+      fees: {
+        title: "batch-fees",
+        steps: [
+          ["01", "Collect creator fee", "Buy/sell routes accrue creator and protocol fee balances."],
+          ["02", "Batch recipients", "Group creator, protocol, LP, referral, and buyback recipients."],
+          ["03", "Single CPI", "Use p-token opcode 25 semantics for multi-recipient distribution."],
+          ["04", "Record receipt", "Expose public accounting while keeping private gateway internals private."]
+        ],
+        terminal: `# Fee distribution model\n# SPL: recipients * 6200 CU\n# p-token: 1000 + recipients * 25 CU\nnpm run ptoken:curve-quote -- --virtual-sol 30 --virtual-token 1073000000 --sol 1`
+      },
+      graduate: {
+        title: "dex-graduation",
+        steps: [
+          ["01", "Hit threshold", "Curve reaches the configured real reserve or market-cap target."],
+          ["02", "Lock curve", "Stop curve trading and mark graduation state."],
+          ["03", "Seed pool", "Move remaining reserves to Raydium, Orca, Meteora, or another adapter."],
+          ["04", "Register market", "Add explorer links and route metadata for agents."]
+        ],
+        terminal: `npm run ptoken:add -- --mint <mint> --symbol PCLAWD --name "Clawd Agent Token"\nnpm run ptoken:list`
+      }
+    };
+
+    const modeButtons = Array.from(document.querySelectorAll(".mode-button"));
+    const modeSteps = document.getElementById("mode-steps");
+    const modeTitle = document.getElementById("mode-title");
+    const modeTerminal = document.getElementById("mode-terminal");
+
+    function renderMode(mode) {
+      const flow = flows[mode];
+      modeTitle.textContent = flow.title;
+      modeTerminal.textContent = flow.terminal;
+      modeSteps.innerHTML = flow.steps.map(([number, title, copy]) => (
+        `<div class="step"><span>${number}</span><div><h3>${title}</h3><p>${copy}</p></div></div>`
+      )).join("");
+      modeButtons.forEach((button) => button.classList.toggle("active", button.dataset.mode === mode));
+    }
+
+    modeButtons.forEach((button) => {
+      button.addEventListener("click", () => renderMode(button.dataset.mode));
+    });
+    renderMode("launch");
+
+    const signalState = [
+      ["whale-meter", "whale-label", ["Accumulation bias detected", "Distribution pressure rising", "Wallet cluster neutral"]],
+      ["mev-meter", "mev-label", ["Route privacy recommended", "Sandwich risk cooling", "Priority fee should be raised"]],
+      ["depth-meter", "depth-label", ["Curve can absorb test size", "Depth thinning near graduation", "Pool migration window open"]],
+      ["agent-meter", "agent-label", ["Execution allowed after payment receipt", "Need fresh oracle read", "Delegate window expiring"]]
+    ];
+
+    setInterval(() => {
+      signalState.forEach(([meterId, labelId, labels], index) => {
+        const meter = document.getElementById(meterId);
+        const label = document.getElementById(labelId);
+        const value = 48 + Math.round(Math.random() * 46);
+        meter.value = value;
+        label.textContent = labels[(value + index) % labels.length];
+      });
+    }, 2400);
+
+    const mintInput = document.getElementById("mint-input");
+    const nameInput = document.getElementById("name-input");
+    const agentInput = document.getElementById("agent-input");
+    const commandOutput = document.getElementById("command-output");
+
+    function renderCommands() {
+      const mint = mintInput.value.trim() || "PCLAWD";
+      const name = nameInput.value.trim() || "Clawd Agent Token";
+      const agent = agentInput.value.trim() || "Clawd";
+      commandOutput.textContent = [
+        `npm run ptoken:inspect -- --mint ${mint}`,
+        `npm run ptoken:add -- --mint ${mint} --symbol ${mint} --name "${name}" --p-token-program-id <program>`,
+        `npm run ptoken:launch-plan -- --symbol ${mint} --name "${name}"`,
+        `npm run pagent:plan -- --symbol ${mint} --name "${name}" --agent-name "${agent}"`,
+        `cd programs && cargo check -p p-token-launchpad`
+      ].join("\\n");
+    }
+
+    [mintInput, nameInput, agentInput].forEach((input) => input.addEventListener("input", renderCommands));
+    renderCommands();
+  </script>
+</body>
+</html>

@@ -67,8 +67,10 @@ target/
 .next/
 coverage/
 *.tsbuildinfo
-
-# Solana / Anchor generated keys
+/Users/8bit/bots/Cladwbot-solana/solana-clawd/apps/beepboop/site
+/Users/8bit/bots/Cladwbot-solana/solana-clawd/apps/beepboop/worker
+/Users/8bit/bots/Cladwbot-solana/solana-clawd/apps/beepboop/.env.local
+.env.local
 *-keypair.json
 keypair.json
 id.json
