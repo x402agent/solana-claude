@@ -1,0 +1,106 @@
+{
+  "name": "@darkralph/tui",
+  "version": "1.0.0",
+  "description": "DarkDefi autonomous Solana release gate, market intelligence, and agent interoperability surface",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "dark-ralph": "./dist/cli.js",
+    "ralph": "./dist/cli.js",
+    "ralph-tui": "./dist/cli.js"
+  },
+  "scripts": {
+    "dev": "bun run src/cli.tsx",
+    "build": "bun build src/cli.tsx --outdir dist --target node && bun run copy:wasm",
+    "build:lib": "bun build src/index.ts --outdir dist --target node && bun run copy:wasm",
+    "copy:wasm": "cp node_modules/yoga-wasm-web/dist/yoga.wasm dist/yoga.wasm",
+    "start": "bun run dist/cli.js",
+    "run": "bun run src/cli.tsx run",
+    "setup": "bun run src/cli.tsx setup",
+    "status": "bun run src/cli.tsx status",
+    "wallet": "bun run src/cli.tsx wallet",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src/**/*.{ts,tsx}",
+    "test": "bun test scripts",
+    "test:release-gate": "bun test scripts/check-clawd-market-cap.test.mjs",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "bun run build && bun run build:lib"
+  },
+  "dependencies": {
+    "ink": "^7.0.2",
+    "ink-spinner": "^5.0.0",
+    "ink-text-input": "^6.0.0",
+    "ink-select-input": "^6.2.0",
+    "ink-big-text": "^2.0.0",
+    "ink-gradient": "^4.0.0",
+    "ink-box": "^2.0.0",
+    "react": "^19.2.6",
+    "react-devtools-core": "^5.3.2",
+    "@solana/web3.js": "^1.87.6",
+    "@solana/spl-token": "^0.3.9",
+    "commander": "^14.0.3",
+    "chalk": "^5.3.0",
+    "figlet": "^1.7.0",
+    "boxen": "^8.0.1",
+    "ora": "^7.0.1",
+    "dotenv": "^16.3.1",
+    "zod": "^4.4.3",
+    "conf": "^12.0.0",
+    "openai": "^6.37.0",
+    "eventsource-parser": "^3.0.8",
+    "node-fetch": "^3.3.2",
+    "ws": "^8.14.2",
+    "date-fns": "^4.1.0",
+    "cli-table3": "^0.6.3",
+    "gradient-string": "^2.0.2",
+    "terminal-link": "^5.0.0",
+    "update-notifier": "^7.3.1"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/react": "^19.2.14",
+    "@types/figlet": "^1.5.8",
+    "@types/gradient-string": "^1.1.5",
+    "@types/ws": "^8.5.10",
+    "typescript": "^5.3.2",
+    "eslint": "^10.3.0",
+    "@typescript-eslint/eslint-plugin": "^6.12.0",
+    "@typescript-eslint/parser": "^8.59.2",
+    "bun-types": "latest"
+  },
+  "keywords": [
+    "solana",
+    "ai-agent",
+    "tui",
+    "terminal",
+    "crypto",
+    "trading",
+    "autonomous",
+    "helius",
+    "birdeye",
+    "grok",
+    "perplexity",
+    "bloomberg",
+    "dark-ralph"
+  ],
+    "author": "DarkDefi contributors",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0",
+    "bun": ">=1.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/x402agent/DarkDefi.git"
+  },
+  "bugs": {
+    "url": "https://github.com/x402agent/DarkDefi/issues"
+  },
+  "homepage": "https://github.com/x402agent/DarkDefi#readme",
+  "files": [
+    "dist",
+    "assets",
+    "README.md",
+    "LICENSE"
+  ]
+}

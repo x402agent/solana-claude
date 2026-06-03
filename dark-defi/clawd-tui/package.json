@@ -1,0 +1,60 @@
+{
+  "name": "@openclawdsolana/clawd-tui",
+  "version": "0.2.2",
+  "description": "Solana-aware agent terminal with OpenRouter OAuth, on-chain lookup, market context, and guarded local tools.",
+  "type": "module",
+  "bin": {
+    "clawd": "dist/cli.js",
+    "clawd-tui": "dist/cli.js"
+  },
+  "main": "dist/cli.js",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "tsx --env-file-if-exists=.env src/cli.ts",
+    "dev": "tsx watch --env-file-if-exists=.env src/cli.ts",
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "agent",
+    "tui",
+    "openrouter",
+    "cli",
+    "clawd",
+    "openclawd",
+    "solana",
+    "birdeye",
+    "helius",
+    "web3",
+    "agent-terminal"
+  ],
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/x402agent/DarkDefi.git",
+    "directory": "clawd-tui"
+  },
+  "homepage": "https://github.com/x402agent/DarkDefi/tree/main/clawd-tui#readme",
+  "dependencies": {
+    "@openrouter/agent": "latest",
+    "@openrouter/sdk": "^0.12.21",
+    "glob": "^13.0.6",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "^25.6.2",
+    "tsx": "^4.7.0",
+    "typescript": "^6.0.3"
+  }
+}

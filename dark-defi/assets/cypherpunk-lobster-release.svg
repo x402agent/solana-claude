@@ -1,0 +1,121 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 360" role="img" aria-labelledby="title desc">
+  <title id="title">DarkDefi cypherpunk lobster countdown</title>
+  <desc id="desc">Animated neon lobster release banner for the 4:20 PM Eastern DarkDefi release.</desc>
+  <defs>
+    <linearGradient id="grid" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#00ffd5"/>
+      <stop offset="0.45" stop-color="#ff2bd6"/>
+      <stop offset="1" stop-color="#fff200"/>
+    </linearGradient>
+    <radialGradient id="pulse" cx="50%" cy="45%" r="70%">
+      <stop offset="0" stop-color="#ff2bd6" stop-opacity="0.28"/>
+      <stop offset="0.45" stop-color="#00ffd5" stop-opacity="0.12"/>
+      <stop offset="1" stop-color="#02030a" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <style>
+      .bg { fill: #02030a; }
+      .wire { stroke: url(#grid); stroke-width: 1; opacity: 0.34; }
+      .title { font: 900 72px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fill: #f8fff8; letter-spacing: 0; }
+      .subtitle { font: 700 25px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fill: #00ffd5; letter-spacing: 0; }
+      .micro { font: 700 18px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fill: #fff200; letter-spacing: 0; }
+      .shell { fill: none; stroke: #ff2bd6; stroke-width: 8; stroke-linecap: round; stroke-linejoin: round; filter: url(#glow); }
+      .claw { fill: none; stroke: #00ffd5; stroke-width: 7; stroke-linecap: round; stroke-linejoin: round; filter: url(#glow); }
+      .eye { fill: #fff200; filter: url(#glow); }
+      .scan { fill: #00ffd5; opacity: 0.24; }
+      .pulse { fill: url(#pulse); animation: breathe 3.6s ease-in-out infinite; transform-origin: 700px 180px; }
+      .crawl-left { animation: crawlLeft 5.2s ease-in-out infinite; }
+      .crawl-right { animation: crawlRight 4.8s ease-in-out infinite; }
+      .blink { animation: blink 1.4s steps(2, end) infinite; }
+      .ticker { animation: ticker 9s linear infinite; }
+      .scanline { animation: scan 3.2s linear infinite; }
+      @keyframes breathe {
+        0%, 100% { transform: scale(0.96); opacity: 0.64; }
+        50% { transform: scale(1.05); opacity: 1; }
+      }
+      @keyframes crawlLeft {
+        0%, 100% { transform: translate(0, 0) rotate(-1deg); }
+        50% { transform: translate(18px, -8px) rotate(2deg); }
+      }
+      @keyframes crawlRight {
+        0%, 100% { transform: translate(0, 0) rotate(1deg); }
+        50% { transform: translate(-16px, 9px) rotate(-2deg); }
+      }
+      @keyframes blink {
+        0%, 46% { opacity: 1; }
+        47%, 58% { opacity: 0.15; }
+        59%, 100% { opacity: 1; }
+      }
+      @keyframes ticker {
+        from { transform: translateX(0); }
+        to { transform: translateX(-470px); }
+      }
+      @keyframes scan {
+        from { transform: translateY(-80px); }
+        to { transform: translateY(380px); }
+      }
+    </style>
+  </defs>
+
+  <rect class="bg" width="1400" height="360" rx="28"/>
+  <rect class="pulse" x="160" y="20" width="1080" height="320" rx="160"/>
+
+  <g opacity="0.55">
+    <path class="wire" d="M0 300 H1400"/>
+    <path class="wire" d="M0 250 H1400"/>
+    <path class="wire" d="M0 200 H1400"/>
+    <path class="wire" d="M0 150 H1400"/>
+    <path class="wire" d="M0 100 H1400"/>
+    <path class="wire" d="M120 360 L620 0"/>
+    <path class="wire" d="M340 360 L720 0"/>
+    <path class="wire" d="M1060 360 L680 0"/>
+    <path class="wire" d="M1280 360 L780 0"/>
+  </g>
+
+  <rect class="scan scanline" x="0" y="0" width="1400" height="34"/>
+
+  <g class="crawl-left" transform="translate(110 122)">
+    <path class="shell" d="M80 76 C80 30 126 12 168 34 C206 54 204 108 168 128 C126 150 80 122 80 76Z"/>
+    <path class="shell" d="M168 48 C202 36 234 26 260 12"/>
+    <path class="shell" d="M168 112 C204 126 238 142 264 166"/>
+    <path class="claw" d="M260 12 C308 2 342 24 356 66 C322 64 298 48 282 22"/>
+    <path class="claw" d="M264 166 C314 184 350 164 364 122 C328 122 302 138 284 160"/>
+    <path class="shell" d="M86 60 C48 42 28 24 16 8"/>
+    <path class="shell" d="M86 92 C48 108 28 130 16 154"/>
+    <path class="shell" d="M116 128 L102 170 M140 134 L134 184 M164 128 L178 170"/>
+    <circle class="eye blink" cx="132" cy="60" r="7"/>
+    <circle class="eye blink" cx="132" cy="94" r="7"/>
+  </g>
+
+  <g class="crawl-right" transform="translate(1176 122) scale(-1 1)">
+    <path class="shell" d="M80 76 C80 30 126 12 168 34 C206 54 204 108 168 128 C126 150 80 122 80 76Z"/>
+    <path class="shell" d="M168 48 C202 36 234 26 260 12"/>
+    <path class="shell" d="M168 112 C204 126 238 142 264 166"/>
+    <path class="claw" d="M260 12 C308 2 342 24 356 66 C322 64 298 48 282 22"/>
+    <path class="claw" d="M264 166 C314 184 350 164 364 122 C328 122 302 138 284 160"/>
+    <path class="shell" d="M86 60 C48 42 28 24 16 8"/>
+    <path class="shell" d="M86 92 C48 108 28 130 16 154"/>
+    <path class="shell" d="M116 128 L102 170 M140 134 L134 184 M164 128 L178 170"/>
+    <circle class="eye blink" cx="132" cy="60" r="7"/>
+    <circle class="eye blink" cx="132" cy="94" r="7"/>
+  </g>
+
+  <g text-anchor="middle">
+    <text class="micro" x="700" y="82">CYPHERPUNK LOBSTER RELEASE WINDOW</text>
+    <text class="title" x="700" y="166" filter="url(#glow)">DARKDEFI 4:20</text>
+    <text class="subtitle" x="700" y="213">TARGET: MAY 8 2026 16:20 EDT / 20:20 UTC</text>
+    <text class="micro" x="700" y="254">WATCH THE GATE. VERIFY THE RELEASE. KEEP KEYS DARK.</text>
+  </g>
+
+  <g class="ticker">
+    <text class="micro" x="290" y="326">CLAWD UNLOCK // SOLANA // AGENTIC RELEASE MACHINE // NO SIGNAL // NO SECRETS // </text>
+    <text class="micro" x="760" y="326">CLAWD UNLOCK // SOLANA // AGENTIC RELEASE MACHINE // NO SIGNAL // NO SECRETS // </text>
+    <text class="micro" x="1230" y="326">CLAWD UNLOCK // SOLANA // AGENTIC RELEASE MACHINE // NO SIGNAL // NO SECRETS // </text>
+  </g>
+</svg>

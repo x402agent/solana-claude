@@ -1,0 +1,73 @@
+<svg width="1400" height="520" viewBox="0 0 1400 520" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">DarkDefi</title>
+  <desc id="desc">Animated DarkDefi banner with Solana release gate messaging.</desc>
+  <style>
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; }
+    .title { font: 900 98px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; letter-spacing: 8px; }
+    .sub { font: 500 28px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; letter-spacing: 4px; }
+    .small { font: 600 18px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; letter-spacing: 2px; }
+    .grid { animation: drift 9s linear infinite; }
+    .pulse { animation: pulse 2.4s ease-in-out infinite; }
+    .blink { animation: blink 1.1s steps(2, end) infinite; }
+    .scan { animation: scan 4.5s linear infinite; }
+    .gate { animation: gate 3s ease-in-out infinite; }
+    .spark { animation: spark 1.8s ease-in-out infinite alternate; }
+    @keyframes drift { from { transform: translateY(0); } to { transform: translateY(40px); } }
+    @keyframes pulse { 0%,100% { opacity: .55; } 50% { opacity: 1; } }
+    @keyframes blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: .18; } }
+    @keyframes scan { from { transform: translateY(-120px); opacity: 0; } 12% { opacity: .75; } 88% { opacity: .75; } to { transform: translateY(560px); opacity: 0; } }
+    @keyframes gate { 0%,100% { stroke-dashoffset: 0; } 50% { stroke-dashoffset: 58; } }
+    @keyframes spark { from { filter: drop-shadow(0 0 4px #21f7d0); } to { filter: drop-shadow(0 0 22px #b967ff); } }
+  </style>
+
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1400" y2="520" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#040506"/>
+      <stop offset=".42" stop-color="#09120f"/>
+      <stop offset="1" stop-color="#13071b"/>
+    </linearGradient>
+    <linearGradient id="sol" x1="366" y1="130" x2="1036" y2="398" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#14f195"/>
+      <stop offset=".48" stop-color="#29d3ff"/>
+      <stop offset="1" stop-color="#9945ff"/>
+    </linearGradient>
+    <radialGradient id="halo" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(700 260) rotate(90) scale(270 620)">
+      <stop stop-color="#14f195" stop-opacity=".22"/>
+      <stop offset=".52" stop-color="#9945ff" stop-opacity=".12"/>
+      <stop offset="1" stop-color="#000" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse">
+      <path d="M48 0H0V48" stroke="#25f7bf" stroke-opacity=".12" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <rect width="1400" height="520" rx="28" fill="url(#bg)"/>
+  <rect width="1400" height="520" rx="28" fill="url(#halo)"/>
+  <g class="grid">
+    <rect x="0" y="-40" width="1400" height="600" fill="url(#grid)"/>
+  </g>
+
+  <path d="M94 92H1306V428H94V92Z" stroke="url(#sol)" stroke-width="2" stroke-opacity=".72"/>
+  <path class="gate" d="M126 124H1274V396H126V124Z" stroke="url(#sol)" stroke-width="3" stroke-dasharray="26 16" stroke-linecap="round"/>
+
+  <g class="spark">
+    <text x="700" y="236" text-anchor="middle" class="title" fill="url(#sol)">DARKDEFI</text>
+    <text x="700" y="286" text-anchor="middle" class="sub" fill="#D9FFF5">THE FUTURE IS ON SOLANA</text>
+  </g>
+
+  <text x="700" y="344" text-anchor="middle" class="small pulse" fill="#BDEFE5">AUTONOMOUS RELEASE GATE: $CLAWD MARKET CAP &gt;= $100,000</text>
+  <text x="700" y="378" text-anchor="middle" class="small" fill="#9C8CFF">SOURCE: BIRDEYE · MODE: WAITING · STATE: DARK</text>
+
+  <g class="scan">
+    <rect x="94" y="0" width="1212" height="72" fill="#14F195" fill-opacity=".08"/>
+    <path d="M94 72H1306" stroke="#21F7D0" stroke-width="2" stroke-opacity=".7"/>
+  </g>
+
+  <g class="mono" fill="#14F195" opacity=".82">
+    <text x="132" y="148" class="small">observe</text>
+    <text x="132" y="374" class="small">orient</text>
+    <text x="1110" y="148" class="small">decide</text>
+    <text x="1148" y="374" class="small">act</text>
+  </g>
+  <text x="1234" y="468" text-anchor="end" class="small blink" fill="#21F7D0">_</text>
+</svg>
