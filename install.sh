@@ -991,6 +991,45 @@ elif [ -t 0 ] && [ -t 1 ] && [ "$QUIET" = "0" ] && grep -q '^XAI_API_KEY=$' "$EN
 fi
 
 # ──────────────────────────────────────────────────────────────────────────────
+# Dark DeFi privacy layer — local workspace packages
+# ──────────────────────────────────────────────────────────────────────────────
+DARK_DEFI_DIR="${SRC_DIR:-$PWD}/dark-defi/packages"
+if [ "$NO_NODE" = "0" ] && [ -d "$DARK_DEFI_DIR" ]; then
+  step "installing Dark DeFi packages (Zcash Sapling + TEE agents + privacy terminal)"
+  DARK_PKGS="protocol sas-lib sdk tee-agents terminal dark-defi"
+  for pkg in $DARK_PKGS; do
+    pkg_path="$DARK_DEFI_DIR/$pkg"
+    if [ -d "$pkg_path" ] && [ -f "$pkg_path/package.json" ]; then
+      spin_start "  npm install → dark-defi/packages/$pkg"
+      npm --prefix "$pkg_path" install --legacy-peer-deps --silent 2>/dev/null || \
+        npm --prefix "$pkg_path" install --legacy-peer-deps 2>&1 | tail -3
+      spin_stop
+      ok "dark-defi/packages/$pkg"
+    fi
+  done
+
+  step "building Dark DeFi packages"
+  for pkg in protocol sas-lib sdk tee-agents terminal; do
+    pkg_path="$DARK_DEFI_DIR/$pkg"
+    if [ -d "$pkg_path" ] && [ -f "$pkg_path/package.json" ]; then
+      build_script="$(node -p "require('$pkg_path/package.json').scripts?.build || ''" 2>/dev/null || true)"
+      if [ -n "$build_script" ]; then
+        spin_start "  tsc build → dark-defi/packages/$pkg"
+        npm --prefix "$pkg_path" run build --silent 2>/dev/null || \
+          npm --prefix "$pkg_path" run build 2>&1 | tail -5
+        spin_stop
+        ok "built dark-defi/packages/$pkg"
+      fi
+    fi
+  done
+
+  ok "Dark DeFi privacy layer ready  →  import from 'solana-clawd/dark'"
+else
+  [ "$NO_NODE" = "1" ] && info "skipping Dark DeFi (--no-node)"
+  [ ! -d "$DARK_DEFI_DIR" ] && warn "dark-defi/packages not found — skipping (run 'npm run dark:install' later)"
+fi
+
+# ──────────────────────────────────────────────────────────────────────────────
 # Post-install verification
 # ──────────────────────────────────────────────────────────────────────────────
 if [ -x "$BIN_DIR/openclawd" ]; then
@@ -1034,6 +1073,7 @@ printf "       ${GREEN}clawd-perps perps tui --relay${RESET}  ${DIM}# Lobster Ki
 printf "       ${GREEN}clawd-perps perps onchain-mm status${RESET}  ${DIM}# Phoenix on-chain MM bridge${RESET}\n"
 printf "       ${GREEN}clawd-perps perps vulcan health${RESET}  ${DIM}# npm CLI → Python agent/Vulcan${RESET}\n"
 printf "       ${GREEN}clawd-phoenix grid SOL --center-on-mark --width-pct 2 --levels-per-side 3 --tokens-per-level 0.1${RESET}\n"
+printf "       ${GREEN}dark-x402-terminal${RESET} ${DIM}# 🌑 privacy DeFi TUI (Zcash + Jupiter + Gemini AI)${RESET}\n"
 printf "       ${GREEN}agentwallet${RESET}        ${DIM}# agentwallet-vault — encrypted keypair vault + HTTP server${RESET}\n"
 printf "       ${GREEN}clawd-automaton${RESET}    ${DIM}# clawd-automaton — automation runtime + cloud dashboard${RESET}\n"
 printf "       ${GREEN}clawd-code${RESET}         ${DIM}# clawd-code-cli — Grok / OpenRouter / Ollama / OpenAI${RESET}\n"

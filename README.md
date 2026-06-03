@@ -1355,11 +1355,23 @@ solana-clawd/
 ```bash
 git clone https://github.com/x402agent/solana-clawd.git
 cd solana-clawd
-npm install && npm run check
+
+# One-shot: installs everything including dark-defi privacy layer
+bash install.sh
+
+# Or step by step:
+npm install                    # link all workspaces
+npm run packages:install       # clawd, clawd-sdk, agentwallet, clawd-perps…
+npm run dark:install           # dark-defi packages (protocol, sdk, tee-agents…)
+npm run dark:build             # compile privacy layer
+npm run check                  # typecheck + lint
 npm run smoke:readme
 
-npm run hermes
-npm run leviathan:spawn
+# Launch surfaces
+npm run hermes                 # Bloomberg TUI
+npm run leviathan:spawn        # sovereign runtime first-time wizard
+npm run dark:terminal          # privacy DeFi TUI
+npm run dark:demo              # dark DeFi barrel smoke test (no keys needed)
 npm run automation:ci
 npm run programs:map
 npm run brain:init
