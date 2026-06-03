@@ -1,7 +1,7 @@
 {
   "name": "@solana-clawd/agent-kit",
   "version": "0.1.0",
-  "description": "Solana Clawd agent loader, runtime profile helpers, and the clawd-agent CLI for designing, validating, and registering agents.",
+  "description": "Solana Clawd agent loader, runtime profile helpers, and the clawd-kit CLI: birth your Clawd, browse the /agents catalog, install the ore miner + perps agent, and mine ore autonomously at install.",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",

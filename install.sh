@@ -30,6 +30,12 @@
 #   --no-node            Skip Node workspace install/build.
 #   --no-vulcan          Skip Phoenix/Vulcan perps bootstrap.
 #   --no-python          Skip Python perps agent dependency bootstrap.
+#   --no-birth           Skip the "name your Clawd at birth" wizard.
+#   --no-agents          Skip installing the ore-miner and perps agents.
+#   --clawd-name=NAME    Name the Clawd non-interactively at birth.
+#   --autostart-mine     Start ore-miner autonomously at end of install
+#                        (requires KEYPAIR + RPC env or .env file; sets
+#                        CLAWD_AUTO_MINE=true for clawd-kit mine).
 #   --reset-config       Overwrite an existing config.json.
 #   --quiet              Suppress informational chatter; keep ✓/! lines only.
 #   --no-banner          Skip the ASCII banner (CI-friendly).
@@ -59,6 +65,10 @@ NO_BUILD=0
 NO_NODE=0
 NO_VULCAN=0
 NO_PYTHON=0
+NO_BIRTH=0
+NO_AGENTS=0
+AUTOSTART_MINE=0
+CLAWD_NAME_FLAG=""
 RESET_CONFIG=0
 QUIET=0
 NO_BANNER=0
@@ -236,6 +246,10 @@ for arg in "$@"; do
     --no-node)         NO_NODE=1 ;;
     --no-vulcan)       NO_VULCAN=1 ;;
     --no-python)       NO_PYTHON=1 ;;
+    --no-birth)        NO_BIRTH=1 ;;
+    --no-agents)       NO_AGENTS=1 ;;
+    --autostart-mine)  AUTOSTART_MINE=1 ;;
+    --clawd-name=*)    CLAWD_NAME_FLAG="${arg#--clawd-name=}" ;;
     --reset-config)    RESET_CONFIG=1 ;;
     --quiet|-q)        QUIET=1 ;;
     --no-banner)       NO_BANNER=1 ;;
@@ -815,6 +829,92 @@ else
 fi
 
 # ──────────────────────────────────────────────────────────────────────────────
+# Clawd birth + /agents catalog install — name the Clawd, install the ore
+# miner + perps agent, optionally autostart mining. Uses the local agent-kit
+# CLI built above (clawd-kit). All sub-steps are skip-on-failure to keep the
+# main install resilient.
+# ──────────────────────────────────────────────────────────────────────────────
+CLAWD_KIT_CLI=""
+for candidate in \
+  "$BIN_DIR/clawd-kit" \
+  "$SRC_DIR/agent-kit/packages/agent-kit/dist/cli.js" \
+  "$(command -v clawd-kit 2>/dev/null || true)"; do
+  if [ -n "$candidate" ] && [ -e "$candidate" ]; then
+    CLAWD_KIT_CLI="$candidate"; break
+  fi
+done
+
+run_clawd_kit() {
+  if [ -z "$CLAWD_KIT_CLI" ]; then
+    warn "clawd-kit not available — skipping: clawd-kit $*"
+    return 1
+  fi
+  case "$CLAWD_KIT_CLI" in
+    *.js) node "$CLAWD_KIT_CLI" "$@" ;;
+    *)    "$CLAWD_KIT_CLI" "$@" ;;
+  esac
+}
+
+export OPENCLAWD_HOME="$WORKSPACE"
+export SOLANA_CLAWD_AGENTS_DIR="$SRC_DIR/agents"
+
+if [ "$NO_BIRTH" = "1" ]; then
+  info "skipping Clawd birth wizard (--no-birth)"
+elif [ -n "$CLAWD_KIT_CLI" ]; then
+  step "naming your Clawd at birth"
+  BIRTH_ARGS=("birth" "--auto")
+  if [ -n "$CLAWD_NAME_FLAG" ]; then
+    BIRTH_ARGS+=("--name" "$CLAWD_NAME_FLAG")
+  fi
+  if [ "$AUTOSTART_MINE" = "1" ]; then
+    BIRTH_ARGS+=("--auto-mine")
+  fi
+  if [ "$NO_AGENTS" = "0" ]; then
+    BIRTH_ARGS+=("--with-perps")
+  fi
+  if [ "$QUIET" = "1" ] || [ "$NO_BANNER" = "1" ]; then
+    BIRTH_ARGS+=("--no-animate")
+  fi
+  run_clawd_kit "${BIRTH_ARGS[@]}" || warn "clawd-kit birth failed — re-run later"
+else
+  warn "skipping Clawd birth — clawd-kit binary not found"
+fi
+
+if [ "$NO_AGENTS" = "1" ]; then
+  info "skipping /agents catalog install (--no-agents)"
+elif [ -n "$CLAWD_KIT_CLI" ]; then
+  step "installing featured /agents (ore-miner + perps)"
+  INSTALL_FLAGS=()
+  [ "$QUIET" = "1" ] && INSTALL_FLAGS+=("--no-animate")
+  run_clawd_kit "${INSTALL_FLAGS[@]}" install ore-miner \
+    || warn "ore-miner install skipped"
+  run_clawd_kit "${INSTALL_FLAGS[@]}" install solana-perpetuals-trader \
+    || warn "perps install skipped"
+  if [ -f "$SRC_DIR/agents/src/solana-vulcan-clawd-autonomous-perps.json" ]; then
+    run_clawd_kit "${INSTALL_FLAGS[@]}" install solana-vulcan-clawd-autonomous-perps \
+      || warn "vulcan-perps install skipped"
+  fi
+  if [ -f "$SRC_DIR/agents/src/imperial-perps-trader.json" ]; then
+    run_clawd_kit "${INSTALL_FLAGS[@]}" install imperial-perps-trader \
+      || warn "imperial-perps install skipped"
+  fi
+fi
+
+if [ "$AUTOSTART_MINE" = "1" ] && [ -n "$CLAWD_KIT_CLI" ]; then
+  step "starting ore-miner autonomously (CLAWD_AUTO_MINE=true)"
+  if [ -z "${KEYPAIR:-}" ] || [ ! -f "${KEYPAIR:-}" ]; then
+    warn "autostart-mine requested but KEYPAIR env not set or missing — printing launch script instead"
+    run_clawd_kit mine --no-animate || true
+  elif [ -z "${RPC:-}" ] && [ -z "${HELIUS_RPC_URL:-}" ] && [ -z "${SOLANA_TRACKER_RPC:-}" ]; then
+    warn "autostart-mine requested but no RPC env (RPC/HELIUS_RPC_URL) — printing launch script instead"
+    run_clawd_kit mine --no-animate || true
+  else
+    CLAWD_AUTO_MINE=true run_clawd_kit mine --no-animate \
+      || warn "autonomous ore mining failed to start — run: clawd-kit mine"
+  fi
+fi
+
+# ──────────────────────────────────────────────────────────────────────────────
 # Optional web console
 # ──────────────────────────────────────────────────────────────────────────────
 if [ "$WITH_WEB" = "1" ]; then
@@ -1110,6 +1210,11 @@ printf "  ${DIM}Agents   : https://x402.wtf/api/agents${RESET}\n"
 printf "  ${DIM}Catalog  : https://x402.wtf/agents  (browse all agents)${RESET}\n"
 printf "  ${DIM}Registry : https://x402.wtf/api/agents/registry${RESET}\n"
 printf "  ${DIM}Build    : clawd-kit new my-agent   # design your own (agent kit)${RESET}\n"
+printf "  ${DIM}Birth    : clawd-kit birth          # name your Clawd${RESET}\n"
+printf "  ${DIM}Catalog  : clawd-kit agents         # animated /agents browser${RESET}\n"
+printf "  ${DIM}Mine     : clawd-kit mine           # install + run ore-miner${RESET}\n"
+printf "  ${DIM}Perps    : clawd-kit perps          # install + run perps agent${RESET}\n"
+printf "  ${DIM}Home     : clawd-kit home           # identity + installed agents${RESET}\n"
 printf "  ${DIM}Mint     : clawd-agent mint-free    # register on Metaplex${RESET}\n"
 printf "  ${DIM}Templates: $SRC_DIR/agents/templates/index.json${RESET}\n"
 printf "  ${DIM}Skill Hub: $SRC_DIR/skills/index.json${RESET}\n"

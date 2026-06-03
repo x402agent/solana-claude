@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// clawd-kit — design, validate, and register Solana Clawd agents.
+// clawd-kit — design, validate, register, install, and animate Solana Clawd agents.
 // (Complements `clawd-agent` from @openclawdsolana/clawd-tui, which does the
 //  on-chain Metaplex mint via `clawd-agent mint` / `mint-free`.)
 //
@@ -8,6 +8,12 @@
 //   clawd-kit new <id> [--title T] [--description D] [--category C] [--avatar A]
 //   clawd-kit validate <id|--all>
 //   clawd-kit register <id> --target metaplex|google [--out FILE] [--host URL]
+//   clawd-kit birth [--name N] [--avatar A] [--auto]    # name your clawd
+//   clawd-kit agents [--category C]                     # animated catalog
+//   clawd-kit install <id> [--autonomous]               # install into workspace
+//   clawd-kit mine [--detach] [--dry-run]               # install + run ore-miner
+//   clawd-kit perps [--detach]                          # install + run perps agent
+//   clawd-kit home                                      # show identity + installed
 
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
@@ -18,6 +24,34 @@ import {
 } from "@solana-clawd/agent-registry";
 import { SolanaClawdAgentKit } from "./index.js";
 import type { SolanaClawdAgent } from "./index.js";
+import {
+  ansi,
+  clawdBanner,
+  convergence,
+  drawBox,
+  oreBoardDance,
+  paint,
+  progressBar,
+  pulse,
+  setAnimate,
+  sleep,
+  spinner,
+  typewriter,
+  writeln,
+} from "./animate.js";
+import {
+  birthClawd,
+  readIdentity,
+  identityPath,
+  workspaceDir,
+  type ClawdIdentity,
+} from "./birth.js";
+import {
+  installAgent,
+  launchAutonomous,
+  listInstalled,
+  readInstallManifest,
+} from "./installer.js";
 
 const DEFAULT_HOST = "https://x402.wtf";
 
@@ -240,21 +274,220 @@ function cmdRegister(flags: Flags): void {
   }
 }
 
+async function cmdBirth(flags: Flags): Promise<void> {
+  const identity = await birthClawd({
+    name: (flags.name as string) ?? undefined,
+    avatar: (flags.avatar as string) ?? undefined,
+    pronoun: (flags.pronoun as ClawdIdentity["pronoun"]) ?? undefined,
+    shellColor: (flags["shell-color"] as string) ?? undefined,
+    auto: Boolean(flags.auto),
+    rename: Boolean(flags.rename),
+    autoMine: Boolean(flags["auto-mine"]),
+    perpsEnabled: Boolean(flags["with-perps"]),
+  });
+  if (flags.json) {
+    log(JSON.stringify(identity, null, 2));
+  }
+}
+
+async function cmdAgentsCatalog(flags: Flags): Promise<void> {
+  const kit = kitFor(flags);
+  const agents = kit.listAgents();
+  const category = flags.category as string | undefined;
+
+  await clawdBanner();
+  writeln("");
+  await typewriter(
+    `  /agents catalog — ${agents.length} Solana Clawd agents ready to install`,
+    { color: "cyan", delayMs: 10 },
+  );
+  writeln("");
+
+  const filtered = category
+    ? agents.filter((a) => a.meta.category === category)
+    : agents;
+
+  const featured = ["ore-miner", "solana-perpetuals-trader", "solana-vulcan-clawd-autonomous-perps", "imperial-perps-trader"];
+  const featuredAgents = filtered.filter((a) => featured.includes(a.identifier));
+  const rest = filtered.filter((a) => !featured.includes(a.identifier));
+
+  if (featuredAgents.length > 0) {
+    writeln(`  ${paint("bold", "★ FEATURED — install at birth")}`);
+    for (const agent of featuredAgents) {
+      const avatar = agent.meta.avatar ?? "🤖";
+      const title = agent.meta.title ?? agent.identifier;
+      const desc = agent.meta.description ?? "";
+      writeln(
+        `    ${avatar}  ${paint("green", agent.identifier.padEnd(40))} ${paint("purple", title)}`,
+      );
+      if (desc) writeln(`        ${paint("gray", desc.slice(0, 96))}`);
+      if (!flags.fast) await sleep(40);
+    }
+    writeln("");
+  }
+
+  writeln(`  ${paint("bold", "/agents catalog")}  ${paint("gray", `(${rest.length})`)}`);
+  for (const agent of rest) {
+    const avatar = agent.meta.avatar ?? "🤖";
+    const id = agent.identifier;
+    const cat = agent.meta.category ?? "defi";
+    const title = agent.meta.title ?? id;
+    writeln(
+      `    ${avatar}  ${id.padEnd(40)} ${paint("gray", cat.padEnd(12))} ${title}`,
+    );
+  }
+
+  writeln("");
+  writeln(`  ${paint("cyan", "▸")} install one: ${paint("green", "clawd-kit install <id>")}`);
+  writeln(`  ${paint("cyan", "▸")} mine now:    ${paint("green", "clawd-kit mine")}`);
+  writeln(`  ${paint("cyan", "▸")} perps now:   ${paint("green", "clawd-kit perps")}`);
+}
+
+async function cmdInstall(flags: Flags): Promise<void> {
+  const id = (flags._ as string[])[1];
+  if (!id) fail("usage: clawd-kit install <id> [--autonomous]");
+  const kit = kitFor(flags);
+  await installAgent({
+    identifier: id,
+    agentsDir: kit.agentsDir,
+    autonomous: Boolean(flags.autonomous),
+  });
+  if (flags.autonomous) {
+    await launchAutonomous({
+      identifier: id,
+      detach: !flags.attach,
+    });
+  }
+}
+
+async function cmdMine(flags: Flags): Promise<void> {
+  const id = "ore-miner";
+  const kit = kitFor(flags);
+  const identity = readIdentity();
+
+  await clawdBanner(identity?.name);
+  writeln("");
+  await typewriter(
+    `  ⛏  ${identity ? identity.name : "Clawd"} is heading to the ORE motherlode.`,
+    { color: "purple", delayMs: 14 },
+  );
+  writeln("");
+
+  await installAgent({
+    identifier: id,
+    agentsDir: kit.agentsDir,
+    autonomous: true,
+  });
+  await oreBoardDance(1600);
+  const result = await launchAutonomous({
+    identifier: id,
+    detach: !flags.attach,
+    extraEnv: flags["dry-run"] ? { DRY_RUN: "true" } : {},
+  });
+  writeln("");
+  writeln(`  ${paint("green", "▸")} ${paint("bold", "mine command:")} ${paint("cyan", result.command)}`);
+  if (result.attached) {
+    writeln(`  ${paint("gray", "(running attached — Ctrl+C to stop)")}`);
+  }
+}
+
+async function cmdPerps(flags: Flags): Promise<void> {
+  const candidates = [
+    "solana-vulcan-clawd-autonomous-perps",
+    "imperial-perps-trader",
+    "solana-perpetuals-trader",
+  ];
+  const kit = kitFor(flags);
+  const available = candidates.find((id) =>
+    existsSync(join(kit.srcDir, `${id}.json`)),
+  );
+  if (!available) fail("no perps agent found in catalog");
+
+  const identity = readIdentity();
+  await clawdBanner(identity?.name);
+  writeln("");
+  await typewriter(
+    `  📊  ${identity ? identity.name : "Clawd"} entering Phoenix perps mode.`,
+    { color: "magenta", delayMs: 14 },
+  );
+  writeln("");
+  await installAgent({
+    identifier: available,
+    agentsDir: kit.agentsDir,
+    autonomous: true,
+  });
+  await launchAutonomous({
+    identifier: available,
+    detach: !flags.attach,
+  });
+}
+
+function cmdHome(flags: Flags): void {
+  const identity = readIdentity();
+  const manifest = readInstallManifest();
+  const installed = listInstalled();
+
+  if (!identity) {
+    log(`${paint("yellow", "!")} no Clawd identity yet — run \`clawd-kit birth\` to name yours.`);
+    return;
+  }
+
+  drawBox(`Clawd home — ${identity.name}`, [
+    `${paint("gray", "avatar    :")} ${identity.avatar}`,
+    `${paint("gray", "generation:")} ${paint("cyan", String(identity.generation))}`,
+    `${paint("gray", "born      :")} ${identity.bornAt}`,
+    `${paint("gray", "shell     :")} ${paint("purple", identity.shellColor)}`,
+    `${paint("gray", "workspace :")} ${identity.workspace}`,
+    `${paint("gray", "identity  :")} ${identityPath()}`,
+    `${paint("gray", "auto-mine :")} ${identity.autoMine ? paint("green", "on") : paint("gray", "off")}`,
+    `${paint("gray", "perps     :")} ${identity.perpsEnabled ? paint("green", "on") : paint("gray", "off")}`,
+  ]);
+
+  writeln("");
+  writeln(`  ${paint("bold", "installed agents")} ${paint("gray", `(${installed.length})`)}`);
+  if (installed.length === 0) {
+    writeln(`    ${paint("gray", "none yet — try `clawd-kit install ore-miner`")}`);
+    return;
+  }
+  for (const record of installed) {
+    const runtime = record.runtime
+      ? paint("green", "runtime")
+      : paint("gray", "metadata-only");
+    writeln(
+      `    ${record.avatar}  ${paint("cyan", record.identifier.padEnd(40))} ${runtime}  ${paint("gray", record.installedAt)}`,
+    );
+  }
+  void flags;
+  void manifest;
+}
+
 function usage(): void {
-  log("clawd-kit — design, validate, and register Solana Clawd agents\n");
-  log("Commands:");
+  log("clawd-kit — design, validate, install, mine, register Solana Clawd agents\n");
+  log("Catalog:");
+  log("  agents [--category X]                  animated /agents catalog");
   log("  list [--category X] [--json] [--remote] [--host URL]");
   log("  show <id>");
+  log("");
+  log("Authoring:");
   log("  new <id> [--title T] [--description D] [--category C] [--avatar A]");
   log("  validate <id> | --all");
   log("  register <id> --target metaplex|google [--out FILE] [--host URL]");
-  log("\nGlobal: --agents-dir DIR  (or SOLANA_CLAWD_AGENTS_DIR)");
+  log("");
+  log("Lifecycle:");
+  log("  birth [--name N] [--avatar A] [--auto]   name your Clawd at birth");
+  log("  install <id> [--autonomous] [--attach]   install agent from /agents");
+  log("  mine   [--dry-run] [--attach]            install + run ore-miner");
+  log("  perps  [--attach]                        install + run perps agent");
+  log("  home                                     show identity + installed agents");
+  log("");
+  log("Global: --agents-dir DIR  (or SOLANA_CLAWD_AGENTS_DIR)  --no-animate");
   log("On-chain mint: `clawd-agent mint` / `clawd-agent mint-free` (clawd-tui)");
   log("Docs: https://x402.wtf/agents/mint");
 }
 
 async function main(): Promise<void> {
   const flags = parseArgs(argv.slice(2));
+  if (flags["no-animate"] || env.CLAWD_NO_ANIMATE === "1") setAnimate(false);
   const command = (flags._ as string[])[0];
   switch (command) {
     case "list":
@@ -271,6 +504,26 @@ async function main(): Promise<void> {
       break;
     case "register":
       cmdRegister(flags);
+      break;
+    case "birth":
+      await cmdBirth(flags);
+      break;
+    case "agents":
+    case "catalog":
+      await cmdAgentsCatalog(flags);
+      break;
+    case "install":
+      await cmdInstall(flags);
+      break;
+    case "mine":
+      await cmdMine(flags);
+      break;
+    case "perps":
+      await cmdPerps(flags);
+      break;
+    case "home":
+    case "whoami":
+      cmdHome(flags);
       break;
     case undefined:
     case "help":

@@ -1,6 +1,10 @@
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { basename, join, resolve } from "node:path";
 
+export * from "./animate.js";
+export * from "./birth.js";
+export * from "./installer.js";
+
 export type JsonObject = Record<string, unknown>;
 
 export interface SolanaClawdAgent {
