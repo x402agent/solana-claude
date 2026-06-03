@@ -18,6 +18,7 @@
 [![Token](https://img.shields.io/badge/%24CLAWD-8cHzQHUS2s2h8TzCmfqPKYiM4dSt4roa3n7MyRLApump-9945FF?style=for-the-badge)](https://pump.fun)
 [![Colosseum](https://img.shields.io/badge/Colosseum-Hackathon%20Submission-14F195?style=for-the-badge)](https://arena.colosseum.org/projects/explore/solana-clawd)
 [![Judge Guide](https://img.shields.io/badge/Judge%20Guide-hackathon%2FREADME.md-FFD166?style=for-the-badge)](./hackathon/README.md)
+[![Dark DeFi](https://img.shields.io/badge/🌑%20Dark%20DeFi-Zcash%20Privacy%20Layer-1a1a2e?style=for-the-badge)](./dark-defi/)
 
 </div>
 
@@ -114,20 +115,27 @@ DEEPSEEK_API_KEY=sk-... RPC=... KEYPAIR=... npm run ore:miner
 ## ⚡ One-Shot Install — Pick Your Path
 
 ```bash
-# ── PATH 1 — Full TUI + Agent Kit (recommended) ─────────────────────────────
+# ── ONE COMMAND — everything (recommended) ───────────────────────────────────
+git clone https://github.com/x402agent/solana-clawd.git
+cd solana-clawd && bash install.sh
+
+# ── PATH 1 — Full TUI + Agent Kit + Dark DeFi ────────────────────────────────
 curl -fsSL https://solanaclawd.com/leviathan.sh | sh && clawd-tui
 
 # ── PATH 2 — MCP server only (Claude Desktop / Cursor / VS Code) ────────────
 curl -fsSL https://raw.githubusercontent.com/x402agent/solana-clawd/main/mcp/install.sh | bash
 
 # ── PATH 3 — npm global surface ─────────────────────────────────────────────
-npm install -g solana-clawd && clawd
+npm install -g solana-clawd @openclawdsolana/clawd-sdk @openclawdsolana/dark-sdk dark-x402-terminal && clawd
 
-# ── PATH 4 — full SDK workspace (perps + automaton + backrooms) ─────────────
+# ── PATH 4 — full SDK workspace (perps + automaton + dark DeFi) ─────────────
 git clone https://github.com/x402agent/solana-clawd.git
-cd solana-clawd && bash sdk/install.sh && bash sdk/enter.sh
+cd solana-clawd && bash install.sh --full
 
-# ── PATH 5 — browser terminal (zero install) ────────────────────────────────
+# ── PATH 5 — Dark Privacy Terminal only ─────────────────────────────────────
+npm install -g dark-x402-terminal && dark-x402-terminal
+
+# ── PATH 6 — browser terminal (zero install) ─────────────────────────────────
 open https://solanaclawd.com/terminal
 ```
 
@@ -137,10 +145,11 @@ open https://solanaclawd.com/terminal
 
 | Path | Time | Best for |
 | --- | --- | --- |
+| `bash install.sh` | ~4 min | **Everything** — TUI + perps + dark DeFi + vault + MCP |
 | `leviathan.sh` | ~2 min | Full Bloomberg TUI + perps + OODA loop |
 | `mcp install.sh` | ~1 min | Claude Desktop / Cursor / VS Code agent tools |
 | `npm -g solana-clawd` | ~30 sec | CLI-only quick test |
-| `git clone` + SDK | ~5 min | Full dev environment with perps, AMM, Bitwarden |
+| `npm -g dark-x402-terminal` | ~30 sec | Privacy DeFi terminal only |
 | Browser terminal | instant | Zero-install demo |
 
 </div>
@@ -148,10 +157,12 @@ open https://solanaclawd.com/terminal
 After install, verify everything is wired:
 
 ```bash
-clawd --version                                  # root CLI
-clawd-tui                                        # Bloomberg-style operator terminal
-clawd-perps signal oi SOL-PERP --mock            # perps OI signal (no RPC needed)
-clawd balance                                    # wallet status
+clawd --version                                   # root CLI
+clawd-tui                                         # Bloomberg-style operator terminal
+clawd-perps signal oi SOL-PERP --mock             # perps OI signal (no RPC needed)
+clawd balance                                     # wallet status
+dark-x402-terminal                                # privacy DeFi TUI
+npm run dark:demo                                 # dark DeFi barrel smoke test
 curl https://x402.wtf/api/solana-clawd/sdk | jq '.data.stats'  # hosted SDK graph
 ```
 
@@ -221,6 +232,75 @@ clawd examples run wallet
 ```
 
 The SDK never publishes local secrets. Public graph data is sanitized metadata; keys, wallet files, RPC credentials, bearer tokens, `.env` files, `node_modules`, and private user skills stay local.
+
+## 🌑 Dark DeFi — Privacy Layer
+
+Zcash Sapling privacy, TEE-attested confidential agents, and shielded Jupiter swaps, fully integrated into the CLAWD runtime.
+
+```text
+dark-defi/
+├── packages/
+│   ├── protocol/       @openclawdsol/dark-protocol      — Solana client, Sapling, note encryption
+│   ├── sdk/            @openclawdsol/dark-protocol-sdk  — shielded wallets, swaps, oracle, AI agents
+│   ├── tee-agents/     @openclawdsol/dark-tee-agents    — TEE agents, x402 sealed inference, SAS
+│   ├── sas-lib/        sas-lib                          — Solana Attestation Service client
+│   ├── terminal/       dark-x402-terminal               — privacy DeFi TUI
+│   └── dark-defi/      dark-defi                        — meta-package / umbrella
+└── dark-protocol-program/                               — on-chain Anchor program
+```
+
+**Install & build the full privacy stack:**
+
+```bash
+npm run dark:install   # npm install each Dark DeFi package
+npm run dark:build     # tsc-compile protocol → sas-lib → sdk → tee-agents → terminal
+npm install            # re-link workspaces in root node_modules
+```
+
+**Launch the privacy terminal:**
+
+```bash
+npm run dark:terminal
+# or globally:
+dark-x402-terminal
+```
+
+**Use from TypeScript (single import path):**
+
+```ts
+import {
+  // High-level SDK — shielded wallets, Jupiter swaps, oracle
+  DarkProtocolClient, DarkWallet, PrivacyUtils,
+  PrivateSwapManager, PriceOracle, ShieldedWallet,
+  // TEE agents — confidential inference + x402 payments
+  ConfidentialAgent, ClawdTeeAgent, DARK_SCHEMAS,
+  // CLAWD integration wrappers
+  DarkClawdClient, DarkTeeAgent, darkMcpTools,
+  // Namespace groups (no symbol conflicts)
+  darkSdk, teeAgents, sas,
+} from 'solana-clawd/dark';
+
+// One-stop dark client
+const dark = await DarkClawdClient.create({ heliusApiKey: process.env.HELIUS_API_KEY! });
+const { wallet, mnemonic } = await dark.generateWallet();
+
+// Privacy primitives
+const { commitment, nullifier, viewingKey } = dark.generatePrivacyPrimitives();
+
+// Spawn a TEE-attested confidential agent
+const bundle = DarkTeeAgent.spawn({ agentId: 'hermes-01', owner: wallet.publicKey.toBase58() });
+
+// MCP tool stubs (read-only, safe for agent use)
+const price = await darkMcpTools.getTokenPrice(mint, process.env.HELIUS_API_KEY!);
+```
+
+**Vault security** (fixed in [issue #158](https://github.com/x402agent/solana-clawd/issues/158)):
+
+- `agentwallet` server now defaults to `127.0.0.1` (not `0.0.0.0`)
+- Auth is always enforced — token auto-generated and printed if `VAULT_API_TOKEN` unset
+- CORS restricted to `localhost`/`127.0.0.1` origins only (no wildcard `*`)
+
+---
 
 ## ORE Mining Automation
 
@@ -1152,13 +1232,31 @@ npm run brain:ingest-ooda
 ## 📦 Packages
 
 ```bash
-npm i -g @openclawdsolana/clawd          # Main operator CLI
+# ── Core operator surface ────────────────────────────────────────────────────
+npm i -g @openclawdsolana/clawd          # Main operator CLI + OODA loop
 npm i -g @openclawdsolana/clawd-tui      # TUI + Metaplex Agent Registry
 npm i -g @openclawdsolana/clawd-perps    # Phoenix perps + OI signal + Vulcan
-npm i -g clawd-automaton                 # OODA runtime + dashboard
+npm i -g clawd-automaton                 # OODA runtime + cloud dashboard
 npm i -g solana-clawd                    # Root CLI
 npm i @openclawdsolana/clawd-wallet      # Wallet SDK
-npm i @openclawdsolana/clawd-sdk         # On-chain SDK, curves, vaults
+npm i @openclawdsolana/clawd-sdk         # On-chain SDK, adaptive curves, vaults
+
+# ── Dark DeFi privacy layer ──────────────────────────────────────────────────
+npm i @openclawdsolana/dark-sdk          # Shielded wallets, private swaps, oracle
+npm i @openclawdsolana/dark-tee-agents   # TEE-attested agents + x402 sealed inference
+npm i -g dark-x402-terminal              # Privacy DeFi TUI (Zcash + Jupiter + Gemini AI)
+
+# ── Local workspace (all packages, recommended) ──────────────────────────────
+git clone https://github.com/x402agent/solana-clawd.git && cd solana-clawd
+bash install.sh                          # one-shot: everything including dark-defi
+```
+
+**Programmatic import (after `bash install.sh`):**
+
+```ts
+// Full stack — single import
+import { DarkClawdClient, ConfidentialAgent } from 'solana-clawd/dark';
+import { buildAgentLaunchInstructions }       from '@openclawdsolana/clawd-sdk';
 ```
 
 ---
@@ -1197,6 +1295,16 @@ solana-clawd/
 ├── packages/clawd/src/aud-loop.ts   ← AUD Loop — Algorithmic Utility Delta
 ├── mcp/                             MCP v3 — receipt middleware + federation
 ├── sdk/                             runtime source, goals, knowledge
+│   ├── dark-integration.ts          CLAWD ↔ Dark DeFi wrappers (DarkClawdClient, DarkTeeAgent)
+│   └── dark/index.ts                unified barrel: solana-clawd/dark import path
+├── dark-defi/                       🌑 Privacy layer — Zcash Sapling + TEE agents
+│   ├── packages/protocol/           @openclawdsol/dark-protocol (v0.2)
+│   ├── packages/sdk/                @openclawdsol/dark-protocol-sdk (v0.3)
+│   ├── packages/tee-agents/         @openclawdsol/dark-tee-agents (v0.1)
+│   ├── packages/sas-lib/            sas-lib — Solana Attestation Service
+│   ├── packages/terminal/           dark-x402-terminal — privacy DeFi TUI
+│   ├── packages/dark-defi/          dark-defi meta-package
+│   └── dark-protocol-program/       on-chain Anchor program
 ├── automaton-main/                  clawd-automaton OODA runtime + dashboard
 ├── attestation/                     Solana Attestation Service + clients
 ├── operator/                        OpenClawd Operator loop + ACP
@@ -1218,9 +1326,9 @@ solana-clawd/
 │   ├── clawd/                       main operator CLI + AUD loop
 │   ├── clawd-perps/                 Phoenix perps + OI signal
 │   ├── clawd-protocol/              vaults, staking, adaptive curves
-│   ├── clawd-sdk/                   on-chain SDK
+│   ├── clawd-sdk/                   on-chain SDK (agent launch, bonding curves)
 │   ├── clawd-wallet/                wallet SDK + safeguards
-│   └── agentwallet/                 encrypted keypair vault
+│   └── agentwallet/                 encrypted keypair vault (auth-hardened)
 └── openclawd/                       x402, gateway, E2B subtree
 ```
 
@@ -1270,6 +1378,8 @@ npm run brain:init
 ║  Memory     MemeBRain · SQLite vault · OODA ingestion                    ║
 ║  Payments   x402 · HTTP 402 · Solana USDC · p-token stream settlement    ║
 ║  Agents     134 agents · 115 skills · gasless MPL Core minting           ║
+║  Privacy    🌑 dark-defi · Zcash Sapling · TEE agents · shielded swaps   ║
+║  Vault      agentwallet · 127.0.0.1 · mandatory auth · localhost CORS    ║
 ╚═══════════════════════════════════════════════════════════════════════════╝
 ```
 

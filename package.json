@@ -24,6 +24,18 @@
     "./metaplex": {
       "import": "./dist/metaplex/index.js",
       "types": "./dist/metaplex/index.d.ts"
+    },
+    "./dark": {
+      "import": "./dark-defi/packages/sdk/dist/index.js",
+      "types": "./dark-defi/packages/sdk/dist/index.d.ts"
+    },
+    "./dark/protocol": {
+      "import": "./dark-defi/packages/protocol/dist/index.js",
+      "types": "./dark-defi/packages/protocol/dist/index.d.ts"
+    },
+    "./dark/tee": {
+      "import": "./dark-defi/packages/tee-agents/dist/index.js",
+      "types": "./dark-defi/packages/tee-agents/dist/index.d.ts"
     }
   },
   "bin": {
@@ -184,7 +196,14 @@
     "programs:map": "node scripts/programs-map.mjs list",
     "programs:show": "node scripts/programs-map.mjs show",
     "perps:audit": "node scripts/perps-secret-audit.mjs",
-    "perps:workspace:build": "npm --prefix perps/clawd-agents-perps run build"
+    "perps:workspace:build": "npm --prefix perps/clawd-agents-perps run build",
+    "dark:install": "set -e; for pkg in dark-defi/packages/protocol dark-defi/packages/sas-lib dark-defi/packages/sdk dark-defi/packages/tee-agents dark-defi/packages/terminal dark-defi/packages/dark-defi; do npm --prefix \"$pkg\" install --legacy-peer-deps; done",
+    "dark:build": "set -e; for pkg in dark-defi/packages/protocol dark-defi/packages/sas-lib dark-defi/packages/sdk dark-defi/packages/tee-agents dark-defi/packages/terminal; do npm --prefix \"$pkg\" run build --if-present; done",
+    "dark:program:build": "anchor build --manifest-path dark-defi/dark-protocol-program/Anchor.toml 2>&1 | grep -v '^+ '",
+    "dark:deploy:devnet": "bash dark-defi/dark-protocol-program/deploy-devnet.sh",
+    "dark:deploy:mainnet": "bash dark-defi/dark-protocol-program/deploy-mainnet.sh",
+    "dark:terminal": "node dark-defi/packages/terminal/dist/terminal/index.js",
+    "dark:demo": "node --import tsx/esm sdk/dark/demo.ts"
   },
   "dependencies": {
     "@ai-sdk/xai": "^1.2.0",
@@ -263,6 +282,11 @@
     "ws": "^8.18.0",
     "x402.wtf": "^0.1.1",
     "x402agent-nanoclawd-cli": "^1.3.0",
+    "dark-defi": "file:dark-defi/packages/dark-defi",
+    "@openclawdsol/dark-protocol": "file:dark-defi/packages/protocol",
+    "@openclawdsol/dark-protocol-sdk": "file:dark-defi/packages/sdk",
+    "@openclawdsol/dark-tee-agents": "file:dark-defi/packages/tee-agents",
+    "sas-lib": "file:dark-defi/packages/sas-lib",
     "yaml": "^2.6.0",
     "zod": "^3.24.0"
   },
@@ -307,7 +331,13 @@
     "packages/clawd-perps",
     "packages/clawd-sdk",
     "packages/clawd-wallet",
-    "packages/cli-standalone"
+    "packages/cli-standalone",
+    "dark-defi/packages/protocol",
+    "dark-defi/packages/sas-lib",
+    "dark-defi/packages/sdk",
+    "dark-defi/packages/tee-agents",
+    "dark-defi/packages/terminal",
+    "dark-defi/packages/dark-defi"
   ],
   "sideEffects": false,
   "keywords": [
